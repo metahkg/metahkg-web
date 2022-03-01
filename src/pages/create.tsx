@@ -187,7 +187,7 @@ export default function Create() {
               disabled={
                 disabled || !(icomment && title && htoken && catchoosed)
               }
-              className="mt20 create-btn"
+              className="mt20 font-size-16 create-btn"
               onClick={create}
               variant="contained"
               color="secondary"

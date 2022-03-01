@@ -129,7 +129,7 @@ export default function SideBar() {
           <div className="m20">
             {Object.entries(categories).map((category: any) => (
               <Link
-                className="sidebar-catlink notextdecoration text-align-left halfwidth"
+                className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
                 to={`/category/${category[0]}`}
                 style={{
                   color:

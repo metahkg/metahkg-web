@@ -2,14 +2,10 @@
   height: 47px;
 }
 .title-text {
-  font-size: 18px !important;
   line-height: 24px !important;
   max-height: 24px !important;
 }
 .title-reply {
   height: 24px !important;
   width: 24px !important;
-}
-.title-share {
-  font-size: 20px !important;
 }

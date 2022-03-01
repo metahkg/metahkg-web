@@ -66,10 +66,12 @@ export default function MenuTop(props: {
         sx={{ backgroundColor: "primary.main" }}
       >
         <div className="flex fullwidth align-center justify-space-between menutop-top">
-          <div className="ml10 menutop-sidebar-btn">
+          <div className="ml10 mr40">
             <SideBar />
           </div>
-          <p className="novmargin menutop-title">{title || inittitle}</p>
+          <p className="novmargin font-size-18 user-select-none metahkg-yellow">
+            {title || inittitle}
+          </p>
           <div className="flex">
             <Tooltip title="Refresh" arrow>
               <IconButton onClick={props.refresh}>
@@ -85,7 +87,7 @@ export default function MenuTop(props: {
             </Tooltip>
           </div>
         </div>
-        <div className="flex fullwidth align-flex-end menutop-bottom">
+        <div className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
           {tabs.map((tab, index) => (
             <Box
               onClick={() => {
@@ -100,7 +102,7 @@ export default function MenuTop(props: {
               }}
             >
               <Typography
-                className="menutop-tabtext"
+                className="font-size-15-force"
                 sx={{ color: "secondary.main" }}
               >
                 {tab}

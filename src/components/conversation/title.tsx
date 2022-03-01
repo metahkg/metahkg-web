@@ -49,7 +49,7 @@ export default function Title(props: {
             </Link>
           )}
           <Typography
-            className="novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap title-text"
+            className="novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text"
             sx={{
               color: "secondary.main",
             }}
@@ -73,7 +73,7 @@ export default function Title(props: {
                 shareLink !== slink && setShareLink(slink);
               }}
             >
-              <ShareIcon className="white title-share" />
+              <ShareIcon className="white font-size-20-force title-share" />
             </IconButton>
           </Tooltip>
         </Box>

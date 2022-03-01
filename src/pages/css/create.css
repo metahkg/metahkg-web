@@ -1,7 +1,6 @@
 .create-btn {
-  font-size: 16px;
   height: 40px;
 }
 .create-choosecat-form {
-  min-width: 200px;
+  min-width: 200px !important;
 }

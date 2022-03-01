@@ -81,7 +81,12 @@ export default function AddComment() {
       });
   }
   if (!localStorage.user) {
-    return <Navigate to={`/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`} replace/>
+    return (
+      <Navigate
+        to={`/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
+        replace
+      />
+    );
   }
   const id = Number(params.id);
   menu && setMenu(false);
@@ -109,7 +114,7 @@ export default function AddComment() {
             />
             <h1 className="nomargin">Add comment</h1>
           </div>
-          <h4 className="mt5 mb10 ac-target">
+          <h4 className="mt5 mb10 font-size-22">
             target: thread{" "}
             <Link to={`/thread/${id}`} target="_blank" rel="noreferrer">
               {id}
@@ -129,7 +134,7 @@ export default function AddComment() {
           />
           <Button
             disabled={disabled || !comment}
-            className="mt20 ac-btn"
+            className="mt20 font-size-16 ac-btn"
             onClick={addcomment}
             variant="contained"
             color="secondary"

@@ -1,47 +1,8 @@
-.profile-root,
-.profile-mainbox {
-  min-height: 100vh;
-}
-.profile-mainbox,
-.profile-top {
-  justify-content: center;
-  align-items: center;
-}
-.profile-paper {
-  max-height: 100vh;
-  overflow: auto;
-}
-.profile-mainbox {
-  flex-direction: column;
-}
-.profile-top {
-  max-width: 100%;
-  margin-top: 10px;
-}
 .profile-toptextdiv {
   height: 200px;
-  justify-content: center;
 }
 .profile-toptext {
-  font-size: 30px;
   align-self: center;
   line-height: 35px;
   max-height: 35px;
-}
-.profile-userspandiv,
-.profile-userspan {
-  overflow: hidden;
-}
-.profile-userspan {
-  text-overflow: ellipsis;
-}
-.profile-tablebox {
-  justify-content: center;
-}
-.profile-historybtn {
-  font-size: 16px;
-}
-.profile-tablecontainer {
-  margin-left: 50px;
-  margin-right: 50px;
 }

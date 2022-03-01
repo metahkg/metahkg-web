@@ -37,7 +37,7 @@ function Comment(props: {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     return (
-      <div className="flex align-center comment-tag-root">
+      <div className="flex align-center font-size-16 pt10">
         <PopUp
           withbutton
           open={open}
@@ -73,7 +73,7 @@ function Comment(props: {
           title={date.format(new Date(props.date), "ddd, MMM DD YYYY HH:mm:ss")}
           arrow
         >
-          <p className="novmargin metahkg-grey ml10 comment-tag-time">
+          <p className="novmargin metahkg-grey ml10 font-size-15">
             {timetoword(props.date)}
           </p>
         </Tooltip>
@@ -85,7 +85,7 @@ function Comment(props: {
               navigate(`/comment/${props.tid}`);
             }}
           >
-            <ReplyIcon className="metahkg-grey-force comment-tag-reply" />
+            <ReplyIcon className="metahkg-grey-force font-size-19-force" />
           </IconButton>
         </Tooltip>
       </div>

@@ -27,40 +27,46 @@ export default function MenuThread(props: { thread: summary }) {
       to={`/thread/${thread.id}?page=1`}
     >
       <Box
-        className="flex fullwidth menuthread-root"
+        className="flex fullwidth flex-dir-column menuthread-root"
         sx={id === thread.id ? { bgcolor: "#303030 !important" } : {}}
       >
-        <div className="menuthread-top flex fullwidth align-center">
+        <div className="flex fullwidth align-center justify-space-between menuthread-top">
           <div style={{ display: "flex", alignItems: "center" }}>
             <p
-              className="menuthread-op ml20"
+              className="font-size-16 ml20 metahkg-grey menuthread-op"
               style={{
                 color: thread.sex === "M" ? "#0277bd" : "red",
               }}
             >
               {thread.op}
             </p>
-            <p className="menuthread-toptext ml5 nomargin">
+            <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
               {timetoword(thread.lastModified)}
             </p>
           </div>
           <div className="flex align-center">
             {thread.vote >= 0 ? (
-              <ThumbUpIcon className="menuthread-icons" />
+              <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
             ) : (
-              <ThumbDownIcon className="menuthread-icons" />
+              <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
             )}
-            <p className="menuthread-toptext nomargin">{thread.vote}</p>
-            <CommentIcon className="menuthread-icons" />
-            <p className="menuthread-toptext nomargin">{thread.c}</p>
-            <ArticleIcon className="menuthread-icons" />
-            <p className="menuthread-toptext mr10 nomargin">
+            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+              {thread.vote}
+            </p>
+            <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+              {thread.c}
+            </p>
+            <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+            <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
               {String(roundup(thread.c / 25))}
             </p>
           </div>
         </div>
-        <div className="menuthread-bottom flex fullwidth mb10 align-center">
-          <p className="ml20 nomargin menuthread-title">{thread.title}</p>
+        <div className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
+          <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
+            {thread.title}
+          </p>
           {!!(cat === 1 || search || profile) && (
             <Link
               className="mr10 notextdecoration"
@@ -70,7 +76,7 @@ export default function MenuThread(props: { thread: summary }) {
                 variant="contained"
                 className="nomargin nopadding notexttransform menuthread-catbtn"
               >
-                <p className="nomargin menuthread-catname">{thread.catname}</p>
+                <p className="nomargin font-size-12 menuthread-catname">{thread.catname}</p>
               </Button>
             </Link>
           )}

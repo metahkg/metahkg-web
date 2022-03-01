@@ -1,5 +1,7 @@
 # Deploying Metahkg
 
+You MUST also deploy metahkg/metahkg-server (backend api)!
+
 ## Prerequisites
 
 - x86_64 debian linux (only tested on ubuntu)

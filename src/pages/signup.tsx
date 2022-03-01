@@ -186,10 +186,10 @@ export default function Register() {
           width: small ? "100vw" : "50vw",
         }}
       >
-        <div className="signup-main-div">
+        <div className="m50">
           <div className="flex justify-center align-center">
             <MetahkgLogo svg light height={50} width={40} className="mb10" />
-            <h1 className="signup-title-text mb20 nohmargin">Register</h1>
+            <h1 className="font-size-25 mb20 nohmargin">Register</h1>
           </div>
           {alert.text && (
             <Alert className="mb15 mt10" severity={alert.severity}>
@@ -261,7 +261,7 @@ export default function Register() {
                     : !(htoken && user && email && pwd && sex))
                 }
                 type="submit"
-                className="signup-btn"
+                className="font-size-16 signup-btn"
                 color="secondary"
                 variant="contained"
                 onClick={waiting ? verify : register}

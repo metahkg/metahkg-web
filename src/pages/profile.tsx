@@ -47,7 +47,7 @@ function DataTable(props: { user: any }) {
     `${timetoword_long(props.user.createdAt)} ago`,
   ];
   return (
-    <TableContainer className="profile-tablecontainer" component={Paper}>
+    <TableContainer className="ml50 mr50" component={Paper}>
       <Table className="fullwidth" aria-label="simple table">
         <TableBody>
           {items.map((item, index) => (
@@ -119,7 +119,7 @@ export default function Profile() {
   cat && setCat(0);
   return (
     <Box
-      className="profile-root flex"
+      className="flex min-height-fullvh profile-root"
       sx={{
         backgroundColor: "primary.dark",
       }}
@@ -128,10 +128,10 @@ export default function Profile() {
         <LinearProgress className="fullwidth" color="secondary" />
       ) : (
         user?.[0] !== null && (
-          <Paper className="profile-paper">
-            <Box className="profile-mainbox flex">
+          <Paper className="max-height-fullvh overflow-auto">
+            <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
               <Box
-                className="profile-top flex"
+                className="flex justify-center align-center max-width-full mt10"
                 sx={{
                   width: width < 760 ? "100vw" : "70vw",
                 }}
@@ -147,14 +147,14 @@ export default function Profile() {
                 />
                 <br />
                 <div
-                  className="profile-toptextdiv ml20 flex"
+                  className="ml20 flex justify-center profile-toptextdiv"
                   style={{
                     flexDirection: params.id === "self" ? "column" : "row",
                   }}
                 >
-                  <h1 className="profile-toptext">
+                  <h1 className="font-size-30 profile-toptext">
                     <div
-                      className="profile-userspandiv"
+                      className="overflow-hidden"
                       style={{
                         maxWidth:
                           width < 760
@@ -163,7 +163,7 @@ export default function Profile() {
                       }}
                     >
                       <span
-                        className="profile-userspan"
+                        className="overflow-hidden text-overflow-ellipsis"
                         style={{
                           color: user.sex === "M" ? "#34aadc" : "red",
                         }}
@@ -183,7 +183,7 @@ export default function Profile() {
                   </div>
                 </div>
               </Box>
-              <Box className="profile-tablebox flex mt20 mb10 fullwidth font">
+              <Box className="flex mt20 mb10 fullwidth font justify-center">
                 <DataTable user={user} />
               </Box>
               {width < 760 && (
@@ -193,7 +193,7 @@ export default function Profile() {
                     to={`/history/${params.id}`}
                   >
                     <Button
-                      className="profile-historybtn"
+                      className="font-size-16"
                       variant="text"
                       color="secondary"
                     >

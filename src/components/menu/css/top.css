@@ -4,18 +4,6 @@
 .menutop-top {
   height: 50px;
 }
-.menutop-sidebar-btn {
-  margin-right: 40px;
-}
-.menutop-title {
-  color: #f5bd1f;
-  font-size: 18px;
-  user-select: none;
-}
 .menutop-bottom {
-  font-size: 20px;
   height: 40px;
-}
-.menutop-tabtext {
-  font-size: 15px !important;
 }

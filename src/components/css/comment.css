@@ -1,7 +1,3 @@
-.comment-tag-root {
-  font-size: 16px;
-  padding-top: 10px;
-}
 .comment-tag-userlink {
   line-height: 22px;
   max-height: 22px;
@@ -11,12 +7,6 @@
 }
 .comment-tag-userlink:hover {
   text-decoration: underline;
-}
-.comment-tag-time {
-  font-size: 15px;
-}
-.comment-tag-reply {
-  font-size: 19px !important;
 }
 .comment-internal-spacer {
   height: 2px;

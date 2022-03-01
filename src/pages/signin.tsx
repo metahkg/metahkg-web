@@ -83,7 +83,7 @@ export default function Signin() {
           width: width < 760 ? "100vw" : "50vw",
         }}
       >
-        <div className="signin-main-div">
+        <div className="ml50 mr50">
           <div className="flex fullwidth justify-flex-end">
             <Link
               className="notextdecoration"
@@ -91,7 +91,7 @@ export default function Signin() {
               replace
             >
               <Button
-                className="flex notexttransform signin-toregister-btn"
+                className="flex notexttransform font-size-18-force"
                 color="secondary"
                 variant="text"
               >
@@ -101,7 +101,7 @@ export default function Signin() {
           </div>
           <div className="flex justify-center align-center">
             <MetahkgLogo height={50} width={40} svg light className="mb10" />
-            <h1 className="signin-title-text mb20">Sign in</h1>
+            <h1 className="font-size-25 mb20">Sign in</h1>
           </div>
           {alert.text && (
             <Alert className="mb15 mt10" severity={alert.severity}>
@@ -135,7 +135,7 @@ export default function Signin() {
           <br />
           <Button
             disabled={disabled || !(user && pwd)}
-            className="mt10 signin-btn"
+            className="mt10 font-size-16 signin-btn"
             color="secondary"
             variant="contained"
             onClick={signin}

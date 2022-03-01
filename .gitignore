@@ -31,4 +31,4 @@ uploads/
 deploy.sh
 .lh/
 package-lock.json
-.dccache
+internal/
