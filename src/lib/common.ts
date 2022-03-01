@@ -62,10 +62,10 @@ export async function logout() {
   localStorage.clear();
   await axios.get("/api/logout");
 }
-export function wholepath() : string {
+export function wholepath(): string {
   return window.location.href.replace(window.location.origin, "");
 }
-export function checkpwd(pwd: string) : boolean {
+export function checkpwd(pwd: string): boolean {
   if (pwd.length < 8) {
     return false;
   }
