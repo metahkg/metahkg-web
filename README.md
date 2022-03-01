@@ -1,6 +1,6 @@
 # Metahkg Web
 
-The metahkg web app.
+This is the metahkg web app. For backend api, please refer to [metahkg/metahkg-server](https://gitlab.com/metahkg/metahkg-server).
 
 stable: [metahkg.wcyat.me](https://metahkg.wcyat.me)
 
@@ -9,9 +9,9 @@ dev build (probably daily): [metahkg.wcyat.engineer](https://metahkg.wcyat.engin
 [![React](https://badges.aleen42.com/src/react.svg)](http://reactjs.org/)
 [![Typescript](https://badges.aleen42.com/src/typescript.svg)](https://www.typescriptlang.org/)
 
-[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://github.com/metahkg/metahkg)
-[![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg/metahkg)
-[![GitHub license](https://img.shields.io/github/license/metahkg/metahkg)](https://github.com/metahkg/metahkg/blob/master/LICENSE)
+[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://github.com/metahkg-web/metahkg)
+[![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg-web/metahkg)
+[![GitHub license](https://img.shields.io/github/license/metahkg-web/metahkg)](https://github.com/metahkg/metahkg-web/blob/master/LICENSE)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
