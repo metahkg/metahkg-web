@@ -1,0 +1,71 @@
+{
+  "name": "metahkg-web",
+  "version": "0.5.3rc4",
+  "author": "wcyat",
+  "license": "MPL-2.0",
+  "keywords": [
+    "forum",
+    "react"
+  ],
+  "dependencies": {
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@hcaptcha/react-hcaptcha": "^1.1.0",
+    "@mui/icons-material": "^5.4.4",
+    "@mui/material": "^5.4.4",
+    "@tinymce/tinymce-react": "^3.13.1",
+    "@types/date-and-time": "^0.13.0",
+    "@types/dompurify": "^2.3.3",
+    "@types/humanize-duration": "^3.27.1",
+    "@types/react-dom": "^17.0.11",
+    "axios": "^0.26.0",
+    "date-and-time": "^2.2.1",
+    "dompurify": "^2.3.6",
+    "dotenv": "^16.0.0",
+    "email-validator": "^2.0.4",
+    "hash.js": "^1.1.7",
+    "html-react-parser": "^1.4.8",
+    "humanize-duration": "^3.27.1",
+    "humanize-duration-shortened-english": "^3.27.1-ts2",
+    "is-sn-integer": "^0.2.0",
+    "mongodb": "^4.4.0",
+    "query-string": "^7.1.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.2",
+    "react-visibility-sensor": "^5.1.1",
+    "system-commands": "^1.1.7",
+    "tinymce": "^5.10.3"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1",
+    "react-scripts": "5.0.0",
+    "typescript": "^4.5.5"
+  },
+  "scripts": {
+    "start": "serve -s build -p 3199",
+    "start:api": "yarn run start",
+    "build": "node build.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "yarn run build && yarn run start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+.sidebar-catlink:hover {
+  color: #fbc308 !important;
+}
+.sidebar-catlink {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 35px;
+}
+.sidebar-menu-btn {
+  height: 40px;
+  width: 40px;
+}
+.sidebar-box {
+  width: 250px;
+}

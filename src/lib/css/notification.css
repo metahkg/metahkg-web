@@ -1,0 +1,33 @@
+.notification-root,
+.notification-bottom {
+  border-radius: 8px;
+}
+.notification-root {
+  width: 300px;
+}
+.notification-mainbox {
+  background-color: #444;
+  border-radius: 8px;
+}
+.notification-top {
+  background-color: #333;
+  font-size: 14px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.notification-icon {
+  font-size: 14px !important;
+}
+.notification-title {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.notification-close {
+  font-size: 16px !important;
+  margin-right: 30px;
+}
+.notification-text {
+    font-size: 15px;
+    line-height: 19px;
+    max-height: 38px;
+}

@@ -1,0 +1,25 @@
+.shimmer {
+  background: #444;
+  background-image: linear-gradient(to right, #333 30%, #333 40%, #333 50%);
+  background-repeat: no-repeat;
+  animation: shimmering forwards infinite ease-in-out, fadein 0.02s forwards;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmering {
+  from {
+    background-position: top right;
+  }
+
+  to {
+    background-position: top left;
+  }
+}
