@@ -24,7 +24,7 @@
     "html-react-parser": "^1.4.8",
     "humanize-duration": "^3.27.1",
     "humanize-duration-shortened-english": "^3.27.1-ts2",
-    "is-sn-integer": "^0.2.0",
+    "is-sn-integer": "^0.3.0",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

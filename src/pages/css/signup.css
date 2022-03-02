@@ -10,3 +10,6 @@
 .signup-btn {
   height: 40px;
 }
+.signup-sex-form {
+  min-width: 200px !important;
+}

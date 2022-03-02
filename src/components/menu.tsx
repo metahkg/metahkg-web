@@ -19,15 +19,9 @@ import queryString from "query-string";
 import { useHistory, useNotification, useQuery } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
-/*
- * variables are from MenuProvider and can be changed in any components
- * returns SearchMenu if search = true
- * returns ProfileMenu if profile = true
- * else:
- * data is fetched by category or thread id
- * two tabs, newest and hottest which fetch different api urls:
- * /api/<"newest" | "hottest">/<category | 'bytid<thread id>'>
- * MenuThreads are rendered after data is fetched
+/**
+ * This function renders the main content of the menu
+ * @param {AxiosError} err - AxiosError
  */
 function MainContent() {
   const querystring = queryString.parse(window.location.search);
@@ -45,6 +39,11 @@ function MainContent() {
   const [updating, setUpdating] = useState(false);
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
+  /**
+   * It sets the notification state to an object with the open property set to true and the text
+   * property set to the error message.
+   * @param {AxiosError} err - The error object.
+   */
   function onError(err: AxiosError) {
     setNotification({
       open: true,
@@ -52,6 +51,7 @@ function MainContent() {
     });
     err?.response?.status === 404 && navigate("/404", { replace: true });
   }
+  /* A way to make sure that the effect is only run once. */
   useEffect(() => {
     if (!data.length && (category || profile || search || id)) {
       const url = {
@@ -72,6 +72,9 @@ function MainContent() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+  /**
+   * It updates the data array with the new data from the API.
+   */
   function update() {
     setUpdating(true);
     const url = {
@@ -95,6 +98,10 @@ function MainContent() {
       })
       .catch(onError);
   }
+  /**
+   * If the user has scrolled to the bottom of the page, update the list
+   * @param {any} e - The event object.
+   */
   function onScroll(e: any) {
     if (!end && !updating) {
       const diff = e.target.scrollHeight - e.target.scrollTop;

@@ -65,16 +65,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-/*
- * A search bar
- * onChange and onKeyPress are for actions after event like clearing the data and re-search
- * initialvalue sets the initial value of the search bar
+/**
+ * It's a search bar
+ * @param props - {onKeyPress: KeyboardEventHandler; OnChange: ChangeEventHandler}
+ * @returns A search bar with a search icon and an input field.
  */
 export default function SearchBar(props: {
   onKeyPress: KeyboardEventHandler<HTMLDivElement>;
-  onChange:
+  onChange?:
     | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-    | undefined;
 }) {
   const [query] = useQuery();
   const querystring = queryString.parse(window.location.search);

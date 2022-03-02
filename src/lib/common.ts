@@ -51,8 +51,8 @@ export function sleep(ms: number) {
 export const categories: any = JSON.parse(
   process.env.REACT_APP_categories || ""
 );
-export function splitarray(arr: [], start: number, end: number) {
-  const r: [] = [];
+export function splitarray(arr: any[], start: number, end: number) {
+  const r: any[] = [];
   for (let i = start; i <= end; i++) {
     arr[i] !== undefined && r.push(arr[i]);
   }
@@ -83,6 +83,13 @@ export function checkpwd(pwd: string) : boolean {
     if (!contain) {
       return false;
     }
+  }
+  return true;
+}
+export function allequal(arr:any[]) {
+  const first = arr[0];
+  for (const i of arr) {
+    if (i !== first) return false;
   }
   return true;
 }
