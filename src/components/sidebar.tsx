@@ -182,7 +182,7 @@ export default function SideBar() {
             </div>
           )}
           <p className="ml5">
-            Metahkg build {process.env.REACT_APP_build || "v0.5.3rc4"}
+            Metahkg build {process.env.REACT_APP_build || "v0.5.3"}
           </p>
         </Box>
       </Drawer>
