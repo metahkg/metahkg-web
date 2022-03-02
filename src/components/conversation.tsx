@@ -21,14 +21,24 @@ import { useCat, useId } from "./MenuProvider";
 import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
-/*
- * Conversation component gets data from /api/thread/<thread id(props.id)>/<conversation/users>
+type comment = {
+  id: number;
+  user: number;
+  comment: string;
+  createdAt: string; //date string
+  D?: number;
+  U?: number;
+};
+/**
+ * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
+ * @param props.id the thread id
+ * @returns full conversation as Comments
  */
 function Conversation(props: { id: number }) {
   const query = queryString.parse(window.location.search);
   const [notification, setNotification] = useNotification();
-  const [conversation, setConversation] = useState<any>([]);
+  const [conversation, setConversation] = useState<comment[]>([]);
   const [page, setPage] = useState(Number(query.page) || 1);
   const [users, setUsers] = useState<any>({});
   const [details, setDetails] = useState<any>({});
@@ -40,7 +50,6 @@ function Conversation(props: { id: number }) {
   const lastHeight = useRef(0);
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
-  const fetching = useRef(false);
   const navigate = useNavigate();
   const onError = function (err: AxiosError) {
     !notification.open &&
@@ -53,7 +62,6 @@ function Conversation(props: { id: number }) {
   !query.page &&
     navigate(`${window.location.pathname}?page=1`, { replace: true });
   useEffect(() => {
-    fetching.current = true;
     axios
       .get(`/api/thread/${props.id}?type=1`)
       .then((res) => {
@@ -72,6 +80,7 @@ function Conversation(props: { id: number }) {
     axios
       .get(`/api/thread/${props.id}?type=2&page=${page}`)
       .then((res) => {
+        res.data?.[0] === null && navigate("/404", {replace: true});
         setConversation(res.data);
         res.data.length % 25 && setEnd(true);
       })
@@ -91,35 +100,37 @@ function Conversation(props: { id: number }) {
    */
   function update() {
     setUpdating(true);
+    const newpage = !(conversation.length % 25);
     axios
       .get(
-        `/api/thread/${props.id}?type=2&page=${
-          conversation.length % 25 ? page : page + 1
+        `/api/thread/${props.id}?type=2&page=${newpage ? page + 1 : page}${
+          newpage
+            ? ""
+            : `&start=${conversation[conversation.length - 1].id + 1}`
         }`
       )
       .then((res) => {
-        if (conversation.length % 25 && res.data.length) {
-          const c = conversation;
-          for (
-            let i =
-              res.data.findIndex((n: any) => n.id === c[c.length - 1].id) + 1;
-            i < res.data.length;
-            i++
-          ) {
-            c.push(res.data?.[i]);
-          }
-          lastHeight.current = 0;
-          setConversation(c);
+        if (res.data?.[0] === null) {
           setEnd(true);
-        } else if (res.data.length) {
-          const c = conversation;
-          for (let i = 0; i < res.data.length; i++) {
-            c.push(res.data?.[i]);
-          }
-          setConversation(c);
+          setUpdating(false);
+          return;
+        }
+        if (!newpage) {
+          for (let i = 0; i < res.data.length; i++)
+            conversation.push(res.data?.[i]);
+          lastHeight.current = 0;
+          setConversation(conversation);
+          setTimeout(() => {
+            document.getElementById(`c${res.data?.[0]?.id}`)?.scrollIntoView();
+          }, 100);
+          conversation.length % 25 && setEnd(true);
+        } else {
+          for (let i = 0; i < res.data.length; i++)
+            conversation.push(res.data?.[i]);
+          setConversation(conversation);
           setUpdating(false);
           setPage((page) => page + 1);
-          setPages(Math.floor((c.length - 1) / 25) + 1);
+          setPages(Math.floor((conversation.length - 1) / 25) + 1);
           navigate(`/thread/${props.id}?page=${page + 1}`, { replace: true });
           document.getElementById(String(page + 1))?.scrollIntoView();
           const croot = document.getElementById("croot");
@@ -132,34 +143,36 @@ function Conversation(props: { id: number }) {
             // @ts-ignore
             croot.scrollTop -= croot?.clientHeight / 5;
           }
-        } else {
-          setEnd(true);
         }
         setUpdating(false);
       });
   }
-  const ready = !!(
-    conversation.length &&
-    Object.keys(users).length &&
-    Object.keys(details).length &&
-    (localStorage.user ? Object.keys(votes).length : 1)
-  );
+  /**
+   * It takes a page number and sends a request to the server to get the next page of comments
+   * @param {number} p - number
+   */
   function changePage(p: number) {
     setConversation([]);
     setPages(1);
     setPage(p);
     lastHeight.current = 0;
     setEnd(false);
-    setN(Math.random());
+    setN((n) => n + (n > 1 ? -1 : 1) * Math.random());
     navigate(`${window.location.pathname}?page=${p}`, { replace: true });
     axios.get(`/api/thread/${props.id}?type=2&page=${p}`).then((res) => {
-      setConversation(res.data);
-      if (res.data.length % 25) {
-        setEnd(true);
+      if (res.data?.[0] === null) {
+        setNotification({ open: true, text: "Page not found!" });
+        return;
       }
+      setConversation(res.data);
+      res.data.length % 25 && setEnd(true);
       document.getElementById(String(page))?.scrollIntoView();
     });
   }
+  /**
+   * When the user scrolls to the bottom of the page, the function calls the update function
+   * @param {any} e - The event object.
+   */
   function onScroll(e: any) {
     if (!end && !updating) {
       const diff = e.target.scrollHeight - e.target.scrollTop;
@@ -172,9 +185,16 @@ function Conversation(props: { id: number }) {
       }
     }
   }
+  const ready = !!(
+    conversation.length &&
+    Object.keys(users).length &&
+    Object.keys(details).length &&
+    (localStorage.user ? Object.keys(votes).length : 1)
+  );
+
   return (
     <ShareProvider>
-      <div className="conversation-root" style={{ minHeight: "100vh" }}>
+      <div className="min-height-fullvh conversation-root">
         <Share />
         {!ready && <LinearProgress className="fullwidth" color="secondary" />}
         <Title
@@ -263,16 +283,16 @@ function Conversation(props: { id: number }) {
                     (comment: any) =>
                       !comment?.removed && (
                         <Comment
-                          name={users?.[comment.user].name}
+                          name={users?.[comment?.user].name}
                           id={comment.id}
-                          op={users?.[comment.user].name === details.op}
-                          sex={users?.[comment.user].sex}
-                          date={comment.createdAt}
+                          op={users?.[comment?.user].name === details.op}
+                          sex={users?.[comment?.user].sex}
+                          date={comment?.createdAt}
                           tid={props.id}
                           up={comment?.["U"] | 0}
                           down={comment?.["D"] | 0}
                           vote={votes?.[comment.id]}
-                          userid={comment.user}
+                          userid={comment?.user}
                         >
                           {DOMPurify.sanitize(comment?.comment)}
                         </Comment>

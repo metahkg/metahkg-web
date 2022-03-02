@@ -17,11 +17,12 @@ import {
 import { Link } from "react-router-dom";
 import MetahkgIcon from "./icon";
 import { wholepath } from "../lib/common";
-/*
+/**
  * just a template for large screens if there's no content
  * e.g. /category/:id, in which there's no main content but only the menu
  */
 export default function Empty() {
+  /* It's a list of objects. */
   const links: { icon: JSX.Element; title: string; link: string }[] = [
     {
       icon: <CreateIcon />,
@@ -55,7 +56,7 @@ export default function Empty() {
           <Link
             className="notextdecoration white"
             to={`/${
-              localStorage.user ? "iconut" : "signin"
+              localStorage.user ? "logout" : "signin"
             }?returnto=${encodeURIComponent(wholepath())}`}
           >
             <ListItem button className="fullwidth">
@@ -63,7 +64,7 @@ export default function Empty() {
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText>
-                {localStorage.user ? "iconut" : "Sign in / Register"}
+                {localStorage.user ? "logout" : "Sign in / Register"}
               </ListItemText>
             </ListItem>
           </Link>

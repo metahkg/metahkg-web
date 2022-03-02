@@ -23,10 +23,11 @@ import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/icon";
 declare const hcaptcha: { reset: (e: string) => void };
-/*
+/**
  * Sex selector
- * props.disabled: set the Select as disabled if true
- * props.changeHandler: callback to use when user changes selection
+ * @param props.disabled disable the selector
+ * @param props.sex the selected sex
+ * @param props.setSex: function to update sex
  */
 function SexSelect(props: {
   sex: "M" | "F" | undefined;
@@ -34,11 +35,11 @@ function SexSelect(props: {
   disabled: boolean;
 }) {
   const { sex, setSex, disabled } = props;
-  const onChange = (e: SelectChangeEvent<string>) => {
+  const onChange = function (e: SelectChangeEvent<string>) {
     setSex(e.target.value ? "M" : "F");
   };
   return (
-    <FormControl sx={{ minWidth: 200 }}>
+    <FormControl className="signup-sex-form">
       <InputLabel color="secondary">Sex</InputLabel>
       <Select
         color="secondary"
@@ -53,7 +54,7 @@ function SexSelect(props: {
     </FormControl>
   );
 }
-/*
+/**
  * Register component for /register
  * initially 3 text fields and a Select list (Sex)
  * When verification is pending
@@ -64,6 +65,7 @@ function SexSelect(props: {
  * process: register --> verify --> account created -->
  * redirect to query.returnto if exists, otherwise homepage after verification
  * If user already signed in, he is redirected to /
+ * @returns register page
  */
 export default function Register() {
   document.title = "Register | Metahkg";
@@ -91,8 +93,10 @@ export default function Register() {
       .then((res) => {
         localStorage.user = user;
         localStorage.id = res.data.id;
-        navigate(decodeURIComponent(String(query.returnto || "/")), {replace: true});
-        setNotification({open: true, text: `Signed in as ${user}.`})
+        navigate(decodeURIComponent(String(query.returnto || "/")), {
+          replace: true,
+        });
+        setNotification({ open: true, text: `Signed in as ${user}.` });
       })
       .catch((err) => {
         setAlert({
@@ -167,9 +171,7 @@ export default function Register() {
         hcaptcha.reset("");
       });
   }
-  if (localStorage.user) {
-    return <Navigate to="/" replace/>;
-  }
+  if (localStorage.user) return <Navigate to="/" replace />;
   menu && setMenu(false);
   const query = queryString.parse(window.location.search);
   const small = width / 2 - 100 <= 450;
