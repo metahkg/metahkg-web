@@ -5,14 +5,16 @@ import { useMenu } from "../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router";
 import { useNotification } from "../components/ContextProvider";
+/**
+ * It logs the user out.
+ */
 async function logout() {
   await axios.get("/api/logout");
   localStorage.clear();
 }
-/*
- * Logs a user out by clearing localStorage and
- * sending a GET request to /api/logout, the server
- * would then remove user's cookie "key"
+/**
+ * Renders an alert while logging out.
+ * @returns an info alert
  */
 export default function Logout() {
   const [menu, setMenu] = useMenu();
@@ -21,20 +23,20 @@ export default function Logout() {
   const query = queryString.parse(window.location.search);
   menu && setMenu(false);
   logout().then(() => {
-    navigate(decodeURIComponent(String(query.returnto || "/")), {replace: true});
-    setNotification({open: true, text: "Logged out."});
+    navigate(decodeURIComponent(String(query.returnto || "/")), {
+      replace: true,
+    });
+    setNotification({ open: true, text: "Logged out." });
   });
   return (
     <Box
+      className="min-height-fullvh justify-center width-fullvw"
       sx={{
         backgroundColor: "primary.dark",
-        minHeight: "100vh",
-        justifyContent: "center",
-        width: "100vw",
       }}
     >
-      <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
-        <Alert sx={{ marginTop: "30px", width: "50%" }} severity="info">
+      <div className="flex fullwidth justify-center">
+        <Alert className="mt30 halfwidth" severity="info">
           Logging you out...
         </Alert>
       </div>

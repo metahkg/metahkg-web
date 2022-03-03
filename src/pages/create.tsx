@@ -25,11 +25,14 @@ import {
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/icon";
-declare const hcaptcha: { reset: (e: string) => void }; //the hcaptcha object, defined to use hcaptcha.reload("")
-/*
- * A select list to choose category
- * props.errorHandler: executed if categories cannot to fetched
- * props.changehandler: used as a callback after user changes category selection
+/* A workaround for the hcaptcha.reset() function not being exported from the hcaptcha library. */
+declare const hcaptcha: { reset: (e: string) => void };
+/**
+ * It takes in a category number and a setter function for the category number, and returns a form
+ * control with a select menu that allows the user to choose a category
+ * @param {number} props.cat The currently choosed category
+ * @param {React.Dispatch<React.SetStateAction<number>>} props.setCat The function to update props.cat
+ * @returns A form control with a select menu.
  */
 function ChooseCat(props: {
   cat: number;
@@ -59,11 +62,8 @@ function ChooseCat(props: {
     </div>
   );
 }
-/*
- * Create component for /create
- * renders a tinymce editor (for content) and a textfield (for title)
- * A captcha must be completed before a user can create a thread
- * The user must be signed in, otherwise he would be redirected to /signin
+/**
+ * Page for creating a new topic
  */
 export default function Create() {
   const navigate = useNavigate();
@@ -83,6 +83,9 @@ export default function Create() {
     severity: "info",
     text: "",
   });
+  /**
+   * It sends data to the /api/create route.
+   */
   function create() {
     //send data to /api/create
     setAlert({ severity: "info", text: "Creating topic..." });

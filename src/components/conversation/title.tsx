@@ -10,21 +10,19 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useHistory } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-/*
- * Thread title component
- * category: category of the thread'
- * title: title of the thread
- * slink: shortened link of the thread
- * renders: a link arrow to the previous category / search / profile / history,
- * or if this is the first page of this session, /category/>category id>
- * title beside the arrow
- * comment (/comment) and share buttons at the right
- * share button opens a popup
+/**
+ * It's a component that renders the title of the thread.
+ * @param {number} props.category The category of the thread
+ * @param {string} props.title The title of of the thread
+ * @param {string} props.slink The shortened link of the thread
  */
 export default function Title(props: {
-  category: number;
-  title: string;
-  slink: string;
+  /** thread category id */
+  category: number | undefined;
+  /** thread title */
+  title: string | undefined;
+  /** thread shortened link */
+  slink: string | undefined;
 }) {
   const { category, title, slink } = props;
   const [shareOpen, setShareOpen] = useShareOpen();
@@ -57,26 +55,28 @@ export default function Title(props: {
             {title}
           </Typography>
         </div>
-        <Box className="flex">
-          <Tooltip title="Comment" arrow>
-            <Link className="notextdecoration" to={`/comment/${params.id}`}>
-              <IconButton>
-                <ReplyIcon className="white title-reply" />
+        {Boolean(title && slink) && (
+          <Box className="flex">
+            <Tooltip title="Comment" arrow>
+              <Link className="notextdecoration" to={`/comment/${params.id}`}>
+                <IconButton>
+                  <ReplyIcon className="white title-reply" />
+                </IconButton>
+              </Link>
+            </Tooltip>
+            <Tooltip title="Share" arrow>
+              <IconButton
+                onClick={() => {
+                  !shareOpen && setShareOpen(true);
+                  shareTitle !== title && title && setShareTitle(title);
+                  shareLink !== slink && slink && setShareLink(slink);
+                }}
+              >
+                <ShareIcon className="white font-size-20-force title-share" />
               </IconButton>
-            </Link>
-          </Tooltip>
-          <Tooltip title="Share" arrow>
-            <IconButton
-              onClick={() => {
-                !shareOpen && setShareOpen(true);
-                shareTitle !== title && setShareTitle(title);
-                shareLink !== slink && setShareLink(slink);
-              }}
-            >
-              <ShareIcon className="white font-size-20-force title-share" />
-            </IconButton>
-          </Tooltip>
-        </Box>
+            </Tooltip>
+          </Box>
+        )}
       </div>
     </Box>
   );

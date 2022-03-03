@@ -25,11 +25,10 @@ import { useQuery } from "./ContextProvider";
 import { categories, wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./icon";
-/*
- * The sidebar used by Menu
- * link to metahkg frontpage, search bar, sign in/register/logout,
- * create topic, link to categories, telegram group and source code,
- * at the bottom, if signed in, a link to /profile/self
+/**
+ * The sidebar is a
+ * drawer that is opened by clicking on the menu icon on the top left of the
+ * screen. It contains a list of links to different pages
  */
 export default function SideBar() {
   const [open, setOpen] = useState(false);
@@ -182,7 +181,7 @@ export default function SideBar() {
             </div>
           )}
           <p className="ml5">
-            Metahkg build {process.env.REACT_APP_build || "v0.5.3"}
+            Metahkg build {process.env.REACT_APP_build || "v0.5.5rc1"}
           </p>
         </Box>
       </Drawer>

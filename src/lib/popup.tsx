@@ -48,7 +48,7 @@ export function PopUp(props: {
         </IconButton>
       </DialogTitle>
       <Divider />
-      <DialogContent sx={{ padding: "0" }}>
+      <DialogContent className="nopadding">
         <div
           style={{
             width: "100%",

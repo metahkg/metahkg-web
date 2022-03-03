@@ -5,21 +5,17 @@ import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useNotification, useWidth } from "../components/ContextProvider";
-import { useMenu } from "../components/MenuProvider";
+import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
 import { roundup, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/icon";
-/*
- * AddComment component for /comment/:id adds a comment
- * if user not signed in, he would be redirected to /signin
- * if thread with the specified id is not found, user would be redirected to /
- * Renders a tinymce editor for editing comment
- * if localStorage.reply exists, tinymce's initial content is set to localStorage.reply
- * captcha not needed
+/**
+ * This page is used to add a comment to a thread
  */
 export default function AddComment() {
   const navigate = useNavigate();
   const [menu, setMenu] = useMenu();
+  const [data, setData] = useData();
   const [width] = useWidth();
   const [comment, setComment] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -59,6 +55,9 @@ export default function AddComment() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  /**
+   * It sends a post request to the server with the comment data.
+   */
   function addcomment() {
     //send data to server /api/comment
     setDisabled(true);
@@ -66,6 +65,7 @@ export default function AddComment() {
     axios
       .post("/api/comment", { id: id, comment: comment })
       .then((res) => {
+        data.length && setData([]);
         navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}`);
       })
       .catch((err) => {

@@ -35,7 +35,7 @@ export default function PageTop(props: {
       <Typography
         className={last ? "pointer" : "user-select-none transparent"}
         sx={last ? { color: "secondary.main" } : {}}
-        onClick={onLastClicked}
+        onClick={last ? onLastClicked : () => {}}
       >
         Last Page
       </Typography>
@@ -55,7 +55,7 @@ export default function PageTop(props: {
       <Typography
         className={next ? "pointer" : "user-select-none transparent"}
         sx={next ? { color: "secondary.main" } : {}}
-        onClick={onNextClicked}
+        onClick={next ? onNextClicked : () => {}}
       >
         Next Page
       </Typography>

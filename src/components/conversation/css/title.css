@@ -1,5 +1,6 @@
 .title-root {
   height: 47px;
+  border-bottom: 0.1px solid #3b3b3b;
 }
 .title-text {
   line-height: 24px !important;

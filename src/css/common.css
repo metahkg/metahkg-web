@@ -89,11 +89,17 @@
 .overflow-hidden {
   overflow: hidden;
 }
+.height-fullvh {
+  height: 100vh;
+}
 .min-height-fullvh {
   min-height: 100vh;
 }
 .min-height-full {
   min-height: 100%;
+}
+.width-fullvw {
+  width: 100vw;
 }
 .max-width-full {
   max-width: 100%;

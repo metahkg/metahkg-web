@@ -21,18 +21,37 @@ import { useCat, useId } from "./MenuProvider";
 import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
+import PageBottom from "./conversation/pagebottom";
 type comment = {
+  /** comment id */
   id: number;
+  /** comment user id */
   user: number;
+  /** the comment (in stringified html) */
   comment: string;
-  createdAt: string; //date string
+  /** date string */
+  createdAt: string;
+  /** number of downvotes */
   D?: number;
+  /** number of upvotes */
   U?: number;
+};
+type details = {
+  /** thread shortened link */
+  slink?: string;
+  /** thread category id */
+  category?: number;
+  /** thread title */
+  title?: string;
+  /** number of comments */
+  c?: number;
+  /** thread original poster name */
+  op?: string;
 };
 /**
  * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
- * @param props.id the thread id
+ * @param {number} props.id the thread id
  * @returns full conversation as Comments
  */
 function Conversation(props: { id: number }) {
@@ -41,7 +60,7 @@ function Conversation(props: { id: number }) {
   const [conversation, setConversation] = useState<comment[]>([]);
   const [page, setPage] = useState(Number(query.page) || 1);
   const [users, setUsers] = useState<any>({});
-  const [details, setDetails] = useState<any>({});
+  const [details, setDetails] = useState<details>({});
   const [votes, setVotes] = useState<any>({});
   const [updating, setUpdating] = useState(false);
   const [pages, setPages] = useState(1);
@@ -51,6 +70,7 @@ function Conversation(props: { id: number }) {
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
   const navigate = useNavigate();
+  /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
     !notification.open &&
       setNotification({
@@ -80,14 +100,15 @@ function Conversation(props: { id: number }) {
     axios
       .get(`/api/thread/${props.id}?type=2&page=${page}`)
       .then((res) => {
-        res.data?.[0] === null && navigate("/404", {replace: true});
+        /** redirect to 404 if thread (or page) not found */
+        res.data?.[0] === null && navigate("/404", { replace: true });
         setConversation(res.data);
         res.data.length % 25 && setEnd(true);
       })
       .catch(onError);
     if (localStorage.user) {
       axios
-        .get(`/api/getvotes?id=${Number(props.id)}`)
+        .get(`/api/getvotes?id=${props.id}`)
         .then((res) => {
           setVotes(res.data);
         })
@@ -96,7 +117,8 @@ function Conversation(props: { id: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
   /**
-   * @description get new comments or next page (if last comment id % 25 = 0)
+   * It fetches new comments, or the next page (if last comment id % 25 = 0)
+   * of messages from the server and appends them to the conversation array
    */
   function update() {
     setUpdating(true);
@@ -132,24 +154,13 @@ function Conversation(props: { id: number }) {
           setPage((page) => page + 1);
           setPages(Math.floor((conversation.length - 1) / 25) + 1);
           navigate(`/thread/${props.id}?page=${page + 1}`, { replace: true });
-          document.getElementById(String(page + 1))?.scrollIntoView();
-          const croot = document.getElementById("croot");
-          if (
-            // @ts-ignore
-            !(croot?.clientHeight / 5 + 60 >= croot?.clientHeight) &&
-            // @ts-ignore
-            croot?.scrollHeight - croot?.scrollTop > croot?.clientHeight
-          ) {
-            // @ts-ignore
-            croot.scrollTop -= croot?.clientHeight / 5;
-          }
         }
         setUpdating(false);
       });
   }
   /**
    * It takes a page number and sends a request to the server to get the next page of comments
-   * @param {number} p - number
+   * @param {number} p - new page number
    */
   function changePage(p: number) {
     setConversation([]);
@@ -191,7 +202,14 @@ function Conversation(props: { id: number }) {
     Object.keys(details).length &&
     (localStorage.user ? Object.keys(votes).length : 1)
   );
-
+  if (ready && query.c) {
+    navigate(`${window.location.pathname}?page=${query.page}`, {
+      replace: true,
+    });
+    setTimeout(() => {
+      document.getElementById(`c${query.c}`)?.scrollIntoView();
+    }, 100);
+  }
   return (
     <ShareProvider>
       <div className="min-height-fullvh conversation-root">
@@ -206,9 +224,10 @@ function Conversation(props: { id: number }) {
           id="croot"
           key={n}
           className="overflow-auto conversation-paper"
+          sx={{ bgcolor: "primary.dark" }}
           onScroll={onScroll}
         >
-          <Box className="fullwidth" sx={{ bgcolor: "primary.dark" }}>
+          <Box className="fullwidth max-height-full max-width-full">
             {ready &&
               [...Array(pages)].map((p, index) => (
                 <Box>
@@ -248,7 +267,7 @@ function Conversation(props: { id: number }) {
                   >
                     <PageTop
                       id={roundup(conversation[0].id / 25) + index}
-                      pages={roundup(details.c / 25)}
+                      pages={roundup((details.c || 0) / 25)}
                       page={roundup(conversation[0].id / 25) + index}
                       onChange={(e: SelectChangeEvent<number>) => {
                         changePage(Number(e.target.value));
@@ -261,7 +280,7 @@ function Conversation(props: { id: number }) {
                       }
                       next={
                         roundup(conversation[0].id / 25) + index !==
-                        roundup(details.c / 25)
+                        roundup((details.c || 0) / 25)
                       }
                       onLastClicked={() => {
                         changePage(
@@ -322,6 +341,7 @@ function Conversation(props: { id: number }) {
               <CircularProgress color="secondary" />
             )}
           </Box>
+          <PageBottom />
         </Paper>
       </div>
     </ShareProvider>

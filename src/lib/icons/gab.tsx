@@ -1,3 +1,11 @@
+/**
+ * It creates a SVG image of gab logo
+ * @param {boolean} props.white use white
+ * @param {boolean} props.black use black
+ * @param {string} props.color custom color
+ * @param {number} props.width width of the image
+ * @param {number} props.height height of the image
+ */
 export default function Gab(props: {
   white?: boolean;
   black?: boolean;
