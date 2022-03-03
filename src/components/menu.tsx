@@ -116,7 +116,7 @@ function MainContent() {
   }
   return (
     <Paper
-      className="overflow-auto"
+      className="nobgimage overflow-auto"
       style={{
         maxHeight: search ? "calc(100vh - 151px)" : "calc(100vh - 91px)",
       }}
@@ -129,7 +129,7 @@ function MainContent() {
         }}
       >
         {!!(data.length && data?.[0] !== null) && (
-          <Box className="flex flex-dir-column max-width-full">
+          <Box className="flex flex-dir-column max-width-full menu-bottom">
             {data.map((thread: summary) => (
               <div>
                 <MenuThread

@@ -27,8 +27,9 @@ export default function MenuThread(props: { thread: summary }) {
       to={`/thread/${thread.id}?page=1`}
     >
       <Box
-        className="flex fullwidth flex-dir-column menuthread-root"
-        sx={id === thread.id ? { bgcolor: "#303030 !important" } : {}}
+        className={`flex fullwidth flex-dir-column menuthread-root${
+          id === thread.id ? "-selected" : ""
+        }`}
       >
         <div className="flex fullwidth align-center justify-space-between menuthread-top">
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -76,7 +77,9 @@ export default function MenuThread(props: { thread: summary }) {
                 variant="contained"
                 className="nomargin nopadding notexttransform menuthread-catbtn"
               >
-                <p className="nomargin font-size-12 menuthread-catname">{thread.catname}</p>
+                <p className="nomargin font-size-12 menuthread-catname">
+                  {thread.catname}
+                </p>
               </Button>
             </Link>
           )}

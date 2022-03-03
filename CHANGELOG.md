@@ -60,3 +60,8 @@ node server/migrate/migratetov0.5.2.js
 
 - interface changes (mainly on conversation)
 - adopt the newest version of api to fetch new comments
+
+## v0.5.5rc2
+
+- links for individual comments
+- you can now share individual comments

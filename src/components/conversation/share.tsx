@@ -86,7 +86,7 @@ export default function Share() {
           aria-readonly
           value={text}
         />
-        <div className="mt5">
+        <div className="mt5 overflow-auto nowrap">
           <Tooltip arrow title="Copy">
             <IconButton
               onClick={async () => {

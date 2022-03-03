@@ -1,4 +1,7 @@
 .menuthread-root:hover {
+  background-color: #242424;
+}
+.menuthread-root-selected {
   background-color: #282828;
 }
 .menuthread-icons {

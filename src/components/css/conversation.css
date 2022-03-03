@@ -4,7 +4,6 @@
 }
 .conversation-paper {
   max-height: calc(100vh - 47.5px);
-  background-image: none !important;
 }
 .conversation-paper-loading {
   max-height: calc(100vh - 51.5px);

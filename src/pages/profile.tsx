@@ -147,7 +147,7 @@ export default function Profile() {
         <LinearProgress className="fullwidth" color="secondary" />
       ) : (
         user?.[0] !== null && (
-          <Paper className="max-height-fullvh overflow-auto">
+          <Paper className="nobgimage max-height-fullvh overflow-auto">
             <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
               <Box
                 className="flex justify-center align-center max-width-full mt10"

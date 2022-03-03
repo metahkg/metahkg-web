@@ -58,7 +58,9 @@ function Conversation(props: { id: number }) {
   const query = queryString.parse(window.location.search);
   const [notification, setNotification] = useNotification();
   const [conversation, setConversation] = useState<comment[]>([]);
-  const [page, setPage] = useState(Number(query.page) || 1);
+  const [page, setPage] = useState(
+    Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+  );
   const [users, setUsers] = useState<any>({});
   const [details, setDetails] = useState<details>({});
   const [votes, setVotes] = useState<any>({});
@@ -80,6 +82,7 @@ function Conversation(props: { id: number }) {
     err?.response?.status === 404 && navigate("/404", { replace: true });
   };
   !query.page &&
+    !query.c &&
     navigate(`${window.location.pathname}?page=1`, { replace: true });
   useEffect(() => {
     axios
@@ -89,6 +92,16 @@ function Conversation(props: { id: number }) {
         !cat && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
+        if (!res.data.slink) {
+          axios.post("https://api-us.wcyat.me", {
+            url: `${window.location.origin}/thread/${id}?page=1`,
+          }).then(sres => {
+            setDetails(Object.assign(res.data, {slink: `https://l.wcyat.me/${sres.data.id}`}));
+          }).catch((err) => {
+            setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
+            setDetails(Object.assign(res.data, {slink: `${window.location.origin}/thread/${id}?page=1`}));
+          })
+        }
       })
       .catch(onError);
     axios
@@ -196,6 +209,7 @@ function Conversation(props: { id: number }) {
       }
     }
   }
+  /* It's checking if the conversation, users, details and votes are all ready. */
   const ready = !!(
     conversation.length &&
     Object.keys(users).length &&
@@ -203,7 +217,7 @@ function Conversation(props: { id: number }) {
     (localStorage.user ? Object.keys(votes).length : 1)
   );
   if (ready && query.c) {
-    navigate(`${window.location.pathname}?page=${query.page}`, {
+    navigate(`${window.location.pathname}?page=${page}`, {
       replace: true,
     });
     setTimeout(() => {
@@ -223,7 +237,7 @@ function Conversation(props: { id: number }) {
         <Paper
           id="croot"
           key={n}
-          className="overflow-auto conversation-paper"
+          className="overflow-auto nobgimage conversation-paper"
           sx={{ bgcolor: "primary.dark" }}
           onScroll={onScroll}
         >
@@ -307,11 +321,13 @@ function Conversation(props: { id: number }) {
                           op={users?.[comment?.user].name === details.op}
                           sex={users?.[comment?.user].sex}
                           date={comment?.createdAt}
+                          title={details.title}
                           tid={props.id}
                           up={comment?.["U"] | 0}
                           down={comment?.["D"] | 0}
                           vote={votes?.[comment.id]}
                           userid={comment?.user}
+                          slink={comment?.slink}
                         >
                           {DOMPurify.sanitize(comment?.comment)}
                         </Comment>

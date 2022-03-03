@@ -1,7 +1,7 @@
 import "./css/comment.css";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { Reply as ReplyIcon } from "@mui/icons-material";
+import { Reply as ReplyIcon, Share as ShareIcon } from "@mui/icons-material";
 import parse from "html-react-parser";
 import dateat from "date-and-time";
 import { timetoword } from "../lib/common";
@@ -9,6 +9,9 @@ import VoteButtons from "./votebuttons";
 import { PopUp } from "../lib/popup";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
+import axios from "axios";
+import { useNotification } from "./ContextProvider";
 /**
  * Comment component renders a comment
  * which includes a title (Tag)
@@ -35,6 +38,8 @@ function Comment(props: {
   id: number;
   /** thread id */
   tid: number;
+  /** thread title */
+  title?: string;
   /** comment user's id */
   userid: number;
   /** comment username */
@@ -49,9 +54,10 @@ function Comment(props: {
   down: number;
   /** comment user's vote' */
   vote?: "U" | "D";
+  /** comment share link */
+  slink?: string;
 }) {
-  const { op, sex, id, tid, userid, name, children, date, up, down, vote } =
-    props;
+  const { op, sex, id, tid, title, userid, name, children, date, up, down, vote, slink } = props;
   /**
    * Tag serves as a title for the comment
    * renders user id, username (as children),
@@ -59,9 +65,44 @@ function Comment(props: {
    */
   function Tag(tprops: { children: string | JSX.Element | JSX.Element[] }) {
     const [open, setOpen] = useState(false);
+    const [link, setLink] = useState(slink);
+    const [,setShareLink] = useShareLink();
+    const [,setShareTitle] = useShareTitle();
+    const [,setShareOpen] = useShareOpen();
+    const [, setNotification] = useNotification();
     const navigate = useNavigate();
+    useEffect(() => {
+      if (!slink) {
+        axios.post("https://api-us.wcyat.me/create", {url: `${window.location.origin}/thread/${tid}?c=${id}`})
+        .then(res => {
+          setLink(`https://l.wcyat.me/${res.data.id}`);
+        })
+        .catch(() => {
+          setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
+        })
+      }
+    }, [setNotification, setShareLink])
+    const buttons = [
+      {
+        icon: <ReplyIcon className="metahkg-grey-force font-size-21-force" />,
+        title: "Quote",
+        action: () => {
+          localStorage.reply = children;
+          navigate(`/comment/${tid}`);
+        },
+      },
+      {
+        icon: <ShareIcon className="metahkg-grey-force font-size-18-force" />,
+        title: "Share",
+        action: () => {
+          setShareLink(link || `${window.location.origin}/thread/${tid}?c=${id}`);
+          setShareTitle(title + ` - comment #${id}`)
+          setShareOpen(true);
+        }
+      }
+    ];
     return (
-      <div className="flex align-center font-size-16 pt10">
+      <div className="flex align-center font-size-16 pt10 justify-space-between">
         <PopUp
           withbutton
           open={open}
@@ -74,51 +115,51 @@ function Comment(props: {
             <br />#{userid}
           </p>
         </PopUp>
-        <p
-          className="novmargin"
-          style={{
-            color: op ? "#f5bd1f" : "#aca9a9",
-          }}
-        >
-          #{id}
-        </p>
-        <p
-          className="comment-tag-userlink novmargin ml10 text-overflow-ellipsis nowrap pointer overflow-hidden max-width-full"
-          onClick={() => {
-            setOpen(true);
-          }}
-          style={{
-            color: sex === "M" ? "#34aadc" : "red",
-          }}
-        >
-          {tprops.children}
-        </p>
-        <Tooltip
-          title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")}
-          arrow
-        >
-          <p className="novmargin metahkg-grey ml10 font-size-15">
-            {timetoword(date)}
-          </p>
-        </Tooltip>
-        <Tooltip title="Quote" arrow>
-          <IconButton
-            className="ml10 nopadding"
-            onClick={() => {
-              localStorage.reply = children;
-              navigate(`/comment/${tid}`);
+        <div className="flex align-center">
+          <p
+            className="novmargin"
+            style={{
+              color: op ? "#f5bd1f" : "#aca9a9",
             }}
           >
-            <ReplyIcon className="metahkg-grey-force font-size-19-force" />
-          </IconButton>
-        </Tooltip>
+            #{id}
+          </p>
+          <p
+            className="comment-tag-userlink novmargin ml10 text-overflow-ellipsis nowrap pointer overflow-hidden max-width-full"
+            onClick={() => {
+              setOpen(true);
+            }}
+            style={{
+              color: sex === "M" ? "#34aadc" : "red",
+            }}
+          >
+            {tprops.children}
+          </p>
+          <Tooltip
+            title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")}
+            arrow
+          >
+            <p className="novmargin metahkg-grey ml10 font-size-15">
+              {timetoword(date)}
+            </p>
+          </Tooltip>
+        </div>
+        <div className="flex align-center">
+          {buttons.map((button) => (
+            <Tooltip title={button.title} arrow>
+              <IconButton className="ml10 nopadding" onClick={button.action}>
+                {button.icon}
+              </IconButton>
+            </Tooltip>
+          ))}
+        </div>
       </div>
     );
   }
   return (
     <Box
       id={`c${id}`}
-      className="text-align-left mt6"
+      className="text-align-left mt5"
       sx={{
         bgcolor: "primary.main",
       }}
