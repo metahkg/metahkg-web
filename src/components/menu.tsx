@@ -116,7 +116,7 @@ function MainContent() {
   }
   return (
     <Paper
-      className="nobgimage overflow-auto"
+      className="nobgimage noshadow overflow-auto"
       style={{
         maxHeight: search ? "calc(100vh - 151px)" : "calc(100vh - 91px)",
       }}
@@ -173,10 +173,7 @@ function Menu() {
     <Box
       className={`max-width-full min-height-fullvh flex-dir-column ${
         menu ? "flex" : "display-none"
-      }`}
-      sx={{
-        bgcolor: "primary.main",
-      }}
+      } menu-root`}
     >
       <MenuTop
         refresh={() => {

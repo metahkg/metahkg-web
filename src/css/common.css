@@ -68,6 +68,9 @@
 .align-flex-end {
   align-items: flex-end;
 }
+.align-flex-start {
+  align-items: flex-start;
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -148,4 +151,7 @@
 }
 .nobgimage {
   background-image: none !important;
+}
+.noshadow {
+  box-shadow: none !important;
 }
