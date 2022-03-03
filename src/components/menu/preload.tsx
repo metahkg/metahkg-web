@@ -18,9 +18,9 @@ export default function MenuPreload() {
       {[...Array(amount)].map(() => (
         <div>
           <Button className="fullwidth flex align-flex-start flex-dir-column justify-center preload-btn">
-            <Shimmer height={20} width={buttonwidth * 0.45} />
-            <div className="preload-spacer" />
-            <Shimmer height={24} width={buttonwidth * 0.8} />
+            <Shimmer className="ml10" height={20} width={buttonwidth * 0.45} />
+            <div className="ml10 preload-spacer" />
+            <Shimmer className="ml10" height={24} width={buttonwidth * 0.8} />
           </Button>
           <Divider />
         </div>
