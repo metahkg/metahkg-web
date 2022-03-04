@@ -95,7 +95,7 @@ function Conversation(props: { id: number }) {
         if (!res.data.slink) {
           axios.post("https://api-us.wcyat.me/create", {
             url: `${window.location.origin}/thread/${id}?page=1`,
-          }).then(sres => {
+          }).then(res => {
             setDetails(Object.assign(res.data, {slink: `https://l.wcyat.me/${res.data.id}`}));
           }).catch((err) => {
             setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
