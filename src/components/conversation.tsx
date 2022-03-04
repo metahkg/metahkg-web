@@ -93,10 +93,10 @@ function Conversation(props: { id: number }) {
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
         if (!res.data.slink) {
-          axios.post("https://api-us.wcyat.me", {
+          axios.post("https://api-us.wcyat.me/create", {
             url: `${window.location.origin}/thread/${id}?page=1`,
           }).then(sres => {
-            setDetails(Object.assign(res.data, {slink: `https://l.wcyat.me/${sres.data.id}`}));
+            setDetails(Object.assign(res.data, {slink: `https://l.wcyat.me/${res.data.id}`}));
           }).catch((err) => {
             setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
             setDetails(Object.assign(res.data, {slink: `${window.location.origin}/thread/${id}?page=1`}));
