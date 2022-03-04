@@ -237,7 +237,7 @@ function Conversation(props: { id: number }) {
         <Paper
           id="croot"
           key={n}
-          className="overflow-auto nobgimage conversation-paper"
+          className="overflow-auto nobgimage noshadow conversation-paper"
           sx={{ bgcolor: "primary.dark" }}
           onScroll={onScroll}
         >

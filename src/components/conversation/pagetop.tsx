@@ -29,7 +29,7 @@ export default function PageTop(props: {
   } = props;
   return (
     <Box
-      className="flex justify-space-between align-center ml20 mr20 pagetop-root"
+      className="flex justify-space-between align-center ml30 mr30 pagetop-root"
       id={String(id)}
     >
       <Typography

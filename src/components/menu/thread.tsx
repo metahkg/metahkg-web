@@ -10,10 +10,9 @@ import {
 import { timetoword, roundup, summary } from "../../lib/common";
 import { Link } from "react-router-dom";
 import { useCat, useId, useProfile, useSearch } from "../MenuProvider";
-/*
- * A thread in the menu
- * Basic information about the thread is needed (see type summary in ../../lib/common)
- * category of the current menu is needed to decide whether category lebel is rendered or not
+/**
+ * A component that renders a thread in the menu. 
+ * @param {summary} props.thread thread info
  */
 export default function MenuThread(props: { thread: summary }) {
   const [cat] = useCat();
