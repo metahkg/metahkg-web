@@ -34,7 +34,7 @@ export function Notification() {
               <Notifications className="metahkg-grey-force font-size-14-force" />
               <p className="metahkg-grey ml10 mt6 mb6">Notification</p>
             </div>
-            <Close className="icon-white-onhover metahkg-grey-force font-size-16-force mr15" />
+            <Close className="icon-white-onhover metahkg-grey-force font-size-16-force mr12" />
           </div>
         </Box>
         <Box className="fullwidth notification-bottom">

@@ -3,10 +3,10 @@
   color: black;
 }
 .conversation-paper {
-  max-height: calc(100vh - 47.5px);
+  max-height: calc(100vh - 47px);
 }
 .conversation-paper-loading {
-  max-height: calc(100vh - 51.5px);
+  max-height: calc(100vh - 51px);
 }
 .conversation-bottom {
   height: 90px;

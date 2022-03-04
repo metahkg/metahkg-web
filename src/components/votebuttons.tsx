@@ -65,7 +65,7 @@ export default function VoteButtons(props: {
               color: vote === "U" ? "green" : "#aaa",
             }}
           >
-            <ArrowDropUp className="icon-white-onhover" />
+            <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
             {up}
           </Typography>
         </Button>
@@ -82,7 +82,7 @@ export default function VoteButtons(props: {
               color: vote === "D" ? "red" : "#aaa",
             }}
           >
-            <ArrowDropDown className="icon-white-onhover" />
+            <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />
             {down}
           </Typography>
         </Button>

@@ -87,8 +87,7 @@ function Comment(props: {
         icon: <ReplyIcon className="metahkg-grey-force font-size-21-force" />,
         title: "Quote",
         action: () => {
-          localStorage.reply = children;
-          navigate(`/comment/${tid}`);
+          navigate(`/comment/${tid}?quote=${id}`);
         },
       },
       {
@@ -166,7 +165,7 @@ function Comment(props: {
     >
       <div className="ml20 mr20">
         <Tag>{name}</Tag>
-        <p className="mt10 mb10">{parse(children)}</p>
+        <p className="mt10 mb10 comment-body">{parse(children)}</p>
         <div className="comment-internal-spacer" />
       </div>
       <div className="ml20">

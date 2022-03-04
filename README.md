@@ -9,7 +9,7 @@ dev build (probably daily): [metahkg.wcyat.engineer](https://metahkg.wcyat.engin
 [![React](https://badges.aleen42.com/src/react.svg)](http://reactjs.org/)
 [![Typescript](https://badges.aleen42.com/src/typescript.svg)](https://www.typescriptlang.org/)
 
-[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://github.com/metahkg-web/metahkg)
+[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://gitlab.com/metahkg-web/metahkg)
 [![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg-web/metahkg)
 [![GitHub license](https://img.shields.io/github/license/metahkg-web/metahkg)](https://github.com/metahkg/metahkg-web/blob/master/LICENSE)
 
@@ -21,7 +21,7 @@ dev build (probably daily): [metahkg.wcyat.engineer](https://metahkg.wcyat.engin
 
 This open-source project was created primarily because of me being unable to register a lihkg account as a high school student.
 
-Currently, it aims to simulate the lihkg experience by resembling all of its features with the help of material-ui and mongodb. However, I might also add other useful features.
+Currently, it aims to be a fully featured alternative to lihkg. However, I might also add other useful features.
 
 As contrasted with lihkg, metahkg is open to everyone and anyone can create an account with a email address, no matter issued by a university or not.
 
@@ -34,4 +34,4 @@ For a fast setup run ./setup.sh.
 
 Logo (public/images/logo.svg) originally by "white card", CC-BY-4.0.
 Modified versions by wcyat, CC0.
-See public/LICENSE for details.
+See public/images/LICENSE for details.

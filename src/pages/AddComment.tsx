@@ -1,5 +1,5 @@
 import "./css/addcomment.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Box, Button } from "@mui/material";
 import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
@@ -9,6 +9,7 @@ import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
 import { roundup, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/icon";
+import queryString from "query-string";
 /**
  * This page is used to add a comment to a thread
  */
@@ -18,14 +19,16 @@ export default function AddComment() {
   const [data, setData] = useData();
   const [width] = useWidth();
   const [comment, setComment] = useState("");
+  const [inittext, setInittext] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [alert, setAlert] = useState<{ severity: severity; text: string }>({
     severity: "info",
     text: "",
   });
   const [, setNotification] = useNotification();
-  const inittext = useRef("");
   const params = useParams();
+  const query = queryString.parse(window.location.search);
+  const quote = Number(query.quote);
   useEffect(() => {
     if (localStorage.user) {
       axios.post("/api/check", { id: id }).catch((err) => {
@@ -52,6 +55,25 @@ export default function AddComment() {
           });
         }
       });
+      if (quote) {
+        setNotification({ open: true, text: "Fetching comment..." });
+        axios
+          .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`)
+          .then((res) => {
+            setInittext(
+              `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
+            );
+            setTimeout(() => {
+              setNotification({ open: false, text: ""});
+            }, 1000);
+          })
+          .catch((err) => {
+            setNotification({
+              open: true,
+              text: "Unable to fetch comment. This comment would not be a quote.",
+            });
+          });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -66,7 +88,7 @@ export default function AddComment() {
       .post("/api/comment", { id: id, comment: comment })
       .then((res) => {
         data.length && setData([]);
-        navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}`);
+        navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`);
       })
       .catch((err) => {
         setAlert({
@@ -91,10 +113,6 @@ export default function AddComment() {
   const id = Number(params.id);
   menu && setMenu(false);
   document.title = "Comment | Metahkg";
-  if (localStorage.reply && localStorage.user) {
-    inittext.current = `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${localStorage.reply}</div></blockquote><p></p>`;
-    localStorage.removeItem("reply");
-  }
   return (
     <Box
       className="min-height-fullvh flex justify-center fullwidth align-center"
@@ -127,7 +145,7 @@ export default function AddComment() {
           )}
           <TextEditor
             key={id}
-            text={inittext.current}
+            text={inittext}
             changehandler={(v, e: any) => {
               setComment(e.getContent());
             }}
