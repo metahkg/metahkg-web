@@ -96,10 +96,10 @@ function Conversation(props: { id: number }) {
           axios.post("https://api-us.wcyat.me/create", {
             url: `${window.location.origin}/thread/${id}?page=1`,
           }).then(res => {
-            setDetails(Object.assign(res.data, {slink: `https://l.wcyat.me/${res.data.id}`}));
+            setDetails(Object.assign(details, {slink: `https://l.wcyat.me/${res.data.id}`}));
           }).catch((err) => {
             setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
-            setDetails(Object.assign(res.data, {slink: `${window.location.origin}/thread/${id}?page=1`}));
+            setDetails(Object.assign(details, {slink: `${window.location.origin}/thread/${id}?page=1`}));
           })
         }
       })
