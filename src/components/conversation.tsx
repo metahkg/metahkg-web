@@ -88,19 +88,33 @@ function Conversation(props: { id: number }) {
     axios
       .get(`/api/thread/${props.id}?type=1`)
       .then((res) => {
-        setDetails(res.data);
+        res.data.slink && setDetails(res.data);
         !cat && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
         if (!res.data.slink) {
-          axios.post("https://api-us.wcyat.me/create", {
-            url: `${window.location.origin}/thread/${id}?page=1`,
-          }).then(res => {
-            setDetails(Object.assign(details, {slink: `https://l.wcyat.me/${res.data.id}`}));
-          }).catch((err) => {
-            setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
-            setDetails(Object.assign(details, {slink: `${window.location.origin}/thread/${id}?page=1`}));
-          })
+          axios
+            .post("https://api-us.wcyat.me/create", {
+              url: `${window.location.origin}/thread/${props.id}?page=1`,
+            })
+            .then((sres) => {
+              setDetails(
+                Object.assign(res.data, {
+                  slink: `https://l.wcyat.me/${sres.data.id}`,
+                })
+              );
+            })
+            .catch(() => {
+              setNotification({
+                open: true,
+                text: "Unable to generate shortened link. A long link will be used instead.",
+              });
+              setDetails(
+                Object.assign(res.data, {
+                  slink: `${window.location.origin}/thread/${props.id}?page=1`,
+                })
+              );
+            });
         }
       })
       .catch(onError);
