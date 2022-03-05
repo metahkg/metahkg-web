@@ -8,7 +8,7 @@ import { useNotification, useWidth } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
 import { roundup, severity, wholepath } from "../lib/common";
-import MetahkgLogo from "../components/icon";
+import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 /**
  * This page is used to add a comment to a thread

@@ -24,7 +24,7 @@ import SearchBar from "./searchbar";
 import { useQuery } from "./ContextProvider";
 import { categories, wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
-import MetahkgLogo from "./icon";
+import MetahkgLogo from "./logo";
 /**
  * The sidebar is a
  * drawer that is opened by clicking on the menu icon on the top left of the
@@ -74,14 +74,14 @@ export default function SideBar() {
         <Box className="sidebar-box max-width-full" role="presentation">
           <div className="fullwidth">
             <List className="fullwidth">
-              <Link to="/" className="notextdecoration white">
+              <a href="https://war.ukraine.ua/donate/" className="notextdecoration white">
                 <ListItem button onClick={onClick}>
                   <ListItemIcon>
-                    <MetahkgLogo height={24} width={24} svg light />
+                    <MetahkgLogo height={24} width={30} ua />
                   </ListItemIcon>
-                  <ListItemText>Metahkg</ListItemText>
+                  <ListItemText>Donate to Ukraine</ListItemText>
                 </ListItem>
-              </Link>
+              </a>
             </List>
             <div className="ml10 mr10">
               <SearchBar

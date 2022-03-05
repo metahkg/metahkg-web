@@ -25,7 +25,7 @@ import {
 } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
-import MetahkgLogo from "../components/icon";
+import MetahkgLogo from "../components/logo";
 /* A workaround for the hcaptcha.reset() function not being exported from the hcaptcha library. */
 declare const hcaptcha: { reset: (e: string) => void };
 /**

@@ -60,11 +60,6 @@ export default function Share() {
       title: "Share to Facebook",
       link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
     },
-    {
-      icon: <Gab white />,
-      title: "Share to Gab",
-      link: `https://gab.com/compose?text=${encodeURIComponent(text)}`,
-    },
   ];
   return (
     <PopUp

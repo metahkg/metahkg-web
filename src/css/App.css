@@ -8,7 +8,7 @@
   background-color: #464646;
   border-radius: 7px;
 }
-body {
+* {
   scrollbar-width: thin;
   scrollbar-color: #464646 #151515;
 }
