@@ -105,9 +105,12 @@ function Comment(props: {
         ) : (
           <Visibility className="metahkg-grey-force font-size-18-force" />
         ),
-        title: "Story mode",
+        title: story ? "Quit story mode" : "Story mode",
         action: () => {
           setStory(story ? 0 : userid);
+          story && setTimeout(() => {
+            document.getElementById(`c${id}`)?.scrollIntoView();
+          }, 10);
         },
       },
       {
