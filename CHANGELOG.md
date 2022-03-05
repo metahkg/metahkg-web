@@ -55,3 +55,18 @@ node server/migrate/migratetov0.5.2.js
 - minor improvements
 - forbid the use of emails as a username
 - check password strength
+
+## v0.5.5rc1
+
+- interface changes (mainly on conversation)
+- adopt the newest version of api to fetch new comments
+
+## v0.5.5rc2
+
+- links for individual comments
+- you can now share individual comments
+
+## v0.5.5rc3
+
+- story mode
+- create new topic from comment

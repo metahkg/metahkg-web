@@ -15,8 +15,9 @@ import {
   Paper,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import MetahkgIcon from "./icon";
+import MetahkgIcon from "./logo";
 import { wholepath } from "../lib/common";
+import MetahkgLogo from "./logo";
 /**
  * just a template for large screens if there's no content
  * e.g. /category/:id, in which there's no main content but only the menu
@@ -53,6 +54,17 @@ export default function Empty() {
           <h1>Metahkg</h1>
         </div>
         <List>
+          <a
+            className="notextdecoration white"
+            href="https://war.ukraine.ua/donate"
+          >
+            <ListItem button className="fullwidth">
+              <ListItemIcon>
+                <MetahkgLogo ua height={24} width={30}/>
+              </ListItemIcon>
+              <ListItemText>Donate to Ukraine</ListItemText>
+            </ListItem>
+          </a>
           <Link
             className="notextdecoration white"
             to={`/${

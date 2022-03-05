@@ -3,9 +3,10 @@ import React from "react";
 /**
  * @description Metahkg logo, in different formats
  */
-export default function MetahkgIcon(props: {
+export default function MetahkgLogo(props: {
   light?: boolean;
   dark?: boolean;
+  ua?: boolean;
   text?: boolean;
   filled?: boolean;
   svg?: boolean;
@@ -14,7 +15,7 @@ export default function MetahkgIcon(props: {
   sx?: React.CSSProperties;
   className?: string;
 }) {
-  const { light, dark, text, filled, svg, height, width, sx, className } =
+  const { light, dark, ua, text, filled, svg, height, width, sx, className } =
     props;
   return (
     <img
@@ -28,6 +29,7 @@ export default function MetahkgIcon(props: {
             : "/images/logo-white.png")) ||
         (text && "/images/logo_with_text.png") ||
         (dark && "/images/logo.png") ||
+        (ua && "/images/metahkg-ua.png") ||
         "/images/logo.png"
       }
       alt="Metahkg Logo"

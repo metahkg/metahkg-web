@@ -9,10 +9,10 @@ import {
   useSelected,
 } from "../components/MenuProvider";
 import { useHistory, useWidth } from "../components/ContextProvider";
-/*
- * History component for /history/:id
- * Controls the menu to show ProfileMenu, retrns nothing
- * Does its work only if width < 760
+/**
+ * Only for small screens
+ * Controls the menu to show ProfileMenu
+ * @returns a div element
  */
 export default function History() {
   const params = useParams();

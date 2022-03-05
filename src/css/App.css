@@ -1,14 +1,14 @@
 *::-webkit-scrollbar {
-  width: 7px;
+  width: 5px;
 }
 *::-webkit-scrollbar-track {
   background: #151515;
 }
 *::-webkit-scrollbar-thumb {
   background-color: #464646;
-  border-radius: 10px;
+  border-radius: 7px;
 }
-body {
+* {
   scrollbar-width: thin;
   scrollbar-color: #464646 #151515;
 }
@@ -30,7 +30,6 @@ h4,
 h5,
 h6,
 span,
-blockquote,
 q {
   color: white;
 }

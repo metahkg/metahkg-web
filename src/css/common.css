@@ -68,6 +68,9 @@
 .align-flex-end {
   align-items: flex-end;
 }
+.align-flex-start {
+  align-items: flex-start !important;
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -89,11 +92,17 @@
 .overflow-hidden {
   overflow: hidden;
 }
+.height-fullvh {
+  height: 100vh;
+}
 .min-height-fullvh {
   min-height: 100vh;
 }
 .min-height-full {
   min-height: 100%;
+}
+.width-fullvw {
+  width: 100vw;
 }
 .max-width-full {
   max-width: 100%;
@@ -139,4 +148,16 @@
 }
 .pt10 {
   padding-top: 10px !important;
+}
+.nobgimage {
+  background-image: none !important;
+}
+.noshadow {
+  box-shadow: none !important;
+}
+.break-word {
+  word-break: break-word;
+}
+.break-word-force {
+  word-break: break-word !important;
 }

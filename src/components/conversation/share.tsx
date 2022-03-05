@@ -13,6 +13,11 @@ import { PopUp } from "../../lib/popup";
 import { useNotification, useWidth } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import Gab from "../../lib/icons/gab";
+/**
+ * It shows a pop up with a text field and some buttons for 
+ * copying the text and sharing externally. 
+ * The text field shows the title and link of the post.
+ */
 export default function Share() {
   const [title] = useShareTitle();
   const [link] = useShareLink();
@@ -55,11 +60,6 @@ export default function Share() {
       title: "Share to Facebook",
       link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
     },
-    {
-      icon: <Gab white />,
-      title: "Share to Gab",
-      link: `https://gab.com/compose?text=${encodeURIComponent(text)}`,
-    },
   ];
   return (
     <PopUp
@@ -81,7 +81,7 @@ export default function Share() {
           aria-readonly
           value={text}
         />
-        <div className="mt5">
+        <div className="mt5 overflow-auto nowrap">
           <Tooltip arrow title="Copy">
             <IconButton
               onClick={async () => {

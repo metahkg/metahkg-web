@@ -5,13 +5,14 @@ import { Button, ButtonGroup, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useNotification } from "./ContextProvider";
-/*
- * Buttons for voting
- * Disabled if user is not signed in
- * If upvote is clicked or has been previously clicked using a same account,
- * upvote button text color changes to green and downvote button disables.
- * For downvote, the same but color is red
- * Generates a notification in case of errors
+/**
+ * It creates a button group with two buttons. One for upvotes and one for downvotes.
+ * @param {"U" | "D" | undefined} props.vote user(client)'s vote
+ * @param {number} props.id thread id
+ * @param {number} props.cid comment id
+ * @param {number} props.up number of upvotes
+ * @param {number} props.down number of downvotes
+ * @returns A button group with two buttons, one for upvote and one for downvote.
  */
 export default function VoteButtons(props: {
   vote?: "U" | "D";
@@ -24,7 +25,11 @@ export default function VoteButtons(props: {
   const [up, setUp] = useState(props.up);
   const [down, setDown] = useState(props.down);
   const [, setNotification] = useNotification();
-  const sendvote = (v: "U" | "D") => {
+  /**
+   * It sends a vote to the server.
+   * @param {"U" | "D"} v - "U" | "D"
+   */
+  function sendvote (v: "U" | "D") {
     v === "U" ? setUp(up + 1) : setDown(down + 1);
     setVote(v);
     axios
@@ -60,7 +65,7 @@ export default function VoteButtons(props: {
               color: vote === "U" ? "green" : "#aaa",
             }}
           >
-            <ArrowDropUp className="icon-white-onhover" />
+            <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
             {up}
           </Typography>
         </Button>
@@ -77,7 +82,7 @@ export default function VoteButtons(props: {
               color: vote === "D" ? "red" : "#aaa",
             }}
           >
-            <ArrowDropDown className="icon-white-onhover" />
+            <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />
             {down}
           </Typography>
         </Button>

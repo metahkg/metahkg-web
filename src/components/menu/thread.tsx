@@ -10,10 +10,9 @@ import {
 import { timetoword, roundup, summary } from "../../lib/common";
 import { Link } from "react-router-dom";
 import { useCat, useId, useProfile, useSearch } from "../MenuProvider";
-/*
- * A thread in the menu
- * Basic information about the thread is needed (see type summary in ../../lib/common)
- * category of the current menu is needed to decide whether category lebel is rendered or not
+/**
+ * A component that renders a thread in the menu. 
+ * @param {summary} props.thread thread info
  */
 export default function MenuThread(props: { thread: summary }) {
   const [cat] = useCat();
@@ -27,8 +26,9 @@ export default function MenuThread(props: { thread: summary }) {
       to={`/thread/${thread.id}?page=1`}
     >
       <Box
-        className="flex fullwidth flex-dir-column menuthread-root"
-        sx={id === thread.id ? { bgcolor: "#303030 !important" } : {}}
+        className={`flex fullwidth flex-dir-column menuthread-root${
+          id === thread.id ? "-selected" : ""
+        }`}
       >
         <div className="flex fullwidth align-center justify-space-between menuthread-top">
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -76,7 +76,9 @@ export default function MenuThread(props: { thread: summary }) {
                 variant="contained"
                 className="nomargin nopadding notexttransform menuthread-catbtn"
               >
-                <p className="nomargin font-size-12 menuthread-catname">{thread.catname}</p>
+                <p className="nomargin font-size-12 menuthread-catname">
+                  {thread.catname}
+                </p>
               </Button>
             </Link>
           )}

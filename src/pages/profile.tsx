@@ -32,12 +32,16 @@ import {
   useNotification,
   useWidth,
 } from "../components/ContextProvider";
-/*
- * ProfileMenu returns posts that a user has posted
- * Renders a Menu without any threads if the user has posted nothing
- * Used in /profile/:id (if width >= 750) and /history/:id (id width < 750)
- */
-function DataTable(props: { user: any }) {
+/* It's a function that returns a table with the user's information. */
+function DataTable(props: {
+  user: {
+    user: string;
+    count: number;
+    sex: "M" | "F";
+    admin?: boolean;
+    createdAt: string;
+  };
+}) {
   const tablerows = ["Name", "Posts", "Sex", "Admin", "Joined"];
   const items = [
     props.user.user,
@@ -54,10 +58,18 @@ function DataTable(props: { user: any }) {
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row" sx={{ fontSize: "16px" }}>
+              <TableCell
+                component="th"
+                scope="row"
+                className="font-size-16-force"
+              >
                 {tablerows[index]}
               </TableCell>
-              <TableCell component="th" scope="row" sx={{ fontSize: "16px" }}>
+              <TableCell
+                component="th"
+                scope="row"
+                className="font-size-16-force"
+              >
                 {item}
               </TableCell>
             </TableRow>
@@ -67,6 +79,10 @@ function DataTable(props: { user: any }) {
     </TableContainer>
   );
 }
+/**
+ * This function renders the profile page
+ */
+/* It's a function that renders the profile page. */
 export default function Profile() {
   const params = useParams();
   const [profile, setProfile] = useProfile();
@@ -82,6 +98,7 @@ export default function Profile() {
   const [history, setHistory] = useHistory();
   const [, setNotification] = useNotification();
   const navigate = useNavigate();
+  /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
   useEffect(() => {
     if (!(params.id === "self" && !localStorage.user)) {
       axios
@@ -96,14 +113,16 @@ export default function Profile() {
         });
     }
   }, [navigate, params.id, setNotification]);
+  /**
+   * Clear the data and reset the title and selected index.
+   */
   function cleardata() {
     setData([]);
     setTitle("");
     selected && setSelected(0);
   }
-  if (params?.id === "self" && !localStorage.user) {
+  if (params?.id === "self" && !localStorage.user)
     return <Navigate to="/" replace />;
-  }
   history !== window.location.pathname && setHistory(window.location.pathname);
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
@@ -128,7 +147,7 @@ export default function Profile() {
         <LinearProgress className="fullwidth" color="secondary" />
       ) : (
         user?.[0] !== null && (
-          <Paper className="max-height-fullvh overflow-auto">
+          <Paper className="nobgimage max-height-fullvh overflow-auto">
             <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
               <Box
                 className="flex justify-center align-center max-width-full mt10"

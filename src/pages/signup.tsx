@@ -21,7 +21,7 @@ import { Navigate, useNavigate } from "react-router";
 import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
-import MetahkgLogo from "../components/icon";
+import MetahkgLogo from "../components/logo";
 declare const hcaptcha: { reset: (e: string) => void };
 /**
  * Sex selector

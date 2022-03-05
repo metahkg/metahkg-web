@@ -14,10 +14,10 @@ import {
   useTitle,
 } from "../components/MenuProvider";
 import { categories } from "../lib/common";
-/*
- * Component for /category/1
- * returns a box with template if width > 760
- * controls the menu component
+/**
+ * It's a function that
+ * returns a component that renders a box with a background color
+ * @returns The empty component is being returned.
  */
 export default function Category() {
   const params = useParams();
