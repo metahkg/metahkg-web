@@ -79,6 +79,7 @@ export default function MoreList(props: {
       <div>
         <IconButton
           ref={anchorRef}
+          className="nopadding ml10"
           aria-controls={open ? "composition-menu" : undefined}
           aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"

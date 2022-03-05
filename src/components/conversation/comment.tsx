@@ -149,7 +149,7 @@ function Comment(props: {
         },
       ];
     return (
-      <div className="flex align-center font-size-16 pt5 justify-space-between">
+      <div className="flex align-center font-size-16 pt10 justify-space-between">
         <PopUp
           withbutton
           open={open}
