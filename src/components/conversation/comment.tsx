@@ -1,17 +1,26 @@
 import "./css/comment.css";
 import React, { memo, useEffect } from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { Reply as ReplyIcon, Share as ShareIcon } from "@mui/icons-material";
+import {
+  Feed as FeedIcon,
+  Reply as ReplyIcon,
+  Share as ShareIcon,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import parse from "html-react-parser";
 import dateat from "date-and-time";
-import { timetoword } from "../lib/common";
-import VoteButtons from "./votebuttons";
-import { PopUp } from "../lib/popup";
+import { timetoword } from "../../lib/common";
+import VoteButtons from "../votebuttons";
+import { PopUp } from "../../lib/popup";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
+import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import axios from "axios";
-import { useNotification } from "./ContextProvider";
+import { useNotification } from "../ContextProvider";
+import MoreList from "./more";
+import { isMobile } from "react-device-detect";
+import { useTid, useTitle, useStory } from "../conversation";
 /**
  * Comment component renders a comment
  * which includes a title (Tag)
@@ -36,10 +45,6 @@ function Comment(props: {
   sex: "M" | "F";
   /** comment id */
   id: number;
-  /** thread id */
-  tid: number;
-  /** thread title */
-  title?: string;
   /** comment user's id */
   userid: number;
   /** comment username */
@@ -57,7 +62,11 @@ function Comment(props: {
   /** comment share link */
   slink?: string;
 }) {
-  const { op, sex, id, tid, title, userid, name, children, date, up, down, vote, slink } = props;
+  const { op, sex, id, userid, name, children, date, up, down, vote, slink } =
+    props;
+  const tid = useTid();
+  const title = useTitle();
+  const [story, setStory] = useStory();
   /**
    * Tag serves as a title for the comment
    * renders user id, username (as children),
@@ -65,43 +74,79 @@ function Comment(props: {
    */
   function Tag(tprops: { children: string | JSX.Element | JSX.Element[] }) {
     const [open, setOpen] = useState(false);
+    const [timemode, setTimemode] = useState<"short" | "long">("short");
     const [link, setLink] = useState(slink);
-    const [,setShareLink] = useShareLink();
-    const [,setShareTitle] = useShareTitle();
-    const [,setShareOpen] = useShareOpen();
+    const [, setShareLink] = useShareLink();
+    const [, setShareTitle] = useShareTitle();
+    const [, setShareOpen] = useShareOpen();
     const [, setNotification] = useNotification();
     const navigate = useNavigate();
     useEffect(() => {
       if (!slink) {
-        axios.post("https://api-us.wcyat.me/create", {url: `${window.location.origin}/thread/${tid}?c=${id}`})
-        .then(res => {
-          setLink(`https://l.wcyat.me/${res.data.id}`);
-        })
-        .catch(() => {
-          setNotification({open: true, text: "Unable to generate shortened link. A long link will be used instead."});
-        })
+        axios
+          .post("https://api-us.wcyat.me/create", {
+            url: `${window.location.origin}/thread/${tid}?c=${id}`,
+          })
+          .then((res) => {
+            setLink(`https://l.wcyat.me/${res.data.id}`);
+          })
+          .catch(() => {
+            setNotification({
+              open: true,
+              text: "Unable to generate shortened link. A long link will be used instead.",
+            });
+          });
       }
-    }, [setNotification, setShareLink])
-    const buttons = [
+    }, [setNotification, setShareLink]);
+    const leftbtns = [
       {
-        icon: <ReplyIcon className="metahkg-grey-force font-size-21-force" />,
+        icon: story ? (
+          <VisibilityOff className="metahkg-grey-force font-size-18-force" />
+        ) : (
+          <Visibility className="metahkg-grey-force font-size-18-force" />
+        ),
+        title: "Story mode",
+        action: () => {
+          setStory(story ? 0 : userid);
+        },
+      },
+      {
+        icon: <ReplyIcon className="metahkg-grey-force font-size-20-force" />,
         title: "Quote",
         action: () => {
           navigate(`/comment/${tid}?quote=${id}`);
         },
       },
+    ];
+    const rightbtns: {
+      icon: JSX.Element;
+      title: string;
+      action: () => void;
+    }[] = [
       {
         icon: <ShareIcon className="metahkg-grey-force font-size-18-force" />,
         title: "Share",
         action: () => {
-          setShareLink(link || `${window.location.origin}/thread/${tid}?c=${id}`);
-          setShareTitle(title + ` - comment #${id}`)
+          setShareLink(
+            link || `${window.location.origin}/thread/${tid}?c=${id}`
+          );
+          setShareTitle(title + ` - comment #${id}`);
           setShareOpen(true);
-        }
-      }
+        },
+      },
     ];
+    const morelist: { icon: JSX.Element; title: string; action: () => void }[] =
+      [
+        {
+          icon: <FeedIcon className="font-size-18-force" />,
+          title: "Create new topic",
+          action: () => {
+            navigate(`/create?quote=${tid}.${id}`);
+          },
+        },
+      ];
     return (
-      <div className="flex align-center font-size-16 pt10 justify-space-between">
+      <div className="flex align-center font-size-16 pt5 justify-space-between">
         <PopUp
           withbutton
           open={open}
@@ -138,13 +183,25 @@ function Comment(props: {
             title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")}
             arrow
           >
-            <p className="novmargin metahkg-grey ml10 font-size-15">
-              {timetoword(date)}
+            <p
+              onClick={() => {
+                if (isMobile) {
+                  setTimemode(timemode === "short" ? "long" : "short");
+                }
+              }}
+              className={`novmargin metahkg-grey ml10 font-size-15${
+                isMobile ? " pointer" : ""
+              }`}
+            >
+              {
+                {
+                  short: timetoword(date),
+                  long: dateat.format(new Date(date), "DD/MM/YY HH:mm"),
+                }[timemode]
+              }
             </p>
           </Tooltip>
-        </div>
-        <div className="flex align-center">
-          {buttons.map((button) => (
+          {leftbtns.map((button) => (
             <Tooltip title={button.title} arrow>
               <IconButton className="ml10 nopadding" onClick={button.action}>
                 {button.icon}
@@ -152,20 +209,32 @@ function Comment(props: {
             </Tooltip>
           ))}
         </div>
+        <div className="flex align-center">
+          {rightbtns.map((button) => (
+            <Tooltip title={button.title} arrow>
+              <IconButton className="ml10 nopadding" onClick={button.action}>
+                {button.icon}
+              </IconButton>
+            </Tooltip>
+          ))}
+          <MoreList buttons={morelist} />
+        </div>
       </div>
     );
   }
   return (
     <Box
       id={`c${id}`}
-      className="text-align-left mt5"
+      className="text-align-left mt6"
       sx={{
         bgcolor: "primary.main",
       }}
     >
       <div className="ml20 mr20">
         <Tag>{name}</Tag>
-        <p className="mt10 mb10 comment-body">{parse(children)}</p>
+        <p className="mt10 mb10 comment-body break-word-force">
+          {parse(children)}
+        </p>
         <div className="comment-internal-spacer" />
       </div>
       <div className="ml20">

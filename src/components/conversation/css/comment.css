@@ -17,3 +17,9 @@
 .comment-body blockquote * {
   color: #aca9a9;
 }
+.comment-body a {
+  text-decoration: none;
+}
+.comment-body a:hover {
+  text-decoration: underline;
+}

@@ -155,3 +155,9 @@
 .noshadow {
   box-shadow: none !important;
 }
+.break-word {
+  word-break: break-word;
+}
+.break-word-force {
+  word-break: break-word !important;
+}

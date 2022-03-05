@@ -1,5 +1,13 @@
 import "./css/conversation.css";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  memo,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Box,
   Button,
@@ -9,7 +17,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import queryString from "query-string";
-import Comment from "./comment";
+import Comment from "./conversation/comment";
 import Title from "./conversation/title";
 import axios, { AxiosError } from "axios";
 import DOMPurify from "dompurify";
@@ -22,6 +30,7 @@ import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
+const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
   id: number;
@@ -68,6 +77,7 @@ function Conversation(props: { id: number }) {
   const [pages, setPages] = useState(1);
   const [end, setEnd] = useState(false);
   const [n, setN] = useState(Math.random());
+  const [story, setStory] = useState(0);
   const lastHeight = useRef(0);
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
@@ -322,31 +332,38 @@ function Conversation(props: { id: number }) {
                       }}
                     />
                   </ReactVisibilitySensor>
-                  {splitarray(
-                    conversation,
-                    index * 25,
-                    (index + 1) * 25 - 1
-                  ).map(
-                    (comment: any) =>
-                      !comment?.removed && (
-                        <Comment
-                          name={users?.[comment?.user].name}
-                          id={comment.id}
-                          op={users?.[comment?.user].name === details.op}
-                          sex={users?.[comment?.user].sex}
-                          date={comment?.createdAt}
-                          title={details.title}
-                          tid={props.id}
-                          up={comment?.["U"] | 0}
-                          down={comment?.["D"] | 0}
-                          vote={votes?.[comment.id]}
-                          userid={comment?.user}
-                          slink={comment?.slink}
-                        >
-                          {DOMPurify.sanitize(comment?.comment)}
-                        </Comment>
-                      )
-                  )}
+                  <ConversationContext.Provider
+                    value={{
+                      story: [story, setStory],
+                      tid: id,
+                      title: details.title,
+                    }}
+                  >
+                    {splitarray(
+                      conversation,
+                      index * 25,
+                      (index + 1) * 25 - 1
+                    ).map(
+                      (comment: any) =>
+                        !comment?.removed &&
+                        (story ? story === comment?.user : 1) && (
+                          <Comment
+                            name={users?.[comment?.user].name}
+                            id={comment.id}
+                            op={users?.[comment?.user].name === details.op}
+                            sex={users?.[comment?.user].sex}
+                            date={comment?.createdAt}
+                            up={comment?.["U"] | 0}
+                            down={comment?.["D"] | 0}
+                            vote={votes?.[comment.id]}
+                            userid={comment?.user}
+                            slink={comment?.slink}
+                          >
+                            {DOMPurify.sanitize(comment?.comment)}
+                          </Comment>
+                        )
+                    )}
+                  </ConversationContext.Provider>
                 </Box>
               ))}
           </Box>
@@ -376,5 +393,17 @@ function Conversation(props: { id: number }) {
       </div>
     </ShareProvider>
   );
+}
+export function useTid(): number {
+  const { tid } = useContext(ConversationContext);
+  return tid;
+}
+export function useTitle(): string {
+  const { title } = useContext(ConversationContext);
+  return title;
+}
+export function useStory(): [number, React.Dispatch<SetStateAction<number>>] {
+  const { story } = useContext(ConversationContext);
+  return story;
 }
 export default memo(Conversation);

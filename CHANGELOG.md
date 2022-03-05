@@ -65,3 +65,8 @@ node server/migrate/migratetov0.5.2.js
 
 - links for individual comments
 - you can now share individual comments
+
+## v0.5.5rc3
+
+- story mode
+- create new topic from comment
