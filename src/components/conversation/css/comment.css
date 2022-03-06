@@ -23,3 +23,7 @@
 .comment-body a:hover {
   text-decoration: underline;
 }
+.comment-body * {
+  object-fit: contain !important;
+  max-width: 100% !important;
+}
