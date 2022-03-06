@@ -7,7 +7,7 @@ You MUST also deploy metahkg/metahkg-server (backend api)!
 - x86_64 debian linux (only tested on ubuntu)
 - mongodb (either locally or remotely)
 - mailgun key (for sending emails, obviously)
-- hcaptcha site key and secret pair (for anti-spamming)
+- recaptcha site key and secret pair (for anti-spamming)
 
 ## Set up
 

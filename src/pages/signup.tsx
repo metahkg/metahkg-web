@@ -14,7 +14,7 @@ import {
   Alert,
   SelectChangeEvent,
 } from "@mui/material";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import isInteger from "is-sn-integer";
 import queryString from "query-string";
 import { Navigate, useNavigate } from "react-router";
@@ -22,7 +22,7 @@ import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-declare const hcaptcha: { reset: (e: string) => void };
+declare const grecaptcha: { reset: () => void };
 /**
  * Sex selector
  * @param props.disabled disable the selector
@@ -78,7 +78,7 @@ export default function Register() {
   const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
   const [disabled, setDisabled] = useState(false);
   const [waiting, setWaiting] = useState(false);
-  const [htoken, setHtoken] = useState("");
+  const [rtoken, setRtoken] = useState("");
   const [code, setCode] = useState("");
   const [alert, setAlert] = useState<{ severity: severity; text: string }>({
     severity: "info",
@@ -143,7 +143,7 @@ export default function Register() {
         user: user,
         pwd: hash.sha256().update(pwd).digest("hex"),
         sex: sex,
-        htoken: htoken,
+        rtoken: rtoken,
       })
       .then(() => {
         setWaiting(true);
@@ -167,8 +167,8 @@ export default function Register() {
           text: err?.response?.data?.error || err?.response?.data || "",
         });
         setDisabled(false);
-        setHtoken("");
-        hcaptcha.reset("");
+        setRtoken("");
+        grecaptcha.reset();
       });
   }
   if (localStorage.user) return <Navigate to="/" replace />;
@@ -240,37 +240,36 @@ export default function Register() {
             </div>
           </div>
           <br />
-          <div className={small ? "" : "flex fullwidth"}>
-            <div className="flex justify-left fullwidth">
-              <HCaptcha
-                theme="dark"
-                sitekey="adbdce6c-dde2-46e1-b881-356447110fa7"
-                onVerify={(token) => {
-                  setHtoken(token);
-                }}
-              />
-            </div>
-            <div
-              className={`flex justify-${
-                small ? "left" : "flex-end"
-              } align-center fullwidth ${small ? "mt20" : ""}`}
+          <div
+            className={`mt10 ${
+              small ? "" : "flex fullwidth justify-space-between"
+            }`}
+          >
+            <ReCAPTCHA
+              theme="dark"
+              sitekey={
+                process.env.REACT_APP_recaptchasitekey ||
+                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+              }
+              onChange={(token) => {
+                setRtoken(token || "");
+              }}
+            />
+            <Button
+              disabled={
+                disabled ||
+                (waiting
+                  ? !(code && isInteger(code) && code.length === 6)
+                  : !(rtoken && user && email && pwd && sex))
+              }
+              type="submit"
+              className="mt20 font-size-16 signup-btn"
+              color="secondary"
+              variant="contained"
+              onClick={waiting ? verify : register}
             >
-              <Button
-                disabled={
-                  disabled ||
-                  (waiting
-                    ? !(code && isInteger(code) && code.length === 6)
-                    : !(htoken && user && email && pwd && sex))
-                }
-                type="submit"
-                className="font-size-16 signup-btn"
-                color="secondary"
-                variant="contained"
-                onClick={waiting ? verify : register}
-              >
-                {waiting ? "Verify" : "Register"}
-              </Button>
-            </div>
+              {waiting ? "Verify" : "Register"}
+            </Button>
           </div>
         </div>
       </Box>

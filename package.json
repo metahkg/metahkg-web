@@ -10,7 +10,6 @@
   "dependencies": {
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
-    "@hcaptcha/react-hcaptcha": "^1.1.0",
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
     "@tinymce/tinymce-react": "^3.13.1",
@@ -29,6 +28,7 @@
     "react": "^17.0.2",
     "react-device-detect": "^2.1.2",
     "react-dom": "^17.0.2",
+    "react-google-recaptcha": "^2.1.0",
     "react-router-dom": "^6.2.2",
     "react-visibility-sensor": "^5.1.1",
     "tinymce": "^5.10.3"
@@ -38,6 +38,7 @@
     "@types/dompurify": "^2.3.3",
     "@types/humanize-duration": "^3.27.1",
     "@types/react-dom": "^17.0.11",
+    "@types/react-google-recaptcha": "^2.1.5",
     "mongodb": "^4.4.0",
     "prettier": "^2.5.1",
     "react-scripts": "5.0.0",

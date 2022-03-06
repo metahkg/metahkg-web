@@ -33,6 +33,7 @@ import {
   Paper,
   Popper,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
 export default function MoreList(props: {
@@ -75,18 +76,20 @@ export default function MoreList(props: {
   }, [open]);
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="row" spacing={1}>
       <div>
-        <IconButton
-          ref={anchorRef}
-          className="nopadding ml10"
-          aria-controls={open ? "composition-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-        >
-          <MoreHoriz className="metahkg-grey-force" />
-        </IconButton>
+        <Tooltip arrow title="More">
+          <IconButton
+            ref={anchorRef}
+            className="nopadding ml10"
+            aria-controls={open ? "composition-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
+          >
+            <MoreHoriz className="metahkg-grey-force font-size-19-force mb2" />
+          </IconButton>
+        </Tooltip>
         <Popper
           open={open}
           anchorEl={anchorRef.current}
