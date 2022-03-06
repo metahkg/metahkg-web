@@ -12,6 +12,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  LinearProgress,
   Paper,
   SelectChangeEvent,
 } from "@mui/material";
@@ -62,10 +63,7 @@ type details = {
  * @param {number} props.id the thread id
  * @returns full conversation as Comments
  */
-function Conversation(props: {
-  id: number;
-  loading: [boolean, React.Dispatch<SetStateAction<boolean>>];
-}) {
+function Conversation(props: { id: number }) {
   const query = queryString.parse(window.location.search);
   const [notification, setNotification] = useNotification();
   const [conversation, setConversation] = useState<comment[]>([]);
@@ -78,11 +76,10 @@ function Conversation(props: {
   const [updating, setUpdating] = useState(false);
   const [pages, setPages] = useState(1);
   const [end, setEnd] = useState(false);
-  const [loading, setLoading] = props.loading;
+  const [loading, setLoading] = useState(true);
   const [n, setN] = useState(Math.random());
   const [story, setStory] = useState(0);
   const lastHeight = useRef(0);
-  const loadingtimeout = useRef<any>(undefined);
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
   const navigate = useNavigate();
@@ -244,11 +241,9 @@ function Conversation(props: {
     Object.keys(details).length &&
     (localStorage.user ? Object.keys(votes).length : 1)
   );
-  !ready && !loading && setLoading(true);
-  if (ready && loading && !loadingtimeout.current) {
-    loadingtimeout.current = setTimeout(() => {
-      setLoading(false);
-      loadingtimeout.current = undefined;
+  if (ready && loading) {
+    setTimeout(() => {
+      loading && setLoading(false);
     }, 500);
   }
   if (ready && query.c) {
@@ -263,6 +258,7 @@ function Conversation(props: {
     <ShareProvider>
       <div className="min-height-fullvh conversation-root">
         <Share />
+        {loading && <LinearProgress className="fullwidth" color="secondary" />}
         <Title
           slink={details.slink}
           category={details.category}
@@ -271,9 +267,7 @@ function Conversation(props: {
         <Paper
           id="croot"
           key={n}
-          className={`overflow-auto nobgimage noshadow conversation-paper${
-            loading ? "-loading" : ""
-          }`}
+          className={`overflow-auto nobgimage noshadow conversation-paper${loading ? "-loading" : ""}`}
           sx={{ bgcolor: "primary.dark" }}
           onScroll={onScroll}
         >

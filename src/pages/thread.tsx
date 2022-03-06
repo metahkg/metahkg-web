@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Conversation from "../components/conversation";
-import { Box, LinearProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import { Navigate } from "react-router-dom";
 import { useCat, useId, useMenu } from "../components/MenuProvider";
@@ -16,7 +16,6 @@ export default function Thread() {
   const [id, setId] = useId();
   const [menu, setMenu] = useMenu();
   const [width] = useWidth();
-  const [loading, setLoading] = useState(true);
   if (!isInteger(params.id)) return <Navigate to="/404" replace />;
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
@@ -29,8 +28,7 @@ export default function Thread() {
       }}
     >
       <div style={{ width: width < 760 ? "100vw" : "70vw" }}>
-        {loading && <LinearProgress className="fullwidth" color="secondary" />}
-        <Conversation key={Number(params.id)} id={Number(params.id)} loading={[loading, setLoading]} />
+        <Conversation key={Number(params.id)} id={Number(params.id)} />
       </div>
     </Box>
   );
