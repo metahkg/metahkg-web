@@ -76,6 +76,7 @@ function Conversation(props: { id: number }) {
   const [updating, setUpdating] = useState(false);
   const [pages, setPages] = useState(1);
   const [end, setEnd] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [n, setN] = useState(Math.random());
   const [story, setStory] = useState(0);
   const lastHeight = useRef(0);
@@ -240,6 +241,11 @@ function Conversation(props: { id: number }) {
     Object.keys(details).length &&
     (localStorage.user ? Object.keys(votes).length : 1)
   );
+  if (ready && loading) {
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }
   if (ready && query.c) {
     navigate(`${window.location.pathname}?page=${page}`, {
       replace: true,
@@ -252,7 +258,7 @@ function Conversation(props: { id: number }) {
     <ShareProvider>
       <div className="min-height-fullvh conversation-root">
         <Share />
-        {!ready && <LinearProgress className="fullwidth" color="secondary" />}
+        {loading && <LinearProgress className="fullwidth" color="secondary" />}
         <Title
           slink={details.slink}
           category={details.category}

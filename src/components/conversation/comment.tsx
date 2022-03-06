@@ -101,9 +101,9 @@ function Comment(props: {
     const leftbtns = [
       {
         icon: story ? (
-          <VisibilityOff className="metahkg-grey-force font-size-18-force" />
+          <VisibilityOff className="metahkg-grey-force font-size-19-force" />
         ) : (
-          <Visibility className="metahkg-grey-force font-size-18-force" />
+          <Visibility className="metahkg-grey-force font-size-19-force" />
         ),
         title: story ? "Quit story mode" : "Story mode",
         action: () => {
@@ -114,7 +114,7 @@ function Comment(props: {
         },
       },
       {
-        icon: <ReplyIcon className="metahkg-grey-force font-size-20-force" />,
+        icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
         title: "Quote",
         action: () => {
           navigate(`/comment/${tid}?quote=${id}`);
@@ -127,7 +127,7 @@ function Comment(props: {
       action: () => void;
     }[] = [
       {
-        icon: <ShareIcon className="metahkg-grey-force font-size-18-force" />,
+        icon: <ShareIcon className="metahkg-grey-force font-size-19-force" />,
         title: "Share",
         action: () => {
           setShareLink(
@@ -141,7 +141,7 @@ function Comment(props: {
     const morelist: { icon: JSX.Element; title: string; action: () => void }[] =
       [
         {
-          icon: <FeedIcon className="font-size-18-force" />,
+          icon: <FeedIcon className="font-size-19-force" />,
           title: "Create new topic",
           action: () => {
             navigate(`/create?quote=${tid}.${id}`);
@@ -149,7 +149,7 @@ function Comment(props: {
         },
       ];
     return (
-      <div className="flex align-center font-size-16 pt10 justify-space-between">
+      <div className="flex align-center font-size-17 pt10 justify-space-between">
         <PopUp
           withbutton
           open={open}

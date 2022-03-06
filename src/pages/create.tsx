@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import TextEditor from "../components/texteditor";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router";
 import queryString from "query-string";
@@ -26,8 +26,8 @@ import {
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-/* A workaround for the hcaptcha.reset() function not being exported from the hcaptcha library. */
-declare const hcaptcha: { reset: (e: string) => void };
+/* A workaround for the recaptcha.reset() function not being exported from the recaptcha library. */
+declare const recaptcha: { reset: (e: string) => void };
 /**
  * It takes in a category number and a setter function for the category number, and returns a form
  * control with a select menu that allows the user to choose a category
@@ -77,7 +77,7 @@ export default function Create() {
   const [data, setData] = useData();
   const [, setNotification] = useNotification();
   const [catchoosed, setCatchoosed] = useState<number>(cat || 0);
-  const [htoken, setHtoken] = useState(""); //hcaptcha token
+  const [rtoken, setRtoken] = useState(""); //recaptcha token
   const [title, setTitle] = useState(""); //this will be the post title
   const [icomment, setIcomment] = useState(""); //initial comment (#1)
   const [disabled, setDisabled] = useState(false);
@@ -125,7 +125,7 @@ export default function Create() {
         title: title,
         category: catchoosed,
         icomment: icomment,
-        htoken: htoken,
+        rtoken: rtoken,
       })
       .then((res) => {
         cat && setCat(0);
@@ -144,7 +144,7 @@ export default function Create() {
           text: err?.response?.data?.error || err?.response?.data || "",
         });
         setDisabled(false);
-        hcaptcha.reset("");
+        recaptcha.reset("");
       });
   }
   document.title = "Create topic | Metahkg";
@@ -205,19 +205,19 @@ export default function Create() {
               small ? "" : "flex fullwidth justify-space-between"
             }`}
           >
-            <HCaptcha
+            <ReCAPTCHA
               theme="dark"
               sitekey={
-                process.env.REACT_APP_hcaptchasitekey ||
-                "adbdce6c-dde2-46e1-b881-356447110fa7"
+                process.env.REACT_APP_recaptchasitekey ||
+                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
               }
-              onVerify={(token) => {
-                setHtoken(token);
+              onChange={(token) => {
+                setRtoken(token || "");
               }}
             />
             <Button
               disabled={
-                disabled || !(icomment && title && htoken && catchoosed)
+                disabled || !(icomment && title && rtoken && catchoosed)
               }
               className="mt20 font-size-16 create-btn"
               onClick={create}

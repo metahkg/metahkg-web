@@ -64,8 +64,8 @@ read -p "Configure environment variables here (If you do not, you will have to d
 if [ $reply = "y" ]; then
   read -p "MongoDB connection string: " reply
   echo "DB_URI=$reply" >.env.save
-  read -p "hCaptcha site key: " reply
-  echo "REACT_APP_hcaptchasitekey=$reply" >>.env.save
+  read -p "recaptcha site key: " reply
+  echo "REACT_APP_recaptchasitekey=$reply" >>.env.save
   {
     test -f .env &&
       echo ".env found. Saving configuration to .env.save"

@@ -75,7 +75,7 @@ export default function MoreList(props: {
   }, [open]);
 
   return (
-    <Stack direction="row" spacing={2}>
+    <Stack direction="row" spacing={1}>
       <div>
         <IconButton
           ref={anchorRef}
@@ -85,7 +85,7 @@ export default function MoreList(props: {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <MoreHoriz className="metahkg-grey-force" />
+          <MoreHoriz className="metahkg-grey-force font-size-19-force mb2" />
         </IconButton>
         <Popper
           open={open}
