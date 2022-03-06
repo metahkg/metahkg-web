@@ -22,7 +22,7 @@ import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-declare const recaptcha: { reset: (e: string) => void };
+declare const grecaptcha: { reset: () => void };
 /**
  * Sex selector
  * @param props.disabled disable the selector
@@ -168,7 +168,7 @@ export default function Register() {
         });
         setDisabled(false);
         setRtoken("");
-        recaptcha.reset("");
+        grecaptcha.reset();
       });
   }
   if (localStorage.user) return <Navigate to="/" replace />;
@@ -240,37 +240,36 @@ export default function Register() {
             </div>
           </div>
           <br />
-          <div className={small ? "" : "flex fullwidth"}>
-            <div className="flex justify-left fullwidth">
-              <ReCAPTCHA
-                theme="dark"
-                sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
-                onChange={(token) => {
-                  setRtoken(token || "");
-                }}
-              />
-            </div>
-            <div
-              className={`flex justify-${
-                small ? "left" : "flex-end"
-              } align-center fullwidth ${small ? "mt20" : ""}`}
+          <div
+            className={`mt10 ${
+              small ? "" : "flex fullwidth justify-space-between"
+            }`}
+          >
+            <ReCAPTCHA
+              theme="dark"
+              sitekey={
+                process.env.REACT_APP_recaptchasitekey ||
+                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+              }
+              onChange={(token) => {
+                setRtoken(token || "");
+              }}
+            />
+            <Button
+              disabled={
+                disabled ||
+                (waiting
+                  ? !(code && isInteger(code) && code.length === 6)
+                  : !(rtoken && user && email && pwd && sex))
+              }
+              type="submit"
+              className="mt20 font-size-16 signup-btn"
+              color="secondary"
+              variant="contained"
+              onClick={waiting ? verify : register}
             >
-              <Button
-                disabled={
-                  disabled ||
-                  (waiting
-                    ? !(code && isInteger(code) && code.length === 6)
-                    : !(rtoken && user && email && pwd && sex))
-                }
-                type="submit"
-                className="font-size-16 signup-btn"
-                color="secondary"
-                variant="contained"
-                onClick={waiting ? verify : register}
-              >
-                {waiting ? "Verify" : "Register"}
-              </Button>
-            </div>
+              {waiting ? "Verify" : "Register"}
+            </Button>
           </div>
         </div>
       </Box>

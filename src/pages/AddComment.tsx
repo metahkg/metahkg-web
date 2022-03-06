@@ -10,6 +10,8 @@ import TextEditor from "../components/texteditor";
 import { roundup, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
+import ReCAPTCHA from "react-google-recaptcha";
+declare const grecaptcha: { reset: () => void };
 /**
  * This page is used to add a comment to a thread
  */
@@ -21,6 +23,7 @@ export default function AddComment() {
   const [comment, setComment] = useState("");
   const [inittext, setInittext] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [rtoken, setRtoken] = useState("");
   const [alert, setAlert] = useState<{ severity: severity; text: string }>({
     severity: "info",
     text: "",
@@ -64,10 +67,10 @@ export default function AddComment() {
               `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
             );
             setTimeout(() => {
-              setNotification({ open: false, text: ""});
+              setNotification({ open: false, text: "" });
             }, 1000);
           })
-          .catch((err) => {
+          .catch(() => {
             setNotification({
               open: true,
               text: "Unable to fetch comment. This comment would not be a quote.",
@@ -85,10 +88,12 @@ export default function AddComment() {
     setDisabled(true);
     setAlert({ severity: "info", text: "Adding comment..." });
     axios
-      .post("/api/comment", { id: id, comment: comment })
+      .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
       .then((res) => {
         data.length && setData([]);
-        navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`);
+        navigate(
+          `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
+        );
       })
       .catch((err) => {
         setAlert({
@@ -100,6 +105,8 @@ export default function AddComment() {
           text: err?.response?.data?.error || err?.response?.data || "",
         });
         setDisabled(false);
+        setRtoken("");
+        grecaptcha.reset();
       });
   }
   if (!localStorage.user) {
@@ -113,6 +120,7 @@ export default function AddComment() {
   const id = Number(params.id);
   menu && setMenu(false);
   document.title = "Comment | Metahkg";
+  const small = width * 0.8 - 40 <= 450;
   return (
     <Box
       className="min-height-fullvh flex justify-center fullwidth align-center"
@@ -150,15 +158,31 @@ export default function AddComment() {
               setComment(e.getContent());
             }}
           />
-          <Button
-            disabled={disabled || !comment}
-            className="mt20 font-size-16 ac-btn"
-            onClick={addcomment}
-            variant="contained"
-            color="secondary"
+          <div
+            className={`mt20 ${
+              small ? "" : "flex fullwidth justify-space-between"
+            }`}
           >
-            Comment
-          </Button>
+            <ReCAPTCHA
+              theme="dark"
+              sitekey={
+                process.env.REACT_APP_recaptchasitekey ||
+                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+              }
+              onChange={(token) => {
+                setRtoken(token || "");
+              }}
+            />
+            <Button
+              disabled={disabled || !comment || !rtoken}
+              className="mt20 font-size-16 ac-btn"
+              onClick={addcomment}
+              variant="contained"
+              color="secondary"
+            >
+              Comment
+            </Button>
+          </div>
         </div>
       </div>
     </Box>

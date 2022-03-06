@@ -27,7 +27,7 @@ import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
 /* A workaround for the recaptcha.reset() function not being exported from the recaptcha library. */
-declare const recaptcha: { reset: (e: string) => void };
+declare const grecaptcha: { reset: () => void };
 /**
  * It takes in a category number and a setter function for the category number, and returns a form
  * control with a select menu that allows the user to choose a category
@@ -144,7 +144,8 @@ export default function Create() {
           text: err?.response?.data?.error || err?.response?.data || "",
         });
         setDisabled(false);
-        recaptcha.reset("");
+        setRtoken("");
+        grecaptcha.reset();
       });
   }
   document.title = "Create topic | Metahkg";
