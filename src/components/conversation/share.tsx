@@ -12,7 +12,6 @@ import { IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
 import { useNotification, useWidth } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-import Gab from "../../lib/icons/gab";
 /**
  * It shows a pop up with a text field and some buttons for 
  * copying the text and sharing externally. 
@@ -85,7 +84,7 @@ export default function Share() {
           <Tooltip arrow title="Copy">
             <IconButton
               onClick={async () => {
-                await navigator.clipboard.writeText(link);
+                await navigator.clipboard.writeText(text);
                 setNotification({ open: true, text: "Copied to Clipboard!" });
               }}
             >
