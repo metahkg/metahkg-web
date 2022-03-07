@@ -27,3 +27,7 @@
   object-fit: contain !important;
   max-width: 100% !important;
 }
+.comment-body img {
+  height: 100% !important;
+  display: flex !important;
+}
