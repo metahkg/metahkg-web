@@ -241,9 +241,7 @@ export default function Register() {
           </div>
           <br />
           <div
-            className={`mt10 ${
-              small ? "" : "flex fullwidth justify-space-between"
-            }`}
+            className={`${small ? "" : "flex fullwidth justify-space-between"}`}
           >
             <ReCAPTCHA
               theme="dark"
