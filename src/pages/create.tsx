@@ -26,7 +26,9 @@ import {
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
+import UploadImage from "../components/uploadimage";
 /* A workaround for the recaptcha.reset() function not being exported from the recaptcha library. */
+declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
 /**
  * It takes in a category number and a setter function for the category number, and returns a form
@@ -81,6 +83,7 @@ export default function Create() {
   const [title, setTitle] = useState(""); //this will be the post title
   const [icomment, setIcomment] = useState(""); //initial comment (#1)
   const [disabled, setDisabled] = useState(false);
+  const [imgurl, setImgurl] = useState("");
   const [alert, setAlert] = useState<{ severity: severity; text: string }>({
     severity: "info",
     text: "",
@@ -154,6 +157,7 @@ export default function Create() {
   }
   document.title = "Create topic | Metahkg";
   menu && setMenu(false);
+  /* It redirects the user to the signin page if the user is not logged in. */
   if (!localStorage.user)
     return (
       <Navigate
@@ -182,12 +186,45 @@ export default function Create() {
             <h1>Create topic</h1>
           </div>
           {alert.text && (
-            <Alert className="mt10 mb15" severity={alert.severity}>
+            <Alert className="mb10" severity={alert.severity}>
               {alert.text}
             </Alert>
           )}
+          <div className="flex align-center">
+            <UploadImage
+              onUpload={() => {
+                setAlert({ severity: "info", text: "Uploading image..." });
+              }}
+              onSuccess={(res) => {
+                setAlert({ severity: "info", text: "Image uploaded!" });
+                setImgurl(res.data.url);
+                tinymce.activeEditor.insertContent(
+                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                );
+              }}
+              onError={() => {
+                setAlert({ severity: "error", text: "Error uploading image." });
+              }}
+            />
+            {imgurl && (
+              <p className="ml10 novmargin flex">
+                <a href={imgurl} target="_blank" rel="noreferrer">
+                  {imgurl}
+                </a>
+                <p
+                  className="link novmargin metahkg-grey-force ml5"
+                  onClick={() => {
+                    navigator.clipboard.writeText(imgurl);
+                    setNotification({open:true, text: "Copied to clipboard!"});
+                  }}
+                >
+                  copy
+                </p>
+              </p>
+            )}
+          </div>
           <TextField
-            className="mb20"
+            className="mb20 mt20"
             variant="outlined"
             color="secondary"
             fullWidth

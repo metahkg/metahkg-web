@@ -113,6 +113,7 @@ export default function AddComment() {
         grecaptcha.reset();
       });
   }
+  /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
   if (!localStorage.user) {
     return (
       <Navigate
