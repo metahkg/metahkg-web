@@ -201,6 +201,7 @@ function Conversation(props: { id: number }) {
    * @param {number} p - new page number
    */
   function changePage(p: number) {
+    setLoading(true);
     setConversation([]);
     setPages(1);
     setPage(p);
@@ -244,7 +245,7 @@ function Conversation(props: { id: number }) {
   if (ready && loading) {
     setTimeout(() => {
       loading && setLoading(false);
-    }, 500);
+    }, 200);
   }
   if (ready && query.c) {
     navigate(`${window.location.pathname}?page=${page}`, {
