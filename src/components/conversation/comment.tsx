@@ -235,7 +235,7 @@ function Comment(props: {
     >
       <div className="ml20 mr20">
         <Tag>{name}</Tag>
-        <p className="mt10 mb10 comment-body break-word-force">
+        <p className="novmargin comment-body break-word-force">
           {parse(children)}
         </p>
         <div className="comment-internal-spacer" />

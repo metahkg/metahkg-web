@@ -16,7 +16,7 @@ export default function TextEditor(props: {
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 300,
+        height: 330,
         menubar: true,
         skin: "oxide-dark",
         content_css: "dark",
@@ -24,7 +24,7 @@ export default function TextEditor(props: {
           menubar: true,
         },
         plugins: [
-          "advlist autolink lists link image imagetools charmap print preview anchor textcolor",
+          "advlist autolink lists link image charmap print preview anchor",
           "searchreplace visualblocks code fullscreen autosave",
           "insertdatetime media table paste code wordcount",
         ],

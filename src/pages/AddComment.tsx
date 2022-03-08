@@ -11,6 +11,8 @@ import { roundup, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
+import UploadImage from "../components/uploadimage";
+declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
 /**
  * This page is used to add a comment to a thread
@@ -21,6 +23,7 @@ export default function AddComment() {
   const [data, setData] = useData();
   const [width] = useWidth();
   const [comment, setComment] = useState("");
+  const [imgurl, setImgurl] = useState("");
   const [inittext, setInittext] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [rtoken, setRtoken] = useState("");
@@ -113,6 +116,7 @@ export default function AddComment() {
         grecaptcha.reset();
       });
   }
+  /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
   if (!localStorage.user) {
     return (
       <Navigate
@@ -151,10 +155,43 @@ export default function AddComment() {
             </Link>
           </h4>
           {alert.text && (
-            <Alert className="mt10 mb15" severity={alert.severity}>
+            <Alert className="mb10" severity={alert.severity}>
               {alert.text}
             </Alert>
           )}
+          <div className="flex align-center mb15">
+            <UploadImage
+              onUpload={() => {
+                setAlert({ severity: "info", text: "Uploading image..." });
+              }}
+              onSuccess={(res) => {
+                setAlert({ severity: "info", text: "Image uploaded!" });
+                setImgurl(res.data.url);
+                tinymce.activeEditor.insertContent(
+                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                );
+              }}
+              onError={() => {
+                setAlert({ severity: "error", text: "Error uploading image." });
+              }}
+            />
+            {imgurl && (
+              <p className="ml10 novmargin flex">
+                <a href={imgurl} target="_blank" rel="noreferrer">
+                  {imgurl}
+                </a>
+                <p
+                  className="link novmargin metahkg-grey-force ml5"
+                  onClick={() => {
+                    navigator.clipboard.writeText(imgurl);
+                    setNotification({open:true, text: "Copied to clipboard!"});
+                  }}
+                >
+                  copy
+                </p>
+              </p>
+            )}
+          </div>
           <TextEditor
             key={id}
             text={inittext}

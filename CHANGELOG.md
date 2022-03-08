@@ -70,3 +70,7 @@ node server/migrate/migratetov0.5.2.js
 
 - story mode
 - create new topic from comment
+
+## v0.5.6rc1
+
+- image uploads using na.cx
