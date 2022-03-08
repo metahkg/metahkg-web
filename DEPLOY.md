@@ -37,4 +37,5 @@ yarn run build
 ```
 
 ## Deploy
-Running  `yarn run start` will start the react app at localhost:3199.
+
+Running `yarn run start` will start the react app at localhost:3199.
