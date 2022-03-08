@@ -169,7 +169,7 @@ export default function Create() {
   const small = width * 0.8 - 40 <= 450;
   return (
     <Box
-      className="flex fullwidth min-height-fullvh justify-center"
+      className="flex fullwidth min-height-fullvh justify-center max-width-full"
       sx={{
         backgroundColor: "primary.dark",
       }}

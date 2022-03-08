@@ -220,7 +220,7 @@ export default function Register() {
           ))}
           <div className={small ? "" : "flex"}>
             <SexSelect disabled={waiting} sex={sex} setSex={setSex} />
-            {small ? <br /> : <div />}
+            {small && <br />}
             <div
               className={`flex fullwidth justify-${
                 small ? "left" : "flex-end"
