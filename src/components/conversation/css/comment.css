@@ -36,3 +36,7 @@
   max-width: 100% !important;
   overflow: hidden !important;
 }
+.comment-body code * {
+  font-family: "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+    monospace;
+}
