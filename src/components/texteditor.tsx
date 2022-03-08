@@ -10,25 +10,33 @@ export default function TextEditor(props: {
   changehandler: (a: string, editor: import("tinymce/tinymce").Editor) => void;
   text: string;
 }) {
-  const {changehandler, text} = props;
+  const { changehandler, text } = props;
   return (
     <Editor
       onEditorChange={changehandler}
       initialValue={text}
       init={{
         height: 330,
-        menubar: true,
         skin: "oxide-dark",
         content_css: "dark",
         mobile: {
           menubar: true,
         },
-        plugins: [
-          "advlist autolink lists link image charmap print preview anchor",
-          "searchreplace visualblocks code fullscreen autosave",
-          "insertdatetime media table paste code wordcount",
-        ],
-        toolbar: `undo redo | cut copy paste | link image | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat`,
+        imagetools_cors_hosts: ["picsum.photos"],
+        quickbars_selection_toolbar: 'cut copy paste | bold italic | forecolor backcolor | formatselect | quicklink blockquote',
+        quickbars_insert_toolbar: 'emoticons | quicklink image quicktable | anchor codesample',
+        menubar: "file edit view insert format tools table help",
+        plugins:
+          "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons",
+        toolbar:
+          "undo redo | link image media table | formatselect | bold italic underline strikethrough forecolor backcolor | emoticons | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | fontsizeselect removeformat pagebreak | charmap | fullscreen preview save print | insertfile template anchor codesample | ltr rtl",
+        toolbar_sticky: true,
+        autosave_ask_before_unload: true,
+        autosave_interval: "30s",
+        autosave_prefix: "{path}{query}-{id}-",
+        autosave_restore_when_empty: false,
+        autosave_retention: "2m",
+        image_advtab: true,
       }}
       tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.3/tinymce.min.js"
     />

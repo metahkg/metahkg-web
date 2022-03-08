@@ -22,6 +22,7 @@ import {
   useMenu,
   useProfile,
   useSearch,
+  useTitle,
 } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { categories, severity, wholepath } from "../lib/common";
@@ -76,6 +77,7 @@ export default function Create() {
   const [cat, setCat] = useCat();
   const [search, setSearch] = useSearch();
   const [data, setData] = useData();
+  const [mtitle, setMtitle] = useTitle();
   const [, setNotification] = useNotification();
   const [catchoosed, setCatchoosed] = useState<number>(cat || 0);
   const [rtoken, setRtoken] = useState(""); //recaptcha token
@@ -138,6 +140,7 @@ export default function Create() {
         search && setSearch(false);
         profile && setProfile(0);
         data.length && setData([]);
+        mtitle && setMtitle("");
         navigate(`/thread/${res.data.id}`);
       })
       .catch((err) => {
@@ -188,7 +191,7 @@ export default function Create() {
               {alert.text}
             </Alert>
           )}
-            <div className="flex align-center">
+          <div className="flex align-center">
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
@@ -213,7 +216,10 @@ export default function Create() {
                   className="link novmargin metahkg-grey-force ml5"
                   onClick={() => {
                     navigator.clipboard.writeText(imgurl);
-                    setNotification({open:true, text: "Copied to clipboard!"});
+                    setNotification({
+                      open: true,
+                      text: "Copied to clipboard!",
+                    });
                   }}
                 >
                   copy
@@ -221,25 +227,25 @@ export default function Create() {
               </p>
             )}
           </div>
-          <TextField
-            className="mb20 mt20"
-            variant="outlined"
-            color="secondary"
-            fullWidth
-            label="Title"
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
+          <div className="flex mb20 mt20">
+            <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
+            <TextField
+              className="ml10"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              label="Title"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </div>
           <TextEditor
             changehandler={(v, e: any) => {
               setIcomment(e.getContent());
             }}
             text={inittext}
           />
-          <div className="mt20">
-            <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
-          </div>
           <div
             className={`mt20 ${
               small ? "" : "flex fullwidth justify-space-between"

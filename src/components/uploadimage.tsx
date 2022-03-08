@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import axios, { AxiosResponse } from "axios";
+import { FileUpload } from "@mui/icons-material";
 const Input = styled("input")({
   display: "none",
 });
@@ -38,8 +39,8 @@ export default function UploadImage(props: {
                 .catch(onError);
             }}
           />
-          <Button color="secondary" variant="text" component="span">
-            Upload Image
+          <Button variant="contained" component="span">
+            <FileUpload className="mr5" /><Typography sx={{color: "secondary.main"}}>Upload Image</Typography>
           </Button>
         </label>
       </form>

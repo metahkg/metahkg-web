@@ -42,6 +42,7 @@ function DataTable(props: {
     createdAt: string;
   };
 }) {
+  const [width] = useWidth();
   const tablerows = ["Name", "Posts", "Sex", "Admin", "Joined"];
   const items = [
     props.user.user,
@@ -51,7 +52,7 @@ function DataTable(props: {
     `${timetoword_long(props.user.createdAt)} ago`,
   ];
   return (
-    <TableContainer className="ml50 mr50" component={Paper}>
+    <TableContainer sx={{maxWidth: width < 760 ? "100%" : "70%" }} className="ml50 mr50" component={Paper}>
       <Table className="fullwidth" aria-label="simple table">
         <TableBody>
           {items.map((item, index) => (

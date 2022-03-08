@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useRef } from "react";
+import { FileUpload } from "@mui/icons-material";
 const Input = styled("input")({
   display: "none",
 });
@@ -31,8 +32,8 @@ export default function UploadAvatar() {
               formRef?.current?.submit();
             }}
           />
-          <Button color="secondary" variant="contained" component="span">
-            Upload
+          <Button className="mt5" variant="contained" component="span">
+            <FileUpload className="mr5" /><Typography sx={{color: "secondary.main"}}>Upload</Typography>
           </Button>
         </label>
       </form>
