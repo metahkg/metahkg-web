@@ -12,7 +12,7 @@
   scrollbar-width: thin;
   scrollbar-color: #464646 #151515;
 }
-body * {
+body {
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Tahoma, Geneva, Verdana,
     sans-serif;
 }

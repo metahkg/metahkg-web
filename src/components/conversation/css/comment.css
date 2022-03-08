@@ -1,3 +1,4 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-nord.min.css);
 .comment-tag-userlink {
   line-height: 22px;
   max-height: 22px;
@@ -35,8 +36,4 @@
 .comment-body {
   max-width: 100% !important;
   overflow: hidden !important;
-}
-.comment-body code * {
-  font-family: "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
-    monospace;
 }
