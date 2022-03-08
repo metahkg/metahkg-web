@@ -27,7 +27,6 @@ import { useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
-import Prism from "prismjs";
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
@@ -57,9 +56,6 @@ export default function App() {
       });
     }
   }, []);
-  setTimeout(() => {
-    Prism.highlightAll();
-  }, 50);
   return (
     <Theme
       primary={{ main: "#222222" }}

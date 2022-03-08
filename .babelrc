@@ -1,9 +1,8 @@
 {
     "plugins": [
       ["prismjs", {
-        "languages": ["javascript", "css", "html", "python", "php", "ruby", "java", "c", "c#", "c++"],
+        "languages": ["javascript", "css", "html", "python", "php", "ruby", "java", "c", "csharp", "cpp"],
         "plugins": ["line-numbers", "show-language"],
-        "theme": "dracula",
         "css": true
       }]
     ]

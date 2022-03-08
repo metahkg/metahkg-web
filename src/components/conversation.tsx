@@ -30,6 +30,7 @@ import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
+import Prism from "prismjs";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -154,6 +155,9 @@ function Conversation(props: { id: number }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
+  useEffect(() => {
+    Prism.highlightAll();
+  });
   /**
    * It fetches new comments, or the next page (if last comment id % 25 = 0)
    * of messages from the server and appends them to the conversation array

@@ -50,8 +50,8 @@ async function build() {
         exit(1);
       }
       console.log("successfully written.");
-      console.log("building with react-scripts...");
-      system("npx react-scripts build")
+      console.log("building with react-app-rewired...");
+      system("npx react-app-rewired build")
         .then(() => {
           console.log(
             `done in ${Math.round((performance.now() - start) / 1000)} seconds`
@@ -61,7 +61,7 @@ async function build() {
         .catch((err) => {
           console.error(err);
           console.error(
-            "Some error occurred while building. Try npx react-scripts build."
+            "Some error occurred while building. Try npx react-app-rewired build."
           );
           exit(1);
         });
