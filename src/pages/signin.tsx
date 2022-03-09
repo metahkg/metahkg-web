@@ -52,12 +52,17 @@ export default function Signin() {
         pwd: hash.sha256().update(pwd).digest("hex"),
       })
       .then((res) => {
+        if (res.data.unverified) {
+          navigate("/verify");
+          setNotification({ open: true, text: "Please verify your account."});
+          return;
+        }
         localStorage.user = res.data.user;
         localStorage.id = res.data.id;
         navigate(decodeURIComponent(String(query.returnto || "/")), {
           replace: true,
         });
-        setNotification({ open:true, text: `Signed in as ${res.data.user}.`});
+        setNotification({ open: true, text: `Signed in as ${res.data.user}.` });
       })
       .catch((err) => {
         setAlert({
@@ -89,7 +94,6 @@ export default function Signin() {
             <Link
               className="notextdecoration"
               to={`/register${window.location.search}`}
-              replace
             >
               <Button
                 className="flex notexttransform font-size-18-force"
@@ -109,34 +113,27 @@ export default function Signin() {
               {alert.text}
             </Alert>
           )}
-          <TextField
-            className="mb20"
-            color="secondary"
-            type="text"
-            label="Username / Email"
-            variant="filled"
-            onChange={(e) => {
-              setUser(e.target.value);
-            }}
-            required
-            fullWidth
-          />
-          <TextField
-            className="mb20"
-            color="secondary"
-            type="password"
-            label="Password"
-            variant="filled"
-            onChange={(e) => {
-              setPwd(e.target.value);
-            }}
-            required
-            fullWidth
-          />
-          <br />
+          {[
+            { label: "Username / Email", type: "text", set: setUser },
+            { label: "Password", type: "password", set: setPwd },
+          ].map((item, index) => (
+            <TextField
+              className={!index ? "mb15" : ""}
+              color="secondary"
+              type={item.type}
+              label={item.label}
+              variant="filled"
+              onChange={(e) => {
+                item.set(e.target.value);
+              }}
+              required
+              fullWidth
+            />
+          ))}
+          <h4><Link className="link metahkg-yellow-force" to="/verify">Verify / Resend verification email?</Link></h4>
           <Button
             disabled={disabled || !(user && pwd)}
-            className="mt10 font-size-16-force notexttransform signin-btn"
+            className="font-size-16-force notexttransform signin-btn"
             color="secondary"
             variant="contained"
             onClick={signin}

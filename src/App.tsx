@@ -27,6 +27,8 @@ import { useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
+import Verify from "./pages/verify";
+import Resend from "./pages/resend";
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
@@ -78,6 +80,8 @@ export default function App() {
               <Route path="/comment/:id" element={<AddComment />} />
               <Route path="/category/:category" element={<Category />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/verify" element={<Verify />} />
+              <Route path="/resend" element={<Resend />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/create" element={<Create />} />
               <Route path="/search" element={<Search />} />

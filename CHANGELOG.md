@@ -74,3 +74,8 @@ node server/migrate/migratetov0.5.2.js
 ## v0.5.6rc1
 
 - image uploads using na.cx
+
+## v0.5.6rc2
+
+- support account verification in one week
+- support resend verification email

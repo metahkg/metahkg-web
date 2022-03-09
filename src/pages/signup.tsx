@@ -15,14 +15,13 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
-import isInteger from "is-sn-integer";
-import queryString from "query-string";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-import { AppRegistration, HowToReg } from "@mui/icons-material";
+import { HowToReg } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 declare const grecaptcha: { reset: () => void };
 /**
  * Sex selector
@@ -70,7 +69,6 @@ function SexSelect(props: {
  */
 export default function Register() {
   document.title = "Register | Metahkg";
-  const navigate = useNavigate();
   const [width] = useWidth();
   const [, setNotification] = useNotification();
   const [user, setUser] = useState("");
@@ -78,39 +76,12 @@ export default function Register() {
   const [pwd, setPwd] = useState("");
   const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
   const [disabled, setDisabled] = useState(false);
-  const [waiting, setWaiting] = useState(false);
   const [rtoken, setRtoken] = useState("");
-  const [code, setCode] = useState("");
   const [alert, setAlert] = useState<{ severity: severity; text: string }>({
     severity: "info",
     text: "",
   });
   const [menu, setMenu] = useMenu();
-  function verify() {
-    setAlert({ severity: "info", text: "Verifying..." });
-    setDisabled(true);
-    axios
-      .post("/api/verify", { email: email, code: Number(code) })
-      .then((res) => {
-        localStorage.user = user;
-        localStorage.id = res.data.id;
-        navigate(decodeURIComponent(String(query.returnto || "/")), {
-          replace: true,
-        });
-        setNotification({ open: true, text: `Signed in as ${user}.` });
-      })
-      .catch((err) => {
-        setAlert({
-          severity: "error",
-          text: err?.response?.data?.error || err?.response?.data || "",
-        });
-        setNotification({
-          open: true,
-          text: err?.response?.data?.error || err?.response?.data || "",
-        });
-        setDisabled(false);
-      });
-  }
   function register() {
     setAlert({ severity: "info", text: "Registering..." });
     setDisabled(true);
@@ -147,16 +118,14 @@ export default function Register() {
         rtoken: rtoken,
       })
       .then(() => {
-        setWaiting(true);
         setAlert({
           severity: "success",
-          text: "Please enter the verification code sent to your email address.\nIt will expire in 5 minutes.",
+          text: "A link has been sent to your email address. Please click the link to verify.",
         });
         setNotification({
           open: true,
-          text: "Please enter the verification code sent to your email address.",
+          text: "Please click the link sent to your email address.",
         });
-        setDisabled(false);
       })
       .catch((err) => {
         setAlert({
@@ -167,14 +136,13 @@ export default function Register() {
           open: true,
           text: err?.response?.data?.error || err?.response?.data || "",
         });
-        setDisabled(false);
         setRtoken("");
+        setDisabled(false);
         grecaptcha.reset();
       });
   }
   if (localStorage.user) return <Navigate to="/" replace />;
   menu && setMenu(false);
-  const query = queryString.parse(window.location.search);
   const small = width / 2 - 100 <= 450;
   return (
     <Box
@@ -205,10 +173,10 @@ export default function Register() {
             { label: "Password", set: setPwd, type: "password" },
           ].map((item) => (
             <TextField
-              className="mb20"
+              className="mb15"
               sx={{ input: { color: "white" } }}
               color="secondary"
-              disabled={waiting}
+              disabled={disabled}
               variant="filled"
               type={item.type}
               onChange={(e) => {
@@ -219,30 +187,17 @@ export default function Register() {
               fullWidth
             />
           ))}
-          <div className={small ? "" : "flex"}>
-            <SexSelect disabled={waiting} sex={sex} setSex={setSex} />
-            {small && <br />}
-            <div
-              className={`flex fullwidth justify-${
-                small ? "left" : "flex-end"
-              }`}
-            >
-              {waiting && (
-                <TextField
-                  color="secondary"
-                  className={small ? "mt20" : ""}
-                  variant="filled"
-                  label="verification code"
-                  onChange={(e) => {
-                    setCode(e.target.value);
-                  }}
-                />
-              )}
-            </div>
-          </div>
+          <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
           <br />
+          <h4>
+            <Link className="link metahkg-yellow-force" to="/verify">
+              Verify / Resend verification email?
+            </Link>
+          </h4>
           <div
-            className={`${small ? "" : "flex fullwidth justify-space-between"}`}
+            className={`${
+              small ? "" : "flex fullwidth justify-space-between"
+            } mt15`}
           >
             <ReCAPTCHA
               theme="dark"
@@ -255,20 +210,15 @@ export default function Register() {
               }}
             />
             <Button
-              disabled={
-                disabled ||
-                (waiting
-                  ? !(code && isInteger(code) && code.length === 6)
-                  : !(rtoken && user && email && pwd && sex))
-              }
+              disabled={disabled || !(rtoken && user && email && pwd && sex)}
               type="submit"
               className="mt20 font-size-16-force notexttransform signup-btn"
               color="secondary"
               variant="contained"
-              onClick={waiting ? verify : register}
+              onClick={register}
             >
-              {waiting ? <HowToReg className="mr5 font-size-17-force"/> : <AppRegistration className="mr5 font-size-17-force"/>}
-              {waiting ? "Verify" : "Register"}
+              <HowToReg className="mr5 font-size-17-force" />
+              Register
             </Button>
           </div>
         </div>
