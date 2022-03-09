@@ -58,7 +58,7 @@ export default function App() {
   }, []);
   return (
     <Theme
-      primary={{ main: "#222222" }}
+      primary={{ main: "#222" }}
       secondary={{ main: "#f5bd1f", dark: "#ffc100" }}
     >
       <Notification />

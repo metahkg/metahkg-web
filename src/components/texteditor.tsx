@@ -17,8 +17,8 @@ export default function TextEditor(props: {
       initialValue={text}
       init={{
         height: 330,
-        skin: "oxide-dark",
-        content_css: "dark",
+        skin_url: "/tinymce/skins/ui/metahkg-dark",
+        content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         mobile: {
           menubar: true,
         },

@@ -232,7 +232,7 @@ export default function Create() {
             <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
             <TextField
               className="ml10"
-              variant="outlined"
+              variant="filled"
               color="secondary"
               fullWidth
               label="Title"
