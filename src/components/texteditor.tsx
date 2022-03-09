@@ -16,7 +16,7 @@ export default function TextEditor(props: {
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 330,
+        height: 360,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         mobile: {
