@@ -52,7 +52,11 @@ function DataTable(props: {
     `${timetoword_long(props.user.createdAt)} ago`,
   ];
   return (
-    <TableContainer sx={{maxWidth: width < 760 ? "100%" : "70%" }} className="ml50 mr50" component={Paper}>
+    <TableContainer
+      sx={{ maxWidth: width < 760 ? "100%" : "70%" }}
+      className="ml50 mr50"
+      component={Paper}
+    >
       <Table className="fullwidth" aria-label="simple table">
         <TableBody>
           {items.map((item, index) => (
@@ -199,7 +203,22 @@ export default function Profile() {
                       marginTop: params.id === "self" ? 25 : 0,
                     }}
                   >
-                    {params.id === "self" && <UploadAvatar />}
+                    {params.id === "self" && (
+                      <UploadAvatar
+                        onUpload={() => {
+                          setNotification({ open: true, text: "Uploading..." });
+                        }}
+                        onSuccess={() => {
+                          window.location.reload();
+                        }}
+                        onError={(err) => {
+                          setNotification({
+                            open: true,
+                            text: `Upload failed: ${err.response.data}`,
+                          });
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </Box>

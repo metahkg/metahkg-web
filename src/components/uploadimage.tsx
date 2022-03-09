@@ -18,13 +18,13 @@ export default function UploadImage(props: {
   const { onUpload, onSuccess, onError } = props;
   return (
     <Box>
-      <form name="uploaded_file[]" encType="multipart/form-data">
+      <form name="image" encType="multipart/form-data">
         <label htmlFor="upload-image">
           <Input
             accept="image/*"
             id="upload-image"
             type="file"
-            name="uploaded_file[]"
+            name="image"
             onChange={(e) => {
               onUpload && onUpload();
               const formData = new FormData();

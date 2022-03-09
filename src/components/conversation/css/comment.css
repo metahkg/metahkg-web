@@ -37,3 +37,6 @@
   max-width: 100% !important;
   overflow: hidden !important;
 }
+.comment-body * {
+  z-index: auto !important;
+}
