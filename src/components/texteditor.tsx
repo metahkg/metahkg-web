@@ -16,14 +16,14 @@ export default function TextEditor(props: {
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 360,
+        height: 350,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         mobile: {
-          menubar: true,
+          menubar: "file edit view insert format tools table",
         },
         imagetools_cors_hosts: ["picsum.photos"],
-        quickbars_selection_toolbar: 'cut copy paste | formatselect | quicklink template',
+        quickbars_selection_toolbar: 'cut copy paste | formatselect | quicklink',
         quickbars_insert_toolbar: '',
         menubar: "file edit view insert format tools table",
         plugins:

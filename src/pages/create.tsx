@@ -228,10 +228,10 @@ export default function Create() {
               </p>
             )}
           </div>
-          <div className="flex mb20 mt20">
+          <div className={`${width < 760 ? "" : "flex "}mb20 mt20`}>
             <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
             <TextField
-              className="ml10"
+              className={width < 760 ? "mt15" : "ml15"}
               variant="filled"
               color="secondary"
               fullWidth
