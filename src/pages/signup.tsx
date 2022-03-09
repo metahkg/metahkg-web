@@ -22,6 +22,7 @@ import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
+import { AppRegistration, HowToReg } from "@mui/icons-material";
 declare const grecaptcha: { reset: () => void };
 /**
  * Sex selector
@@ -261,11 +262,12 @@ export default function Register() {
                   : !(rtoken && user && email && pwd && sex))
               }
               type="submit"
-              className="mt20 font-size-16 signup-btn"
+              className="mt20 font-size-16-force notexttransform signup-btn"
               color="secondary"
               variant="contained"
               onClick={waiting ? verify : register}
             >
+              {waiting ? <HowToReg className="mr5 font-size-17-force"/> : <AppRegistration className="mr5 font-size-17-force"/>}
               {waiting ? "Verify" : "Register"}
             </Button>
           </div>

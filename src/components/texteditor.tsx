@@ -25,11 +25,11 @@ export default function TextEditor(props: {
         imagetools_cors_hosts: ["picsum.photos"],
         quickbars_selection_toolbar: 'cut copy paste | bold italic | formatselect | quicklink template',
         quickbars_insert_toolbar: 'emoticons | quicklink image | template anchor codesample',
-        menubar: "file edit view insert format tools table help",
+        menubar: "file edit view insert format tools table",
         plugins:
           "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons",
         toolbar:
-          "undo redo | link image | formatselect | bold italic underline strikethrough forecolor backcolor | emoticons | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | fontsizeselect | media table removeformat pagebreak | template charmap | fullscreen preview save print | insertfile template anchor codesample | ltr rtl",
+          "undo redo | link image | formatselect | bold italic underline strikethrough forecolor backcolor | emoticons | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | fontsizeselect | media table removeformat pagebreak | template charmap | fullscreen preview save print | insertfile anchor codesample | ltr rtl | help",
         toolbar_sticky: true,
         templates: [
           {title: "Quote", description: "Quote text.", content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`}

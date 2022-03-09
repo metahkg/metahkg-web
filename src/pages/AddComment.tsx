@@ -1,6 +1,7 @@
 import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button } from "@mui/material";
+import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -216,11 +217,12 @@ export default function AddComment() {
             />
             <Button
               disabled={disabled || !comment || !rtoken}
-              className="mt20 font-size-16 ac-btn"
+              className="mt20 font-size-16-force notexttransform ac-btn"
               onClick={addcomment}
               variant="contained"
               color="secondary"
             >
+              <AddCommentIcon className="mr5 font-size-16-force" />
               Comment
             </Button>
           </div>

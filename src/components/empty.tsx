@@ -6,6 +6,7 @@ import {
   Code as CodeIcon,
   Telegram as TelegramIcon,
   ManageAccounts as ManageAccountsIcon,
+  Logout as LogoutIcon,
 } from "@mui/icons-material";
 import {
   List,
@@ -60,7 +61,7 @@ export default function Empty() {
           >
             <ListItem button className="fullwidth">
               <ListItemIcon>
-                <MetahkgLogo ua height={24} width={30}/>
+                <MetahkgLogo ua height={24} width={30} />
               </ListItemIcon>
               <ListItemText>Donate to Ukraine</ListItemText>
             </ListItem>
@@ -73,10 +74,10 @@ export default function Empty() {
           >
             <ListItem button className="fullwidth">
               <ListItemIcon>
-                <AccountCircleIcon />
+                {localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />}
               </ListItemIcon>
               <ListItemText>
-                {localStorage.user ? "logout" : "Sign in / Register"}
+                {localStorage.user ? "Logout" : "Sign in / Register"}
               </ListItemText>
             </ListItem>
           </Link>

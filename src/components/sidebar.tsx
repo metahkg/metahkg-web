@@ -17,6 +17,7 @@ import {
   Telegram as TelegramIcon,
   Code as CodeIcon,
   ManageAccounts as ManageAccountsIcon,
+  Logout as LogoutIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
@@ -74,7 +75,10 @@ export default function SideBar() {
         <Box className="sidebar-box max-width-full" role="presentation">
           <div className="fullwidth">
             <List className="fullwidth">
-              <a href="https://war.ukraine.ua/donate/" className="notextdecoration white">
+              <a
+                href="https://war.ukraine.ua/donate/"
+                className="notextdecoration white"
+              >
                 <ListItem button onClick={onClick}>
                   <ListItemIcon>
                     <MetahkgLogo height={24} width={30} ua />
@@ -108,7 +112,7 @@ export default function SideBar() {
             >
               <ListItem button onClick={onClick}>
                 <ListItemIcon>
-                  <AccountCircleIcon />
+                  {localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />}
                 </ListItemIcon>
                 <ListItemText>
                   {localStorage.user ? "Logout" : "Sign in / Register"}

@@ -7,6 +7,8 @@ import {
   useProfile,
   useSearch,
   useSelected,
+  useTitle,
+  useData
 } from "../components/MenuProvider";
 import { useHistory, useWidth } from "../components/ContextProvider";
 /**
@@ -22,17 +24,28 @@ export default function History() {
   const [history, setHistory] = useHistory();
   const [width] = useWidth();
   const [selected, setSelected] = useSelected();
+  const [, setTitle] = useTitle();
+  const [,setData] = useData();
   const [id, setId] = useId();
   const [cat, setCat] = useCat();
   if (!(width < 760)) {
     return <Navigate to={`/profile/${params.id}`} replace />;
   }
+  function cleardata() {
+    setData([]);
+    setTitle("");
+    selected && setSelected(0);
+  }
   !menu && setMenu(true);
   history !== window.location.pathname && setHistory(window.location.pathname);
-  (profile !== Number(params.id) || "self") &&
+  if (profile !== (Number(params.id) || "self")) {
     setProfile(Number(params.id) || "self");
-  search && setSearch(false);
-  selected && setSelected(0);
+    cleardata();
+  }
+  if (search) {
+    setSearch(false);
+    cleardata();
+  }
   id && setId(0);
   cat && setCat(0);
   return <div />;

@@ -11,6 +11,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
@@ -265,11 +266,12 @@ export default function Create() {
               disabled={
                 disabled || !(icomment && title && rtoken && catchoosed)
               }
-              className="mt20 font-size-16 create-btn"
+              className="mt20 font-size-16-force create-btn novpadding notexttransform"
               onClick={create}
               variant="contained"
               color="secondary"
             >
+              <CreateIcon className="mr5 font-size-16-force" />
               Create
             </Button>
           </div>

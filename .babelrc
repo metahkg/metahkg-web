@@ -1,9 +1,23 @@
 {
-    "plugins": [
-      ["prismjs", {
-        "languages": ["javascript", "css", "html", "python", "php", "ruby", "java", "c", "csharp", "cpp"],
+  "plugins": [
+    [
+      "prismjs",
+      {
+        "languages": [
+          "javascript",
+          "css",
+          "html",
+          "python",
+          "php",
+          "ruby",
+          "java",
+          "c",
+          "csharp",
+          "cpp"
+        ],
         "plugins": ["line-numbers", "show-language"],
         "css": true
-      }]
+      }
     ]
-  }
+  ]
+}

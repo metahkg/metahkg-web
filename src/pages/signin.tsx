@@ -10,7 +10,8 @@ import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-/*
+import { Login as LoginIcon } from "@mui/icons-material";
+/**
  * /signin
  * The Signin component collects data from user then send to the server /api/signin
  * If sign in is successful, a cookie "key" would be set by the server, which is the api key
@@ -135,11 +136,12 @@ export default function Signin() {
           <br />
           <Button
             disabled={disabled || !(user && pwd)}
-            className="mt10 font-size-16 signin-btn"
+            className="mt10 font-size-16-force notexttransform signin-btn"
             color="secondary"
             variant="contained"
             onClick={signin}
           >
+            <LoginIcon className="mr5 font-size-16-force" />
             Sign in
           </Button>
         </div>

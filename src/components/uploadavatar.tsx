@@ -32,7 +32,7 @@ export default function UploadAvatar() {
               formRef?.current?.submit();
             }}
           />
-          <Button className="mt5" variant="contained" component="span">
+          <Button className="mt5 notexttransform" variant="contained" component="span">
             <FileUpload className="mr5" /><Typography sx={{color: "secondary.main"}}>Upload</Typography>
           </Button>
         </label>
