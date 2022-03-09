@@ -1,8 +1,10 @@
 {
   "name": "metahkg-web",
+  "homepage": "https://metahkg.wcyat.me",
+  "repository": "https://github.com/metahkg/metahkg-web",
   "version": "0.5.6rc1",
   "author": "wcyat",
-  "license": "MPL-2.0",
+  "license": "AGPL-3.0-or-later",
   "keywords": [
     "forum",
     "react"
