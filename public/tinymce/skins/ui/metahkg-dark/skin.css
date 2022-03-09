@@ -554,21 +554,21 @@ button::-moz-focus-inner {
   color: #fff;
 }
 .tox .tox-collection--list .tox-collection__item--active {
-  background-color: #3389ec;
+  background-color: rgba(255,255,255,0.1);
 }
 .tox .tox-collection--toolbar .tox-collection__item--enabled {
   background-color: #599fef;
   color: #fff;
 }
 .tox .tox-collection--toolbar .tox-collection__item--active {
-  background-color: #3389ec;
+  background-color: rgba(255,255,255,0.1);
 }
 .tox .tox-collection--grid .tox-collection__item--enabled {
   background-color: #599fef;
   color: #fff;
 }
 .tox .tox-collection--grid .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
-  background-color: #3389ec;
+  background-color: rgba(255,255,255,0.1);
   color: #fff;
 }
 .tox .tox-collection--list .tox-collection__item--active:not(.tox-collection__item--state-disabled) {
@@ -903,7 +903,7 @@ button::-moz-focus-inner {
   width: 24px;
 }
 .tox .tox-swatches__picker-btn:hover {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
 }
 .tox:not([dir=rtl]) .tox-swatches__picker-btn {
   margin-left: auto;
@@ -2124,7 +2124,7 @@ body.tox-dialog__disable-scroll {
   cursor: not-allowed;
 }
 .tox .tox-mbtn:focus:not(:disabled) {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
   border: 0;
   box-shadow: none;
   color: #fff;
@@ -2136,7 +2136,7 @@ body.tox-dialog__disable-scroll {
   color: #fff;
 }
 .tox .tox-mbtn:hover:not(:disabled):not(.tox-mbtn--active) {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
   border: 0;
   box-shadow: none;
   color: #fff;
@@ -2669,12 +2669,12 @@ body.tox-dialog__disable-scroll {
   width: inherit;
 }
 .tox .tox-tbtn:focus {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
   border: 0;
   box-shadow: none;
 }
 .tox .tox-tbtn:hover {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
   border: 0;
   box-shadow: none;
   color: #fff;
@@ -2793,10 +2793,10 @@ body.tox-dialog__disable-scroll {
   overflow: hidden;
 }
 .tox .tox-split-button:hover {
-  box-shadow: 0 0 0 1px #3389ec inset;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset;
 }
 .tox .tox-split-button:focus {
-  background: #3389ec;
+  background: rgba(255,255,255,0.1);
   box-shadow: none;
   color: #fff;
 }

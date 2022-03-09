@@ -425,15 +425,15 @@ pre[class*="language-"] {
   color: #fff;
 }
 .mce-match-marker-selected {
-  background: #39f;
+  background: rgba(255,255,255,0.1);
   color: #fff;
 }
 .mce-match-marker-selected::-moz-selection {
-  background: #39f;
+  background: rgba(255,255,255,0.1);
   color: #fff;
 }
 .mce-match-marker-selected::selection {
-  background: #39f;
+  background: rgba(255,255,255,0.1);
   color: #fff;
 }
 .mce-content-body img[data-mce-selected],
