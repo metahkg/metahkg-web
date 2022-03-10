@@ -89,6 +89,9 @@
 .overflow-auto {
   overflow: auto;
 }
+.overflow-auto-force {
+  overflow: auto !important;
+}
 .overflow-hidden {
   overflow: hidden;
 }

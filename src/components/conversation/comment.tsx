@@ -1,5 +1,5 @@
 import "./css/comment.css";
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import {
   Feed as FeedIcon,
@@ -13,7 +13,6 @@ import dateat from "date-and-time";
 import { timetoword } from "../../lib/common";
 import VoteButtons from "../votebuttons";
 import { PopUp } from "../../lib/popup";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import axios from "axios";
@@ -107,14 +106,43 @@ function Comment(props: {
         ),
         title: story ? "Quit story mode" : "Story mode",
         action: () => {
+          const bheight =
+            //@ts-ignore
+            document.getElementById(`c${id}`)?.offsetTop -
+            47 -
+            //@ts-ignore
+            document.getElementById("croot")?.scrollTop;
+          console.log(
+            bheight,
+            document.getElementById(`c${id}`)?.offsetTop,
+            document.getElementById("croot")?.scrollTop
+          );
           setStory(story ? 0 : userid);
-          story && setTimeout(() => {
-            document.getElementById(`c${id}`)?.scrollIntoView();
-          }, 10);
+          setTimeout(() => {
+            const aheight =
+              //@ts-ignore
+              document.getElementById(`c${id}`)?.offsetTop -
+              47 -
+              //@ts-ignore
+              document.getElementById("croot")?.scrollTop;
+            //@ts-ignore
+            console.log(
+              //@ts-ignore
+              document.getElementById(`c${id}`)?.offsetTop -
+                47 -
+                (document.getElementById("croot")?.scrollTop || 0),
+              aheight,
+              bheight
+            );
+            //@ts-ignore
+            document.getElementById("croot").scrollTop += aheight - bheight;
+          });
         },
       },
       {
-        icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
+        icon: (
+          <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />
+        ),
         title: "Quote",
         action: () => {
           navigate(`/comment/${tid}?quote=${id}`);

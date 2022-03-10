@@ -9,9 +9,11 @@
     min-width: 0px !important;
 }
 .vb-btn-left {
-    margin-left: 3.5px !important;
+    margin-left: 5.5px !important;
     margin-right: 6px !important;
+    border-right: none !important;
 }
 .vb-btn-right {
-    margin-right: 8px !important;
+    margin-right: 10px !important;
+    border-right: none !important;
 }

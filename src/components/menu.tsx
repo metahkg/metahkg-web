@@ -21,7 +21,6 @@ import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
 /**
  * This function renders the main content of the menu
- * @param {AxiosError} err - AxiosError
  */
 function MainContent() {
   const querystring = queryString.parse(window.location.search);

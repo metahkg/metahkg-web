@@ -21,18 +21,25 @@ export default function TextEditor(props: {
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         mobile: {
           menubar: "file edit view insert format tools table",
+          toolbar:
+            "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         },
         imagetools_cors_hosts: ["picsum.photos"],
-        quickbars_selection_toolbar: 'cut copy paste | formatselect | quicklink',
-        quickbars_insert_toolbar: '',
+        quickbars_selection_toolbar:
+          "cut copy paste | fontsizeselect | quicklink",
+        quickbars_insert_toolbar: "",
         menubar: "file edit view insert format tools table",
         plugins:
           "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons",
         toolbar:
-          "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | fontsizeselect | media table removeformat pagebreak | template charmap | fullscreen preview save print | ltr rtl | anchor help",
+          "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         toolbar_sticky: true,
         templates: [
-          {title: "Quote", description: "Add a quote.", content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`}
+          {
+            title: "Quote",
+            description: "Add a quote.",
+            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+          },
         ],
         autosave_ask_before_unload: true,
         autosave_interval: "30s",
