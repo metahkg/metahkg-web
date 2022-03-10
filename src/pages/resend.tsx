@@ -65,6 +65,7 @@ export default function Verify() {
   }, []);
   if (localStorage.user) return <Navigate to="/" replace />;
   menu && setMenu(false);
+  document.title = "Resend Verification Email | Metahkg";
   const small = width / 2 - 100 <= 450;
   return (
     <Box
@@ -75,7 +76,7 @@ export default function Verify() {
         <div className="m50">
           <div className="flex justify-center align-center">
             <MetahkgLogo svg light height={50} width={40} className="mb10" />
-            <h1 className="font-size-25 mb20 nohmargin">Resend Email</h1>
+            <h1 className="font-size-25 mb20 nohmargin">Resend Verification Email</h1>
           </div>
           {alert.text && (
             <Alert className="mb20" severity={alert.severity}>
@@ -111,7 +112,7 @@ export default function Verify() {
             />
             <Button
               variant="contained"
-              className="font-size-16-force notexttransform"
+              className={`font-size-16-force notexttransform${small ? " mt20" : ""}`}
               color="secondary"
               onClick={resend}
               disabled={

@@ -58,6 +58,7 @@ export default function Verify() {
   }, []);
   if (localStorage.user) return <Navigate to="/" replace />;
   menu && setMenu(false);
+  document.title = "Verify | Metahkg";
   const small = width / 2 - 100 <= 450;
   return (
     <Box
@@ -103,7 +104,7 @@ export default function Verify() {
               fullWidth
             />
           ))}
-          <h4><Link className="metahkg-yellow-force link" to="/resend">Resend email?</Link></h4>
+          <h4><Link className="metahkg-yellow-force link" to="/resend">Resend verification email?</Link></h4>
           <Button
             variant="contained"
             className="font-size-16-force notexttransform"

@@ -80,7 +80,7 @@ export default function Create() {
   const [data, setData] = useData();
   const [mtitle, setMtitle] = useTitle();
   const [, setNotification] = useNotification();
-  const [catchoosed, setCatchoosed] = useState<number>(cat || 0);
+  const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
   const [rtoken, setRtoken] = useState(""); //recaptcha token
   const [title, setTitle] = useState(""); //this will be the post title
   const [imgurl, setImgurl] = useState("");
@@ -192,7 +192,20 @@ export default function Create() {
               {alert.text}
             </Alert>
           )}
-          <div className="flex align-center">
+          <div className={width < 760 ? "" : "flex "}>
+            <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
+            <TextField
+              className={width < 760 ? "mt15" : "ml15"}
+              variant="filled"
+              color="secondary"
+              fullWidth
+              label="Title"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </div>
+          <div className="flex align-center mb15 mt15">
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
@@ -228,19 +241,6 @@ export default function Create() {
               </p>
             )}
           </div>
-          <div className={`${width < 760 ? "" : "flex "}mb20 mt20`}>
-            <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
-            <TextField
-              className={width < 760 ? "mt15" : "ml15"}
-              variant="filled"
-              color="secondary"
-              fullWidth
-              label="Title"
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-            />
-          </div>
           <TextEditor
             changehandler={(v, e: any) => {
               setIcomment(e.getContent());
@@ -248,8 +248,8 @@ export default function Create() {
             text={inittext}
           />
           <div
-            className={`mt20 ${
-              small ? "" : "flex fullwidth justify-space-between"
+            className={`mt15 ${
+              small ? "" : "flex fullwidth justify-space-between align-center"
             }`}
           >
             <ReCAPTCHA
@@ -266,7 +266,7 @@ export default function Create() {
               disabled={
                 disabled || !(icomment && title && rtoken && catchoosed)
               }
-              className="mt20 font-size-16-force create-btn novpadding notexttransform"
+              className={`${small ? "mt15 " : ""}font-size-16-force create-btn novpadding notexttransform`}
               onClick={create}
               variant="contained"
               color="secondary"

@@ -201,8 +201,8 @@ export default function AddComment() {
             }}
           />
           <div
-            className={`mt20 ${
-              small ? "" : "flex fullwidth justify-space-between"
+            className={`mt15 ${
+              small ? "" : "flex fullwidth justify-space-between align-center"
             }`}
           >
             <ReCAPTCHA
@@ -217,7 +217,7 @@ export default function AddComment() {
             />
             <Button
               disabled={disabled || !comment || !rtoken}
-              className="mt20 font-size-16-force notexttransform ac-btn"
+              className={`${small ? "mt15 " : ""}font-size-16-force notexttransform ac-btn`}
               onClick={addcomment}
               variant="contained"
               color="secondary"
