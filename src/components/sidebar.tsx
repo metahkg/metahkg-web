@@ -13,11 +13,11 @@ import {
 import {
   Menu as MenuIcon,
   AccountCircle as AccountCircleIcon,
-  Create as CreateIcon,
   Telegram as TelegramIcon,
   Code as CodeIcon,
   ManageAccounts as ManageAccountsIcon,
   Logout as LogoutIcon,
+  AccessTimeFilled,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
@@ -104,29 +104,31 @@ export default function SideBar() {
             </div>
           </div>
           <List>
-            <Link
-              className="notextdecoration white"
-              to={`/${
-                localStorage.user ? "logout" : "signin"
-              }?returnto=${encodeURIComponent(wholepath())}`}
-            >
-              <ListItem button onClick={onClick}>
-                <ListItemIcon>
-                  {localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />}
-                </ListItemIcon>
-                <ListItemText>
-                  {localStorage.user ? "Logout" : "Sign in / Register"}
-                </ListItemText>
-              </ListItem>
-            </Link>
-            <Link className="notextdecoration white" to="/create">
-              <ListItem button onClick={onClick}>
-                <ListItemIcon>
-                  <CreateIcon />
-                </ListItemIcon>
-                <ListItemText>Create topic</ListItemText>
-              </ListItem>
-            </Link>
+            {[
+              {
+                title: "Recall",
+                link: "/recall",
+                icon: <AccessTimeFilled />,
+              },
+              {
+                title: localStorage.user ? "Logout" : "Sign in / Register",
+                link: `/${
+                  localStorage.user ? "logout" : "signin"
+                }?returnto=${encodeURIComponent(wholepath())}`,
+                icon: localStorage.user ? (
+                  <LogoutIcon />
+                ) : (
+                  <AccountCircleIcon />
+                ),
+              }
+            ].map((item) => (
+              <Link to={item.link} className="notextdecoration white">
+                <ListItem button onClick={onClick}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.title}</ListItemText>
+                </ListItem>
+              </Link>
+            ))}
           </List>
           <Divider />
           <div className="m20">
@@ -185,7 +187,7 @@ export default function SideBar() {
             </div>
           )}
           <p className="ml5">
-            Metahkg build {process.env.REACT_APP_build || "v0.5.6rc2"}
+            Metahkg build {process.env.REACT_APP_build || "v0.5.6rc3"}
           </p>
         </Box>
       </Drawer>

@@ -12,8 +12,9 @@ import {
   useMenu,
   useSelected,
   useData,
+  useRecall,
 } from "./MenuProvider";
-import { summary } from "../lib/common";
+import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
 import { useHistory, useNotification, useQuery } from "./ContextProvider";
@@ -29,6 +30,7 @@ function MainContent() {
   const [search] = useSearch();
   const [profile] = useProfile();
   const [selected] = useSelected();
+  const [recall] = useRecall();
   const [query] = useQuery();
   const [, setNotification] = useNotification();
   const [id] = useId();
@@ -38,6 +40,8 @@ function MainContent() {
   const [updating, setUpdating] = useState(false);
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
+  const history: any[] = JSON.parse(localStorage.history || "[]") || [];
+  console.log(end);
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
@@ -50,14 +54,22 @@ function MainContent() {
     });
     err?.response?.status === 404 && navigate("/404", { replace: true });
   }
+  const mode =
+    (search && "search") ||
+    (profile && "profile") ||
+    (recall && "recall") ||
+    "menu";
   /* A way to make sure that the effect is only run once. */
   useEffect(() => {
-    if (!data.length && (category || profile || search || id)) {
+    if (!data.length && (category || profile || search || id || recall)) {
       const url = {
         search: `/api/search?q=${q}&sort=${selected}`,
         profile: `/api/history/${profile}?sort=${selected}`,
         menu: `/api/menu/${c}?sort=${selected}`,
-      }[search ? "search" : profile ? "profile" : "menu"];
+        recall: `/api/threads?threads=${JSON.stringify(
+          splitarray(history, 0, 24)
+        )}`,
+      }[mode];
       axios
         .get(url)
         .then((res) => {
@@ -80,7 +92,10 @@ function MainContent() {
       search: `/api/search?q=${q}&sort=${selected}&page=${page + 1}`,
       profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
       menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
-    }[search ? "search" : profile ? "profile" : "menu"];
+      recall: `/api/threads?threads=${JSON.stringify(
+        splitarray(history, page * 25, (page + 1) * 25 - 1)
+      )}`,
+    }[mode];
     axios
       .get(url)
       .then((res) => {
@@ -117,16 +132,13 @@ function MainContent() {
     <Paper
       className="nobgimage noshadow overflow-auto"
       style={{
-        maxHeight: search ? "calc(100vh - 151px)" : "calc(100vh - 91px)",
+        maxHeight: `calc(100vh - ${
+          (search && "151") || (recall && "51") || "91"
+        }px)`,
       }}
       onScroll={onScroll}
     >
-      <Box
-        className="min-height-full"
-        sx={{
-          bgcolor: "primary.main",
-        }}
-      >
+      <Box className="min-height-full menu-bottom flex flex-dir-column">
         {!!(data.length && data?.[0] !== null) && (
           <Box className="flex flex-dir-column max-width-full menu-bottom">
             {data.map((thread: summary) => (
@@ -134,22 +146,28 @@ function MainContent() {
                 <MenuThread
                   key={`${category}${id === thread.id}`}
                   thread={thread}
+                  onClick={() => {
+                    const index = history.findIndex((i) => i === thread.id);
+                    if (index !== -1) history.splice(index, 1);
+                    history.unshift(thread.id);
+                    localStorage.setItem("history", JSON.stringify(history));
+                  }}
                 />
                 <Divider />
               </div>
             ))}
             {updating && <MenuPreload />}
-            {end && (
-              <Typography
-                className="mt10 mb10 text-align-center font-size-20-force"
-                sx={{
-                  color: "secondary.main",
-                }}
-              >
-                End
-              </Typography>
-            )}
           </Box>
+        )}
+        {end && (
+          <Typography
+            className="mt10 mb10 text-align-center font-size-20-force"
+            sx={{
+              color: "secondary.main",
+            }}
+          >
+            End
+          </Typography>
         )}
         {!data.length && <MenuPreload />}
       </Box>
@@ -164,6 +182,7 @@ function Menu() {
   const [query, setQuery] = useQuery();
   const [, setHistory] = useHistory();
   const [category] = useCat();
+  const [recall] = useRecall();
   const [profile] = useProfile();
   const navigate = useNavigate();
   const [n, setN] = useState(Math.random());
@@ -206,7 +225,7 @@ function Menu() {
           </div>
         </div>
       )}
-      <MainContent key={`${search}${profile}${category}${selected}${n}`} />
+      <MainContent key={`${search}${profile}${category}${recall}${selected}${n}`} />
     </Box>
   );
 }

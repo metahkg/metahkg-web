@@ -29,6 +29,7 @@ import NotFound from "./pages/notfound";
 import axios from "axios";
 import Verify from "./pages/verify";
 import Resend from "./pages/resend";
+import Recall from "./pages/recall";
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
@@ -48,7 +49,8 @@ export default function App() {
     if (localStorage.user || localStorage.id) {
       axios.get("/api/loggedin").then((res) => {
         if (!res.data.loggedin) {
-          localStorage.clear();
+          localStorage.removeItem("user");
+          localStorage.removeItem("id");
           return;
         }
         localStorage.user !== res.data.user &&
@@ -90,6 +92,7 @@ export default function App() {
               <Route path="/telegram" element={<Telegram />} />
               <Route path="/profile/:id" element={<Profile />} />
               <Route path="/history/:id" element={<History />} />
+              <Route path="/recall" element={<Recall />} />
               <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>

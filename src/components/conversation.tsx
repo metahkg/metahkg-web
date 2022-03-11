@@ -25,7 +25,7 @@ import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
 import ReactVisibilitySensor from "react-visibility-sensor";
-import { useCat, useId } from "./MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";
 import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
@@ -83,6 +83,9 @@ function Conversation(props: { id: number }) {
   const lastHeight = useRef(0);
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
+  const [recall] = useRecall();
+  const [search] = useSearch();
+  const [profile] = useProfile();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -101,7 +104,7 @@ function Conversation(props: { id: number }) {
       .get(`/api/thread/${props.id}?type=1`)
       .then((res) => {
         res.data.slink && setDetails(res.data);
-        !cat && setCat(res.data.category);
+        !cat && !(recall || search || profile) && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
         if (!res.data.slink) {

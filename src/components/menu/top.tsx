@@ -12,6 +12,7 @@ import {
   useCat,
   useId,
   useProfile,
+  useRecall,
   useSearch,
   useTitle,
 } from "../MenuProvider";
@@ -36,20 +37,28 @@ export default function MenuTop(props: {
   const [search] = useSearch();
   const [profile] = useProfile();
   const [category] = useCat();
+  const [recall] = useRecall();
   const [id] = useId();
+  const mode =
+    (search && "search") ||
+    (profile && "profile") ||
+    (recall && "recall") ||
+    "menu";
   const inittitle = {
     search: "Search",
     profile: "User Profile",
     menu: "Metahkg",
-  }[search ? "search" : profile ? "profile" : "menu"];
+    recall: "Recall"
+  }[mode];
   const [title, setTitle] = useTitle();
   const tabs = {
     search: ["Relevance", "Created", "Last Comment"],
     profile: ["Created", "Last Comment"],
     menu: ["Newest", "Hottest"],
-  }[search ? "search" : profile ? "profile" : "menu"];
+    recall: []
+  }[mode];
   useEffect(() => {
-    if (!search && !title && (category || profile || id)) {
+    if (!search && !recall && !title && (category || profile || id)) {
       if (profile) {
         axios.get(`/api/profile/${profile}?nameonly=true`).then((res) => {
           setTitle(res.data.user);
@@ -64,12 +73,12 @@ export default function MenuTop(props: {
         });
       }
     }
-  }, [category, id, profile, search, setTitle, title]);
+  }, [category, id, profile, recall, search, setTitle, title]);
   return (
     <div>
       <Box
         className="fullwidth menutop-root"
-        sx={{ backgroundColor: "primary.main" }}
+        sx={{ bgcolor: "primary.main", height: recall ? 50 : 90 }}
       >
         <div className="flex fullwidth align-center justify-space-between menutop-top">
           <div className="ml10 mr40">
@@ -93,7 +102,7 @@ export default function MenuTop(props: {
             </Tooltip>
           </div>
         </div>
-        <div className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
+        {tabs.length && <div className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
           {tabs.map((tab, index) => (
             <Box
               onClick={() => {
@@ -115,7 +124,7 @@ export default function MenuTop(props: {
               </Typography>
             </Box>
           ))}
-        </div>
+        </div>}
       </Box>
       <Divider />
     </div>

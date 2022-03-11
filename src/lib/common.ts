@@ -42,7 +42,6 @@ export type summary = {
   category: number;
   lastModified: string;
   createdAt: string;
-  catname: string;
   vote: number;
 };
 export function sleep(ms: number) {
@@ -59,8 +58,9 @@ export function splitarray(arr: any[], start: number, end: number) {
   return r;
 }
 export async function logout() {
-  localStorage.clear();
   await axios.get("/api/logout");
+  localStorage.removeItem("user");
+  localStorage.removeItem("id");
 }
 export function wholepath(): string {
   return window.location.href.replace(window.location.origin, "");

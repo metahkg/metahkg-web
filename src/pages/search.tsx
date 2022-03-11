@@ -6,6 +6,7 @@ import {
   useData,
   useId,
   useMenu,
+  useRecall,
   useSearch,
   useSelected,
   useTitle,
@@ -13,6 +14,7 @@ import {
 import { useHistory, useWidth } from "../components/ContextProvider";
 export default function Search() {
   const [search, setSearch] = useSearch();
+  const [recall, setRecall] = useRecall();
   const [menu, setMenu] = useMenu();
   const [history, setHistory] = useHistory();
   const [data, setData] = useData();
@@ -33,6 +35,7 @@ export default function Search() {
     selected && setSelected(0);
     setTitle("");
   }
+  recall && setRecall(false);
   return (
     <Box
       className="flex min-height-fullvh"

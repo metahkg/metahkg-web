@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { useParams } from "react-router";
 import Empty from "../components/empty";
 import { useHistory, useWidth } from "../components/ContextProvider";
 import {
@@ -14,14 +13,12 @@ import {
   useSelected,
   useTitle,
 } from "../components/MenuProvider";
-import { categories } from "../lib/common";
 /**
  * It's a function that
  * returns a component that renders a box with a background color
  * @returns The empty component is being returned.
  */
-export default function Category() {
-  const params = useParams();
+export default function Recall() {
   const [id, setId] = useId();
   const [menu, setMenu] = useMenu();
   const [category, setCategory] = useCat();
@@ -29,24 +26,24 @@ export default function Category() {
   const [profile, setProfile] = useProfile();
   const [history, setHistory] = useHistory();
   const [recall, setRecall] = useRecall();
-  const [, setData] = useData();
+  const [data, setData] = useData();
   const [width] = useWidth();
-  const [, setTitle] = useTitle();
+  const [title, setTitle] = useTitle();
   const [selected, setSelected] = useSelected();
-  document.title = categories[category] + " | Metahkg";
+  document.title = "Recall | Metahkg";
   function cleardata() {
-    setData([]);
-    setTitle("");
-    setSelected(0);
+    data.length && setData([]);
+    title && setTitle("");
+    selected && setSelected(0);
   }
   history !== window.location.pathname && setHistory(window.location.pathname);
   !menu && setMenu(true);
-  (category !== Number(params.category) || search || profile || recall) && cleardata();
-  category !== Number(params.category) && setCategory(Number(params.category));
+  (category || search || profile || !recall) && cleardata();
   id && setId(0);
+  category && setCategory(0);
   search && setSearch(false);
-  recall && setRecall(false);
   profile && setProfile(0);
+  !recall && setRecall(true);
   ![0, 1].includes(selected) && setSelected(0);
   return (
     <Box

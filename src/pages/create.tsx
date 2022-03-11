@@ -22,6 +22,7 @@ import {
   useData,
   useMenu,
   useProfile,
+  useRecall,
   useSearch,
   useTitle,
 } from "../components/MenuProvider";
@@ -77,6 +78,7 @@ export default function Create() {
   const [profile, setProfile] = useProfile();
   const [cat, setCat] = useCat();
   const [search, setSearch] = useSearch();
+  const [recall, setRecall] = useRecall();
   const [data, setData] = useData();
   const [mtitle, setMtitle] = useTitle();
   const [, setNotification] = useNotification();
@@ -106,7 +108,7 @@ export default function Create() {
           `/api/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`
         )
         .then((res) => {
-          if (res.data?.[0]) {
+          if (res.data?.[0]?.comment) {
             setInittext(
               `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
             );
@@ -139,6 +141,7 @@ export default function Create() {
       .then((res) => {
         cat && setCat(0);
         search && setSearch(false);
+        recall && setRecall(false);
         profile && setProfile(0);
         data.length && setData([]);
         mtitle && setMtitle("");

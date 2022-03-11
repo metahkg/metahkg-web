@@ -23,6 +23,7 @@ import {
   useSelected,
   useTitle,
   useCat,
+  useRecall,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
 import { timetoword_long } from "../lib/common";
@@ -92,6 +93,7 @@ export default function Profile() {
   const params = useParams();
   const [profile, setProfile] = useProfile();
   const [search, setSearch] = useSearch();
+  const [recall, setRecall] = useRecall();
   const [user, setUser] = useState<any>({});
   const [menu, setMenu] = useMenu();
   const [width] = useWidth();
@@ -131,14 +133,11 @@ export default function Profile() {
   history !== window.location.pathname && setHistory(window.location.pathname);
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
-  if (profile !== (Number(params.id) || "self")) {
+  (profile !== (Number(params.id) || "self") || search) && cleardata();
+  profile !== (Number(params.id) || "self") &&
     setProfile(Number(params.id) || "self");
-    cleardata();
-  }
-  if (search) {
-    setSearch(false);
-    cleardata();
-  }
+  search && setSearch(false);
+  recall && setRecall(false);
   id && setId(0);
   cat && setCat(0);
   return (
