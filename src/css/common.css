@@ -89,6 +89,9 @@
 .overflow-auto {
   overflow: auto;
 }
+.overflow-auto-force {
+  overflow: auto !important;
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -160,4 +163,12 @@
 }
 .break-word-force {
   word-break: break-word !important;
+}
+.link {
+  color: #3498db;
+  text-decoration: none;
+  cursor: pointer;
+}
+.link:hover {
+  text-decoration: underline;
 }

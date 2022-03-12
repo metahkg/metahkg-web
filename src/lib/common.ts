@@ -42,7 +42,6 @@ export type summary = {
   category: number;
   lastModified: string;
   createdAt: string;
-  catname: string;
   vote: number;
 };
 export function sleep(ms: number) {
@@ -59,13 +58,14 @@ export function splitarray(arr: any[], start: number, end: number) {
   return r;
 }
 export async function logout() {
-  localStorage.clear();
   await axios.get("/api/logout");
+  localStorage.removeItem("user");
+  localStorage.removeItem("id");
 }
-export function wholepath() : string {
+export function wholepath(): string {
   return window.location.href.replace(window.location.origin, "");
 }
-export function checkpwd(pwd: string) : boolean {
+export function checkpwd(pwd: string): boolean {
   if (pwd.length < 8) {
     return false;
   }
@@ -86,7 +86,7 @@ export function checkpwd(pwd: string) : boolean {
   }
   return true;
 }
-export function allequal(arr:any[]) {
+export function allequal(arr: any[]) {
   const first = arr[0];
   for (const i of arr) {
     if (i !== first) return false;

@@ -9,6 +9,7 @@ import {
   useId,
   useMenu,
   useProfile,
+  useRecall,
   useSearch,
   useSelected,
   useTitle,
@@ -27,6 +28,7 @@ export default function Category() {
   const [search, setSearch] = useSearch();
   const [profile, setProfile] = useProfile();
   const [history, setHistory] = useHistory();
+  const [recall, setRecall] = useRecall();
   const [, setData] = useData();
   const [width] = useWidth();
   const [, setTitle] = useTitle();
@@ -39,10 +41,11 @@ export default function Category() {
   }
   history !== window.location.pathname && setHistory(window.location.pathname);
   !menu && setMenu(true);
-  (category !== Number(params.category) || search || profile) && cleardata();
+  (category !== Number(params.category) || search || profile || recall) && cleardata();
   category !== Number(params.category) && setCategory(Number(params.category));
   id && setId(0);
   search && setSearch(false);
+  recall && setRecall(false);
   profile && setProfile(0);
   ![0, 1].includes(selected) && setSelected(0);
   return (

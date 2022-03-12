@@ -10,25 +10,44 @@ export default function TextEditor(props: {
   changehandler: (a: string, editor: import("tinymce/tinymce").Editor) => void;
   text: string;
 }) {
-  const {changehandler, text} = props;
+  const { changehandler, text } = props;
   return (
     <Editor
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 300,
-        menubar: true,
-        skin: "oxide-dark",
-        content_css: "dark",
+        height: 350,
+        skin_url: "/tinymce/skins/ui/metahkg-dark",
+        content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
+        branding: false,
         mobile: {
-          menubar: true,
+          menubar: "file edit view insert format tools table",
+          toolbar:
+            "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         },
-        plugins: [
-          "advlist autolink lists link image imagetools charmap print preview anchor textcolor",
-          "searchreplace visualblocks code fullscreen autosave",
-          "insertdatetime media table paste code wordcount",
+        imagetools_cors_hosts: ["picsum.photos"],
+        quickbars_selection_toolbar:
+          "cut copy paste | fontsizeselect | quicklink",
+        quickbars_insert_toolbar: "",
+        menubar: "file edit view insert format tools table",
+        plugins:
+          "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
+        toolbar:
+          "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+        toolbar_sticky: true,
+        templates: [
+          {
+            title: "Quote",
+            description: "Add a quote.",
+            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+          },
         ],
-        toolbar: `undo redo | cut copy paste | link image | formatselect | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat`,
+        autosave_ask_before_unload: true,
+        autosave_interval: "30s",
+        autosave_prefix: "{path}{query}-{id}-",
+        autosave_restore_when_empty: false,
+        autosave_retention: "2m",
+        image_advtab: true,
       }}
       tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.3/tinymce.min.js"
     />

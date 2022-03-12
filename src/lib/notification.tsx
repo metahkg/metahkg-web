@@ -19,7 +19,7 @@ export function Notification() {
       }}
       anchorOrigin={{ horizontal, vertical }}
       open={open}
-      autoHideDuration={3500}
+      autoHideDuration={3000}
       onClick={() => {
         setNotification({ ...notification, open: false });
       }}

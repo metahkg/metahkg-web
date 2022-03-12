@@ -3,6 +3,7 @@
 }
 .profile-toptext {
   align-self: center;
-  line-height: 35px;
-  max-height: 35px;
+  white-space: nowrap;
+  line-height: 37px;
+  max-height: 37px;
 }

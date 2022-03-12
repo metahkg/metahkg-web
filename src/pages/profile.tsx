@@ -23,6 +23,7 @@ import {
   useSelected,
   useTitle,
   useCat,
+  useRecall,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
 import { timetoword_long } from "../lib/common";
@@ -42,6 +43,7 @@ function DataTable(props: {
     createdAt: string;
   };
 }) {
+  const [width] = useWidth();
   const tablerows = ["Name", "Posts", "Sex", "Admin", "Joined"];
   const items = [
     props.user.user,
@@ -51,7 +53,11 @@ function DataTable(props: {
     `${timetoword_long(props.user.createdAt)} ago`,
   ];
   return (
-    <TableContainer className="ml50 mr50" component={Paper}>
+    <TableContainer
+      sx={{ maxWidth: width < 760 ? "100%" : "70%" }}
+      className="ml50 mr50"
+      component={Paper}
+    >
       <Table className="fullwidth" aria-label="simple table">
         <TableBody>
           {items.map((item, index) => (
@@ -87,6 +93,7 @@ export default function Profile() {
   const params = useParams();
   const [profile, setProfile] = useProfile();
   const [search, setSearch] = useSearch();
+  const [recall, setRecall] = useRecall();
   const [user, setUser] = useState<any>({});
   const [menu, setMenu] = useMenu();
   const [width] = useWidth();
@@ -126,14 +133,11 @@ export default function Profile() {
   history !== window.location.pathname && setHistory(window.location.pathname);
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
-  if (profile !== (Number(params.id) || "self")) {
+  (profile !== (Number(params.id) || "self") || search) && cleardata();
+  profile !== (Number(params.id) || "self") &&
     setProfile(Number(params.id) || "self");
-    cleardata();
-  }
-  if (search) {
-    setSearch(false);
-    cleardata();
-  }
+  search && setSearch(false);
+  recall && setRecall(false);
   id && setId(0);
   cat && setCat(0);
   return (
@@ -198,7 +202,22 @@ export default function Profile() {
                       marginTop: params.id === "self" ? 25 : 0,
                     }}
                   >
-                    {params.id === "self" && <UploadAvatar />}
+                    {params.id === "self" && (
+                      <UploadAvatar
+                        onUpload={() => {
+                          setNotification({ open: true, text: "Uploading..." });
+                        }}
+                        onSuccess={() => {
+                          window.location.reload();
+                        }}
+                        onError={(err) => {
+                          setNotification({
+                            open: true,
+                            text: `Upload failed: ${err.response.data}`,
+                          });
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </Box>

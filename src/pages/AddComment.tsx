@@ -1,6 +1,7 @@
 import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button } from "@mui/material";
+import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -11,6 +12,8 @@ import { roundup, severity, wholepath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
+import UploadImage from "../components/uploadimage";
+declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
 /**
  * This page is used to add a comment to a thread
@@ -21,6 +24,7 @@ export default function AddComment() {
   const [data, setData] = useData();
   const [width] = useWidth();
   const [comment, setComment] = useState("");
+  const [imgurl, setImgurl] = useState("");
   const [inittext, setInittext] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [rtoken, setRtoken] = useState("");
@@ -59,6 +63,7 @@ export default function AddComment() {
         }
       });
       if (quote) {
+        setAlert({ severity: "info", text: "Fetching comment..." });
         setNotification({ open: true, text: "Fetching comment..." });
         axios
           .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`)
@@ -67,14 +72,20 @@ export default function AddComment() {
               setInittext(
                 `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
               );
+              setAlert({ severity: "info", text: "" });
               setTimeout(() => {
                 setNotification({ open: false, text: "" });
               }, 1000);
             } else {
-              setNotification({ open: true, text: "Comment not found!"});
+              setAlert({ severity: "error", text: " Comment not found!" });
+              setNotification({ open: true, text: "Comment not found!" });
             }
           })
           .catch(() => {
+            setAlert({
+              severity: "warning",
+              text: "Unable to fetch comment. This comment would not be a quote.",
+            });
             setNotification({
               open: true,
               text: "Unable to fetch comment. This comment would not be a quote.",
@@ -91,6 +102,7 @@ export default function AddComment() {
     //send data to server /api/comment
     setDisabled(true);
     setAlert({ severity: "info", text: "Adding comment..." });
+    setNotification({ open: true, text: "Adding comment..." });
     axios
       .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
       .then((res) => {
@@ -98,6 +110,9 @@ export default function AddComment() {
         navigate(
           `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
         );
+        setTimeout(() => {
+          setNotification({ open: false, text: "" });
+        }, 100);
       })
       .catch((err) => {
         setAlert({
@@ -113,6 +128,7 @@ export default function AddComment() {
         grecaptcha.reset();
       });
   }
+  /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
   if (!localStorage.user) {
     return (
       <Navigate
@@ -151,10 +167,52 @@ export default function AddComment() {
             </Link>
           </h4>
           {alert.text && (
-            <Alert className="mt10 mb15" severity={alert.severity}>
+            <Alert className="mb10" severity={alert.severity}>
               {alert.text}
             </Alert>
           )}
+          <div className="flex align-center mb15">
+            <UploadImage
+              onUpload={() => {
+                setAlert({ severity: "info", text: "Uploading image..." });
+                setNotification({ open: true, text: "Uploading image..." });
+              }}
+              onSuccess={(res) => {
+                setAlert({ severity: "info", text: "Image uploaded!" });
+                setNotification({ open: true, text: "Image uploaded!" });
+                setTimeout(() => {
+                  setNotification({ open: false, text: "" });
+                }, 1000);
+                setImgurl(res.data.url);
+                tinymce.activeEditor.insertContent(
+                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                );
+              }}
+              onError={() => {
+                setAlert({ severity: "error", text: "Error uploading image." });
+                setNotification({ open: true, text: "Error uploading image." });
+              }}
+            />
+            {imgurl && (
+              <p className="ml10 novmargin flex">
+                <a href={imgurl} target="_blank" rel="noreferrer">
+                  {imgurl}
+                </a>
+                <p
+                  className="link novmargin metahkg-grey-force ml5"
+                  onClick={() => {
+                    navigator.clipboard.writeText(imgurl);
+                    setNotification({
+                      open: true,
+                      text: "Copied to clipboard!",
+                    });
+                  }}
+                >
+                  copy
+                </p>
+              </p>
+            )}
+          </div>
           <TextEditor
             key={id}
             text={inittext}
@@ -163,8 +221,8 @@ export default function AddComment() {
             }}
           />
           <div
-            className={`mt20 ${
-              small ? "" : "flex fullwidth justify-space-between"
+            className={`mt15 ${
+              small ? "" : "flex fullwidth justify-space-between align-center"
             }`}
           >
             <ReCAPTCHA
@@ -179,11 +237,14 @@ export default function AddComment() {
             />
             <Button
               disabled={disabled || !comment || !rtoken}
-              className="mt20 font-size-16 ac-btn"
+              className={`${
+                small ? "mt15 " : ""
+              }font-size-16-force notexttransform ac-btn`}
               onClick={addcomment}
               variant="contained"
               color="secondary"
             >
+              <AddCommentIcon className="mr5 font-size-16-force" />
               Comment
             </Button>
           </div>

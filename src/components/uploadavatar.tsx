@@ -1,7 +1,8 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useRef } from "react";
+import { FileUpload } from "@mui/icons-material";
+import axios, { AxiosResponse } from "axios";
 const Input = styled("input")({
   display: "none",
 });
@@ -9,30 +10,42 @@ const Input = styled("input")({
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadAvatar() {
-  const formRef = useRef<HTMLFormElement>(null);
+export default function UploadAvatar(props: {
+  onUpload?: () => void;
+  onSuccess: (res: AxiosResponse<any, any>) => void;
+  onError: (err: any) => void;
+}) {
+  const { onUpload, onSuccess, onError } = props;
   return (
     <Box>
-      <form
-        ref={formRef}
-        name="avatar"
-        id="avatar"
-        method="post"
-        action="/api/avatar"
-        encType="multipart/form-data"
-      >
+      <form name="avatar" id="avatar" encType="multipart/form-data">
         <label htmlFor="contained-button-file">
           <Input
             accept="image/*"
             id="contained-button-file"
             type="file"
             name="avatar"
-            onChange={() => {
-              formRef?.current?.submit();
+            onChange={(e) => {
+              onUpload && onUpload();
+              const formData = new FormData();
+              formData.append("avatar", e?.target?.files?.[0] || "");
+              axios
+                .post("/api/avatar", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                })
+                .then(onSuccess)
+                .catch(onError);
             }}
           />
-          <Button color="secondary" variant="contained" component="span">
-            Upload
+          <Button
+            className="mt5 notexttransform"
+            variant="contained"
+            component="span"
+          >
+            <FileUpload className="mr5" />
+            <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
           </Button>
         </label>
       </form>

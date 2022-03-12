@@ -7,23 +7,29 @@ import {
   Article as ArticleIcon,
   Comment as CommentIcon,
 } from "@mui/icons-material";
-import { timetoword, roundup, summary } from "../../lib/common";
+import { timetoword, roundup, summary, categories } from "../../lib/common";
 import { Link } from "react-router-dom";
-import { useCat, useId, useProfile, useSearch } from "../MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
 /**
- * A component that renders a thread in the menu. 
+ * A component that renders a thread in the menu.
  * @param {summary} props.thread thread info
+ * @param {() => void | undefined} props.onClick on click event handler
  */
-export default function MenuThread(props: { thread: summary }) {
+export default function MenuThread(props: {
+  thread: summary;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+}) {
   const [cat] = useCat();
   const [search] = useSearch();
   const [profile] = useProfile();
+  const [recall] = useRecall();
   const [id] = useId();
-  const { thread } = props;
+  const { thread, onClick } = props;
   return (
     <Link
       className="fullwidth notextdecoration"
       to={`/thread/${thread.id}?page=1`}
+      onClick={onClick}
     >
       <Box
         className={`flex fullwidth flex-dir-column menuthread-root${
@@ -67,7 +73,7 @@ export default function MenuThread(props: { thread: summary }) {
           <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
             {thread.title}
           </p>
-          {!!(cat === 1 || search || profile) && (
+          {Boolean(cat === 1 || search || profile || recall) && (
             <Link
               className="mr10 notextdecoration"
               to={`/category/${thread.category}`}
@@ -77,7 +83,7 @@ export default function MenuThread(props: { thread: summary }) {
                 className="nomargin nopadding notexttransform menuthread-catbtn"
               >
                 <p className="nomargin font-size-12 menuthread-catname">
-                  {thread.catname}
+                  {categories?.[thread.category]}
                 </p>
               </Button>
             </Link>

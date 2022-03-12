@@ -12,6 +12,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
   const [profile, setProfile] = useState<number | "self">(0);
   const [search, useSearch] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [recall, setRecall] = useState(false);
   const [selected, setSelected] = useState(0);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
@@ -24,6 +25,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
         profile: [profile, setProfile],
         menu: [menu, setMenu],
         selected: [selected, setSelected],
+        recall: [recall, setRecall],
         data: [data, setData],
         title: [title, setTitle],
       }}
@@ -120,4 +122,15 @@ export function useSearch(): [
 ] {
   const { search } = useContext(MenuContext);
   return search;
+}
+/**
+ * It returns a boolean and a function that sets the boolean.
+ * @returns A boolean and a setter function.
+ */
+export function useRecall(): [
+  boolean,
+  React.Dispatch<React.SetStateAction<boolean>>  
+] {
+  const { recall } = useContext(MenuContext);
+  return recall;
 }

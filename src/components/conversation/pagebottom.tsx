@@ -37,11 +37,11 @@ export default function PageBottom() {
         Copyright (c) 2022 wcyat.{" "}
         <a
           className="metahkg-grey-force"
-          href="https://www.mozilla.org/en-US/MPL/2.0/"
+          href="https://www.gnu.org/licenses/agpl-3.0.en.html"
           target="_blank"
           rel="noreferrer"
         >
-          MPL-2.0
+          AGPL-3.0
         </a>
         .
       </div>

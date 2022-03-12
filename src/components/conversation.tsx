@@ -25,11 +25,12 @@ import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
 import ReactVisibilitySensor from "react-visibility-sensor";
-import { useCat, useId } from "./MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";
 import { useNotification } from "./ContextProvider";
 import Share from "./conversation/share";
 import { ShareProvider } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
+import Prism from "prismjs";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -82,6 +83,9 @@ function Conversation(props: { id: number }) {
   const lastHeight = useRef(0);
   const [cat, setCat] = useCat();
   const [id, setId] = useId();
+  const [recall] = useRecall();
+  const [search] = useSearch();
+  const [profile] = useProfile();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -100,7 +104,7 @@ function Conversation(props: { id: number }) {
       .get(`/api/thread/${props.id}?type=1`)
       .then((res) => {
         res.data.slink && setDetails(res.data);
-        !cat && setCat(res.data.category);
+        !cat && !(recall || search || profile) && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
         if (!res.data.slink) {
@@ -154,6 +158,9 @@ function Conversation(props: { id: number }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
+  useEffect(() => {
+    Prism.highlightAll();
+  });
   /**
    * It fetches new comments, or the next page (if last comment id % 25 = 0)
    * of messages from the server and appends them to the conversation array
