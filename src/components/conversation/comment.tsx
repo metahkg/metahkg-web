@@ -112,11 +112,6 @@ function Comment(props: {
             47 -
             //@ts-ignore
             document.getElementById("croot")?.scrollTop;
-          console.log(
-            bheight,
-            document.getElementById(`c${id}`)?.offsetTop,
-            document.getElementById("croot")?.scrollTop
-          );
           setStory(story ? 0 : userid);
           setTimeout(() => {
             const aheight =
@@ -125,15 +120,6 @@ function Comment(props: {
               47 -
               //@ts-ignore
               document.getElementById("croot")?.scrollTop;
-            //@ts-ignore
-            console.log(
-              //@ts-ignore
-              document.getElementById(`c${id}`)?.offsetTop -
-                47 -
-                (document.getElementById("croot")?.scrollTop || 0),
-              aheight,
-              bheight
-            );
             //@ts-ignore
             document.getElementById("croot").scrollTop += aheight - bheight;
           });

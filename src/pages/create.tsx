@@ -199,10 +199,10 @@ export default function Create() {
               light
               className="mr10 mb10"
             />
-            <h1 className="novmargin">Create topic</h1>
+            <h1>Create topic</h1>
           </div>
           {alert.text && (
-            <Alert className="mt10 mb15" severity={alert.severity}>
+            <Alert className="mb15" severity={alert.severity}>
               {alert.text}
             </Alert>
           )}

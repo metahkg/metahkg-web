@@ -41,7 +41,6 @@ function MainContent() {
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
   const history: any[] = JSON.parse(localStorage.history || "[]") || [];
-  console.log(end);
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
