@@ -63,6 +63,7 @@ export default function AddComment() {
         }
       });
       if (quote) {
+        setAlert({ severity: "info", text: "Fetching comment..." });
         setNotification({ open: true, text: "Fetching comment..." });
         axios
           .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`)
@@ -71,14 +72,20 @@ export default function AddComment() {
               setInittext(
                 `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
               );
+              setAlert({ severity: "info", text: "" });
               setTimeout(() => {
                 setNotification({ open: false, text: "" });
               }, 1000);
             } else {
-              setNotification({ open: true, text: "Comment not found!"});
+              setAlert({ severity: "error", text: " Comment not found!" });
+              setNotification({ open: true, text: "Comment not found!" });
             }
           })
           .catch(() => {
+            setAlert({
+              severity: "warning",
+              text: "Unable to fetch comment. This comment would not be a quote.",
+            });
             setNotification({
               open: true,
               text: "Unable to fetch comment. This comment would not be a quote.",
@@ -95,6 +102,7 @@ export default function AddComment() {
     //send data to server /api/comment
     setDisabled(true);
     setAlert({ severity: "info", text: "Adding comment..." });
+    setNotification({ open: true, text: "Adding comment..." });
     axios
       .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
       .then((res) => {
@@ -102,6 +110,9 @@ export default function AddComment() {
         navigate(
           `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
         );
+        setTimeout(() => {
+          setNotification({ open: false, text: "" });
+        }, 100);
       })
       .catch((err) => {
         setAlert({
@@ -164,9 +175,14 @@ export default function AddComment() {
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
+                setNotification({ open: true, text: "Uploading image..." });
               }}
               onSuccess={(res) => {
                 setAlert({ severity: "info", text: "Image uploaded!" });
+                setNotification({ open: true, text: "Image uploaded!" });
+                setTimeout(() => {
+                  setNotification({ open: false, text: "" });
+                }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
                   `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
@@ -174,6 +190,7 @@ export default function AddComment() {
               }}
               onError={() => {
                 setAlert({ severity: "error", text: "Error uploading image." });
+                setNotification({ open: true, text: "Error uploading image." });
               }}
             />
             {imgurl && (
@@ -185,7 +202,10 @@ export default function AddComment() {
                   className="link novmargin metahkg-grey-force ml5"
                   onClick={() => {
                     navigator.clipboard.writeText(imgurl);
-                    setNotification({open:true, text: "Copied to clipboard!"});
+                    setNotification({
+                      open: true,
+                      text: "Copied to clipboard!",
+                    });
                   }}
                 >
                   copy
@@ -217,7 +237,9 @@ export default function AddComment() {
             />
             <Button
               disabled={disabled || !comment || !rtoken}
-              className={`${small ? "mt15 " : ""}font-size-16-force notexttransform ac-btn`}
+              className={`${
+                small ? "mt15 " : ""
+              }font-size-16-force notexttransform ac-btn`}
               onClick={addcomment}
               variant="contained"
               color="secondary"

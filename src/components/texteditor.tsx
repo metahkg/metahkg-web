@@ -19,6 +19,7 @@ export default function TextEditor(props: {
         height: 350,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
+        branding: false,
         mobile: {
           menubar: "file edit view insert format tools table",
           toolbar:
@@ -30,7 +31,7 @@ export default function TextEditor(props: {
         quickbars_insert_toolbar: "",
         menubar: "file edit view insert format tools table",
         plugins:
-          "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons",
+          "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
         toolbar:
           "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         toolbar_sticky: true,

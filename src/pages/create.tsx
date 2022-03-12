@@ -102,6 +102,7 @@ export default function Create() {
    */
   useEffect(() => {
     if (localStorage.user && quote.id && quote.cid) {
+      setAlert({ severity: "info", text: "Fetching comment..." });
       setNotification({ open: true, text: "Fetching comment..." });
       axios
         .get(
@@ -112,14 +113,20 @@ export default function Create() {
             setInittext(
               `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
             );
+            setAlert({ severity: "info", text: "" });
             setTimeout(() => {
               setNotification({ open: false, text: "" });
             }, 1000);
           } else {
+            setAlert({ severity: "error", text: "Comment not found!" });
             setNotification({ open: true, text: "Comment not found!" });
           }
         })
         .catch(() => {
+          setAlert({
+            severity: "warning",
+            text: "Unable to fetch comment. This comment would not be a quote.",
+          });
           setNotification({
             open: true,
             text: "Unable to fetch comment. This comment would not be a quote.",
@@ -130,6 +137,7 @@ export default function Create() {
   function create() {
     //send data to /api/create
     setAlert({ severity: "info", text: "Creating topic..." });
+    setNotification({ open: true, text: "Creating topic..." });
     setDisabled(true);
     axios
       .post("/api/create", {
@@ -146,6 +154,9 @@ export default function Create() {
         data.length && setData([]);
         mtitle && setMtitle("");
         navigate(`/thread/${res.data.id}`);
+        setTimeout(() => {
+          setNotification({ open: false, text: "" });
+        }, 100);
       })
       .catch((err) => {
         setAlert({
@@ -188,7 +199,7 @@ export default function Create() {
               light
               className="mr10 mb10"
             />
-            <h1>Create topic</h1>
+            <h1 className="novmargin">Create topic</h1>
           </div>
           {alert.text && (
             <Alert className="mt10 mb15" severity={alert.severity}>
@@ -212,9 +223,14 @@ export default function Create() {
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
+                setNotification({ open: true, text: "Uploading image..." });
               }}
               onSuccess={(res) => {
                 setAlert({ severity: "info", text: "Image uploaded!" });
+                setNotification({ open: true, text: "Image uploaded!" });
+                setTimeout(() => {
+                  setNotification({ open: false, text: "" });
+                }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
                   `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
@@ -222,6 +238,7 @@ export default function Create() {
               }}
               onError={() => {
                 setAlert({ severity: "error", text: "Error uploading image." });
+                setNotification({ open: true, text: "Error uploading image." });
               }}
             />
             {imgurl && (
@@ -269,7 +286,9 @@ export default function Create() {
               disabled={
                 disabled || !(icomment && title && rtoken && catchoosed)
               }
-              className={`${small ? "mt15 " : ""}font-size-16-force create-btn novpadding notexttransform`}
+              className={`${
+                small ? "mt15 " : ""
+              }font-size-16-force create-btn novpadding notexttransform`}
               onClick={create}
               variant="contained"
               color="secondary"
