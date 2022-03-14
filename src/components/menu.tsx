@@ -41,6 +41,7 @@ function MainContent(props: {smode: number}) {
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
   const history: any[] = JSON.parse(localStorage.history || "[]") || [];
+  console.log(end);
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
@@ -61,6 +62,7 @@ function MainContent(props: {smode: number}) {
   /* A way to make sure that the effect is only run once. */
   useEffect(() => {
     if (!data.length && (category || profile || search || id || recall)) {
+      setEnd(false);
       const url = {
         search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&mode=${props.smode}`,
         profile: `/api/history/${profile}?sort=${selected}`,
@@ -74,8 +76,7 @@ function MainContent(props: {smode: number}) {
         .then((res) => {
           !(page === 1) && setPage(1);
           setData(res.data);
-          res.data.length < 25 && !end && setEnd(true);
-          res.data.length >= 25 && end && setEnd(false);
+          res.data.length < 25 && setEnd(true);
           setUpdating(false);
         })
         .catch(onError);
@@ -86,6 +87,7 @@ function MainContent(props: {smode: number}) {
    * It updates the data array with the new data from the API.
    */
   function update() {
+    setEnd(false);
     setUpdating(true);
     const url = {
       search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${page + 1}&mode=${props.smode}`,
@@ -158,6 +160,7 @@ function MainContent(props: {smode: number}) {
             {updating && <MenuPreload />}
           </Box>
         )}
+        {!data.length && <MenuPreload />}
         {end && (
           <Typography
             className="mt10 mb10 text-align-center font-size-20-force"
@@ -168,7 +171,6 @@ function MainContent(props: {smode: number}) {
             End
           </Typography>
         )}
-        {!data.length && <MenuPreload />}
       </Box>
     </Paper>
   );
