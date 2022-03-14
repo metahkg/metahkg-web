@@ -399,7 +399,7 @@ function Conversation(props: { id: number }) {
                 Update
               </Button>
             ) : (
-              <CircularProgress color="secondary" />
+              <CircularProgress disableShrink color="secondary" />
             )}
           </Box>
           <PageBottom />

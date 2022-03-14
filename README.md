@@ -9,8 +9,8 @@ dev build (probably daily): [metahkg.wcyat.engineer](https://metahkg.wcyat.engin
 [![React](https://badges.aleen42.com/src/react.svg)](http://reactjs.org/)
 [![Typescript](https://badges.aleen42.com/src/typescript.svg)](https://www.typescriptlang.org/)
 
-[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://gitlab.com/metahkg-web/metahkg)
-[![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg-web/metahkg)
+[![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://gitlab.com/metahkg/metahkg-web)
+[![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg/metahkg-web)
 [![GitHub license](https://img.shields.io/github/license/metahkg-web/metahkg)](https://github.com/metahkg/metahkg-web/blob/master/LICENSE)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
