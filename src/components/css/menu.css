@@ -4,6 +4,10 @@
 .menu-search {
   height: 39px;
 }
+.menu-search-chip {
+  height: 24px !important;
+  width: 48px;
+}
 .menu-bottom {
   background-color: #1e1e1e;
 }

@@ -39,7 +39,7 @@ export default function TextEditor(props: {
           {
             title: "Quote",
             description: "Add a quote.",
-            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
           },
         ],
         autosave_ask_before_unload: true,

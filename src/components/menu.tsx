@@ -1,6 +1,6 @@
 import "./css/menu.css";
 import React, { memo, useEffect, useState } from "react";
-import { Box, Typography, Paper, Divider } from "@mui/material";
+import { Box, Typography, Paper, Divider, Chip } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import MenuTop from "./menu/top";
 import MenuThread from "./menu/thread";
@@ -23,7 +23,7 @@ import { useNavigate } from "react-router";
 /**
  * This function renders the main content of the menu
  */
-function MainContent() {
+function MainContent(props: {smode: number}) {
   const querystring = queryString.parse(window.location.search);
   const navigate = useNavigate();
   const [category] = useCat();
@@ -62,7 +62,7 @@ function MainContent() {
   useEffect(() => {
     if (!data.length && (category || profile || search || id || recall)) {
       const url = {
-        search: `/api/search?q=${q}&sort=${selected}`,
+        search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&mode=${props.smode}`,
         profile: `/api/history/${profile}?sort=${selected}`,
         menu: `/api/menu/${c}?sort=${selected}`,
         recall: `/api/threads?threads=${JSON.stringify(
@@ -88,7 +88,7 @@ function MainContent() {
   function update() {
     setUpdating(true);
     const url = {
-      search: `/api/search?q=${q}&sort=${selected}&page=${page + 1}`,
+      search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${page + 1}&mode=${props.smode}`,
       profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
       menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
       recall: `/api/threads?threads=${JSON.stringify(
@@ -185,6 +185,7 @@ function Menu() {
   const [profile] = useProfile();
   const navigate = useNavigate();
   const [n, setN] = useState(Math.random());
+  const [smode, setSmode] = useState(0); //search mode
   let tempq = decodeURIComponent(query || "");
   return (
     <Box
@@ -208,6 +209,14 @@ function Menu() {
       {search && (
         <div className="flex fullwidth">
           <div className="flex fullwidth justify-center align-center m10 menu-search">
+            <Chip
+              label={smode ? "OP" : "Title"}
+              onClick={() => {
+                setSmode(Number(!smode));
+                setData([]);
+              }}
+              className="mr10 menu-search-chip"
+            />
             <SearchBar
               onChange={(e) => {
                 tempq = e.target.value;
@@ -224,7 +233,10 @@ function Menu() {
           </div>
         </div>
       )}
-      <MainContent key={`${search}${profile}${category}${recall}${selected}${n}`} />
+      <MainContent
+        key={`${search}${profile}${category}${recall}${selected}${n}`}
+        smode={smode}
+      />
     </Box>
   );
 }
