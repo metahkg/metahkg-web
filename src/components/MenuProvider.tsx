@@ -16,6 +16,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
   const [selected, setSelected] = useState(0);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
+  const [smode, setSmode] = useState(0); //search mode
   return (
     <MenuContext.Provider
       value={{
@@ -28,6 +29,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
         recall: [recall, setRecall],
         data: [data, setData],
         title: [title, setTitle],
+        smode: [smode, setSmode],
       }}
     >
       {props.children}
@@ -129,8 +131,16 @@ export function useSearch(): [
  */
 export function useRecall(): [
   boolean,
-  React.Dispatch<React.SetStateAction<boolean>>  
+  React.Dispatch<React.SetStateAction<boolean>>
 ] {
   const { recall } = useContext(MenuContext);
   return recall;
+}
+
+export function useSmode(): [
+  number,
+  React.Dispatch<React.SetStateAction<number>>
+] {
+  const { smode } = useContext(MenuContext);
+  return smode;
 }

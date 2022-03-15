@@ -21,19 +21,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+import "./css/searchbar.css";
 import React from "react";
-import { styled, alpha, InputBase } from "@mui/material";
+import { styled, InputBase, Chip } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { KeyboardEventHandler } from "react";
 import { useQuery } from "./ContextProvider";
 import queryString from "query-string";
+import { useData, useSearch, useSmode } from "./MenuProvider";
 const Search = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  backgroundColor: "#111",
+  border: "1px solid #f5bd1f",
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     width: "auto",
@@ -72,10 +74,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  */
 export default function SearchBar(props: {
   onKeyPress: KeyboardEventHandler<HTMLDivElement>;
-  onChange?:
-    | React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
   const [query] = useQuery();
+  const [, setData] = useData();
+  const [smode, setSmode] = useSmode();
+  const [search] = useSearch();
   const querystring = queryString.parse(window.location.search);
   return (
     <Search>
@@ -90,6 +94,16 @@ export default function SearchBar(props: {
         onChange={props.onChange}
         defaultValue={decodeURIComponent(String(querystring.q || query || ""))}
       />
+      {search && (
+        <Chip
+          label={smode ? "OP" : "Title"}
+          onClick={() => {
+            setSmode(Number(!smode));
+            setData([]);
+          }}
+          className="mr10 searchbar-chip"
+        />
+      )}
     </Search>
   );
 }
