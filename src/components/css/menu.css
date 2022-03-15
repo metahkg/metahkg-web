@@ -6,7 +6,7 @@
 }
 .menu-search-chip {
   height: 24px !important;
-  width: 48px;
+  min-width: 48px !important;
 }
 .menu-bottom {
   background-color: #1e1e1e;
