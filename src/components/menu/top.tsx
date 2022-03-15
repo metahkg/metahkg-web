@@ -4,14 +4,7 @@ import {
   Add as AddIcon,
   Autorenew as AutorenewIcon,
 } from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  IconButton,
-  Tab,
-  Tabs,
-  Tooltip,
-} from "@mui/material";
+import { Box, Divider, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import { MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
@@ -110,17 +103,23 @@ export default function MenuTop(props: {
           </div>
         </div>
         {tabs.length && (
-          <Box className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
+          <Box className="flex fullwidth align-flex-end menutop-bottom">
             <Tabs
               className="fullwidth"
               value={props.selected}
               textColor="secondary"
               indicatorColor="secondary"
               variant="fullWidth"
-              onChange={(e, v) => {props.onClick(v)}}
+              onChange={(e, v) => {
+                props.onClick(v);
+              }}
             >
               {tabs.map((tab, index) => (
-                <Tab value={index} label={tab} />
+                <Tab
+                  className="font-size-15-force notexttransform"
+                  value={index}
+                  label={tab}
+                />
               ))}
             </Tabs>
           </Box>
