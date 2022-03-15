@@ -4,7 +4,14 @@ import {
   Add as AddIcon,
   Autorenew as AutorenewIcon,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Tab,
+  Tabs,
+  Tooltip,
+} from "@mui/material";
 import { MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
@@ -48,14 +55,14 @@ export default function MenuTop(props: {
     search: "Search",
     profile: "User Profile",
     menu: "Metahkg",
-    recall: "Recall"
+    recall: "Recall",
   }[mode];
   const [title, setTitle] = useTitle();
   const tabs = {
     search: ["Relevance", "Created", "Last Comment"],
     profile: ["Created", "Last Comment"],
     menu: ["Newest", "Hottest"],
-    recall: []
+    recall: [],
   }[mode];
   useEffect(() => {
     if (!search && !recall && !title && (category || profile || id)) {
@@ -102,29 +109,22 @@ export default function MenuTop(props: {
             </Tooltip>
           </div>
         </div>
-        {tabs.length && <div className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
-          {tabs.map((tab, index) => (
-            <Box
-              onClick={() => {
-                props.onClick(index);
-              }}
-              className={`pointer fullwidth mr10 flex justify-center align-center fullheight${
-                !index ? " ml10" : ""
-              }`}
-              sx={{
-                borderBottom:
-                  props.selected === index ? "2px solid rgb(245, 189, 31)" : "",
-              }}
+        {tabs.length && (
+          <Box className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
+            <Tabs
+              className="fullwidth"
+              value={props.selected}
+              textColor="secondary"
+              indicatorColor="secondary"
+              variant="fullWidth"
+              onChange={(e, v) => {props.onClick(v)}}
             >
-              <Typography
-                className="font-size-15-force"
-                sx={{ color: "secondary.main" }}
-              >
-                {tab}
-              </Typography>
-            </Box>
-          ))}
-        </div>}
+              {tabs.map((tab, index) => (
+                <Tab value={index} label={tab} />
+              ))}
+            </Tabs>
+          </Box>
+        )}
       </Box>
       <Divider />
     </div>
