@@ -3,5 +3,5 @@
     min-width: 45px !important;
 }
 .searchbar-chip span {
-    overflow: auto !important;
+    overflow: visible !important;
 }
