@@ -119,6 +119,7 @@ export default function MenuTop(props: {
                   className="font-size-15-force notexttransform"
                   value={index}
                   label={tab}
+                  disableRipple
                 />
               ))}
             </Tabs>
