@@ -40,8 +40,6 @@ export default function PageTop(props: {
         Last Page
       </Typography>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
         value={page}
         label="Age"
         onChange={onChange}

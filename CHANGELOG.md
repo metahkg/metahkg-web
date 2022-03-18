@@ -83,3 +83,7 @@ node server/migrate/migratetov0.5.2.js
 ## v0.5.6rc3
 
 - recall
+
+## v0.5.7rc1
+
+- floating page switch for desktop only

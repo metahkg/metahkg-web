@@ -4,7 +4,7 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useNotification } from "./ContextProvider";
+import { useNotification } from "../ContextProvider";
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
  * @param {"U" | "D" | undefined} props.vote user(client)'s vote

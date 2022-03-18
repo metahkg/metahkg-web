@@ -11,7 +11,7 @@ import {
 import parse from "html-react-parser";
 import dateat from "date-and-time";
 import { timetoword } from "../../lib/common";
-import VoteButtons from "../votebuttons";
+import VoteButtons from "./votebuttons";
 import { PopUp } from "../../lib/popup";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
