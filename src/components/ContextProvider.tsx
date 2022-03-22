@@ -12,6 +12,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const [notification, setNotification] = useState({ open: false, text: "" });
+  const [dock, setDock] = useState(false);
   const resizehandler = useRef(false);
   function updateSize() {
     setWidth(window.innerWidth);
@@ -29,6 +30,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         query: [query, setQuery],
         height: [height, setHeight],
         notification: [notification, setNotification],
+        dock: [dock, setDock],
       }}
     >
       {props.children}
@@ -105,4 +107,15 @@ export function useNotification(): [
 ] {
   const { notification } = useContext(Context);
   return notification;
+}
+/**
+ * It returns a boolean (whether the dock is open) and a function that can be used to set the boolean.
+ * @returns A boolean and a function that sets the boolean.
+ */
+export function useDock(): [
+  boolean,
+  React.Dispatch<React.SetStateAction<boolean>>
+] {
+  const { dock } = useContext(Context);
+  return dock;
 }

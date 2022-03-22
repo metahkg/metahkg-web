@@ -38,6 +38,8 @@ import { ShareProvider } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
+import Dock from "./dock";
+import { Refresh, Reply } from "@mui/icons-material";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -285,6 +287,17 @@ function Conversation(props: { id: number }) {
   return (
     <ShareProvider>
       <div className="min-height-fullvh conversation-root">
+        <Dock
+          btns={[
+            { icon: <Refresh />, action: update },
+            {
+              icon: <Reply />,
+              action: () => {
+                navigate(`/comment/${props.id}`);
+              },
+            },
+          ]}
+        />
         <Share />
         {!(width < 760) && (
           <PageSelect

@@ -23,7 +23,7 @@ import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import { useWidth } from "./components/ContextProvider";
+import { useDock, useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
@@ -44,6 +44,7 @@ function Telegram() {
  */
 export default function App() {
   const [menu] = useMenu();
+  const [dock] = useDock();
   const [width] = useWidth();
   useEffect(() => {
     if (localStorage.user || localStorage.id) {
@@ -69,12 +70,10 @@ export default function App() {
       <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
         <Router>
           <div className="flex">
-            <div key={Number(menu)}>
-              {menu && (
-                <div style={{ width: width < 760 ? "100vw" : "30vw" }}>
-                  <Menu />
-                </div>
-              )}
+            <div
+              style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}
+            >
+              <Menu />
             </div>
             <Routes>
               <Route path="/" element={<Navigate to="/category/1" replace />} />

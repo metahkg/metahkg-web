@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
@@ -243,9 +244,11 @@ export default function Create() {
             />
             {imgurl && (
               <p className="ml10 novmargin flex">
-                <a href={imgurl} target="_blank" rel="noreferrer">
-                  {imgurl}
-                </a>
+                <Tooltip arrow title={<img src={`https://i.wcyat.me/thumbnail?src=${imgurl}`} alt="" />}>
+                  <a href={imgurl} target="_blank" rel="noreferrer">
+                    {imgurl}
+                  </a>
+                </Tooltip>
                 <p
                   className="link novmargin metahkg-grey-force ml5"
                   onClick={() => {

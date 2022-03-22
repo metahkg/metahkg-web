@@ -54,7 +54,7 @@ export default function MenuTop(props: {
   const tabs = {
     search: ["Relevance", "Created", "Last Comment"],
     profile: ["Created", "Last Comment"],
-    menu: ["Newest", "Hottest"],
+    menu: ["Latest", "Hot"],
     recall: [],
   }[mode];
   useEffect(() => {

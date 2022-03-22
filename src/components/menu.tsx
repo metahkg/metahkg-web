@@ -14,6 +14,7 @@ import {
   useData,
   useRecall,
   useSmode,
+  useMenuN,
 } from "./MenuProvider";
 import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
@@ -43,7 +44,6 @@ function MainContent() {
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
   const history: any[] = JSON.parse(localStorage.history || "[]") || [];
-  console.log(end);
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
@@ -192,7 +192,7 @@ function Menu() {
   const [recall] = useRecall();
   const [profile] = useProfile();
   const navigate = useNavigate();
-  const [n, setN] = useState(Math.random());
+  const [menun, setMenuN] = useMenuN();
   let tempq = decodeURIComponent(query || "");
   return (
     <Box
@@ -203,7 +203,7 @@ function Menu() {
       <MenuTop
         refresh={() => {
           setData([]);
-          setN(Math.random());
+          setMenuN(Math.random());
         }}
         onClick={(e: number) => {
           if (selected !== e) {
@@ -233,7 +233,7 @@ function Menu() {
         </div>
       )}
       <MainContent
-        key={`${search}${profile}${category}${recall}${selected}${n}`}
+        key={`${search}${profile}${category}${recall}${selected}${menun}`}
       />
     </Box>
   );

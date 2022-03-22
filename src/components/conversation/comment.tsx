@@ -96,7 +96,8 @@ function Comment(props: {
             });
           });
       }
-    }, [setNotification, setShareLink]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const leftbtns = [
       {
         icon: story ? (
