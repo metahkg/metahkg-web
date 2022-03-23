@@ -27,7 +27,6 @@
 .comment-body * {
   object-fit: contain !important;
   max-width: 100% !important;
-  word-wrap: break-word !important;
 }
 .comment-body img,
 .comment-body video {

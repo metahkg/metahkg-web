@@ -33,12 +33,17 @@ import {
 } from "./MenuProvider";
 import { useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
-import { ShareProvider } from "./ShareProvider";
+import {
+  ShareProvider,
+  useShareLink,
+  useShareOpen,
+  useShareTitle,
+} from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
 import Dock from "./dock";
-import { Refresh, Reply } from "@mui/icons-material";
+import { Refresh, Reply, Share as ShareIcon } from "@mui/icons-material";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -98,6 +103,9 @@ function Conversation(props: { id: number }) {
   const [recall] = useRecall();
   const [search] = useSearch();
   const [profile] = useProfile();
+  const [shareOpen, setShareOpen] = useShareOpen();
+  const [shareTitle, setShareTitle] = useShareTitle();
+  const [shareLink, setShareLink] = useShareLink();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -288,7 +296,6 @@ function Conversation(props: { id: number }) {
   const [width] = useWidth();
   const numofpages = roundup((details.c || 0) / 25);
   return (
-    <ShareProvider>
       <div className="min-height-fullvh conversation-root">
         <Dock
           btns={[
@@ -297,6 +304,18 @@ function Conversation(props: { id: number }) {
               icon: <Reply />,
               action: () => {
                 navigate(`/comment/${props.id}`);
+              },
+            },
+            {
+              icon: <ShareIcon className="font-size-19-force" />,
+              action: () => {
+                !shareOpen && setShareOpen(true);
+                shareTitle !== details.title &&
+                  details.title &&
+                  setShareTitle(details.title);
+                shareLink !== details.slink &&
+                  details.slink &&
+                  setShareLink(details.slink);
               },
             },
           ]}
@@ -462,7 +481,6 @@ function Conversation(props: { id: number }) {
           <PageBottom />
         </Paper>
       </div>
-    </ShareProvider>
   );
 }
 export function useTid(): number {

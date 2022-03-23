@@ -72,7 +72,7 @@ export default function Share() {
         <TextField
           className="mt0"
           sx={{
-            minWidth: width < 760 ? "300px" : "500px",
+            minWidth: width < 760 ? "250px" : "500px",
           }}
           multiline
           variant="outlined"

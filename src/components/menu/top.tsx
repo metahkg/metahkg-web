@@ -86,14 +86,18 @@ export default function MenuTop(props: {
           height: recall ? 50 : width < 760 && !mobileTop ? 40 : 90,
         }}
       >
-        {(width < 760 ? mobileTop : 1) && (
-          <div className="flex fullwidth align-center justify-space-between menutop-top">
+        {Boolean(width < 760 ? mobileTop : 1) && (
+          <div
+            className={`flex fullwidth align-center menutop-top justify-${
+              width < 760 ? "center" : "space-between"
+            }`}
+          >
             {!(width < 760) && (
               <div className="ml10 mr40">
                 <SideBar />
               </div>
             )}
-            <p className="novmargin font-size-18 user-select-none metahkg-yellow text-align-center">
+            <p className="novmargin font-size-18 user-select-none text-align-center metahkg-yellow">
               {title || inittitle}
             </p>
             {!(width < 760) && (
@@ -114,7 +118,7 @@ export default function MenuTop(props: {
             )}
           </div>
         )}
-        {tabs.length && (
+        {Boolean(tabs.length) && (
           <Box className="flex fullwidth align-flex-end menutop-bottom">
             <Tabs
               className="fullwidth"
