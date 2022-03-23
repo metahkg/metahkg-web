@@ -2,9 +2,9 @@
 
 This is the metahkg web app. For backend api, please refer to [metahkg/metahkg-server](https://gitlab.com/metahkg/metahkg-server).
 
-stable: [metahkg.wcyat.me](https://metahkg.wcyat.me)
+stable: [metahkg.wcyat.me](https://metahkg.org)
 
-dev build (probably daily): [metahkg.wcyat.engineer](https://metahkg.wcyat.engineer)
+dev build (probably daily): [metahkg.wcyat.engineer](https://dev.metahkg.org)
 
 [![React](https://badges.aleen42.com/src/react.svg)](http://reactjs.org/)
 [![Typescript](https://badges.aleen42.com/src/typescript.svg)](https://www.typescriptlang.org/)
