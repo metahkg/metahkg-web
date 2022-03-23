@@ -34,7 +34,6 @@ import {
 import { useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
 import {
-  ShareProvider,
   useShareLink,
   useShareOpen,
   useShareTitle,

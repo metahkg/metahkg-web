@@ -83,7 +83,7 @@ export default function MenuTop(props: {
         className="fullwidth menutop-root"
         sx={{
           bgcolor: "primary.main",
-          height: recall ? 50 : width < 760 && !mobileTop ? 40 : 90,
+          height: recall ? 50 : width < 760 && !mobileTop ? 50 : 90,
         }}
       >
         {Boolean(width < 760 ? mobileTop : 1) && (
@@ -119,7 +119,10 @@ export default function MenuTop(props: {
           </div>
         )}
         {Boolean(tabs.length) && (
-          <Box className="flex fullwidth align-flex-end menutop-bottom">
+          <Box
+            sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
+            className="flex fullwidth align-flex-end"
+          >
             <Tabs
               className="fullwidth"
               value={props.selected}
