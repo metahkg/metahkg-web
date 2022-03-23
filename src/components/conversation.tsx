@@ -20,7 +20,6 @@ import queryString from "query-string";
 import Comment from "./conversation/comment";
 import Title from "./conversation/title";
 import axios, { AxiosError } from "axios";
-import DOMPurify from "dompurify";
 import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
@@ -157,6 +156,9 @@ function Conversation(props: { id: number }) {
       .then((res) => {
         /** redirect to 404 if thread (or page) not found */
         res.data?.[0] === null && navigate("/404", { replace: true });
+        for (let i = 0; i < res.data.length; i++) {
+          conversation.push(res.data?.[i]);
+        }
         setConversation(res.data);
         res.data.length % 25 && setEnd(true);
       })
@@ -198,8 +200,9 @@ function Conversation(props: { id: number }) {
           return;
         }
         if (!newpage) {
-          for (let i = 0; i < res.data.length; i++)
+          for (let i = 0; i < res.data.length; i++) {
             conversation.push(res.data?.[i]);
+          }
           lastHeight.current = 0;
           setConversation(conversation);
           setTimeout(() => {
@@ -427,7 +430,7 @@ function Conversation(props: { id: number }) {
                             userid={comment?.user}
                             slink={comment?.slink}
                           >
-                            {DOMPurify.sanitize(comment?.comment)}
+                            {comment?.comment}
                           </Comment>
                         )
                     )}

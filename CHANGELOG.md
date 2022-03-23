@@ -87,3 +87,9 @@ node server/migrate/migratetov0.5.2.js
 ## v0.5.7rc1
 
 - floating page switch for desktop only
+
+## v0.5.7rc2
+
+- experimental mobile dock
+- support youtube embed
+- links all open in new tab

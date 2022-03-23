@@ -8,7 +8,6 @@ import {
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import parse from "html-react-parser";
 import dateat from "date-and-time";
 import { timetoword } from "../../lib/common";
 import VoteButtons from "./votebuttons";
@@ -20,6 +19,8 @@ import { useNotification } from "../ContextProvider";
 import MoreList from "./more";
 import { isMobile } from "react-device-detect";
 import { useTid, useTitle, useStory } from "../conversation";
+import parse from "html-react-parser";
+import { modifycomment } from "../../lib/modifycomments";
 /**
  * Comment component renders a comment
  * which includes a title (Tag)
@@ -96,7 +97,7 @@ function Comment(props: {
             });
           });
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const leftbtns = [
       {
@@ -251,7 +252,7 @@ function Comment(props: {
       <div className="ml20 mr20">
         <Tag>{name}</Tag>
         <p className="novmargin comment-body break-word-force">
-          {parse(children)}
+          {parse(modifycomment(children))}
         </p>
         <div className="comment-internal-spacer" />
       </div>
