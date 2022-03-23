@@ -1,5 +1,6 @@
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useWidth } from "./ContextProvider";
 /**
  * It creates a text editor that can be used to edit text
  * @param {(a: string, editor: import("tinymce/tinymce").Editor) => void} props.changehandler function triggered on editor change
@@ -11,12 +12,13 @@ export default function TextEditor(props: {
   text: string;
 }) {
   const { changehandler, text } = props;
+  const [width] = useWidth();
   return (
     <Editor
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 350,
+        height: width < 760 ? 300 : 350,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         branding: false,
