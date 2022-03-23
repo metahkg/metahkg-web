@@ -31,7 +31,6 @@
 .comment-body img,
 .comment-body video {
   height: 100% !important;
-  display: flex !important;
 }
 .comment-body {
   max-width: 100% !important;
