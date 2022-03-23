@@ -9,7 +9,11 @@ export function modifycomment(comment: string) {
   let parsed = parse(comment);
   // eslint-disable-next-line no-loop-func
   parsed.querySelectorAll("a").forEach((item) => {
-    if (item.getAttribute("href")?.startsWith("https://www.youtube.com/")) {
+    const href = item.getAttribute("href");
+    if (
+      href?.startsWith("https://www.youtube.com/") ||
+      href?.startsWith("https://youtu.be")
+    ) {
       addyoutube(item);
     }
     linkinnewtab(item);
@@ -23,7 +27,10 @@ export function modifycomment(comment: string) {
  */
 function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
   const youtubeurl = new URL(String(item.getAttribute("href")));
-  const videoId = youtubeurl.searchParams.get("v");
+  const videoId =
+    youtubeurl.origin === "https://youtu.be"
+      ? youtubeurl.pathname.replace("/", "")
+      : youtubeurl.searchParams.get("v");
   if (!videoId) return;
   item.insertAdjacentHTML(
     "beforebegin",
