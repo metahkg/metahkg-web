@@ -171,7 +171,7 @@ export default function AddComment() {
               {alert.text}
             </Alert>
           )}
-          <div className="flex align-center mb15">
+          <div className={`${!(width < 760) ? "flex" : ""} align-center mb15`}>
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
@@ -185,7 +185,7 @@ export default function AddComment() {
                 }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
-                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                  `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" style="object-fit: contain; max-width: 70%; max-height: 300px;" /></a>`
                 );
               }}
               onError={() => {

@@ -17,6 +17,7 @@ import {
   useTitle,
 } from "../MenuProvider";
 import axios from "axios";
+import { useWidth } from "../ContextProvider";
 /**
  * The top part of the menu consists of a title part
  * (sidebar, title, refresh and create topic button link)
@@ -39,6 +40,7 @@ export default function MenuTop(props: {
   const [category] = useCat();
   const [recall] = useRecall();
   const [id] = useId();
+  const [width] = useWidth();
   const mode =
     (search && "search") ||
     (profile && "profile") ||
@@ -52,11 +54,12 @@ export default function MenuTop(props: {
   }[mode];
   const [title, setTitle] = useTitle();
   const tabs = {
-    search: ["Relevance", "Created", "Last Comment"],
-    profile: ["Created", "Last Comment"],
-    menu: ["Latest", "Hot"],
+    search: ["Relevance", "Topic", "Comments"],
+    profile: ["Topic", "Comments"],
+    menu: [width < 760 && title ? title : "Latest", "Hot"],
     recall: [],
   }[mode];
+  const mobileTop = mode !== "menu";
   useEffect(() => {
     if (!search && !recall && !title && (category || profile || id)) {
       if (profile) {
@@ -78,30 +81,39 @@ export default function MenuTop(props: {
     <div>
       <Box
         className="fullwidth menutop-root"
-        sx={{ bgcolor: "primary.main", height: recall ? 50 : 90 }}
+        sx={{
+          bgcolor: "primary.main",
+          height: recall ? 50 : width < 760 && !mobileTop ? 40 : 90,
+        }}
       >
-        <div className="flex fullwidth align-center justify-space-between menutop-top">
-          <div className="ml10 mr40">
-            <SideBar />
+        {(width < 760 ? mobileTop : 1) && (
+          <div className="flex fullwidth align-center justify-space-between menutop-top">
+            {!(width < 760) && (
+              <div className="ml10 mr40">
+                <SideBar />
+              </div>
+            )}
+            <p className="novmargin font-size-18 user-select-none metahkg-yellow text-align-center">
+              {title || inittitle}
+            </p>
+            {!(width < 760) && (
+              <div className="flex">
+                <Tooltip title="Refresh" arrow>
+                  <IconButton onClick={props.refresh}>
+                    <AutorenewIcon className="force-white" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Create topic" arrow>
+                  <Link className="flex" to="/create">
+                    <IconButton className="mr10">
+                      <AddIcon className="force-white" />
+                    </IconButton>
+                  </Link>
+                </Tooltip>
+              </div>
+            )}
           </div>
-          <p className="novmargin font-size-18 user-select-none metahkg-yellow">
-            {title || inittitle}
-          </p>
-          <div className="flex">
-            <Tooltip title="Refresh" arrow>
-              <IconButton onClick={props.refresh}>
-                <AutorenewIcon className="force-white" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Create topic" arrow>
-              <Link className="flex" to="/create">
-                <IconButton className="mr10">
-                  <AddIcon className="force-white" />
-                </IconButton>
-              </Link>
-            </Tooltip>
-          </div>
-        </div>
+        )}
         {tabs.length && (
           <Box className="flex fullwidth align-flex-end menutop-bottom">
             <Tabs

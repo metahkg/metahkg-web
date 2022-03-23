@@ -27,11 +27,13 @@
 .comment-body * {
   object-fit: contain !important;
   max-width: 100% !important;
+  word-wrap: break-word !important;
 }
 .comment-body img,
 .comment-body video {
   height: 100% !important;
-  display: flex !important;
+  max-height: calc(100vh * 0.5) !important;
+  width: auto !important;
 }
 .comment-body {
   max-width: 100% !important;

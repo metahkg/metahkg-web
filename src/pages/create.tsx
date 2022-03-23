@@ -220,7 +220,9 @@ export default function Create() {
               }}
             />
           </div>
-          <div className="flex align-center mb15 mt15">
+          <div
+            className={`${!(width < 760) ? "flex" : ""} align-center mb15 mt15`}
+          >
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
@@ -234,7 +236,7 @@ export default function Create() {
                 }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
-                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                  `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" style="object-fit: contain; max-width: 70%; max-height: 300px;" /></a>`
                 );
               }}
               onError={() => {
@@ -244,7 +246,15 @@ export default function Create() {
             />
             {imgurl && (
               <p className="ml10 novmargin flex">
-                <Tooltip arrow title={<img src={`https://i.wcyat.me/thumbnail?src=${imgurl}`} alt="" />}>
+                <Tooltip
+                  arrow
+                  title={
+                    <img
+                      src={`https://i.wcyat.me/thumbnail?src=${imgurl}`}
+                      alt=""
+                    />
+                  }
+                >
                   <a href={imgurl} target="_blank" rel="noreferrer">
                     {imgurl}
                   </a>

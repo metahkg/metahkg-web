@@ -35,11 +35,13 @@ function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
   item.insertAdjacentHTML(
     "beforebegin",
     `<iframe 
-      width="560" height="315" 
-      src="https://www.youtube.com/embed/${videoId}" 
-      title="YouTube video player" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      width="${window.innerWidth < 760 ? "100%" : "60%"}"
+      height="auto"
+      style="aspect-ratio: 16/9;"
+      src="https://www.youtube.com/embed/${videoId}"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
     ></iframe>
   <br/>`

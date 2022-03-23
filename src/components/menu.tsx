@@ -22,6 +22,8 @@ import queryString from "query-string";
 import { useHistory, useNotification, useQuery } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
+import Dock from "./dock";
+import { Add, Autorenew } from "@mui/icons-material";
 /**
  * This function renders the main content of the menu
  */
@@ -200,6 +202,23 @@ function Menu() {
         menu ? "flex" : "display-none"
       } menu-root`}
     >
+      <Dock
+        btns={[
+          {
+            icon: <Autorenew />,
+            action: () => {
+              setData([]);
+              setMenuN(Math.random());
+            },
+          },
+          {
+            icon: <Add />,
+            action: () => {
+              navigate("/create");
+            },
+          },
+        ]}
+      />
       <MenuTop
         refresh={() => {
           setData([]);
