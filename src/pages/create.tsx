@@ -236,7 +236,7 @@ export default function Create() {
                 }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
-                  `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" style="object-fit: contain; max-width: 70%; max-height: 300px;" /></a>`
+                  `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" style="object-fit: contain; max-width: 70%; max-height: 250px;" /></a>`
                 );
               }}
               onError={() => {
