@@ -256,14 +256,14 @@ function Comment(props: {
         </p>
         <div className="comment-internal-spacer" />
       </div>
-      <div className="ml20">
+      <div className="ml20 mr20">
         <VoteButtons
           key={tid}
           vote={vote}
-          id={tid}
-          cid={id}
-          up={up}
-          down={down}
+          postId={tid}
+          clientId={id}
+          upVoteCount={up}
+          downVoteCount={down}
         />
       </div>
       <div className="comment-spacer" />
