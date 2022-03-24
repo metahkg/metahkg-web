@@ -15,10 +15,11 @@ export default function TextEditor(props: {
   const [width] = useWidth();
   return (
     <Editor
+      key={Number(width < 760)}
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: width < 760 ? 300 : 350,
+        height: width < 760 ? 310 : 350,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         branding: false,

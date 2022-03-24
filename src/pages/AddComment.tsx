@@ -1,6 +1,6 @@
 import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button } from "@mui/material";
+import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
@@ -195,9 +195,19 @@ export default function AddComment() {
             />
             {imgurl && (
               <p className="ml10 novmargin flex">
-                <a href={imgurl} target="_blank" rel="noreferrer">
-                  {imgurl}
-                </a>
+                <Tooltip
+                  arrow
+                  title={
+                    <img
+                      src={`https://i.wcyat.me/thumbnail?src=${imgurl}`}
+                      alt=""
+                    />
+                  }
+                >
+                  <a href={imgurl} target="_blank" rel="noreferrer">
+                    {imgurl}
+                  </a>
+                </Tooltip>
                 <p
                   className="link novmargin metahkg-grey-force ml5"
                   onClick={() => {

@@ -54,8 +54,8 @@ export default function MenuTop(props: {
   }[mode];
   const [title, setTitle] = useTitle();
   const tabs = {
-    search: ["Relevance", "By Topic", "By Last Reply"],
-    profile: ["By Topic", "By Last Reply"],
+    search: ["Relevance", "Topic", "Last Reply"],
+    profile: ["Topic", "Last Reply"],
     menu: [width < 760 && title ? title : "Latest", "Hot"],
     recall: [],
   }[mode];
