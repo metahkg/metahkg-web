@@ -23,7 +23,7 @@ import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import { useDock, useWidth } from "./components/ContextProvider";
+import { useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
@@ -44,7 +44,6 @@ function Telegram() {
  */
 export default function App() {
   const [menu] = useMenu();
-  const [dock] = useDock();
   const [width] = useWidth();
   useEffect(() => {
     if (localStorage.user || localStorage.id) {

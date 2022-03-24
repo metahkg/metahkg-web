@@ -58,6 +58,7 @@
   "scripts": {
     "start": "node server.js",
     "start:api": "yarn run start",
+    "start:react": "npx react-app-rewired start",
     "build": "node build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

@@ -194,7 +194,7 @@ export default function AddComment() {
               }}
             />
             {imgurl && (
-              <p className="ml10 novmargin flex">
+              <p className={`ml10 novmargin flex${width < 760 ? " mt5" : ""}`}>
                 <Tooltip
                   arrow
                   title={
