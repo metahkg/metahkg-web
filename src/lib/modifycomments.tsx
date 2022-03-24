@@ -26,15 +26,16 @@ export function modifycomment(comment: string) {
  * @returns A string
  */
 function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
-  const youtubeurl = new URL(String(item.getAttribute("href")));
-  const videoId =
-    youtubeurl.origin === "https://youtu.be"
-      ? youtubeurl.pathname.replace("/", "")
-      : youtubeurl.searchParams.get("v");
-  if (!videoId) return;
-  item.insertAdjacentHTML(
-    "beforebegin",
-    `<iframe 
+  try {
+    const youtubeurl = new URL(String(item.getAttribute("href")));
+    const videoId =
+      youtubeurl.origin === "https://youtu.be"
+        ? youtubeurl.pathname.replace("/", "")
+        : youtubeurl.searchParams.get("v");
+    if (!videoId) return;
+    item.insertAdjacentHTML(
+      "beforebegin",
+      `<iframe 
       width="${window.innerWidth < 760 ? "100%" : "60%"}"
       height="auto"
       style="aspect-ratio: 16/9;"
@@ -45,7 +46,8 @@ function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
       allowfullscreen
     ></iframe>
   <br/>`
-  );
+    );
+  } catch {}
 }
 /**
  * It takes an HTML node and
