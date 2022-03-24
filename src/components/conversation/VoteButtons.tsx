@@ -99,12 +99,14 @@ const VoteButtons = React.memo<Props>((props) => {
               color: vote === "U" ? yellow[900] : "white",
               transform: vote === "U" ? "rotate(-15deg)" : "rotate(0deg)",
               transition: "all 0.2s ease-in-out",
+              height: 15,
+              width: 15
             }}
           />
         </IconButton>
         <LinearProgress
           sx={(theme) => ({
-            height: 20,
+            height: 15,
             width: "100%",
             background: theme.palette.error.main,
             [`& .${linearProgressClasses.bar}`]: {
@@ -134,6 +136,8 @@ const VoteButtons = React.memo<Props>((props) => {
               color: vote === "D" ? red[900] : "white",
               transform: vote === "D" ? "rotate(-15deg)" : "rotate(0deg)",
               transition: "all 0.2s ease-in-out",
+              height: 15,
+              width: 15
             }}
           />
         </IconButton>
