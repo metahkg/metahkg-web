@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import dateat from "date-and-time";
 import { timetoword } from "../../lib/common";
-import VoteButtons from "./votebuttons";
+import VoteButtons from "./VoteButtons";
 import { PopUp } from "../../lib/popup";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
