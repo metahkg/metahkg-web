@@ -186,7 +186,7 @@ export default function Profile() {
                       }}
                     >
                       <span
-                        className="overflow-hidden text-overflow-ellipsis"
+                        className="overflow-hidden text-overflow-ellipsis nowrap"
                         style={{
                           color: user.sex === "M" ? "#34aadc" : "red",
                         }}

@@ -9,6 +9,9 @@
 .comment-tag-userlink:hover {
   text-decoration: underline;
 }
+.comment-tag-left {
+  max-width: calc(100% - 75px);
+}
 .comment-internal-spacer {
   height: 2px;
 }
@@ -31,7 +34,7 @@
 .comment-body img,
 .comment-body video {
   height: 100% !important;
-  max-height: calc(100vh * 0.5) !important;
+  max-height: 400px !important;
   width: auto !important;
 }
 .comment-body {

@@ -1,4 +1,5 @@
 import { parse } from "node-html-parser";
+import DOMPurify from 'dompurify';
 /**
  * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
  * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
@@ -6,6 +7,7 @@ import { parse } from "node-html-parser";
  * @returns The modified comment.
  */
 export function modifycomment(comment: string) {
+  comment = DOMPurify.sanitize(comment);
   let parsed = parse(comment);
   // eslint-disable-next-line no-loop-func
   parsed.querySelectorAll("a").forEach((item) => {
@@ -39,7 +41,7 @@ function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
       width="${window.innerWidth < 760 ? "100%" : "60%"}"
       height="auto"
       style="aspect-ratio: 16/9;"
-      src="https://www.youtube.com/embed/${videoId}"
+      src="https://www.youtube.com/embed/${videoId}?enablejsapi=1"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
