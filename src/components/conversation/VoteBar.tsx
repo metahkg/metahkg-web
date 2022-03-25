@@ -92,7 +92,7 @@ const VoteBar = React.memo<Props>((props) => {
             transform: vote === "U" ? "scale(1.4)" : "scale(1)",
           })}
           size="small"
-          disabled={isVoted}
+          disabled={!localStorage.user || isVoted}
         >
           <ThumbUpIcon
             sx={{
@@ -129,7 +129,7 @@ const VoteBar = React.memo<Props>((props) => {
             transform: vote === "D" ? "scale(1.4)" : "scale(1)",
           })}
           size="small"
-          disabled={isVoted}
+          disabled={!localStorage.user || isVoted}
         >
           <ThumbDown
             sx={{
