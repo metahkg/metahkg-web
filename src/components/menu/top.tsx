@@ -97,7 +97,7 @@ export default function MenuTop(props: {
                 <SideBar />
               </div>
             )}
-            <p className="novmargin font-size-18 user-select-none text-align-center metahkg-yellow">
+            <p className="novmargin font-size-18 user-select-none text-align-center metahkg-yellow nowrap text-overflow-ellipsis overflow-hidden">
               {title || inittitle}
             </p>
             {!(width < 760) && (

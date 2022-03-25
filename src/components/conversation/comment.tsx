@@ -178,7 +178,7 @@ function Comment(props: {
             <br />#{userid}
           </p>
         </PopUp>
-        <div className="flex align-center">
+        <div className="flex align-center comment-tag-left">
           <p
             className="novmargin"
             style={{

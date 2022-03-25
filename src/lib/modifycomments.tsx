@@ -41,7 +41,7 @@ function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
       width="${window.innerWidth < 760 ? "100%" : "60%"}"
       height="auto"
       style="aspect-ratio: 16/9;"
-      src="https://www.youtube.com/embed/${videoId}"
+      src="https://www.youtube.com/embed/${videoId}?enablejsapi=1"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
