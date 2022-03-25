@@ -168,16 +168,6 @@ function MainContent() {
             {updating && <MenuPreload />}
           </Box>
         )}
-        {end && (
-          <Typography
-            className="mt10 mb10 text-align-center font-size-20-force"
-            sx={{
-              color: "secondary.main",
-            }}
-          >
-            End
-          </Typography>
-        )}
         {!data.length && <MenuPreload />}
         {end && (
           <Typography
