@@ -17,6 +17,7 @@
     "@tinymce/tinymce-react": "^3.13.1",
     "axios": "^0.26.0",
     "date-and-time": "^2.2.1",
+    "dompurify": "^2.3.6",
     "dotenv": "^16.0.0",
     "email-validator": "^2.0.4",
     "express": "^4.17.3",
