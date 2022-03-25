@@ -9,6 +9,9 @@
 .comment-tag-userlink:hover {
   text-decoration: underline;
 }
+.comment-tag-left {
+  max-width: calc(100% - 75px);
+}
 .comment-internal-spacer {
   height: 2px;
 }
