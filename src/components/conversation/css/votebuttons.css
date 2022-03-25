@@ -1,19 +1,20 @@
 .vb-btn-group {
-    border-radius: 4px;
-    background-color: #333;
+  border-radius: 4px;
+  background-color: #333;
 }
-.vb-btn { /*override mui button*/
-    display: normal !important; /*use an invalid value i/o a blank*/
-    margin-top: 2px !important;
-    margin-bottom: 2px !important;
-    min-width: 0px !important;
+.vb-btn {
+  /*override mui button*/
+  display: normal !important; /*use an invalid value i/o a blank*/
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  min-width: 0px !important;
 }
 .vb-btn-left {
-    margin-left: 5.5px !important;
-    margin-right: 6px !important;
-    border-right: none !important;
+  margin-left: 5.5px !important;
+  margin-right: 6px !important;
+  border-right: none !important;
 }
 .vb-btn-right {
-    margin-right: 10px !important;
-    border-right: none !important;
+  margin-right: 10px !important;
+  border-right: none !important;
 }

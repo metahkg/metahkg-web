@@ -41,5 +41,5 @@ yarn run build
 
 ## Deploy
 
-Running  `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
+Running `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
 Run `yarn run start:react` to start the react app at localhost:3000 and use the public dev server.
