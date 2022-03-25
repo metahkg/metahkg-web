@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import dateat from "date-and-time";
 import { timetoword } from "../../lib/common";
-import VoteButtons from "./VoteButtons";
+import VoteBar from "./VoteBar";
 import { PopUp } from "../../lib/popup";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
@@ -257,7 +257,7 @@ function Comment(props: {
         <div className="comment-internal-spacer" />
       </div>
       <div className="ml20 mr20">
-        <VoteButtons
+        <VoteBar
           key={tid}
           vote={vote}
           postId={tid}

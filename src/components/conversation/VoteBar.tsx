@@ -34,7 +34,7 @@ interface Props {
  * @param {number} props.down number of downvotes
  * @returns A button group with two buttons, one for upvote and one for downvote.
  */
-const VoteButtons = React.memo<Props>((props) => {
+const VoteBar = React.memo<Props>((props) => {
   const [vote, setVote] = useState(props.vote);
   const [upVoteCount, setUpVoteCount] = useState(props.upVoteCount);
   const [downVoteCount, setDownVoteCount] = useState(props.downVoteCount);
@@ -144,12 +144,12 @@ const VoteButtons = React.memo<Props>((props) => {
       </Box>
       <Box>
         <Typography color="grey.300" variant="body1">
-          <strong>{upVoteCount}</strong> 個正皮 /{" "}
-          <strong>{downVoteCount}</strong> 個負皮
+          <strong>{upVoteCount}</strong> upvotes /{" "}
+          <strong>{downVoteCount}</strong> downvotes
         </Typography>
       </Box>
     </Box>
   );
 });
 
-export default VoteButtons;
+export default VoteBar;
