@@ -12,6 +12,10 @@ export default function ContextProvider(props: { children: JSX.Element }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const [notification, setNotification] = useState({ open: false, text: "" });
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settings, setSettings] = useState(
+    JSON.parse(localStorage.getItem("settings") || "{}")
+  );
   const resizehandler = useRef(false);
   function updateSize() {
     setWidth(window.innerWidth);
@@ -29,6 +33,8 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         query: [query, setQuery],
         height: [height, setHeight],
         notification: [notification, setNotification],
+        settingsOpen: [settingsOpen, setSettingsOpen],
+        settings: [settings, setSettings],
       }}
     >
       {props.children}
@@ -105,4 +111,26 @@ export function useNotification(): [
 ] {
   const { notification } = useContext(Context);
   return notification;
+}
+/**
+ * It returns the value of the settingsOpen state and a setter function for that state
+ * @returns The boolean value of the settingsOpen state and a function to set the state.
+ */
+export function useSettingsOpen(): [
+  boolean,
+  React.Dispatch<React.SetStateAction<boolean>>
+] {
+  const { settingsOpen } = useContext(Context);
+  return settingsOpen;
+}
+/**
+ * It returns the settings object and a setter function
+ * @returns A tuple of the settings object and a setter function.
+ */
+export function useSettings(): [
+  any,
+  React.Dispatch<React.SetStateAction<any>>
+] {
+  const { settings } = useContext(Context);
+  return settings;
 }

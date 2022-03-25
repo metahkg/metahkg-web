@@ -23,13 +23,14 @@ import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import { useWidth } from "./components/ContextProvider";
+import { useSettingsOpen, useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
 import Verify from "./pages/verify";
 import Resend from "./pages/resend";
 import Recall from "./pages/recall";
+import Settings from "./components/settings";
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
@@ -45,6 +46,7 @@ function Telegram() {
 export default function App() {
   const [menu] = useMenu();
   const [width] = useWidth();
+  const [settingsOpen, setSettingsOpen] = useSettingsOpen();
   useEffect(() => {
     if (localStorage.user || localStorage.id) {
       axios.get("/api/loggedin").then((res) => {
@@ -66,12 +68,11 @@ export default function App() {
       secondary={{ main: "#f5bd1f", dark: "#ffc100" }}
     >
       <Notification />
+      <Settings open={settingsOpen} setOpen={setSettingsOpen} />
       <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
         <Router>
           <div className="flex">
-            <div
-              style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}
-            >
+            <div style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}>
               <Menu />
             </div>
             <Routes>

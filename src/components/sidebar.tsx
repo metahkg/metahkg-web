@@ -18,11 +18,12 @@ import {
   ManageAccounts as ManageAccountsIcon,
   Logout as LogoutIcon,
   AccessTimeFilled,
+  Settings as SettingsIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import SearchBar from "./searchbar";
-import { useQuery } from "./ContextProvider";
+import { useQuery, useSettingsOpen } from "./ContextProvider";
 import { categories, wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
@@ -37,6 +38,7 @@ export default function SideBar() {
   const [cat] = useCat();
   const [profile] = useProfile();
   const [search] = useSearch();
+  const [, setSettingsOpen] = useSettingsOpen();
   const navigate = useNavigate();
   const toggleDrawer =
     (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -120,7 +122,7 @@ export default function SideBar() {
                 ) : (
                   <AccountCircleIcon />
                 ),
-              }
+              },
             ].map((item) => (
               <Link to={item.link} className="notextdecoration white">
                 <ListItem button onClick={onClick}>
@@ -171,21 +173,30 @@ export default function SideBar() {
             ))}
           </List>
           <Divider />
-          {localStorage.user && (
-            <div>
-              <List>
-                <Link to="/profile/self" className="notextdecoration white">
-                  <ListItem button onClick={onClick}>
-                    <ListItemIcon>
-                      <ManageAccountsIcon />
-                    </ListItemIcon>
-                    <ListItemText>{localStorage.user}</ListItemText>
-                  </ListItem>
-                </Link>
-              </List>
-              <Divider />
-            </div>
-          )}
+          <List>
+            {localStorage.user && (
+              <Link to="/profile/self" className="notextdecoration white">
+                <ListItem button onClick={onClick}>
+                  <ListItemIcon>
+                    <ManageAccountsIcon />
+                  </ListItemIcon>
+                  <ListItemText>{localStorage.user}</ListItemText>
+                </ListItem>
+              </Link>
+            )}
+            <ListItem
+              button
+              onClick={() => {
+                setOpen(false);
+                setSettingsOpen(true);
+              }}
+            >
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText>Settings</ListItemText>
+            </ListItem>
+          </List>
           <p className="ml5">
             Metahkg build {process.env.REACT_APP_build || "v0.5.7rc2"}
           </p>

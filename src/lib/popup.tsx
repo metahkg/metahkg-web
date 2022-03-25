@@ -14,8 +14,7 @@ export function PopUp(props: {
   title: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  button: { text: string; link: string };
-  withbutton: boolean;
+  button?: { text: string; link: string };
   children: JSX.Element | JSX.Element[];
 }) {
   return (
@@ -62,11 +61,11 @@ export function PopUp(props: {
         >
           {props.children}
         </div>
-        {props.withbutton && <Divider />}
-        {props.withbutton && (
-          <Link style={{ textDecoration: "none" }} to={props.button.link}>
+        {props.button && <Divider />}
+        {props.button && (
+          <Link className="notextdecoration" to={props.button.link}>
             <Button
-              sx={{ textTransform: "none", fontSize: "18px" }}
+              className="notexttransform font-size-18"
               color="secondary"
               variant="text"
               fullWidth

@@ -19,11 +19,16 @@ import {
 import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
-import { useHistory, useNotification, useQuery } from "./ContextProvider";
+import {
+  useHistory,
+  useNotification,
+  useQuery,
+  useSettingsOpen,
+} from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
 import Dock from "./dock";
-import { Add, Autorenew } from "@mui/icons-material";
+import { Add, Autorenew, Settings } from "@mui/icons-material";
 /**
  * This function renders the main content of the menu
  */
@@ -195,6 +200,7 @@ function Menu() {
   const [profile] = useProfile();
   const navigate = useNavigate();
   const [menun, setMenuN] = useMenuN();
+  const [, setSettingsOpen] = useSettingsOpen();
   let tempq = decodeURIComponent(query || "");
   return (
     <Box
@@ -215,6 +221,12 @@ function Menu() {
             icon: <Add />,
             action: () => {
               navigate("/create");
+            },
+          },
+          {
+            icon: <Settings />,
+            action: () => {
+              setSettingsOpen(true);
             },
           },
         ]}

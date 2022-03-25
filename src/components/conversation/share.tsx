@@ -13,8 +13,8 @@ import { PopUp } from "../../lib/popup";
 import { useNotification, useWidth } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 /**
- * It shows a pop up with a text field and some buttons for 
- * copying the text and sharing externally. 
+ * It shows a pop up with a text field and some buttons for
+ * copying the text and sharing externally.
  * The text field shows the title and link of the post.
  */
 export default function Share() {
@@ -57,17 +57,13 @@ export default function Share() {
     {
       icon: <Facebook />,
       title: "Share to Facebook",
-      link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+      link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        link
+      )}`,
     },
   ];
   return (
-    <PopUp
-      withbutton={false}
-      open={open}
-      setOpen={setOpen}
-      title="Share"
-      button={{ text: "", link: "" }}
-    >
+    <PopUp open={open} setOpen={setOpen} title="Share">
       <div className="ml10 mr10 text-align-start">
         <TextField
           className="mt0"

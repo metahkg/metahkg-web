@@ -9,18 +9,19 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import dateat from "date-and-time";
-import { timetoword } from "../../lib/common";
 import VoteBar from "./VoteBar";
 import { PopUp } from "../../lib/popup";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import axios from "axios";
-import { useNotification } from "../ContextProvider";
+import { useNotification, useSettings } from "../ContextProvider";
 import MoreList from "./more";
 import { isMobile } from "react-device-detect";
 import { useTid, useTitle, useStory } from "../conversation";
 import parse from "html-react-parser";
 import { modifycomment } from "../../lib/modifycomments";
+import VoteButtons from "./votebuttons";
+import { timetoword } from "../../lib/common";
 /**
  * Comment component renders a comment
  * which includes a title (Tag)
@@ -67,6 +68,7 @@ function Comment(props: {
   const tid = useTid();
   const title = useTitle();
   const [story, setStory] = useStory();
+  const [settings] = useSettings();
   /**
    * Tag serves as a title for the comment
    * renders user id, username (as children),
@@ -167,7 +169,6 @@ function Comment(props: {
     return (
       <div className="flex align-center font-size-17 pt10 justify-space-between">
         <PopUp
-          withbutton
           open={open}
           setOpen={setOpen}
           title="User information"
@@ -257,14 +258,18 @@ function Comment(props: {
         <div className="comment-internal-spacer" />
       </div>
       <div className="ml20 mr20">
-        <VoteBar
-          key={tid}
-          vote={vote}
-          postId={tid}
-          clientId={id}
-          upVoteCount={up}
-          downVoteCount={down}
-        />
+        {settings.votebar ? (
+          <VoteBar
+            key={tid}
+            vote={vote}
+            postId={tid}
+            clientId={id}
+            upVoteCount={up}
+            downVoteCount={down}
+          />
+        ) : (
+          <VoteButtons vote={vote} up={up} down={down} id={tid} cid={id} />
+        )}
       </div>
       <div className="comment-spacer" />
     </Box>
