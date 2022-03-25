@@ -1,6 +1,6 @@
 import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button } from "@mui/material";
+import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
@@ -70,7 +70,7 @@ export default function AddComment() {
           .then((res) => {
             if (res.data?.[0]) {
               setInittext(
-                `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
+                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
               );
               setAlert({ severity: "info", text: "" });
               setTimeout(() => {
@@ -171,7 +171,7 @@ export default function AddComment() {
               {alert.text}
             </Alert>
           )}
-          <div className="flex align-center mb15">
+          <div className={`${!(width < 760) ? "flex" : ""} align-center mb15`}>
             <UploadImage
               onUpload={() => {
                 setAlert({ severity: "info", text: "Uploading image..." });
@@ -185,7 +185,7 @@ export default function AddComment() {
                 }, 1000);
                 setImgurl(res.data.url);
                 tinymce.activeEditor.insertContent(
-                  `<img src="${res.data.url}" style="object-fit: contain; max-width: 60%; max-height: 250px;" />`
+                  `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
                 );
               }}
               onError={() => {
@@ -194,10 +194,20 @@ export default function AddComment() {
               }}
             />
             {imgurl && (
-              <p className="ml10 novmargin flex">
-                <a href={imgurl} target="_blank" rel="noreferrer">
-                  {imgurl}
-                </a>
+              <p className={`ml10 novmargin flex${width < 760 ? " mt5" : ""}`}>
+                <Tooltip
+                  arrow
+                  title={
+                    <img
+                      src={`https://i.wcyat.me/thumbnail?src=${imgurl}`}
+                      alt=""
+                    />
+                  }
+                >
+                  <a href={imgurl} target="_blank" rel="noreferrer">
+                    {imgurl}
+                  </a>
+                </Tooltip>
                 <p
                   className="link novmargin metahkg-grey-force ml5"
                   onClick={() => {

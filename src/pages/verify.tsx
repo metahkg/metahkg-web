@@ -66,7 +66,7 @@ export default function Verify() {
       sx={{ bgcolor: "primary.dark" }}
     >
       <Box sx={{ width: small ? "100vw" : "50vw" }}>
-        <div className="m50">
+        <div className="m40">
           <div className="flex justify-center align-center">
             <MetahkgLogo svg light height={50} width={40} className="mb10" />
             <h1 className="font-size-25 mb20 nohmargin">Verify</h1>

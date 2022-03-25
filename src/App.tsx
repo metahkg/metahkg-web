@@ -69,12 +69,10 @@ export default function App() {
       <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
         <Router>
           <div className="flex">
-            <div key={Number(menu)}>
-              {menu && (
-                <div style={{ width: width < 760 ? "100vw" : "30vw" }}>
-                  <Menu />
-                </div>
-              )}
+            <div
+              style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}
+            >
+              <Menu />
             </div>
             <Routes>
               <Route path="/" element={<Navigate to="/category/1" replace />} />

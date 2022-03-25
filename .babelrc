@@ -5,6 +5,11 @@
       {
         "languages": [
           "javascript",
+          "typescript",
+          "tsx",
+          "jsx",
+          "go",
+          "json",
           "css",
           "html",
           "python",

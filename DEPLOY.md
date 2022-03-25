@@ -1,6 +1,8 @@
 # Deploying Metahkg
 
-You MUST also deploy metahkg/metahkg-server (backend api)!
+You can either:
+deploy metahkg-server locally, or
+use the public dev api server (dev branch only!)
 
 ## Prerequisites
 
@@ -28,6 +30,7 @@ cp templates/template.env .env
 ```
 
 Then edit values in the .env file.
+If you use the public dev server you must configure .env to have REACT_APP_categories!
 
 ## Build the React app
 
@@ -37,4 +40,6 @@ yarn run build
 ```
 
 ## Deploy
-Running  `yarn run start` will start the react app at localhost:3199.
+
+Running  `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
+Run `yarn run start:react` to start the react app at localhost:3000 and use the public dev server.

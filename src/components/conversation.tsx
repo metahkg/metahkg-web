@@ -20,17 +20,29 @@ import queryString from "query-string";
 import Comment from "./conversation/comment";
 import Title from "./conversation/title";
 import axios, { AxiosError } from "axios";
-import DOMPurify from "dompurify";
 import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
 import ReactVisibilitySensor from "react-visibility-sensor";
-import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";
-import { useNotification } from "./ContextProvider";
+import {
+  useCat,
+  useId,
+  useProfile,
+  useRecall,
+  useSearch,
+} from "./MenuProvider";
+import { useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
-import { ShareProvider } from "./ShareProvider";
+import {
+  useShareLink,
+  useShareOpen,
+  useShareTitle,
+} from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
+import PageSelect from "./conversation/pageselect";
+import Dock from "./dock";
+import { Refresh, Reply, Share as ShareIcon } from "@mui/icons-material";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -68,7 +80,11 @@ function Conversation(props: { id: number }) {
   const query = queryString.parse(window.location.search);
   const [notification, setNotification] = useNotification();
   const [conversation, setConversation] = useState<comment[]>([]);
-  const [page, setPage] = useState(
+  const [lastpage, setLastPage] = useState(
+    Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+  );
+  /** Current page */
+  const [cpage, setCPage] = useState(
     Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
   );
   const [users, setUsers] = useState<any>({});
@@ -86,6 +102,9 @@ function Conversation(props: { id: number }) {
   const [recall] = useRecall();
   const [search] = useSearch();
   const [profile] = useProfile();
+  const [shareOpen, setShareOpen] = useShareOpen();
+  const [shareTitle, setShareTitle] = useShareTitle();
+  const [shareLink, setShareLink] = useShareLink();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -140,10 +159,13 @@ function Conversation(props: { id: number }) {
       })
       .catch(onError);
     axios
-      .get(`/api/thread/${props.id}?type=2&page=${page}`)
+      .get(`/api/thread/${props.id}?type=2&page=${lastpage}`)
       .then((res) => {
         /** redirect to 404 if thread (or page) not found */
         res.data?.[0] === null && navigate("/404", { replace: true });
+        for (let i = 0; i < res.data.length; i++) {
+          conversation.push(res.data?.[i]);
+        }
         setConversation(res.data);
         res.data.length % 25 && setEnd(true);
       })
@@ -170,7 +192,9 @@ function Conversation(props: { id: number }) {
     const newpage = !(conversation.length % 25);
     axios
       .get(
-        `/api/thread/${props.id}?type=2&page=${newpage ? page + 1 : page}${
+        `/api/thread/${props.id}?type=2&page=${
+          newpage ? lastpage + 1 : lastpage
+        }${
           newpage
             ? ""
             : `&start=${conversation[conversation.length - 1].id + 1}`
@@ -183,8 +207,9 @@ function Conversation(props: { id: number }) {
           return;
         }
         if (!newpage) {
-          for (let i = 0; i < res.data.length; i++)
+          for (let i = 0; i < res.data.length; i++) {
             conversation.push(res.data?.[i]);
+          }
           lastHeight.current = 0;
           setConversation(conversation);
           setTimeout(() => {
@@ -196,9 +221,12 @@ function Conversation(props: { id: number }) {
             conversation.push(res.data?.[i]);
           setConversation(conversation);
           setUpdating(false);
-          setPage((page) => page + 1);
+          setLastPage((lastpage) => lastpage + 1);
           setPages(Math.floor((conversation.length - 1) / 25) + 1);
-          navigate(`/thread/${props.id}?page=${page + 1}`, { replace: true });
+          navigate(`/thread/${props.id}?page=${lastpage + 1}`, {
+            replace: true,
+          });
+          setCPage(lastpage + 1);
         }
         setUpdating(false);
       });
@@ -211,11 +239,12 @@ function Conversation(props: { id: number }) {
     setLoading(true);
     setConversation([]);
     setPages(1);
-    setPage(p);
+    setLastPage(p);
     lastHeight.current = 0;
     setEnd(false);
     setN((n) => n + (n > 1 ? -1 : 1) * Math.random());
     navigate(`${window.location.pathname}?page=${p}`, { replace: true });
+    setCPage(p);
     axios.get(`/api/thread/${props.id}?type=2&page=${p}`).then((res) => {
       if (res.data?.[0] === null) {
         setNotification({ open: true, text: "Page not found!" });
@@ -223,7 +252,7 @@ function Conversation(props: { id: number }) {
       }
       setConversation(res.data);
       res.data.length % 25 && setEnd(true);
-      document.getElementById(String(page))?.scrollIntoView();
+      document.getElementById(String(lastpage))?.scrollIntoView();
     });
   }
   /**
@@ -255,17 +284,59 @@ function Conversation(props: { id: number }) {
     }, 200);
   }
   if (ready && query.c) {
-    navigate(`${window.location.pathname}?page=${page}`, {
+    navigate(`${window.location.pathname}?page=${lastpage}`, {
       replace: true,
     });
+    setCPage(lastpage);
     setTimeout(() => {
       document.getElementById(`c${query.c}`)?.scrollIntoView();
     }, 100);
   }
+  const [width] = useWidth();
+  const numofpages = roundup((details.c || 0) / 25);
   return (
-    <ShareProvider>
       <div className="min-height-fullvh conversation-root">
+        <Dock
+          btns={[
+            { icon: <Refresh />, action: update },
+            {
+              icon: <Reply />,
+              action: () => {
+                navigate(`/comment/${props.id}`);
+              },
+            },
+            {
+              icon: <ShareIcon className="font-size-19-force" />,
+              action: () => {
+                !shareOpen && setShareOpen(true);
+                shareTitle !== details.title &&
+                  details.title &&
+                  setShareTitle(details.title);
+                shareLink !== details.slink &&
+                  details.slink &&
+                  setShareLink(details.slink);
+              },
+            },
+          ]}
+        />
         <Share />
+        {!(width < 760) && (
+          <PageSelect
+            last={cpage !== 1 && numofpages > 1}
+            next={cpage !== numofpages && numofpages > 1}
+            pages={numofpages}
+            page={cpage}
+            onLastClicked={() => {
+              changePage(cpage - 1);
+            }}
+            onNextClicked={() => {
+              changePage(cpage + 1);
+            }}
+            onSelect={(e) => {
+              changePage(Number(e.target.value));
+            }}
+          />
+        )}
         {loading && <LinearProgress className="fullwidth" color="secondary" />}
         <Title
           slink={details.slink}
@@ -275,7 +346,9 @@ function Conversation(props: { id: number }) {
         <Paper
           id="croot"
           key={n}
-          className={`overflow-auto nobgimage noshadow conversation-paper${loading ? "-loading" : ""}`}
+          className={`overflow-auto nobgimage noshadow conversation-paper${
+            loading ? "-loading" : ""
+          }`}
           sx={{ bgcolor: "primary.dark" }}
           onScroll={onScroll}
         >
@@ -294,6 +367,7 @@ function Conversation(props: { id: number }) {
                           navigate(`${window.location.pathname}?page=${page}`, {
                             replace: true,
                           });
+                          setCPage(page);
                         }
                       }
                       if (!isVisible && conversation.length) {
@@ -312,6 +386,7 @@ function Conversation(props: { id: number }) {
                               `${window.location.pathname}?page=${page}`,
                               { replace: true }
                             );
+                            setCPage(page);
                           }
                         }
                       }
@@ -373,7 +448,7 @@ function Conversation(props: { id: number }) {
                             userid={comment?.user}
                             slink={comment?.slink}
                           >
-                            {DOMPurify.sanitize(comment?.comment)}
+                            {comment?.comment}
                           </Comment>
                         )
                     )}
@@ -405,7 +480,6 @@ function Conversation(props: { id: number }) {
           <PageBottom />
         </Paper>
       </div>
-    </ShareProvider>
   );
 }
 export function useTid(): number {

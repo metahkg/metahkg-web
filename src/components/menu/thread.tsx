@@ -32,7 +32,7 @@ export default function MenuThread(props: {
       onClick={onClick}
     >
       <Box
-        className={`flex fullwidth flex-dir-column menuthread-root${
+        className={`flex fullwidth flex-dir-column user-select-none menuthread-root${
           id === thread.id ? "-selected" : ""
         }`}
       >

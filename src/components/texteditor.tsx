@@ -1,5 +1,6 @@
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useWidth } from "./ContextProvider";
 /**
  * It creates a text editor that can be used to edit text
  * @param {(a: string, editor: import("tinymce/tinymce").Editor) => void} props.changehandler function triggered on editor change
@@ -11,21 +12,22 @@ export default function TextEditor(props: {
   text: string;
 }) {
   const { changehandler, text } = props;
+  const [width] = useWidth();
   return (
     <Editor
+      key={Number(width < 760)}
       onEditorChange={changehandler}
       initialValue={text}
       init={{
-        height: 350,
+        height: width < 760 ? 310 : 350,
         skin_url: "/tinymce/skins/ui/metahkg-dark",
         content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
         branding: false,
         mobile: {
-          menubar: "file edit view insert format tools table",
+          menubar: "file edit view insert format tools",
           toolbar:
             "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         },
-        imagetools_cors_hosts: ["picsum.photos"],
         quickbars_selection_toolbar:
           "cut copy paste | fontsizeselect | quicklink",
         quickbars_insert_toolbar: "",
@@ -39,8 +41,26 @@ export default function TextEditor(props: {
           {
             title: "Quote",
             description: "Add a quote.",
-            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #aca9a9; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
           },
+        ],
+        codesample_global_prismjs: true,
+        codesample_languages: [
+          { text: "JavaScript", value: "javascript" },
+          { text: "TypeScript", value: "typescript" },
+          { text: "React JSX", value: "jsx" },
+          { text: "React TSX", value: "tsx" },
+          { text: "Python", value: "python" },
+          { text: "HTML/XML", value: "markup" },
+          { text: "JSON", value: "json" },
+          { text: "CSS", value: "css" },
+          { text: "Go", value: "go" },
+          { text: "PHP", value: "php" },
+          { text: "Ruby", value: "ruby" },
+          { text: "Java", value: "java" },
+          { text: "C", value: "c" },
+          { text: "C#", value: "csharp" },
+          { text: "C++", value: "cpp" },
         ],
         autosave_ask_before_unload: true,
         autosave_interval: "30s",

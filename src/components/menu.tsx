@@ -13,6 +13,8 @@ import {
   useSelected,
   useData,
   useRecall,
+  useSmode,
+  useMenuN,
 } from "./MenuProvider";
 import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
@@ -20,6 +22,8 @@ import queryString from "query-string";
 import { useHistory, useNotification, useQuery } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
+import Dock from "./dock";
+import { Add, Autorenew } from "@mui/icons-material";
 /**
  * This function renders the main content of the menu
  */
@@ -35,6 +39,7 @@ function MainContent() {
   const [, setNotification] = useNotification();
   const [id] = useId();
   const [data, setData] = useData();
+  const [smode] = useSmode();
   const [page, setPage] = useState(1);
   const [end, setEnd] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -61,8 +66,11 @@ function MainContent() {
   /* A way to make sure that the effect is only run once. */
   useEffect(() => {
     if (!data.length && (category || profile || search || id || recall)) {
+      setEnd(false);
       const url = {
-        search: `/api/search?q=${q}&sort=${selected}`,
+        search: `/api/search?q=${encodeURIComponent(
+          q
+        )}&sort=${selected}&mode=${smode}`,
         profile: `/api/history/${profile}?sort=${selected}`,
         menu: `/api/menu/${c}?sort=${selected}`,
         recall: `/api/threads?threads=${JSON.stringify(
@@ -74,8 +82,7 @@ function MainContent() {
         .then((res) => {
           !(page === 1) && setPage(1);
           setData(res.data);
-          res.data.length < 25 && !end && setEnd(true);
-          res.data.length >= 25 && end && setEnd(false);
+          res.data.length < 25 && setEnd(true);
           setUpdating(false);
         })
         .catch(onError);
@@ -86,9 +93,12 @@ function MainContent() {
    * It updates the data array with the new data from the API.
    */
   function update() {
+    setEnd(false);
     setUpdating(true);
     const url = {
-      search: `/api/search?q=${q}&sort=${selected}&page=${page + 1}`,
+      search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
+        page + 1
+      }&mode=${smode}`,
       profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
       menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
       recall: `/api/threads?threads=${JSON.stringify(
@@ -169,6 +179,16 @@ function MainContent() {
           </Typography>
         )}
         {!data.length && <MenuPreload />}
+        {end && (
+          <Typography
+            className="mt10 mb10 text-align-center font-size-20-force"
+            sx={{
+              color: "secondary.main",
+            }}
+          >
+            End
+          </Typography>
+        )}
       </Box>
     </Paper>
   );
@@ -184,7 +204,7 @@ function Menu() {
   const [recall] = useRecall();
   const [profile] = useProfile();
   const navigate = useNavigate();
-  const [n, setN] = useState(Math.random());
+  const [menun, setMenuN] = useMenuN();
   let tempq = decodeURIComponent(query || "");
   return (
     <Box
@@ -192,10 +212,27 @@ function Menu() {
         menu ? "flex" : "display-none"
       } menu-root`}
     >
+      <Dock
+        btns={[
+          {
+            icon: <Autorenew />,
+            action: () => {
+              setData([]);
+              setMenuN(Math.random());
+            },
+          },
+          {
+            icon: <Add />,
+            action: () => {
+              navigate("/create");
+            },
+          },
+        ]}
+      />
       <MenuTop
         refresh={() => {
           setData([]);
-          setN(Math.random());
+          setMenuN(Math.random());
         }}
         onClick={(e: number) => {
           if (selected !== e) {
@@ -224,7 +261,9 @@ function Menu() {
           </div>
         </div>
       )}
-      <MainContent key={`${search}${profile}${category}${recall}${selected}${n}`} />
+      <MainContent
+        key={`${search}${profile}${category}${recall}${selected}${menun}`}
+      />
     </Box>
   );
 }

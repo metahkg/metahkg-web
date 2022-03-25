@@ -4,7 +4,7 @@ import {
   Add as AddIcon,
   Autorenew as AutorenewIcon,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
 import { MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
@@ -17,6 +17,7 @@ import {
   useTitle,
 } from "../MenuProvider";
 import axios from "axios";
+import { useWidth } from "../ContextProvider";
 /**
  * The top part of the menu consists of a title part
  * (sidebar, title, refresh and create topic button link)
@@ -39,6 +40,7 @@ export default function MenuTop(props: {
   const [category] = useCat();
   const [recall] = useRecall();
   const [id] = useId();
+  const [width] = useWidth();
   const mode =
     (search && "search") ||
     (profile && "profile") ||
@@ -48,15 +50,16 @@ export default function MenuTop(props: {
     search: "Search",
     profile: "User Profile",
     menu: "Metahkg",
-    recall: "Recall"
+    recall: "Recall",
   }[mode];
   const [title, setTitle] = useTitle();
   const tabs = {
-    search: ["Relevance", "Created", "Last Comment"],
-    profile: ["Created", "Last Comment"],
-    menu: ["Newest", "Hottest"],
-    recall: []
+    search: ["Relevance", "Topic", "Last Reply"],
+    profile: ["Topic", "Last Reply"],
+    menu: [width < 760 && title ? title : "Latest", "Hot"],
+    recall: [],
   }[mode];
+  const mobileTop = mode !== "menu";
   useEffect(() => {
     if (!search && !recall && !title && (category || profile || id)) {
       if (profile) {
@@ -78,53 +81,69 @@ export default function MenuTop(props: {
     <div>
       <Box
         className="fullwidth menutop-root"
-        sx={{ bgcolor: "primary.main", height: recall ? 50 : 90 }}
+        sx={{
+          bgcolor: "primary.main",
+          height: recall ? 50 : width < 760 && !mobileTop ? 50 : 90,
+        }}
       >
-        <div className="flex fullwidth align-center justify-space-between menutop-top">
-          <div className="ml10 mr40">
-            <SideBar />
+        {Boolean(width < 760 ? mobileTop : 1) && (
+          <div
+            className={`flex fullwidth align-center menutop-top justify-${
+              width < 760 ? "center" : "space-between"
+            }`}
+          >
+            {!(width < 760) && (
+              <div className="ml10 mr40">
+                <SideBar />
+              </div>
+            )}
+            <p className="novmargin font-size-18 user-select-none text-align-center metahkg-yellow">
+              {title || inittitle}
+            </p>
+            {!(width < 760) && (
+              <div className="flex">
+                <Tooltip title="Refresh" arrow>
+                  <IconButton onClick={props.refresh}>
+                    <AutorenewIcon className="force-white" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Create topic" arrow>
+                  <Link className="flex" to="/create">
+                    <IconButton className="mr10">
+                      <AddIcon className="force-white" />
+                    </IconButton>
+                  </Link>
+                </Tooltip>
+              </div>
+            )}
           </div>
-          <p className="novmargin font-size-18 user-select-none metahkg-yellow">
-            {title || inittitle}
-          </p>
-          <div className="flex">
-            <Tooltip title="Refresh" arrow>
-              <IconButton onClick={props.refresh}>
-                <AutorenewIcon className="force-white" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Create topic" arrow>
-              <Link className="flex" to="/create">
-                <IconButton className="mr10">
-                  <AddIcon className="force-white" />
-                </IconButton>
-              </Link>
-            </Tooltip>
-          </div>
-        </div>
-        {tabs.length && <div className="flex fullwidth align-flex-end font-size-20 menutop-bottom">
-          {tabs.map((tab, index) => (
-            <Box
-              onClick={() => {
-                props.onClick(index);
-              }}
-              className={`pointer fullwidth mr10 flex justify-center align-center fullheight${
-                !index ? " ml10" : ""
-              }`}
-              sx={{
-                borderBottom:
-                  props.selected === index ? "2px solid rgb(245, 189, 31)" : "",
+        )}
+        {Boolean(tabs.length) && (
+          <Box
+            sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
+            className="flex fullwidth align-flex-end"
+          >
+            <Tabs
+              className="fullwidth"
+              value={props.selected}
+              textColor="secondary"
+              indicatorColor="secondary"
+              variant="fullWidth"
+              onChange={(e, v) => {
+                props.onClick(v);
               }}
             >
-              <Typography
-                className="font-size-15-force"
-                sx={{ color: "secondary.main" }}
-              >
-                {tab}
-              </Typography>
-            </Box>
-          ))}
-        </div>}
+              {tabs.map((tab, index) => (
+                <Tab
+                  className="font-size-15-force notexttransform"
+                  value={index}
+                  label={tab}
+                  disableRipple
+                />
+              ))}
+            </Tabs>
+          </Box>
+        )}
       </Box>
       <Divider />
     </div>

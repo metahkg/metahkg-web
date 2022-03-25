@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { useHistory } from "../ContextProvider";
+import { useHistory, useWidth } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 /**
  * It's a component that renders the title of the thread.
@@ -29,6 +29,7 @@ export default function Title(props: {
   const [shareTitle, setShareTitle] = useShareTitle();
   const [shareLink, setShareLink] = useShareLink();
   const [history] = useHistory();
+  const [width] = useWidth();
   const params = useParams();
   return (
     <Box
@@ -47,7 +48,9 @@ export default function Title(props: {
             </Link>
           )}
           <Typography
-            className="novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text"
+            className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
+              width < 760 ? " text-align-center" : ""
+            }`}
             sx={{
               color: "secondary.main",
             }}
@@ -55,7 +58,7 @@ export default function Title(props: {
             {title}
           </Typography>
         </div>
-        {Boolean(title && slink) && (
+        {!(width < 760) && Boolean(title && slink) && (
           <Box className="flex">
             <Tooltip title="Comment" arrow>
               <Link className="notextdecoration" to={`/comment/${params.id}`}>
