@@ -35,7 +35,6 @@
 .comment-body video {
   height: 100% !important;
   max-height: 400px !important;
-  width: auto !important;
 }
 .comment-body {
   max-width: 100% !important;

@@ -1,5 +1,5 @@
 import { parse } from "node-html-parser";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 /**
  * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
  * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
@@ -19,6 +19,11 @@ export function modifycomment(comment: string) {
       addyoutube(item);
     }
     linkinnewtab(item);
+  });
+  parsed.querySelectorAll("img").forEach((item) => {
+    const height = Number(item.getAttribute("height"));
+    if (height > 400) item.setAttribute("height", "400");
+    if (height > 400 || !height) item.setAttribute("width", "auto");
   });
   return parsed.toString();
 }
