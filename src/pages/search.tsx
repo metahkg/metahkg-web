@@ -11,12 +11,12 @@ import {
   useSelected,
   useTitle,
 } from "../components/MenuProvider";
-import { useHistory, useWidth } from "../components/ContextProvider";
+import { useBack, useWidth } from "../components/ContextProvider";
 export default function Search() {
   const [search, setSearch] = useSearch();
   const [recall, setRecall] = useRecall();
   const [menu, setMenu] = useMenu();
-  const [history, setHistory] = useHistory();
+  const [history, setHistory] = useBack();
   const [data, setData] = useData();
   const [width] = useWidth();
   const [selected, setSelected] = useSelected();

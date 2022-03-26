@@ -5,7 +5,7 @@ import {
   ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useHistory, useWidth } from "../ContextProvider";
+import { useBack, useWidth } from "../ContextProvider";
 /**
  * It's a component that renders the title of the thread.
  * @param {number} props.category The category of the thread
@@ -21,7 +21,7 @@ export default function Title(props: {
   btns: { icon: JSX.Element; action: () => void; title: string }[];
 }) {
   const { category, title, btns } = props;
-  const [history] = useHistory();
+  const [history] = useBack();
   const [width] = useWidth();
   return (
     <Box

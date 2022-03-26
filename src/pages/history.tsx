@@ -11,7 +11,7 @@ import {
   useData,
   useRecall,
 } from "../components/MenuProvider";
-import { useHistory, useWidth } from "../components/ContextProvider";
+import { useBack, useWidth } from "../components/ContextProvider";
 /**
  * Only for small screens
  * Controls the menu to show ProfileMenu
@@ -23,7 +23,7 @@ export default function History() {
   const [search, setSearch] = useSearch();
   const [recall, setRecall] = useRecall();
   const [menu, setMenu] = useMenu();
-  const [history, setHistory] = useHistory();
+  const [back, setBack] = useBack();
   const [width] = useWidth();
   const [selected, setSelected] = useSelected();
   const [, setTitle] = useTitle();
@@ -39,7 +39,7 @@ export default function History() {
     selected && setSelected(0);
   }
   !menu && setMenu(true);
-  history !== window.location.pathname && setHistory(window.location.pathname);
+  back !== window.location.pathname && setBack(window.location.pathname);
   (profile !== (Number(params.id) || "self") || search) &&
     cleardata();
   profile !== (Number(params.id) || "self") &&

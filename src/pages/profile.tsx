@@ -29,7 +29,7 @@ import UploadAvatar from "../components/uploadavatar";
 import { timetoword_long } from "../lib/common";
 import { Link } from "react-router-dom";
 import {
-  useHistory,
+  useBack,
   useNotification,
   useWidth,
 } from "../components/ContextProvider";
@@ -102,7 +102,7 @@ export default function Profile() {
   const [id, setId] = useId();
   const [cat, setCat] = useCat();
   const [selected, setSelected] = useSelected();
-  const [history, setHistory] = useHistory();
+  const [back, setBack] = useBack();
   const [, setNotification] = useNotification();
   const navigate = useNavigate();
   /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
@@ -130,7 +130,7 @@ export default function Profile() {
   }
   if (params?.id === "self" && !localStorage.user)
     return <Navigate to="/" replace />;
-  history !== window.location.pathname && setHistory(window.location.pathname);
+  back !== window.location.pathname && setBack(window.location.pathname);
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
   (profile !== (Number(params.id) || "self") || search) && cleardata();

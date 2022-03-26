@@ -9,7 +9,14 @@ import {
 } from "@mui/icons-material";
 import { timetoword, roundup, summary, categories } from "../../lib/common";
 import { Link } from "react-router-dom";
-import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
+import {
+  useCat,
+  useId,
+  useProfile,
+  useRecall,
+  useSearch,
+} from "../MenuProvider";
+import { useHistory } from "../ContextProvider";
 /**
  * A component that renders a thread in the menu.
  * @param {summary} props.thread thread info
@@ -24,11 +31,13 @@ export default function MenuThread(props: {
   const [profile] = useProfile();
   const [recall] = useRecall();
   const [id] = useId();
+  const [history] = useHistory();
   const { thread, onClick } = props;
+  const cid = history[history.findIndex((i) => i.id === thread.id)]?.cid;
   return (
     <Link
       className="fullwidth notextdecoration"
-      to={`/thread/${thread.id}?page=1`}
+      to={`/thread/${thread.id}?${cid ? `c=${cid}` : "page=1"}`}
       onClick={onClick}
     >
       <Box

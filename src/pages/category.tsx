@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import Empty from "../components/empty";
-import { useHistory, useWidth } from "../components/ContextProvider";
+import { useBack, useWidth } from "../components/ContextProvider";
 import {
   useCat,
   useData,
@@ -27,7 +27,7 @@ export default function Category() {
   const [category, setCategory] = useCat();
   const [search, setSearch] = useSearch();
   const [profile, setProfile] = useProfile();
-  const [history, setHistory] = useHistory();
+  const [back, setBack] = useBack();
   const [recall, setRecall] = useRecall();
   const [, setData] = useData();
   const [width] = useWidth();
@@ -39,7 +39,7 @@ export default function Category() {
     setTitle("");
     setSelected(0);
   }
-  history !== window.location.pathname && setHistory(window.location.pathname);
+  back !== window.location.pathname && setBack(window.location.pathname);
   !menu && setMenu(true);
   (category !== Number(params.category) || search || profile || recall) && cleardata();
   category !== Number(params.category) && setCategory(Number(params.category));

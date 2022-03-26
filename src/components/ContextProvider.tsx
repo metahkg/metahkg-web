@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { createContext, useContext, useState } from "react";
 const Context = createContext<any>({});
 /**
@@ -7,15 +7,26 @@ const Context = createContext<any>({});
  * @returns The ContextProvider is returning a JSX element.
  */
 export default function ContextProvider(props: { children: JSX.Element }) {
-  const [history, setHistory] = useState("");
+  const [back, setBack] = useState("");
   const [query, setQuery] = useState("");
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const [notification, setNotification] = useState({ open: false, text: "" });
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settings, setSettings] = useState(
+  const [settings, setSettings] = useState<{ votebar?: boolean }>(
     JSON.parse(localStorage.getItem("settings") || "{}")
   );
+  const parsedhistory: { id: number; cid: number, c: number }[] = JSON.parse(
+    localStorage.getItem("history") || "[]"
+  );
+  /** migrate from old */
+  if (parsedhistory.length && !parsedhistory[0].id) {
+    for (let i = 0; i < parsedhistory.length; i++) {
+      parsedhistory.push({ id: Number(parsedhistory.shift()), cid: 1, c: 1 });
+    }
+    localStorage.setItem("history", JSON.stringify(parsedhistory));
+  }
+  const [history, setHistory] = useState(parsedhistory);
   const resizehandler = useRef(false);
   function updateSize() {
     setWidth(window.innerWidth);
@@ -25,16 +36,20 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     resizehandler.current = true;
     window.addEventListener("resize", updateSize);
   }
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(history));
+  }, [history]);
   return (
     <Context.Provider
       value={{
-        history: [history, setHistory],
+        back: [back, setBack],
         width: [width, setWidth],
         query: [query, setQuery],
         height: [height, setHeight],
         notification: [notification, setNotification],
         settingsOpen: [settingsOpen, setSettingsOpen],
         settings: [settings, setSettings],
+        history: [history, setHistory],
       }}
     >
       {props.children}
@@ -45,12 +60,12 @@ export default function ContextProvider(props: { children: JSX.Element }) {
  * It returns the current history and a setter for the history
  * @returns The history object and a setter function.
  */
-export function useHistory(): [
+export function useBack(): [
   string,
   React.Dispatch<React.SetStateAction<string>>
 ] {
-  const { history } = useContext(Context);
-  return history;
+  const { back } = useContext(Context);
+  return back;
 }
 /**
  * "Use the width of the window."
@@ -128,9 +143,20 @@ export function useSettingsOpen(): [
  * @returns A tuple of the settings object and a setter function.
  */
 export function useSettings(): [
-  any,
-  React.Dispatch<React.SetStateAction<any>>
+  { votebar?: boolean },
+  React.Dispatch<React.SetStateAction<{ votebar?: boolean }>>
 ] {
   const { settings } = useContext(Context);
   return settings;
+}
+/**
+ * It returns the history of the current user
+ * @returns The history array and a setter function.
+ */
+export function useHistory(): [
+  { id: number; cid: number, c: number }[],
+  React.Dispatch<React.SetStateAction<{ id: number; cid: number, c: number }[]>>
+] {
+  const { history } = useContext(Context);
+  return history;
 }

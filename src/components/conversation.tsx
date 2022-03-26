@@ -23,7 +23,7 @@ import axios, { AxiosError } from "axios";
 import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
-import ReactVisibilitySensor from "react-visibility-sensor";
+import VisibilityDetector from "react-visibility-detector";
 import {
   useCat,
   useId,
@@ -31,7 +31,7 @@ import {
   useRecall,
   useSearch,
 } from "./MenuProvider";
-import { useNotification, useWidth } from "./ContextProvider";
+import { useHistory, useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
@@ -111,6 +111,7 @@ function Conversation(props: { id: number }) {
   const [images, setImages] = useState<
     { original: string; thumbnail: string }[]
   >([]);
+  const [history, setHistory] = useHistory();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -129,6 +130,11 @@ function Conversation(props: { id: number }) {
       .get(`/api/thread/${props.id}?type=1`)
       .then((res) => {
         res.data.slink && setDetails(res.data);
+        const historyIndex = history.findIndex((i) => i.id === props.id);
+        if (historyIndex && history[historyIndex].c < res.data.c) {
+          history[historyIndex].c = res.data.c;
+          setHistory(history);
+        }
         !cat && !(recall || search || profile) && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
         document.title = `${res.data.title} | Metahkg`;
@@ -202,6 +208,12 @@ function Conversation(props: { id: number }) {
   }, [n]);
   useEffect(() => {
     Prism.highlightAll();
+  });
+  useEffect(() => {
+    if (history.findIndex((i) => i.id === props.id) === -1) {
+      history.push({ id: props.id, cid: 1, c: 1 });
+      setHistory(history);
+    }
   });
   /**
    * It fetches new comments, or the next page (if last comment id % 25 = 0)
@@ -288,6 +300,24 @@ function Conversation(props: { id: number }) {
         diff < e.target.clientHeight
       ) {
         update();
+      }
+    }
+    const index = history.findIndex((i) => i.id === props.id);
+    if (index !== -1) {
+      const arr = [...Array(conversation.length)].map((und, c) => {
+        return Math.abs(
+          Number(
+            document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top
+          )
+        );
+      });
+      const currentcomment =
+        arr.findIndex(
+          (i) => i === Math.min.apply(Math, JSON.parse(JSON.stringify(arr)))
+        ) + 1;
+      if (history[index]?.cid !== currentcomment) {
+        history[index].cid = currentcomment;
+        setHistory(history);
       }
     }
   }
@@ -394,8 +424,8 @@ function Conversation(props: { id: number }) {
           {ready &&
             [...Array(pages)].map((p, index) => (
               <Box>
-                <ReactVisibilitySensor
-                  onChange={(isVisible) => {
+                <VisibilityDetector
+                  onVisibilityChange={(isVisible) => {
                     const croot = document.getElementById("croot");
                     let page = roundup(conversation[0].id / 25) + index;
                     if (isVisible) {
@@ -452,7 +482,7 @@ function Conversation(props: { id: number }) {
                       changePage(roundup(conversation[0].id / 25) + index + 1);
                     }}
                   />
-                </ReactVisibilitySensor>
+                </VisibilityDetector>
                 <ConversationContext.Provider
                   value={{
                     story: [story, setStory],

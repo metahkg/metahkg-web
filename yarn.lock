@@ -7599,12 +7599,10 @@ react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-visibility-sensor@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-visibility-sensor/-/react-visibility-sensor-5.1.1.tgz#5238380960d3a0b2be0b7faddff38541e337f5a9"
-  integrity sha512-cTUHqIK+zDYpeK19rzW6zF9YfT4486TIgizZW53wEZ+/GPBbK7cNS0EHyJVyHYacwFEvvHLEKfgJndbemWhB/w==
-  dependencies:
-    prop-types "^15.7.2"
+react-visibility-detector@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-visibility-detector/-/react-visibility-detector-1.1.1.tgz#323724207533fc82bb9b7defeb54de5c1811433f"
+  integrity sha512-j0DMlEMsavKb+5qQdX23mh3nxPQgehekjTMzNloULI76osFS7xfMVGj8YetSqaMNv+rH88mtsrv13HLo6Bbaag==
 
 react@^17.0.2:
   version "17.0.2"
@@ -8576,7 +8574,7 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tinymce@^5.10.3, tinymce@^5.5.1:
+tinymce@^5.5.1:
   version "5.10.3"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.10.3.tgz#9485cf00159fd70c4948cb5e9dd49bce2a775899"
   integrity sha512-O59ssHNnujWvSk5Gt8hIGrdNCMKVWVQv9F8siAgLTRgTh0t3NDHrP1UlLtCxArUi9DPWZvlBeUz8D5fJTu7vnA==

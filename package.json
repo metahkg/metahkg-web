@@ -35,9 +35,8 @@
     "react-google-recaptcha": "^2.1.0",
     "react-image-gallery": "^1.2.7",
     "react-router-dom": "^6.2.2",
-    "react-visibility-sensor": "^5.1.1",
-    "sanitize-html": "^2.7.0",
-    "tinymce": "^5.10.3"
+    "react-visibility-detector": "^1.1.1",
+    "sanitize-html": "^2.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",

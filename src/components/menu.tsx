@@ -20,10 +20,11 @@ import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
 import {
-  useHistory,
+  useBack,
   useNotification,
   useQuery,
   useSettingsOpen,
+  useHistory,
 } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
@@ -48,9 +49,9 @@ function MainContent() {
   const [page, setPage] = useState(1);
   const [end, setEnd] = useState(false);
   const [updating, setUpdating] = useState(false);
+  const [history, setHistory] = useHistory();
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
-  const history: any[] = JSON.parse(localStorage.history || "[]") || [];
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
@@ -79,7 +80,11 @@ function MainContent() {
         profile: `/api/history/${profile}?sort=${selected}`,
         menu: `/api/menu/${c}?sort=${selected}`,
         recall: `/api/threads?threads=${JSON.stringify(
-          splitarray(history, 0, 24)
+          splitarray(
+            history.map((item) => item.id),
+            0,
+            24
+          )
         )}`,
       }[mode];
       axios
@@ -107,7 +112,11 @@ function MainContent() {
       profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
       menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
       recall: `/api/threads?threads=${JSON.stringify(
-        splitarray(history, page * 25, (page + 1) * 25 - 1)
+        splitarray(
+          history.map((item) => item.id),
+          page * 25,
+          (page + 1) * 25 - 1
+        )
       )}`,
     }[mode];
     axios
@@ -161,10 +170,14 @@ function MainContent() {
                   key={`${category}${id === thread.id}`}
                   thread={thread}
                   onClick={() => {
-                    const index = history.findIndex((i) => i === thread.id);
-                    if (index !== -1) history.splice(index, 1);
-                    history.unshift(thread.id);
-                    localStorage.setItem("history", JSON.stringify(history));
+                    const index = history.findIndex((i) => i.id === thread.id);
+                    if (index === -1) {
+                      history.unshift({ id: thread.id, c: thread.c, cid: 1 });
+                      setHistory(history);
+                    } else if (history[index].cid < thread.c) {
+                      history[index].c = thread.c;
+                      setHistory(history);
+                    }
                   }}
                 />
                 <Divider />
@@ -194,7 +207,7 @@ function Menu() {
   const [menu] = useMenu();
   const [search] = useSearch();
   const [query, setQuery] = useQuery();
-  const [, setHistory] = useHistory();
+  const [, setHistory] = useBack();
   const [category] = useCat();
   const [recall] = useRecall();
   const [profile] = useProfile();
