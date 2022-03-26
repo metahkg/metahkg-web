@@ -3,13 +3,9 @@ import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import {
   ArrowBack as ArrowBackIcon,
-  Share as ShareIcon,
-  Reply as ReplyIcon,
 } from "@mui/icons-material";
-import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useHistory, useWidth } from "../ContextProvider";
-import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 /**
  * It's a component that renders the title of the thread.
  * @param {number} props.category The category of the thread
@@ -21,16 +17,12 @@ export default function Title(props: {
   category: number | undefined;
   /** thread title */
   title: string | undefined;
-  /** thread shortened link */
-  slink: string | undefined;
+  /** buttons */
+  btns: { icon: JSX.Element; action: () => void; title: string }[];
 }) {
-  const { category, title, slink } = props;
-  const [shareOpen, setShareOpen] = useShareOpen();
-  const [shareTitle, setShareTitle] = useShareTitle();
-  const [shareLink, setShareLink] = useShareLink();
+  const { category, title, btns } = props;
   const [history] = useHistory();
   const [width] = useWidth();
-  const params = useParams();
   return (
     <Box
       className="title-root"
@@ -58,28 +50,14 @@ export default function Title(props: {
             {title}
           </Typography>
         </div>
-        {!(width < 760) && Boolean(title && slink) && (
-          <Box className="flex">
-            <Tooltip title="Comment" arrow>
-              <Link className="notextdecoration" to={`/comment/${params.id}`}>
-                <IconButton>
-                  <ReplyIcon className="white title-reply" />
-                </IconButton>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Share" arrow>
-              <IconButton
-                onClick={() => {
-                  !shareOpen && setShareOpen(true);
-                  shareTitle !== title && title && setShareTitle(title);
-                  shareLink !== slink && slink && setShareLink(slink);
-                }}
-              >
-                <ShareIcon className="white font-size-20-force title-share" />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+        <div className="flex">
+          {!(width < 760) &&
+            btns.map((btn) => (
+              <Tooltip arrow title={btn.title}>
+                <IconButton onClick={btn.action}>{btn.icon}</IconButton>
+              </Tooltip>
+            ))}
+        </div>
       </div>
     </Box>
   );

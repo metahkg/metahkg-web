@@ -33,16 +33,18 @@ import {
 } from "./MenuProvider";
 import { useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
-import {
-  useShareLink,
-  useShareOpen,
-  useShareTitle,
-} from "./ShareProvider";
+import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
 import Dock from "./dock";
-import { Refresh, Reply, Share as ShareIcon } from "@mui/icons-material";
+import {
+  Collections,
+  Refresh,
+  Reply,
+  Share as ShareIcon,
+} from "@mui/icons-material";
+import Gallery from "./conversation/gallery";
 const ConversationContext = createContext<any>(null);
 type comment = {
   /** comment id */
@@ -105,6 +107,10 @@ function Conversation(props: { id: number }) {
   const [shareOpen, setShareOpen] = useShareOpen();
   const [shareTitle, setShareTitle] = useShareTitle();
   const [shareLink, setShareLink] = useShareLink();
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [images, setImages] = useState<
+    { original: string; thumbnail: string }[]
+  >([]);
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
   const onError = function (err: AxiosError) {
@@ -168,6 +174,20 @@ function Conversation(props: { id: number }) {
         }
         setConversation(res.data);
         res.data.length % 25 && setEnd(true);
+      })
+      .catch(onError);
+    axios
+      .get(`/api/images/${props.id}`)
+      .then((res) => {
+        res.data.forEach((item: { image: string }) => {
+          images.push({
+            original: item.image,
+            thumbnail: `https://i.wcyat.me/thumbnail?src=${encodeURIComponent(
+              item.image
+            )}`,
+          });
+        });
+        res.data.length && setImages(images);
       })
       .catch(onError);
     if (localStorage.user) {
@@ -294,192 +314,204 @@ function Conversation(props: { id: number }) {
   }
   const [width] = useWidth();
   const numofpages = roundup((details.c || 0) / 25);
+  const btns = [
+    {
+      icon: <Refresh />,
+      action: () => {
+        update();
+        const croot = document.getElementById("croot");
+        const newscrollTop =
+          croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
+        // @ts-ignore
+        croot.scrollTop = newscrollTop;
+      },
+      title: "Refresh",
+    },
+    {
+      icon: <Collections />,
+      action: () => {
+        setGalleryOpen(true);
+      },
+      title: "Images",
+    },
+    {
+      icon: <Reply />,
+      action: () => {
+        navigate(`/comment/${props.id}`);
+      },
+      title: "Reply",
+    },
+    {
+      icon: <ShareIcon className="font-size-19-force" />,
+      action: () => {
+        if (details.title && details.slink) {
+          !shareOpen && setShareOpen(true);
+          shareTitle !== details.title &&
+            details.title &&
+            setShareTitle(details.title);
+          shareLink !== details.slink &&
+            details.slink &&
+            setShareLink(details.slink);
+        }
+      },
+      title: "Share",
+    },
+  ];
   return (
-      <div className="min-height-fullvh conversation-root">
-        <Dock
-          btns={[
-            { icon: <Refresh />, action: update },
-            {
-              icon: <Reply />,
-              action: () => {
-                navigate(`/comment/${props.id}`);
-              },
-            },
-            {
-              icon: <ShareIcon className="font-size-19-force" />,
-              action: () => {
-                !shareOpen && setShareOpen(true);
-                shareTitle !== details.title &&
-                  details.title &&
-                  setShareTitle(details.title);
-                shareLink !== details.slink &&
-                  details.slink &&
-                  setShareLink(details.slink);
-              },
-            },
-          ]}
+    <div className="min-height-fullvh conversation-root">
+      <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
+      <Dock btns={btns} />
+      <Share />
+      {!(width < 760) && (
+        <PageSelect
+          last={cpage !== 1 && numofpages > 1}
+          next={cpage !== numofpages && numofpages > 1}
+          pages={numofpages}
+          page={cpage}
+          onLastClicked={() => {
+            changePage(cpage - 1);
+          }}
+          onNextClicked={() => {
+            changePage(cpage + 1);
+          }}
+          onSelect={(e) => {
+            changePage(Number(e.target.value));
+          }}
         />
-        <Share />
-        {!(width < 760) && (
-          <PageSelect
-            last={cpage !== 1 && numofpages > 1}
-            next={cpage !== numofpages && numofpages > 1}
-            pages={numofpages}
-            page={cpage}
-            onLastClicked={() => {
-              changePage(cpage - 1);
-            }}
-            onNextClicked={() => {
-              changePage(cpage + 1);
-            }}
-            onSelect={(e) => {
-              changePage(Number(e.target.value));
-            }}
-          />
-        )}
-        {loading && <LinearProgress className="fullwidth" color="secondary" />}
-        <Title
-          slink={details.slink}
-          category={details.category}
-          title={details.title}
-        />
-        <Paper
-          id="croot"
-          key={n}
-          className={`overflow-auto nobgimage noshadow conversation-paper${
-            loading ? "-loading" : ""
-          }`}
-          sx={{ bgcolor: "primary.dark" }}
-          onScroll={onScroll}
-        >
-          <Box className="fullwidth max-height-full max-width-full">
-            {ready &&
-              [...Array(pages)].map((p, index) => (
-                <Box>
-                  <ReactVisibilitySensor
-                    onChange={(isVisible) => {
-                      const croot = document.getElementById("croot");
-                      let page = roundup(conversation[0].id / 25) + index;
-                      if (isVisible) {
-                        lastHeight.current =
-                          croot?.scrollTop || lastHeight.current;
-                        if (page !== Number(query.page) && page) {
+      )}
+      {loading && <LinearProgress className="fullwidth" color="secondary" />}
+      <Title category={details.category} title={details.title} btns={btns} />
+      <Paper
+        id="croot"
+        key={n}
+        className={`overflow-auto nobgimage noshadow conversation-paper${
+          loading ? "-loading" : ""
+        }`}
+        sx={{ bgcolor: "primary.dark" }}
+        onScroll={onScroll}
+      >
+        <Box className="fullwidth max-height-full max-width-full">
+          {ready &&
+            [...Array(pages)].map((p, index) => (
+              <Box>
+                <ReactVisibilitySensor
+                  onChange={(isVisible) => {
+                    const croot = document.getElementById("croot");
+                    let page = roundup(conversation[0].id / 25) + index;
+                    if (isVisible) {
+                      lastHeight.current =
+                        croot?.scrollTop || lastHeight.current;
+                      if (page !== Number(query.page) && page) {
+                        navigate(`${window.location.pathname}?page=${page}`, {
+                          replace: true,
+                        });
+                        setCPage(page);
+                      }
+                    }
+                    if (!isVisible && conversation.length) {
+                      if (lastHeight.current !== croot?.scrollTop) {
+                        page =
+                          // @ts-ignore
+                          croot.scrollTop > lastHeight.current
+                            ? page
+                            : page - 1;
+                        if (
+                          lastHeight.current &&
+                          page !== Number(query.page) &&
+                          page
+                        ) {
                           navigate(`${window.location.pathname}?page=${page}`, {
                             replace: true,
                           });
                           setCPage(page);
                         }
                       }
-                      if (!isVisible && conversation.length) {
-                        if (lastHeight.current !== croot?.scrollTop) {
-                          page =
-                            // @ts-ignore
-                            croot.scrollTop > lastHeight.current
-                              ? page
-                              : page - 1;
-                          if (
-                            lastHeight.current &&
-                            page !== Number(query.page) &&
-                            page
-                          ) {
-                            navigate(
-                              `${window.location.pathname}?page=${page}`,
-                              { replace: true }
-                            );
-                            setCPage(page);
-                          }
-                        }
-                      }
+                    }
+                  }}
+                >
+                  <PageTop
+                    id={roundup(conversation[0].id / 25) + index}
+                    pages={roundup((details.c || 0) / 25)}
+                    page={roundup(conversation[0].id / 25) + index}
+                    onChange={(e: SelectChangeEvent<number>) => {
+                      changePage(Number(e.target.value));
                     }}
-                  >
-                    <PageTop
-                      id={roundup(conversation[0].id / 25) + index}
-                      pages={roundup((details.c || 0) / 25)}
-                      page={roundup(conversation[0].id / 25) + index}
-                      onChange={(e: SelectChangeEvent<number>) => {
-                        changePage(Number(e.target.value));
-                      }}
-                      last={
-                        !(
-                          roundup(conversation[0].id / 25) + index === 1 &&
-                          !index
-                        )
-                      }
-                      next={
-                        roundup(conversation[0].id / 25) + index !==
-                        roundup((details.c || 0) / 25)
-                      }
-                      onLastClicked={() => {
-                        changePage(
-                          roundup(conversation[0].id / 25) + index - 1
-                        );
-                      }}
-                      onNextClicked={() => {
-                        changePage(
-                          roundup(conversation[0].id / 25) + index + 1
-                        );
-                      }}
-                    />
-                  </ReactVisibilitySensor>
-                  <ConversationContext.Provider
-                    value={{
-                      story: [story, setStory],
-                      tid: id,
-                      title: details.title,
+                    last={
+                      !(
+                        roundup(conversation[0].id / 25) + index === 1 && !index
+                      )
+                    }
+                    next={
+                      roundup(conversation[0].id / 25) + index !==
+                      roundup((details.c || 0) / 25)
+                    }
+                    onLastClicked={() => {
+                      changePage(roundup(conversation[0].id / 25) + index - 1);
                     }}
-                  >
-                    {splitarray(
-                      conversation,
-                      index * 25,
-                      (index + 1) * 25 - 1
-                    ).map(
-                      (comment: any) =>
-                        !comment?.removed &&
-                        (story ? story === comment?.user : 1) && (
-                          <Comment
-                            name={users?.[comment?.user].name}
-                            id={comment.id}
-                            op={users?.[comment?.user].name === details.op}
-                            sex={users?.[comment?.user].sex}
-                            date={comment?.createdAt}
-                            up={comment?.["U"] | 0}
-                            down={comment?.["D"] | 0}
-                            vote={votes?.[comment.id]}
-                            userid={comment?.user}
-                            slink={comment?.slink}
-                          >
-                            {comment?.comment}
-                          </Comment>
-                        )
-                    )}
-                  </ConversationContext.Provider>
-                </Box>
-              ))}
-          </Box>
-          <Box
-            className="flex justify-center align-center conversation-bottom"
-            sx={{
-              bgcolor: "primary.dark",
-            }}
-          >
-            {!updating ? (
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => {
-                  setEnd(false);
-                  update();
-                }}
-              >
-                Update
-              </Button>
-            ) : (
-              <CircularProgress disableShrink color="secondary" />
-            )}
-          </Box>
-          <PageBottom />
-        </Paper>
-      </div>
+                    onNextClicked={() => {
+                      changePage(roundup(conversation[0].id / 25) + index + 1);
+                    }}
+                  />
+                </ReactVisibilitySensor>
+                <ConversationContext.Provider
+                  value={{
+                    story: [story, setStory],
+                    tid: id,
+                    title: details.title,
+                  }}
+                >
+                  {splitarray(
+                    conversation,
+                    index * 25,
+                    (index + 1) * 25 - 1
+                  ).map(
+                    (comment: any) =>
+                      !comment?.removed &&
+                      (story ? story === comment?.user : 1) && (
+                        <Comment
+                          name={users?.[comment?.user].name}
+                          id={comment.id}
+                          op={users?.[comment?.user].name === details.op}
+                          sex={users?.[comment?.user].sex}
+                          date={comment?.createdAt}
+                          up={comment?.["U"] | 0}
+                          down={comment?.["D"] | 0}
+                          vote={votes?.[comment.id]}
+                          userid={comment?.user}
+                          slink={comment?.slink}
+                        >
+                          {comment?.comment}
+                        </Comment>
+                      )
+                  )}
+                </ConversationContext.Provider>
+              </Box>
+            ))}
+        </Box>
+        <Box
+          className="flex justify-center align-center conversation-bottom"
+          sx={{
+            bgcolor: "primary.dark",
+          }}
+        >
+          {!updating ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => {
+                setEnd(false);
+                update();
+              }}
+            >
+              Update
+            </Button>
+          ) : (
+            <CircularProgress disableShrink color="secondary" />
+          )}
+        </Box>
+        <PageBottom />
+      </Paper>
+    </div>
   );
 }
 export function useTid(): number {

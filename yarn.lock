@@ -2021,6 +2021,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-image-gallery@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-image-gallery/-/react-image-gallery-1.0.5.tgz#563234ac0fa131e2920199d191fca0c1594ba29d"
+  integrity sha512-CjIjFXmV7zGRO/FkdtPK31Rwj0ud7Xz/9e5o4DCX2Lx96jR8+0xCmKeUAQQVN3pKc6jUjOC0f/aEylhKg8vhAw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-is@^16.7.1 || ^17.0.0":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-17.0.3.tgz#2d855ba575f2fc8d17ef9861f084acc4b90a137a"
@@ -7486,6 +7493,11 @@ react-google-recaptcha@^2.1.0:
   dependencies:
     prop-types "^15.5.0"
     react-async-script "^1.1.1"
+
+react-image-gallery@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-1.2.7.tgz#2dfb83c52f32828a5340ca565f91bca58241fcfe"
+  integrity sha512-ts7yMWykvZhslGMuvVAUk7a1dJIx9QtIwK6Clv8dOGxPsJid92FRrLvXbZDvkYcUyj48sHalnBhqU6mZNCB2jg==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
