@@ -16,7 +16,7 @@ export default function Dock(props: {
       {width < 760 && (
         <Box
           className="flex fullwidth dock-root"
-          sx={{ bgcolor: "primary.dark" }}
+          sx={{ bgcolor: "primary.dark", height: 50 }}
         >
           <div className="flex justify-space-between fullwidth ml20 mr20 align-center">
             <SideBar />
