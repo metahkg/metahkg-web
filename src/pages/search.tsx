@@ -16,7 +16,7 @@ export default function Search() {
   const [search, setSearch] = useSearch();
   const [recall, setRecall] = useRecall();
   const [menu, setMenu] = useMenu();
-  const [history, setHistory] = useBack();
+  const [back, setBack] = useBack();
   const [data, setData] = useData();
   const [width] = useWidth();
   const [selected, setSelected] = useSelected();
@@ -24,8 +24,8 @@ export default function Search() {
   const [id, setId] = useId();
   const [cat, setCat] = useCat();
   document.title = "Search | Metahkg";
-  history !== window.location.pathname &&
-    setHistory(window.location.pathname + window.location.search);
+  back !== window.location.pathname &&
+    setBack(window.location.pathname + window.location.search);
   !menu && setMenu(true);
   id && setId(0);
   cat && setCat(0);

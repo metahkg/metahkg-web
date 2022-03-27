@@ -134,6 +134,7 @@ function Conversation(props: { id: number }) {
         if (historyIndex && history[historyIndex].c < res.data.c) {
           history[historyIndex].c = res.data.c;
           setHistory(history);
+          localStorage.setItem("history", JSON.stringify(history));
         }
         !cat && !(recall || search || profile) && setCat(res.data.category);
         id !== res.data.id && setId(res.data.id);
@@ -213,6 +214,7 @@ function Conversation(props: { id: number }) {
     if (history.findIndex((i) => i.id === props.id) === -1) {
       history.push({ id: props.id, cid: 1, c: 1 });
       setHistory(history);
+      localStorage.setItem("history", JSON.stringify(history));
     }
   });
   /**
@@ -313,11 +315,18 @@ function Conversation(props: { id: number }) {
       });
       const currentcomment =
         arr.findIndex(
-          (i) => i === Math.min.apply(Math, JSON.parse(JSON.stringify(arr)))
+          (i) =>
+            i ===
+            Math.min.apply(
+              Math,
+              arr.filter((i) => Boolean(i))
+            )
         ) + 1;
+      console.log(currentcomment);
       if (history[index]?.cid !== currentcomment) {
         history[index].cid = currentcomment;
         setHistory(history);
+        localStorage.setItem("history", JSON.stringify(history));
       }
     }
   }
@@ -360,7 +369,8 @@ function Conversation(props: { id: number }) {
     {
       icon: <Collections />,
       action: () => {
-        setGalleryOpen(true);
+        if (images.length) setGalleryOpen(true);
+        else setNotification({ open: true, text: "No images!" });
       },
       title: "Images",
     },

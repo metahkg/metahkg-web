@@ -33,7 +33,7 @@ export default function MenuThread(props: {
   const [id] = useId();
   const [history] = useHistory();
   const { thread, onClick } = props;
-  const cid = history[history.findIndex((i) => i.id === thread.id)]?.cid;
+  const cid = history.find((i) => i.id === thread.id)?.cid;
   return (
     <Link
       className="fullwidth notextdecoration"

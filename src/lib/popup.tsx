@@ -23,49 +23,31 @@ export function PopUp(props: {
       PaperProps={{
         sx: {
           backgroundImage: "none",
-          backgroundColor: "primary.main",
+          bgcolor: "primary.main",
         },
       }}
     >
       <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
-        <p
-          style={{
-            marginLeft: "20px",
-            marginTop: 0,
-            marginBottom: 0,
-          }}
-        >
-          {props.title}
-        </p>
+        <p className="ml20 novmargin">{props.title}</p>
         <IconButton
           className="mr5"
           onClick={() => {
             props.setOpen(false);
           }}
         >
-          <Close sx={{ color: "white", fontSize: "18px" }} />
+          <Close className="font-size-18-force" />
         </IconButton>
       </DialogTitle>
       <Divider />
       <DialogContent className="nopadding">
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "20px",
-            marginTop: "5px",
-            marginBottom: "5px",
-            textAlign: "center",
-          }}
-        >
+        <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
           {props.children}
         </div>
         {props.button && <Divider />}
         {props.button && (
           <Link className="notextdecoration" to={props.button.link}>
             <Button
-              className="notexttransform font-size-18"
+              className="notexttransform font-size-18-force"
               color="secondary"
               variant="text"
               fullWidth

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { createContext, useContext, useState } from "react";
 const Context = createContext<any>({});
 /**
@@ -16,7 +16,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
   const [settings, setSettings] = useState<{ votebar?: boolean }>(
     JSON.parse(localStorage.getItem("settings") || "{}")
   );
-  const parsedhistory: { id: number; cid: number, c: number }[] = JSON.parse(
+  const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
     localStorage.getItem("history") || "[]"
   );
   /** migrate from old */
@@ -36,9 +36,6 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     resizehandler.current = true;
     window.addEventListener("resize", updateSize);
   }
-  useEffect(() => {
-    localStorage.setItem("history", JSON.stringify(history));
-  }, [history]);
   return (
     <Context.Provider
       value={{
@@ -154,8 +151,8 @@ export function useSettings(): [
  * @returns The history array and a setter function.
  */
 export function useHistory(): [
-  { id: number; cid: number, c: number }[],
-  React.Dispatch<React.SetStateAction<{ id: number; cid: number, c: number }[]>>
+  { id: number; cid: number; c: number }[],
+  React.Dispatch<React.SetStateAction<{ id: number; cid: number; c: number }[]>>
 ] {
   const { history } = useContext(Context);
   return history;

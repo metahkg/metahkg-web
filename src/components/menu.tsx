@@ -174,9 +174,11 @@ function MainContent() {
                     if (index === -1) {
                       history.unshift({ id: thread.id, c: thread.c, cid: 1 });
                       setHistory(history);
+                      localStorage.setItem("history", JSON.stringify(history));
                     } else if (history[index].cid < thread.c) {
                       history[index].c = thread.c;
                       setHistory(history);
+                      localStorage.setItem("history", JSON.stringify(history));
                     }
                   }}
                 />
@@ -207,7 +209,7 @@ function Menu() {
   const [menu] = useMenu();
   const [search] = useSearch();
   const [query, setQuery] = useQuery();
-  const [, setHistory] = useBack();
+  const [, setBack] = useBack();
   const [category] = useCat();
   const [recall] = useRecall();
   const [profile] = useProfile();
@@ -269,7 +271,7 @@ function Menu() {
                   navigate(`/search?q=${encodeURIComponent(tempq)}`);
                   setQuery(tempq);
                   setData([]);
-                  setHistory(`/search?q=${encodeURIComponent(tempq)}`);
+                  setBack(`/search?q=${encodeURIComponent(tempq)}`);
                 }
               }}
             />
