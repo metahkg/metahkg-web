@@ -133,23 +133,32 @@ export default function SideBar() {
             ))}
           </List>
           <Divider />
-          <div className="m20">
-            {categories.map((category) => (
-              <Link
-                className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
-                to={`/category/${category.id}`}
-                style={{
-                  color:
-                    cat === category.id && !(profile || search)
-                      ? "#fbc308"
-                      : "white",
-                }}
-                onClick={onClick}
-              >
-                {category.name}
-              </Link>
-            ))}
-          </div>
+          {[
+            categories.filter((i) => !i.hidden),
+            localStorage.user && categories.filter((i) => i.hidden),
+          ].map((cats: { id: number; name: string; hidden?: boolean }[], index) => (
+            <div>
+              {cats && (
+                <div className={`m20${localStorage.user ? " mb10" : ""}${index ? " mt0" : ""}`}>
+                  {cats.map((category) => (
+                    <Link
+                      className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
+                      to={`/category/${category.id}`}
+                      style={{
+                        color:
+                          cat === category.id && !(profile || search)
+                            ? "#fbc308"
+                            : "white",
+                      }}
+                      onClick={onClick}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
           <Divider />
           <List>
             {[

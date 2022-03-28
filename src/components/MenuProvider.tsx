@@ -17,7 +17,6 @@ export default function MenuProvider(props: { children: JSX.Element }) {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [smode, setSmode] = useState(0); //search mode
-  const [menun, setMenuN] = useState(Math.random()); //rerender the menu
   return (
     <MenuContext.Provider
       value={{
@@ -31,7 +30,6 @@ export default function MenuProvider(props: { children: JSX.Element }) {
         data: [data, setData],
         title: [title, setTitle],
         smode: [smode, setSmode],
-        menun: [menun, setMenuN],
       }}
     >
       {props.children}
@@ -151,12 +149,4 @@ export function useSmode(): [
 ] {
   const { smode } = useContext(MenuContext);
   return smode;
-}
-
-export function useMenuN(): [
-  number,
-  React.Dispatch<React.SetStateAction<number>>
-] {
-  const { menun } = useContext(MenuContext);
-  return menun;
 }

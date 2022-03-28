@@ -1,5 +1,5 @@
 import "./css/menu.css";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Box, Typography, Paper, Divider } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import MenuTop from "./menu/top";
@@ -14,7 +14,6 @@ import {
   useData,
   useRecall,
   useSmode,
-  useMenuN,
 } from "./MenuProvider";
 import { splitarray, summary } from "../lib/common";
 import MenuPreload from "./menu/preload";
@@ -50,6 +49,7 @@ function MainContent() {
   const [end, setEnd] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [history, setHistory] = useHistory();
+  const paperRef = useRef<HTMLDivElement>(null);
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
   /**
@@ -63,6 +63,7 @@ function MainContent() {
       text: err?.response?.data?.error || err?.response?.data || "",
     });
     err?.response?.status === 404 && navigate("/404", { replace: true });
+    err?.response?.status === 401 && navigate("/401", { replace: true });
   }
   const mode =
     (search && "search") ||
@@ -94,6 +95,10 @@ function MainContent() {
           setData(res.data);
           res.data.length < 25 && setEnd(true);
           setUpdating(false);
+          setTimeout(() => {
+            // @ts-ignore
+            paperRef.current.scrollTop = 0;
+          }, 1);
         })
         .catch(onError);
     }
@@ -160,6 +165,7 @@ function MainContent() {
         }px)`,
       }}
       onScroll={onScroll}
+      ref={paperRef}
     >
       <Box className="min-height-full menu-bottom flex flex-dir-column">
         {!!(data.length && data?.[0] !== null) && (
@@ -214,7 +220,6 @@ function Menu() {
   const [recall] = useRecall();
   const [profile] = useProfile();
   const navigate = useNavigate();
-  const [menun, setMenuN] = useMenuN();
   const [, setSettingsOpen] = useSettingsOpen();
   let tempq = decodeURIComponent(query || "");
   return (
@@ -229,7 +234,6 @@ function Menu() {
             icon: <Autorenew />,
             action: () => {
               setData([]);
-              setMenuN(Math.random());
             },
           },
           {
@@ -249,7 +253,6 @@ function Menu() {
       <MenuTop
         refresh={() => {
           setData([]);
-          setMenuN(Math.random());
         }}
         onClick={(e: number) => {
           if (selected !== e) {
@@ -278,9 +281,7 @@ function Menu() {
           </div>
         </div>
       )}
-      <MainContent
-        key={`${search}${profile}${category}${recall}${selected}${menun}`}
-      />
+      <MainContent key={`${search}${profile}${category}${recall}${selected}`} />
     </Box>
   );
 }

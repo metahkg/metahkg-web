@@ -31,6 +31,7 @@ import Verify from "./pages/verify";
 import Resend from "./pages/resend";
 import Recall from "./pages/recall";
 import Settings from "./components/settings";
+import Forbidden from "./pages/forbidden";
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
@@ -93,6 +94,7 @@ export default function App() {
               <Route path="/history/:id" element={<History />} />
               <Route path="/recall" element={<Recall />} />
               <Route path="/404" element={<NotFound />} />
+              <Route path="/401" element={<Forbidden />} />
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
           </div>

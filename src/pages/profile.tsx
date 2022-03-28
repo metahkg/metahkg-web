@@ -117,6 +117,7 @@ export default function Profile() {
         .catch((err: AxiosError) => {
           setNotification({ open: true, text: err?.response?.data?.error });
           err?.response?.status === 404 && navigate("/404", { replace: true });
+          err?.response?.status === 401 && navigate("/401", { replace: true });
         });
     }
   }, [navigate, params.id, setNotification]);

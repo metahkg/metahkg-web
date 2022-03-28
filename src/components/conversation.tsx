@@ -121,6 +121,7 @@ function Conversation(props: { id: number }) {
         text: err?.response?.data?.error || err?.response?.data || "",
       });
     err?.response?.status === 404 && navigate("/404", { replace: true });
+    err?.response?.status === 401 && navigate("/401", { replace: true });
   };
   !query.page &&
     !query.c &&
@@ -248,7 +249,7 @@ function Conversation(props: { id: number }) {
           setConversation(conversation);
           setTimeout(() => {
             document.getElementById(`c${res.data?.[0]?.id}`)?.scrollIntoView();
-          }, 100);
+          }, 1);
           conversation.length % 25 && setEnd(true);
         } else {
           for (let i = 0; i < res.data.length; i++)
@@ -349,7 +350,7 @@ function Conversation(props: { id: number }) {
     setCPage(lastpage);
     setTimeout(() => {
       document.getElementById(`c${query.c}`)?.scrollIntoView();
-    }, 100);
+    }, 1);
   }
   const [width] = useWidth();
   const numofpages = roundup((details.c || 0) / 25);
