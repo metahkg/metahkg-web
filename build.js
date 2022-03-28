@@ -3,7 +3,6 @@ const system = require("system-commands");
 const { MongoClient } = require("mongodb");
 const fs = require("fs");
 const { exit } = require("process");
-const isInteger = require("is-sn-integer");
 const mongouri = process.env.DB_URI;
 async function build() {
   const start = performance.now();
@@ -15,6 +14,7 @@ async function build() {
     .collection("category")
     .find()
     .project({ _id: 0 })
+    .sort({ id: 1 })
     .toArray();
   if (!categories.length) {
     console.error(
