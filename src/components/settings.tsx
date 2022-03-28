@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Box, Switch } from "@mui/material";
 import { PopUp } from "../lib/popup";
 import { useSettings } from "./ContextProvider";
+import { IOSSwitch } from "../lib/switch";
 export default function Settings(props: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +31,7 @@ export default function Settings(props: {
         {settingItems.map((item) => (
           <div className="flex justify-space-between align-center fullwidth">
             <p className="nomargin">{item.title}</p>
-            <Switch
+            <IOSSwitch
               color="secondary"
               checked={item.checked}
               onChange={item.action}
