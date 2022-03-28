@@ -139,7 +139,7 @@ export default function SideBar() {
           ].map((cats: { id: number; name: string; hidden?: boolean }[], index) => (
             <div>
               {cats && (
-                <div className={`m20${localStorage.user ? " mb10" : ""}${index ? " mt0" : ""}`}>
+                <div className={`m20${localStorage.user && !index ? " mb10" : ""}${index ? " mt0" : ""}`}>
                   {cats.map((category) => (
                     <Link
                       className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
