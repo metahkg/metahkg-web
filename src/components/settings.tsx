@@ -29,7 +29,7 @@ export default function Settings(props: {
     <PopUp title="Settings" open={open} setOpen={setOpen}>
       <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
         {settingItems.map((item) => (
-          <div className="flex justify-space-between align-center fullwidth">
+          <div className="flex justify-space-between align-center fullwidth mt4 mb4">
             <p className="nomargin">{item.title}</p>
             <IOSSwitch
               color="secondary"

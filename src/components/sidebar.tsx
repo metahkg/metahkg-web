@@ -78,14 +78,14 @@ export default function SideBar() {
           <div className="fullwidth">
             <List className="fullwidth">
               <a
-                href="https://war.ukraine.ua/donate/"
+                href="https://war.ukraine.ua/support-ukraine/"
                 className="notextdecoration white"
               >
                 <ListItem button onClick={onClick}>
                   <ListItemIcon>
                     <MetahkgLogo height={24} width={30} ua />
                   </ListItemIcon>
-                  <ListItemText>Donate to Ukraine</ListItemText>
+                  <ListItemText>Support Ukraine</ListItemText>
                 </ListItem>
               </a>
             </List>

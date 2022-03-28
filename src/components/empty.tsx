@@ -57,13 +57,13 @@ export default function Empty() {
         <List>
           <a
             className="notextdecoration white"
-            href="https://war.ukraine.ua/donate"
+            href="https://war.ukraine.ua/support-ukraine/"
           >
             <ListItem button className="fullwidth">
               <ListItemIcon>
                 <MetahkgLogo ua height={24} width={30} />
               </ListItemIcon>
-              <ListItemText>Donate to Ukraine</ListItemText>
+              <ListItemText>Support Ukraine</ListItemText>
             </ListItem>
           </a>
           <Link
