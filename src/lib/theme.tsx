@@ -22,11 +22,11 @@ export default function Theme(props: any) {
     typography: {
       fontFamily: [
         "Segoe UI",
+        "Open Sans",
         "Helvetica Neue",
         "Helvetica",
-        "Tahoma",
-        "Geneva",
-        "Verdana",
+        "Arial",
+        "Microsoft JhengHei",
         "sans-serif",
       ].join(","),
     },
