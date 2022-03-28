@@ -23,16 +23,6 @@ async function build() {
     exit(1);
   }
   console.log(`retrieved ${categories.length} categories.`);
-  const c = {};
-  for (const i of categories) {
-    if (!i.name || !isInteger(i.id) || typeof i.name !== "string") {
-      console.error(
-        "Format error. Please make sure the documents are in the format {id: integer, name: string}"
-      );
-      exit(1);
-    }
-    c[i.id] = i.name;
-  }
   fs.readFile(".env", "utf8", (err, data) => {
     if (err) {
       console.error(err);
@@ -42,7 +32,7 @@ async function build() {
     d.forEach((i, index) => {
       i.startsWith("REACT_APP_categories") && d.splice(index, 1);
     });
-    d.push(`REACT_APP_categories=${JSON.stringify(c)}`);
+    d.push(`REACT_APP_categories=${JSON.stringify(categories)}`);
     console.log("writing REACT_APP_categories to .env...");
     fs.writeFile(".env", d.join("\n"), async (err) => {
       if (err) {

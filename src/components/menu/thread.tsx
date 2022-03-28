@@ -92,7 +92,7 @@ export default function MenuThread(props: {
                 className="nomargin nopadding notexttransform menuthread-catbtn"
               >
                 <p className="nomargin font-size-12 menuthread-catname">
-                  {categories?.[thread.category]}
+                  {categories.find((i) => i.id === thread.category)?.name}
                 </p>
               </Button>
             </Link>

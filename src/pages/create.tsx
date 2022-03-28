@@ -50,7 +50,7 @@ function ChooseCat(props: {
   };
   return (
     <div>
-      {Object.keys(categories).length && (
+      {categories.length && (
         <FormControl className="create-choosecat-form">
           <InputLabel color="secondary">Category</InputLabel>
           <Select
@@ -59,8 +59,8 @@ function ChooseCat(props: {
             label="Category"
             onChange={changeHandler}
           >
-            {Object.entries(categories).map((d: [string, any]) => (
-              <MenuItem value={Number(d[0])}>{d[1]}</MenuItem>
+            {categories.map((category) => (
+              <MenuItem value={category.id}>{category.name}</MenuItem>
             ))}
           </Select>
         </FormControl>

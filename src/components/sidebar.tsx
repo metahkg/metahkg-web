@@ -134,19 +134,19 @@ export default function SideBar() {
           </List>
           <Divider />
           <div className="m20">
-            {Object.entries(categories).map((category: any) => (
+            {categories.map((category) => (
               <Link
                 className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
-                to={`/category/${category[0]}`}
+                to={`/category/${category.id}`}
                 style={{
                   color:
-                    cat === Number(category[0]) && !(profile || search)
+                    cat === category.id && !(profile || search)
                       ? "#fbc308"
                       : "white",
                 }}
                 onClick={onClick}
               >
-                {category[1]}
+                {category.name}
               </Link>
             ))}
           </div>
