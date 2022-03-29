@@ -13,15 +13,17 @@ import {
   InputLabel,
   Alert,
   SelectChangeEvent,
+  IconButton,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { useMenu } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { checkpwd, severity } from "../lib/common";
 import MetahkgLogo from "../components/logo";
-import { HowToReg } from "@mui/icons-material";
+import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import queryString from "query-string";
 declare const grecaptcha: { reset: () => void };
 /**
  * Sex selector
@@ -82,6 +84,8 @@ export default function Register() {
     text: "",
   });
   const [menu, setMenu] = useMenu();
+  const query = queryString.parse(window.location.search);
+  const navigate = useNavigate();
   function register() {
     setAlert({ severity: "info", text: "Registering..." });
     setDisabled(true);
@@ -158,6 +162,17 @@ export default function Register() {
         }}
       >
         <div className="m40">
+          {query.returnto && (
+            <div className="flex align-center justify-flex-end">
+              <IconButton
+                onClick={() => {
+                  navigate(String(query.returnto));
+                }}
+              >
+                <Close />
+              </IconButton>
+            </div>
+          )}
           <div className="flex justify-center align-center">
             <MetahkgLogo svg light height={50} width={40} className="mb10" />
             <h1 className="font-size-25 mb20 nohmargin">Register</h1>

@@ -190,7 +190,7 @@ function Conversation(props: { id: number }) {
         res.data.forEach((item: { image: string }) => {
           images.push({
             original: item.image,
-            thumbnail: `https://i.wcyat.me/thumbnail?src=${encodeURIComponent(
+            thumbnail: `https://i.metahkg.org/thumbnail?src=${encodeURIComponent(
               item.image
             )}`,
           });

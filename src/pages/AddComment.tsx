@@ -199,7 +199,7 @@ export default function AddComment() {
                   arrow
                   title={
                     <img
-                      src={`https://i.wcyat.me/thumbnail?src=${imgurl}`}
+                      src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
                       alt=""
                     />
                   }
