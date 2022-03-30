@@ -46,6 +46,7 @@ function DataTable(props: {
     admin?: boolean;
     createdAt: string;
   };
+  setUser: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const [width] = useWidth();
   const [, setNotification] = useNotification();
@@ -101,10 +102,12 @@ function DataTable(props: {
   ];
   function editprofile() {
     setSaveDisabled(true);
+    setNotification({ open: true, text: "Saving..." });
     axios
       .post("/api/account/editprofile", { user: name, sex: sex })
       .then((res) => {
         setSaveDisabled(false);
+        props.setUser({});
         setNotification({ open: true, text: res.data?.response });
       })
       .catch((err) => {
@@ -148,7 +151,7 @@ function DataTable(props: {
       </TableContainer>
       {params.id === "self" && (
         <Button
-          className="mt10 mb10"
+          className="mt20 mb10"
           variant="contained"
           disabled={
             saveDisabled || (name === props.user.user && sex === props.user.sex)
@@ -185,7 +188,10 @@ export default function Profile() {
   const navigate = useNavigate();
   /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
   useEffect(() => {
-    if (!(params.id === "self" && !localStorage.user)) {
+    if (
+      !(params.id === "self" && !localStorage.user) &&
+      !Object.keys(user).length
+    ) {
       axios
         .get(`/api/profile/${Number(params.id) || "self"}`)
         .then((res) => {
@@ -198,7 +204,8 @@ export default function Profile() {
           err?.response?.status === 401 && navigate("/401", { replace: true });
         });
     }
-  }, [navigate, params.id, setNotification]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id, user]);
   /**
    * Clear the data and reset the title and selected index.
    */
@@ -301,7 +308,7 @@ export default function Profile() {
                 </div>
               </Box>
               <Box className="flex mt20 mb10 fullwidth font justify-center">
-                <DataTable user={user} />
+                <DataTable setUser={setUser} user={user} />
               </Box>
               {width < 760 && (
                 <div className="mt20">
