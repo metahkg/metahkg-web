@@ -2,7 +2,7 @@
   "name": "metahkg-web",
   "homepage": "https://metahkg.org",
   "repository": "https://github.com/metahkg/metahkg-web",
-  "version": "0.5.8rc1",
+  "version": "0.5.8rc2",
   "author": "wcyat",
   "license": "AGPL-3.0-or-later",
   "keywords": [

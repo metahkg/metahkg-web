@@ -4,12 +4,15 @@ import {
   Box,
   Button,
   LinearProgress,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  TextField,
 } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
@@ -33,6 +36,7 @@ import {
   useNotification,
   useWidth,
 } from "../components/ContextProvider";
+import { Save } from "@mui/icons-material";
 /* It's a function that returns a table with the user's information. */
 function DataTable(props: {
   user: {
@@ -44,45 +48,119 @@ function DataTable(props: {
   };
 }) {
   const [width] = useWidth();
-  const tablerows = ["Name", "Posts", "Sex", "Admin", "Joined"];
+  const [, setNotification] = useNotification();
+  const [name, setName] = useState(props.user.user);
+  const [sex, setSex] = useState<"M" | "F">(props.user.sex);
+  const [saveDisabled, setSaveDisabled] = useState(false);
+  const params = useParams();
   const items = [
-    props.user.user,
-    props.user.count,
-    props.user.sex === "M" ? "male" : "female",
-    props.user?.admin ? "yes" : "no",
-    `${timetoword_long(props.user.createdAt)} ago`,
+    {
+      title: "Name",
+      content:
+        params.id === "self" ? (
+          <TextField
+            variant="standard"
+            color="secondary"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+        ) : (
+          props.user.user
+        ),
+    },
+    {
+      title: "Posts",
+      content: props.user.count,
+    },
+    {
+      title: "Sex",
+      content:
+        params.id === "self" ? (
+          <Select
+            variant="standard"
+            value={sex}
+            onChange={(e) => {
+              // @ts-ignore
+              setSex(e.target.value);
+            }}
+          >
+            <MenuItem value="M">Male</MenuItem>
+            <MenuItem value="F">Female</MenuItem>
+          </Select>
+        ) : (
+          props.user.sex
+        ),
+    },
+    { title: "Admin", content: props.user.admin ? "yes" : "no" },
+    {
+      title: "Joined",
+      content: `${timetoword_long(props.user.createdAt)} ago`,
+    },
   ];
+  function editprofile() {
+    setSaveDisabled(true);
+    axios
+      .post("/api/account/editprofile", { user: name, sex: sex })
+      .then((res) => {
+        setSaveDisabled(false);
+        setNotification({ open: true, text: res.data?.response });
+      })
+      .catch((err) => {
+        setSaveDisabled(false);
+        setNotification({
+          open: true,
+          text: err.response?.data?.error || err.response?.data || "",
+        });
+      });
+  }
   return (
-    <TableContainer
-      sx={{ maxWidth: width < 760 ? "100%" : "70%" }}
-      className="ml50 mr50"
-      component={Paper}
+    <div
+      className="ml50 mr50 fullwidth"
+      style={{ maxWidth: width < 760 ? "100%" : "70%" }}
     >
-      <Table className="fullwidth" aria-label="simple table">
-        <TableBody>
-          {items.map((item, index) => (
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell
-                component="th"
-                scope="row"
-                className="font-size-16-force"
+      <TableContainer className="fullwidth" component={Paper}>
+        <Table className="fullwidth" aria-label="simple table">
+          <TableBody>
+            {items.map((item, index) => (
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                {tablerows[index]}
-              </TableCell>
-              <TableCell
-                component="th"
-                scope="row"
-                className="font-size-16-force"
-              >
-                {item}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className="font-size-16-force"
+                >
+                  {item.title}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className="font-size-16-force"
+                >
+                  {item.content}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {params.id === "self" && (
+        <Button
+          className="mt10 mb10"
+          variant="contained"
+          disabled={
+            saveDisabled || (name === props.user.user && sex === props.user.sex)
+          }
+          color="secondary"
+          onClick={editprofile}
+        >
+          <Save />
+          Save
+        </Button>
+      )}
+    </div>
   );
 }
 /**
@@ -155,7 +233,7 @@ export default function Profile() {
           <Paper className="nobgimage max-height-fullvh overflow-auto">
             <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
               <Box
-                className="flex justify-center align-center max-width-full mt10"
+                className="flex justify-center align-center max-width-full mt20"
                 sx={{
                   width: width < 760 ? "100vw" : "70vw",
                 }}

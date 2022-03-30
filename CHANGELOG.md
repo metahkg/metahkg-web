@@ -97,3 +97,9 @@ node server/migrate/migratetov0.5.2.js
 ## v0.5.8rc1
 
 - image gallery
+- vote bar (opt in)
+
+## v0.5.8rc2
+
+- change username / sex
+- hidden categories
