@@ -28,7 +28,6 @@ export default function UploadImage(props: {
             onChange={(e) => {
               onUpload && onUpload();
               const formData = new FormData();
-              console.log(e?.target?.files?.[0])
               formData.append("image", e?.target?.files?.[0] || "");
               axios
                 .post("https://api.na.cx/upload", formData, {

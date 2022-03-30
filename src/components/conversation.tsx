@@ -323,7 +323,6 @@ function Conversation(props: { id: number }) {
               arr.filter((i) => Boolean(i))
             )
         ) + 1;
-      console.log(currentcomment);
       if (history[index]?.cid !== currentcomment) {
         history[index].cid = currentcomment;
         setHistory(history);
