@@ -63,7 +63,7 @@ export default function TextEditor(props: {
           { text: "C++", value: "cpp" },
         ],
         autosave_ask_before_unload: true,
-        autosave_interval: "30s",
+        autosave_interval: "10s",
         autosave_prefix: "{path}{query}-{id}-",
         autosave_restore_when_empty: false,
         autosave_retention: "2m",
