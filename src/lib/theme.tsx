@@ -1,4 +1,5 @@
 import React from "react";
+import { PaletteColorOptions } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface Theme {
@@ -12,7 +13,11 @@ declare module "@mui/material/styles" {
     };
   }
 }
-export default function Theme(props: any) {
+export default function Theme(props: {
+  primary?: PaletteColorOptions;
+  secondary?: PaletteColorOptions;
+  children: JSX.Element | JSX.Element[];
+}) {
   const theme = createTheme({
     palette: {
       mode: "dark",

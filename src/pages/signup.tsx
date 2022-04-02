@@ -47,7 +47,7 @@ function SexSelect(props: {
         color="secondary"
         disabled={disabled}
         value={sex}
-        label="Sex"
+        label="Gender"
         onChange={onChange}
       >
         <MenuItem value={1}>Male</MenuItem>

@@ -76,7 +76,7 @@ function DataTable(props: {
       content: props.user.count,
     },
     {
-      title: "Sex",
+      title: "Gender",
       content:
         params.id === "self" ? (
           <Select
