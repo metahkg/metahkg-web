@@ -213,7 +213,7 @@ export default function Profile() {
                         onError={(err) => {
                           setNotification({
                             open: true,
-                            text: `Upload failed: ${err.response.data}`,
+                            text: `Upload failed: ${err.response?.data?.error || err.response?.data || ""}`,
                           });
                         }}
                       />
