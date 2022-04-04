@@ -246,10 +246,7 @@ export default function Profile() {
                 }}
               >
                 <img
-                  src={
-                    user?.avatar ||
-                    "https://metahkg.s3.amazonaws.com/avatars/noavatar.png"
-                  }
+                  src={`/api/avatars/${user.id}`}
                   alt="User avatar"
                   height={width < 760 ? 150 : 200}
                   width={width < 760 ? 150 : 200}
@@ -299,7 +296,11 @@ export default function Profile() {
                         onError={(err) => {
                           setNotification({
                             open: true,
-                            text: `Upload failed: ${err.response?.data?.error || err.response?.data || ""}`,
+                            text: `Upload failed: ${
+                              err.response?.data?.error ||
+                              err.response?.data ||
+                              ""
+                            }`,
                           });
                         }}
                       />
