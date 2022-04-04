@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableRow,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
@@ -91,7 +92,7 @@ function DataTable(props: {
             <MenuItem value="F">Female</MenuItem>
           </Select>
         ) : (
-          props.user.sex
+          { M: "male", F: "female" }[props.user.sex] || ""
         ),
     },
     { title: "Admin", content: props.user.admin ? "yes" : "no" },
@@ -150,18 +151,21 @@ function DataTable(props: {
         </Table>
       </TableContainer>
       {params.id === "self" && (
-        <Button
-          className="mt20 mb10"
-          variant="contained"
-          disabled={
-            saveDisabled || (name === props.user.user && sex === props.user.sex)
-          }
-          color="secondary"
-          onClick={editprofile}
-        >
-          <Save />
-          Save
-        </Button>
+        <Tooltip title="jpg / png / svg supported">
+          <Button
+            className="mt20 mb10"
+            variant="contained"
+            disabled={
+              saveDisabled ||
+              (name === props.user.user && sex === props.user.sex)
+            }
+            color="secondary"
+            onClick={editprofile}
+          >
+            <Save />
+            Save
+          </Button>
+        </Tooltip>
       )}
     </div>
   );
