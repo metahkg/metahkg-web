@@ -1,5 +1,8 @@
 import { parse } from "node-html-parser";
 import DOMPurify from "dompurify";
+import { DOMNode, domToReact } from "html-react-parser";
+import YouTube from "react-youtube";
+import React from "react";
 /**
  * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
  * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
@@ -11,13 +14,6 @@ export function modifycomment(comment: string) {
   let parsed = parse(comment);
   // eslint-disable-next-line no-loop-func
   parsed.querySelectorAll("a").forEach((item) => {
-    const href = item.getAttribute("href");
-    if (
-      href?.startsWith("https://www.youtube.com/") ||
-      href?.startsWith("https://youtu.be")
-    ) {
-      addyoutube(item);
-    }
     linkinnewtab(item);
   });
   parsed.querySelectorAll("img").forEach((item) => {
@@ -27,34 +23,34 @@ export function modifycomment(comment: string) {
   });
   return parsed.toString();
 }
-/**
- * It takes a link to a YouTube video and inserts an iframe with the video embedded
- * @param item - The node that contains the link to the YouTube video.
- * @returns A string
- */
-function addyoutube(item: import("node-html-parser/dist/nodes/html").default) {
-  try {
-    const youtubeurl = new URL(String(item.getAttribute("href")));
-    const videoId =
-      youtubeurl.origin === "https://youtu.be"
-        ? youtubeurl.pathname.replace("/", "")
-        : youtubeurl.searchParams.get("v");
-    if (!videoId) return;
-    item.insertAdjacentHTML(
-      "beforebegin",
-      `<iframe 
-      width="${window.innerWidth < 760 ? "100%" : "60%"}"
-      height="auto"
-      style="aspect-ratio: 16/9;"
-      src="https://www.youtube.com/embed/${videoId}?enablejsapi=1"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  <br/>`
-    );
-  } catch {}
+export function replace(domNode: DOMNode) {
+  if (
+    //@ts-ignore
+    domNode.name === "a"
+  ) {
+    //@ts-ignore
+    const href: string = domNode.attribs?.href;
+    if (
+      href.startsWith("https://www.youtube.com") ||
+      href.startsWith("https://youtu.be")
+    ) {
+      console.log(domNode);
+      try {
+        const url = new URL(href);
+        const videoId = href.startsWith("https://youtu.be")
+          ? url.pathname.replace("/", "")
+          : url.searchParams.get("v");
+        if (videoId) {
+          return (
+            <div>
+              <YouTube videoId={videoId} />
+              {domToReact([domNode])}
+            </div>
+          );
+        }
+      } catch {}
+    }
+  }
 }
 /**
  * It takes an HTML node and

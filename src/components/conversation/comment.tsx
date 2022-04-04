@@ -19,7 +19,7 @@ import MoreList from "./more";
 import { isMobile } from "react-device-detect";
 import { useTid, useTitle, useStory } from "../conversation";
 import parse from "html-react-parser";
-import { modifycomment } from "../../lib/modifycomments";
+import { modifycomment, replace } from "../../lib/modifycomments";
 import VoteButtons from "./votebuttons";
 import { timetoword } from "../../lib/common";
 /**
@@ -253,7 +253,9 @@ function Comment(props: {
       <div className="ml20 mr20">
         <Tag>{name}</Tag>
         <p className="novmargin comment-body break-word-force">
-          {parse(modifycomment(children))}
+          {parse(modifycomment(children), {
+            replace: replace,
+          })}
         </p>
         <div className="comment-internal-spacer" />
       </div>

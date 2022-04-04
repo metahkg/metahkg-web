@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
+    "@personio/html-sanitizer": "^1.0.0",
     "@tinymce/tinymce-react": "^3.13.1",
     "axios": "^0.26.0",
     "date-and-time": "^2.2.1",
@@ -36,7 +37,7 @@
     "react-image-gallery": "^1.2.7",
     "react-router-dom": "^6.2.2",
     "react-visibility-detector": "^1.1.1",
-    "sanitize-html": "^2.7.0"
+    "react-youtube": "^7.14.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
