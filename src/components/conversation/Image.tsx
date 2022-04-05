@@ -1,7 +1,8 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import Spinner from "react-spinner-material";
 import { useImage } from "react-image";
 import { CSSstring } from "../../lib/cssstring";
+import ImageErrorBoundary from "../errorboundary";
 function ImgComponent(props: {
   src: string;
   height?: string;
@@ -30,12 +31,16 @@ export default function Img(props: {
     <Suspense
       fallback={<Spinner radius={60} color="gray" stroke={2} visible={true} />}
     >
-      <ImgComponent
+      <ImageErrorBoundary
         src={props.src}
-        height={props.height}
-        width={props.width}
-        style={props.style}
-      />
+      >
+        <ImgComponent
+          src={props.src}
+          height={props.height}
+          width={props.width}
+          style={props.style}
+        />
+      </ImageErrorBoundary>
     </Suspense>
   );
 }

@@ -47,6 +47,9 @@
 .display-none {
   display: none;
 }
+.display-inline-block {
+  display: inline-block;
+}
 .icon-white-onhover:hover {
   color: white !important;
 }
