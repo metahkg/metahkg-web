@@ -41,10 +41,10 @@ export default function Youtube(props: { videoId: string }) {
     },
   ];
   return (
-    <div>
+    <div className="mb5">
       {play && (
         <Box
-          width={window.innerWidth < 760 ? "100%" : "60%"}
+          width={window.innerWidth < 760 ? "100%" : "65%"}
           sx={{ bgcolor: "#333", height: 30 }}
           className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
         >
@@ -66,7 +66,7 @@ export default function Youtube(props: { videoId: string }) {
       )}
       <ReactPlayer
         ref={player}
-        width={window.innerWidth < 760 ? "100%" : "60%"}
+        width={window.innerWidth < 760 ? "100%" : "65%"}
         height="auto"
         style={{ aspectRatio: "16/9" }}
         stopOnUnmount={false}
