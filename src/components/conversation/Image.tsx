@@ -39,7 +39,7 @@ export default function Image(props: {
           className="mt5 mb5"
           radius={50}
           color="gray"
-          stroke={2}
+          stroke={3}
           visible={true}
         />
       }

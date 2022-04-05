@@ -30,7 +30,7 @@
     "node-html-parser": "^5.3.3",
     "prismjs": "^1.27.0",
     "query-string": "^7.1.1",
-    "react": "^17.0.2",
+    "react": "^18.0.0",
     "react-cool-img": "^1.2.12",
     "react-device-detect": "^2.1.2",
     "react-dom": "^18.0.0",

@@ -16,7 +16,7 @@ export default class ImageErrorBoundary extends React.Component<{
           arrow
           title={
             <a href={src} target="_blank" rel="noreferrer">
-              src
+              {src}
             </a>
           }
         >
