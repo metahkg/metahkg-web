@@ -7439,6 +7439,11 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
+react-cool-img@^1.2.12:
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/react-cool-img/-/react-cool-img-1.2.12.tgz#b7a65053d5e234417afeb0791ce650783ebf80db"
+  integrity sha512-HambbjVszVVCNAEps+wReo9znzhgpq/72DCRvz4ahKkubEUV/ij0WH3RCQ37rcAPezhchpH75VutDE/ENgWegA==
+
 react-dev-utils@^12.0.0:
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-12.0.0.tgz#4eab12cdb95692a077616770b5988f0adf806526"
@@ -7521,6 +7526,11 @@ react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-photo-view@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-photo-view/-/react-photo-view-1.0.0.tgz#bfbe01c15ea66bfb7d578f9725df5aba5de4fe0f"
+  integrity sha512-OSy2PRYqGT4ho6vC4Tq/hDrt6Y+FPcbY2M2LXd7waxSBVXjFuuCDK20NVlgs0y+oYT38NsMIRKKyrwTBoIMIcg==
 
 react-player@^2.10.0:
   version "2.10.0"

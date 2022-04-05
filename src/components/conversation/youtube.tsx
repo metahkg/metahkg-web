@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { useRef, useState } from "react";
 import ReactPlayer from "react-player/youtube";
 import {
@@ -14,41 +14,56 @@ export default function Youtube(props: { videoId: string }) {
   const [play, setPlay] = useState(false);
   const player = useRef<ReactPlayer>(null);
   const { videoId } = props;
+  const videourl = `https://www.youtube.com/watch?v=${videoId}`;
+  const buttons = [
+    {
+      title: "Full Screen (press ESC/F11 to exit)",
+      icon: <Fullscreen className="font-size-18-force" />,
+      onClick: () => {
+        //@ts-ignore
+        screenfull.request(findDOMNode(player.current));
+      },
+    },
+    {
+      title: "Picture in Picture",
+      icon: <PictureInPictureAlt className="font-size-16-force" />,
+      onClick: () => {
+        setPip(!pip);
+      },
+      hidden: !ReactPlayer.canEnablePIP(videourl),
+    },
+    {
+      title: "Close",
+      icon: <Close className="font-size-16-force" />,
+      onClick: () => {
+        setPlay(false);
+      },
+    },
+  ];
   return (
     <div>
+      {play && (
         <Box
-          sx={{ bgcolor: "primary.light", height: 20 }}
-          className="metahkg-grey justify-space-between"
+          width={window.innerWidth < 760 ? "100%" : "60%"}
+          sx={{ bgcolor: "#333", height: 30 }}
+          className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
         >
-          <div className="flex">
-            <YouTubeIcon />
-            <p>Youtube</p>
+          <div className="flex align-center ml10">
+            <YouTubeIcon className="font-size-18-force" />
+            <p className="novmargin ml5">Youtube</p>
           </div>
-          <div className="flex">
-            <IconButton
-              onClick={() => {
-                // @ts-ignore
-                screenfull.request(findDOMNode(player));
-              }}
-            >
-              <Fullscreen />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                setPip(true);
-              }}
-            >
-              <PictureInPictureAlt />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                setPlay(false);
-              }}
-            >
-              <Close />
-            </IconButton>
+          <div className="flex align-center mr5">
+            {buttons.map(
+              (btn) =>
+                !btn.hidden && (
+                  <Tooltip title={btn.title} arrow>
+                    <IconButton onClick={btn.onClick}>{btn.icon}</IconButton>
+                  </Tooltip>
+                )
+            )}
           </div>
         </Box>
+      )}
       <ReactPlayer
         ref={player}
         width={window.innerWidth < 760 ? "100%" : "60%"}
@@ -56,7 +71,7 @@ export default function Youtube(props: { videoId: string }) {
         style={{ aspectRatio: "16/9" }}
         stopOnUnmount={false}
         pip={pip}
-        url={`https://youtu.be/${videoId}`}
+        url={videourl}
         controls
         light={!play}
         onClickPreview={() => {
@@ -70,6 +85,7 @@ export default function Youtube(props: { videoId: string }) {
             alt=""
           />
         }
+        playing={play}
       />
     </div>
   );
