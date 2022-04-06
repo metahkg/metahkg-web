@@ -32,25 +32,23 @@ export default function Image(props: {
   width?: string;
   style?: string;
 }) {
+  const { height, style, width, src } = props;
   return (
     <Suspense
       fallback={
-        <Spinner
-          className="mt5 mb5"
-          radius={50}
-          color="gray"
-          stroke={3}
-          visible={true}
-        />
+        <a href={src} target="_blank" rel="noreferrer">
+          <Spinner
+            className="mt5 mb5"
+            radius={50}
+            color="gray"
+            stroke={3}
+            visible={true}
+          />
+        </a>
       }
     >
-      <ImageErrorBoundary src={props.src}>
-        <ImgComponent
-          src={props.src}
-          height={props.height}
-          width={props.width}
-          style={props.style}
-        />
+      <ImageErrorBoundary src={src}>
+        <ImgComponent src={src} height={height} width={width} style={style} />
       </ImageErrorBoundary>
     </Suspense>
   );

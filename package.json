@@ -14,7 +14,6 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
-    "@personio/html-sanitizer": "^1.0.0",
     "@tinymce/tinymce-react": "^3.13.1",
     "axios": "^0.26.0",
     "date-and-time": "^2.2.1",
