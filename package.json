@@ -41,6 +41,7 @@
     "react-player": "^2.10.0",
     "react-router-dom": "^6.2.2",
     "react-spinner-material": "^1.4.0",
+    "react-twitter-embed": "^4.0.4",
     "react-visibility-detector": "^1.1.1",
     "screenfull": "^6.0.1"
   },

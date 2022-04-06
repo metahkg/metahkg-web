@@ -4,6 +4,7 @@ import { domToReact } from "html-react-parser";
 import { Element } from "domhandler/lib/node";
 import Img from "../components/conversation/Image";
 import Player from "../components/conversation/player";
+import TweetEmbed from "../components/conversation/twitter";
 /**
  * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
  * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
@@ -56,6 +57,20 @@ export function replace(node: any): JSX.Element | void {
             {domToReact([node])}
           </div>
         );
+      } else if (
+        href.match(/https:\/\/(|mobile.)twitter.com\/\S+\/status\/\S+/i)
+      ) {
+        try {
+          const url = new URL(href);
+          const tweetid = url.pathname.split("/").pop();
+          if (tweetid)
+            return (
+              <div>
+                <TweetEmbed tweetId={tweetid} />
+                {domToReact([node])}
+              </div>
+            );
+        } catch {}
       }
       if (
         domNode.children?.length === 1 &&
