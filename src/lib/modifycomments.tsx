@@ -3,7 +3,7 @@ import DOMPurify from "dompurify";
 import { domToReact } from "html-react-parser";
 import { Element } from "domhandler/lib/node";
 import Img from "../components/conversation/Image";
-import Youtube from "../components/conversation/youtube";
+import Player from "../components/conversation/player";
 /**
  * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
  * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
@@ -45,25 +45,17 @@ export function replace(node: any): JSX.Element | void {
       const href: string = domNode.attribs?.href;
       if (
         [
-          "https://www.youtube.com",
-          "https://youtu.be",
-          "https://m.youtube.com",
-        ].some((item) => href.startsWith(item))
+          /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i,
+          /https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)/i,
+          /https:\/\/youtu.be\/\S{11}/i,
+        ].some((item) => href.match(item))
       ) {
-        try {
-          const url = new URL(href);
-          const videoId = href.startsWith("https://youtu.be")
-            ? url.pathname.replace("/", "")
-            : url.searchParams.get("v");
-          if (videoId) {
-            return (
-              <div>
-                <Youtube videoId={videoId} />
-                {domToReact([node])}
-              </div>
-            );
-          }
-        } catch {}
+        return (
+          <div>
+            <Player url={href} />
+            {domToReact([node])}
+          </div>
+        );
       }
       if (
         domNode.children?.length === 1 &&

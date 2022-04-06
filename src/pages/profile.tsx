@@ -50,6 +50,7 @@ function DataTable(props: {
   setUser: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const [width] = useWidth();
+  const [, setData] = useData();
   const [, setNotification] = useNotification();
   const [name, setName] = useState(props.user.user);
   const [sex, setSex] = useState<"M" | "F">(props.user.sex);
@@ -109,6 +110,7 @@ function DataTable(props: {
       .then((res) => {
         setSaveDisabled(false);
         props.setUser({});
+        setData([]);
         setNotification({ open: true, text: res.data?.response });
       })
       .catch((err) => {

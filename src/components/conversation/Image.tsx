@@ -3,7 +3,7 @@ import Img from "react-cool-img";
 import Spinner from "react-spinner-material";
 import { useImage } from "react-image";
 import { CSSstring } from "../../lib/cssstring";
-import ImageErrorBoundary from "../errorboundary";
+import ImageErrorBoundary from "./ImageErrorBoundary";
 import { PhotoView } from "react-photo-view";
 function ImgComponent(props: {
   src: string;

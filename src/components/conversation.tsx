@@ -2,7 +2,6 @@ import "./css/conversation.css";
 import React, {
   createContext,
   memo,
-  SetStateAction,
   useContext,
   useEffect,
   useRef,
@@ -46,8 +45,13 @@ import {
 } from "@mui/icons-material";
 import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
-import 'react-photo-view/dist/react-photo-view.css';
-const ConversationContext = createContext<any>(null);
+import "react-photo-view/dist/react-photo-view.css";
+const ConversationContext = createContext<{
+  story: [number, React.Dispatch<React.SetStateAction<number>>];
+  tid: number;
+  title?: string;
+  // @ts-ignore
+}>(null);
 type comment = {
   /** comment id */
   id: number;
@@ -435,109 +439,104 @@ function Conversation(props: { id: number }) {
         <Box className="fullwidth max-height-full max-width-full">
           <PhotoProvider>
             {ready &&
-              [...Array(pages)].map((p, index) => (
-                <Box>
-                  <VisibilityDetector
-                    onVisibilityChange={(isVisible) => {
-                      const croot = document.getElementById("croot");
-                      let page = roundup(conversation[0].id / 25) + index;
-                      if (isVisible) {
-                        lastHeight.current =
-                          croot?.scrollTop || lastHeight.current;
-                        if (page !== Number(query.page) && page) {
-                          navigate(`${window.location.pathname}?page=${page}`, {
-                            replace: true,
-                          });
-                          setCPage(page);
-                        }
-                      }
-                      if (!isVisible && conversation.length) {
-                        if (lastHeight.current !== croot?.scrollTop) {
-                          page =
-                            // @ts-ignore
-                            croot.scrollTop > lastHeight.current
-                              ? page
-                              : page - 1;
-                          if (
-                            lastHeight.current &&
-                            page !== Number(query.page) &&
-                            page
-                          ) {
+              [...Array(pages)].map((p, index) => {
+                const page = roundup(conversation[0].id / 25) + index;
+                const totalpages = roundup((details.c || 0) / 25);
+                return (
+                  <Box>
+                    <VisibilityDetector
+                      onVisibilityChange={(isVisible) => {
+                        const croot = document.getElementById("croot");
+                        let Page = page;
+                        if (isVisible) {
+                          lastHeight.current =
+                            croot?.scrollTop || lastHeight.current;
+                          if (Page !== Number(query.page) && Page) {
                             navigate(
-                              `${window.location.pathname}?page=${page}`,
+                              `${window.location.pathname}?page=${Page}`,
                               {
                                 replace: true,
                               }
                             );
-                            setCPage(page);
+                            setCPage(Page);
                           }
                         }
-                      }
-                    }}
-                  >
-                    <PageTop
-                      id={roundup(conversation[0].id / 25) + index}
-                      pages={roundup((details.c || 0) / 25)}
-                      page={roundup(conversation[0].id / 25) + index}
-                      onChange={(e: SelectChangeEvent<number>) => {
-                        changePage(Number(e.target.value));
+                        if (!isVisible && conversation.length) {
+                          if (lastHeight.current !== croot?.scrollTop) {
+                            Page =
+                              // @ts-ignore
+                              croot.scrollTop > lastHeight.current
+                                ? Page
+                                : Page - 1;
+                            if (
+                              lastHeight.current &&
+                              Page !== Number(query.page) &&
+                              Page
+                            ) {
+                              navigate(
+                                `${window.location.pathname}?page=${Page}`,
+                                {
+                                  replace: true,
+                                }
+                              );
+                              setCPage(Page);
+                            }
+                          }
+                        }
                       }}
-                      last={
-                        !(
-                          roundup(conversation[0].id / 25) + index === 1 &&
-                          !index
-                        )
-                      }
-                      next={
-                        roundup(conversation[0].id / 25) + index !==
-                        roundup((details.c || 0) / 25)
-                      }
-                      onLastClicked={() => {
-                        changePage(
-                          roundup(conversation[0].id / 25) + index - 1
-                        );
+                    >
+                      <PageTop
+                        id={page}
+                        pages={totalpages}
+                        page={page}
+                        onChange={(e: SelectChangeEvent<number>) => {
+                          changePage(Number(e.target.value));
+                        }}
+                        last={!(page === 1 && !index)}
+                        next={page !== totalpages}
+                        onLastClicked={() => {
+                          changePage(page - 1);
+                        }}
+                        onNextClicked={() => {
+                          changePage(page + 1);
+                        }}
+                      />
+                    </VisibilityDetector>
+                    <ConversationContext.Provider
+                      value={{
+                        story: [story, setStory],
+                        tid: id,
+                        title: details.title,
                       }}
-                      onNextClicked={() => {
-                        changePage(
-                          roundup(conversation[0].id / 25) + index + 1
-                        );
-                      }}
-                    />
-                  </VisibilityDetector>
-                  <ConversationContext.Provider
-                    value={{
-                      story: [story, setStory],
-                      tid: id,
-                      title: details.title,
-                    }}
-                  >
-                    {splitarray(
-                      conversation,
-                      index * 25,
-                      (index + 1) * 25 - 1
-                    ).map(
-                      (comment: any) =>
-                        !comment?.removed &&
-                        (story ? story === comment?.user : 1) && (
-                          <Comment
-                            name={users?.[comment?.user].name}
-                            id={comment.id}
-                            op={users?.[comment?.user].name === details.op}
-                            sex={users?.[comment?.user].sex}
-                            date={comment?.createdAt}
-                            up={comment?.["U"] | 0}
-                            down={comment?.["D"] | 0}
-                            vote={votes?.[comment.id]}
-                            userid={comment?.user}
-                            slink={comment?.slink}
-                          >
-                            {comment?.comment}
-                          </Comment>
-                        )
-                    )}
-                  </ConversationContext.Provider>
-                </Box>
-              ))}
+                    >
+                      {splitarray(
+                        conversation,
+                        index * 25,
+                        (index + 1) * 25 - 1
+                      ).map(
+                        (comment: any) =>
+                          !comment?.removed &&
+                          (story ? story === comment?.user : 1) && (
+                            <Comment
+                              name={users?.[comment?.user].name}
+                              id={comment.id}
+                              op={users?.[comment?.user].name === details.op}
+                              sex={users?.[comment?.user].sex}
+                              date={comment?.createdAt}
+                              up={comment?.["U"] | 0}
+                              down={comment?.["D"] | 0}
+                              vote={votes?.[comment.id]}
+                              userid={comment?.user}
+                              slink={comment?.slink}
+                            >
+                              {comment?.comment}
+                            </Comment>
+                          )
+                      )}
+                    </ConversationContext.Provider>
+                  </Box>
+                );
+              })}
           </PhotoProvider>
         </Box>
         <Box
@@ -566,15 +565,15 @@ function Conversation(props: { id: number }) {
     </div>
   );
 }
-export function useTid(): number {
+export function useTid() {
   const { tid } = useContext(ConversationContext);
   return tid;
 }
-export function useTitle(): string {
+export function useTitle() {
   const { title } = useContext(ConversationContext);
-  return title;
+  return title || "";
 }
-export function useStory(): [number, React.Dispatch<SetStateAction<number>>] {
+export function useStory() {
   const { story } = useContext(ConversationContext);
   return story;
 }

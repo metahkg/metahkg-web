@@ -127,12 +127,11 @@ function MainContent() {
     axios
       .get(url)
       .then((res) => {
-        const d: any = data;
         if (res.data?.[0] !== null) {
-          res.data.forEach((item: any) => {
-            d.push(item);
+          res.data.forEach((item: summary) => {
+            data.push(item);
           });
-          setData(d);
+          setData(data);
         }
         res.data.length < 25 && setEnd(true);
         setPage((page) => page + 1);

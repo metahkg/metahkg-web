@@ -1,20 +1,25 @@
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { useRef, useState } from "react";
-import ReactPlayer from "react-player/youtube";
+import ReactPlayer from "react-player";
 import {
   Close,
+  Facebook,
   Fullscreen,
   PictureInPictureAlt,
+  PlayCircleOutline,
   YouTube as YouTubeIcon,
 } from "@mui/icons-material";
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
-export default function Youtube(props: { videoId: string }) {
+export default function Player(props: { url: string }) {
   const [pip, setPip] = useState(false);
   const [play, setPlay] = useState(false);
   const player = useRef<ReactPlayer>(null);
-  const { videoId } = props;
-  const videourl = `https://www.youtube.com/watch?v=${videoId}`;
+  const { url } = props;
+  const mode =
+    (url.match(/https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i) &&
+      "facebook") ||
+    "youtube";
   const buttons = [
     {
       title: "Full Screen (press ESC/F11 to exit)",
@@ -30,7 +35,7 @@ export default function Youtube(props: { videoId: string }) {
       onClick: () => {
         setPip(!pip);
       },
-      hidden: !ReactPlayer.canEnablePIP(videourl),
+      hidden: !ReactPlayer.canEnablePIP(url),
     },
     {
       title: "Close",
@@ -49,8 +54,15 @@ export default function Youtube(props: { videoId: string }) {
           className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
         >
           <div className="flex align-center ml10">
-            <YouTubeIcon className="font-size-18-force" />
-            <p className="novmargin ml5">Youtube</p>
+            {
+              {
+                youtube: <YouTubeIcon className="font-size-18-force" />,
+                facebook: <Facebook className="font-size-18-force" />,
+              }[mode]
+            }
+            <p className="novmargin ml5">
+              {{ youtube: "Youtube", facebook: "Facebook" }[mode]}
+            </p>
           </div>
           <div className="flex align-center mr5">
             {buttons.map(
@@ -71,19 +83,24 @@ export default function Youtube(props: { videoId: string }) {
         style={{ aspectRatio: "16/9" }}
         stopOnUnmount={false}
         pip={pip}
-        url={videourl}
+        url={url}
         controls
         light={!play}
         onClickPreview={() => {
           setPlay(true);
         }}
         playIcon={
-          <img
-            width={80}
-            height={50}
-            src="/images/youtube/youtube.png"
-            alt=""
-          />
+          {
+            youtube: (
+              <img
+                width={80}
+                height={50}
+                src="/images/youtube/youtube.png"
+                alt=""
+              />
+            ),
+            facebook: <PlayCircleOutline className="font-size-50-force" />,
+          }[mode]
         }
         playing={play}
       />
