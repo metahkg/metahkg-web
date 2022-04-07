@@ -3,7 +3,7 @@ const system = require("system-commands");
 const { MongoClient } = require("mongodb");
 const fs = require("fs");
 const { exit } = require("process");
-const mongouri = process.env.DB_URI;
+const mongouri = process.env.DB_URI || "mongodb://localhost";
 async function build() {
   const start = performance.now();
   const client = new MongoClient(mongouri);

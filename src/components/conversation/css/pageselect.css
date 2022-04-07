@@ -1,26 +1,27 @@
 .pageselect-root {
-    position: absolute;
-    bottom: 60px;
-    right: 40px;
-    z-index: 10;
+  position: absolute;
+  bottom: 60px;
+  right: 40px;
+  z-index: 10;
 }
-.pageselect-top, .pageselect-bottom {
-    height: 40px;
-    width: 40px;
+.pageselect-top,
+.pageselect-bottom {
+  height: 40px;
+  width: 40px;
 }
 .pageselect-top {
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    height: 40px;
-    width: 50px;
-    background-color: #333;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  height: 40px;
+  width: 50px;
+  background-color: #333;
 }
 .pageselect-bottom {
-    border-bottom-left-radius: 50%;
-    border-bottom-right-radius: 50%;
-    background-color: #333;
-    height: 40px;
-    width: 50px;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: #333;
+  height: 40px;
+  width: 50px;
 }
 .pageselect-box {
   cursor: pointer;

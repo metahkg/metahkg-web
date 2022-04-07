@@ -33,7 +33,8 @@ export default function Category() {
   const [width] = useWidth();
   const [, setTitle] = useTitle();
   const [selected, setSelected] = useSelected();
-  document.title = categories.find(i => i.id === category)?.name + " | Metahkg";
+  document.title =
+    categories.find((i) => i.id === category)?.name + " | Metahkg";
   function cleardata() {
     setData([]);
     setTitle("");
@@ -41,7 +42,8 @@ export default function Category() {
   }
   back !== window.location.pathname && setBack(window.location.pathname);
   !menu && setMenu(true);
-  (category !== Number(params.category) || search || profile || recall) && cleardata();
+  (category !== Number(params.category) || search || profile || recall) &&
+    cleardata();
   category !== Number(params.category) && setCategory(Number(params.category));
   id && setId(0);
   search && setSearch(false);

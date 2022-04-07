@@ -10,7 +10,7 @@ import EmailValidator from "email-validator";
 import axios from "axios";
 import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
-declare const grecaptcha: {reset: () => void};
+declare const grecaptcha: { reset: () => void };
 export default function Verify() {
   const [menu, setMenu] = useMenu();
   const [, setNotification] = useNotification();
@@ -76,7 +76,9 @@ export default function Verify() {
         <div className="m40">
           <div className="flex justify-center align-center">
             <MetahkgLogo svg light height={50} width={40} className="mb10" />
-            <h1 className="font-size-25 mb20 nohmargin">Resend Verification Email</h1>
+            <h1 className="font-size-25 mb20 nohmargin">
+              Resend Verification Email
+            </h1>
           </div>
           {alert.text && (
             <Alert className="mb20" severity={alert.severity}>
@@ -112,7 +114,9 @@ export default function Verify() {
             />
             <Button
               variant="contained"
-              className={`font-size-16-force notexttransform${small ? " mt20" : ""}`}
+              className={`font-size-16-force notexttransform${
+                small ? " mt20" : ""
+              }`}
               color="secondary"
               onClick={resend}
               disabled={

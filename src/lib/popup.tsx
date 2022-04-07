@@ -16,10 +16,12 @@ export function PopUp(props: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   button?: { text: string; link: string };
   children: JSX.Element | JSX.Element[];
+  fullScreen?: boolean;
 }) {
   return (
     <Dialog
       open={props.open}
+      fullScreen={props.fullScreen}
       PaperProps={{
         sx: {
           backgroundImage: "none",

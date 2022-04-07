@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 /**
- * 401 page 
+ * 401 page
  */
 export default function Forbidden() {
   document.title = "401 Forbidden | Metahkg";

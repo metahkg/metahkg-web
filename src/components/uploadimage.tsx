@@ -39,8 +39,15 @@ export default function UploadImage(props: {
                 .catch(onError);
             }}
           />
-          <Button className="notexttransform" variant="contained" component="span">
-            <FileUpload className="mr5" /><Typography sx={{color: "secondary.main"}}>Upload Image</Typography>
+          <Button
+            className="notexttransform"
+            variant="contained"
+            component="span"
+          >
+            <FileUpload className="mr5" />
+            <Typography sx={{ color: "secondary.main" }}>
+              Upload Image
+            </Typography>
           </Button>
         </label>
       </form>

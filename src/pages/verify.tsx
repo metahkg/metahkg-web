@@ -19,8 +19,12 @@ export default function Verify() {
   });
   const [disabled, setDisabled] = useState(false);
   const query = queryString.parse(window.location.search);
-  const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
-  const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
+  const [email, setEmail] = useState(
+    decodeURIComponent(String(query.email || ""))
+  );
+  const [code, setCode] = useState(
+    decodeURIComponent(String(query.code || ""))
+  );
   const navigate = useNavigate();
   function verify() {
     setAlert({ severity: "info", text: "Verifying..." });
@@ -104,18 +108,24 @@ export default function Verify() {
               fullWidth
             />
           ))}
-          <h4><Link className="metahkg-yellow-force link" to="/resend">Resend verification email?</Link></h4>
+          <h4>
+            <Link className="metahkg-yellow-force link" to="/resend">
+              Resend verification email?
+            </Link>
+          </h4>
           <Button
             variant="contained"
             className="font-size-16-force notexttransform"
             color="secondary"
             onClick={verify}
-            disabled={disabled || !(email && code && EmailValidator.validate(email))}
+            disabled={
+              disabled || !(email && code && EmailValidator.validate(email))
+            }
           >
             <HowToReg className="mr5" />
             Verify
           </Button>
-          </div>
+        </div>
       </Box>
     </Box>
   );

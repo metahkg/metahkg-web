@@ -6,12 +6,6 @@ import Img from "../components/conversation/Image";
 import Player from "../components/conversation/player";
 import TweetEmbed from "../components/conversation/twitter";
 //import { LinkPreview } from "@dhaiwat10/react-link-preview";
-/**
- * It takes a string, parses it, and then looks for any links in the string. If it finds a link, it
- * checks if the link is a YouTube link. If it is, it adds a YouTube link to the page
- * @param {string} comment - The comment to modify.
- * @returns The modified comment.
- */
 export function modifycomment(comment: string) {
   comment = DOMPurify.sanitize(comment);
   let parsed = parse(comment);
@@ -72,6 +66,7 @@ export function replace(node: any): JSX.Element | void {
               </div>
             );
         }
+        // TODO: embed instagram and facebook
         // TODO: Link preview for specific websites
         /*else {
         return (

@@ -100,7 +100,7 @@ const VoteBar = React.memo<Props>((props) => {
               transform: vote === "U" ? "rotate(-15deg)" : "rotate(0deg)",
               transition: "all 0.2s ease-in-out",
               height: 15,
-              width: 15
+              width: 15,
             }}
           />
         </IconButton>
@@ -137,7 +137,7 @@ const VoteBar = React.memo<Props>((props) => {
               transform: vote === "D" ? "rotate(-15deg)" : "rotate(0deg)",
               transition: "all 0.2s ease-in-out",
               height: 15,
-              width: 15
+              width: 15,
             }}
           />
         </IconButton>

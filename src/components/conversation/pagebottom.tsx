@@ -5,7 +5,9 @@ import GitlabIcon from "../../lib/icons/gitlab";
 export default function PageBottom() {
   const socialicons = [
     {
-      icon: <GitlabIcon className="metahkg-grey-force" height={17} width={17} />,
+      icon: (
+        <GitlabIcon className="metahkg-grey-force" height={17} width={17} />
+      ),
       link: "https://gitlab.com/metahkg",
     },
     {

@@ -11,7 +11,7 @@ export default function Gab(props: {
   black?: boolean;
   color?: string;
   width?: number;
-  height?: number
+  height?: number;
 }) {
   const { white, black, color, width, height } = props;
   return (

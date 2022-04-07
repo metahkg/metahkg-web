@@ -54,7 +54,7 @@ export default function Signin() {
       .then((res) => {
         if (res.data.unverified) {
           navigate("/verify");
-          setNotification({ open: true, text: "Please verify your account."});
+          setNotification({ open: true, text: "Please verify your account." });
           return;
         }
         localStorage.user = res.data.user;
@@ -130,7 +130,11 @@ export default function Signin() {
               fullWidth
             />
           ))}
-          <h4><Link className="link metahkg-yellow-force" to="/verify">Verify / Resend verification email?</Link></h4>
+          <h4>
+            <Link className="link metahkg-yellow-force" to="/verify">
+              Verify / Resend verification email?
+            </Link>
+          </h4>
           <Button
             disabled={disabled || !(user && pwd)}
             className="font-size-16-force notexttransform signin-btn"

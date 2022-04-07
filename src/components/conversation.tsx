@@ -114,9 +114,7 @@ function Conversation(props: { id: number }) {
   const [shareTitle, setShareTitle] = useShareTitle();
   const [shareLink, setShareLink] = useShareLink();
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const [images, setImages] = useState<
-    { original: string; thumbnail: string }[]
-  >([]);
+  const [images, setImages] = useState<{ src: string }[]>([]);
   const [history, setHistory] = useHistory();
   const navigate = useNavigate();
   /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
@@ -195,10 +193,7 @@ function Conversation(props: { id: number }) {
       .then((res) => {
         res.data.forEach((item: { image: string }) => {
           images.push({
-            original: item.image,
-            thumbnail: `https://i.metahkg.org/thumbnail?src=${encodeURIComponent(
-              item.image
-            )}`,
+            src: item.image,
           });
         });
         res.data.length && setImages(images);

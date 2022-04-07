@@ -29,7 +29,7 @@ export default function VoteButtons(props: {
    * It sends a vote to the server.
    * @param {"U" | "D"} v - "U" | "D"
    */
-  function sendvote (v: "U" | "D") {
+  function sendvote(v: "U" | "D") {
     v === "U" ? setUp(up + 1) : setDown(down + 1);
     setVote(v);
     axios
@@ -46,46 +46,43 @@ export default function VoteButtons(props: {
           text: err?.response?.data?.error || err?.response?.data || "",
         });
       });
-  };
+  }
   return (
-      <ButtonGroup
-        variant="text"
-        className="vb-btn-group"
+    <ButtonGroup variant="text" className="vb-btn-group">
+      <Button
+        className="nopadding vb-btn vb-btn-left"
+        disabled={!localStorage.user || !!vote}
+        onClick={() => {
+          sendvote("U");
+        }}
       >
-        <Button
-          className="nopadding vb-btn vb-btn-left"
-          disabled={!localStorage.user || !!vote}
-          onClick={() => {
-            sendvote("U");
+        <Typography
+          className="flex"
+          sx={{
+            color: vote === "U" ? "green" : "#aaa",
           }}
         >
-          <Typography
-            className="flex"
-            sx={{
-              color: vote === "U" ? "green" : "#aaa",
-            }}
-          >
-            <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
-            {up}
-          </Typography>
-        </Button>
-        <Button
-          className="nopadding vb-btn vb-btn-right"
-          disabled={!localStorage.user || !!vote}
-          onClick={() => {
-            sendvote("D");
+          <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
+          {up}
+        </Typography>
+      </Button>
+      <Button
+        className="nopadding vb-btn vb-btn-right"
+        disabled={!localStorage.user || !!vote}
+        onClick={() => {
+          sendvote("D");
+        }}
+      >
+        <Typography
+          className="flex"
+          sx={{
+            color: vote === "D" ? "red" : "#aaa",
           }}
         >
-          <Typography
-            className="flex"
-            sx={{
-              color: vote === "D" ? "red" : "#aaa",
-            }}
-          >
-            <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />
-            {down}
-          </Typography>
-        </Button>
-      </ButtonGroup>
+          <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />
+          {down}
+        </Typography>
+      </Button>
+    </ButtonGroup>
   );
 }
