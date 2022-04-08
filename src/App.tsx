@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import "./css/App.css";
-import "./css/common.css";
-import "./css/fontsize.css";
-import "./css/margin.css";
 import Theme from "./lib/theme";
 import {
   BrowserRouter as Router,

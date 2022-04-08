@@ -1,3 +1,10 @@
+@import "~metahkg-css/dist/common.min.css";
+@import "~metahkg-css/dist/fontsize.min.css";
+@import "~metahkg-css/dist/margin.min.css";
+@import "~metahkg-css/dist/padding.min.css";
+@import "~metahkg-css/dist/colors.min.css";
+@import "~metahkg-css/dist/border-radius.min.css";
+
 *::-webkit-scrollbar {
   width: 5px;
 }

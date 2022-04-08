@@ -187,7 +187,6 @@ function MainContent() {
                     }
                   }}
                 />
-                <Divider />
               </div>
             ))}
             {updating && <MenuPreload />}

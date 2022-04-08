@@ -20,8 +20,10 @@ export default function TextEditor(props: {
       initialValue={text}
       init={{
         height: width < 760 ? 310 : 350,
-        skin_url: "/tinymce/skins/ui/metahkg-dark",
-        content_css: "/tinymce/skins/content/metahkg-dark/content.min.css",
+        skin_url:
+          "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/ui/metahkg-dark",
+        content_css:
+          "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/content/metahkg-dark/content.min.css",
         branding: false,
         mobile: {
           menubar: "file edit view insert format tools",
