@@ -1,0 +1,13 @@
+prettify:
+  image: node:latest
+  script:
+    - git checkout $CI_COMMIT_BRANCH
+    - npm install prettier
+    - npx prettier --check . || (npx prettier --write . && \
+      git config user.name wcyat-bot && \
+      git config user.email bot@wcyat.me && \
+      git commit -a -m prettify && \
+      git remote set-url origin https://wcyat:$gitlab_token@gitlab.com/metahkg/metahkg-web.git && \
+      git push origin $CI_COMMIT_BRANCH)
+  rules:
+    - if: $CI_COMMIT_AUTHOR != "wcyat-bot <bot@wcyat.me>"
