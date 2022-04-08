@@ -71,7 +71,7 @@ export default function TextEditor(props: {
         autosave_retention: "2m",
         image_advtab: true,
       }}
-      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.3/tinymce.min.js"
+      tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.0/tinymce.min.js"
     />
   );
 }
