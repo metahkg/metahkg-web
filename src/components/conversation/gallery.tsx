@@ -11,7 +11,6 @@ export default function Gallery(props: {
   const { open, setOpen, images } = props;
   const resizeBase = "https://i.metahkg.org/resize";
   const [width] = useWidth();
-  console.log(images);
   return (
     <PopUp title="Images" open={open} setOpen={setOpen} fullScreen>
       <Box sx={{ bgcolor: "primary.main" }}>
