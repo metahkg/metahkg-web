@@ -17,10 +17,15 @@ import {
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router";
-import { useMenu } from "../components/MenuProvider";
-import { useNotification, useWidth } from "../components/ContextProvider";
-import { checkpwd, severity } from "../lib/common";
-import MetahkgLogo from "../components/logo";
+import { useMenu } from "../../components/MenuProvider";
+import {
+  useNotification,
+  useSettings,
+  useWidth,
+} from "../../components/ContextProvider";
+import { checkpwd } from "../../lib/common";
+import { severity } from "../../types/severity";
+import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import queryString from "query-string";
@@ -57,7 +62,7 @@ function SexSelect(props: {
   );
 }
 /**
- * Register component for /register
+ * Register component for /users/register
  * initially 3 text fields and a Select list (Sex)
  * When verification is pending
  * (waiting for user to type verification code sent to their email address),
@@ -84,6 +89,7 @@ export default function Register() {
     text: "",
   });
   const [menu, setMenu] = useMenu();
+  const [settings] = useSettings();
   const query = queryString.parse(window.location.search);
   const navigate = useNavigate();
   function register() {
@@ -114,7 +120,7 @@ export default function Register() {
       }
     }
     axios
-      .post("/api/register", {
+      .post("/api/users/register", {
         email: email,
         user: user,
         pwd: hash.sha256().update(pwd).digest("hex"),
@@ -205,7 +211,11 @@ export default function Register() {
           <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
           <br />
           <h4>
-            <Link className="link metahkg-yellow-force" to="/verify">
+            <Link
+              style={{ color: settings.secondaryColor?.main }}
+              className="link"
+              to="/users/verify"
+            >
               Verify / Resend verification email?
             </Link>
           </h4>

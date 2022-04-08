@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useWidth } from "../components/ContextProvider";
-import MetahkgLogo from "../components/logo";
-import { severity } from "../lib/common";
-import { useMenu } from "../components/MenuProvider";
+import { useNotification, useWidth } from "../../components/ContextProvider";
+import MetahkgLogo from "../../components/logo";
+import { severity } from "../../types/severity";
+import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
@@ -28,7 +28,7 @@ export default function Verify() {
     setNotification({ open: true, text: "Requesting resend..." });
     setDisabled(true);
     axios
-      .post("/api/resend", {
+      .post("/api/users/resend", {
         email: email,
         rtoken: rtoken,
       })

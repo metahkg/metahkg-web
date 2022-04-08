@@ -1,10 +1,10 @@
 import React from "react";
 import { Alert, Box } from "@mui/material";
-import { useMenu } from "../components/MenuProvider";
+import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router";
-import { useNotification } from "../components/ContextProvider";
-import { logout } from "../lib/common";
+import { useNotification } from "../../components/ContextProvider";
+import { logout } from "../../lib/common";
 /**
  * Renders an alert while logging out.
  * @returns an info alert

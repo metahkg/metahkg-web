@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  Typography,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -147,17 +148,24 @@ export default function SideBar() {
                   >
                     {cats.map((category) => (
                       <Link
-                        className="font-size-16 sidebar-catlink notextdecoration text-align-left halfwidth"
                         to={`/category/${category.id}`}
-                        style={{
-                          color:
-                            cat === category.id && !(profile || search)
-                              ? "#fbc308"
-                              : "white",
-                        }}
-                        onClick={onClick}
+                        className="notextdecoration"
                       >
-                        {category.name}
+                        <Typography
+                          className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
+                          sx={(theme) => ({
+                            color:
+                              cat === category.id && !(profile || search)
+                                ? theme.palette.secondary.main
+                                : "white",
+                            "&:hover": {
+                              color: `${theme.palette.secondary.main} !important`,
+                            },
+                          })}
+                          onClick={onClick}
+                        >
+                          {category.name}
+                        </Typography>
                       </Link>
                     ))}
                   </div>

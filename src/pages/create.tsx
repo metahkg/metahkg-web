@@ -28,7 +28,8 @@ import {
   useTitle,
 } from "../components/MenuProvider";
 import { useNotification, useWidth } from "../components/ContextProvider";
-import { categories, severity, wholepath } from "../lib/common";
+import { categories, wholepath } from "../lib/common";
+import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
 declare const tinymce: any;
@@ -178,7 +179,7 @@ export default function Create() {
   if (!localStorage.user)
     return (
       <Navigate
-        to={`/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
+        to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
         replace
       />
     );

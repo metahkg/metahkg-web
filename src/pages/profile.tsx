@@ -106,7 +106,7 @@ function DataTable(props: {
     setSaveDisabled(true);
     setNotification({ open: true, text: "Saving..." });
     axios
-      .post("/api/account/editprofile", { user: name, sex: sex })
+      .post("/api/users/editprofile", { user: name, sex: sex })
       .then((res) => {
         setSaveDisabled(false);
         props.setUser({});

@@ -1,6 +1,6 @@
 import "./css/menu.css";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Box, Typography, Paper, Divider } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import MenuTop from "./menu/top";
 import MenuThread from "./menu/thread";
@@ -15,7 +15,8 @@ import {
   useRecall,
   useSmode,
 } from "./MenuProvider";
-import { splitarray, summary } from "../lib/common";
+import { splitarray } from "../lib/common";
+import { summary } from "../types/conversation/summary";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
 import {
@@ -103,7 +104,7 @@ function MainContent() {
         .catch(onError);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [search, recall, profile, data, selected, category]);
   /**
    * It updates the data array with the new data from the API.
    */
@@ -214,9 +215,6 @@ function Menu() {
   const [search] = useSearch();
   const [query, setQuery] = useQuery();
   const [, setBack] = useBack();
-  const [category] = useCat();
-  const [recall] = useRecall();
-  const [profile] = useProfile();
   const navigate = useNavigate();
   const [, setSettingsOpen] = useSettingsOpen();
   let tempq = decodeURIComponent(query || "");
@@ -279,7 +277,7 @@ function Menu() {
           </div>
         </div>
       )}
-      <MainContent key={`${search}${profile}${category}${recall}${selected}`} />
+      <MainContent />
     </Box>
   );
 }

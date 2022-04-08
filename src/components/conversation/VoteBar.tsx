@@ -13,7 +13,7 @@ import { useNotification } from "../ContextProvider";
 
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
-import { red, yellow } from "@mui/material/colors";
+import { red, green } from "@mui/material/colors";
 
 type VoteType = "U" | "D";
 
@@ -85,7 +85,7 @@ const VoteBar = React.memo<Props>((props) => {
         <IconButton
           onClick={() => onVote("U")}
           sx={(theme) => ({
-            bgcolor: `${theme.palette.secondary.main} !important`,
+            bgcolor: `${theme.palette.success.main} !important`,
             mr: -1,
             zIndex: 1,
             transition: "all 0.2s ease-in-out",
@@ -96,7 +96,7 @@ const VoteBar = React.memo<Props>((props) => {
         >
           <ThumbUpIcon
             sx={{
-              color: vote === "U" ? yellow[900] : "white",
+              color: vote === "U" ? green[900] : "white",
               transform: vote === "U" ? "rotate(-15deg)" : "rotate(0deg)",
               transition: "all 0.2s ease-in-out",
               height: 15,
@@ -112,10 +112,10 @@ const VoteBar = React.memo<Props>((props) => {
             [`& .${linearProgressClasses.bar}`]: {
               background: isEmptyVote
                 ? theme.palette.grey[700]
-                : theme.palette.secondary.main,
+                : theme.palette.success.main,
             },
           })}
-          color="secondary"
+          color="success"
           variant="determinate"
           value={upVotePercent}
         />

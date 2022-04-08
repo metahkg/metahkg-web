@@ -46,38 +46,14 @@ import {
 import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
+import { comment } from "../types/conversation/comment";
+import { details } from "../types/conversation/details";
 const ConversationContext = createContext<{
   story: [number, React.Dispatch<React.SetStateAction<number>>];
   tid: number;
   title?: string;
   // @ts-ignore
 }>(null);
-type comment = {
-  /** comment id */
-  id: number;
-  /** comment user id */
-  user: number;
-  /** the comment (in stringified html) */
-  comment: string;
-  /** date string */
-  createdAt: string;
-  /** number of downvotes */
-  D?: number;
-  /** number of upvotes */
-  U?: number;
-};
-type details = {
-  /** thread shortened link */
-  slink?: string;
-  /** thread category id */
-  category?: number;
-  /** thread title */
-  title?: string;
-  /** number of comments */
-  c?: number;
-  /** thread original poster name */
-  op?: string;
-};
 /**
  * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments

@@ -7,7 +7,8 @@ import {
   Article as ArticleIcon,
   Comment as CommentIcon,
 } from "@mui/icons-material";
-import { timetoword, roundup, summary, categories } from "../../lib/common";
+import { timetoword, roundup, categories } from "../../lib/common";
+import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
 import {
   useCat,

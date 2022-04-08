@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useWidth } from "../components/ContextProvider";
-import MetahkgLogo from "../components/logo";
-import { severity } from "../lib/common";
-import { useMenu } from "../components/MenuProvider";
+import {
+  useNotification,
+  useSettings,
+  useWidth,
+} from "../../components/ContextProvider";
+import MetahkgLogo from "../../components/logo";
+import { severity } from "../../types/severity";
+import { useMenu } from "../../components/MenuProvider";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
@@ -18,6 +22,7 @@ export default function Verify() {
     text: "",
   });
   const [disabled, setDisabled] = useState(false);
+  const [settings] = useSettings();
   const query = queryString.parse(window.location.search);
   const [email, setEmail] = useState(
     decodeURIComponent(String(query.email || ""))
@@ -31,7 +36,7 @@ export default function Verify() {
     setNotification({ open: true, text: "Verifying..." });
     setDisabled(true);
     axios
-      .post("/api/verify", {
+      .post("/api/users/verify", {
         email: email,
         code: code,
       })
@@ -109,7 +114,11 @@ export default function Verify() {
             />
           ))}
           <h4>
-            <Link className="metahkg-yellow-force link" to="/resend">
+            <Link
+              style={{ color: settings.secondaryColor?.main }}
+              className="link"
+              to="/users/resend"
+            >
               Resend verification email?
             </Link>
           </h4>

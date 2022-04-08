@@ -1,6 +1,6 @@
 import "./css/comment.css";
 import React, { memo, useEffect, useState } from "react";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import {
   Feed as FeedIcon,
   Reply as ReplyIcon,
@@ -180,14 +180,14 @@ function Comment(props: {
           </p>
         </PopUp>
         <div className="flex align-center comment-tag-left">
-          <p
-            className="novmargin"
-            style={{
-              color: op ? "#f5bd1f" : "#aca9a9",
-            }}
+          <Typography
+            className="novmargin font-size-17-force"
+            sx={(theme) => ({
+              color: op ? theme.palette.secondary.main : "#aca9a9",
+            })}
           >
             #{id}
-          </p>
+          </Typography>
           <p
             className="comment-tag-userlink novmargin ml10 text-overflow-ellipsis nowrap pointer overflow-hidden max-width-full"
             onClick={() => {

@@ -32,18 +32,6 @@ export function timetoword_long(sdate: string): string {
   r = r.split(",");
   return r[0];
 }
-export type severity = "success" | "info" | "warning" | "error";
-export type summary = {
-  c: number;
-  id: number;
-  op: string;
-  sex: "M" | "F";
-  title: string;
-  category: number;
-  lastModified: string;
-  createdAt: string;
-  vote: number;
-};
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -57,7 +45,7 @@ export function splitarray(arr: any[], start: number, end: number) {
   return r;
 }
 export async function logout() {
-  await axios.get("/api/logout");
+  await axios.get("/api/users/logout");
   localStorage.removeItem("user");
   localStorage.removeItem("id");
 }

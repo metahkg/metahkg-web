@@ -7,25 +7,29 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Register from "./pages/signup";
-import Signin from "./pages/signin";
+import Register from "./pages/users/signup";
+import Signin from "./pages/users/signin";
 import Thread from "./pages/thread";
 import AddComment from "./pages/AddComment";
 import Create from "./pages/create";
 import Category from "./pages/category";
-import Logout from "./pages/logout";
+import Logout from "./pages/users/logout";
 import Search from "./pages/search";
 import Profile from "./pages/profile";
 import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import { useSettingsOpen, useWidth } from "./components/ContextProvider";
+import {
+  useSettings,
+  useSettingsOpen,
+  useWidth,
+} from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
-import Verify from "./pages/verify";
-import Resend from "./pages/resend";
+import Verify from "./pages/users/verify";
+import Resend from "./pages/users/resend";
 import Recall from "./pages/recall";
 import Settings from "./components/settings";
 import Forbidden from "./pages/forbidden";
@@ -45,6 +49,7 @@ export default function App() {
   const [menu] = useMenu();
   const [width] = useWidth();
   const [settingsOpen, setSettingsOpen] = useSettingsOpen();
+  const [settings] = useSettings();
   useEffect(() => {
     if (localStorage.user || localStorage.id) {
       axios.get("/api/loggedin").then((res) => {
@@ -63,7 +68,9 @@ export default function App() {
   return (
     <Theme
       primary={{ main: "#222" }}
-      secondary={{ main: "#f5bd1f", dark: "#ffc100" }}
+      secondary={
+        settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }
+      }
     >
       <Notification />
       <Settings open={settingsOpen} setOpen={setSettingsOpen} />
@@ -78,13 +85,13 @@ export default function App() {
               <Route path="/thread/:id" element={<Thread />} />
               <Route path="/comment/:id" element={<AddComment />} />
               <Route path="/category/:category" element={<Category />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/verify" element={<Verify />} />
-              <Route path="/resend" element={<Resend />} />
-              <Route path="/signin" element={<Signin />} />
+              <Route path="/users/register" element={<Register />} />
+              <Route path="/users/verify" element={<Verify />} />
+              <Route path="/users/resend" element={<Resend />} />
+              <Route path="/users/signin" element={<Signin />} />
               <Route path="/create" element={<Create />} />
               <Route path="/search" element={<Search />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/users/logout" element={<Logout />} />
               <Route path="/source" element={<Source />} />
               <Route path="/telegram" element={<Telegram />} />
               <Route path="/profile/:id" element={<Profile />} />

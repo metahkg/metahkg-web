@@ -6,14 +6,18 @@ import hash from "hash.js";
 import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router";
 import queryString from "query-string";
-import { useMenu } from "../components/MenuProvider";
-import { useNotification, useWidth } from "../components/ContextProvider";
-import { severity } from "../lib/common";
-import MetahkgLogo from "../components/logo";
+import { useMenu } from "../../components/MenuProvider";
+import {
+  useNotification,
+  useSettings,
+  useWidth,
+} from "../../components/ContextProvider";
+import { severity } from "../../types/severity";
+import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
 /**
  * /signin
- * The Signin component collects data from user then send to the server /api/signin
+ * The Signin component collects data from user then send to the server /api/users/signin
  * If sign in is successful, a cookie "key" would be set by the server, which is the api key
  * If user is already signed in, he is redirected to /
  * After signing in, user is redirected to query.returnto if it exists, otherwise /
@@ -22,6 +26,7 @@ export default function Signin() {
   const navigate = useNavigate();
   const [menu, setMenu] = useMenu();
   const [, setNotification] = useNotification();
+  const [settings] = useSettings();
   const [width] = useWidth();
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -47,13 +52,13 @@ export default function Signin() {
     setAlert({ severity: "info", text: "Signing in..." });
     setDisabled(true);
     axios
-      .post("/api/signin", {
+      .post("/api/users/signin", {
         user: user,
         pwd: hash.sha256().update(pwd).digest("hex"),
       })
       .then((res) => {
         if (res.data.unverified) {
-          navigate("/verify");
+          navigate("/users/verify");
           setNotification({ open: true, text: "Please verify your account." });
           return;
         }
@@ -93,7 +98,7 @@ export default function Signin() {
           <div className="flex fullwidth justify-flex-end">
             <Link
               className="notextdecoration"
-              to={`/register${window.location.search}`}
+              to={`/users/register${window.location.search}`}
             >
               <Button
                 className="flex notexttransform font-size-18-force"
@@ -131,7 +136,11 @@ export default function Signin() {
             />
           ))}
           <h4>
-            <Link className="link metahkg-yellow-force" to="/verify">
+            <Link
+              style={{ color: settings.secondaryColor?.main }}
+              className="link"
+              to="/users/verify"
+            >
               Verify / Resend verification email?
             </Link>
           </h4>

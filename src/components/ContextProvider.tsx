@@ -1,6 +1,25 @@
-import React, { useRef } from "react";
-import { createContext, useContext, useState } from "react";
-const Context = createContext<any>({});
+import React, {
+  Dispatch,
+  SetStateAction,
+  useRef,
+  createContext,
+  useContext,
+  useState,
+} from "react";
+import { history } from "../types/history";
+import { notification } from "../types/notification";
+import { settings } from "../types/settings";
+const Context = createContext<{
+  back: [string, Dispatch<SetStateAction<string>>];
+  query: [string, Dispatch<SetStateAction<string>>];
+  width: [number, Dispatch<SetStateAction<number>>];
+  height: [number, Dispatch<SetStateAction<number>>];
+  notification: [notification, Dispatch<SetStateAction<notification>>];
+  settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
+  settings: [settings, Dispatch<SetStateAction<settings>>];
+  history: [history, Dispatch<SetStateAction<history>>];
+  //@ts-ignore
+}>(null);
 /**
  * Holds global application values.
  * @param props - { children: JSX.Element }
@@ -13,7 +32,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
   const [height, setHeight] = useState(window.innerHeight);
   const [notification, setNotification] = useState({ open: false, text: "" });
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settings, setSettings] = useState<{ votebar?: boolean }>(
+  const [settings, setSettings] = useState<settings>(
     JSON.parse(localStorage.getItem("settings") || "{}")
   );
   const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
@@ -57,10 +76,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
  * It returns the current history and a setter for the history
  * @returns The history object and a setter function.
  */
-export function useBack(): [
-  string,
-  React.Dispatch<React.SetStateAction<string>>
-] {
+export function useBack() {
   const { back } = useContext(Context);
   return back;
 }
@@ -76,10 +92,7 @@ export function useBack(): [
  * the window
  * @returns The width of the window and a setter for the width of the window.
  */
-export function useWidth(): [
-  number,
-  React.Dispatch<React.SetStateAction<number>>
-] {
+export function useWidth() {
   const { width } = useContext(Context);
   return width;
 }
@@ -88,10 +101,7 @@ export function useWidth(): [
  * @returns A tuple of two values. The first value is the query, and the second value is a
  * setter function for the query.
  */
-export function useQuery(): [
-  string,
-  React.Dispatch<React.SetStateAction<string>>
-] {
+export function useQuery() {
   const { query } = useContext(Context);
   return query;
 }
@@ -104,10 +114,7 @@ export function useQuery(): [
  * A setter function for the height value in the Context
  * @returns The height of the window and a setter for the height of the window.
  */
-export function useHeight(): [
-  number,
-  React.Dispatch<React.SetStateAction<number>>
-] {
+export function useHeight() {
   const { height } = useContext(Context);
   return height;
 }
@@ -117,10 +124,7 @@ export function useHeight(): [
  * @returns A tuple of two values. The first value is the current state of the notification. The second
  * value is a function that can be used to update the state of the notification.
  */
-export function useNotification(): [
-  { open: boolean; text: string },
-  React.Dispatch<React.SetStateAction<{ open: boolean; text: string }>>
-] {
+export function useNotification() {
   const { notification } = useContext(Context);
   return notification;
 }
@@ -128,10 +132,7 @@ export function useNotification(): [
  * It returns the value of the settingsOpen state and a setter function for that state
  * @returns The boolean value of the settingsOpen state and a function to set the state.
  */
-export function useSettingsOpen(): [
-  boolean,
-  React.Dispatch<React.SetStateAction<boolean>>
-] {
+export function useSettingsOpen() {
   const { settingsOpen } = useContext(Context);
   return settingsOpen;
 }
@@ -139,10 +140,7 @@ export function useSettingsOpen(): [
  * It returns the settings object and a setter function
  * @returns A tuple of the settings object and a setter function.
  */
-export function useSettings(): [
-  { votebar?: boolean },
-  React.Dispatch<React.SetStateAction<{ votebar?: boolean }>>
-] {
+export function useSettings() {
   const { settings } = useContext(Context);
   return settings;
 }
@@ -150,10 +148,7 @@ export function useSettings(): [
  * It returns the history of the current user
  * @returns The history array and a setter function.
  */
-export function useHistory(): [
-  { id: number; cid: number; c: number }[],
-  React.Dispatch<React.SetStateAction<{ id: number; cid: number; c: number }[]>>
-] {
+export function useHistory() {
   const { history } = useContext(Context);
   return history;
 }

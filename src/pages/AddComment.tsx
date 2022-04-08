@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, severity, wholepath } from "../lib/common";
+import { roundup, wholepath } from "../lib/common";
+import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -132,7 +133,7 @@ export default function AddComment() {
   if (!localStorage.user) {
     return (
       <Navigate
-        to={`/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
+        to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
         replace
       />
     );

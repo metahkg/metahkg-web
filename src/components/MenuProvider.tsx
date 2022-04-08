@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { summary } from "../lib/common";
+import { summary } from "../types/conversation/summary";
 const MenuContext = createContext<{
   category: [number, React.Dispatch<React.SetStateAction<number>>];
   id: [number, React.Dispatch<React.SetStateAction<number>>];

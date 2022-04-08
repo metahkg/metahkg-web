@@ -4,7 +4,15 @@ import {
   Add as AddIcon,
   Autorenew as AutorenewIcon,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Tab, Tabs, Tooltip } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Tab,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
@@ -97,9 +105,12 @@ export default function MenuTop(props: {
                 <SideBar />
               </div>
             )}
-            <p className="novmargin font-size-18 user-select-none text-align-center metahkg-yellow nowrap text-overflow-ellipsis overflow-hidden">
+            <Typography
+              sx={{ color: "secondary.main" }}
+              className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
+            >
               {title || inittitle}
-            </p>
+            </Typography>
             {!(width < 760) && (
               <div className="flex">
                 <Tooltip title="Refresh" arrow>

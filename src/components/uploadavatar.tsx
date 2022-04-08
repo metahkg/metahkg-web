@@ -30,7 +30,7 @@ export default function UploadAvatar(props: {
               const formData = new FormData();
               formData.append("avatar", e?.target?.files?.[0] || "");
               axios
-                .post("/api/avatar", formData, {
+                .post("/api/users/avatar", formData, {
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },

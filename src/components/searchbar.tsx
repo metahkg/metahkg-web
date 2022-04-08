@@ -35,7 +35,7 @@ const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: "#111",
-  border: "1px solid #f5bd1f",
+  border: `1px solid ${theme.palette.secondary.main}`,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     width: "auto",
