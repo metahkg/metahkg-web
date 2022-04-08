@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import {
-  useNotification,
-  useSettings,
-  useWidth,
-} from "../../components/ContextProvider";
+import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -13,6 +9,7 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import axios from "axios";
 import { HowToReg } from "@mui/icons-material";
+
 export default function Verify() {
   const [menu, setMenu] = useMenu();
   const [, setNotification] = useNotification();
@@ -24,13 +21,10 @@ export default function Verify() {
   const [disabled, setDisabled] = useState(false);
   const [settings] = useSettings();
   const query = queryString.parse(window.location.search);
-  const [email, setEmail] = useState(
-    decodeURIComponent(String(query.email || ""))
-  );
-  const [code, setCode] = useState(
-    decodeURIComponent(String(query.code || ""))
-  );
+  const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
+  const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
   const navigate = useNavigate();
+
   function verify() {
     setAlert({ severity: "info", text: "Verifying..." });
     setNotification({ open: true, text: "Verifying..." });
@@ -61,6 +55,7 @@ export default function Verify() {
         });
       });
   }
+
   useEffect(() => {
     if (query.code && query.email && !localStorage.user) verify();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,10 +65,7 @@ export default function Verify() {
   document.title = "Verify | Metahkg";
   const small = width / 2 - 100 <= 450;
   return (
-    <Box
-      className="flex align-center justify-center min-height-fullvh fullwidth"
-      sx={{ bgcolor: "primary.dark" }}
-    >
+    <Box className="flex align-center justify-center min-height-fullvh fullwidth" sx={{ bgcolor: "primary.dark" }}>
       <Box sx={{ width: small ? "100vw" : "50vw" }}>
         <div className="m40">
           <div className="flex justify-center align-center">
@@ -114,11 +106,7 @@ export default function Verify() {
             />
           ))}
           <h4>
-            <Link
-              style={{ color: settings.secondaryColor?.main }}
-              className="link"
-              to="/users/resend"
-            >
+            <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/resend">
               Resend verification email?
             </Link>
           </h4>
@@ -127,9 +115,7 @@ export default function Verify() {
             className="font-size-16-force notexttransform"
             color="secondary"
             onClick={verify}
-            disabled={
-              disabled || !(email && code && EmailValidator.validate(email))
-            }
+            disabled={disabled || !(email && code && EmailValidator.validate(email))}
           >
             <HowToReg className="mr5" />
             Verify

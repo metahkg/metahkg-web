@@ -7,14 +7,11 @@ import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router";
 import queryString from "query-string";
 import { useMenu } from "../../components/MenuProvider";
-import {
-  useNotification,
-  useSettings,
-  useWidth,
-} from "../../components/ContextProvider";
+import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
+
 /**
  * /signin
  * The Signin component collects data from user then send to the server /api/users/signin
@@ -48,6 +45,7 @@ export default function Signin() {
   menu && setMenu(false);
   document.title = "Sign in | Metahkg";
   const query = queryString.parse(window.location.search);
+
   function signin() {
     setAlert({ severity: "info", text: "Signing in..." });
     setDisabled(true);
@@ -81,6 +79,7 @@ export default function Signin() {
         setDisabled(false);
       });
   }
+
   return (
     <Box
       className="flex align-center justify-center fullwidth min-height-fullvh"
@@ -96,15 +95,8 @@ export default function Signin() {
       >
         <div className="ml50 mr50">
           <div className="flex fullwidth justify-flex-end">
-            <Link
-              className="notextdecoration"
-              to={`/users/register${window.location.search}`}
-            >
-              <Button
-                className="flex notexttransform font-size-18-force"
-                color="secondary"
-                variant="text"
-              >
+            <Link className="notextdecoration" to={`/users/register${window.location.search}`}>
+              <Button className="flex notexttransform font-size-18-force" color="secondary" variant="text">
                 <strong>Register</strong>
               </Button>
             </Link>
@@ -136,11 +128,7 @@ export default function Signin() {
             />
           ))}
           <h4>
-            <Link
-              style={{ color: settings.secondaryColor?.main }}
-              className="link"
-              to="/users/verify"
-            >
+            <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/verify">
               Verify / Resend verification email?
             </Link>
           </h4>

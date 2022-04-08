@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import "./css/App.css";
 import Theme from "./lib/theme";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import Register from "./pages/users/signup";
 import Signin from "./pages/users/signin";
 import Thread from "./pages/thread";
@@ -20,11 +15,7 @@ import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import {
-  useSettings,
-  useSettingsOpen,
-  useWidth,
-} from "./components/ContextProvider";
+import { useSettings, useSettingsOpen, useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import axios from "axios";
@@ -33,14 +24,17 @@ import Resend from "./pages/users/resend";
 import Recall from "./pages/recall";
 import Settings from "./components/settings";
 import Forbidden from "./pages/forbidden";
+
 function Source() {
   window.location.replace("https://gitlab.com/metahkg/metahkg");
   return <div />;
 }
+
 function Telegram() {
   window.location.replace("https://t.me/+WbB7PyRovUY1ZDFl");
   return <div />;
 }
+
 /**
  * Menu is not in the Routes to prevent unnecessary rerenders
  * Instead it is controlled by components inside Routes
@@ -58,20 +52,13 @@ export default function App() {
           localStorage.removeItem("id");
           return;
         }
-        localStorage.user !== res.data.user &&
-          localStorage.setItem("user", res.data.user);
-        localStorage.id !== Number(res.data.id) &&
-          localStorage.setItem("id", res.data.id);
+        localStorage.user !== res.data.user && localStorage.setItem("user", res.data.user);
+        localStorage.id !== Number(res.data.id) && localStorage.setItem("id", res.data.id);
       });
     }
   }, []);
   return (
-    <Theme
-      primary={{ main: "#222" }}
-      secondary={
-        settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }
-      }
-    >
+    <Theme primary={{ main: "#222" }} secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}>
       <Notification />
       <Settings open={settingsOpen} setOpen={setSettingsOpen} />
       <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>

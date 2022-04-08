@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
 import axios, { AxiosResponse } from "axios";
+
 const Input = styled("input")({
   display: "none",
 });
@@ -39,11 +40,7 @@ export default function UploadAvatar(props: {
                 .catch(onError);
             }}
           />
-          <Button
-            className="mt5 notexttransform"
-            variant="contained"
-            component="span"
-          >
+          <Button className="mt5 notexttransform" variant="contained" component="span">
             <FileUpload className="mr5" />
             <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
           </Button>

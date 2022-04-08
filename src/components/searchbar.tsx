@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import "./css/searchbar.css";
-import React from "react";
-import { styled, InputBase, Chip } from "@mui/material";
+import React, { KeyboardEventHandler } from "react";
+import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { KeyboardEventHandler } from "react";
 import { useQuery } from "./ContextProvider";
 import queryString from "query-string";
 import { useData, useSearch, useSmode } from "./MenuProvider";
+
 const Search = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",

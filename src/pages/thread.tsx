@@ -7,6 +7,7 @@ import { useCat, useId, useMenu } from "../components/MenuProvider";
 import { useWidth } from "../components/ContextProvider";
 import isInteger from "is-sn-integer";
 import { ShareProvider } from "../components/ShareProvider";
+
 /**
  * Thread Component for /thread/:id
  * controls the menu and returns a Conversation

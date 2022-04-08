@@ -4,6 +4,7 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useBack, useWidth } from "../ContextProvider";
+
 /**
  * It's a component that renders the title of the thread.
  * @param {number} props.category The category of the thread

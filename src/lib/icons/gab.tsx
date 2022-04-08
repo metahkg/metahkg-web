@@ -15,11 +15,7 @@ export default function Gab(props: {
 }) {
   const { white, black, color, width, height } = props;
   return (
-    <svg
-      width={width || "34.4"}
-      height={height || "21"}
-      viewBox="-8.6929917 -8.6929917 503.3613834 307.1523734"
-    >
+    <svg width={width || "34.4"} height={height || "21"} viewBox="-8.6929917 -8.6929917 503.3613834 307.1523734">
       <defs />
       <path
         id="gab"

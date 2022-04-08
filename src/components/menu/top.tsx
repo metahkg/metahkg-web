@@ -1,31 +1,13 @@
 import "./css/top.css";
-import React, { useEffect } from "react";
-import {
-  Add as AddIcon,
-  Autorenew as AutorenewIcon,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  IconButton,
-  Tab,
-  Tabs,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useEffect } from "react";
+import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material";
+import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
-import {
-  useCat,
-  useId,
-  useProfile,
-  useRecall,
-  useSearch,
-  useTitle,
-} from "../MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch, useTitle } from "../MenuProvider";
 import axios from "axios";
 import { useWidth } from "../ContextProvider";
+
 /**
  * The top part of the menu consists of a title part
  * (sidebar, title, refresh and create topic button link)
@@ -49,11 +31,7 @@ export default function MenuTop(props: {
   const [recall] = useRecall();
   const [id] = useId();
   const [width] = useWidth();
-  const mode =
-    (search && "search") ||
-    (profile && "profile") ||
-    (recall && "recall") ||
-    "menu";
+  const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
   const inittitle = {
     search: "Search",
     profile: "User Profile",
@@ -96,9 +74,7 @@ export default function MenuTop(props: {
       >
         {Boolean(width < 760 ? mobileTop : 1) && (
           <div
-            className={`flex fullwidth align-center menutop-top justify-${
-              width < 760 ? "center" : "space-between"
-            }`}
+            className={`flex fullwidth align-center menutop-top justify-${width < 760 ? "center" : "space-between"}`}
           >
             {!(width < 760) && (
               <div className="ml10 mr40">
@@ -130,10 +106,7 @@ export default function MenuTop(props: {
           </div>
         )}
         {Boolean(tabs.length) && (
-          <Box
-            sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
-            className="flex fullwidth align-flex-end"
-          >
+          <Box sx={{ height: width < 760 && !mobileTop ? 50 : 40 }} className="flex fullwidth align-flex-end">
             <Tabs
               className="fullwidth"
               value={props.selected}
@@ -145,12 +118,7 @@ export default function MenuTop(props: {
               }}
             >
               {tabs.map((tab, index) => (
-                <Tab
-                  className="font-size-15-force notexttransform"
-                  value={index}
-                  label={tab}
-                  disableRipple
-                />
+                <Tab className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
               ))}
             </Tabs>
           </Box>

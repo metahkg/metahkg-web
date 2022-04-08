@@ -1,12 +1,7 @@
 import "./css/pagetop.css";
 import React from "react";
-import {
-  Box,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+
 export default function PageTop(props: {
   pages: number;
   page: number;
@@ -17,21 +12,9 @@ export default function PageTop(props: {
   onNextClicked?: React.MouseEventHandler<HTMLSpanElement>;
   id?: number | string;
 }) {
-  const {
-    pages,
-    page,
-    onChange,
-    last,
-    next,
-    onLastClicked,
-    onNextClicked,
-    id,
-  } = props;
+  const { pages, page, onChange, last, next, onLastClicked, onNextClicked, id } = props;
   return (
-    <Box
-      className="flex justify-space-between align-center ml30 mr30 pagetop-root"
-      id={String(id)}
-    >
+    <Box className="flex justify-space-between align-center ml30 mr30 pagetop-root" id={String(id)}>
       <Typography
         className={last ? "pointer" : "user-select-none transparent"}
         sx={last ? { color: "secondary.main" } : {}}
@@ -39,13 +22,7 @@ export default function PageTop(props: {
       >
         Last Page
       </Typography>
-      <Select
-        value={page}
-        label="Age"
-        onChange={onChange}
-        color="secondary"
-        variant="standard"
-      >
+      <Select value={page} label="Age" onChange={onChange} color="secondary" variant="standard">
         {[...Array(pages)].map((p, index) => (
           <MenuItem value={index + 1}>Page {index + 1}</MenuItem>
         ))}

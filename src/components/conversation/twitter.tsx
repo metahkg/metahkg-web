@@ -7,15 +7,7 @@ export default function TweetEmbed(props: { tweetId: string }) {
   const [loading, setLoading] = useState(true);
   return (
     <div>
-      {loading && (
-        <Spinner
-          className="mt5 mb5"
-          radius={50}
-          color="gray"
-          stroke={3}
-          visible={true}
-        />
-      )}
+      {loading && <Spinner className="mt5 mb5" radius={50} color="gray" stroke={3} visible={true} />}
       <TwitterTweetEmbed
         options={{
           theme: "dark",

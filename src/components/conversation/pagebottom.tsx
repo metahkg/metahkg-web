@@ -2,12 +2,11 @@ import React from "react";
 import { GitHub, Telegram } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
+
 export default function PageBottom() {
   const socialicons = [
     {
-      icon: (
-        <GitlabIcon className="metahkg-grey-force" height={17} width={17} />
-      ),
+      icon: <GitlabIcon className="metahkg-grey-force" height={17} width={17} />,
       link: "https://gitlab.com/metahkg",
     },
     {
@@ -24,9 +23,7 @@ export default function PageBottom() {
       <div className="flex">
         {socialicons.map((icon, index) => (
           <a
-            className={`metahkg-grey-force notextdecoration${
-              index !== socialicons.length - 1 ? " mr7" : ""
-            }`}
+            className={`metahkg-grey-force notextdecoration${index !== socialicons.length - 1 ? " mr7" : ""}`}
             href={icon.link}
             target="_blank"
             rel="noreferrer"

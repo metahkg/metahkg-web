@@ -1,9 +1,6 @@
 export function CSSstring(string: string): React.CSSProperties {
   try {
-    const css_json = `{"${string
-      .replace(/; /g, '", "')
-      .replace(/: /g, '": "')
-      .replace(";", "")}"}`;
+    const css_json = `{"${string.replace(/; /g, '", "').replace(/: /g, '": "').replace(";", "")}"}`;
 
     const obj = JSON.parse(css_json);
 

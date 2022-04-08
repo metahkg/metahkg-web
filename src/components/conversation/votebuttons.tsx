@@ -1,10 +1,10 @@
 import "./css/votebuttons.css";
-import React from "react";
+import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
 import { useNotification } from "../ContextProvider";
+
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
  * @param {"U" | "D" | undefined} props.vote user(client)'s vote
@@ -14,17 +14,12 @@ import { useNotification } from "../ContextProvider";
  * @param {number} props.down number of downvotes
  * @returns A button group with two buttons, one for upvote and one for downvote.
  */
-export default function VoteButtons(props: {
-  vote?: "U" | "D";
-  id: number;
-  cid: number;
-  up: number;
-  down: number;
-}) {
+export default function VoteButtons(props: { vote?: "U" | "D"; id: number; cid: number; up: number; down: number }) {
   const [vote, setVote] = useState(props.vote);
   const [up, setUp] = useState(props.up);
   const [down, setDown] = useState(props.down);
   const [, setNotification] = useNotification();
+
   /**
    * It sends a vote to the server.
    * @param {"U" | "D"} v - "U" | "D"
@@ -47,6 +42,7 @@ export default function VoteButtons(props: {
         });
       });
   }
+
   return (
     <ButtonGroup variant="text" className="vb-btn-group">
       <Button

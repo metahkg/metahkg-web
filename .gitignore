@@ -32,3 +32,5 @@ deploy.sh
 .lh/
 package-lock.json
 internal/
+
+.idea

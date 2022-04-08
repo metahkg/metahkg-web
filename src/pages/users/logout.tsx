@@ -5,6 +5,7 @@ import queryString from "query-string";
 import { useNavigate } from "react-router";
 import { useNotification } from "../../components/ContextProvider";
 import { logout } from "../../lib/common";
+
 /**
  * Renders an alert while logging out.
  * @returns an info alert

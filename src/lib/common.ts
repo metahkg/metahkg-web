@@ -1,10 +1,12 @@
 import humanizeDurationShortened from "humanize-duration-shortened-english";
 import humanizeDuration from "humanize-duration";
 import axios from "axios";
+
 export function roundup(num: number, precision = 0): number {
   precision = Math.pow(10, precision);
   return Math.ceil(num * precision) / precision;
 }
+
 export function timetoword(sdate: string): string {
   const startDate = new Date(sdate);
   const endDate = new Date();
@@ -20,6 +22,7 @@ export function timetoword(sdate: string): string {
   }
   return r;
 }
+
 export function timetoword_long(sdate: string): string {
   const startDate = new Date(sdate);
   const endDate = new Date();
@@ -32,11 +35,15 @@ export function timetoword_long(sdate: string): string {
   r = r.split(",");
   return r[0];
 }
+
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export const categories: { id: number; name: string; hidden?: boolean }[] =
-  JSON.parse(process.env.REACT_APP_categories || "[]");
+
+export const categories: { id: number; name: string; hidden?: boolean }[] = JSON.parse(
+  process.env.REACT_APP_categories || "[]"
+);
+
 export function splitarray(arr: any[], start: number, end: number) {
   const r: any[] = [];
   for (let i = start; i <= end; i++) {
@@ -44,14 +51,17 @@ export function splitarray(arr: any[], start: number, end: number) {
   }
   return r;
 }
+
 export async function logout() {
   await axios.get("/api/users/logout");
   localStorage.removeItem("user");
   localStorage.removeItem("id");
 }
+
 export function wholepath(): string {
   return window.location.href.replace(window.location.origin, "");
 }
+
 export function checkpwd(pwd: string): boolean {
   if (pwd.length < 8) {
     return false;
@@ -73,6 +83,7 @@ export function checkpwd(pwd: string): boolean {
   }
   return true;
 }
+
 export function allequal(arr: any[]) {
   const first = arr[0];
   for (const i of arr) {

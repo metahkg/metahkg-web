@@ -15,6 +15,7 @@ import {
   useTitle,
 } from "../components/MenuProvider";
 import { categories } from "../lib/common";
+
 /**
  * It's a function that
  * returns a component that renders a box with a background color
@@ -33,17 +34,17 @@ export default function Category() {
   const [width] = useWidth();
   const [, setTitle] = useTitle();
   const [selected, setSelected] = useSelected();
-  document.title =
-    categories.find((i) => i.id === category)?.name + " | Metahkg";
+  document.title = categories.find((i) => i.id === category)?.name + " | Metahkg";
+
   function cleardata() {
     setData([]);
     setTitle("");
     setSelected(0);
   }
+
   back !== window.location.pathname && setBack(window.location.pathname);
   !menu && setMenu(true);
-  (category !== Number(params.category) || search || profile || recall) &&
-    cleardata();
+  (category !== Number(params.category) || search || profile || recall) && cleardata();
   category !== Number(params.category) && setCategory(Number(params.category));
   id && setId(0);
   search && setSearch(false);

@@ -3,6 +3,7 @@ import React from "react";
 import { Close, Notifications } from "@mui/icons-material";
 import { Box, Snackbar } from "@mui/material";
 import { useNotification } from "../components/ContextProvider";
+
 /**
  * Display a notification at the top right corner
  */

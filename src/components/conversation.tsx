@@ -1,20 +1,6 @@
 import "./css/conversation.css";
-import React, {
-  createContext,
-  memo,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  LinearProgress,
-  Paper,
-  SelectChangeEvent,
-} from "@mui/material";
+import React, { createContext, memo, useContext, useEffect, useRef, useState } from "react";
+import { Box, Button, CircularProgress, LinearProgress, Paper, SelectChangeEvent } from "@mui/material";
 import queryString from "query-string";
 import Comment from "./conversation/comment";
 import Title from "./conversation/title";
@@ -23,13 +9,7 @@ import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
-import {
-  useCat,
-  useId,
-  useProfile,
-  useRecall,
-  useSearch,
-} from "./MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";
 import { useHistory, useNotification, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
@@ -37,23 +17,20 @@ import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
 import Dock from "./dock";
-import {
-  Collections,
-  Refresh,
-  Reply,
-  Share as ShareIcon,
-} from "@mui/icons-material";
+import { Collections, Refresh, Reply, Share as ShareIcon } from "@mui/icons-material";
 import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { comment } from "../types/conversation/comment";
 import { details } from "../types/conversation/details";
+
 const ConversationContext = createContext<{
   story: [number, React.Dispatch<React.SetStateAction<number>>];
   tid: number;
   title?: string;
   // @ts-ignore
 }>(null);
+
 /**
  * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
@@ -64,13 +41,9 @@ function Conversation(props: { id: number }) {
   const query = queryString.parse(window.location.search);
   const [notification, setNotification] = useNotification();
   const [conversation, setConversation] = useState<comment[]>([]);
-  const [lastpage, setLastPage] = useState(
-    Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
-  );
+  const [lastpage, setLastPage] = useState(Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1);
   /** Current page */
-  const [cpage, setCPage] = useState(
-    Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
-  );
+  const [cpage, setCPage] = useState(Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1);
   const [users, setUsers] = useState<any>({});
   const [details, setDetails] = useState<details>({});
   const [votes, setVotes] = useState<any>({});
@@ -103,9 +76,7 @@ function Conversation(props: { id: number }) {
     err?.response?.status === 404 && navigate("/404", { replace: true });
     err?.response?.status === 401 && navigate("/401", { replace: true });
   };
-  !query.page &&
-    !query.c &&
-    navigate(`${window.location.pathname}?page=1`, { replace: true });
+  !query.page && !query.c && navigate(`${window.location.pathname}?page=1`, { replace: true });
   useEffect(() => {
     axios
       .get(`/api/thread/${props.id}?type=1`)
@@ -195,6 +166,7 @@ function Conversation(props: { id: number }) {
       localStorage.setItem("history", JSON.stringify(history));
     }
   });
+
   /**
    * It fetches new comments, or the next page (if last comment id % 25 = 0)
    * of messages from the server and appends them to the conversation array
@@ -204,12 +176,8 @@ function Conversation(props: { id: number }) {
     const newpage = !(conversation.length % 25);
     axios
       .get(
-        `/api/thread/${props.id}?type=2&page=${
-          newpage ? lastpage + 1 : lastpage
-        }${
-          newpage
-            ? ""
-            : `&start=${conversation[conversation.length - 1].id + 1}`
+        `/api/thread/${props.id}?type=2&page=${newpage ? lastpage + 1 : lastpage}${
+          newpage ? "" : `&start=${conversation[conversation.length - 1].id + 1}`
         }`
       )
       .then((res) => {
@@ -229,8 +197,7 @@ function Conversation(props: { id: number }) {
           }, 1);
           conversation.length % 25 && setEnd(true);
         } else {
-          for (let i = 0; i < res.data.length; i++)
-            conversation.push(res.data?.[i]);
+          for (let i = 0; i < res.data.length; i++) conversation.push(res.data?.[i]);
           setConversation(conversation);
           setUpdating(false);
           setLastPage((lastpage) => lastpage + 1);
@@ -243,6 +210,7 @@ function Conversation(props: { id: number }) {
         setUpdating(false);
       });
   }
+
   /**
    * It takes a page number and sends a request to the server to get the next page of comments
    * @param {number} p - new page number
@@ -267,6 +235,7 @@ function Conversation(props: { id: number }) {
       document.getElementById(String(lastpage))?.scrollIntoView();
     });
   }
+
   /**
    * When the user scrolls to the bottom of the page, the function calls the update function
    * @param {any} e - The event object.
@@ -275,8 +244,7 @@ function Conversation(props: { id: number }) {
     if (!end && !updating) {
       const diff = e.target.scrollHeight - e.target.scrollTop;
       if (
-        (e.target.clientHeight >= diff - 1.5 &&
-          e.target.clientHeight <= diff + 1.5) ||
+        (e.target.clientHeight >= diff - 1.5 && e.target.clientHeight <= diff + 1.5) ||
         diff < e.target.clientHeight
       ) {
         update();
@@ -285,11 +253,7 @@ function Conversation(props: { id: number }) {
     const index = history.findIndex((i) => i.id === props.id);
     if (index !== -1) {
       const arr = [...Array(conversation.length)].map((und, c) => {
-        return Math.abs(
-          Number(
-            document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top
-          )
-        );
+        return Math.abs(Number(document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top));
       });
       const currentcomment =
         arr.findIndex(
@@ -307,6 +271,7 @@ function Conversation(props: { id: number }) {
       }
     }
   }
+
   /* It's checking if the conversation, users, details and votes are all ready. */
   const ready = !!(
     conversation.length &&
@@ -336,8 +301,7 @@ function Conversation(props: { id: number }) {
       action: () => {
         update();
         const croot = document.getElementById("croot");
-        const newscrollTop =
-          croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
+        const newscrollTop = croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
         // @ts-ignore
         croot.scrollTop = newscrollTop;
       },
@@ -363,12 +327,8 @@ function Conversation(props: { id: number }) {
       action: () => {
         if (details.title && details.slink) {
           !shareOpen && setShareOpen(true);
-          shareTitle !== details.title &&
-            details.title &&
-            setShareTitle(details.title);
-          shareLink !== details.slink &&
-            details.slink &&
-            setShareLink(details.slink);
+          shareTitle !== details.title && details.title && setShareTitle(details.title);
+          shareLink !== details.slink && details.slink && setShareLink(details.slink);
         }
       },
       title: "Share",
@@ -401,9 +361,7 @@ function Conversation(props: { id: number }) {
       <Paper
         id="croot"
         key={n}
-        className={`overflow-auto nobgimage noshadow conversation-paper${
-          loading ? "-loading" : ""
-        }`}
+        className={`overflow-auto nobgimage noshadow conversation-paper${loading ? "-loading" : ""}`}
         sx={{ bgcolor: "primary.dark" }}
         onScroll={onScroll}
       >
@@ -420,15 +378,11 @@ function Conversation(props: { id: number }) {
                         const croot = document.getElementById("croot");
                         let Page = page;
                         if (isVisible) {
-                          lastHeight.current =
-                            croot?.scrollTop || lastHeight.current;
+                          lastHeight.current = croot?.scrollTop || lastHeight.current;
                           if (Page !== Number(query.page) && Page) {
-                            navigate(
-                              `${window.location.pathname}?page=${Page}`,
-                              {
-                                replace: true,
-                              }
-                            );
+                            navigate(`${window.location.pathname}?page=${Page}`, {
+                              replace: true,
+                            });
                             setCPage(Page);
                           }
                         }
@@ -436,20 +390,11 @@ function Conversation(props: { id: number }) {
                           if (lastHeight.current !== croot?.scrollTop) {
                             Page =
                               // @ts-ignore
-                              croot.scrollTop > lastHeight.current
-                                ? Page
-                                : Page - 1;
-                            if (
-                              lastHeight.current &&
-                              Page !== Number(query.page) &&
-                              Page
-                            ) {
-                              navigate(
-                                `${window.location.pathname}?page=${Page}`,
-                                {
-                                  replace: true,
-                                }
-                              );
+                              croot.scrollTop > lastHeight.current ? Page : Page - 1;
+                            if (lastHeight.current && Page !== Number(query.page) && Page) {
+                              navigate(`${window.location.pathname}?page=${Page}`, {
+                                replace: true,
+                              });
                               setCPage(Page);
                             }
                           }
@@ -480,11 +425,7 @@ function Conversation(props: { id: number }) {
                         title: details.title,
                       }}
                     >
-                      {splitarray(
-                        conversation,
-                        index * 25,
-                        (index + 1) * 25 - 1
-                      ).map(
+                      {splitarray(conversation, index * 25, (index + 1) * 25 - 1).map(
                         (comment: any) =>
                           !comment?.removed &&
                           (story ? story === comment?.user : 1) && (
@@ -536,16 +477,20 @@ function Conversation(props: { id: number }) {
     </div>
   );
 }
+
 export function useTid() {
   const { tid } = useContext(ConversationContext);
   return tid;
 }
+
 export function useTitle() {
   const { title } = useContext(ConversationContext);
   return title || "";
 }
+
 export function useStory() {
   const { story } = useContext(ConversationContext);
   return story;
 }
+
 export default memo(Conversation);

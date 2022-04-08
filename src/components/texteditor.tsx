@@ -1,6 +1,7 @@
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useWidth } from "./ContextProvider";
+
 /**
  * It creates a text editor that can be used to edit text
  * @param {(a: string, editor: import("tinymce/tinymce").Editor) => void} props.changehandler function triggered on editor change
@@ -20,18 +21,15 @@ export default function TextEditor(props: {
       initialValue={text}
       init={{
         height: width < 760 ? 310 : 350,
-        skin_url:
-          "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/ui/metahkg-dark",
-        content_css:
-          "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/content/metahkg-dark/content.min.css",
+        skin_url: "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/ui/metahkg-dark",
+        content_css: "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/content/metahkg-dark/content.min.css",
         branding: false,
         mobile: {
           menubar: "file edit view insert format tools",
           toolbar:
             "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
         },
-        quickbars_selection_toolbar:
-          "cut copy paste | fontsizeselect | quicklink",
+        quickbars_selection_toolbar: "cut copy paste | fontsizeselect | quicklink",
         quickbars_insert_toolbar: "",
         menubar: "file edit view insert format tools table",
         plugins:

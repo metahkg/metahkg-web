@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./css/profile.css";
 import {
   Box,
@@ -16,28 +16,24 @@ import {
   Tooltip,
 } from "@mui/material";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 import {
+  useCat,
   useData,
   useId,
   useMenu,
   useProfile,
+  useRecall,
   useSearch,
   useSelected,
   useTitle,
-  useCat,
-  useRecall,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
 import { timetoword_long } from "../lib/common";
 import { Link } from "react-router-dom";
-import {
-  useBack,
-  useNotification,
-  useWidth,
-} from "../components/ContextProvider";
+import { useBack, useNotification, useWidth } from "../components/ContextProvider";
 import { Save } from "@mui/icons-material";
+
 /* It's a function that returns a table with the user's information. */
 function DataTable(props: {
   user: {
@@ -102,6 +98,7 @@ function DataTable(props: {
       content: `${timetoword_long(props.user.createdAt)} ago`,
     },
   ];
+
   function editprofile() {
     setSaveDisabled(true);
     setNotification({ open: true, text: "Saving..." });
@@ -121,30 +118,18 @@ function DataTable(props: {
         });
       });
   }
+
   return (
-    <div
-      className="ml50 mr50 fullwidth"
-      style={{ maxWidth: width < 760 ? "100%" : "70%" }}
-    >
+    <div className="ml50 mr50 fullwidth" style={{ maxWidth: width < 760 ? "100%" : "70%" }}>
       <TableContainer className="fullwidth" component={Paper}>
         <Table className="fullwidth" aria-label="simple table">
           <TableBody>
             {items.map((item, index) => (
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  className="font-size-16-force"
-                >
+              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell component="th" scope="row" className="font-size-16-force">
                   {item.title}
                 </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  className="font-size-16-force"
-                >
+                <TableCell component="th" scope="row" className="font-size-16-force">
                   {item.content}
                 </TableCell>
               </TableRow>
@@ -157,10 +142,7 @@ function DataTable(props: {
           <Button
             className="mt20 mb10"
             variant="contained"
-            disabled={
-              saveDisabled ||
-              (name === props.user.user && sex === props.user.sex)
-            }
+            disabled={saveDisabled || (name === props.user.user && sex === props.user.sex)}
             color="secondary"
             onClick={editprofile}
           >
@@ -172,6 +154,7 @@ function DataTable(props: {
     </div>
   );
 }
+
 /**
  * This function renders the profile page
  */
@@ -194,10 +177,7 @@ export default function Profile() {
   const navigate = useNavigate();
   /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
   useEffect(() => {
-    if (
-      !(params.id === "self" && !localStorage.user) &&
-      !Object.keys(user).length
-    ) {
+    if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
       axios
         .get(`/api/profile/${Number(params.id) || "self"}`)
         .then((res) => {
@@ -212,6 +192,7 @@ export default function Profile() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id, user]);
+
   /**
    * Clear the data and reset the title and selected index.
    */
@@ -220,14 +201,13 @@ export default function Profile() {
     setTitle("");
     selected && setSelected(0);
   }
-  if (params?.id === "self" && !localStorage.user)
-    return <Navigate to="/" replace />;
+
+  if (params?.id === "self" && !localStorage.user) return <Navigate to="/" replace />;
   back !== window.location.pathname && setBack(window.location.pathname);
   !menu && !(width < 760) && setMenu(true);
   menu && width < 760 && setMenu(false);
   (profile !== (Number(params.id) || "self") || search) && cleardata();
-  profile !== (Number(params.id) || "self") &&
-    setProfile(Number(params.id) || "self");
+  profile !== (Number(params.id) || "self") && setProfile(Number(params.id) || "self");
   search && setSearch(false);
   recall && setRecall(false);
   id && setId(0);
@@ -268,10 +248,7 @@ export default function Profile() {
                     <div
                       className="overflow-hidden"
                       style={{
-                        maxWidth:
-                          width < 760
-                            ? "calc(100vw - 250px)"
-                            : "calc(70vw - 350px)",
+                        maxWidth: width < 760 ? "calc(100vw - 250px)" : "calc(70vw - 350px)",
                       }}
                     >
                       <span
@@ -302,11 +279,7 @@ export default function Profile() {
                         onError={(err) => {
                           setNotification({
                             open: true,
-                            text: `Upload failed: ${
-                              err.response?.data?.error ||
-                              err.response?.data ||
-                              ""
-                            }`,
+                            text: `Upload failed: ${err.response?.data?.error || err.response?.data || ""}`,
                           });
                         }}
                       />
@@ -319,15 +292,8 @@ export default function Profile() {
               </Box>
               {width < 760 && (
                 <div className="mt20">
-                  <Link
-                    className="notextdecoration"
-                    to={`/history/${params.id}`}
-                  >
-                    <Button
-                      className="font-size-16"
-                      variant="text"
-                      color="secondary"
-                    >
+                  <Link className="notextdecoration" to={`/history/${params.id}`}>
+                    <Button className="font-size-16" variant="text" color="secondary">
                       View History
                     </Button>
                   </Link>

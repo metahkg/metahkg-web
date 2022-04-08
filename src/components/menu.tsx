@@ -1,35 +1,30 @@
 import "./css/menu.css";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import MenuTop from "./menu/top";
 import MenuThread from "./menu/thread";
 import {
   useCat,
-  useId,
-  useProfile,
-  useSearch,
-  useMenu,
-  useSelected,
   useData,
+  useId,
+  useMenu,
+  useProfile,
   useRecall,
+  useSearch,
+  useSelected,
   useSmode,
 } from "./MenuProvider";
 import { splitarray } from "../lib/common";
 import { summary } from "../types/conversation/summary";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
-import {
-  useBack,
-  useNotification,
-  useQuery,
-  useSettingsOpen,
-  useHistory,
-} from "./ContextProvider";
+import { useBack, useHistory, useNotification, useQuery, useSettingsOpen } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
 import Dock from "./dock";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
+
 /**
  * This function renders the main content of the menu
  */
@@ -53,6 +48,7 @@ function MainContent() {
   const paperRef = useRef<HTMLDivElement>(null);
   const q = decodeURIComponent(String(querystring.q || query || ""));
   const c: string | number = category || `bytid${id}`;
+
   /**
    * It sets the notification state to an object with the open property set to true and the text
    * property set to the error message.
@@ -66,19 +62,14 @@ function MainContent() {
     err?.response?.status === 404 && navigate("/404", { replace: true });
     err?.response?.status === 401 && navigate("/401", { replace: true });
   }
-  const mode =
-    (search && "search") ||
-    (profile && "profile") ||
-    (recall && "recall") ||
-    "menu";
+
+  const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
   /* A way to make sure that the effect is only run once. */
   useEffect(() => {
     if (!data.length && (category || profile || search || id || recall)) {
       setEnd(false);
       const url = {
-        search: `/api/search?q=${encodeURIComponent(
-          q
-        )}&sort=${selected}&mode=${smode}`,
+        search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&mode=${smode}`,
         profile: `/api/history/${profile}?sort=${selected}`,
         menu: `/api/menu/${c}?sort=${selected}`,
         recall: `/api/threads?threads=${JSON.stringify(
@@ -105,6 +96,7 @@ function MainContent() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, recall, profile, data, selected, category]);
+
   /**
    * It updates the data array with the new data from the API.
    */
@@ -112,9 +104,7 @@ function MainContent() {
     setEnd(false);
     setUpdating(true);
     const url = {
-      search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
-        page + 1
-      }&mode=${smode}`,
+      search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${page + 1}&mode=${smode}`,
       profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
       menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
       recall: `/api/threads?threads=${JSON.stringify(
@@ -140,6 +130,7 @@ function MainContent() {
       })
       .catch(onError);
   }
+
   /**
    * If the user has scrolled to the bottom of the page, update the list
    * @param {any} e - The event object.
@@ -148,21 +139,19 @@ function MainContent() {
     if (!end && !updating) {
       const diff = e.target.scrollHeight - e.target.scrollTop;
       if (
-        (e.target.clientHeight >= diff - 1.5 &&
-          e.target.clientHeight <= diff + 1.5) ||
+        (e.target.clientHeight >= diff - 1.5 && e.target.clientHeight <= diff + 1.5) ||
         diff < e.target.clientHeight
       ) {
         update();
       }
     }
   }
+
   return (
     <Paper
       className="nobgimage noshadow overflow-auto"
       style={{
-        maxHeight: `calc(100vh - ${
-          (search && "151") || (recall && "51") || "91"
-        }px)`,
+        maxHeight: `calc(100vh - ${(search && "151") || (recall && "51") || "91"}px)`,
       }}
       onScroll={onScroll}
       ref={paperRef}
@@ -208,6 +197,7 @@ function MainContent() {
     </Paper>
   );
 }
+
 function Menu() {
   const [selected, setSelected] = useSelected();
   const [, setData] = useData();
@@ -219,11 +209,7 @@ function Menu() {
   const [, setSettingsOpen] = useSettingsOpen();
   let tempq = decodeURIComponent(query || "");
   return (
-    <Box
-      className={`max-width-full min-height-fullvh flex-dir-column ${
-        menu ? "flex" : "display-none"
-      } menu-root`}
-    >
+    <Box className={`max-width-full min-height-fullvh flex-dir-column ${menu ? "flex" : "display-none"} menu-root`}>
       <Dock
         btns={[
           {
@@ -281,4 +267,5 @@ function Menu() {
     </Box>
   );
 }
+
 export default memo(Menu);

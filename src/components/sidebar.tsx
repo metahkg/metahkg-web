@@ -2,24 +2,24 @@ import "./css/sidebar.css";
 import React, { useState } from "react";
 import {
   Box,
+  Divider,
+  Drawer,
+  IconButton,
   List,
   ListItem,
-  Drawer,
-  Divider,
   ListItemIcon,
   ListItemText,
-  IconButton,
   Typography,
 } from "@mui/material";
 import {
-  Menu as MenuIcon,
-  AccountCircle as AccountCircleIcon,
-  Telegram as TelegramIcon,
-  Code as CodeIcon,
-  ManageAccounts as ManageAccountsIcon,
-  Logout as LogoutIcon,
   AccessTimeFilled,
+  AccountCircle as AccountCircleIcon,
+  Code as CodeIcon,
+  Logout as LogoutIcon,
+  ManageAccounts as ManageAccountsIcon,
+  Menu as MenuIcon,
   Settings as SettingsIcon,
+  Telegram as TelegramIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
@@ -28,6 +28,7 @@ import { useQuery, useSettingsOpen } from "./ContextProvider";
 import { categories, wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
+
 /**
  * The sidebar is a
  * drawer that is opened by clicking on the menu icon on the top left of the
@@ -41,20 +42,20 @@ export default function SideBar() {
   const [search] = useSearch();
   const [, setSettingsOpen] = useSettingsOpen();
   const navigate = useNavigate();
-  const toggleDrawer =
-    (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setOpen(o);
-    };
+  const toggleDrawer = (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === "keydown" &&
+      ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")
+    ) {
+      return;
+    }
+    setOpen(o);
+  };
+
   function onClick() {
     setOpen(false);
   }
+
   const [data, setData] = useData();
   let tempq = decodeURIComponent(query || "");
   return (
@@ -78,10 +79,7 @@ export default function SideBar() {
         <Box className="sidebar-box max-width-full" role="presentation">
           <div className="fullwidth">
             <List className="fullwidth">
-              <a
-                href="https://war.ukraine.ua/support-ukraine/"
-                className="notextdecoration white"
-              >
+              <a href="https://war.ukraine.ua/support-ukraine/" className="notextdecoration white">
                 <ListItem button onClick={onClick}>
                   <ListItemIcon>
                     <MetahkgLogo height={24} width={30} ua />
@@ -115,14 +113,10 @@ export default function SideBar() {
               },
               {
                 title: localStorage.user ? "Logout" : "Sign in / Register",
-                link: `/${
-                  localStorage.user ? "users/logout" : "users/signin"
-                }?returnto=${encodeURIComponent(wholepath())}`,
-                icon: localStorage.user ? (
-                  <LogoutIcon />
-                ) : (
-                  <AccountCircleIcon />
-                ),
+                link: `/${localStorage.user ? "users/logout" : "users/signin"}?returnto=${encodeURIComponent(
+                  wholepath()
+                )}`,
+                icon: localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />,
               },
             ].map((item) => (
               <Link to={item.link} className="notextdecoration white">
@@ -134,30 +128,17 @@ export default function SideBar() {
             ))}
           </List>
           <Divider />
-          {[
-            categories.filter((i) => !i.hidden),
-            localStorage.user && categories.filter((i) => i.hidden),
-          ].map(
+          {[categories.filter((i) => !i.hidden), localStorage.user && categories.filter((i) => i.hidden)].map(
             (cats: { id: number; name: string; hidden?: boolean }[], index) => (
               <div>
                 {cats && (
-                  <div
-                    className={`m20${
-                      localStorage.user && !index ? " mb10" : ""
-                    }${index ? " mt0" : ""}`}
-                  >
+                  <div className={`m20${localStorage.user && !index ? " mb10" : ""}${index ? " mt0" : ""}`}>
                     {cats.map((category) => (
-                      <Link
-                        to={`/category/${category.id}`}
-                        className="notextdecoration"
-                      >
+                      <Link to={`/category/${category.id}`} className="notextdecoration">
                         <Typography
                           className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
                           sx={(theme) => ({
-                            color:
-                              cat === category.id && !(profile || search)
-                                ? theme.palette.secondary.main
-                                : "white",
+                            color: cat === category.id && !(profile || search) ? theme.palette.secondary.main : "white",
                             "&:hover": {
                               color: `${theme.palette.secondary.main} !important`,
                             },
@@ -220,9 +201,7 @@ export default function SideBar() {
               <ListItemText>Settings</ListItemText>
             </ListItem>
           </List>
-          <p className="ml5">
-            Metahkg build {process.env.REACT_APP_build || "v0.5.8rc2"}
-          </p>
+          <p className="ml5">Metahkg build {process.env.REACT_APP_build || "v0.5.8rc2"}</p>
         </Box>
       </Drawer>
     </div>

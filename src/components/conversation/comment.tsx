@@ -17,11 +17,12 @@ import axios from "axios";
 import { useNotification, useSettings } from "../ContextProvider";
 import MoreList from "./more";
 import { isMobile } from "react-device-detect";
-import { useTid, useTitle, useStory } from "../conversation";
+import { useStory, useTid, useTitle } from "../conversation";
 import parse from "html-react-parser";
 import { modifycomment, replace } from "../../lib/modifycomments";
 import VoteButtons from "./votebuttons";
 import { timetoword } from "../../lib/common";
+
 /**
  * Comment component renders a comment
  * which includes a title (Tag)
@@ -63,12 +64,12 @@ function Comment(props: {
   /** comment share link */
   slink?: string;
 }) {
-  const { op, sex, id, userid, name, children, date, up, down, vote, slink } =
-    props;
+  const { op, sex, id, userid, name, children, date, up, down, vote, slink } = props;
   const tid = useTid();
   const title = useTitle();
   const [story, setStory] = useStory();
   const [settings] = useSettings();
+
   /**
    * Tag serves as a title for the comment
    * renders user id, username (as children),
@@ -130,9 +131,7 @@ function Comment(props: {
         },
       },
       {
-        icon: (
-          <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />
-        ),
+        icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
         title: "Quote",
         action: () => {
           navigate(`/comment/${tid}?quote=${id}`);
@@ -148,24 +147,21 @@ function Comment(props: {
         icon: <ShareIcon className="metahkg-grey-force font-size-19-force" />,
         title: "Share",
         action: () => {
-          setShareLink(
-            link || `${window.location.origin}/thread/${tid}?c=${id}`
-          );
+          setShareLink(link || `${window.location.origin}/thread/${tid}?c=${id}`);
           setShareTitle(title + ` - comment #${id}`);
           setShareOpen(true);
         },
       },
     ];
-    const morelist: { icon: JSX.Element; title: string; action: () => void }[] =
-      [
-        {
-          icon: <FeedIcon className="font-size-19-force" />,
-          title: "Create new topic",
-          action: () => {
-            navigate(`/create?quote=${tid}.${id}`);
-          },
+    const morelist: { icon: JSX.Element; title: string; action: () => void }[] = [
+      {
+        icon: <FeedIcon className="font-size-19-force" />,
+        title: "Create new topic",
+        action: () => {
+          navigate(`/create?quote=${tid}.${id}`);
         },
-      ];
+      },
+    ];
     return (
       <div className="flex align-center font-size-17 pt10 justify-space-between">
         <PopUp
@@ -199,19 +195,14 @@ function Comment(props: {
           >
             {tprops.children}
           </p>
-          <Tooltip
-            title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")}
-            arrow
-          >
+          <Tooltip title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")} arrow>
             <p
               onClick={() => {
                 if (isMobile) {
                   setTimemode(timemode === "short" ? "long" : "short");
                 }
               }}
-              className={`novmargin metahkg-grey ml10 font-size-15${
-                isMobile ? " pointer" : ""
-              }`}
+              className={`novmargin metahkg-grey ml10 font-size-15${isMobile ? " pointer" : ""}`}
             >
               {
                 {
@@ -242,6 +233,7 @@ function Comment(props: {
       </div>
     );
   }
+
   return (
     <Box
       id={`c${id}`}
@@ -261,14 +253,7 @@ function Comment(props: {
       </div>
       <div className="ml20 mr20">
         {settings.votebar ? (
-          <VoteBar
-            key={tid}
-            vote={vote}
-            postId={tid}
-            clientId={id}
-            upVoteCount={up}
-            downVoteCount={down}
-          />
+          <VoteBar key={tid} vote={vote} postId={tid} clientId={id} upVoteCount={up} downVoteCount={down} />
         ) : (
           <VoteButtons vote={vote} up={up} down={down} id={tid} cid={id} />
         )}
@@ -277,4 +262,5 @@ function Comment(props: {
     </Box>
   );
 }
+
 export default memo(Comment);

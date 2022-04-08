@@ -14,6 +14,7 @@ import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
 import UploadImage from "../components/uploadimage";
+
 declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
 /**
@@ -96,6 +97,7 @@ export default function AddComment() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   /**
    * It sends a post request to the server with the comment data.
    */
@@ -108,9 +110,7 @@ export default function AddComment() {
       .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
       .then((res) => {
         data.length && setData([]);
-        navigate(
-          `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
-        );
+        navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`);
         setTimeout(() => {
           setNotification({ open: false, text: "" });
         }, 100);
@@ -129,14 +129,10 @@ export default function AddComment() {
         grecaptcha.reset();
       });
   }
+
   /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
   if (!localStorage.user) {
-    return (
-      <Navigate
-        to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`}
-        replace
-      />
-    );
+    return <Navigate to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`} replace />;
   }
   const id = Number(params.id);
   menu && setMenu(false);
@@ -152,13 +148,7 @@ export default function AddComment() {
       <div style={{ width: width < 760 ? "100vw" : "80vw" }}>
         <div className="m20">
           <div className="flex align-center">
-            <MetahkgLogo
-              svg
-              height={50}
-              width={40}
-              light
-              className="mr10 mb10"
-            />
+            <MetahkgLogo svg height={50} width={40} light className="mr10 mb10" />
             <h1 className="nomargin">Add comment</h1>
           </div>
           <h4 className="mt5 mb10 font-size-22">
@@ -196,15 +186,7 @@ export default function AddComment() {
             />
             {imgurl && (
               <p className={`ml10 novmargin flex${width < 760 ? " mt5" : ""}`}>
-                <Tooltip
-                  arrow
-                  title={
-                    <img
-                      src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
-                      alt=""
-                    />
-                  }
-                >
+                <Tooltip arrow title={<img src={`https://i.metahkg.org/thumbnail?src=${imgurl}`} alt="" />}>
                   <a href={imgurl} target="_blank" rel="noreferrer">
                     {imgurl}
                   </a>
@@ -231,26 +213,17 @@ export default function AddComment() {
               setComment(e.getContent());
             }}
           />
-          <div
-            className={`mt15 ${
-              small ? "" : "flex fullwidth justify-space-between align-center"
-            }`}
-          >
+          <div className={`mt15 ${small ? "" : "flex fullwidth justify-space-between align-center"}`}>
             <ReCAPTCHA
               theme="dark"
-              sitekey={
-                process.env.REACT_APP_recaptchasitekey ||
-                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-              }
+              sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
               onChange={(token) => {
                 setRtoken(token || "");
               }}
             />
             <Button
               disabled={disabled || !comment || !rtoken}
-              className={`${
-                small ? "mt15 " : ""
-              }font-size-16-force notexttransform ac-btn`}
+              className={`${small ? "mt15 " : ""}font-size-16-force notexttransform ac-btn`}
               onClick={addcomment}
               variant="contained"
               color="secondary"

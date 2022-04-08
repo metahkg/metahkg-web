@@ -1,23 +1,18 @@
 import React from "react";
 import "./css/thread.css";
-import { Button, Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import {
-  ThumbUp as ThumbUpIcon,
-  ThumbDown as ThumbDownIcon,
   Article as ArticleIcon,
   Comment as CommentIcon,
+  ThumbDown as ThumbDownIcon,
+  ThumbUp as ThumbUpIcon,
 } from "@mui/icons-material";
-import { timetoword, roundup, categories } from "../../lib/common";
+import { categories, roundup, timetoword } from "../../lib/common";
 import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
-import {
-  useCat,
-  useId,
-  useProfile,
-  useRecall,
-  useSearch,
-} from "../MenuProvider";
+import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
 import { useHistory } from "../ContextProvider";
+
 /**
  * A component that renders a thread in the menu.
  * @param {summary} props.thread thread info
@@ -38,9 +33,7 @@ export default function MenuThread(props: {
   return (
     <Link
       className="fullwidth notextdecoration"
-      to={`/thread/${thread.id}?${
-        cid && id !== thread.id ? `c=${cid}` : "page=1"
-      }`}
+      to={`/thread/${thread.id}?${cid && id !== thread.id ? `c=${cid}` : "page=1"}`}
       onClick={onClick}
     >
       <Box
@@ -68,13 +61,9 @@ export default function MenuThread(props: {
             ) : (
               <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
             )}
-            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
-              {thread.vote}
-            </p>
+            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">{thread.vote}</p>
             <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
-              {thread.c}
-            </p>
+            <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">{thread.c}</p>
             <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
             <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
               {String(roundup(thread.c / 25))}
@@ -86,14 +75,8 @@ export default function MenuThread(props: {
             {thread.title}
           </p>
           {Boolean(cat === 1 || search || profile || recall) && (
-            <Link
-              className="mr10 notextdecoration"
-              to={`/category/${thread.category}`}
-            >
-              <Button
-                variant="contained"
-                className="nomargin nopadding notexttransform menuthread-catbtn"
-              >
+            <Link className="mr10 notextdecoration" to={`/category/${thread.category}`}>
+              <Button variant="contained" className="nomargin nopadding notexttransform menuthread-catbtn">
                 <p className="nomargin font-size-12 menuthread-catname">
                   {categories.find((i) => i.id === thread.category)?.name}
                 </p>

@@ -4,32 +4,30 @@ import axios from "axios";
 import hash from "hash.js";
 import * as EmailValidator from "email-validator";
 import {
+  Alert,
   Box,
-  TextField,
   Button,
   FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  Alert,
-  SelectChangeEvent,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router";
 import { useMenu } from "../../components/MenuProvider";
-import {
-  useNotification,
-  useSettings,
-  useWidth,
-} from "../../components/ContextProvider";
+import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
 import { checkpwd } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import queryString from "query-string";
+
 declare const grecaptcha: { reset: () => void };
+
 /**
  * Sex selector
  * @param props.disabled disable the selector
@@ -48,19 +46,14 @@ function SexSelect(props: {
   return (
     <FormControl className="signup-sex-form">
       <InputLabel color="secondary">Sex</InputLabel>
-      <Select
-        color="secondary"
-        disabled={disabled}
-        value={sex}
-        label="Gender"
-        onChange={onChange}
-      >
+      <Select color="secondary" disabled={disabled} value={sex} label="Gender" onChange={onChange}>
         <MenuItem value={1}>Male</MenuItem>
         <MenuItem value={0}>Female</MenuItem>
       </Select>
     </FormControl>
   );
 }
+
 /**
  * Register component for /users/register
  * initially 3 text fields and a Select list (Sex)
@@ -92,6 +85,7 @@ export default function Register() {
   const [settings] = useSettings();
   const query = queryString.parse(window.location.search);
   const navigate = useNavigate();
+
   function register() {
     setAlert({ severity: "info", text: "Registering..." });
     setDisabled(true);
@@ -107,8 +101,7 @@ export default function Register() {
       },
       {
         cond: !checkpwd(pwd),
-        alert:
-          "Password must contain 8 characters, an uppercase, a lowercase, and a number.",
+        alert: "Password must contain 8 characters, an uppercase, a lowercase, and a number.",
       },
     ];
     for (const error of errors) {
@@ -151,6 +144,7 @@ export default function Register() {
         grecaptcha.reset();
       });
   }
+
   if (localStorage.user) return <Navigate to="/" replace />;
   menu && setMenu(false);
   const small = width / 2 - 100 <= 450;
@@ -211,25 +205,14 @@ export default function Register() {
           <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
           <br />
           <h4>
-            <Link
-              style={{ color: settings.secondaryColor?.main }}
-              className="link"
-              to="/users/verify"
-            >
+            <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/verify">
               Verify / Resend verification email?
             </Link>
           </h4>
-          <div
-            className={`${
-              small ? "" : "flex fullwidth justify-space-between"
-            } mt15`}
-          >
+          <div className={`${small ? "" : "flex fullwidth justify-space-between"} mt15`}>
             <ReCAPTCHA
               theme="dark"
-              sitekey={
-                process.env.REACT_APP_recaptchasitekey ||
-                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-              }
+              sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
               onChange={(token) => {
                 setRtoken(token || "");
               }}

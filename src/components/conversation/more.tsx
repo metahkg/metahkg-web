@@ -36,9 +36,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
-export default function MoreList(props: {
-  buttons: { title: string; icon?: JSX.Element; action: () => void }[];
-}) {
+
+export default function MoreList(props: { buttons: { title: string; icon?: JSX.Element; action: () => void }[] }) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
 
@@ -47,10 +46,7 @@ export default function MoreList(props: {
   };
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
     setOpen(false);
@@ -103,8 +99,7 @@ export default function MoreList(props: {
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === "bottom-start" ? "left top" : "left bottom",
+                transformOrigin: placement === "bottom-start" ? "left top" : "left bottom",
               }}
             >
               <Paper>

@@ -1,13 +1,8 @@
 import "./css/pageselect.css";
 import React from "react";
-import {
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Box, IconButton, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+
 export default function PageSelect(props: {
   pages: number;
   page: number;
@@ -17,8 +12,7 @@ export default function PageSelect(props: {
   onLastClicked: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onNextClicked: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) {
-  const { pages, page, onSelect, onLastClicked, onNextClicked, last, next } =
-    props;
+  const { pages, page, onSelect, onLastClicked, onNextClicked, last, next } = props;
   return (
     <div className="pageselect-root flex flex-dir-column">
       {last && (

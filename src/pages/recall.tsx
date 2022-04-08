@@ -13,6 +13,7 @@ import {
   useSelected,
   useTitle,
 } from "../components/MenuProvider";
+
 /**
  * It's a function that
  * returns a component that renders a box with a background color
@@ -31,11 +32,13 @@ export default function Recall() {
   const [title, setTitle] = useTitle();
   const [selected, setSelected] = useSelected();
   document.title = "Recall | Metahkg";
+
   function cleardata() {
     data.length && setData([]);
     title && setTitle("");
     selected && setSelected(0);
   }
+
   back !== window.location.pathname && setBack(window.location.pathname);
   !menu && setMenu(true);
   (category || search || profile || !recall) && cleardata();

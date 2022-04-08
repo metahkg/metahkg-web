@@ -11,15 +11,13 @@ import {
 } from "@mui/icons-material";
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
+
 export default function Player(props: { url: string }) {
   const [pip, setPip] = useState(false);
   const [play, setPlay] = useState(false);
   const player = useRef<ReactPlayer>(null);
   const { url } = props;
-  const mode =
-    (url.match(/https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i) &&
-      "facebook") ||
-    "youtube";
+  const mode = (url.match(/https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i) && "facebook") || "youtube";
   const buttons = [
     {
       title: "Full Screen (press ESC/F11 to exit)",
@@ -60,9 +58,7 @@ export default function Player(props: { url: string }) {
                 facebook: <Facebook className="font-size-18-force" />,
               }[mode]
             }
-            <p className="novmargin ml5">
-              {{ youtube: "Youtube", facebook: "Facebook" }[mode]}
-            </p>
+            <p className="novmargin ml5">{{ youtube: "Youtube", facebook: "Facebook" }[mode]}</p>
           </div>
           <div className="flex align-center mr5">
             {buttons.map(
@@ -91,14 +87,7 @@ export default function Player(props: { url: string }) {
         }}
         playIcon={
           {
-            youtube: (
-              <img
-                width={80}
-                height={50}
-                src="/images/youtube/youtube.png"
-                alt=""
-              />
-            ),
+            youtube: <img width={80} height={50} src="/images/youtube/youtube.png" alt="" />,
             facebook: <PlayCircleOutline className="font-size-50-force" />,
           }[mode]
         }
