@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "https://dev.metahkg.org",
+      target: process.env.BACKEND_URL,
       changeOrigin: true,
     })
   );
