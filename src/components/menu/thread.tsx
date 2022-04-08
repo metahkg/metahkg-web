@@ -43,10 +43,9 @@ export default function MenuThread(props: {
       onClick={onClick}
     >
       <Box
-        className={`flex fullwidth flex-dir-column user-select-none menuthread-root${
+        className={`flex fullwidth flex-dir-column user-select-none border-radius-20 menuthread-root${
           id === thread.id ? "-selected" : ""
         }`}
-        sx={{ borderRadius: 10 }}
       >
         <div className="flex fullwidth align-center justify-space-between menuthread-top">
           <div style={{ display: "flex", alignItems: "center" }}>
