@@ -22,50 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import "./css/searchbar.css";
-import React from "react";
-import { styled, InputBase, Chip } from "@mui/material";
-import { Search as SearchIcon } from "@mui/icons-material";
-import { KeyboardEventHandler } from "react";
-import { useQuery } from "./ContextProvider";
+import React, {KeyboardEventHandler} from "react";
+import {Chip, InputBase, styled} from "@mui/material";
+import {Search as SearchIcon} from "@mui/icons-material";
+import {useQuery} from "./ContextProvider";
 import queryString from "query-string";
-import { useData, useSearch, useSmode } from "./MenuProvider";
-const Search = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#111",
-  border: `1px solid ${theme.palette.secondary.main}`,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    width: "auto",
-    maxWidth: "100%",
-  },
-}));
+import {useData, useSearch, useSmode} from "./MenuProvider";
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  color: "white",
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "white",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
+const Search = styled("div")(({theme}) => ({
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: "#111",
+    border: `1px solid ${theme.palette.secondary.main}`,
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
+    [theme.breakpoints.up("sm")]: {
+        width: "auto",
+        maxWidth: "100%",
     },
-  },
+}));
+
+const SearchIconWrapper = styled("div")(({theme}) => ({
+    padding: theme.spacing(0, 2),
+    color: "white",
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({theme}) => ({
+    color: "white",
+    "& .MuiInputBase-input": {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create("width"),
+        width: "100%",
+        [theme.breakpoints.up("md")]: {
+            width: "100%",
+        },
+    },
 }));
 /**
  * It's a search bar
@@ -73,37 +73,37 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  * @returns A search bar with a search icon and an input field.
  */
 export default function SearchBar(props: {
-  onKeyPress: KeyboardEventHandler<HTMLDivElement>;
-  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    onKeyPress: KeyboardEventHandler<HTMLDivElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
-  const [query] = useQuery();
-  const [, setData] = useData();
-  const [smode, setSmode] = useSmode();
-  const [search] = useSearch();
-  const querystring = queryString.parse(window.location.search);
-  return (
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
-        key={query}
-        placeholder="Search"
-        inputProps={{ "aria-label": "search" }}
-        onKeyPress={props.onKeyPress}
-        onChange={props.onChange}
-        defaultValue={decodeURIComponent(String(querystring.q || query || ""))}
-      />
-      {search && (
-        <Chip
-          label={smode ? "OP" : "Title"}
-          onClick={() => {
-            setSmode(Number(!smode));
-            setData([]);
-          }}
-          className="mr10 searchbar-chip"
-        />
-      )}
-    </Search>
-  );
+    const [query] = useQuery();
+    const [, setData] = useData();
+    const [smode, setSmode] = useSmode();
+    const [search] = useSearch();
+    const querystring = queryString.parse(window.location.search);
+    return (
+        <Search>
+            <SearchIconWrapper>
+                <SearchIcon/>
+            </SearchIconWrapper>
+            <StyledInputBase
+                key={query}
+                placeholder="Search"
+                inputProps={{"aria-label": "search"}}
+                onKeyPress={props.onKeyPress}
+                onChange={props.onChange}
+                defaultValue={decodeURIComponent(String(querystring.q || query || ""))}
+            />
+            {search && (
+                <Chip
+                    label={smode ? "OP" : "Title"}
+                    onClick={() => {
+                        setSmode(Number(!smode));
+                        setData([]);
+                    }}
+                    className="mr10 searchbar-chip"
+                />
+            )}
+        </Search>
+    );
 }

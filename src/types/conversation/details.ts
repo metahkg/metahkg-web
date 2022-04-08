@@ -9,5 +9,5 @@ export type details = {
     c?: number;
     /** thread original poster name */
     op?: string;
-  };
+};
   
