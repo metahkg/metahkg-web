@@ -2,8 +2,7 @@ prettify:
   image: node:latest
   script:
     - git checkout $CI_COMMIT_BRANCH
-    - sudo npm -g install prettier
-    - prettier --check . || (prettier --write . && \
+    - npx prettier --check . || (npx prettier --write . && \
       git config user.name wcyat-bot && \
       git config user.email bot@wcyat.me && \
       git commit -a -m prettify && \
