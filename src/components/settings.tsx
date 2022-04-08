@@ -34,7 +34,7 @@ export default function Settings(props: {
     { value: "Yellow", main: "#f5bd1f", dark: "#ffc100" },
     { value: "Orange", main: "#ff9800", dark: "#b26a00" },
     { value: "Teal", main: "#009688", dark: "#00695f" },
-    { value: "Purple", main: "#673ab7", dark: "#482880" },
+    { value: "Purple", main: "#651fff", dark: "#4615b2" },
   ];
   return (
     <PopUp title="Settings" open={open} setOpen={setOpen} fullScreen>
@@ -50,7 +50,7 @@ export default function Settings(props: {
           </div>
         ))}
         <div className="flex justify-space-between align-center fullwidth mt6 mb4">
-          <p className="nomargin">Secondary Color</p>
+          <p className="nomargin">Color</p>
           <ToggleButtonGroup
             color="secondary"
             value={
