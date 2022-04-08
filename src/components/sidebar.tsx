@@ -116,7 +116,7 @@ export default function SideBar() {
               {
                 title: localStorage.user ? "Logout" : "Sign in / Register",
                 link: `/${
-                  localStorage.user ? "logout" : "signin"
+                  localStorage.user ? "users/logout" : "users/signin"
                 }?returnto=${encodeURIComponent(wholepath())}`,
                 icon: localStorage.user ? (
                   <LogoutIcon />

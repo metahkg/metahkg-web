@@ -69,7 +69,7 @@ export default function Empty() {
           <Link
             className="notextdecoration white"
             to={`/${
-              localStorage.user ? "logout" : "signin"
+              localStorage.user ? "users/logout" : "users/signin"
             }?returnto=${encodeURIComponent(wholepath())}`}
           >
             <ListItem button className="fullwidth">
