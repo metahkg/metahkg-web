@@ -18,7 +18,7 @@ export default function Player(props: { url: string }) {
   const player = useRef<ReactPlayer>(null);
   const { url } = props;
   const mode =
-    ([/https:\/\/fb\.watch\/\.+/i, /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i].some((regexp) =>
+    ([/https:\/\/fb\.watch\/\S+/i, /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i].some((regexp) =>
       url.match(regexp)
     ) &&
       "facebook") ||

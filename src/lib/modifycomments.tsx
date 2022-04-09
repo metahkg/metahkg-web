@@ -44,7 +44,7 @@ export function replace(node: any): JSX.Element | void {
         if (
           [
             /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i,
-            /https:\/\/fb\.watch\/\.+/i,
+            /https:\/\/fb\.watch\/\S+/i,
             /https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)/i,
             /https:\/\/youtu.be\/\S{11}/i,
           ].some((item) => href.match(item))
