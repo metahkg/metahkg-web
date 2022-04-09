@@ -57,8 +57,10 @@
     "babel-loader": "^8.2.3",
     "babel-plugin-prismjs": "^2.1.0",
     "customize-cra": "^1.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
     "mongodb": "^4.4.0",
-    "prettier": "^2.5.1",
+    "prettier": "2.6.2",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.0",
     "system-commands": "^1.1.7",
@@ -71,7 +73,8 @@
     "build": "node build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn run build && yarn run start"
+    "deploy": "yarn run build && yarn run start",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -90,5 +93,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
