@@ -57,6 +57,7 @@
     "babel-loader": "^8.2.3",
     "babel-plugin-prismjs": "^2.1.0",
     "customize-cra": "^1.0.0",
+    "eslint": "^8.13.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
     "mongodb": "^4.4.0",
@@ -95,6 +96,7 @@
     ]
   },
   "lint-staged": {
-    "*.{js,css,md,jsx,ts}": "prettier --write"
+    "*.{js,jsx,tsx,ts}": "eslint --cache --fix",
+    "*.{js,css,md,jsx,tsx,ts}": "prettier --write"
   }
 }
