@@ -8,26 +8,32 @@
 *::-webkit-scrollbar {
   width: 5px;
 }
+
 *::-webkit-scrollbar-track {
   background: #151515;
 }
+
 *::-webkit-scrollbar-thumb {
   background-color: #464646;
   border-radius: 7px;
 }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #464646 #151515;
 }
+
 body {
   font-family: "Segoe UI", "Open Sans", Helvetica Neue, Helvetica, Arial, Microsoft JhengHei, sans-serif;
 }
+
 a,
 a:visited,
 a:hover,
 a:active {
   color: #3498db;
 }
+
 p,
 h1,
 h2,
@@ -39,6 +45,7 @@ span,
 q {
   color: white;
 }
+
 .TextField-without-border-radius fieldset {
   border-radius: 0;
 }
