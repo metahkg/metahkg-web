@@ -58,6 +58,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "customize-cra": "^1.0.0",
     "eslint": "^8.13.0",
+    "eslint-config-react-app": "^7.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.7",
     "mongodb": "^4.4.0",
