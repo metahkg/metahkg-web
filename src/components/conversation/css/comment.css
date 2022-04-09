@@ -1,58 +1,58 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-nord.min.css);
 
 .comment-tag-userlink {
-  line-height: 22px;
-  max-height: 22px;
+    line-height: 22px;
+    max-height: 22px;
 }
 
 .comment-tag-userlink:active {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .comment-tag-userlink:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .comment-tag-left {
-  max-width: calc(100% - 75px);
+    max-width: calc(100% - 75px);
 }
 
 .comment-internal-spacer {
-  height: 2px;
+    height: 2px;
 }
 
 .comment-spacer {
-  height: 10px;
+    height: 10px;
 }
 
 .comment-body blockquote * {
-  color: #aca9a9;
+    color: #aca9a9;
 }
 
 .comment-body a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .comment-body a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .comment-body * {
-  object-fit: contain !important;
-  max-width: 100% !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
 }
 
 .comment-body img,
 .comment-body video {
-  height: 100%;
-  max-height: 400px;
+    height: 100%;
+    max-height: 400px;
 }
 
 .comment-body {
-  max-width: 100% !important;
-  overflow: hidden !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
 }
 
 .comment-body * {
-  z-index: auto !important;
+    z-index: auto !important;
 }

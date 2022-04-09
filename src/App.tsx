@@ -26,13 +26,13 @@ import Settings from "./components/settings";
 import Forbidden from "./pages/forbidden";
 
 function Source() {
-  window.location.replace("https://gitlab.com/metahkg/metahkg");
-  return <div />;
+    window.location.replace("https://gitlab.com/metahkg/metahkg");
+    return <div />;
 }
 
 function Telegram() {
-  window.location.replace("https://t.me/+WbB7PyRovUY1ZDFl");
-  return <div />;
+    window.location.replace("https://t.me/+WbB7PyRovUY1ZDFl");
+    return <div />;
 }
 
 /**
@@ -40,57 +40,57 @@ function Telegram() {
  * Instead it is controlled by components inside Routes
  */
 export default function App() {
-  const [menu] = useMenu();
-  const [width] = useWidth();
-  const [settingsOpen, setSettingsOpen] = useSettingsOpen();
-  const [settings] = useSettings();
-  useEffect(() => {
-    if (localStorage.user || localStorage.id) {
-      axios.get("/api/loggedin").then((res) => {
-        if (!res.data.loggedin) {
-          localStorage.removeItem("user");
-          localStorage.removeItem("id");
-          return;
+    const [menu] = useMenu();
+    const [width] = useWidth();
+    const [settingsOpen, setSettingsOpen] = useSettingsOpen();
+    const [settings] = useSettings();
+    useEffect(() => {
+        if (localStorage.user || localStorage.id) {
+            axios.get("/api/loggedin").then((res) => {
+                if (!res.data.loggedin) {
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("id");
+                    return;
+                }
+                localStorage.user !== res.data.user && localStorage.setItem("user", res.data.user);
+                localStorage.id !== Number(res.data.id) && localStorage.setItem("id", res.data.id);
+            });
         }
-        localStorage.user !== res.data.user && localStorage.setItem("user", res.data.user);
-        localStorage.id !== Number(res.data.id) && localStorage.setItem("id", res.data.id);
-      });
-    }
-  }, []);
-  return (
-    <Theme primary={{ main: "#222" }} secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}>
-      <Notification />
-      <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-      <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
-        <Router>
-          <div className="flex">
-            <div style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}>
-              <Menu />
-            </div>
-            <Routes>
-              <Route path="/" element={<Navigate to="/category/1" replace />} />
-              <Route path="/thread/:id" element={<Thread />} />
-              <Route path="/comment/:id" element={<AddComment />} />
-              <Route path="/category/:category" element={<Category />} />
-              <Route path="/users/register" element={<Register />} />
-              <Route path="/users/verify" element={<Verify />} />
-              <Route path="/users/resend" element={<Resend />} />
-              <Route path="/users/signin" element={<Signin />} />
-              <Route path="/create" element={<Create />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/users/logout" element={<Logout />} />
-              <Route path="/source" element={<Source />} />
-              <Route path="/telegram" element={<Telegram />} />
-              <Route path="/profile/:id" element={<Profile />} />
-              <Route path="/history/:id" element={<History />} />
-              <Route path="/recall" element={<Recall />} />
-              <Route path="/404" element={<NotFound />} />
-              <Route path="/401" element={<Forbidden />} />
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </div>
-        </Router>
-      </Box>
-    </Theme>
-  );
+    }, []);
+    return (
+        <Theme primary={{ main: "#222" }} secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}>
+            <Notification />
+            <Settings open={settingsOpen} setOpen={setSettingsOpen} />
+            <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
+                <Router>
+                    <div className="flex">
+                        <div style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}>
+                            <Menu />
+                        </div>
+                        <Routes>
+                            <Route path="/" element={<Navigate to="/category/1" replace />} />
+                            <Route path="/thread/:id" element={<Thread />} />
+                            <Route path="/comment/:id" element={<AddComment />} />
+                            <Route path="/category/:category" element={<Category />} />
+                            <Route path="/users/register" element={<Register />} />
+                            <Route path="/users/verify" element={<Verify />} />
+                            <Route path="/users/resend" element={<Resend />} />
+                            <Route path="/users/signin" element={<Signin />} />
+                            <Route path="/create" element={<Create />} />
+                            <Route path="/search" element={<Search />} />
+                            <Route path="/users/logout" element={<Logout />} />
+                            <Route path="/source" element={<Source />} />
+                            <Route path="/telegram" element={<Telegram />} />
+                            <Route path="/profile/:id" element={<Profile />} />
+                            <Route path="/history/:id" element={<History />} />
+                            <Route path="/recall" element={<Recall />} />
+                            <Route path="/404" element={<NotFound />} />
+                            <Route path="/401" element={<Forbidden />} />
+                            <Route path="*" element={<Navigate to="/404" replace />} />
+                        </Routes>
+                    </div>
+                </Router>
+            </Box>
+        </Theme>
+    );
 }

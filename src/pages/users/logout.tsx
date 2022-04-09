@@ -11,29 +11,29 @@ import { logout } from "../../lib/common";
  * @returns an info alert
  */
 export default function Logout() {
-  const [menu, setMenu] = useMenu();
-  const [, setNotification] = useNotification();
-  const navigate = useNavigate();
-  const query = queryString.parse(window.location.search);
-  menu && setMenu(false);
-  logout().then(() => {
-    navigate(decodeURIComponent(String(query.returnto || "/")), {
-      replace: true,
+    const [menu, setMenu] = useMenu();
+    const [, setNotification] = useNotification();
+    const navigate = useNavigate();
+    const query = queryString.parse(window.location.search);
+    menu && setMenu(false);
+    logout().then(() => {
+        navigate(decodeURIComponent(String(query.returnto || "/")), {
+            replace: true,
+        });
+        setNotification({ open: true, text: "Logged out." });
     });
-    setNotification({ open: true, text: "Logged out." });
-  });
-  return (
-    <Box
-      className="min-height-fullvh justify-center width-fullvw"
-      sx={{
-        backgroundColor: "primary.dark",
-      }}
-    >
-      <div className="flex fullwidth justify-center">
-        <Alert className="mt30 halfwidth" severity="info">
-          Logging you out...
-        </Alert>
-      </div>
-    </Box>
-  );
+    return (
+        <Box
+            className="min-height-fullvh justify-center width-fullvw"
+            sx={{
+                backgroundColor: "primary.dark",
+            }}
+        >
+            <div className="flex fullwidth justify-center">
+                <Alert className="mt30 halfwidth" severity="info">
+                    Logging you out...
+                </Alert>
+            </div>
+        </Box>
+    );
 }

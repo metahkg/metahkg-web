@@ -12,52 +12,50 @@ import { useBack, useWidth } from "../ContextProvider";
  * @param {string} props.slink The shortened link of the thread
  */
 export default function Title(props: {
-  /** thread category id */
-  category: number | undefined;
-  /** thread title */
-  title: string | undefined;
-  /** buttons */
-  btns: { icon: JSX.Element; action: () => void; title: string }[];
+    /** thread category id */
+    category: number | undefined;
+    /** thread title */
+    title: string | undefined;
+    /** buttons */
+    btns: { icon: JSX.Element; action: () => void; title: string }[];
 }) {
-  const { category, title, btns } = props;
-  const [history] = useBack();
-  const [width] = useWidth();
-  return (
-    <Box
-      className="title-root"
-      sx={{
-        bgcolor: "primary.main",
-      }}
-    >
-      <div className="flex ml10 mr20 align-center justify-space-between fullheight">
-        <div className="flex align-center mr10 overflow-hidden">
-          {(history || category) && (
-            <Link to={history || `/category/${category}`}>
-              <IconButton className="nomargin nopadding">
-                <ArrowBackIcon color="secondary" />
-              </IconButton>
-            </Link>
-          )}
-          <Typography
-            className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
-              width < 760 ? " text-align-center" : ""
-            }`}
+    const { category, title, btns } = props;
+    const [history] = useBack();
+    const [width] = useWidth();
+    return (
+        <Box
+            className="title-root"
             sx={{
-              color: "secondary.main",
+                bgcolor: "primary.main",
             }}
-          >
-            {title}
-          </Typography>
-        </div>
-        <div className="flex">
-          {!(width < 760) &&
-            btns.map((btn) => (
-              <Tooltip arrow title={btn.title}>
-                <IconButton onClick={btn.action}>{btn.icon}</IconButton>
-              </Tooltip>
-            ))}
-        </div>
-      </div>
-    </Box>
-  );
+        >
+            <div className="flex ml10 mr20 align-center justify-space-between fullheight">
+                <div className="flex align-center mr10 overflow-hidden">
+                    {(history || category) && (
+                        <Link to={history || `/category/${category}`}>
+                            <IconButton className="nomargin nopadding">
+                                <ArrowBackIcon color="secondary" />
+                            </IconButton>
+                        </Link>
+                    )}
+                    <Typography
+                        className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${width < 760 ? " text-align-center" : ""}`}
+                        sx={{
+                            color: "secondary.main",
+                        }}
+                    >
+                        {title}
+                    </Typography>
+                </div>
+                <div className="flex">
+                    {!(width < 760) &&
+                        btns.map((btn) => (
+                            <Tooltip arrow title={btn.title}>
+                                <IconButton onClick={btn.action}>{btn.icon}</IconButton>
+                            </Tooltip>
+                        ))}
+                </div>
+            </div>
+        </Box>
+    );
 }

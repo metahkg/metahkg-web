@@ -2,17 +2,17 @@ import React, { createContext, useContext, useState } from "react";
 import { summary } from "../types/conversation/summary";
 
 const MenuContext = createContext<{
-  category: [number, React.Dispatch<React.SetStateAction<number>>];
-  id: [number, React.Dispatch<React.SetStateAction<number>>];
-  search: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-  profile: [number | "self", React.Dispatch<React.SetStateAction<number | "self">>];
-  menu: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-  selected: [number, React.Dispatch<React.SetStateAction<number>>];
-  recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-  data: [summary[], React.Dispatch<React.SetStateAction<summary[]>>];
-  title: [string, React.Dispatch<React.SetStateAction<string>>];
-  smode: [number, React.Dispatch<React.SetStateAction<number>>];
-  // @ts-ignore
+    category: [number, React.Dispatch<React.SetStateAction<number>>];
+    id: [number, React.Dispatch<React.SetStateAction<number>>];
+    search: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    profile: [number | "self", React.Dispatch<React.SetStateAction<number | "self">>];
+    menu: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    selected: [number, React.Dispatch<React.SetStateAction<number>>];
+    recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    data: [summary[], React.Dispatch<React.SetStateAction<summary[]>>];
+    title: [string, React.Dispatch<React.SetStateAction<string>>];
+    smode: [number, React.Dispatch<React.SetStateAction<number>>];
+    // @ts-ignore
 }>({});
 /**
  * It creates a context object that is passed to the children.
@@ -21,34 +21,34 @@ const MenuContext = createContext<{
  * component that will be used to provide the context to the rest of the application.
  */
 export default function MenuProvider(props: { children: JSX.Element }) {
-  const [category, setCategory] = useState(0);
-  const [id, setId] = useState(0);
-  const [profile, setProfile] = useState<number | "self">(0);
-  const [search, useSearch] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [recall, setRecall] = useState(false);
-  const [selected, setSelected] = useState(0);
-  const [data, setData] = useState<any[]>([]);
-  const [title, setTitle] = useState("");
-  const [smode, setSmode] = useState(0); //search mode
-  return (
-    <MenuContext.Provider
-      value={{
-        category: [category, setCategory],
-        id: [id, setId],
-        search: [search, useSearch],
-        profile: [profile, setProfile],
-        menu: [menu, setMenu],
-        selected: [selected, setSelected],
-        recall: [recall, setRecall],
-        data: [data, setData],
-        title: [title, setTitle],
-        smode: [smode, setSmode],
-      }}
-    >
-      {props.children}
-    </MenuContext.Provider>
-  );
+    const [category, setCategory] = useState(0);
+    const [id, setId] = useState(0);
+    const [profile, setProfile] = useState<number | "self">(0);
+    const [search, useSearch] = useState(false);
+    const [menu, setMenu] = useState(false);
+    const [recall, setRecall] = useState(false);
+    const [selected, setSelected] = useState(0);
+    const [data, setData] = useState<any[]>([]);
+    const [title, setTitle] = useState("");
+    const [smode, setSmode] = useState(0); //search mode
+    return (
+        <MenuContext.Provider
+            value={{
+                category: [category, setCategory],
+                id: [id, setId],
+                search: [search, useSearch],
+                profile: [profile, setProfile],
+                menu: [menu, setMenu],
+                selected: [selected, setSelected],
+                recall: [recall, setRecall],
+                data: [data, setData],
+                title: [title, setTitle],
+                smode: [smode, setSmode],
+            }}
+        >
+            {props.children}
+        </MenuContext.Provider>
+    );
 }
 
 /**
@@ -57,8 +57,8 @@ export default function MenuProvider(props: { children: JSX.Element }) {
  * that can be used to change the category.
  */
 export function useCat(): [number, React.Dispatch<React.SetStateAction<number>>] {
-  const { category } = useContext(MenuContext);
-  return category;
+    const { category } = useContext(MenuContext);
+    return category;
 }
 
 /**
@@ -66,8 +66,8 @@ export function useCat(): [number, React.Dispatch<React.SetStateAction<number>>]
  * @returns The thread id and a setter for the id.
  */
 export function useId() {
-  const { id } = useContext(MenuContext);
-  return id;
+    const { id } = useContext(MenuContext);
+    return id;
 }
 
 /**
@@ -75,8 +75,8 @@ export function useId() {
  * @returns A tuple of the current profile id and a setter for the profile.
  */
 export function useProfile() {
-  const { profile } = useContext(MenuContext);
-  return profile;
+    const { profile } = useContext(MenuContext);
+    return profile;
 }
 
 /**
@@ -84,8 +84,8 @@ export function useProfile() {
  * @returns The menu enabled or not and a function that sets it.
  */
 export function useMenu() {
-  const { menu } = useContext(MenuContext);
-  return menu;
+    const { menu } = useContext(MenuContext);
+    return menu;
 }
 
 /**
@@ -93,8 +93,8 @@ export function useMenu() {
  * @returns The selected menu item and a setter for the selected menu item.
  */
 export function useSelected() {
-  const { selected } = useContext(MenuContext);
-  return selected;
+    const { selected } = useContext(MenuContext);
+    return selected;
 }
 
 /**
@@ -102,8 +102,8 @@ export function useSelected() {
  * @returns The data array and a setter function.
  */
 export function useData() {
-  const { data } = useContext(MenuContext);
-  return data;
+    const { data } = useContext(MenuContext);
+    return data;
 }
 
 /**
@@ -111,8 +111,8 @@ export function useData() {
  * @returns The menu title of the current page.
  */
 export function useTitle() {
-  const { title } = useContext(MenuContext);
-  return title;
+    const { title } = useContext(MenuContext);
+    return title;
 }
 
 /**
@@ -120,8 +120,8 @@ export function useTitle() {
  * @returns A boolean and a function that sets the boolean.
  */
 export function useSearch() {
-  const { search } = useContext(MenuContext);
-  return search;
+    const { search } = useContext(MenuContext);
+    return search;
 }
 
 /**
@@ -129,8 +129,8 @@ export function useSearch() {
  * @returns A boolean and a setter function.
  */
 export function useRecall() {
-  const { recall } = useContext(MenuContext);
-  return recall;
+    const { recall } = useContext(MenuContext);
+    return recall;
 }
 
 /**
@@ -141,6 +141,6 @@ export function useRecall() {
  * @returns The smode value and a setter function.
  */
 export function useSmode() {
-  const { smode } = useContext(MenuContext);
-  return smode;
+    const { smode } = useContext(MenuContext);
+    return smode;
 }

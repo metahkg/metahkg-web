@@ -1,17 +1,17 @@
 .sidebar-catlink:hover {
-  color: #fbc308 !important;
+    color: #fbc308 !important;
 }
 
 .sidebar-catlink {
-  display: inline-block;
-  line-height: 35px;
+    display: inline-block;
+    line-height: 35px;
 }
 
 .sidebar-menu-btn {
-  height: 40px;
-  width: 40px;
+    height: 40px;
+    width: 40px;
 }
 
 .sidebar-box {
-  width: 250px;
+    width: 250px;
 }

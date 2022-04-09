@@ -18,113 +18,108 @@ import { useWidth } from "../ContextProvider";
  * @param {(e: number) => void} props.onClick event handler for when a tab is selected
  */
 export default function MenuTop(props: {
-  /** event handler when refresh is clicked */
-  refresh: MouseEventHandler<HTMLButtonElement>;
-  /** selected tab number*/
-  selected: number;
-  /** event handler for when a tab is selected */
-  onClick: (e: number) => void;
+    /** event handler when refresh is clicked */
+    refresh: MouseEventHandler<HTMLButtonElement>;
+    /** selected tab number*/
+    selected: number;
+    /** event handler for when a tab is selected */
+    onClick: (e: number) => void;
 }) {
-  const [search] = useSearch();
-  const [profile] = useProfile();
-  const [category] = useCat();
-  const [recall] = useRecall();
-  const [id] = useId();
-  const [width] = useWidth();
-  const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
-  const inittitle = {
-    search: "Search",
-    profile: "User Profile",
-    menu: "Metahkg",
-    recall: "Recall",
-  }[mode];
-  const [title, setTitle] = useTitle();
-  const tabs = {
-    search: ["Relevance", "Topic", "Last Reply"],
-    profile: ["Topic", "Last Reply"],
-    menu: [width < 760 && title ? title : "Latest", "Hot"],
-    recall: [],
-  }[mode];
-  const mobileTop = mode !== "menu";
-  useEffect(() => {
-    if (!search && !recall && !title && (category || profile || id)) {
-      if (profile) {
-        axios.get(`/api/profile/${profile}?nameonly=true`).then((res) => {
-          setTitle(res.data.user);
-          document.title = `${res.data.user} | Metahkg`;
-        });
-      } else {
-        axios.get(`/api/category/${category || `bytid${id}`}`).then((res) => {
-          setTitle(res.data.name);
-          if (!id) {
-            document.title = `${res.data.name} | Metahkg`;
-          }
-        });
-      }
-    }
-  }, [category, id, profile, recall, search, setTitle, title]);
-  return (
-    <div>
-      <Box
-        className="fullwidth menutop-root"
-        sx={{
-          bgcolor: "primary.main",
-          height: recall ? 50 : width < 760 && !mobileTop ? 50 : 90,
-        }}
-      >
-        {Boolean(width < 760 ? mobileTop : 1) && (
-          <div
-            className={`flex fullwidth align-center menutop-top justify-${width < 760 ? "center" : "space-between"}`}
-          >
-            {!(width < 760) && (
-              <div className="ml10 mr40">
-                <SideBar />
-              </div>
-            )}
-            <Typography
-              sx={{ color: "secondary.main" }}
-              className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
+    const [search] = useSearch();
+    const [profile] = useProfile();
+    const [category] = useCat();
+    const [recall] = useRecall();
+    const [id] = useId();
+    const [width] = useWidth();
+    const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
+    const inittitle = {
+        search: "Search",
+        profile: "User Profile",
+        menu: "Metahkg",
+        recall: "Recall",
+    }[mode];
+    const [title, setTitle] = useTitle();
+    const tabs = {
+        search: ["Relevance", "Topic", "Last Reply"],
+        profile: ["Topic", "Last Reply"],
+        menu: [width < 760 && title ? title : "Latest", "Hot"],
+        recall: [],
+    }[mode];
+    const mobileTop = mode !== "menu";
+    useEffect(() => {
+        if (!search && !recall && !title && (category || profile || id)) {
+            if (profile) {
+                axios.get(`/api/profile/${profile}?nameonly=true`).then((res) => {
+                    setTitle(res.data.user);
+                    document.title = `${res.data.user} | Metahkg`;
+                });
+            } else {
+                axios.get(`/api/category/${category || `bytid${id}`}`).then((res) => {
+                    setTitle(res.data.name);
+                    if (!id) {
+                        document.title = `${res.data.name} | Metahkg`;
+                    }
+                });
+            }
+        }
+    }, [category, id, profile, recall, search, setTitle, title]);
+    return (
+        <div>
+            <Box
+                className="fullwidth menutop-root"
+                sx={{
+                    bgcolor: "primary.main",
+                    height: recall ? 50 : width < 760 && !mobileTop ? 50 : 90,
+                }}
             >
-              {title || inittitle}
-            </Typography>
-            {!(width < 760) && (
-              <div className="flex">
-                <Tooltip title="Refresh" arrow>
-                  <IconButton onClick={props.refresh}>
-                    <AutorenewIcon className="force-white" />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Create topic" arrow>
-                  <Link className="flex" to="/create">
-                    <IconButton className="mr10">
-                      <AddIcon className="force-white" />
-                    </IconButton>
-                  </Link>
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        )}
-        {Boolean(tabs.length) && (
-          <Box sx={{ height: width < 760 && !mobileTop ? 50 : 40 }} className="flex fullwidth align-flex-end">
-            <Tabs
-              className="fullwidth"
-              value={props.selected}
-              textColor="secondary"
-              indicatorColor="secondary"
-              variant="fullWidth"
-              onChange={(e, v) => {
-                props.onClick(v);
-              }}
-            >
-              {tabs.map((tab, index) => (
-                <Tab className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
-              ))}
-            </Tabs>
-          </Box>
-        )}
-      </Box>
-      <Divider />
-    </div>
-  );
+                {Boolean(width < 760 ? mobileTop : 1) && (
+                    <div className={`flex fullwidth align-center menutop-top justify-${width < 760 ? "center" : "space-between"}`}>
+                        {!(width < 760) && (
+                            <div className="ml10 mr40">
+                                <SideBar />
+                            </div>
+                        )}
+                        <Typography sx={{ color: "secondary.main" }} className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden">
+                            {title || inittitle}
+                        </Typography>
+                        {!(width < 760) && (
+                            <div className="flex">
+                                <Tooltip title="Refresh" arrow>
+                                    <IconButton onClick={props.refresh}>
+                                        <AutorenewIcon className="force-white" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Create topic" arrow>
+                                    <Link className="flex" to="/create">
+                                        <IconButton className="mr10">
+                                            <AddIcon className="force-white" />
+                                        </IconButton>
+                                    </Link>
+                                </Tooltip>
+                            </div>
+                        )}
+                    </div>
+                )}
+                {Boolean(tabs.length) && (
+                    <Box sx={{ height: width < 760 && !mobileTop ? 50 : 40 }} className="flex fullwidth align-flex-end">
+                        <Tabs
+                            className="fullwidth"
+                            value={props.selected}
+                            textColor="secondary"
+                            indicatorColor="secondary"
+                            variant="fullWidth"
+                            onChange={(e, v) => {
+                                props.onClick(v);
+                            }}
+                        >
+                            {tabs.map((tab, index) => (
+                                <Tab className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
+                            ))}
+                        </Tabs>
+                    </Box>
+                )}
+            </Box>
+            <Divider />
+        </div>
+    );
 }
