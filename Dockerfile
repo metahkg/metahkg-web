@@ -1,5 +1,8 @@
 FROM node:17 AS build
 
+ARG DB_URI
+ENV DB_URI $DB_URI
+
 WORKDIR /usr/src/app
 
 RUN yarn add typescript
@@ -10,7 +13,8 @@ COPY tsconfig.json ./
 
 COPY . ./
 RUN yarn install
-RUN yarn run build:nocheck
+RUN touch .env
+RUN yarn run build
 
 FROM node:17
 
