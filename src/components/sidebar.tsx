@@ -94,8 +94,8 @@ export default function SideBar() {
                                 link: `/${localStorage.user ? "users/logout" : "users/signin"}?returnto=${encodeURIComponent(wholepath())}`,
                                 icon: localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
-                        ].map((item) => (
-                            <Link to={item.link} className="notextdecoration white">
+                        ].map((item,index) => (
+                            <Link key={index} to={item.link} className="notextdecoration white">
                                 <ListItem button onClick={onClick}>
                                     <ListItemIcon>{item.icon}</ListItemIcon>
                                     <ListItemText>{item.title}</ListItemText>
@@ -105,11 +105,11 @@ export default function SideBar() {
                     </List>
                     <Divider />
                     {[categories.filter((i) => !i.hidden), localStorage.user && categories.filter((i) => i.hidden)].map((cats: { id: number; name: string; hidden?: boolean }[], index) => (
-                        <div>
+                        <div key={index}>
                             {cats && (
                                 <div className={`m20${localStorage.user && !index ? " mb10" : ""}${index ? " mt0" : ""}`}>
-                                    {cats.map((category) => (
-                                        <Link to={`/category/${category.id}`} className="notextdecoration">
+                                    {cats.map((category,index) => (
+                                        <Link key={index} to={`/category/${category.id}`} className="notextdecoration">
                                             <Typography
                                                 className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
                                                 sx={(theme) => ({
@@ -142,7 +142,7 @@ export default function SideBar() {
                                 link: "https://gitlab.com/metahkg/metahkg",
                             },
                         ].map((item, index) => (
-                            <a className="notextdecoration white" href={item.link}>
+                            <a key={index} className="notextdecoration white" href={item.link}>
                                 <ListItem button key={index} onClick={onClick}>
                                     <ListItemIcon>{item.icon}</ListItemIcon>
                                     <ListItemText primary={item.title} />

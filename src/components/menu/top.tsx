@@ -113,7 +113,7 @@ export default function MenuTop(props: {
                             }}
                         >
                             {tabs.map((tab, index) => (
-                                <Tab className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
+                                <Tab key={index} className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
                             ))}
                         </Tabs>
                     </Box>

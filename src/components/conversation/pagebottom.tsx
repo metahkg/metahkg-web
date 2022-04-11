@@ -22,7 +22,7 @@ export default function PageBottom() {
         <div className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10 mb55">
             <div className="flex">
                 {socialicons.map((icon, index) => (
-                    <a className={`metahkg-grey-force notextdecoration${index !== socialicons.length - 1 ? " mr7" : ""}`} href={icon.link} target="_blank" rel="noreferrer">
+                    <a key={index} className={`metahkg-grey-force notextdecoration${index !== socialicons.length - 1 ? " mr7" : ""}`} href={icon.link} target="_blank" rel="noreferrer">
                         <IconButton className="nopadding">{icon.icon}</IconButton>
                     </a>
                 ))}
