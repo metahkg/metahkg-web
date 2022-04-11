@@ -6,7 +6,7 @@ use the public dev api server (dev branch only!)
 
 ## Prerequisites
 
-- x86_64 debian linux (only tested on ubuntu)
+- x86_64 linux (only tested on ubuntu & arch)
 - mongodb (either locally or remotely)
 - mailgun key (for sending emails, obviously)
 - recaptcha site key and secret pair (for anti-spamming)
@@ -20,7 +20,7 @@ Alternatively, use the following step-by-step guide. It assumes that you have in
 ### Mongodb
 
 ```bash
-mongoimport -d=metahkg-threads templates/server/category.json
+mongoimport -d=metahkg templates/server/category.json
 ```
 
 ### Environmental variables

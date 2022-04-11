@@ -2,7 +2,7 @@
   "name": "metahkg-web",
   "homepage": "https://metahkg.org",
   "repository": "https://github.com/metahkg/metahkg-web",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "author": "wcyat",
   "license": "AGPL-3.0-or-later",
   "keywords": [
@@ -26,16 +26,23 @@
     "humanize-duration": "^3.27.1",
     "humanize-duration-shortened-english": "^3.27.1-ts2",
     "is-sn-integer": "^0.3.0",
+    "metahkg-css": "^1.0.1",
     "node-html-parser": "^5.3.3",
     "prismjs": "^1.27.0",
     "query-string": "^7.1.1",
-    "react": "^17.0.2",
+    "react": "^18.0.0",
+    "react-cool-img": "^1.2.12",
     "react-device-detect": "^2.1.2",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.0.0",
     "react-google-recaptcha": "^2.1.0",
+    "react-image": "^4.0.3",
+    "react-photo-view": "^1.0.0",
+    "react-player": "^2.10.0",
     "react-router-dom": "^6.2.2",
-    "react-visibility-sensor": "^5.1.1",
-    "tinymce": "^5.10.3"
+    "react-spinner-material": "^1.4.0",
+    "react-twitter-embed": "^4.0.4",
+    "react-visibility-detector": "^1.1.1",
+    "screenfull": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -46,24 +53,38 @@
     "@types/prismjs": "^1.26.0",
     "@types/react-dom": "^17.0.11",
     "@types/react-google-recaptcha": "^2.1.5",
+    "@types/sanitize-html": "^2.6.2",
     "babel-loader": "^8.2.3",
     "babel-plugin-prismjs": "^2.1.0",
     "customize-cra": "^1.0.0",
+    "eslint": "^8.13.0",
+    "eslint-config-react-app": "^7.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
     "mongodb": "^4.4.0",
-    "prettier": "^2.5.1",
+    "prettier": "2.6.2",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.0",
     "system-commands": "^1.1.7",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "@types/react-redux": "^7.1.9",
+    "@types/redux-thunk": "^2.1.0"
   },
   "scripts": {
     "start": "node server.js",
     "start:api": "yarn run start",
     "start:react": "npx react-app-rewired start",
-    "build": "node build.js",
+    "build": "npx react-app-rewired build",
+    "build:nocheck": "yarn run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn run build && yarn run start"
+    "deploy": "yarn run build && yarn run start",
+    "dev": "yarn run deploy",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -82,5 +103,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,tsx,ts}": "eslint --cache --fix",
+    "*.{js,css,md,jsx,tsx,ts}": "prettier --write"
   }
 }

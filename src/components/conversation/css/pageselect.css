@@ -4,10 +4,13 @@
     right: 40px;
     z-index: 10;
 }
-.pageselect-top, .pageselect-bottom {
+
+.pageselect-top,
+.pageselect-bottom {
     height: 40px;
     width: 40px;
 }
+
 .pageselect-top {
     border-top-left-radius: 50%;
     border-top-right-radius: 50%;
@@ -15,6 +18,7 @@
     width: 50px;
     background-color: #333;
 }
+
 .pageselect-bottom {
     border-bottom-left-radius: 50%;
     border-bottom-right-radius: 50%;
@@ -22,24 +26,28 @@
     height: 40px;
     width: 50px;
 }
+
 .pageselect-box {
-  cursor: pointer;
-  background-color: #333;
-  height: 50px;
-  width: 50px;
+    cursor: pointer;
+    background-color: #333;
+    height: 50px;
+    width: 50px;
 }
+
 .pageselect-select svg {
-  display: none;
+    display: none;
 }
+
 .pageselect-select div {
-  padding: 0px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: 100% !important;
-  width: 100% !important;
+    padding: 0px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+    width: 100% !important;
 }
+
 .pageselect-select {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 }

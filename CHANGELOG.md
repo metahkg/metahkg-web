@@ -93,3 +93,13 @@ node server/migrate/migratetov0.5.2.js
 - experimental mobile dock
 - support youtube embed
 - links all open in new tab
+
+## v0.5.8rc1
+
+- image gallery
+- vote bar (opt in)
+
+## v0.5.8rc2
+
+- change username / sex
+- hidden categories
