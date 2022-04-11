@@ -38,7 +38,7 @@ export default function Settings(props: { open: boolean; setOpen: React.Dispatch
         <PopUp title="Settings" open={open} setOpen={setOpen} fullScreen>
             <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
-                    <div className="flex justify-space-between align-center fullwidth mt4 mb4">
+                    <div key={item.title} className="flex justify-space-between align-center fullwidth mt4 mb4">
                         <p className="nomargin">{item.title}</p>
                         <IOSSwitch color="secondary" checked={item.checked} onChange={item.action} />
                     </div>
@@ -65,7 +65,7 @@ export default function Settings(props: { open: boolean; setOpen: React.Dispatch
                         }}
                     >
                         {colorOptions.map((item) => (
-                            <ToggleButton disableRipple disableTouchRipple disableFocusRipple sx={{ color: `${item.main} !important` }} value={item.value}>
+                            <ToggleButton disableRipple disableTouchRipple disableFocusRipple sx={{ color: `${item.main} !important` }} value={item.value} key={item.value}>
                                 {item.value}
                             </ToggleButton>
                         ))}
