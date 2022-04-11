@@ -40,8 +40,6 @@ export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const categories: { id: number; name: string; hidden?: boolean }[] = JSON.parse(process.env.REACT_APP_categories || "[]");
-
 export function splitarray(arr: any[], start: number, end: number) {
     const r: any[] = [];
     for (let i = start; i <= end; i++) {

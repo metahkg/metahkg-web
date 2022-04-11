@@ -5,8 +5,8 @@ import { AccessTimeFilled, AccountCircle as AccountCircleIcon, Code as CodeIcon,
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import SearchBar from "./searchbar";
-import { useQuery, useSettingsOpen } from "./ContextProvider";
-import { categories, wholepath } from "../lib/common";
+import { useCategories, useQuery, useSettingsOpen } from "./ContextProvider";
+import { wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
 
@@ -22,6 +22,7 @@ export default function SideBar() {
     const [profile] = useProfile();
     const [search] = useSearch();
     const [, setSettingsOpen] = useSettingsOpen();
+    const categories = useCategories();
     const navigate = useNavigate();
     const toggleDrawer = (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (event.type === "keydown" && ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")) {

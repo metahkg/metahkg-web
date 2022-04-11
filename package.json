@@ -78,11 +78,12 @@
     "start": "node server.js",
     "start:api": "yarn run start",
     "start:react": "npx react-app-rewired start",
-    "build": "node build.js",
-    "build:nocheck": "npx react-app-rewired build",
+    "build": "npx react-app-rewired build",
+    "build:nocheck": "yarn run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn run build && yarn run start",
+    "dev": "yarn run deploy",
     "prepare": "husky install"
   },
   "eslintConfig": {

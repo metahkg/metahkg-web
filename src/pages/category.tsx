@@ -2,9 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import Empty from "../components/empty";
-import { useBack, useWidth } from "../components/ContextProvider";
+import { useBack, useCategories, useWidth } from "../components/ContextProvider";
 import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
-import { categories } from "../lib/common";
 
 /**
  * It's a function that
@@ -24,6 +23,7 @@ export default function Category() {
     const [width] = useWidth();
     const [, setTitle] = useTitle();
     const [selected, setSelected] = useSelected();
+    const categories = useCategories();
 
     // set the title, in future categories may be just fetch from server and store in redux
     document.title = categories.find((i) => i.id === category)?.name + " | Metahkg";

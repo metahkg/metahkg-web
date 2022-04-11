@@ -1,8 +1,9 @@
-import React, { createContext, Dispatch, SetStateAction, useContext, useRef, useState } from "react";
-import { history } from "../types/history";
-import { notification } from "../types/notification";
-import { settings } from "../types/settings";
-
+import axios from "axios";
+import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import type { history } from "../types/history";
+import type { notification } from "../types/notification";
+import type { settings } from "../types/settings";
+import type { category } from "../types/category";
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
@@ -12,6 +13,7 @@ const Context = createContext<{
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
+    categories: [category[], Dispatch<category[]>];
     //@ts-ignore
 }>(null);
 /**
@@ -27,6 +29,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<settings>(JSON.parse(localStorage.getItem("settings") || "{}"));
+    const [categories, setCategories] = useState<category[]>([]);
     const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(localStorage.getItem("history") || "[]");
     /** migrate from old */
     if (parsedhistory.length && !parsedhistory[0].id) {
@@ -37,6 +40,12 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     }
     const [history, setHistory] = useState(parsedhistory);
     const resizehandler = useRef(false);
+
+    useEffect(() => {
+        axios.get(`/api/category/all`).then((res) => {
+            setCategories(res.data);
+        });
+    }, []);
 
     function updateSize() {
         setWidth(window.innerWidth);
@@ -58,6 +67,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
                 settingsOpen: [settingsOpen, setSettingsOpen],
                 settings: [settings, setSettings],
                 history: [history, setHistory],
+                categories: [categories, setCategories],
             }}
         >
             {props.children}
@@ -151,4 +161,8 @@ export function useSettings() {
 export function useHistory() {
     const { history } = useContext(Context);
     return history;
+}
+export function useCategories() {
+    const { categories } = useContext(Context);
+    return categories[0];
 }

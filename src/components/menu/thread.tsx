@@ -2,11 +2,11 @@ import React from "react";
 import "./css/thread.css";
 import { Box, Button } from "@mui/material";
 import { Article as ArticleIcon, Comment as CommentIcon, ThumbDown as ThumbDownIcon, ThumbUp as ThumbUpIcon } from "@mui/icons-material";
-import { categories, roundup, timetoword } from "../../lib/common";
+import { roundup, timetoword } from "../../lib/common";
 import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
 import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
-import { useHistory } from "../ContextProvider";
+import { useCategories, useHistory } from "../ContextProvider";
 
 /**
  * A component that renders a thread in the menu.
@@ -20,6 +20,7 @@ export default function MenuThread(props: { thread: summary; onClick?: (e: React
     const [recall] = useRecall();
     const [id] = useId();
     const [history] = useHistory();
+    const categories = useCategories();
     const { thread, onClick } = props;
     const cid = history.find((i) => i.id === thread.id)?.cid;
     return (

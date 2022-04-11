@@ -8,8 +8,8 @@ import axios from "axios";
 import { Navigate, useNavigate } from "react-router";
 import queryString from "query-string";
 import { useCat, useData, useMenu, useProfile, useRecall, useSearch, useTitle } from "../components/MenuProvider";
-import { useNotification, useWidth } from "../components/ContextProvider";
-import { categories, wholepath } from "../lib/common";
+import { useCategories, useNotification, useWidth } from "../components/ContextProvider";
+import { wholepath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
@@ -29,6 +29,7 @@ function ChooseCat(props: { cat: number; setCat: React.Dispatch<React.SetStateAc
     const changeHandler = (e: SelectChangeEvent<number>) => {
         setCat(Number(e.target.value));
     };
+    const categories = useCategories();
     return (
         <div>
             {categories.length && (
