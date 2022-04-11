@@ -6,10 +6,10 @@ use the public dev api server (dev branch only!)
 
 ## Prerequisites
 
-- x86_64 linux (only tested on ubuntu & arch)
-- mongodb (either locally or remotely)
-- mailgun key (for sending emails, obviously)
-- recaptcha site key and secret pair (for anti-spamming)
+-   x86_64 linux (only tested on ubuntu & arch)
+-   mongodb (either locally or remotely)
+-   mailgun key (for sending emails, obviously)
+-   recaptcha site key and secret pair (for anti-spamming)
 
 ## Set up
 
@@ -41,5 +41,5 @@ yarn run build
 
 ## Deploy
 
-Running  `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
+Running `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
 Run `yarn run start:react` to start the react app at localhost:3000 and use the public dev server.
