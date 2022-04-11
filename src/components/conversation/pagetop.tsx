@@ -11,7 +11,9 @@ export default function PageTop(props: { pages: number; page: number; onChange: 
             </Typography>
             <Select value={page} label="Age" onChange={onChange} color="secondary" variant="standard">
                 {[...Array(pages)].map((p, index) => (
-                    <MenuItem key={index} value={index + 1}>Page {index + 1}</MenuItem>
+                    <MenuItem key={index} value={index + 1}>
+                        Page {index + 1}
+                    </MenuItem>
                 ))}
             </Select>
             <Typography className={next ? "pointer" : "user-select-none transparent"} sx={next ? { color: "secondary.main" } : {}} onClick={next ? onNextClicked : () => {}}>

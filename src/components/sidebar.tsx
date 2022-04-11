@@ -94,7 +94,7 @@ export default function SideBar() {
                                 link: `/${localStorage.user ? "users/logout" : "users/signin"}?returnto=${encodeURIComponent(wholepath())}`,
                                 icon: localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
-                        ].map((item,index) => (
+                        ].map((item, index) => (
                             <Link key={index} to={item.link} className="notextdecoration white">
                                 <ListItem button onClick={onClick}>
                                     <ListItemIcon>{item.icon}</ListItemIcon>
@@ -108,7 +108,7 @@ export default function SideBar() {
                         <div key={index}>
                             {cats && (
                                 <div className={`m20${localStorage.user && !index ? " mb10" : ""}${index ? " mt0" : ""}`}>
-                                    {cats.map((category,index) => (
+                                    {cats.map((category, index) => (
                                         <Link key={index} to={`/category/${category.id}`} className="notextdecoration">
                                             <Typography
                                                 className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"

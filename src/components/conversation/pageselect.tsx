@@ -17,7 +17,9 @@ export default function PageSelect(props: { pages: number; page: number; last?: 
             <Box className="pageselect-box flex justify-center align-center" sx={{ borderRadius: last || next ? "0" : "50%" }}>
                 <Select value={page} label="Age" onChange={onSelect} color="secondary" variant="standard" className="pageselect-select nopadding flex align-center justify-center" disableUnderline>
                     {[...Array(pages)].map((p, index) => (
-                        <MenuItem key={index} value={index + 1}>{index + 1}</MenuItem>
+                        <MenuItem key={index} value={index + 1}>
+                            {index + 1}
+                        </MenuItem>
                     ))}
                 </Select>
             </Box>

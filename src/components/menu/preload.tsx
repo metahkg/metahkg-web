@@ -15,7 +15,7 @@ export default function MenuPreload() {
     const buttonwidth = width < 760 ? width : 0.3 * width;
     return (
         <Box className="preload-root" sx={{ minHeight: totalheight }}>
-            {[...Array(amount)].map((_,index) => (
+            {[...Array(amount)].map((_, index) => (
                 <div key={index}>
                     <Button className="fullwidth flex align-flex-start flex-dir-column justify-center preload-btn">
                         <Shimmer className="ml10" height={18} width={buttonwidth * 0.45} />

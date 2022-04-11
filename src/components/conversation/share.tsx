@@ -87,7 +87,7 @@ export default function Share() {
                             <LinkIcon />
                         </IconButton>
                     </Tooltip>
-                    {externals.map((external,index) => (
+                    {externals.map((external, index) => (
                         <Tooltip key={index} arrow title={external.title}>
                             <a href={external.link} target="_blank" rel="noreferrer">
                                 <IconButton>{external.icon}</IconButton>

@@ -1,11 +1,11 @@
 export type post = {
-	id: number;
-	title: string;
-	body: string;
+    id: number;
+    title: string;
+    body: string;
 };
 
 interface storeType {
-	posts: post[];
+    posts: post[];
 }
 
 export default storeType;

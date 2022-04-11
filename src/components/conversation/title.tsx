@@ -49,7 +49,7 @@ export default function Title(props: {
                 </div>
                 <div className="flex">
                     {!(width < 760) &&
-                        btns.map((btn,index) => (
+                        btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
                                 <IconButton onClick={btn.action}>{btn.icon}</IconButton>
                             </Tooltip>
