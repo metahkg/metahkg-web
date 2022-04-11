@@ -42,7 +42,7 @@ export default function MenuTop(props: {
     const tabs = {
         search: ["Relevance", "Topic", "Last Reply"],
         profile: ["Topic", "Last Reply"],
-        menu: [width < 760 && title ? title : "Latest", "Hot"],
+        menu: [width < 760 && title ? title : "Latest", "Viral"],
         recall: [],
     }[mode];
     const mobileTop = mode !== "menu";
