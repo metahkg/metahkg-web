@@ -57,6 +57,7 @@ export default function Category() {
                 backgroundColor: "primary.dark",
             }}
         >
+            {/*if not enough width , dont show the default screen, in this case, just left menu will be shown */}
             {!(width < 760) && <Empty />}
         </Box>
     );
