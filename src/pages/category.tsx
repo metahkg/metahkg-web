@@ -24,6 +24,8 @@ export default function Category() {
     const [width] = useWidth();
     const [, setTitle] = useTitle();
     const [selected, setSelected] = useSelected();
+
+    // set the title, in future categories may be just fetch from server and store in redux
     document.title = categories.find((i) => i.id === category)?.name + " | Metahkg";
 
     function cleardata() {
@@ -33,9 +35,16 @@ export default function Category() {
     }
 
     back !== window.location.pathname && setBack(window.location.pathname);
+
+    // if menu is not open, open it
     !menu && setMenu(true);
+
+    // clear data, if category in context is not updated  or  search/profile/recall have some value
     (category !== Number(params.category) || search || profile || recall) && cleardata();
+
+    // update the category in context
     category !== Number(params.category) && setCategory(Number(params.category));
+
     id && setId(0);
     search && setSearch(false);
     recall && setRecall(false);
