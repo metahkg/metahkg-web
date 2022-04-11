@@ -353,7 +353,7 @@ function Conversation(props: { id: number }) {
                                 const page = roundup(conversation[0].id / 25) + index;
                                 const totalpages = roundup((details.c || 0) / 25);
                                 return (
-                                    <Box>
+                                    <Box key={index}>
                                         <VisibilityDetector
                                             onVisibilityChange={(isVisible) => {
                                                 const croot = document.getElementById("croot");

@@ -197,8 +197,8 @@ function Comment(props: {
                             }
                         </p>
                     </Tooltip>
-                    {leftbtns.map((button) => (
-                        <Tooltip title={button.title} arrow>
+                    {leftbtns.map((button,index) => (
+                        <Tooltip key={index} title={button.title} arrow>
                             <IconButton className="ml10 nopadding" onClick={button.action}>
                                 {button.icon}
                             </IconButton>
