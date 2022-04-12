@@ -110,14 +110,14 @@ export default function Verify() {
                                 item.set(e.target.value);
                             }}
                             variant="filled"
-                            color="secondarysettings.secondaryColor?.main || "#f5bd1f"
+                            color="secondary"
                             required
                             fullWidth
                         />
                     ))}
                     <h4>
                         <Link
-                            style={{ color: settings.secondaryColor?.main }}
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
                             className="link"
                             to="/users/resend"
                         >

@@ -136,14 +136,14 @@ export default function Signin() {
                             variant="filled"
                             onChange={(e) => {
                                 item.set(e.target.value);
-                            }}settings.secondaryColor?.main || "#f5bd1f"
+                            }}
                             required
                             fullWidth
                         />
                     ))}
                     <h4>
                         <Link
-                            style={{ color: settings.secondaryColor?.main }}
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
                             className="link"
                             to="/users/verify"
                         >

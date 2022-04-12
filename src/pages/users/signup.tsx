@@ -212,13 +212,13 @@ export default function Register() {
                             label={item.label}
                             required
                             fullWidth
-                        />settings.secondaryColor?.main || "#f5bd1f"
+                        />
                     ))}
                     <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
                     <br />
                     <h4>
                         <Link
-                            style={{ color: settings.secondaryColor?.main }}
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
                             className="link"
                             to="/users/verify"
                         >

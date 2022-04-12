@@ -59,7 +59,7 @@ export default function Settings(props: {
                         color="secondary"
                         value={
                             colorOptions.find(
-                                (item) => item.main === settings.secondaryColor?.main || "#f5bd1f"
+                                (item) => item.main === (settings.secondaryColor?.main || "#f5bd1f")
                             )?.value
                         }
                         exclusive
