@@ -101,7 +101,7 @@ function Conversation(props: { id: number }) {
     useEffect(() => {
         axios
             .get(`/api/thread/${props.id}?type=1`, {
-                headers: { authorization:  localStorage.getItem("token") || "" },
+                headers: { authorization: localStorage.getItem("token") || "" },
             })
             .then((res) => {
                 res.data.slink && setDetails(res.data);
@@ -116,11 +116,17 @@ function Conversation(props: { id: number }) {
                 document.title = `${res.data.title} | Metahkg`;
                 if (!res.data.slink) {
                     axios
-                        .post("https://api-us.wcyat.me/create", {
-                            url: `${window.location.origin}/thread/${props.id}?page=1`,
-                        }, {
-                            headers: { authorization:  localStorage.getItem("token") || "" },
-                        })
+                        .post(
+                            "https://api-us.wcyat.me/create",
+                            {
+                                url: `${window.location.origin}/thread/${props.id}?page=1`,
+                            },
+                            {
+                                headers: {
+                                    authorization: localStorage.getItem("token") || "",
+                                },
+                            }
+                        )
                         .then((sres) => {
                             setDetails(
                                 Object.assign(res.data, {
@@ -144,7 +150,7 @@ function Conversation(props: { id: number }) {
             .catch(onError);
         axios
             .get(`/api/thread/${props.id}?type=0`, {
-                headers: { authorization:  localStorage.getItem("token") || "" },
+                headers: { authorization: localStorage.getItem("token") || "" },
             })
             .then((res) => {
                 setUsers(res.data);
@@ -152,7 +158,7 @@ function Conversation(props: { id: number }) {
             .catch(onError);
         axios
             .get(`/api/thread/${props.id}?type=2&page=${lastpage}`, {
-                headers: { authorization:  localStorage.getItem("token") || "" },
+                headers: { authorization: localStorage.getItem("token") || "" },
             })
             .then((res) => {
                 /** redirect to 404 if thread (or page) not found */
@@ -166,7 +172,7 @@ function Conversation(props: { id: number }) {
             .catch(onError);
         axios
             .get(`/api/images/${props.id}`, {
-                headers: { authorization:  localStorage.getItem("token") || "" },
+                headers: { authorization: localStorage.getItem("token") || "" },
             })
             .then((res) => {
                 res.data.forEach((item: { image: string }) => {
@@ -180,7 +186,7 @@ function Conversation(props: { id: number }) {
         if (localStorage.user) {
             axios
                 .get(`/api/getvotes?id=${props.id}`, {
-                    headers: { authorization:  localStorage.getItem("token") || "" },
+                    headers: { authorization: localStorage.getItem("token") || "" },
                 })
                 .then((res) => {
                     setVotes(res.data);
@@ -215,8 +221,9 @@ function Conversation(props: { id: number }) {
                     newpage
                         ? ""
                         : `&start=${conversation[conversation.length - 1].id + 1}`
-                }`, {
-                    headers: { authorization:  localStorage.getItem("token") || "" },
+                }`,
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
                 }
             )
             .then((res) => {
@@ -267,17 +274,19 @@ function Conversation(props: { id: number }) {
         setN((n) => n + (n > 1 ? -1 : 1) * Math.random());
         navigate(`${window.location.pathname}?page=${p}`, { replace: true });
         setCPage(p);
-        axios.get(`/api/thread/${props.id}?type=2&page=${p}`, {
-            headers: { authorization:  localStorage.getItem("token") || "" },
-        }).then((res) => {
-            if (res.data?.[0] === null) {
-                setNotification({ open: true, text: "Page not found!" });
-                return;
-            }
-            setConversation(res.data);
-            res.data.length % 25 && setEnd(true);
-            document.getElementById(String(lastpage))?.scrollIntoView();
-        });
+        axios
+            .get(`/api/thread/${props.id}?type=2&page=${p}`, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
+            .then((res) => {
+                if (res.data?.[0] === null) {
+                    setNotification({ open: true, text: "Page not found!" });
+                    return;
+                }
+                setConversation(res.data);
+                res.data.length % 25 && setEnd(true);
+                document.getElementById(String(lastpage))?.scrollIntoView();
+            });
     }
 
     /**
