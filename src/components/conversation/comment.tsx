@@ -1,7 +1,13 @@
 import "./css/comment.css";
 import React, { memo, useEffect, useState } from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import { Feed as FeedIcon, Reply as ReplyIcon, Share as ShareIcon, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+    Feed as FeedIcon,
+    Reply as ReplyIcon,
+    Share as ShareIcon,
+    Visibility,
+    VisibilityOff,
+} from "@mui/icons-material";
 import dateat from "date-and-time";
 import VoteBar from "./VoteBar";
 import { PopUp } from "../../lib/popup";
@@ -98,7 +104,11 @@ function Comment(props: {
         }, []);
         const leftbtns = [
             {
-                icon: story ? <VisibilityOff className="metahkg-grey-force font-size-19-force" /> : <Visibility className="metahkg-grey-force font-size-19-force" />,
+                icon: story ? (
+                    <VisibilityOff className="metahkg-grey-force font-size-19-force" />
+                ) : (
+                    <Visibility className="metahkg-grey-force font-size-19-force" />
+                ),
                 title: story ? "Quit story mode" : "Story mode",
                 action: () => {
                     const bheight =
@@ -137,7 +147,9 @@ function Comment(props: {
                 icon: <ShareIcon className="metahkg-grey-force font-size-19-force" />,
                 title: "Share",
                 action: () => {
-                    setShareLink(link || `${window.location.origin}/thread/${tid}?c=${id}`);
+                    setShareLink(
+                        link || `${window.location.origin}/thread/${tid}?c=${id}`
+                    );
                     setShareTitle(title + ` - comment #${id}`);
                     setShareOpen(true);
                 },
@@ -154,7 +166,12 @@ function Comment(props: {
         ];
         return (
             <div className="flex align-center font-size-17 pt10 justify-space-between">
-                <PopUp open={open} setOpen={setOpen} title="User information" button={{ text: "View Profile", link: `/profile/${userid}` }}>
+                <PopUp
+                    open={open}
+                    setOpen={setOpen}
+                    title="User information"
+                    button={{ text: "View Profile", link: `/profile/${userid}` }}
+                >
                     <p className="text-align-center mt5 mb5">
                         {name}
                         <br />#{userid}
@@ -180,14 +197,19 @@ function Comment(props: {
                     >
                         {tprops.children}
                     </p>
-                    <Tooltip title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")} arrow>
+                    <Tooltip
+                        title={dateat.format(new Date(date), "ddd, MMM DD YYYY HH:mm:ss")}
+                        arrow
+                    >
                         <p
                             onClick={() => {
                                 if (isMobile) {
                                     setTimemode(timemode === "short" ? "long" : "short");
                                 }
                             }}
-                            className={`novmargin metahkg-grey ml10 font-size-15${isMobile ? " pointer" : ""}`}
+                            className={`novmargin metahkg-grey ml10 font-size-15${
+                                isMobile ? " pointer" : ""
+                            }`}
                         >
                             {
                                 {
@@ -199,7 +221,10 @@ function Comment(props: {
                     </Tooltip>
                     {leftbtns.map((button, index) => (
                         <Tooltip key={index} title={button.title} arrow>
-                            <IconButton className="ml10 nopadding" onClick={button.action}>
+                            <IconButton
+                                className="ml10 nopadding"
+                                onClick={button.action}
+                            >
                                 {button.icon}
                             </IconButton>
                         </Tooltip>
@@ -208,7 +233,10 @@ function Comment(props: {
                 <div className="flex align-center">
                     {rightbtns.map((button) => (
                         <Tooltip title={button.title} arrow>
-                            <IconButton className="ml10 nopadding" onClick={button.action}>
+                            <IconButton
+                                className="ml10 nopadding"
+                                onClick={button.action}
+                            >
                                 {button.icon}
                             </IconButton>
                         </Tooltip>
@@ -236,7 +264,20 @@ function Comment(props: {
                 </p>
                 <div className="comment-internal-spacer" />
             </div>
-            <div className="ml20 mr20">{settings.votebar ? <VoteBar key={tid} vote={vote} postId={tid} clientId={id} upVoteCount={up} downVoteCount={down} /> : <VoteButtons vote={vote} up={up} down={down} id={tid} cid={id} />}</div>
+            <div className="ml20 mr20">
+                {settings.votebar ? (
+                    <VoteBar
+                        key={tid}
+                        vote={vote}
+                        postId={tid}
+                        clientId={id}
+                        upVoteCount={up}
+                        downVoteCount={down}
+                    />
+                ) : (
+                    <VoteButtons vote={vote} up={up} down={down} id={tid} cid={id} />
+                )}
+            </div>
             <div className="comment-spacer" />
         </Box>
     );

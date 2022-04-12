@@ -71,12 +71,17 @@ export default function Verify() {
     document.title = "Resend Verification Email | Metahkg";
     const small = width / 2 - 100 <= 450;
     return (
-        <Box className="flex align-center justify-center min-height-fullvh fullwidth" sx={{ bgcolor: "primary.dark" }}>
+        <Box
+            className="flex align-center justify-center min-height-fullvh fullwidth"
+            sx={{ bgcolor: "primary.dark" }}
+        >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
                 <div className="m40">
                     <div className="flex justify-center align-center">
                         <MetahkgLogo svg light height={50} width={40} className="mb10" />
-                        <h1 className="font-size-25 mb20 nohmargin">Resend Verification Email</h1>
+                        <h1 className="font-size-25 mb20 nohmargin">
+                            Resend Verification Email
+                        </h1>
                     </div>
                     {alert.text && (
                         <Alert className="mb20" severity={alert.severity}>
@@ -95,15 +100,35 @@ export default function Verify() {
                         required
                         fullWidth
                     />
-                    <div className={`${small ? "" : "flex fullwidth align-center justify-space-between"} mt20`}>
+                    <div
+                        className={`${
+                            small
+                                ? ""
+                                : "flex fullwidth align-center justify-space-between"
+                        } mt20`}
+                    >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
+                            sitekey={
+                                process.env.REACT_APP_recaptchasitekey ||
+                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            }
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}
                         />
-                        <Button variant="contained" className={`font-size-16-force notexttransform${small ? " mt20" : ""}`} color="secondary" onClick={resend} disabled={disabled || !(email && rtoken && EmailValidator.validate(email))}>
+                        <Button
+                            variant="contained"
+                            className={`font-size-16-force notexttransform${
+                                small ? " mt20" : ""
+                            }`}
+                            color="secondary"
+                            onClick={resend}
+                            disabled={
+                                disabled ||
+                                !(email && rtoken && EmailValidator.validate(email))
+                            }
+                        >
                             <SendIcon className="mr5 font-size-16-force" />
                             Resend
                         </Button>

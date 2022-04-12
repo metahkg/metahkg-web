@@ -22,10 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 import React, { useEffect, useRef } from "react";
-import { ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Stack, Tooltip } from "@mui/material";
+import {
+    ClickAwayListener,
+    Grow,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Stack,
+    Tooltip,
+} from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
 
-export default function MoreList(props: { buttons: { title: string; icon?: JSX.Element; action: () => void }[] }) {
+export default function MoreList(props: {
+    buttons: { title: string; icon?: JSX.Element; action: () => void }[];
+}) {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
@@ -34,7 +48,10 @@ export default function MoreList(props: { buttons: { title: string; icon?: JSX.E
     };
 
     const handleClose = (event: Event | React.SyntheticEvent) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+        if (
+            anchorRef.current &&
+            anchorRef.current.contains(event.target as HTMLElement)
+        ) {
             return;
         }
         setOpen(false);
@@ -63,21 +80,44 @@ export default function MoreList(props: { buttons: { title: string; icon?: JSX.E
         <Stack direction="row" spacing={1}>
             <div>
                 <Tooltip arrow title="More">
-                    <IconButton ref={anchorRef} className="nopadding ml10" aria-controls={open ? "composition-menu" : undefined} aria-expanded={open ? "true" : undefined} aria-haspopup="true" onClick={handleToggle}>
+                    <IconButton
+                        ref={anchorRef}
+                        className="nopadding ml10"
+                        aria-controls={open ? "composition-menu" : undefined}
+                        aria-expanded={open ? "true" : undefined}
+                        aria-haspopup="true"
+                        onClick={handleToggle}
+                    >
                         <MoreHoriz className="metahkg-grey-force font-size-19-force mb2" />
                     </IconButton>
                 </Tooltip>
-                <Popper open={open} style={{ zIndex: 2147483647 }} anchorEl={anchorRef.current} role={undefined} placement="bottom-start" transition disablePortal>
+                <Popper
+                    open={open}
+                    style={{ zIndex: 2147483647 }}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    placement="bottom-start"
+                    transition
+                    disablePortal
+                >
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             style={{
-                                transformOrigin: placement === "bottom-start" ? "left top" : "left bottom",
+                                transformOrigin:
+                                    placement === "bottom-start"
+                                        ? "left top"
+                                        : "left bottom",
                             }}
                         >
                             <Paper>
                                 <ClickAwayListener onClickAway={handleClose}>
-                                    <MenuList autoFocusItem={open} id="composition-menu" aria-labelledby="composition-button" onKeyDown={handleListKeyDown}>
+                                    <MenuList
+                                        autoFocusItem={open}
+                                        id="composition-menu"
+                                        aria-labelledby="composition-button"
+                                        onKeyDown={handleListKeyDown}
+                                    >
                                         {props.buttons.map((button) => (
                                             <MenuItem
                                                 onClick={(e) => {
@@ -86,7 +126,9 @@ export default function MoreList(props: { buttons: { title: string; icon?: JSX.E
                                                 }}
                                             >
                                                 <ListItemIcon>{button.icon}</ListItemIcon>
-                                                <ListItemText>{button.title}</ListItemText>
+                                                <ListItemText>
+                                                    {button.title}
+                                                </ListItemText>
                                             </MenuItem>
                                         ))}
                                     </MenuList>

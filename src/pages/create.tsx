@@ -1,13 +1,32 @@
 import "./css/create.css";
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Tooltip } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Tooltip,
+} from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router";
 import queryString from "query-string";
-import { useCat, useData, useMenu, useProfile, useRecall, useSearch, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useTitle,
+} from "../components/MenuProvider";
 import { useCategories, useNotification, useWidth } from "../components/ContextProvider";
 import { wholepath } from "../lib/common";
 import { severity } from "../types/severity";
@@ -24,7 +43,10 @@ declare const grecaptcha: { reset: () => void };
  * @param {React.Dispatch<React.SetStateAction<number>>} props.setCat The function to update props.cat
  * @returns A form control with a select menu.
  */
-function ChooseCat(props: { cat: number; setCat: React.Dispatch<React.SetStateAction<number>> }) {
+function ChooseCat(props: {
+    cat: number;
+    setCat: React.Dispatch<React.SetStateAction<number>>;
+}) {
     const { cat, setCat } = props;
     const changeHandler = (e: SelectChangeEvent<number>) => {
         setCat(Number(e.target.value));
@@ -35,7 +57,12 @@ function ChooseCat(props: { cat: number; setCat: React.Dispatch<React.SetStateAc
             {categories.length && (
                 <FormControl className="create-choosecat-form">
                     <InputLabel color="secondary">Category</InputLabel>
-                    <Select color="secondary" value={cat} label="Category" onChange={changeHandler}>
+                    <Select
+                        color="secondary"
+                        value={cat}
+                        label="Category"
+                        onChange={changeHandler}
+                    >
                         {categories.map((category) => (
                             <MenuItem value={category.id}>{category.name}</MenuItem>
                         ))}
@@ -87,7 +114,9 @@ export default function Create() {
                 .get(`/api/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`)
                 .then((res) => {
                     if (res.data?.[0]?.comment) {
-                        setInittext(`<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`);
+                        setInittext(
+                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
+                        );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
                             setNotification({ open: false, text: "" });
@@ -151,7 +180,15 @@ export default function Create() {
 
     document.title = "Create topic | Metahkg";
     menu && setMenu(false);
-    if (!localStorage.user) return <Navigate to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`} replace />;
+    if (!localStorage.user)
+        return (
+            <Navigate
+                to={`/users/signin?continue=true&returnto=${encodeURIComponent(
+                    wholepath()
+                )}`}
+                replace
+            />
+        );
     const small = width * 0.8 - 40 <= 450;
     return (
         <Box
@@ -163,7 +200,13 @@ export default function Create() {
             <div style={{ width: small ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
-                        <MetahkgLogo svg height={50} width={40} light className="mr10 mb10" />
+                        <MetahkgLogo
+                            svg
+                            height={50}
+                            width={40}
+                            light
+                            className="mr10 mb10"
+                        />
                         <h1>Create topic</h1>
                     </div>
                     {alert.text && (
@@ -184,11 +227,21 @@ export default function Create() {
                             }}
                         />
                     </div>
-                    <div className={`${!(width < 760) ? "flex" : ""} align-center mb15 mt15`}>
+                    <div
+                        className={`${
+                            !(width < 760) ? "flex" : ""
+                        } align-center mb15 mt15`}
+                    >
                         <UploadImage
                             onUpload={() => {
-                                setAlert({ severity: "info", text: "Uploading image..." });
-                                setNotification({ open: true, text: "Uploading image..." });
+                                setAlert({
+                                    severity: "info",
+                                    text: "Uploading image...",
+                                });
+                                setNotification({
+                                    open: true,
+                                    text: "Uploading image...",
+                                });
                             }}
                             onSuccess={(res) => {
                                 setAlert({ severity: "info", text: "Image uploaded!" });
@@ -197,16 +250,36 @@ export default function Create() {
                                     setNotification({ open: false, text: "" });
                                 }, 1000);
                                 setImgurl(res.data.url);
-                                tinymce.activeEditor.insertContent(`<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`);
+                                tinymce.activeEditor.insertContent(
+                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                );
                             }}
                             onError={() => {
-                                setAlert({ severity: "error", text: "Error uploading image." });
-                                setNotification({ open: true, text: "Error uploading image." });
+                                setAlert({
+                                    severity: "error",
+                                    text: "Error uploading image.",
+                                });
+                                setNotification({
+                                    open: true,
+                                    text: "Error uploading image.",
+                                });
                             }}
                         />
                         {imgurl && (
-                            <p className={`ml10 novmargin flex${width < 760 ? " mt5" : ""}`}>
-                                <Tooltip arrow title={<img src={`https://i.metahkg.org/thumbnail?src=${imgurl}`} alt="" />}>
+                            <p
+                                className={`ml10 novmargin flex${
+                                    width < 760 ? " mt5" : ""
+                                }`}
+                            >
+                                <Tooltip
+                                    arrow
+                                    title={
+                                        <img
+                                            src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
+                                            alt=""
+                                        />
+                                    }
+                                >
                                     <a href={imgurl} target="_blank" rel="noreferrer">
                                         {imgurl}
                                     </a>
@@ -232,15 +305,34 @@ export default function Create() {
                         }}
                         text={inittext}
                     />
-                    <div className={`mt15 ${small ? "" : "flex fullwidth justify-space-between align-center"}`}>
+                    <div
+                        className={`mt15 ${
+                            small
+                                ? ""
+                                : "flex fullwidth justify-space-between align-center"
+                        }`}
+                    >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
+                            sitekey={
+                                process.env.REACT_APP_recaptchasitekey ||
+                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            }
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}
                         />
-                        <Button disabled={disabled || !(icomment && title && rtoken && catchoosed)} className={`${small ? "mt15 " : ""}font-size-16-force create-btn novpadding notexttransform`} onClick={create} variant="contained" color="secondary">
+                        <Button
+                            disabled={
+                                disabled || !(icomment && title && rtoken && catchoosed)
+                            }
+                            className={`${
+                                small ? "mt15 " : ""
+                            }font-size-16-force create-btn novpadding notexttransform`}
+                            onClick={create}
+                            variant="contained"
+                            color="secondary"
+                        >
                             <CreateIcon className="mr5 font-size-16-force" />
                             Create
                         </Button>

@@ -3,7 +3,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import hash from "hash.js";
 import * as EmailValidator from "email-validator";
-import { Alert, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+} from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router";
 import { useMenu } from "../../components/MenuProvider";
@@ -23,7 +34,11 @@ declare const grecaptcha: { reset: () => void };
  * @param props.sex the selected sex
  * @param props.setSex: function to update sex
  */
-function SexSelect(props: { sex: "M" | "F" | undefined; setSex: React.Dispatch<React.SetStateAction<"M" | "F" | undefined>>; disabled: boolean }) {
+function SexSelect(props: {
+    sex: "M" | "F" | undefined;
+    setSex: React.Dispatch<React.SetStateAction<"M" | "F" | undefined>>;
+    disabled: boolean;
+}) {
     const { sex, setSex, disabled } = props;
     const onChange = function (e: SelectChangeEvent<string>) {
         setSex(e.target.value ? "M" : "F");
@@ -31,7 +46,13 @@ function SexSelect(props: { sex: "M" | "F" | undefined; setSex: React.Dispatch<R
     return (
         <FormControl className="signup-sex-form">
             <InputLabel color="secondary">Sex</InputLabel>
-            <Select color="secondary" disabled={disabled} value={sex} label="Gender" onChange={onChange}>
+            <Select
+                color="secondary"
+                disabled={disabled}
+                value={sex}
+                label="Gender"
+                onChange={onChange}
+            >
                 <MenuItem value={1}>Male</MenuItem>
                 <MenuItem value={0}>Female</MenuItem>
             </Select>
@@ -190,19 +211,39 @@ export default function Register() {
                     <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
                     <br />
                     <h4>
-                        <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/verify">
+                        <Link
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
+                            className="link"
+                            to="/users/verify"
+                        >
                             Verify / Resend verification email?
                         </Link>
                     </h4>
-                    <div className={`${small ? "" : "flex fullwidth justify-space-between"} mt15`}>
+                    <div
+                        className={`${
+                            small ? "" : "flex fullwidth justify-space-between"
+                        } mt15`}
+                    >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
+                            sitekey={
+                                process.env.REACT_APP_recaptchasitekey ||
+                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            }
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}
                         />
-                        <Button disabled={disabled || !(rtoken && user && email && pwd && sex)} type="submit" className="mt20 font-size-16-force notexttransform signup-btn" color="secondary" variant="contained" onClick={register}>
+                        <Button
+                            disabled={
+                                disabled || !(rtoken && user && email && pwd && sex)
+                            }
+                            type="submit"
+                            className="mt20 font-size-16-force notexttransform signup-btn"
+                            color="secondary"
+                            variant="contained"
+                            onClick={register}
+                        >
                             <HowToReg className="mr5 font-size-17-force" />
                             Register
                         </Button>

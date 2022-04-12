@@ -6,10 +6,20 @@
  * @param {number} props.width width of the image
  * @param {number} props.height height of the image
  */
-export default function Gab(props: { white?: boolean; black?: boolean; color?: string; width?: number; height?: number }) {
+export default function Gab(props: {
+    white?: boolean;
+    black?: boolean;
+    color?: string;
+    width?: number;
+    height?: number;
+}) {
     const { white, black, color, width, height } = props;
     return (
-        <svg width={width || "34.4"} height={height || "21"} viewBox="-8.6929917 -8.6929917 503.3613834 307.1523734">
+        <svg
+            width={width || "34.4"}
+            height={height || "21"}
+            viewBox="-8.6929917 -8.6929917 503.3613834 307.1523734"
+        >
             <defs />
             <path
                 id="gab"

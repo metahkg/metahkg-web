@@ -15,12 +15,21 @@ export interface ShimmerProps {
     duration?: number;
 }
 
-const calcShimmerStyle = (width: number, height: number, duration = DEFAULT_DURATION_MS) => ({
+const calcShimmerStyle = (
+    width: number,
+    height: number,
+    duration = DEFAULT_DURATION_MS
+) => ({
     backgroundSize: `${width * 10}px ${height}px`,
     animationDuration: `${(duration / 1000).toFixed(1)}s`,
 });
 
-export const Shimmer = ({ className, duration, height = DEFAULT_HEIGHT, width = DEFAULT_WIDTH }: ShimmerProps) => {
+export const Shimmer = ({
+    className,
+    duration,
+    height = DEFAULT_HEIGHT,
+    width = DEFAULT_WIDTH,
+}: ShimmerProps) => {
     const shimmerStyle = calcShimmerStyle(width, height, duration);
     const style = { ...shimmerStyle, ...{ height, width } };
 

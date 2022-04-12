@@ -52,23 +52,33 @@ export default function App() {
                     localStorage.removeItem("id");
                     return;
                 }
-                localStorage.user !== res.data.user && localStorage.setItem("user", res.data.user);
-                localStorage.id !== Number(res.data.id) && localStorage.setItem("id", res.data.id);
+                localStorage.user !== res.data.user &&
+                    localStorage.setItem("user", res.data.user);
+                localStorage.id !== Number(res.data.id) &&
+                    localStorage.setItem("id", res.data.id);
             });
         }
     }, []);
     return (
-        <Theme primary={{ main: "#222" }} secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}>
+        <Theme
+            primary={{ main: "#222" }}
+            secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
+        >
             <Notification />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
             <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
                 <Router>
                     <div className="flex">
-                        <div style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}>
+                        <div
+                            style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}
+                        >
                             <Menu />
                         </div>
                         <Routes>
-                            <Route path="/" element={<Navigate to="/category/1" replace />} />
+                            <Route
+                                path="/"
+                                element={<Navigate to="/category/1" replace />}
+                            />
                             <Route path="/thread/:id" element={<Thread />} />
                             <Route path="/comment/:id" element={<AddComment />} />
                             <Route path="/category/:category" element={<Category />} />

@@ -1,5 +1,13 @@
 import React from "react";
-import { ContentCopy, Facebook, Link as LinkIcon, Reddit, Telegram, Twitter, WhatsApp } from "@mui/icons-material";
+import {
+    ContentCopy,
+    Facebook,
+    Link as LinkIcon,
+    Reddit,
+    Telegram,
+    Twitter,
+    WhatsApp,
+} from "@mui/icons-material";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
 import { useNotification, useWidth } from "../ContextProvider";
@@ -26,7 +34,9 @@ export default function Share() {
         {
             icon: <Telegram />,
             title: "Share to Telegram",
-            link: `tg://msg_url?text=${encodeURIComponent(title + "\n- Shared from Metahkg forum")}&url=${encodeURIComponent(link)}`,
+            link: `tg://msg_url?text=${encodeURIComponent(
+                title + "\n- Shared from Metahkg forum"
+            )}&url=${encodeURIComponent(link)}`,
         },
         {
             icon: <WhatsApp />,
@@ -41,12 +51,16 @@ export default function Share() {
         {
             icon: <Reddit />,
             title: "Share to Reddit",
-            link: `https://www.reddit.com/submit?link=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}`,
+            link: `https://www.reddit.com/submit?link=${encodeURIComponent(
+                link
+            )}&title=${encodeURIComponent(title)}`,
         },
         {
             icon: <Facebook />,
             title: "Share to Facebook",
-            link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                link
+            )}`,
         },
     ];
     return (
@@ -68,7 +82,10 @@ export default function Share() {
                         <IconButton
                             onClick={async () => {
                                 await navigator.clipboard.writeText(text);
-                                setNotification({ open: true, text: "Copied to Clipboard!" });
+                                setNotification({
+                                    open: true,
+                                    text: "Copied to Clipboard!",
+                                });
                             }}
                         >
                             <ContentCopy />

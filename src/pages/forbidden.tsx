@@ -12,7 +12,10 @@ export default function Forbidden() {
     const [menu, setMenu] = useMenu();
     menu && setMenu(false);
     return (
-        <Box className="flex align-center justify-center notfound-root" sx={{ bgcolor: "primary.dark" }}>
+        <Box
+            className="flex align-center justify-center notfound-root"
+            sx={{ bgcolor: "primary.dark" }}
+        >
             <MetahkgLogo className="mr10 mb20" svg light height={100} width={80} />
             <h1>401 Forbidden</h1>
         </Box>

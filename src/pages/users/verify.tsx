@@ -65,7 +65,10 @@ export default function Verify() {
     document.title = "Verify | Metahkg";
     const small = width / 2 - 100 <= 450;
     return (
-        <Box className="flex align-center justify-center min-height-fullvh fullwidth" sx={{ bgcolor: "primary.dark" }}>
+        <Box
+            className="flex align-center justify-center min-height-fullvh fullwidth"
+            sx={{ bgcolor: "primary.dark" }}
+        >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
                 <div className="m40">
                     <div className="flex justify-center align-center">
@@ -106,11 +109,23 @@ export default function Verify() {
                         />
                     ))}
                     <h4>
-                        <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/resend">
+                        <Link
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
+                            className="link"
+                            to="/users/resend"
+                        >
                             Resend verification email?
                         </Link>
                     </h4>
-                    <Button variant="contained" className="font-size-16-force notexttransform" color="secondary" onClick={verify} disabled={disabled || !(email && code && EmailValidator.validate(email))}>
+                    <Button
+                        variant="contained"
+                        className="font-size-16-force notexttransform"
+                        color="secondary"
+                        onClick={verify}
+                        disabled={
+                            disabled || !(email && code && EmailValidator.validate(email))
+                        }
+                    >
                         <HowToReg className="mr5" />
                         Verify
                     </Button>

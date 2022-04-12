@@ -3,7 +3,17 @@ import { Box } from "@mui/material";
 import { useParams } from "react-router";
 import Empty from "../components/empty";
 import { useBack, useCategories, useWidth } from "../components/ContextProvider";
-import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useTitle,
+} from "../components/MenuProvider";
 
 /**
  * It's a function that

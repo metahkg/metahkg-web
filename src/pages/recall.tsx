@@ -2,7 +2,17 @@ import React from "react";
 import { Box } from "@mui/material";
 import Empty from "../components/empty";
 import { useBack, useWidth } from "../components/ContextProvider";
-import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useTitle,
+} from "../components/MenuProvider";
 
 /**
  * It's a function that

@@ -11,7 +11,11 @@ const Input = styled("input")({
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadImage(props: { onUpload?: () => void; onSuccess: (res: AxiosResponse<any, any>) => void; onError: (err: any) => void }) {
+export default function UploadImage(props: {
+    onUpload?: () => void;
+    onSuccess: (res: AxiosResponse<any, any>) => void;
+    onError: (err: any) => void;
+}) {
     const { onUpload, onSuccess, onError } = props;
     return (
         <Box>
@@ -36,9 +40,15 @@ export default function UploadImage(props: { onUpload?: () => void; onSuccess: (
                                 .catch(onError);
                         }}
                     />
-                    <Button className="notexttransform" variant="contained" component="span">
+                    <Button
+                        className="notexttransform"
+                        variant="contained"
+                        component="span"
+                    >
                         <FileUpload className="mr5" />
-                        <Typography sx={{ color: "secondary.main" }}>Upload Image</Typography>
+                        <Typography sx={{ color: "secondary.main" }}>
+                            Upload Image
+                        </Typography>
                     </Button>
                 </label>
             </form>

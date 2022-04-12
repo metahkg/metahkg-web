@@ -1,10 +1,24 @@
 import "./css/popup.css";
 import React from "react";
 import { Close } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 
-export function PopUp(props: { title: string; open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>>; button?: { text: string; link: string }; children: JSX.Element | JSX.Element[]; fullScreen?: boolean }) {
+export function PopUp(props: {
+    title: string;
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    button?: { text: string; link: string };
+    children: JSX.Element | JSX.Element[];
+    fullScreen?: boolean;
+}) {
     return (
         <Dialog
             open={props.open}
@@ -29,11 +43,18 @@ export function PopUp(props: { title: string; open: boolean; setOpen: React.Disp
             </DialogTitle>
             <Divider />
             <DialogContent className="nopadding">
-                <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">{props.children}</div>
+                <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
+                    {props.children}
+                </div>
                 {props.button && <Divider />}
                 {props.button && (
                     <Link className="notextdecoration" to={props.button.link}>
-                        <Button className="notexttransform font-size-18-force" color="secondary" variant="text" fullWidth>
+                        <Button
+                            className="notexttransform font-size-18-force"
+                            color="secondary"
+                            variant="text"
+                            fullWidth
+                        >
                             {props.button.text}
                         </Button>
                     </Link>

@@ -1,6 +1,16 @@
 import React from "react";
 import { Navigate, useParams } from "react-router";
-import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useTitle,
+} from "../components/MenuProvider";
 import { useBack, useWidth } from "../components/ContextProvider";
 
 /**

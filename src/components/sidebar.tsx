@@ -1,7 +1,26 @@
 import "./css/sidebar.css";
 import React, { useState } from "react";
-import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
-import { AccessTimeFilled, AccountCircle as AccountCircleIcon, Code as CodeIcon, Logout as LogoutIcon, ManageAccounts as ManageAccountsIcon, Menu as MenuIcon, Settings as SettingsIcon, Telegram as TelegramIcon } from "@mui/icons-material";
+import {
+    Box,
+    Divider,
+    Drawer,
+    IconButton,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from "@mui/material";
+import {
+    AccessTimeFilled,
+    AccountCircle as AccountCircleIcon,
+    Code as CodeIcon,
+    Logout as LogoutIcon,
+    ManageAccounts as ManageAccountsIcon,
+    Menu as MenuIcon,
+    Settings as SettingsIcon,
+    Telegram as TelegramIcon,
+} from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import SearchBar from "./searchbar";
@@ -24,12 +43,17 @@ export default function SideBar() {
     const [, setSettingsOpen] = useSettingsOpen();
     const categories = useCategories();
     const navigate = useNavigate();
-    const toggleDrawer = (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-        if (event.type === "keydown" && ((event as React.KeyboardEvent).key === "Tab" || (event as React.KeyboardEvent).key === "Shift")) {
-            return;
-        }
-        setOpen(o);
-    };
+    const toggleDrawer =
+        (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+            if (
+                event.type === "keydown" &&
+                ((event as React.KeyboardEvent).key === "Tab" ||
+                    (event as React.KeyboardEvent).key === "Shift")
+            ) {
+                return;
+            }
+            setOpen(o);
+        };
 
     function onClick() {
         setOpen(false);
@@ -58,7 +82,10 @@ export default function SideBar() {
                 <Box className="sidebar-box max-width-full" role="presentation">
                     <div className="fullwidth">
                         <List className="fullwidth">
-                            <a href="https://war.ukraine.ua/support-ukraine/" className="notextdecoration white">
+                            <a
+                                href="https://war.ukraine.ua/support-ukraine/"
+                                className="notextdecoration white"
+                            >
                                 <ListItem button onClick={onClick}>
                                     <ListItemIcon>
                                         <MetahkgLogo height={24} width={30} ua />
@@ -74,7 +101,9 @@ export default function SideBar() {
                                 }}
                                 onKeyPress={(e: any) => {
                                     if (e.key === "Enter" && tempq) {
-                                        navigate(`/search?q=${encodeURIComponent(tempq)}`);
+                                        navigate(
+                                            `/search?q=${encodeURIComponent(tempq)}`
+                                        );
                                         data && setData([]);
                                         setOpen(false);
                                         setQuery(tempq);
@@ -91,12 +120,24 @@ export default function SideBar() {
                                 icon: <AccessTimeFilled />,
                             },
                             {
-                                title: localStorage.user ? "Logout" : "Sign in / Register",
-                                link: `/${localStorage.user ? "users/logout" : "users/signin"}?returnto=${encodeURIComponent(wholepath())}`,
-                                icon: localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />,
+                                title: localStorage.user
+                                    ? "Logout"
+                                    : "Sign in / Register",
+                                link: `/${
+                                    localStorage.user ? "users/logout" : "users/signin"
+                                }?returnto=${encodeURIComponent(wholepath())}`,
+                                icon: localStorage.user ? (
+                                    <LogoutIcon />
+                                ) : (
+                                    <AccountCircleIcon />
+                                ),
                             },
                         ].map((item, index) => (
-                            <Link key={index} to={item.link} className="notextdecoration white">
+                            <Link
+                                key={index}
+                                to={item.link}
+                                className="notextdecoration white"
+                            >
                                 <ListItem button onClick={onClick}>
                                     <ListItemIcon>{item.icon}</ListItemIcon>
                                     <ListItemText>{item.title}</ListItemText>
@@ -105,30 +146,51 @@ export default function SideBar() {
                         ))}
                     </List>
                     <Divider />
-                    {[categories.filter((i) => !i.hidden), localStorage.user && categories.filter((i) => i.hidden)].map((cats: { id: number; name: string; hidden?: boolean }[], index) => (
-                        <div key={index}>
-                            {cats && (
-                                <div className={`m20${localStorage.user && !index ? " mb10" : ""}${index ? " mt0" : ""}`}>
-                                    {cats.map((category, index) => (
-                                        <Link key={index} to={`/category/${category.id}`} className="notextdecoration">
-                                            <Typography
-                                                className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
-                                                sx={(theme) => ({
-                                                    color: cat === category.id && !(profile || search) ? theme.palette.secondary.main : "white",
-                                                    "&:hover": {
-                                                        color: `${theme.palette.secondary.main} !important`,
-                                                    },
-                                                })}
-                                                onClick={onClick}
+                    {[
+                        categories.filter((i) => !i.hidden),
+                        localStorage.user && categories.filter((i) => i.hidden),
+                    ].map(
+                        (
+                            cats: { id: number; name: string; hidden?: boolean }[],
+                            index
+                        ) => (
+                            <div key={index}>
+                                {cats && (
+                                    <div
+                                        className={`m20${
+                                            localStorage.user && !index ? " mb10" : ""
+                                        }${index ? " mt0" : ""}`}
+                                    >
+                                        {cats.map((category, index) => (
+                                            <Link
+                                                key={index}
+                                                to={`/category/${category.id}`}
+                                                className="notextdecoration"
                                             >
-                                                {category.name}
-                                            </Typography>
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                                                <Typography
+                                                    className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
+                                                    sx={(theme) => ({
+                                                        color:
+                                                            cat === category.id &&
+                                                            !(profile || search)
+                                                                ? theme.palette.secondary
+                                                                      .main
+                                                                : "white",
+                                                        "&:hover": {
+                                                            color: `${theme.palette.secondary.main} !important`,
+                                                        },
+                                                    })}
+                                                    onClick={onClick}
+                                                >
+                                                    {category.name}
+                                                </Typography>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    )}
                     <Divider />
                     <List>
                         {[
@@ -143,7 +205,11 @@ export default function SideBar() {
                                 link: "https://gitlab.com/metahkg/metahkg",
                             },
                         ].map((item, index) => (
-                            <a key={index} className="notextdecoration white" href={item.link}>
+                            <a
+                                key={index}
+                                className="notextdecoration white"
+                                href={item.link}
+                            >
                                 <ListItem button key={index} onClick={onClick}>
                                     <ListItemIcon>{item.icon}</ListItemIcon>
                                     <ListItemText primary={item.title} />
@@ -176,7 +242,9 @@ export default function SideBar() {
                             <ListItemText>Settings</ListItemText>
                         </ListItem>
                     </List>
-                    <p className="ml5">Metahkg build {process.env.REACT_APP_build || "v0.5.8"}</p>
+                    <p className="ml5">
+                        Metahkg build {process.env.REACT_APP_build || "v0.5.8"}
+                    </p>
                 </Box>
             </Drawer>
         </div>

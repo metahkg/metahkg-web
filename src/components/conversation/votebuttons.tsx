@@ -14,7 +14,13 @@ import { useNotification } from "../ContextProvider";
  * @param {number} props.down number of downvotes
  * @returns A button group with two buttons, one for upvote and one for downvote.
  */
-export default function VoteButtons(props: { vote?: "U" | "D"; id: number; cid: number; up: number; down: number }) {
+export default function VoteButtons(props: {
+    vote?: "U" | "D";
+    id: number;
+    cid: number;
+    up: number;
+    down: number;
+}) {
     const [vote, setVote] = useState(props.vote);
     const [up, setUp] = useState(props.up);
     const [down, setDown] = useState(props.down);

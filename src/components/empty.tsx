@@ -1,6 +1,13 @@
 import "./css/empty.css";
 import React from "react";
-import { AccountCircle as AccountCircleIcon, Code as CodeIcon, Create as CreateIcon, Logout as LogoutIcon, ManageAccounts as ManageAccountsIcon, Telegram as TelegramIcon } from "@mui/icons-material";
+import {
+    AccountCircle as AccountCircleIcon,
+    Code as CodeIcon,
+    Create as CreateIcon,
+    Logout as LogoutIcon,
+    ManageAccounts as ManageAccountsIcon,
+    Telegram as TelegramIcon,
+} from "@mui/icons-material";
 import { List, ListItem, ListItemIcon, ListItemText, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
 import MetahkgIcon from "./logo";
@@ -43,7 +50,10 @@ export default function Empty() {
                     <h1>Metahkg</h1>
                 </div>
                 <List>
-                    <a className="notextdecoration white" href="https://war.ukraine.ua/support-ukraine/">
+                    <a
+                        className="notextdecoration white"
+                        href="https://war.ukraine.ua/support-ukraine/"
+                    >
                         <ListItem button className="fullwidth">
                             <ListItemIcon>
                                 <MetahkgLogo ua height={24} width={30} />
@@ -51,10 +61,23 @@ export default function Empty() {
                             <ListItemText>Support Ukraine</ListItemText>
                         </ListItem>
                     </a>
-                    <Link className="notextdecoration white" to={`/${localStorage.user ? "users/logout" : "users/signin"}?returnto=${encodeURIComponent(wholepath())}`}>
+                    <Link
+                        className="notextdecoration white"
+                        to={`/${
+                            localStorage.user ? "users/logout" : "users/signin"
+                        }?returnto=${encodeURIComponent(wholepath())}`}
+                    >
                         <ListItem button className="fullwidth">
-                            <ListItemIcon>{localStorage.user ? <LogoutIcon /> : <AccountCircleIcon />}</ListItemIcon>
-                            <ListItemText>{localStorage.user ? "Logout" : "Sign in / Register"}</ListItemText>
+                            <ListItemIcon>
+                                {localStorage.user ? (
+                                    <LogoutIcon />
+                                ) : (
+                                    <AccountCircleIcon />
+                                )}
+                            </ListItemIcon>
+                            <ListItemText>
+                                {localStorage.user ? "Logout" : "Sign in / Register"}
+                            </ListItemText>
                         </ListItem>
                     </Link>
                     {localStorage.user && (

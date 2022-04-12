@@ -95,8 +95,15 @@ export default function Signin() {
             >
                 <div className="ml50 mr50">
                     <div className="flex fullwidth justify-flex-end">
-                        <Link className="notextdecoration" to={`/users/register${window.location.search}`}>
-                            <Button className="flex notexttransform font-size-18-force" color="secondary" variant="text">
+                        <Link
+                            className="notextdecoration"
+                            to={`/users/register${window.location.search}`}
+                        >
+                            <Button
+                                className="flex notexttransform font-size-18-force"
+                                color="secondary"
+                                variant="text"
+                            >
                                 <strong>Register</strong>
                             </Button>
                         </Link>
@@ -128,11 +135,21 @@ export default function Signin() {
                         />
                     ))}
                     <h4>
-                        <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/verify">
+                        <Link
+                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
+                            className="link"
+                            to="/users/verify"
+                        >
                             Verify / Resend verification email?
                         </Link>
                     </h4>
-                    <Button disabled={disabled || !(user && pwd)} className="font-size-16-force notexttransform signin-btn" color="secondary" variant="contained" onClick={signin}>
+                    <Button
+                        disabled={disabled || !(user && pwd)}
+                        className="font-size-16-force notexttransform signin-btn"
+                        color="secondary"
+                        variant="contained"
+                        onClick={signin}
+                    >
                         <LoginIcon className="mr5 font-size-16-force" />
                         Sign in
                     </Button>
