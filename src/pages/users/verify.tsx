@@ -110,7 +110,7 @@ export default function Verify() {
                                 item.set(e.target.value);
                             }}
                             variant="filled"
-                            color="secondary"
+                            color="secondarysettings.secondaryColor?.main || "#f5bd1f"
                             required
                             fullWidth
                         />

@@ -212,7 +212,7 @@ export default function Register() {
                             label={item.label}
                             required
                             fullWidth
-                        />
+                        />settings.secondaryColor?.main || "#f5bd1f"
                     ))}
                     <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
                     <br />

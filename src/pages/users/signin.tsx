@@ -136,7 +136,7 @@ export default function Signin() {
                             variant="filled"
                             onChange={(e) => {
                                 item.set(e.target.value);
-                            }}
+                            }}settings.secondaryColor?.main || "#f5bd1f"
                             required
                             fullWidth
                         />
