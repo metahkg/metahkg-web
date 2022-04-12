@@ -50,18 +50,25 @@ export default function Signin() {
         setAlert({ severity: "info", text: "Signing in..." });
         setDisabled(true);
         axios
-            .post("/api/users/signin", {
-                user: user,
-                pwd: hash.sha256().update(pwd).digest("hex"),
-            })
+            .post(
+                "/api/users/signin",
+                {
+                    user: user,
+                    pwd: hash.sha256().update(pwd).digest("hex"),
+                },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 if (res.data.unverified) {
                     navigate("/users/verify");
                     setNotification({ open: true, text: "Please verify your account." });
                     return;
                 }
-                localStorage.user = res.data.user;
-                localStorage.id = res.data.id;
+                localStorage.setItem("user", res.data.user);
+                localStorage.setItem("id", res.data.id);
+                localStorage.setItem("token", res.data.token);
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
@@ -95,8 +102,15 @@ export default function Signin() {
             >
                 <div className="ml50 mr50">
                     <div className="flex fullwidth justify-flex-end">
-                        <Link className="notextdecoration" to={`/users/register${window.location.search}`}>
-                            <Button className="flex notexttransform font-size-18-force" color="secondary" variant="text">
+                        <Link
+                            className="notextdecoration"
+                            to={`/users/register${window.location.search}`}
+                        >
+                            <Button
+                                className="flex notexttransform font-size-18-force"
+                                color="secondary"
+                                variant="text"
+                            >
                                 <strong>Register</strong>
                             </Button>
                         </Link>
@@ -128,11 +142,21 @@ export default function Signin() {
                         />
                     ))}
                     <h4>
-                        <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/verify">
+                        <Link
+                            style={{ color: settings.secondaryColor?.main }}
+                            className="link"
+                            to="/users/verify"
+                        >
                             Verify / Resend verification email?
                         </Link>
                     </h4>
-                    <Button disabled={disabled || !(user && pwd)} className="font-size-16-force notexttransform signin-btn" color="secondary" variant="contained" onClick={signin}>
+                    <Button
+                        disabled={disabled || !(user && pwd)}
+                        className="font-size-16-force notexttransform signin-btn"
+                        color="secondary"
+                        variant="contained"
+                        onClick={signin}
+                    >
                         <LoginIcon className="mr5 font-size-16-force" />
                         Sign in
                     </Button>

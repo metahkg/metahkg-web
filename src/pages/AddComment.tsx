@@ -40,38 +40,50 @@ export default function AddComment() {
     const quote = Number(query.quote);
     useEffect(() => {
         if (localStorage.user) {
-            axios.post("/api/check", { id: id }).catch((err) => {
-                if (err.response.status === 404) {
-                    setAlert({
-                        severity: "warning",
-                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                    });
-                    setNotification({
-                        open: true,
-                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                    });
-                    setTimeout(() => {
-                        navigate("/", { replace: true });
-                    }, 5000);
-                } else {
-                    setAlert({
-                        severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
-                    });
-                    setNotification({
-                        open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
-                    });
-                }
-            });
+            axios
+                .post(
+                    "/api/check",
+                    { id: id },
+                    {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    }
+                )
+                .catch((err) => {
+                    if (err.response.status === 404) {
+                        setAlert({
+                            severity: "warning",
+                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                        });
+                        setNotification({
+                            open: true,
+                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                        });
+                        setTimeout(() => {
+                            navigate("/", { replace: true });
+                        }, 5000);
+                    } else {
+                        setAlert({
+                            severity: "error",
+                            text: err?.response?.data?.error || err?.response?.data || "",
+                        });
+                        setNotification({
+                            open: true,
+                            text: err?.response?.data?.error || err?.response?.data || "",
+                        });
+                    }
+                });
             if (quote) {
                 setAlert({ severity: "info", text: "Fetching comment..." });
                 setNotification({ open: true, text: "Fetching comment..." });
                 axios
-                    .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`)
+                    .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`, {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    })
                     .then((res) => {
                         if (res.data?.[0]) {
-                            setInittext(`<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`);
+                            setInittext(
+                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
+                            );
                             setAlert({ severity: "info", text: "" });
                             setTimeout(() => {
                                 setNotification({ open: false, text: "" });
@@ -105,10 +117,18 @@ export default function AddComment() {
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
         axios
-            .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
+            .post(
+                "/api/comment",
+                { id: id, comment: comment, rtoken: rtoken },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 data.length && setData([]);
-                navigate(`/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`);
+                navigate(
+                    `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
+                );
                 setTimeout(() => {
                     setNotification({ open: false, text: "" });
                 }, 100);
@@ -130,7 +150,14 @@ export default function AddComment() {
 
     /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
     if (!localStorage.user) {
-        return <Navigate to={`/users/signin?continue=true&returnto=${encodeURIComponent(wholepath())}`} replace />;
+        return (
+            <Navigate
+                to={`/users/signin?continue=true&returnto=${encodeURIComponent(
+                    wholepath()
+                )}`}
+                replace
+            />
+        );
     }
     const id = Number(params.id);
     menu && setMenu(false);
@@ -146,7 +173,13 @@ export default function AddComment() {
             <div style={{ width: width < 760 ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
-                        <MetahkgLogo svg height={50} width={40} light className="mr10 mb10" />
+                        <MetahkgLogo
+                            svg
+                            height={50}
+                            width={40}
+                            light
+                            className="mr10 mb10"
+                        />
                         <h1 className="nomargin">Add comment</h1>
                     </div>
                     <h4 className="mt5 mb10 font-size-22">
@@ -163,8 +196,14 @@ export default function AddComment() {
                     <div className={`${!(width < 760) ? "flex" : ""} align-center mb15`}>
                         <UploadImage
                             onUpload={() => {
-                                setAlert({ severity: "info", text: "Uploading image..." });
-                                setNotification({ open: true, text: "Uploading image..." });
+                                setAlert({
+                                    severity: "info",
+                                    text: "Uploading image...",
+                                });
+                                setNotification({
+                                    open: true,
+                                    text: "Uploading image...",
+                                });
                             }}
                             onSuccess={(res) => {
                                 setAlert({ severity: "info", text: "Image uploaded!" });
@@ -173,16 +212,36 @@ export default function AddComment() {
                                     setNotification({ open: false, text: "" });
                                 }, 1000);
                                 setImgurl(res.data.url);
-                                tinymce.activeEditor.insertContent(`<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`);
+                                tinymce.activeEditor.insertContent(
+                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                );
                             }}
                             onError={() => {
-                                setAlert({ severity: "error", text: "Error uploading image." });
-                                setNotification({ open: true, text: "Error uploading image." });
+                                setAlert({
+                                    severity: "error",
+                                    text: "Error uploading image.",
+                                });
+                                setNotification({
+                                    open: true,
+                                    text: "Error uploading image.",
+                                });
                             }}
                         />
                         {imgurl && (
-                            <p className={`ml10 novmargin flex${width < 760 ? " mt5" : ""}`}>
-                                <Tooltip arrow title={<img src={`https://i.metahkg.org/thumbnail?src=${imgurl}`} alt="" />}>
+                            <p
+                                className={`ml10 novmargin flex${
+                                    width < 760 ? " mt5" : ""
+                                }`}
+                            >
+                                <Tooltip
+                                    arrow
+                                    title={
+                                        <img
+                                            src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
+                                            alt=""
+                                        />
+                                    }
+                                >
                                     <a href={imgurl} target="_blank" rel="noreferrer">
                                         {imgurl}
                                     </a>
@@ -209,15 +268,32 @@ export default function AddComment() {
                             setComment(e.getContent());
                         }}
                     />
-                    <div className={`mt15 ${small ? "" : "flex fullwidth justify-space-between align-center"}`}>
+                    <div
+                        className={`mt15 ${
+                            small
+                                ? ""
+                                : "flex fullwidth justify-space-between align-center"
+                        }`}
+                    >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={process.env.REACT_APP_recaptchasitekey || "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"}
+                            sitekey={
+                                process.env.REACT_APP_recaptchasitekey ||
+                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            }
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}
                         />
-                        <Button disabled={disabled || !comment || !rtoken} className={`${small ? "mt15 " : ""}font-size-16-force notexttransform ac-btn`} onClick={addcomment} variant="contained" color="secondary">
+                        <Button
+                            disabled={disabled || !comment || !rtoken}
+                            className={`${
+                                small ? "mt15 " : ""
+                            }font-size-16-force notexttransform ac-btn`}
+                            onClick={addcomment}
+                            variant="contained"
+                            color="secondary"
+                        >
                             <AddCommentIcon className="mr5 font-size-16-force" />
                             Comment
                         </Button>

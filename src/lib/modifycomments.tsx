@@ -41,14 +41,23 @@ export function replace(node: any): JSX.Element | void {
         try {
             if (domNode.name === "a") {
                 const href: string = domNode.attribs?.href;
-                if ([/https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i, /https:\/\/fb\.watch\/\S+/i, /https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)/i, /https:\/\/youtu.be\/\S{11}/i].some((item) => href.match(item))) {
+                if (
+                    [
+                        /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i,
+                        /https:\/\/fb\.watch\/\S+/i,
+                        /https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)/i,
+                        /https:\/\/youtu.be\/\S{11}/i,
+                    ].some((item) => href.match(item))
+                ) {
                     return (
                         <div>
                             <Player url={href} />
                             {domToReact([node])}
                         </div>
                     );
-                } else if (href.match(/https:\/\/(|mobile.)twitter.com\/\S+\/status\/\S+/i)) {
+                } else if (
+                    href.match(/https:\/\/(|mobile.)twitter.com\/\S+\/status\/\S+/i)
+                ) {
                     const url = new URL(href);
                     const tweetid = url.pathname.split("/").pop();
                     if (tweetid)
@@ -92,7 +101,12 @@ export function replace(node: any): JSX.Element | void {
                                     evt.preventDefault();
                                 }}
                             >
-                                <Img src={src} height={height} width={width} style={style} />
+                                <Img
+                                    src={src}
+                                    height={height}
+                                    width={width}
+                                    style={style}
+                                />
                             </a>
                         );
                     }

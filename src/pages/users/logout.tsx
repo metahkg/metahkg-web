@@ -16,12 +16,11 @@ export default function Logout() {
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     menu && setMenu(false);
-    logout().then(() => {
-        navigate(decodeURIComponent(String(query.returnto || "/")), {
-            replace: true,
-        });
-        setNotification({ open: true, text: "Logged out." });
+    logout();
+    navigate(decodeURIComponent(String(query.returnto || "/")), {
+        replace: true,
     });
+    setNotification({ open: true, text: "Logged out." });
     return (
         <Box
             className="min-height-fullvh justify-center width-fullvw"

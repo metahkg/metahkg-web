@@ -4,12 +4,28 @@ import { Box, Paper, Typography } from "@mui/material";
 import axios, { AxiosError } from "axios";
 import MenuTop from "./menu/top";
 import MenuThread from "./menu/thread";
-import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useSmode } from "./MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useSmode,
+} from "./MenuProvider";
 import { splitarray } from "../lib/common";
 import { summary } from "../types/conversation/summary";
 import MenuPreload from "./menu/preload";
 import queryString from "query-string";
-import { useBack, useHistory, useNotification, useQuery, useSettingsOpen } from "./ContextProvider";
+import {
+    useBack,
+    useHistory,
+    useNotification,
+    useQuery,
+    useSettingsOpen,
+} from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router";
 import Dock from "./dock";
@@ -53,13 +69,16 @@ function MainContent() {
         err?.response?.status === 401 && navigate("/401", { replace: true });
     }
 
-    const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
+    const mode =
+        (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {
         if (!data.length && (category || profile || search || id || recall)) {
             setEnd(false);
             const url = {
-                search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&mode=${smode}`,
+                search: `/api/search?q=${encodeURIComponent(
+                    q
+                )}&sort=${selected}&mode=${smode}`,
                 profile: `/api/history/${profile}?sort=${selected}`,
                 menu: `/api/menu/${c}?sort=${selected}`,
                 recall: `/api/threads?threads=${JSON.stringify(
@@ -71,7 +90,9 @@ function MainContent() {
                 )}`,
             }[mode];
             axios
-                .get(url)
+                .get(url, {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                })
                 .then((res) => {
                     !(page === 1) && setPage(1);
                     setData(res.data);
@@ -94,7 +115,9 @@ function MainContent() {
         setEnd(false);
         setUpdating(true);
         const url = {
-            search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${page + 1}&mode=${smode}`,
+            search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
+                page + 1
+            }&mode=${smode}`,
             profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
             menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
             recall: `/api/threads?threads=${JSON.stringify(
@@ -106,7 +129,9 @@ function MainContent() {
             )}`,
         }[mode];
         axios
-            .get(url)
+            .get(url, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
             .then((res) => {
                 if (res.data?.[0] !== null) {
                     res.data.forEach((item: summary) => {
@@ -128,7 +153,11 @@ function MainContent() {
     function onScroll(e: any) {
         if (!end && !updating) {
             const diff = e.target.scrollHeight - e.target.scrollTop;
-            if ((e.target.clientHeight >= diff - 1.5 && e.target.clientHeight <= diff + 1.5) || diff < e.target.clientHeight) {
+            if (
+                (e.target.clientHeight >= diff - 1.5 &&
+                    e.target.clientHeight <= diff + 1.5) ||
+                diff < e.target.clientHeight
+            ) {
                 update();
             }
         }
@@ -138,7 +167,9 @@ function MainContent() {
         <Paper
             className="nobgimage noshadow overflow-auto"
             style={{
-                maxHeight: `calc(100vh - ${(search && "151") || (recall && "51") || "91"}px)`,
+                maxHeight: `calc(100vh - ${
+                    (search && "151") || (recall && "51") || "91"
+                }px)`,
             }}
             onScroll={onScroll}
             ref={paperRef}
@@ -152,15 +183,27 @@ function MainContent() {
                                     key={`${category}${id === thread.id}`}
                                     thread={thread}
                                     onClick={() => {
-                                        const index = history.findIndex((i) => i.id === thread.id);
+                                        const index = history.findIndex(
+                                            (i) => i.id === thread.id
+                                        );
                                         if (index === -1) {
-                                            history.unshift({ id: thread.id, c: thread.c, cid: 1 });
+                                            history.unshift({
+                                                id: thread.id,
+                                                c: thread.c,
+                                                cid: 1,
+                                            });
                                             setHistory(history);
-                                            localStorage.setItem("history", JSON.stringify(history));
+                                            localStorage.setItem(
+                                                "history",
+                                                JSON.stringify(history)
+                                            );
                                         } else if (history[index].cid < thread.c) {
                                             history[index].c = thread.c;
                                             setHistory(history);
-                                            localStorage.setItem("history", JSON.stringify(history));
+                                            localStorage.setItem(
+                                                "history",
+                                                JSON.stringify(history)
+                                            );
                                         }
                                     }}
                                 />
@@ -196,7 +239,11 @@ function Menu() {
     const [, setSettingsOpen] = useSettingsOpen();
     let tempq = decodeURIComponent(query || "");
     return (
-        <Box className={`max-width-full min-height-fullvh flex-dir-column ${menu ? "flex" : "display-none"} menu-root`}>
+        <Box
+            className={`max-width-full min-height-fullvh flex-dir-column ${
+                menu ? "flex" : "display-none"
+            } menu-root`}
+        >
             <Dock
                 btns={[
                     {

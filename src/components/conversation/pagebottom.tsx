@@ -22,14 +22,27 @@ export default function PageBottom() {
         <div className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10 mb55">
             <div className="flex">
                 {socialicons.map((icon, index) => (
-                    <a key={index} className={`metahkg-grey-force notextdecoration${index !== socialicons.length - 1 ? " mr7" : ""}`} href={icon.link} target="_blank" rel="noreferrer">
+                    <a
+                        key={index}
+                        className={`metahkg-grey-force notextdecoration${
+                            index !== socialicons.length - 1 ? " mr7" : ""
+                        }`}
+                        href={icon.link}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
                         <IconButton className="nopadding">{icon.icon}</IconButton>
                     </a>
                 ))}
             </div>
             <div className="mt8">
                 Copyright (c) 2022 wcyat.{" "}
-                <a className="metahkg-grey-force" href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank" rel="noreferrer">
+                <a
+                    className="metahkg-grey-force"
+                    href="https://www.gnu.org/licenses/agpl-3.0.en.html"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     AGPL-3.0
                 </a>
                 .

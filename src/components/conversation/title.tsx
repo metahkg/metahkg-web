@@ -39,7 +39,9 @@ export default function Title(props: {
                         </Link>
                     )}
                     <Typography
-                        className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${width < 760 ? " text-align-center" : ""}`}
+                        className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
+                            width < 760 ? " text-align-center" : ""
+                        }`}
                         sx={{
                             color: "secondary.main",
                         }}

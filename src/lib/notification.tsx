@@ -39,7 +39,9 @@ export function Notification() {
                     </div>
                 </Box>
                 <Box className="fullwidth notification-bottom">
-                    <p className="m15 text-overflow-ellipsis overflow-hidden font-size-15 notification-text">{notification.text}</p>
+                    <p className="m15 text-overflow-ellipsis overflow-hidden font-size-15 notification-text">
+                        {notification.text}
+                    </p>
                 </Box>
             </Box>
         </Snackbar>

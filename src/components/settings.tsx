@@ -5,7 +5,10 @@ import { useSettings } from "./ContextProvider";
 import { IOSSwitch } from "../lib/switch";
 import { secondaryColorDark, secondaryColorMain } from "../types/settings";
 
-export default function Settings(props: { open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function Settings(props: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
     useEffect(() => {
@@ -38,19 +41,32 @@ export default function Settings(props: { open: boolean; setOpen: React.Dispatch
         <PopUp title="Settings" open={open} setOpen={setOpen} fullScreen>
             <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
-                    <div key={item.title} className="flex justify-space-between align-center fullwidth mt4 mb4">
+                    <div
+                        key={item.title}
+                        className="flex justify-space-between align-center fullwidth mt4 mb4"
+                    >
                         <p className="nomargin">{item.title}</p>
-                        <IOSSwitch color="secondary" checked={item.checked} onChange={item.action} />
+                        <IOSSwitch
+                            color="secondary"
+                            checked={item.checked}
+                            onChange={item.action}
+                        />
                     </div>
                 ))}
                 <div className="flex justify-space-between align-center fullwidth mt6 mb4">
                     <p className="nomargin">Color</p>
                     <ToggleButtonGroup
                         color="secondary"
-                        value={colorOptions.find((item) => item.main === settings.secondaryColor?.main)?.value}
+                        value={
+                            colorOptions.find(
+                                (item) => item.main === settings.secondaryColor?.main
+                            )?.value
+                        }
                         exclusive
                         onChange={(e, val) => {
-                            const selected = colorOptions.find((item) => item.value === val) || {
+                            const selected = colorOptions.find(
+                                (item) => item.value === val
+                            ) || {
                                 value: "Yellow",
                                 main: "#f5bd1f",
                                 dark: "#ffc100",
@@ -65,7 +81,14 @@ export default function Settings(props: { open: boolean; setOpen: React.Dispatch
                         }}
                     >
                         {colorOptions.map((item) => (
-                            <ToggleButton disableRipple disableTouchRipple disableFocusRipple sx={{ color: `${item.main} !important` }} value={item.value} key={item.value}>
+                            <ToggleButton
+                                disableRipple
+                                disableTouchRipple
+                                disableFocusRipple
+                                sx={{ color: `${item.main} !important` }}
+                                value={item.value}
+                                key={item.value}
+                            >
                                 {item.value}
                             </ToggleButton>
                         ))}

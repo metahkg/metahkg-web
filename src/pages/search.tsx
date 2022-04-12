@@ -1,7 +1,16 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Empty from "../components/empty";
-import { useCat, useData, useId, useMenu, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useRecall,
+    useSearch,
+    useSelected,
+    useTitle,
+} from "../components/MenuProvider";
 import { useBack, useWidth } from "../components/ContextProvider";
 
 export default function Search() {
@@ -16,7 +25,8 @@ export default function Search() {
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
     document.title = "Search | Metahkg";
-    back !== window.location.pathname && setBack(window.location.pathname + window.location.search);
+    back !== window.location.pathname &&
+        setBack(window.location.pathname + window.location.search);
     !menu && setMenu(true);
     id && setId(0);
     cat && setCat(0);

@@ -72,7 +72,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  * @param props - {onKeyPress: KeyboardEventHandler; OnChange: ChangeEventHandler}
  * @returns A search bar with a search icon and an input field.
  */
-export default function SearchBar(props: { onKeyPress: KeyboardEventHandler<HTMLDivElement>; onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> }) {
+export default function SearchBar(props: {
+    onKeyPress: KeyboardEventHandler<HTMLDivElement>;
+    onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+}) {
     const [query] = useQuery();
     const [, setData] = useData();
     const [smode, setSmode] = useSmode();
@@ -83,7 +86,14 @@ export default function SearchBar(props: { onKeyPress: KeyboardEventHandler<HTML
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase key={query} placeholder="Search" inputProps={{ "aria-label": "search" }} onKeyPress={props.onKeyPress} onChange={props.onChange} defaultValue={decodeURIComponent(String(querystring.q || query || ""))} />
+            <StyledInputBase
+                key={query}
+                placeholder="Search"
+                inputProps={{ "aria-label": "search" }}
+                onKeyPress={props.onKeyPress}
+                onChange={props.onChange}
+                defaultValue={decodeURIComponent(String(querystring.q || query || ""))}
+            />
             {search && (
                 <Chip
                     label={smode ? "OP" : "Title"}

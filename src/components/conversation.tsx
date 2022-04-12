@@ -1,6 +1,20 @@
 import "./css/conversation.css";
-import React, { createContext, memo, useContext, useEffect, useRef, useState } from "react";
-import { Box, Button, CircularProgress, LinearProgress, Paper, SelectChangeEvent } from "@mui/material";
+import React, {
+    createContext,
+    memo,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import {
+    Box,
+    Button,
+    CircularProgress,
+    LinearProgress,
+    Paper,
+    SelectChangeEvent,
+} from "@mui/material";
 import queryString from "query-string";
 import Comment from "./conversation/comment";
 import Title from "./conversation/title";
@@ -42,9 +56,13 @@ function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
     const [notification, setNotification] = useNotification();
     const [conversation, setConversation] = useState<comment[]>([]);
-    const [lastpage, setLastPage] = useState(Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1);
+    const [lastpage, setLastPage] = useState(
+        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+    );
     /** Current page */
-    const [cpage, setCPage] = useState(Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1);
+    const [cpage, setCPage] = useState(
+        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+    );
     const [users, setUsers] = useState<any>({});
     const [details, setDetails] = useState<details>({});
     const [votes, setVotes] = useState<any>({});
@@ -77,10 +95,14 @@ function Conversation(props: { id: number }) {
         err?.response?.status === 404 && navigate("/404", { replace: true });
         err?.response?.status === 401 && navigate("/401", { replace: true });
     };
-    !query.page && !query.c && navigate(`${window.location.pathname}?page=1`, { replace: true });
+    !query.page &&
+        !query.c &&
+        navigate(`${window.location.pathname}?page=1`, { replace: true });
     useEffect(() => {
         axios
-            .get(`/api/thread/${props.id}?type=1`)
+            .get(`/api/thread/${props.id}?type=1`, {
+                headers: { authorization:  localStorage.getItem("token") || "" },
+            })
             .then((res) => {
                 res.data.slink && setDetails(res.data);
                 const historyIndex = history.findIndex((i) => i.id === props.id);
@@ -96,6 +118,8 @@ function Conversation(props: { id: number }) {
                     axios
                         .post("https://api-us.wcyat.me/create", {
                             url: `${window.location.origin}/thread/${props.id}?page=1`,
+                        }, {
+                            headers: { authorization:  localStorage.getItem("token") || "" },
                         })
                         .then((sres) => {
                             setDetails(
@@ -119,13 +143,17 @@ function Conversation(props: { id: number }) {
             })
             .catch(onError);
         axios
-            .get(`/api/thread/${props.id}?type=0`)
+            .get(`/api/thread/${props.id}?type=0`, {
+                headers: { authorization:  localStorage.getItem("token") || "" },
+            })
             .then((res) => {
                 setUsers(res.data);
             })
             .catch(onError);
         axios
-            .get(`/api/thread/${props.id}?type=2&page=${lastpage}`)
+            .get(`/api/thread/${props.id}?type=2&page=${lastpage}`, {
+                headers: { authorization:  localStorage.getItem("token") || "" },
+            })
             .then((res) => {
                 /** redirect to 404 if thread (or page) not found */
                 res.data?.[0] === null && navigate("/404", { replace: true });
@@ -137,7 +165,9 @@ function Conversation(props: { id: number }) {
             })
             .catch(onError);
         axios
-            .get(`/api/images/${props.id}`)
+            .get(`/api/images/${props.id}`, {
+                headers: { authorization:  localStorage.getItem("token") || "" },
+            })
             .then((res) => {
                 res.data.forEach((item: { image: string }) => {
                     images.push({
@@ -149,7 +179,9 @@ function Conversation(props: { id: number }) {
             .catch(onError);
         if (localStorage.user) {
             axios
-                .get(`/api/getvotes?id=${props.id}`)
+                .get(`/api/getvotes?id=${props.id}`, {
+                    headers: { authorization:  localStorage.getItem("token") || "" },
+                })
                 .then((res) => {
                     setVotes(res.data);
                 })
@@ -175,35 +207,50 @@ function Conversation(props: { id: number }) {
     function update() {
         setUpdating(true);
         const newpage = !(conversation.length % 25);
-        axios.get(`/api/thread/${props.id}?type=2&page=${newpage ? lastpage + 1 : lastpage}${newpage ? "" : `&start=${conversation[conversation.length - 1].id + 1}`}`).then((res) => {
-            if (res.data?.[0] === null) {
-                setEnd(true);
-                setUpdating(false);
-                return;
-            }
-            if (!newpage) {
-                for (let i = 0; i < res.data.length; i++) {
-                    conversation.push(res.data?.[i]);
+        axios
+            .get(
+                `/api/thread/${props.id}?type=2&page=${
+                    newpage ? lastpage + 1 : lastpage
+                }${
+                    newpage
+                        ? ""
+                        : `&start=${conversation[conversation.length - 1].id + 1}`
+                }`, {
+                    headers: { authorization:  localStorage.getItem("token") || "" },
                 }
-                lastHeight.current = 0;
-                setConversation(conversation);
-                setTimeout(() => {
-                    document.getElementById(`c${res.data?.[0]?.id}`)?.scrollIntoView();
-                }, 1);
-                conversation.length % 25 && setEnd(true);
-            } else {
-                for (let i = 0; i < res.data.length; i++) conversation.push(res.data?.[i]);
-                setConversation(conversation);
+            )
+            .then((res) => {
+                if (res.data?.[0] === null) {
+                    setEnd(true);
+                    setUpdating(false);
+                    return;
+                }
+                if (!newpage) {
+                    for (let i = 0; i < res.data.length; i++) {
+                        conversation.push(res.data?.[i]);
+                    }
+                    lastHeight.current = 0;
+                    setConversation(conversation);
+                    setTimeout(() => {
+                        document
+                            .getElementById(`c${res.data?.[0]?.id}`)
+                            ?.scrollIntoView();
+                    }, 1);
+                    conversation.length % 25 && setEnd(true);
+                } else {
+                    for (let i = 0; i < res.data.length; i++)
+                        conversation.push(res.data?.[i]);
+                    setConversation(conversation);
+                    setUpdating(false);
+                    setLastPage((lastpage) => lastpage + 1);
+                    setPages(Math.floor((conversation.length - 1) / 25) + 1);
+                    navigate(`/thread/${props.id}?page=${lastpage + 1}`, {
+                        replace: true,
+                    });
+                    setCPage(lastpage + 1);
+                }
                 setUpdating(false);
-                setLastPage((lastpage) => lastpage + 1);
-                setPages(Math.floor((conversation.length - 1) / 25) + 1);
-                navigate(`/thread/${props.id}?page=${lastpage + 1}`, {
-                    replace: true,
-                });
-                setCPage(lastpage + 1);
-            }
-            setUpdating(false);
-        });
+            });
     }
 
     /**
@@ -220,7 +267,9 @@ function Conversation(props: { id: number }) {
         setN((n) => n + (n > 1 ? -1 : 1) * Math.random());
         navigate(`${window.location.pathname}?page=${p}`, { replace: true });
         setCPage(p);
-        axios.get(`/api/thread/${props.id}?type=2&page=${p}`).then((res) => {
+        axios.get(`/api/thread/${props.id}?type=2&page=${p}`, {
+            headers: { authorization:  localStorage.getItem("token") || "" },
+        }).then((res) => {
             if (res.data?.[0] === null) {
                 setNotification({ open: true, text: "Page not found!" });
                 return;
@@ -238,14 +287,22 @@ function Conversation(props: { id: number }) {
     function onScroll(e: any) {
         if (!end && !updating) {
             const diff = e.target.scrollHeight - e.target.scrollTop;
-            if ((e.target.clientHeight >= diff - 1.5 && e.target.clientHeight <= diff + 1.5) || diff < e.target.clientHeight) {
+            if (
+                (e.target.clientHeight >= diff - 1.5 &&
+                    e.target.clientHeight <= diff + 1.5) ||
+                diff < e.target.clientHeight
+            ) {
                 update();
             }
         }
         const index = history.findIndex((i) => i.id === props.id);
         if (index !== -1) {
             const arr = [...Array(conversation.length)].map((und, c) => {
-                return Math.abs(Number(document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top));
+                return Math.abs(
+                    Number(
+                        document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top
+                    )
+                );
             });
             const currentcomment =
                 arr.findIndex(
@@ -265,7 +322,12 @@ function Conversation(props: { id: number }) {
     }
 
     /* It's checking if the conversation, users, details and votes are all ready. */
-    const ready = !!(conversation.length && Object.keys(users).length && Object.keys(details).length && (localStorage.user ? Object.keys(votes).length : 1));
+    const ready = !!(
+        conversation.length &&
+        Object.keys(users).length &&
+        Object.keys(details).length &&
+        (localStorage.user ? Object.keys(votes).length : 1)
+    );
     if (ready && loading) {
         setTimeout(() => {
             loading && setLoading(false);
@@ -288,7 +350,8 @@ function Conversation(props: { id: number }) {
             action: () => {
                 update();
                 const croot = document.getElementById("croot");
-                const newscrollTop = croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
+                const newscrollTop =
+                    croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
                 // @ts-ignore
                 croot.scrollTop = newscrollTop;
             },
@@ -314,8 +377,12 @@ function Conversation(props: { id: number }) {
             action: () => {
                 if (details.title && details.slink) {
                     !shareOpen && setShareOpen(true);
-                    shareTitle !== details.title && details.title && setShareTitle(details.title);
-                    shareLink !== details.slink && details.slink && setShareLink(details.slink);
+                    shareTitle !== details.title &&
+                        details.title &&
+                        setShareTitle(details.title);
+                    shareLink !== details.slink &&
+                        details.slink &&
+                        setShareLink(details.slink);
                 }
             },
             title: "Share",
@@ -345,7 +412,15 @@ function Conversation(props: { id: number }) {
             )}
             {loading && <LinearProgress className="fullwidth" color="secondary" />}
             <Title category={details.category} title={details.title} btns={btns} />
-            <Paper id="croot" key={n} className={`overflow-auto nobgimage noshadow conversation-paper${loading ? "-loading" : ""}`} sx={{ bgcolor: "primary.dark" }} onScroll={onScroll}>
+            <Paper
+                id="croot"
+                key={n}
+                className={`overflow-auto nobgimage noshadow conversation-paper${
+                    loading ? "-loading" : ""
+                }`}
+                sx={{ bgcolor: "primary.dark" }}
+                onScroll={onScroll}
+            >
                 <Box className="fullwidth max-height-full max-width-full">
                     <PhotoProvider>
                         {ready &&
@@ -356,26 +431,48 @@ function Conversation(props: { id: number }) {
                                     <Box key={index}>
                                         <VisibilityDetector
                                             onVisibilityChange={(isVisible) => {
-                                                const croot = document.getElementById("croot");
+                                                const croot =
+                                                    document.getElementById("croot");
                                                 let Page = page;
                                                 if (isVisible) {
-                                                    lastHeight.current = croot?.scrollTop || lastHeight.current;
-                                                    if (Page !== Number(query.page) && Page) {
-                                                        navigate(`${window.location.pathname}?page=${Page}`, {
-                                                            replace: true,
-                                                        });
+                                                    lastHeight.current =
+                                                        croot?.scrollTop ||
+                                                        lastHeight.current;
+                                                    if (
+                                                        Page !== Number(query.page) &&
+                                                        Page
+                                                    ) {
+                                                        navigate(
+                                                            `${window.location.pathname}?page=${Page}`,
+                                                            {
+                                                                replace: true,
+                                                            }
+                                                        );
                                                         setCPage(Page);
                                                     }
                                                 }
                                                 if (!isVisible && conversation.length) {
-                                                    if (lastHeight.current !== croot?.scrollTop) {
+                                                    if (
+                                                        lastHeight.current !==
+                                                        croot?.scrollTop
+                                                    ) {
                                                         Page =
                                                             // @ts-ignore
-                                                            croot.scrollTop > lastHeight.current ? Page : Page - 1;
-                                                        if (lastHeight.current && Page !== Number(query.page) && Page) {
-                                                            navigate(`${window.location.pathname}?page=${Page}`, {
-                                                                replace: true,
-                                                            });
+                                                            croot.scrollTop >
+                                                            lastHeight.current
+                                                                ? Page
+                                                                : Page - 1;
+                                                        if (
+                                                            lastHeight.current &&
+                                                            Page !== Number(query.page) &&
+                                                            Page
+                                                        ) {
+                                                            navigate(
+                                                                `${window.location.pathname}?page=${Page}`,
+                                                                {
+                                                                    replace: true,
+                                                                }
+                                                            );
                                                             setCPage(Page);
                                                         }
                                                     }
@@ -386,7 +483,9 @@ function Conversation(props: { id: number }) {
                                                 id={page}
                                                 pages={totalpages}
                                                 page={page}
-                                                onChange={(e: SelectChangeEvent<number>) => {
+                                                onChange={(
+                                                    e: SelectChangeEvent<number>
+                                                ) => {
                                                     changePage(Number(e.target.value));
                                                 }}
                                                 last={!(page === 1 && !index)}
@@ -406,11 +505,36 @@ function Conversation(props: { id: number }) {
                                                 title: details.title,
                                             }}
                                         >
-                                            {splitarray(conversation, index * 25, (index + 1) * 25 - 1).map(
+                                            {splitarray(
+                                                conversation,
+                                                index * 25,
+                                                (index + 1) * 25 - 1
+                                            ).map(
                                                 (comment: any) =>
                                                     !comment?.removed &&
-                                                    (story ? story === comment?.user : 1) && (
-                                                        <Comment name={users?.[comment?.user].name} id={comment.id} op={users?.[comment?.user].name === details.op} sex={users?.[comment?.user].sex} date={comment?.createdAt} up={comment?.["U"] | 0} down={comment?.["D"] | 0} vote={votes?.[comment.id]} userid={comment?.user} slink={comment?.slink}>
+                                                    (story
+                                                        ? story === comment?.user
+                                                        : 1) && (
+                                                        <Comment
+                                                            name={
+                                                                users?.[comment?.user]
+                                                                    .name
+                                                            }
+                                                            id={comment.id}
+                                                            op={
+                                                                users?.[comment?.user]
+                                                                    .name === details.op
+                                                            }
+                                                            sex={
+                                                                users?.[comment?.user].sex
+                                                            }
+                                                            date={comment?.createdAt}
+                                                            up={comment?.["U"] | 0}
+                                                            down={comment?.["D"] | 0}
+                                                            vote={votes?.[comment.id]}
+                                                            userid={comment?.user}
+                                                            slink={comment?.slink}
+                                                        >
                                                             {comment?.comment}
                                                         </Comment>
                                                     )

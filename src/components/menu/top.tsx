@@ -4,7 +4,14 @@ import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material"
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
-import { useCat, useId, useProfile, useRecall, useSearch, useTitle } from "../MenuProvider";
+import {
+    useCat,
+    useId,
+    useProfile,
+    useRecall,
+    useSearch,
+    useTitle,
+} from "../MenuProvider";
 import axios from "axios";
 import { useWidth } from "../ContextProvider";
 
@@ -31,7 +38,8 @@ export default function MenuTop(props: {
     const [recall] = useRecall();
     const [id] = useId();
     const [width] = useWidth();
-    const mode = (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
+    const mode =
+        (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     const inittitle = {
         search: "Search",
         profile: "User Profile",
@@ -49,17 +57,25 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!search && !recall && !title && (category || profile || id)) {
             if (profile) {
-                axios.get(`/api/profile/${profile}?nameonly=true`).then((res) => {
-                    setTitle(res.data.user);
-                    document.title = `${res.data.user} | Metahkg`;
-                });
+                axios
+                    .get(`/api/profile/${profile}?nameonly=true`, {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    })
+                    .then((res) => {
+                        setTitle(res.data.user);
+                        document.title = `${res.data.user} | Metahkg`;
+                    });
             } else {
-                axios.get(`/api/category/${category || `bytid${id}`}`).then((res) => {
-                    setTitle(res.data.name);
-                    if (!id) {
-                        document.title = `${res.data.name} | Metahkg`;
-                    }
-                });
+                axios
+                    .get(`/api/category/${category || `bytid${id}`}`, {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    })
+                    .then((res) => {
+                        setTitle(res.data.name);
+                        if (!id) {
+                            document.title = `${res.data.name} | Metahkg`;
+                        }
+                    });
             }
         }
     }, [category, id, profile, recall, search, setTitle, title]);
@@ -73,13 +89,20 @@ export default function MenuTop(props: {
                 }}
             >
                 {Boolean(width < 760 ? mobileTop : 1) && (
-                    <div className={`flex fullwidth align-center menutop-top justify-${width < 760 ? "center" : "space-between"}`}>
+                    <div
+                        className={`flex fullwidth align-center menutop-top justify-${
+                            width < 760 ? "center" : "space-between"
+                        }`}
+                    >
                         {!(width < 760) && (
                             <div className="ml10 mr40">
                                 <SideBar />
                             </div>
                         )}
-                        <Typography sx={{ color: "secondary.main" }} className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden">
+                        <Typography
+                            sx={{ color: "secondary.main" }}
+                            className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
+                        >
                             {title || inittitle}
                         </Typography>
                         {!(width < 760) && (
@@ -101,7 +124,10 @@ export default function MenuTop(props: {
                     </div>
                 )}
                 {Boolean(tabs.length) && (
-                    <Box sx={{ height: width < 760 && !mobileTop ? 50 : 40 }} className="flex fullwidth align-flex-end">
+                    <Box
+                        sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
+                        className="flex fullwidth align-flex-end"
+                    >
                         <Tabs
                             className="fullwidth"
                             value={props.selected}
@@ -113,7 +139,13 @@ export default function MenuTop(props: {
                             }}
                         >
                             {tabs.map((tab, index) => (
-                                <Tab key={index} className="font-size-15-force notexttransform" value={index} label={tab} disableRipple />
+                                <Tab
+                                    key={index}
+                                    className="font-size-15-force notexttransform"
+                                    value={index}
+                                    label={tab}
+                                    disableRipple
+                                />
                             ))}
                         </Tabs>
                     </Box>

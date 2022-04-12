@@ -1,6 +1,12 @@
 import "./css/votebuttons.css";
 import React, { useState } from "react";
-import { Box, IconButton, LinearProgress, linearProgressClasses, Typography } from "@mui/material";
+import {
+    Box,
+    IconButton,
+    LinearProgress,
+    linearProgressClasses,
+    Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useNotification } from "../ContextProvider";
 
@@ -48,13 +54,21 @@ const VoteBar = React.memo<Props>((props) => {
             }
 
             try {
-                await axios.post("/api/vote", {
-                    id: Number(props.postId),
-                    cid: Number(props.clientId),
-                    vote: value,
-                });
+                await axios.post(
+                    "/api/vote",
+                    {
+                        id: Number(props.postId),
+                        cid: Number(props.clientId),
+                        vote: value,
+                    },
+                    {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    }
+                );
             } catch (err: any) {
-                value === "U" ? setUpVoteCount(upVoteCount) : setDownVoteCount(downVoteCount);
+                value === "U"
+                    ? setUpVoteCount(upVoteCount)
+                    : setDownVoteCount(downVoteCount);
                 setVote(undefined);
                 setNotification({
                     open: true,
@@ -101,7 +115,9 @@ const VoteBar = React.memo<Props>((props) => {
                         width: "100%",
                         background: theme.palette.error.main,
                         [`& .${linearProgressClasses.bar}`]: {
-                            background: isEmptyVote ? theme.palette.grey[700] : theme.palette.success.main,
+                            background: isEmptyVote
+                                ? theme.palette.grey[700]
+                                : theme.palette.success.main,
                         },
                     })}
                     color="success"
@@ -133,7 +149,8 @@ const VoteBar = React.memo<Props>((props) => {
             </Box>
             <Box>
                 <Typography color="grey.300" variant="body1">
-                    <strong>{upVoteCount}</strong> upvotes / <strong>{downVoteCount}</strong> downvotes
+                    <strong>{upVoteCount}</strong> upvotes /{" "}
+                    <strong>{downVoteCount}</strong> downvotes
                 </Typography>
             </Box>
         </Box>

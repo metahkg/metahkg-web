@@ -8,7 +8,10 @@ import { useWidth } from "./ContextProvider";
  * @param {string} props.text initial text of the editor
  * @returns A text editor.
  */
-export default function TextEditor(props: { changehandler: (a: string, editor: import("tinymce/tinymce").Editor) => void; text: string }) {
+export default function TextEditor(props: {
+    changehandler: (a: string, editor: import("tinymce/tinymce").Editor) => void;
+    text: string;
+}) {
     const { changehandler, text } = props;
     const [width] = useWidth();
     return (
@@ -18,18 +21,24 @@ export default function TextEditor(props: { changehandler: (a: string, editor: i
             initialValue={text}
             init={{
                 height: width < 760 ? 310 : 350,
-                skin_url: "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/ui/metahkg-dark",
-                content_css: "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/content/metahkg-dark/content.min.css",
+                skin_url:
+                    "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/ui/metahkg-dark",
+                content_css:
+                    "https://cdn.jsdelivr.net/npm/metahkg-css/dist/tinymce/skins/content/metahkg-dark/content.min.css",
                 branding: false,
                 mobile: {
                     menubar: "file edit view insert format tools",
-                    toolbar: "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+                    toolbar:
+                        "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                 },
-                quickbars_selection_toolbar: "cut copy paste | fontsizeselect | quicklink",
+                quickbars_selection_toolbar:
+                    "cut copy paste | fontsizeselect | quicklink",
                 quickbars_insert_toolbar: "",
                 menubar: "file edit view insert format tools table",
-                plugins: "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
-                toolbar: "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+                plugins:
+                    "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
+                toolbar:
+                    "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                 toolbar_sticky: true,
                 templates: [
                     {

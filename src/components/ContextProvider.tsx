@@ -1,5 +1,13 @@
 import axios from "axios";
-import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import React, {
+    createContext,
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import type { history } from "../types/history";
 import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
@@ -28,9 +36,13 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const [height, setHeight] = useState(window.innerHeight);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settings, setSettings] = useState<settings>(JSON.parse(localStorage.getItem("settings") || "{}"));
+    const [settings, setSettings] = useState<settings>(
+        JSON.parse(localStorage.getItem("settings") || "{}")
+    );
     const [categories, setCategories] = useState<category[]>([]);
-    const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(localStorage.getItem("history") || "[]");
+    const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
+        localStorage.getItem("history") || "[]"
+    );
     /** migrate from old */
     if (parsedhistory.length && !parsedhistory[0].id) {
         for (let i = 0; i < parsedhistory.length; i++) {
@@ -42,9 +54,13 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const resizehandler = useRef(false);
 
     useEffect(() => {
-        axios.get(`/api/category/all`).then((res) => {
-            setCategories(res.data);
-        });
+        axios
+            .get(`/api/category/all`, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
+            .then((res) => {
+                setCategories(res.data);
+            });
     }, []);
 
     function updateSize() {

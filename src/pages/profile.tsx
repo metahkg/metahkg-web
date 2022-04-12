@@ -1,9 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./css/profile.css";
-import { Box, Button, LinearProgress, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Tooltip } from "@mui/material";
+import {
+    Box,
+    Button,
+    LinearProgress,
+    MenuItem,
+    Paper,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+    TextField,
+    Tooltip,
+} from "@mui/material";
 import axios, { AxiosError } from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { useCat, useData, useId, useMenu, useProfile, useRecall, useSearch, useSelected, useTitle } from "../components/MenuProvider";
+import {
+    useCat,
+    useData,
+    useId,
+    useMenu,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useTitle,
+} from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
 import { timetoword_long } from "../lib/common";
 import { Link } from "react-router-dom";
@@ -79,12 +103,19 @@ function DataTable(props: {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
         axios
-            .post("/api/users/editprofile", { user: name, sex: sex })
+            .post(
+                "/api/users/editprofile",
+                { user: name, sex: sex },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 setSaveDisabled(false);
                 props.setUser({});
                 setData([]);
                 setNotification({ open: true, text: res.data?.response });
+                localStorage.setItem("token", res.data.token);
             })
             .catch((err) => {
                 setSaveDisabled(false);
@@ -96,16 +127,29 @@ function DataTable(props: {
     }
 
     return (
-        <div className="ml50 mr50 fullwidth" style={{ maxWidth: width < 760 ? "100%" : "70%" }}>
+        <div
+            className="ml50 mr50 fullwidth"
+            style={{ maxWidth: width < 760 ? "100%" : "70%" }}
+        >
             <TableContainer className="fullwidth" component={Paper}>
                 <Table className="fullwidth" aria-label="simple table">
                     <TableBody>
                         {items.map((item, index) => (
-                            <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                <TableCell component="th" scope="row" className="font-size-16-force">
+                            <TableRow
+                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                            >
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                    className="font-size-16-force"
+                                >
                                     {item.title}
                                 </TableCell>
-                                <TableCell component="th" scope="row" className="font-size-16-force">
+                                <TableCell
+                                    component="th"
+                                    scope="row"
+                                    className="font-size-16-force"
+                                >
                                     {item.content}
                                 </TableCell>
                             </TableRow>
@@ -115,7 +159,16 @@ function DataTable(props: {
             </TableContainer>
             {params.id === "self" && (
                 <Tooltip title="jpg / png / svg supported">
-                    <Button className="mt20 mb10" variant="contained" disabled={saveDisabled || (name === props.user.user && sex === props.user.sex)} color="secondary" onClick={editprofile}>
+                    <Button
+                        className="mt20 mb10"
+                        variant="contained"
+                        disabled={
+                            saveDisabled ||
+                            (name === props.user.user && sex === props.user.sex)
+                        }
+                        color="secondary"
+                        onClick={editprofile}
+                    >
                         <Save />
                         Save
                     </Button>
@@ -149,7 +202,9 @@ export default function Profile() {
     useEffect(() => {
         if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
             axios
-                .get(`/api/profile/${Number(params.id) || "self"}`)
+                .get(`/api/profile/${Number(params.id) || "self"}`, {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                })
                 .then((res) => {
                     setUser(res.data);
                     document.title = `${res.data.user} | Metahkg`;
@@ -201,25 +256,37 @@ export default function Profile() {
                                     width: width < 760 ? "100vw" : "70vw",
                                 }}
                             >
-                                <img src={`/api/avatars/${user.id}`} alt="User avatar" height={width < 760 ? 150 : 200} width={width < 760 ? 150 : 200} />
+                                <img
+                                    src={`/api/avatars/${user.id}`}
+                                    alt="User avatar"
+                                    height={width < 760 ? 150 : 200}
+                                    width={width < 760 ? 150 : 200}
+                                />
                                 <br />
                                 <div
                                     className="ml20 flex justify-center profile-toptextdiv"
                                     style={{
-                                        flexDirection: params.id === "self" ? "column" : "row",
+                                        flexDirection:
+                                            params.id === "self" ? "column" : "row",
                                     }}
                                 >
                                     <h1 className="font-size-30 profile-toptext">
                                         <div
                                             className="overflow-hidden"
                                             style={{
-                                                maxWidth: width < 760 ? "calc(100vw - 250px)" : "calc(70vw - 350px)",
+                                                maxWidth:
+                                                    width < 760
+                                                        ? "calc(100vw - 250px)"
+                                                        : "calc(70vw - 350px)",
                                             }}
                                         >
                                             <span
                                                 className="overflow-hidden text-overflow-ellipsis nowrap"
                                                 style={{
-                                                    color: user.sex === "M" ? "#34aadc" : "red",
+                                                    color:
+                                                        user.sex === "M"
+                                                            ? "#34aadc"
+                                                            : "red",
                                                 }}
                                             >
                                                 {user.user}
@@ -236,7 +303,10 @@ export default function Profile() {
                                         {params.id === "self" && (
                                             <UploadAvatar
                                                 onUpload={() => {
-                                                    setNotification({ open: true, text: "Uploading..." });
+                                                    setNotification({
+                                                        open: true,
+                                                        text: "Uploading...",
+                                                    });
                                                 }}
                                                 onSuccess={() => {
                                                     window.location.reload();
@@ -244,7 +314,11 @@ export default function Profile() {
                                                 onError={(err) => {
                                                     setNotification({
                                                         open: true,
-                                                        text: `Upload failed: ${err.response?.data?.error || err.response?.data || ""}`,
+                                                        text: `Upload failed: ${
+                                                            err.response?.data?.error ||
+                                                            err.response?.data ||
+                                                            ""
+                                                        }`,
                                                     });
                                                 }}
                                             />
@@ -257,8 +331,15 @@ export default function Profile() {
                             </Box>
                             {width < 760 && (
                                 <div className="mt20">
-                                    <Link className="notextdecoration" to={`/history/${params.id}`}>
-                                        <Button className="font-size-16" variant="text" color="secondary">
+                                    <Link
+                                        className="notextdecoration"
+                                        to={`/history/${params.id}`}
+                                    >
+                                        <Button
+                                            className="font-size-16"
+                                            variant="text"
+                                            color="secondary"
+                                        >
                                             View History
                                         </Button>
                                     </Link>

@@ -1,7 +1,12 @@
 import React from "react";
 import "./css/thread.css";
 import { Box, Button } from "@mui/material";
-import { Article as ArticleIcon, Comment as CommentIcon, ThumbDown as ThumbDownIcon, ThumbUp as ThumbUpIcon } from "@mui/icons-material";
+import {
+    Article as ArticleIcon,
+    Comment as CommentIcon,
+    ThumbDown as ThumbDownIcon,
+    ThumbUp as ThumbUpIcon,
+} from "@mui/icons-material";
 import { roundup, timetoword } from "../../lib/common";
 import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
@@ -13,7 +18,10 @@ import { useCategories, useHistory } from "../ContextProvider";
  * @param {summary} props.thread thread info
  * @param {() => void | undefined} props.onClick on click event handler
  */
-export default function MenuThread(props: { thread: summary; onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void }) {
+export default function MenuThread(props: {
+    thread: summary;
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+}) {
     const [cat] = useCat();
     const [search] = useSearch();
     const [profile] = useProfile();
@@ -24,8 +32,16 @@ export default function MenuThread(props: { thread: summary; onClick?: (e: React
     const { thread, onClick } = props;
     const cid = history.find((i) => i.id === thread.id)?.cid;
     return (
-        <Link className="fullwidth notextdecoration" to={`/thread/${thread.id}?${cid && id !== thread.id ? `c=${cid}` : "page=1"}`} onClick={onClick}>
-            <Box className={`flex fullwidth flex-dir-column user-select-none border-radius-20 menuthread-root${id === thread.id ? "-selected" : ""}`}>
+        <Link
+            className="fullwidth notextdecoration"
+            to={`/thread/${thread.id}?${cid && id !== thread.id ? `c=${cid}` : "page=1"}`}
+            onClick={onClick}
+        >
+            <Box
+                className={`flex fullwidth flex-dir-column user-select-none border-radius-20 menuthread-root${
+                    id === thread.id ? "-selected" : ""
+                }`}
+            >
                 <div className="flex fullwidth align-center justify-space-between menuthread-top">
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <p
@@ -36,23 +52,48 @@ export default function MenuThread(props: { thread: summary; onClick?: (e: React
                         >
                             {thread.op}
                         </p>
-                        <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">{timetoword(thread.lastModified)}</p>
+                        <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                            {timetoword(thread.lastModified)}
+                        </p>
                     </div>
                     <div className="flex align-center">
-                        {thread.vote >= 0 ? <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" /> : <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />}
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">{thread.vote}</p>
+                        {thread.vote >= 0 ? (
+                            <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                        ) : (
+                            <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                        )}
+                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+                            {thread.vote}
+                        </p>
                         <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">{thread.c}</p>
+                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+                            {thread.c}
+                        </p>
                         <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">{String(roundup(thread.c / 25))}</p>
+                        <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                            {String(roundup(thread.c / 25))}
+                        </p>
                     </div>
                 </div>
                 <div className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
-                    <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">{thread.title}</p>
+                    <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
+                        {thread.title}
+                    </p>
                     {Boolean(cat === 1 || search || profile || recall) && (
-                        <Link className="mr10 notextdecoration" to={`/category/${thread.category}`}>
-                            <Button variant="contained" className="nomargin nopadding notexttransform menuthread-catbtn">
-                                <p className="nomargin font-size-12 menuthread-catname">{categories.find((i) => i.id === thread.category)?.name}</p>
+                        <Link
+                            className="mr10 notextdecoration"
+                            to={`/category/${thread.category}`}
+                        >
+                            <Button
+                                variant="contained"
+                                className="nomargin nopadding notexttransform menuthread-catbtn"
+                            >
+                                <p className="nomargin font-size-12 menuthread-catname">
+                                    {
+                                        categories.find((i) => i.id === thread.category)
+                                            ?.name
+                                    }
+                                </p>
                             </Button>
                         </Link>
                     )}

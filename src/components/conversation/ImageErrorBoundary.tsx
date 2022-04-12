@@ -18,7 +18,12 @@ export default class ImageErrorBoundary extends React.Component<{
                 <Tooltip
                     arrow
                     title={
-                        <a className="link white-force" href={src} target="_blank" rel="noreferrer">
+                        <a
+                            className="link white-force"
+                            href={src}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
                             {src}
                         </a>
                     }

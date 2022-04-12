@@ -30,13 +30,20 @@ export default function Verify() {
         setNotification({ open: true, text: "Verifying..." });
         setDisabled(true);
         axios
-            .post("/api/users/verify", {
-                email: email,
-                code: code,
-            })
+            .post(
+                "/api/users/verify",
+                {
+                    email: email,
+                    code: code,
+                },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 localStorage.setItem("user", res.data.user);
                 localStorage.setItem("id", res.data.id);
+                localStorage.setItem("token", res.data.token);
                 setNotification({
                     open: true,
                     text: `Logged in as ${res.data.user}.`,
@@ -65,7 +72,10 @@ export default function Verify() {
     document.title = "Verify | Metahkg";
     const small = width / 2 - 100 <= 450;
     return (
-        <Box className="flex align-center justify-center min-height-fullvh fullwidth" sx={{ bgcolor: "primary.dark" }}>
+        <Box
+            className="flex align-center justify-center min-height-fullvh fullwidth"
+            sx={{ bgcolor: "primary.dark" }}
+        >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
                 <div className="m40">
                     <div className="flex justify-center align-center">
@@ -106,11 +116,23 @@ export default function Verify() {
                         />
                     ))}
                     <h4>
-                        <Link style={{ color: settings.secondaryColor?.main }} className="link" to="/users/resend">
+                        <Link
+                            style={{ color: settings.secondaryColor?.main }}
+                            className="link"
+                            to="/users/resend"
+                        >
                             Resend verification email?
                         </Link>
                     </h4>
-                    <Button variant="contained" className="font-size-16-force notexttransform" color="secondary" onClick={verify} disabled={disabled || !(email && code && EmailValidator.validate(email))}>
+                    <Button
+                        variant="contained"
+                        className="font-size-16-force notexttransform"
+                        color="secondary"
+                        onClick={verify}
+                        disabled={
+                            disabled || !(email && code && EmailValidator.validate(email))
+                        }
+                    >
                         <HowToReg className="mr5" />
                         Verify
                     </Button>

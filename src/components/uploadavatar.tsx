@@ -11,7 +11,11 @@ const Input = styled("input")({
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadAvatar(props: { onUpload?: () => void; onSuccess: (res: AxiosResponse<any, any>) => void; onError: (err: any) => void }) {
+export default function UploadAvatar(props: {
+    onUpload?: () => void;
+    onSuccess: (res: AxiosResponse<any, any>) => void;
+    onError: (err: any) => void;
+}) {
     const { onUpload, onSuccess, onError } = props;
     return (
         <Box>
@@ -30,13 +34,19 @@ export default function UploadAvatar(props: { onUpload?: () => void; onSuccess: 
                                 .post("/api/users/avatar", formData, {
                                     headers: {
                                         "Content-Type": "multipart/form-data",
+                                        authorization:
+                                            localStorage.getItem("authorization") || "",
                                     },
                                 })
                                 .then(onSuccess)
                                 .catch(onError);
                         }}
                     />
-                    <Button className="mt5 notexttransform" variant="contained" component="span">
+                    <Button
+                        className="mt5 notexttransform"
+                        variant="contained"
+                        component="span"
+                    >
                         <FileUpload className="mr5" />
                         <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
                     </Button>

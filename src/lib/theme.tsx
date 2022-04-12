@@ -15,7 +15,11 @@ declare module "@mui/material/styles" {
         };
     }
 }
-export default function Theme(props: { primary?: PaletteColorOptions; secondary?: PaletteColorOptions; children: JSX.Element | JSX.Element[] }) {
+export default function Theme(props: {
+    primary?: PaletteColorOptions;
+    secondary?: PaletteColorOptions;
+    children: JSX.Element | JSX.Element[];
+}) {
     const theme = createTheme({
         palette: {
             mode: "dark",
@@ -23,7 +27,15 @@ export default function Theme(props: { primary?: PaletteColorOptions; secondary?
             secondary: props.secondary,
         },
         typography: {
-            fontFamily: ["Segoe UI", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", "Microsoft JhengHei", "sans-serif"].join(","),
+            fontFamily: [
+                "Segoe UI",
+                "Open Sans",
+                "Helvetica Neue",
+                "Helvetica",
+                "Arial",
+                "Microsoft JhengHei",
+                "sans-serif",
+            ].join(","),
         },
     });
     return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
