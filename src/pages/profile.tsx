@@ -290,7 +290,10 @@ export default function Profile() {
                                         }}
                                     >
                                         {params.id === "self" && (
-                                            <Tooltip title="jpg / png / svg supported" arrow>
+                                            <Tooltip
+                                                title="jpg / png / svg supported"
+                                                arrow
+                                            >
                                                 <UploadAvatar
                                                     onUpload={() => {
                                                         setNotification({
