@@ -151,21 +151,19 @@ function DataTable(props: {
                 </Table>
             </TableContainer>
             {params.id === "self" && (
-                <Tooltip title="jpg / png / svg supported">
-                    <Button
-                        className="mt20 mb10"
-                        variant="contained"
-                        disabled={
-                            saveDisabled ||
-                            (name === props.user.user && sex === props.user.sex)
-                        }
-                        color="secondary"
-                        onClick={editprofile}
-                    >
-                        <Save />
-                        Save
-                    </Button>
-                </Tooltip>
+                <Button
+                    className="mt20 mb10"
+                    variant="contained"
+                    disabled={
+                        saveDisabled ||
+                        (name === props.user.user && sex === props.user.sex)
+                    }
+                    color="secondary"
+                    onClick={editprofile}
+                >
+                    <Save />
+                    Save
+                </Button>
             )}
         </div>
     );
@@ -292,27 +290,30 @@ export default function Profile() {
                                         }}
                                     >
                                         {params.id === "self" && (
-                                            <UploadAvatar
-                                                onUpload={() => {
-                                                    setNotification({
-                                                        open: true,
-                                                        text: "Uploading...",
-                                                    });
-                                                }}
-                                                onSuccess={() => {
-                                                    window.location.reload();
-                                                }}
-                                                onError={(err) => {
-                                                    setNotification({
-                                                        open: true,
-                                                        text: `Upload failed: ${
-                                                            err.response?.data?.error ||
-                                                            err.response?.data ||
-                                                            ""
-                                                        }`,
-                                                    });
-                                                }}
-                                            />
+                                            <Tooltip title="jpg / png / svg supported" arrow>
+                                                <UploadAvatar
+                                                    onUpload={() => {
+                                                        setNotification({
+                                                            open: true,
+                                                            text: "Uploading...",
+                                                        });
+                                                    }}
+                                                    onSuccess={() => {
+                                                        window.location.reload();
+                                                    }}
+                                                    onError={(err) => {
+                                                        setNotification({
+                                                            open: true,
+                                                            text: `Upload failed: ${
+                                                                err.response?.data
+                                                                    ?.error ||
+                                                                err.response?.data ||
+                                                                ""
+                                                            }`,
+                                                        });
+                                                    }}
+                                                />
+                                            </Tooltip>
                                         )}
                                     </div>
                                 </div>
