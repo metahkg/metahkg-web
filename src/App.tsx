@@ -57,8 +57,8 @@ export default function App() {
                         localStorage.removeItem("token");
                         return;
                     }
-                    localStorage.user !== res.data.user &&
-                        localStorage.setItem("user", res.data.user);
+                    localStorage.user !== res.data.name &&
+                        localStorage.setItem("user", res.data.name);
                     localStorage.id !== Number(res.data.id) &&
                         localStorage.setItem("id", res.data.id);
                     localStorage.token !== res.data.token &&

@@ -132,7 +132,7 @@ function MainContent() {
             .get(url, {
                 headers: { authorization: localStorage.getItem("token") || "" },
             })
-            .then((res) => {
+            .then((res: { data: summary[] }) => {
                 if (res.data?.[0] !== null) {
                     res.data.forEach((item: summary) => {
                         data.push(item);

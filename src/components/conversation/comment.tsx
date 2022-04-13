@@ -87,17 +87,9 @@ function Comment(props: {
         useEffect(() => {
             if (!slink) {
                 axios
-                    .post(
-                        "https://api-us.wcyat.me/create",
-                        {
-                            url: `${window.location.origin}/thread/${tid}?c=${id}`,
-                        },
-                        {
-                            headers: {
-                                authorization: localStorage.getItem("token") || "",
-                            },
-                        }
-                    )
+                    .post("https://api-us.wcyat.me/create", {
+                        url: `${window.location.origin}/thread/${tid}?c=${id}`,
+                    })
                     .then((res) => {
                         setLink(`https://l.wcyat.me/${res.data.id}`);
                     })

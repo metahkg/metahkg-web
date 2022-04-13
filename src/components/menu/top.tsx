@@ -62,8 +62,8 @@ export default function MenuTop(props: {
                         headers: { authorization: localStorage.getItem("token") || "" },
                     })
                     .then((res) => {
-                        setTitle(res.data.user);
-                        document.title = `${res.data.user} | Metahkg`;
+                        setTitle(res.data.name);
+                        document.title = `${res.data.name} | Metahkg`;
                     });
             } else {
                 axios

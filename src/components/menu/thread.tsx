@@ -47,10 +47,10 @@ export default function MenuThread(props: {
                         <p
                             className="font-size-16 ml20 metahkg-grey menuthread-op"
                             style={{
-                                color: thread.sex === "M" ? "#0277bd" : "red",
+                                color: thread.op.sex === "M" ? "#0277bd" : "red",
                             }}
                         >
-                            {thread.op}
+                            {thread.op.name}
                         </p>
                         <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {timetoword(thread.lastModified)}

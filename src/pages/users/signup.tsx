@@ -77,7 +77,7 @@ export default function Register() {
     document.title = "Register | Metahkg";
     const [width] = useWidth();
     const [, setNotification] = useNotification();
-    const [user, setUser] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
@@ -98,11 +98,11 @@ export default function Register() {
         const errors = [
             { cond: !EmailValidator.validate(email), alert: "Email invalid." },
             {
-                cond: user.split(" ")[1] || user.length > 15,
+                cond: name.split(" ")[1] || name.length > 15,
                 alert: "Username must be one word and less than 16 characters.",
             },
             {
-                cond: EmailValidator.validate(user),
+                cond: EmailValidator.validate(name),
                 alert: "Username must not be a email.",
             },
             {
@@ -119,19 +119,13 @@ export default function Register() {
             }
         }
         axios
-            .post(
-                "/api/users/register",
-                {
-                    email: email,
-                    user: user,
-                    pwd: hash.sha256().update(pwd).digest("hex"),
-                    sex: sex,
-                    rtoken: rtoken,
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+            .post("/api/users/register", {
+                email: email,
+                name: name,
+                pwd: hash.sha256().update(pwd).digest("hex"),
+                sex: sex,
+                rtoken: rtoken,
+            })
             .then(() => {
                 setAlert({
                     severity: "success",
@@ -195,7 +189,7 @@ export default function Register() {
                         </Alert>
                     )}
                     {[
-                        { label: "Username", set: setUser, type: "text" },
+                        { label: "Username", set: setName, type: "text" },
                         { label: "Email", set: setEmail, type: "email" },
                         { label: "Password", set: setPwd, type: "password" },
                     ].map((item) => (
@@ -242,7 +236,7 @@ export default function Register() {
                         />
                         <Button
                             disabled={
-                                disabled || !(rtoken && user && email && pwd && sex)
+                                disabled || !(rtoken && name && email && pwd && sex)
                             }
                             type="submit"
                             className="mt20 font-size-16-force notexttransform signup-btn"

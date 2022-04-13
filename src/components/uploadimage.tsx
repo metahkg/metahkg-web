@@ -34,8 +34,6 @@ export default function UploadImage(props: {
                                 .post("https://api.na.cx/upload", formData, {
                                     headers: {
                                         "Content-Type": "multipart/form-data",
-                                        authorization:
-                                            localStorage.getItem("authorization") || "",
                                     },
                                 })
                                 .then(onSuccess)

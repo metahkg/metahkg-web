@@ -30,23 +30,17 @@ export default function Verify() {
         setNotification({ open: true, text: "Verifying..." });
         setDisabled(true);
         axios
-            .post(
-                "/api/users/verify",
-                {
-                    email: email,
-                    code: code,
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+            .post("/api/users/verify", {
+                email: email,
+                code: code,
+            })
             .then((res) => {
-                localStorage.setItem("user", res.data.user);
+                localStorage.setItem("user", res.data.name);
                 localStorage.setItem("id", res.data.id);
                 localStorage.setItem("token", res.data.token);
                 setNotification({
                     open: true,
-                    text: `Logged in as ${res.data.user}.`,
+                    text: `Logged in as ${res.data.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })

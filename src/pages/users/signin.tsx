@@ -25,7 +25,7 @@ export default function Signin() {
     const [, setNotification] = useNotification();
     const [settings] = useSettings();
     const [width] = useWidth();
-    const [user, setUser] = useState("");
+    const [name, setName] = useState("");
     const [pwd, setPwd] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
@@ -53,7 +53,7 @@ export default function Signin() {
             .post(
                 "/api/users/signin",
                 {
-                    user: user,
+                    name: name,
                     pwd: hash.sha256().update(pwd).digest("hex"),
                 },
                 {
@@ -66,13 +66,13 @@ export default function Signin() {
                     setNotification({ open: true, text: "Please verify your account." });
                     return;
                 }
-                localStorage.setItem("user", res.data.user);
+                localStorage.setItem("user", res.data.name);
                 localStorage.setItem("id", res.data.id);
                 localStorage.setItem("token", res.data.token);
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
-                setNotification({ open: true, text: `Signed in as ${res.data.user}.` });
+                setNotification({ open: true, text: `Signed in as ${res.data.name}.` });
             })
             .catch((err) => {
                 setAlert({
@@ -125,7 +125,7 @@ export default function Signin() {
                         </Alert>
                     )}
                     {[
-                        { label: "Username / Email", type: "text", set: setUser },
+                        { label: "Username / Email", type: "text", set: setName },
                         { label: "Password", type: "password", set: setPwd },
                     ].map((item, index) => (
                         <TextField
@@ -151,7 +151,7 @@ export default function Signin() {
                         </Link>
                     </h4>
                     <Button
-                        disabled={disabled || !(user && pwd)}
+                        disabled={disabled || !(name && pwd)}
                         className="font-size-16-force notexttransform signin-btn"
                         color="secondary"
                         variant="contained"
