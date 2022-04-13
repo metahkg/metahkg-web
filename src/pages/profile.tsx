@@ -35,16 +35,17 @@ import { useBack, useNotification, useWidth } from "../components/ContextProvide
 import { Save } from "@mui/icons-material";
 
 /* It's a function that returns a table with the user's information. */
-function DataTable(props: {
+interface DataTableProps {
     user: {
         user: string;
         count: number;
         sex: "M" | "F";
-        admin?: boolean;
+        role: "user" | "admin";
         createdAt: string;
     };
     setUser: React.Dispatch<React.SetStateAction<any>>;
-}) {
+}
+function DataTable(props: DataTableProps) {
     const [width] = useWidth();
     const [, setData] = useData();
     const [, setNotification] = useNotification();
@@ -92,7 +93,7 @@ function DataTable(props: {
                     { M: "male", F: "female" }[props.user.sex] || ""
                 ),
         },
-        { title: "Admin", content: props.user.admin ? "yes" : "no" },
+        { title: "Role", content: props.user.role },
         {
             title: "Joined",
             content: `${timetoword_long(props.user.createdAt)} ago`,
@@ -103,19 +104,12 @@ function DataTable(props: {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
         axios
-            .post(
-                "/api/users/editprofile",
-                { user: name, sex: sex },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+            .post("/api/users/editprofile", { user: name, sex: sex })
             .then((res) => {
                 setSaveDisabled(false);
                 props.setUser({});
                 setData([]);
                 setNotification({ open: true, text: res.data?.response });
-                localStorage.setItem("token", res.data.token);
             })
             .catch((err) => {
                 setSaveDisabled(false);
@@ -202,9 +196,7 @@ export default function Profile() {
     useEffect(() => {
         if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
             axios
-                .get(`/api/profile/${Number(params.id) || "self"}`, {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                })
+                .get(`/api/profile/${Number(params.id) || "self"}`)
                 .then((res) => {
                     setUser(res.data);
                     document.title = `${res.data.user} | Metahkg`;
