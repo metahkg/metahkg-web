@@ -114,11 +114,17 @@ function Conversation(props: { id: number }) {
                 document.title = `${res.data.title} | Metahkg`;
                 if (!res.data.slink) {
                     axios
-                        .post("https://api-us.wcyat.me/create", {
-                            url: `${window.location.origin}/thread/${props.id}?page=1`,
-                        }, {
-                            headers: { authorization: localStorage.getItem("token") || "" },
-                        })
+                        .post(
+                            "https://api-us.wcyat.me/create",
+                            {
+                                url: `${window.location.origin}/thread/${props.id}?page=1`,
+                            },
+                            {
+                                headers: {
+                                    authorization: localStorage.getItem("token") || "",
+                                },
+                            }
+                        )
                         .then((sres) => {
                             res.data.slink = sres.data;
                             setThread(res.data);
@@ -201,9 +207,9 @@ function Conversation(props: { id: number }) {
                     if (!openNewPage) {
                         res.data.conversation.forEach((item) => {
                             thread.conversation.push(item);
-                        })
+                        });
                         lastHeight.current = 0;
-                        setThread({...thread, conversation: thread.conversation});
+                        setThread({ ...thread, conversation: thread.conversation });
                         setTimeout(() => {
                             document
                                 .getElementById(`c${res.data?.conversation[0]?.id}`)
@@ -213,7 +219,7 @@ function Conversation(props: { id: number }) {
                     } else {
                         for (let i = 0; i < res.data.conversation.length; i++)
                             thread.conversation.push(res.data.conversation?.[i]);
-                        setThread({...thread, conversation: thread.conversation});
+                        setThread({ ...thread, conversation: thread.conversation });
                         setUpdating(false);
                         setFinalPage(finalPage + 1);
                         setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
@@ -223,7 +229,7 @@ function Conversation(props: { id: number }) {
                         setCurrentPage(finalPage + 1);
                     }
                     setUpdating(false);
-                });    
+                });
         }
     }
 
