@@ -1,4 +1,4 @@
-FROM node:17 AS build
+FROM node:latest AS build
 
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
@@ -16,7 +16,7 @@ RUN yarn install
 RUN touch .env
 RUN yarn run build
 
-FROM node:17
+FROM node:latest
 
 WORKDIR /usr/src/app
 
