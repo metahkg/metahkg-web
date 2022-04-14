@@ -7,12 +7,12 @@ import {
     linearProgressClasses,
     Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useNotification } from "../ContextProvider";
 
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
 import { green, red } from "@mui/material/colors";
+import { api } from "../../lib/api";
 
 type VoteType = "U" | "D";
 
@@ -54,17 +54,11 @@ const VoteBar = React.memo<Props>((props) => {
             }
 
             try {
-                await axios.post(
-                    "/api/vote",
-                    {
-                        id: Number(props.postId),
-                        cid: Number(props.clientId),
-                        vote: value,
-                    },
-                    {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    }
-                );
+                await api.post("/posts/vote", {
+                    id: Number(props.postId),
+                    cid: Number(props.clientId),
+                    vote: value,
+                });
             } catch (err: any) {
                 value === "U"
                     ? setUpVoteCount(upVoteCount)

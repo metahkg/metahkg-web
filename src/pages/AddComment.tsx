@@ -2,7 +2,6 @@ import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
-import axios from "axios";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useNotification, useWidth } from "../components/ContextProvider";
@@ -14,6 +13,7 @@ import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
 import UploadImage from "../components/uploadimage";
+import { api } from "../lib/api";
 
 declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
@@ -35,50 +35,38 @@ export default function AddComment() {
         text: "",
     });
     const [, setNotification] = useNotification();
-    const params = useParams();
     const query = queryString.parse(window.location.search);
     const quote = Number(query.quote);
     useEffect(() => {
         if (localStorage.user) {
-            axios
-                .post(
-                    "/api/check",
-                    { id: id },
-                    {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    }
-                )
-                .catch((err) => {
-                    if (err.response.status === 404) {
-                        setAlert({
-                            severity: "warning",
-                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                        });
-                        setNotification({
-                            open: true,
-                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                        });
-                        setTimeout(() => {
-                            navigate("/", { replace: true });
-                        }, 5000);
-                    } else {
-                        setAlert({
-                            severity: "error",
-                            text: err?.response?.data?.error || err?.response?.data || "",
-                        });
-                        setNotification({
-                            open: true,
-                            text: err?.response?.data?.error || err?.response?.data || "",
-                        });
-                    }
-                });
+            api.post("/posts/check", { id: id }).catch((err) => {
+                if (err.response.status === 404) {
+                    setAlert({
+                        severity: "warning",
+                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                    });
+                    setNotification({
+                        open: true,
+                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                    });
+                    setTimeout(() => {
+                        navigate("/", { replace: true });
+                    }, 5000);
+                } else {
+                    setAlert({
+                        severity: "error",
+                        text: err?.response?.data?.error || err?.response?.data || "",
+                    });
+                    setNotification({
+                        open: true,
+                        text: err?.response?.data?.error || err?.response?.data || "",
+                    });
+                }
+            });
             if (quote) {
                 setAlert({ severity: "info", text: "Fetching comment..." });
                 setNotification({ open: true, text: "Fetching comment..." });
-                axios
-                    .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`, {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    })
+                api.get(`/thread/${id}?type=2&start=${quote}&end=${quote}`)
                     .then((res) => {
                         if (res.data?.[0]) {
                             setInittext(
@@ -111,19 +99,13 @@ export default function AddComment() {
     /**
      * It sends a post request to the server with the comment data.
      */
+    const params = useParams();
     function addcomment() {
-        //send data to server /api/comment
+        //send data to server /api/posts/comment
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
-        axios
-            .post(
-                "/api/comment",
-                { id: id, comment: comment, rtoken: rtoken },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+        api.post("/posts/comment", { id: id, comment: comment, rtoken: rtoken })
             .then((res) => {
                 data.length && setData([]);
                 navigate(

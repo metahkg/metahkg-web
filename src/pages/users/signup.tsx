@@ -1,6 +1,5 @@
 import "./css/signup.css";
 import React, { useState } from "react";
-import axios from "axios";
 import hash from "hash.js";
 import * as EmailValidator from "email-validator";
 import {
@@ -25,6 +24,7 @@ import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import queryString from "query-string";
+import { api } from "../../lib/api";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -118,14 +118,13 @@ export default function Register() {
                 return;
             }
         }
-        axios
-            .post("/api/users/register", {
-                email: email,
-                name: name,
-                pwd: hash.sha256().update(pwd).digest("hex"),
-                sex: sex,
-                rtoken: rtoken,
-            })
+        api.post("/users/register", {
+            email: email,
+            name: name,
+            pwd: hash.sha256().update(pwd).digest("hex"),
+            sex: sex,
+            rtoken: rtoken,
+        })
             .then(() => {
                 setAlert({
                     severity: "success",

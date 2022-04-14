@@ -12,8 +12,8 @@ import {
     useSearch,
     useTitle,
 } from "../MenuProvider";
-import axios from "axios";
 import { useWidth } from "../ContextProvider";
+import { api } from "../../lib/api";
 
 /**
  * The top part of the menu consists of a title part
@@ -57,25 +57,17 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!search && !recall && !title && (category || profile || id)) {
             if (profile) {
-                axios
-                    .get(`/api/profile/${profile}?nameonly=true`, {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    })
-                    .then((res) => {
-                        setTitle(res.data.name);
-                        document.title = `${res.data.name} | Metahkg`;
-                    });
+                api.get(`/profile/${profile}?nameonly=true`).then((res) => {
+                    setTitle(res.data.name);
+                    document.title = `${res.data.name} | Metahkg`;
+                });
             } else {
-                axios
-                    .get(`/api/category/${category || `bytid${id}`}`, {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    })
-                    .then((res) => {
-                        setTitle(res.data.name);
-                        if (!id) {
-                            document.title = `${res.data.name} | Metahkg`;
-                        }
-                    });
+                api.get(`/category/${category || `bytid${id}`}`).then((res) => {
+                    setTitle(res.data.name);
+                    if (!id) {
+                        document.title = `${res.data.name} | Metahkg`;
+                    }
+                });
             }
         }
     }, [category, id, profile, recall, search, setTitle, title]);

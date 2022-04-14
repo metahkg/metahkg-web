@@ -2,8 +2,8 @@ import "./css/votebuttons.css";
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
-import axios from "axios";
 import { useNotification } from "../ContextProvider";
+import { api } from "../../lib/api";
 
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
@@ -33,26 +33,18 @@ export default function VoteButtons(props: {
     function sendvote(v: "U" | "D") {
         v === "U" ? setUp(up + 1) : setDown(down + 1);
         setVote(v);
-        axios
-            .post(
-                "/api/vote",
-                {
-                    id: Number(props.id),
-                    cid: Number(props.cid),
-                    vote: v,
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
-            .catch((err) => {
-                v === "U" ? setUp(up) : setDown(down);
-                setVote(undefined);
-                setNotification({
-                    open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
-                });
+        api.post("/posts/vote", {
+            id: Number(props.id),
+            cid: Number(props.cid),
+            vote: v,
+        }).catch((err) => {
+            v === "U" ? setUp(up) : setDown(down);
+            setVote(undefined);
+            setNotification({
+                open: true,
+                text: err?.response?.data?.error || err?.response?.data || "",
             });
+        });
     }
 
     return (

@@ -38,6 +38,7 @@ import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { threadType } from "../types/conversation/thread";
 import { commentType } from "../types/conversation/comment";
+import { api } from "../lib/api";
 
 const ConversationContext = createContext<{
     story: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -97,10 +98,9 @@ function Conversation(props: { id: number }) {
         !query.c &&
         navigate(`${window.location.pathname}?page=1`, { replace: true });
     useEffect(() => {
-        axios
-            .get(`/api/thread/${props.id}?page=${finalPage}`, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
+        api.get(`/thread/${props.id}?page=${finalPage}`, {
+            headers: { authorization: localStorage.getItem("token") || "" },
+        })
             .then((res: { data: threadType }) => {
                 res.data.slink && setThread(res.data);
                 const historyIndex = history.findIndex((i) => i.id === props.id);
@@ -114,17 +114,9 @@ function Conversation(props: { id: number }) {
                 document.title = `${res.data.title} | Metahkg`;
                 if (!res.data.slink) {
                     axios
-                        .post(
-                            "https://api-us.wcyat.me/create",
-                            {
-                                url: `${window.location.origin}/thread/${props.id}?page=1`,
-                            },
-                            {
-                                headers: {
-                                    authorization: localStorage.getItem("token") || "",
-                                },
-                            }
-                        )
+                        .post("https://api-us.wcyat.me/create", {
+                            url: `${window.location.origin}/thread/${props.id}?page=1`,
+                        })
                         .then((sres) => {
                             res.data.slink = sres.data;
                             setThread(res.data);
@@ -141,10 +133,7 @@ function Conversation(props: { id: number }) {
                 res.data.conversation.length % 25 && setEnd(true);
             })
             .catch(onError);
-        axios
-            .get(`/api/images/${props.id}`, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
+        api.get(`/posts/images/${props.id}`)
             .then((res) => {
                 res.data.forEach((item: { image: string }) => {
                     images.push({
@@ -155,10 +144,7 @@ function Conversation(props: { id: number }) {
             })
             .catch(onError);
         if (localStorage.user) {
-            axios
-                .get(`/api/getvotes?id=${props.id}`, {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                })
+            api.get(`/posts/votes?id=${props.id}`)
                 .then((res) => {
                     setVotes(res.data);
                 })
@@ -182,54 +168,46 @@ function Conversation(props: { id: number }) {
         if (thread) {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
-            axios
-                .get(
-                    `/api/thread/${props.id}?page=${
-                        openNewPage ? finalPage + 1 : finalPage
-                    }${
-                        openNewPage
-                            ? ""
-                            : `&start=${
-                                  thread.conversation[thread.conversation.length - 1].id +
-                                  1
-                              }`
-                    }`,
-                    {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    }
-                )
-                .then((res: { data: threadType }) => {
-                    if (!res.data.conversation.length) {
-                        setEnd(true);
-                        setUpdating(false);
-                        return;
-                    }
-                    if (!openNewPage) {
-                        res.data.conversation.forEach((item) => {
-                            thread.conversation.push(item);
-                        });
-                        lastHeight.current = 0;
-                        setThread({ ...thread, conversation: thread.conversation });
-                        setTimeout(() => {
-                            document
-                                .getElementById(`c${res.data?.conversation[0]?.id}`)
-                                ?.scrollIntoView();
-                        }, 1);
-                        thread.conversation.length % 25 && setEnd(true);
-                    } else {
-                        for (let i = 0; i < res.data.conversation.length; i++)
-                            thread.conversation.push(res.data.conversation?.[i]);
-                        setThread({ ...thread, conversation: thread.conversation });
-                        setUpdating(false);
-                        setFinalPage(finalPage + 1);
-                        setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
-                        navigate(`/thread/${props.id}?page=${finalPage + 1}`, {
-                            replace: true,
-                        });
-                        setCurrentPage(finalPage + 1);
-                    }
+            api.get(
+                `/thread/${props.id}?page=${openNewPage ? finalPage + 1 : finalPage}${
+                    openNewPage
+                        ? ""
+                        : `&start=${
+                              thread.conversation[thread.conversation.length - 1].id + 1
+                          }`
+                }`
+            ).then((res: { data: threadType }) => {
+                if (!res.data.conversation.length) {
+                    setEnd(true);
                     setUpdating(false);
-                });
+                    return;
+                }
+                if (!openNewPage) {
+                    res.data.conversation.forEach((item) => {
+                        thread.conversation.push(item);
+                    });
+                    lastHeight.current = 0;
+                    setThread({ ...thread, conversation: thread.conversation });
+                    setTimeout(() => {
+                        document
+                            .getElementById(`c${res.data?.conversation[0]?.id}`)
+                            ?.scrollIntoView();
+                    }, 1);
+                    thread.conversation.length % 25 && setEnd(true);
+                } else {
+                    for (let i = 0; i < res.data.conversation.length; i++)
+                        thread.conversation.push(res.data.conversation?.[i]);
+                    setThread({ ...thread, conversation: thread.conversation });
+                    setUpdating(false);
+                    setFinalPage(finalPage + 1);
+                    setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
+                    navigate(`/thread/${props.id}?page=${finalPage + 1}`, {
+                        replace: true,
+                    });
+                    setCurrentPage(finalPage + 1);
+                }
+                setUpdating(false);
+            });
         }
     }
 
@@ -244,11 +222,8 @@ function Conversation(props: { id: number }) {
         setReRender(Math.random());
         navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
         setCurrentPage(newPage);
-        axios
-            .get(`/api/thread/${props.id}?type=2&page=${newPage}`, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
-            .then((res: { data: threadType }) => {
+        api.get(`/thread/${props.id}?type=2&page=${newPage}`).then(
+            (res: { data: threadType }) => {
                 if (!res.data.conversation.length) {
                     setNotification({ open: true, text: "Page not found!" });
                     return;
@@ -256,7 +231,8 @@ function Conversation(props: { id: number }) {
                 setThread(res.data);
                 res.data.conversation.length % 25 && setEnd(true);
                 document.getElementById(String(finalPage))?.scrollIntoView();
-            });
+            }
+        );
     }
 
     /**

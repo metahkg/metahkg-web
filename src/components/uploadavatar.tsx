@@ -2,7 +2,8 @@ import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import { api } from "../lib/api";
 
 const Input = styled("input")({
     display: "none",
@@ -30,14 +31,11 @@ export default function UploadAvatar(props: {
                             onUpload && onUpload();
                             const formData = new FormData();
                             formData.append("avatar", e?.target?.files?.[0] || "");
-                            axios
-                                .post("/api/users/avatar", formData, {
-                                    headers: {
-                                        "Content-Type": "multipart/form-data",
-                                        authorization:
-                                            localStorage.getItem("authorization") || "",
-                                    },
-                                })
+                            api.post("/users/avatar", formData, {
+                                headers: {
+                                    "Content-Type": "multipart/form-data",
+                                },
+                            })
                                 .then(onSuccess)
                                 .catch(onError);
                         }}

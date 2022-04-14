@@ -1,7 +1,6 @@
 import "./css/signin.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import axios from "axios";
 import hash from "hash.js";
 import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router";
@@ -11,6 +10,7 @@ import { useNotification, useSettings, useWidth } from "../../components/Context
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
+import { api } from "../../lib/api";
 
 /**
  * /signin
@@ -49,17 +49,10 @@ export default function Signin() {
     function signin() {
         setAlert({ severity: "info", text: "Signing in..." });
         setDisabled(true);
-        axios
-            .post(
-                "/api/users/signin",
-                {
-                    name: name,
-                    pwd: hash.sha256().update(pwd).digest("hex"),
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+        api.post("/users/signin", {
+            name: name,
+            pwd: hash.sha256().update(pwd).digest("hex"),
+        })
             .then((res) => {
                 if (res.data.unverified) {
                     navigate("/users/verify");

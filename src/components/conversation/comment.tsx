@@ -13,7 +13,6 @@ import VoteBar from "./VoteBar";
 import { PopUp } from "../../lib/popup";
 import { useNavigate } from "react-router";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-import axios from "axios";
 import { useNotification, useSettings } from "../ContextProvider";
 import MoreList from "./more";
 import { isMobile } from "react-device-detect";
@@ -22,6 +21,7 @@ import parse from "html-react-parser";
 import { modifycomment, replace } from "../../lib/modifycomments";
 import VoteButtons from "./votebuttons";
 import { timetoword } from "../../lib/common";
+import axios from "axios";
 
 /**
  * Comment component renders a comment
