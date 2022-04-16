@@ -15,7 +15,7 @@ import {
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import {
     useCat,

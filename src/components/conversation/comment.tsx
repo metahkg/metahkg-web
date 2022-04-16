@@ -11,7 +11,7 @@ import {
 import dateat from "date-and-time";
 import VoteBar from "./VoteBar";
 import { PopUp } from "../../lib/popup";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import { useNotification, useSettings } from "../ContextProvider";
 import MoreList from "./more";

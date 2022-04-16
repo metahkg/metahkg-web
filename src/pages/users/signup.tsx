@@ -15,7 +15,7 @@ import {
     TextField,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
 import { checkpwd } from "../../lib/common";

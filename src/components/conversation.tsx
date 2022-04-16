@@ -21,7 +21,7 @@ import Title from "./conversation/title";
 import axios, { AxiosError } from "axios";
 
 import { roundup, splitarray } from "../lib/common";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
 import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";

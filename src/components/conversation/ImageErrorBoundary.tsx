@@ -4,6 +4,7 @@ import { Tooltip } from "@mui/material";
 
 export default class ImageErrorBoundary extends React.Component<{
     src: string;
+    children: JSX.Element;
 }> {
     state = { hasError: false };
 

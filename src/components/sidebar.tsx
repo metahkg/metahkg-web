@@ -22,7 +22,7 @@ import {
     Telegram as TelegramIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchbar";
 import { useCategories, useQuery, useSettingsOpen } from "./ContextProvider";
 import { wholepath } from "../lib/common";

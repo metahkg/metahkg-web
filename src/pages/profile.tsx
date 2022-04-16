@@ -16,7 +16,7 @@ import {
     Tooltip,
 } from "@mui/material";
 import { AxiosError } from "axios";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
     useData,

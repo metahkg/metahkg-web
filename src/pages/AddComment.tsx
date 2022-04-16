@@ -2,7 +2,7 @@ import "./css/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";

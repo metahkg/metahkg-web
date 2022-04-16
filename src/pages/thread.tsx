@@ -1,7 +1,7 @@
 import React from "react";
 import Conversation from "../components/conversation";
 import { Box } from "@mui/material";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { useCat, useId, useMenu } from "../components/MenuProvider";
 import { useWidth } from "../components/ContextProvider";

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import hash from "hash.js";
 import { Link } from "react-router-dom";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useMenu } from "../../components/MenuProvider";
 import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";

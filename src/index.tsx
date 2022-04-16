@@ -5,7 +5,7 @@ import App from "./App";
 import MenuProvider from "./components/MenuProvider";
 import ContextProvider from "./components/ContextProvider";
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import reducer from "./reducer/index";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";

@@ -27,7 +27,7 @@ import {
     useSettingsOpen,
 } from "./ContextProvider";
 import SearchBar from "./searchbar";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Dock from "./dock";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
 import { api } from "../lib/api";

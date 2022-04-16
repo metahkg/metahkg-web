@@ -89,9 +89,9 @@ export default function App() {
                             <Route path="/users/verify" element={<Verify />} />
                             <Route path="/users/resend" element={<Resend />} />
                             <Route path="/users/signin" element={<Signin />} />
+                            <Route path="/users/logout" element={<Logout />} />
                             <Route path="/create" element={<Create />} />
                             <Route path="/search" element={<Search />} />
-                            <Route path="/users/logout" element={<Logout />} />
                             <Route path="/source" element={<Source />} />
                             <Route path="/telegram" element={<Telegram />} />
                             <Route path="/profile/:id" element={<Profile />} />

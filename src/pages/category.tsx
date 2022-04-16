@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import Empty from "../components/empty";
 import { useBack, useCategories, useWidth } from "../components/ContextProvider";
 import {
