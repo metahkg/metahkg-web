@@ -109,7 +109,7 @@ function Conversation(props: { id: number }) {
                     setHistory(history);
                     localStorage.setItem("history", JSON.stringify(history));
                 }
-                !cat && !(recall || search || profile) && setCat(res.data.category.id);
+                !cat && !(recall || search || profile) && setCat(res.data.category);
                 id !== res.data.id && setId(res.data.id);
                 document.title = `${res.data.title} | Metahkg`;
                 if (!res.data.slink) {
@@ -365,7 +365,7 @@ function Conversation(props: { id: number }) {
                 />
             )}
             {loading && <LinearProgress className="fullwidth" color="secondary" />}
-            <Title category={thread?.category?.id} title={thread?.title} btns={btns} />
+            <Title category={thread?.category} title={thread?.title} btns={btns} />
             <Paper
                 id="croot"
                 key={reRender}
