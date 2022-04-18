@@ -40,9 +40,7 @@ export default function useFirstFetch() {
         err?.response?.status === 401 && navigate("/401", { replace: true });
     };
     useEffect(() => {
-        api.get(`/thread/${threadId}?page=${finalPage}`, {
-            headers: { authorization: localStorage.getItem("token") || "" },
-        })
+        api.get(`/thread/${threadId}?page=${finalPage}`)
             .then((res: { data: threadType }) => {
                 res.data.slink && setThread(res.data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);

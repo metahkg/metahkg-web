@@ -110,9 +110,7 @@ export default function Create() {
         if (localStorage.user && quote.id && quote.cid) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(`/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
+            api.get(`/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`)
                 .then((res) => {
                     if (res.data?.[0]?.comment) {
                         setInittext(
