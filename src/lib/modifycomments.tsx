@@ -2,9 +2,9 @@ import { parse } from "node-html-parser";
 import DOMPurify from "dompurify";
 import { domToReact } from "html-react-parser";
 import { Element } from "domhandler/lib/node";
-import Img from "../components/conversation/Image";
-import Player from "../components/conversation/player";
-import TweetEmbed from "../components/conversation/twitter";
+import Img from "../components/conversation/image/Image";
+import Player from "../components/conversation/comment/player";
+import TweetEmbed from "../components/conversation/comment/twitter";
 
 //import { LinkPreview } from "@dhaiwat10/react-link-preview";
 export function modifycomment(comment: string) {

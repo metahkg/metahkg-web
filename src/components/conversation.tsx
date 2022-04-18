@@ -1,12 +1,5 @@
 import "./css/conversation.css";
-import React, {
-    createContext,
-    memo,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import React, { memo, useEffect } from "react";
 import {
     Box,
     Button,
@@ -18,34 +11,40 @@ import {
 import queryString from "query-string";
 import Comment from "./conversation/comment";
 import Title from "./conversation/title";
-import axios, { AxiosError } from "axios";
-
 import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
-import { useCat, useId, useProfile, useRecall, useSearch } from "./MenuProvider";
-import { useHistory, useNotification, useWidth } from "./ContextProvider";
+import { useHistory, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
-import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import PageBottom from "./conversation/pagebottom";
 import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
 import Dock from "./dock";
-import { Collections, Refresh, Reply, Share as ShareIcon } from "@mui/icons-material";
+import useBtns from "./conversation/functions/btns";
 import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
-import { threadType } from "../types/conversation/thread";
 import { commentType } from "../types/conversation/comment";
-import { api } from "../lib/api";
-
-const ConversationContext = createContext<{
-    story: [number, React.Dispatch<React.SetStateAction<number>>];
-    tid: number;
-    title?: string;
-    // @ts-ignore
-}>(null);
+import {
+    useCurrentPage,
+    useEnd,
+    useFinalPage,
+    useGalleryOpen,
+    useImages,
+    useLoading,
+    usePages,
+    useRerender,
+    useStory,
+    useThread,
+    useUpdating,
+    useVotes,
+} from "./conversation/ConversationContext";
+import { useUpdate } from "./conversation/functions/update";
+import useFirstFetch from "./conversation/functions/firstfetch";
+import useChangePage from "./conversation/functions/changePage";
+import useOnScroll from "./conversation/functions/onScroll";
+import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
 
 /**
  * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
@@ -55,103 +54,27 @@ const ConversationContext = createContext<{
  */
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
-    const [notification, setNotification] = useNotification();
-    const [thread, setThread] = useState<null | threadType>(null);
-    const [finalPage, setFinalPage] = useState(
-        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
-    );
+    const [thread] = useThread();
+    const [finalPage] = useFinalPage();
     /** Current page */
-    const [currentPage, setCurrentPage] = useState(
-        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
-    );
-    const [votes, setVotes] = useState<any>({});
-    const [updating, setUpdating] = useState(false);
-    const [pages, setPages] = useState(1);
-    const [end, setEnd] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [reRender, setReRender] = useState(Math.random());
-    const [story, setStory] = useState(0);
-    const lastHeight = useRef(0);
-    const [cat, setCat] = useCat();
-    const [id, setId] = useId();
-    const [recall] = useRecall();
-    const [search] = useSearch();
-    const [profile] = useProfile();
-    const [shareOpen, setShareOpen] = useShareOpen();
-    const [shareTitle, setShareTitle] = useShareTitle();
-    const [shareLink, setShareLink] = useShareLink();
-    const [galleryOpen, setGalleryOpen] = useState(false);
-    const [images, setImages] = useState<{ src: string }[]>([]);
+    const [currentPage, setCurrentPage] = useCurrentPage();
+    const [votes] = useVotes();
+    const [updating] = useUpdating();
+    const [pages] = usePages();
+    const [, setEnd] = useEnd();
+    const [loading, setLoading] = useLoading();
+    const [reRender] = useRerender();
+    const [width] = useWidth();
+    const [story] = useStory();
+    const [galleryOpen, setGalleryOpen] = useGalleryOpen();
+    const [images] = useImages();
     const [history, setHistory] = useHistory();
     const navigate = useNavigate();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
-    const onError = function (err: AxiosError) {
-        !notification.open &&
-            setNotification({
-                open: true,
-                text: err?.response?.data?.error || err?.response?.data || "",
-            });
-        err?.response?.status === 404 && navigate("/404", { replace: true });
-        err?.response?.status === 401 && navigate("/401", { replace: true });
-    };
     !query.page &&
         !query.c &&
         navigate(`${window.location.pathname}?page=1`, { replace: true });
-    useEffect(() => {
-        api.get(`/thread/${props.id}?page=${finalPage}`, {
-            headers: { authorization: localStorage.getItem("token") || "" },
-        })
-            .then((res: { data: threadType }) => {
-                res.data.slink && setThread(res.data);
-                const historyIndex = history.findIndex((i) => i.id === props.id);
-                if (historyIndex && history[historyIndex].c < res.data.c) {
-                    history[historyIndex].c = res.data.c;
-                    setHistory(history);
-                    localStorage.setItem("history", JSON.stringify(history));
-                }
-                !cat && !(recall || search || profile) && setCat(res.data.category);
-                id !== res.data.id && setId(res.data.id);
-                document.title = `${res.data.title} | Metahkg`;
-                if (!res.data.slink) {
-                    axios
-                        .post("https://api-us.wcyat.me/create", {
-                            url: `${window.location.origin}/thread/${props.id}?page=1`,
-                        })
-                        .then((sres) => {
-                            res.data.slink = sres.data;
-                            setThread(res.data);
-                        })
-                        .catch(() => {
-                            setNotification({
-                                open: true,
-                                text: "Unable to generate shortened link. A long link will be used instead.",
-                            });
-                            res.data.slink = `${window.location.origin}/thread/${props.id}?page=1`;
-                            setThread(res.data);
-                        });
-                }
-                res.data.conversation.length % 25 && setEnd(true);
-            })
-            .catch(onError);
-        api.get(`/posts/images/${props.id}`)
-            .then((res) => {
-                res.data.forEach((item: { image: string }) => {
-                    images.push({
-                        src: item.image,
-                    });
-                });
-                res.data.length && setImages(images);
-            })
-            .catch(onError);
-        if (localStorage.user) {
-            api.get(`/posts/votes?id=${props.id}`)
-                .then((res) => {
-                    setVotes(res.data);
-                })
-                .catch(onError);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reRender]);
+    useFirstFetch();
     useEffect(() => {
         Prism.highlightAll();
         if (history.findIndex((i) => i.id === props.id) === -1) {
@@ -164,117 +87,15 @@ function Conversation(props: { id: number }) {
      * It fetches new comments, or the next page (if last comment id % 25 = 0)
      * of messages from the server and appends them to the conversation array
      */
-    function update() {
-        if (thread) {
-            setUpdating(true);
-            const openNewPage = !(thread.conversation.length % 25);
-            api.get(
-                `/thread/${props.id}?page=${openNewPage ? finalPage + 1 : finalPage}${
-                    openNewPage
-                        ? ""
-                        : `&start=${
-                              thread.conversation[thread.conversation.length - 1].id + 1
-                          }`
-                }`
-            ).then((res: { data: threadType }) => {
-                if (!res.data.conversation.length) {
-                    setEnd(true);
-                    setUpdating(false);
-                    return;
-                }
-                if (!openNewPage) {
-                    res.data.conversation.forEach((item) => {
-                        thread.conversation.push(item);
-                    });
-                    lastHeight.current = 0;
-                    setThread({ ...thread, conversation: thread.conversation });
-                    setTimeout(() => {
-                        document
-                            .getElementById(`c${res.data?.conversation[0]?.id}`)
-                            ?.scrollIntoView();
-                    }, 1);
-                    thread.conversation.length % 25 && setEnd(true);
-                } else {
-                    for (let i = 0; i < res.data.conversation.length; i++)
-                        thread.conversation.push(res.data.conversation?.[i]);
-                    setThread({ ...thread, conversation: thread.conversation });
-                    setUpdating(false);
-                    setFinalPage(finalPage + 1);
-                    setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
-                    navigate(`/thread/${props.id}?page=${finalPage + 1}`, {
-                        replace: true,
-                    });
-                    setCurrentPage(finalPage + 1);
-                }
-                setUpdating(false);
-            });
-        }
-    }
+    const update = useUpdate();
 
-    function changePage(newPage: number) {
-        setLoading(true);
-        // @ts-ignore
-        setThread({ ...thread, conversation: [] });
-        setPages(1);
-        setFinalPage(newPage);
-        lastHeight.current = 0;
-        setEnd(false);
-        setReRender(Math.random());
-        navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
-        setCurrentPage(newPage);
-        api.get(`/thread/${props.id}?type=2&page=${newPage}`).then(
-            (res: { data: threadType }) => {
-                if (!res.data.conversation.length) {
-                    setNotification({ open: true, text: "Page not found!" });
-                    return;
-                }
-                setThread(res.data);
-                res.data.conversation.length % 25 && setEnd(true);
-                document.getElementById(String(finalPage))?.scrollIntoView();
-            }
-        );
-    }
+    const changePage = useChangePage();
 
     /**
      * When the user scrolls to the bottom of the page, the function calls the update function
      * @param {any} e - The event object.
      */
-    function onScroll(e: any) {
-        if (!end && !updating) {
-            const diff = e.target.scrollHeight - e.target.scrollTop;
-            if (
-                (e.target.clientHeight >= diff - 1.5 &&
-                    e.target.clientHeight <= diff + 1.5) ||
-                diff < e.target.clientHeight
-            ) {
-                update();
-            }
-        }
-        const index = history.findIndex((i) => i.id === props.id);
-        if (index !== -1 && thread) {
-            const arr = [...Array(thread.conversation.length)].map((und, c) => {
-                return Math.abs(
-                    Number(
-                        document.getElementById(`c${c + 1}`)?.getBoundingClientRect()?.top
-                    )
-                );
-            });
-            const currentcomment =
-                arr.findIndex(
-                    (i) =>
-                        i ===
-                        Math.min.apply(
-                            Math,
-                            arr.filter((i) => Boolean(i))
-                        )
-                ) + 1;
-            if (history[index]?.cid !== currentcomment) {
-                history[index].cid = currentcomment;
-                setHistory(history);
-                localStorage.setItem("history", JSON.stringify(history));
-            }
-        }
-    }
+    const onScroll = useOnScroll();
 
     /* It's checking if the conversation, users, details and votes are all ready. */
     const ready = !!(
@@ -296,52 +117,9 @@ function Conversation(props: { id: number }) {
             document.getElementById(`c${query.c}`)?.scrollIntoView();
         }, 1);
     }
-    const [width] = useWidth();
     const numofpages = roundup((thread?.c || 0) / 25);
-    const btns = [
-        {
-            icon: <Refresh />,
-            action: () => {
-                update();
-                const croot = document.getElementById("croot");
-                const newscrollTop =
-                    croot?.scrollHeight || 0 - (croot?.clientHeight || 0);
-                // @ts-ignore
-                croot.scrollTop = newscrollTop;
-            },
-            title: "Refresh",
-        },
-        {
-            icon: <Collections />,
-            action: () => {
-                if (images.length) setGalleryOpen(true);
-                else setNotification({ open: true, text: "No images!" });
-            },
-            title: "Images",
-        },
-        {
-            icon: <Reply />,
-            action: () => {
-                navigate(`/comment/${props.id}`);
-            },
-            title: "Reply",
-        },
-        {
-            icon: <ShareIcon className="font-size-19-force" />,
-            action: () => {
-                if (thread && thread.title && thread.slink) {
-                    !shareOpen && setShareOpen(true);
-                    shareTitle !== thread.title &&
-                        thread.title &&
-                        setShareTitle(thread.title);
-                    shareLink !== thread.slink &&
-                        thread.slink &&
-                        setShareLink(thread.slink);
-                }
-            },
-            title: "Share",
-        },
-    ];
+    const btns = useBtns();
+    const onVisibilityChange = useOnVisibilityChange();
     return (
         <div className="min-height-fullvh conversation-root">
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
@@ -386,55 +164,7 @@ function Conversation(props: { id: number }) {
                                     <Box key={index}>
                                         <VisibilityDetector
                                             onVisibilityChange={(isVisible) => {
-                                                const croot =
-                                                    document.getElementById("croot");
-                                                let Page = page;
-                                                if (isVisible) {
-                                                    lastHeight.current =
-                                                        croot?.scrollTop ||
-                                                        lastHeight.current;
-                                                    if (
-                                                        Page !== Number(query.page) &&
-                                                        Page
-                                                    ) {
-                                                        navigate(
-                                                            `${window.location.pathname}?page=${Page}`,
-                                                            {
-                                                                replace: true,
-                                                            }
-                                                        );
-                                                        setCurrentPage(Page);
-                                                    }
-                                                }
-                                                if (
-                                                    !isVisible &&
-                                                    thread.conversation.length
-                                                ) {
-                                                    if (
-                                                        lastHeight.current !==
-                                                        croot?.scrollTop
-                                                    ) {
-                                                        Page =
-                                                            // @ts-ignore
-                                                            croot.scrollTop >
-                                                            lastHeight.current
-                                                                ? Page
-                                                                : Page - 1;
-                                                        if (
-                                                            lastHeight.current &&
-                                                            Page !== Number(query.page) &&
-                                                            Page
-                                                        ) {
-                                                            navigate(
-                                                                `${window.location.pathname}?page=${Page}`,
-                                                                {
-                                                                    replace: true,
-                                                                }
-                                                            );
-                                                            setCurrentPage(Page);
-                                                        }
-                                                    }
-                                                }
+                                                onVisibilityChange(isVisible, page);
                                             }}
                                         >
                                             <PageTop
@@ -456,13 +186,7 @@ function Conversation(props: { id: number }) {
                                                 }}
                                             />
                                         </VisibilityDetector>
-                                        <ConversationContext.Provider
-                                            value={{
-                                                story: [story, setStory],
-                                                tid: id,
-                                                title: thread?.title,
-                                            }}
-                                        >
+                                        <React.Fragment>
                                             {splitarray(
                                                 thread.conversation,
                                                 index * 25,
@@ -492,7 +216,7 @@ function Conversation(props: { id: number }) {
                                                         </Comment>
                                                     )
                                             )}
-                                        </ConversationContext.Provider>
+                                        </React.Fragment>
                                     </Box>
                                 );
                             })}
@@ -523,21 +247,6 @@ function Conversation(props: { id: number }) {
             </Paper>
         </div>
     );
-}
-
-export function useTid() {
-    const { tid } = useContext(ConversationContext);
-    return tid;
-}
-
-export function useTitle() {
-    const { title } = useContext(ConversationContext);
-    return title || "";
-}
-
-export function useStory() {
-    const { story } = useContext(ConversationContext);
-    return story;
 }
 
 export default memo(Conversation);

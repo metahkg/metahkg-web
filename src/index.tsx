@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./css/index.css";
 import App from "./App";
 import MenuProvider from "./components/MenuProvider";
@@ -11,17 +11,14 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
-
-ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <ContextProvider>
-                <MenuProvider>
-                    <App />
-                </MenuProvider>
-            </ContextProvider>
-        </Provider>
-    </React.StrictMode>,
-
-    document.getElementById("root")
+// @ts-ignore
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <Provider store={store}>
+        <ContextProvider>
+            <MenuProvider>
+                <App />
+            </MenuProvider>
+        </ContextProvider>
+    </Provider>
 );

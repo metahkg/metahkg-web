@@ -243,19 +243,19 @@ function Menu() {
                 btns={[
                     {
                         icon: <Autorenew />,
-                        action: () => {
+                        useAction: () => {
                             setData([]);
                         },
                     },
                     {
                         icon: <Add />,
-                        action: () => {
+                        useAction: () => {
                             navigate("/create");
                         },
                     },
                     {
                         icon: <Settings />,
-                        action: () => {
+                        useAction: () => {
                             setSettingsOpen(true);
                         },
                     },
