@@ -90,7 +90,9 @@ function MainContent() {
                 )}`,
             }[mode];
             axios
-                .get(url)
+                .get(url, {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                })
                 .then((res) => {
                     !(page === 1) && setPage(1);
                     setData(res.data);
@@ -127,8 +129,10 @@ function MainContent() {
             )}`,
         }[mode];
         axios
-            .get(url)
-            .then((res) => {
+            .get(url, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
+            .then((res: { data: summary[] }) => {
                 if (res.data?.[0] !== null) {
                     res.data.forEach((item: summary) => {
                         data.push(item);

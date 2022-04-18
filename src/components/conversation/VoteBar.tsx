@@ -54,11 +54,17 @@ const VoteBar = React.memo<Props>((props) => {
             }
 
             try {
-                await axios.post("/api/vote", {
-                    id: Number(props.postId),
-                    cid: Number(props.clientId),
-                    vote: value,
-                });
+                await axios.post(
+                    "/api/vote",
+                    {
+                        id: Number(props.postId),
+                        cid: Number(props.clientId),
+                        vote: value,
+                    },
+                    {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    }
+                );
             } catch (err: any) {
                 value === "U"
                     ? setUpVoteCount(upVoteCount)

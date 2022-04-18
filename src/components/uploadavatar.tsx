@@ -34,6 +34,8 @@ export default function UploadAvatar(props: {
                                 .post("/api/users/avatar", formData, {
                                     headers: {
                                         "Content-Type": "multipart/form-data",
+                                        authorization:
+                                            localStorage.getItem("authorization") || "",
                                     },
                                 })
                                 .then(onSuccess)

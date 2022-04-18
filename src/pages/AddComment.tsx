@@ -40,35 +40,45 @@ export default function AddComment() {
     const quote = Number(query.quote);
     useEffect(() => {
         if (localStorage.user) {
-            axios.post("/api/check", { id: id }).catch((err) => {
-                if (err.response.status === 404) {
-                    setAlert({
-                        severity: "warning",
-                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                    });
-                    setNotification({
-                        open: true,
-                        text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
-                    });
-                    setTimeout(() => {
-                        navigate("/", { replace: true });
-                    }, 5000);
-                } else {
-                    setAlert({
-                        severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
-                    });
-                    setNotification({
-                        open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
-                    });
-                }
-            });
+            axios
+                .post(
+                    "/api/check",
+                    { id: id },
+                    {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    }
+                )
+                .catch((err) => {
+                    if (err.response.status === 404) {
+                        setAlert({
+                            severity: "warning",
+                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                        });
+                        setNotification({
+                            open: true,
+                            text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
+                        });
+                        setTimeout(() => {
+                            navigate("/", { replace: true });
+                        }, 5000);
+                    } else {
+                        setAlert({
+                            severity: "error",
+                            text: err?.response?.data?.error || err?.response?.data || "",
+                        });
+                        setNotification({
+                            open: true,
+                            text: err?.response?.data?.error || err?.response?.data || "",
+                        });
+                    }
+                });
             if (quote) {
                 setAlert({ severity: "info", text: "Fetching comment..." });
                 setNotification({ open: true, text: "Fetching comment..." });
                 axios
-                    .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`)
+                    .get(`/api/thread/${id}?type=2&start=${quote}&end=${quote}`, {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    })
                     .then((res) => {
                         if (res.data?.[0]) {
                             setInittext(
@@ -107,7 +117,13 @@ export default function AddComment() {
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
         axios
-            .post("/api/comment", { id: id, comment: comment, rtoken: rtoken })
+            .post(
+                "/api/comment",
+                { id: id, comment: comment, rtoken: rtoken },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 data.length && setData([]);
                 navigate(

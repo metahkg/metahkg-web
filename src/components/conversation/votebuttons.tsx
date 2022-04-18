@@ -34,11 +34,17 @@ export default function VoteButtons(props: {
         v === "U" ? setUp(up + 1) : setDown(down + 1);
         setVote(v);
         axios
-            .post("/api/vote", {
-                id: Number(props.id),
-                cid: Number(props.cid),
-                vote: v,
-            })
+            .post(
+                "/api/vote",
+                {
+                    id: Number(props.id),
+                    cid: Number(props.cid),
+                    vote: v,
+                },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .catch((err) => {
                 v === "U" ? setUp(up) : setDown(down);
                 setVote(undefined);

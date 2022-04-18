@@ -54,9 +54,13 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const resizehandler = useRef(false);
 
     useEffect(() => {
-        axios.get(`/api/category/all`).then((res) => {
-            setCategories(res.data);
-        });
+        axios
+            .get(`/api/category/all`, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
+            .then((res) => {
+                setCategories(res.data);
+            });
     }, []);
 
     function updateSize() {

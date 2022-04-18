@@ -30,10 +30,16 @@ export default function Verify() {
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
         axios
-            .post("/api/users/resend", {
-                email: email,
-                rtoken: rtoken,
-            })
+            .post(
+                "/api/users/resend",
+                {
+                    email: email,
+                    rtoken: rtoken,
+                },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then(() => {
                 setNotification({
                     open: true,

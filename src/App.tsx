@@ -45,18 +45,25 @@ export default function App() {
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
     useEffect(() => {
-        if (localStorage.user || localStorage.id) {
-            axios.get("/api/loggedin").then((res) => {
-                if (!res.data.loggedin) {
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("id");
-                    return;
-                }
-                localStorage.user !== res.data.user &&
-                    localStorage.setItem("user", res.data.user);
-                localStorage.id !== Number(res.data.id) &&
-                    localStorage.setItem("id", res.data.id);
-            });
+        if (localStorage.user || localStorage.id || localStorage.token) {
+            axios
+                .get("/api/loggedin", {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                })
+                .then((res) => {
+                    if (!res.data.loggedin) {
+                        localStorage.removeItem("user");
+                        localStorage.removeItem("id");
+                        localStorage.removeItem("token");
+                        return;
+                    }
+                    localStorage.user !== res.data.name &&
+                        localStorage.setItem("user", res.data.name);
+                    localStorage.id !== Number(res.data.id) &&
+                        localStorage.setItem("id", res.data.id);
+                    localStorage.token !== res.data.token &&
+                        localStorage.setItem("token", res.data.token);
+                });
         }
     }, []);
     return (

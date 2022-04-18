@@ -111,7 +111,12 @@ export default function Create() {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
             axios
-                .get(`/api/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`)
+                .get(
+                    `/api/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`,
+                    {
+                        headers: { authorization: localStorage.getItem("token") || "" },
+                    }
+                )
                 .then((res) => {
                     if (res.data?.[0]?.comment) {
                         setInittext(
@@ -145,12 +150,18 @@ export default function Create() {
         setNotification({ open: true, text: "Creating topic..." });
         setDisabled(true);
         axios
-            .post("/api/create", {
-                title: title,
-                category: catchoosed,
-                icomment: icomment,
-                rtoken: rtoken,
-            })
+            .post(
+                "/api/create",
+                {
+                    title: title,
+                    category: catchoosed,
+                    icomment: icomment,
+                    rtoken: rtoken,
+                },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 cat && setCat(0);
                 search && setSearch(false);

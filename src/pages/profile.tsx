@@ -35,20 +35,21 @@ import { useBack, useNotification, useWidth } from "../components/ContextProvide
 import { Save } from "@mui/icons-material";
 
 /* It's a function that returns a table with the user's information. */
-function DataTable(props: {
+interface DataTableProps {
     user: {
-        user: string;
+        name: string;
         count: number;
         sex: "M" | "F";
-        admin?: boolean;
+        role: "user" | "admin";
         createdAt: string;
     };
     setUser: React.Dispatch<React.SetStateAction<any>>;
-}) {
+}
+function DataTable(props: DataTableProps) {
     const [width] = useWidth();
     const [, setData] = useData();
     const [, setNotification] = useNotification();
-    const [name, setName] = useState(props.user.user);
+    const [name, setName] = useState(props.user.name);
     const [sex, setSex] = useState<"M" | "F">(props.user.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const params = useParams();
@@ -66,7 +67,7 @@ function DataTable(props: {
                         }}
                     />
                 ) : (
-                    props.user.user
+                    props.user.name
                 ),
         },
         {
@@ -92,7 +93,7 @@ function DataTable(props: {
                     { M: "male", F: "female" }[props.user.sex] || ""
                 ),
         },
-        { title: "Admin", content: props.user.admin ? "yes" : "no" },
+        { title: "Role", content: props.user.role },
         {
             title: "Joined",
             content: `${timetoword_long(props.user.createdAt)} ago`,
@@ -103,7 +104,13 @@ function DataTable(props: {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
         axios
-            .post("/api/users/editprofile", { user: name, sex: sex })
+            .post(
+                "/api/users/editprofile",
+                { name: name, sex: sex },
+                {
+                    headers: { authorization: localStorage.getItem("token") || "" },
+                }
+            )
             .then((res) => {
                 setSaveDisabled(false);
                 props.setUser({});
@@ -127,7 +134,7 @@ function DataTable(props: {
             <TableContainer className="fullwidth" component={Paper}>
                 <Table className="fullwidth" aria-label="simple table">
                     <TableBody>
-                        {items.map((item, index) => (
+                        {items.map((item) => (
                             <TableRow
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                             >
@@ -156,7 +163,7 @@ function DataTable(props: {
                     variant="contained"
                     disabled={
                         saveDisabled ||
-                        (name === props.user.user && sex === props.user.sex)
+                        (name === props.user.name && sex === props.user.sex)
                     }
                     color="secondary"
                     onClick={editprofile}
@@ -193,10 +200,14 @@ export default function Profile() {
     useEffect(() => {
         if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
             axios
-                .get(`/api/profile/${Number(params.id) || "self"}`)
+                .get(`/api/profile/${Number(params.id) || "self"}`, {
+                    headers: {
+                        authorization: localStorage.token || "",
+                    },
+                })
                 .then((res) => {
                     setUser(res.data);
-                    document.title = `${res.data.user} | Metahkg`;
+                    document.title = `${res.data.name} | Metahkg`;
                 })
                 .catch((err: AxiosError) => {
                     setNotification({ open: true, text: err?.response?.data?.error });
@@ -278,7 +289,7 @@ export default function Profile() {
                                                             : "red",
                                                 }}
                                             >
-                                                {user.user}
+                                                {user.name}
                                             </span>
                                         </div>
                                         #{user.id}
@@ -290,7 +301,10 @@ export default function Profile() {
                                         }}
                                     >
                                         {params.id === "self" && (
-                                            <Tooltip title="jpg / png / svg supported" arrow>
+                                            <Tooltip
+                                                title="jpg / png / svg supported"
+                                                arrow
+                                            >
                                                 <UploadAvatar
                                                     onUpload={() => {
                                                         setNotification({
