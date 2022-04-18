@@ -13,7 +13,6 @@ COPY tsconfig.json ./
 
 COPY . ./
 RUN yarn install
-RUN echo REACT_APP_build=$(git rev-parse --short HEAD) >> .env
 RUN yarn run build
 
 FROM node:latest
