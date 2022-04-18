@@ -6,9 +6,9 @@ export type threadType = {
     op: {
         id: number;
         name: string;
-        sex: userSex,
-        role: userRole
-    }
+        sex: userSex;
+        role: userRole;
+    };
     c: number;
     vote: number;
     slink?: string;
@@ -17,8 +17,8 @@ export type threadType = {
         id: number;
         name: string;
         hidden?: boolean;
-    }
+    };
     lastModified: string;
     createdAt: string;
-    conversation: commentType[]
+    conversation: commentType[];
 };
