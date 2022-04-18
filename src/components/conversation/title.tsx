@@ -53,7 +53,9 @@ export default function Title(props: {
                     {!(width < 760) &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
-                                <IconButton onClick={btn.useAction}>{btn.icon}</IconButton>
+                                <IconButton onClick={btn.useAction}>
+                                    {btn.icon}
+                                </IconButton>
                             </Tooltip>
                         ))}
                 </div>
