@@ -32,7 +32,7 @@ export default function Thread() {
             }}
         >
             <div style={{ width: width < 760 ? "100vw" : "70vw" }}>
-                <ConversationProvider  key={threadId} threadId={threadId}>
+                <ConversationProvider key={threadId} threadId={threadId}>
                     <ShareProvider>
                         <Conversation key={threadId} id={threadId} />
                     </ShareProvider>

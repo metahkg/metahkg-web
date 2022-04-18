@@ -11,7 +11,7 @@ import {
     useThread,
     useImages,
     useVotes,
-    useRerender
+    useRerender,
 } from "../ConversationContext";
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
@@ -57,7 +57,7 @@ export default function useFirstFetch() {
                 if (!res.data.slink) {
                     res.data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
                     setThread(res.data);
-                    console.log("setthread")
+                    console.log("setthread");
                 }
                 res.data.conversation.length % 25 && setEnd(true);
             })
@@ -79,6 +79,6 @@ export default function useFirstFetch() {
                 })
                 .catch(onError);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reRender]);
 }
