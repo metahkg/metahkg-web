@@ -9,19 +9,19 @@ import {
     VisibilityOff,
 } from "@mui/icons-material";
 import dateat from "date-and-time";
-import VoteBar from "./VoteBar";
+import VoteBar from "./comment/VoteBar";
 import { PopUp } from "../../lib/popup";
-import { useNavigate } from "react-router";
-import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import { useNotification, useSettings } from "../ContextProvider";
-import MoreList from "./more";
+import MoreList from "./comment/more";
 import { isMobile } from "react-device-detect";
-import { useStory, useTid, useTitle } from "../conversation";
 import parse from "html-react-parser";
 import { modifycomment, replace } from "../../lib/modifycomments";
-import VoteButtons from "./votebuttons";
+import VoteButtons from "./comment/votebuttons";
 import { timetoword } from "../../lib/common";
+import axios from "axios";
+import { useStory, useThreadId, useTitle } from "./ConversationContext";
 
 /**
  * Comment component renders a comment
@@ -65,7 +65,7 @@ function Comment(props: {
     slink?: string;
 }) {
     const { op, sex, id, userid, name, children, date, up, down, vote, slink } = props;
-    const tid = useTid();
+    const threadId = useThreadId();
     const title = useTitle();
     const [story, setStory] = useStory();
     const [settings] = useSettings();
@@ -88,7 +88,7 @@ function Comment(props: {
             if (!slink) {
                 axios
                     .post("https://api-us.wcyat.me/create", {
-                        url: `${window.location.origin}/thread/${tid}?c=${id}`,
+                        url: `${window.location.origin}/thread/${threadId}?c=${id}`,
                     })
                     .then((res) => {
                         setLink(`https://l.wcyat.me/${res.data.id}`);
@@ -134,7 +134,7 @@ function Comment(props: {
                 icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
                 title: "Quote",
                 action: () => {
-                    navigate(`/comment/${tid}?quote=${id}`);
+                    navigate(`/comment/${threadId}?quote=${id}`);
                 },
             },
         ];
@@ -148,7 +148,7 @@ function Comment(props: {
                 title: "Share",
                 action: () => {
                     setShareLink(
-                        link || `${window.location.origin}/thread/${tid}?c=${id}`
+                        link || `${window.location.origin}/thread/${threadId}?c=${id}`
                     );
                     setShareTitle(title + ` - comment #${id}`);
                     setShareOpen(true);
@@ -160,7 +160,7 @@ function Comment(props: {
                 icon: <FeedIcon className="font-size-19-force" />,
                 title: "Create new topic",
                 action: () => {
-                    navigate(`/create?quote=${tid}.${id}`);
+                    navigate(`/create?quote=${threadId}.${id}`);
                 },
             },
         ];
@@ -267,15 +267,15 @@ function Comment(props: {
             <div className="ml20 mr20">
                 {settings.votebar ? (
                     <VoteBar
-                        key={tid}
+                        key={threadId}
                         vote={vote}
-                        postId={tid}
+                        postId={threadId}
                         clientId={id}
                         upVoteCount={up}
                         downVoteCount={down}
                     />
                 ) : (
-                    <VoteButtons vote={vote} up={up} down={down} id={tid} cid={id} />
+                    <VoteButtons vote={vote} up={up} down={down} id={threadId} cid={id} />
                 )}
             </div>
             <div className="comment-spacer" />

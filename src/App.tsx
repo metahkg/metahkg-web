@@ -18,12 +18,12 @@ import { Box } from "@mui/material";
 import { useSettings, useSettingsOpen, useWidth } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
-import axios from "axios";
 import Verify from "./pages/users/verify";
 import Resend from "./pages/users/resend";
 import Recall from "./pages/recall";
 import Settings from "./components/settings";
 import Forbidden from "./pages/forbidden";
+import { api } from "./lib/api";
 
 function Source() {
     window.location.replace("https://gitlab.com/metahkg/metahkg");
@@ -46,24 +46,20 @@ export default function App() {
     const [settings] = useSettings();
     useEffect(() => {
         if (localStorage.user || localStorage.id || localStorage.token) {
-            axios
-                .get("/api/loggedin", {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                })
-                .then((res) => {
-                    if (!res.data.loggedin) {
-                        localStorage.removeItem("user");
-                        localStorage.removeItem("id");
-                        localStorage.removeItem("token");
-                        return;
-                    }
-                    localStorage.user !== res.data.name &&
-                        localStorage.setItem("user", res.data.name);
-                    localStorage.id !== Number(res.data.id) &&
-                        localStorage.setItem("id", res.data.id);
-                    localStorage.token !== res.data.token &&
-                        localStorage.setItem("token", res.data.token);
-                });
+            api.get("/users/loggedin").then((res) => {
+                if (!res.data.loggedin) {
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("id");
+                    localStorage.removeItem("token");
+                    return;
+                }
+                localStorage.user !== res.data.name &&
+                    localStorage.setItem("user", res.data.name);
+                localStorage.id !== Number(res.data.id) &&
+                    localStorage.setItem("id", res.data.id);
+                localStorage.token !== res.data.token &&
+                    localStorage.setItem("token", res.data.token);
+            });
         }
     }, []);
     return (
@@ -93,9 +89,9 @@ export default function App() {
                             <Route path="/users/verify" element={<Verify />} />
                             <Route path="/users/resend" element={<Resend />} />
                             <Route path="/users/signin" element={<Signin />} />
+                            <Route path="/users/logout" element={<Logout />} />
                             <Route path="/create" element={<Create />} />
                             <Route path="/search" element={<Search />} />
-                            <Route path="/users/logout" element={<Logout />} />
                             <Route path="/source" element={<Source />} />
                             <Route path="/telegram" element={<Telegram />} />
                             <Route path="/profile/:id" element={<Profile />} />

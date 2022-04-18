@@ -15,8 +15,8 @@ import {
     TextField,
     Tooltip,
 } from "@mui/material";
-import axios, { AxiosError } from "axios";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { AxiosError } from "axios";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
     useData,
@@ -33,6 +33,7 @@ import { timetoword_long } from "../lib/common";
 import { Link } from "react-router-dom";
 import { useBack, useNotification, useWidth } from "../components/ContextProvider";
 import { Save } from "@mui/icons-material";
+import { api } from "../lib/api";
 
 /* It's a function that returns a table with the user's information. */
 interface DataTableProps {
@@ -103,14 +104,7 @@ function DataTable(props: DataTableProps) {
     function editprofile() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
-        axios
-            .post(
-                "/api/users/editprofile",
-                { name: name, sex: sex },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+        api.post("/users/editprofile", { name: name, sex: sex })
             .then((res) => {
                 setSaveDisabled(false);
                 props.setUser({});
@@ -199,12 +193,7 @@ export default function Profile() {
     /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
     useEffect(() => {
         if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
-            axios
-                .get(`/api/profile/${Number(params.id) || "self"}`, {
-                    headers: {
-                        authorization: localStorage.token || "",
-                    },
-                })
+            api.get(`/profile/${Number(params.id) || "self"}`)
                 .then((res) => {
                     setUser(res.data);
                     document.title = `${res.data.name} | Metahkg`;

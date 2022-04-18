@@ -15,8 +15,7 @@ import {
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
 import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import {
     useCat,
@@ -32,6 +31,7 @@ import { wholepath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
+import { api } from "../lib/api";
 
 declare const tinymce: any;
 declare const grecaptcha: { reset: () => void };
@@ -104,19 +104,15 @@ export default function Create() {
     };
     const [inittext, setInittext] = useState("");
     /**
-     * It sends data to the /api/create route.
+     * It sends data to the /api/posts/create route.
      */
     useEffect(() => {
         if (localStorage.user && quote.id && quote.cid) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            axios
-                .get(
-                    `/api/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`,
-                    {
-                        headers: { authorization: localStorage.getItem("token") || "" },
-                    }
-                )
+            api.get(`/thread/${quote.id}?type=2&start=${quote.cid}&end=${quote.cid}`, {
+                headers: { authorization: localStorage.getItem("token") || "" },
+            })
                 .then((res) => {
                     if (res.data?.[0]?.comment) {
                         setInittext(
@@ -145,23 +141,16 @@ export default function Create() {
     }, [quote.cid, quote.id, setNotification]);
 
     function create() {
-        //send data to /api/create
+        //send data to /api/posts/create
         setAlert({ severity: "info", text: "Creating topic..." });
         setNotification({ open: true, text: "Creating topic..." });
         setDisabled(true);
-        axios
-            .post(
-                "/api/create",
-                {
-                    title: title,
-                    category: catchoosed,
-                    icomment: icomment,
-                    rtoken: rtoken,
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+        api.post("/posts/create", {
+            title: title,
+            category: catchoosed,
+            icomment: icomment,
+            rtoken: rtoken,
+        })
             .then((res) => {
                 cat && setCat(0);
                 search && setSearch(false);

@@ -1,7 +1,7 @@
 import "./css/menu.css";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Box, Paper, Typography } from "@mui/material";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import MenuTop from "./menu/top";
 import MenuThread from "./menu/thread";
 import {
@@ -27,9 +27,10 @@ import {
     useSettingsOpen,
 } from "./ContextProvider";
 import SearchBar from "./searchbar";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Dock from "./dock";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
+import { api } from "../lib/api";
 
 /**
  * This function renders the main content of the menu
@@ -76,12 +77,12 @@ function MainContent() {
         if (!data.length && (category || profile || search || id || recall)) {
             setEnd(false);
             const url = {
-                search: `/api/search?q=${encodeURIComponent(
+                search: `/search?q=${encodeURIComponent(
                     q
                 )}&sort=${selected}&mode=${smode}`,
-                profile: `/api/history/${profile}?sort=${selected}`,
-                menu: `/api/menu/${c}?sort=${selected}`,
-                recall: `/api/threads?threads=${JSON.stringify(
+                profile: `/history/${profile}?sort=${selected}`,
+                menu: `/menu/${c}?sort=${selected}`,
+                recall: `/threads?threads=${JSON.stringify(
                     splitarray(
                         history.map((item) => item.id),
                         0,
@@ -89,10 +90,7 @@ function MainContent() {
                     )
                 )}`,
             }[mode];
-            axios
-                .get(url, {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                })
+            api.get(url)
                 .then((res) => {
                     !(page === 1) && setPage(1);
                     setData(res.data);
@@ -115,12 +113,12 @@ function MainContent() {
         setEnd(false);
         setUpdating(true);
         const url = {
-            search: `/api/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
+            search: `/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
                 page + 1
             }&mode=${smode}`,
-            profile: `/api/history/${profile}?sort=${selected}&page=${page + 1}`,
-            menu: `/api/menu/${c}?sort=${selected}&page=${page + 1}`,
-            recall: `/api/threads?threads=${JSON.stringify(
+            profile: `/history/${profile}?sort=${selected}&page=${page + 1}`,
+            menu: `/menu/${c}?sort=${selected}&page=${page + 1}`,
+            recall: `/threads?threads=${JSON.stringify(
                 splitarray(
                     history.map((item) => item.id),
                     page * 25,
@@ -128,10 +126,7 @@ function MainContent() {
                 )
             )}`,
         }[mode];
-        axios
-            .get(url, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
+        api.get(url)
             .then((res: { data: summary[] }) => {
                 if (res.data?.[0] !== null) {
                     res.data.forEach((item: summary) => {
@@ -248,19 +243,19 @@ function Menu() {
                 btns={[
                     {
                         icon: <Autorenew />,
-                        action: () => {
+                        useAction: () => {
                             setData([]);
                         },
                     },
                     {
                         icon: <Add />,
-                        action: () => {
+                        useAction: () => {
                             navigate("/create");
                         },
                     },
                     {
                         icon: <Settings />,
-                        action: () => {
+                        useAction: () => {
                             setSettingsOpen(true);
                         },
                     },

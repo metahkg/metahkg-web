@@ -7,8 +7,8 @@ import { useMenu } from "../../components/MenuProvider";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
-import axios from "axios";
 import { HowToReg } from "@mui/icons-material";
+import { api } from "../../lib/api";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -29,11 +29,10 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, text: "Verifying..." });
         setDisabled(true);
-        axios
-            .post("/api/users/verify", {
-                email: email,
-                code: code,
-            })
+        api.post("/users/verify", {
+            email: email,
+            code: code,
+        })
             .then((res) => {
                 localStorage.setItem("user", res.data.name);
                 localStorage.setItem("id", res.data.id);

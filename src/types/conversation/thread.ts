@@ -13,11 +13,7 @@ export type threadType = {
     vote: number;
     slink?: string;
     title: string;
-    category: {
-        id: number;
-        name: string;
-        hidden?: boolean;
-    };
+    category: number;
     lastModified: string;
     createdAt: string;
     conversation: commentType[];

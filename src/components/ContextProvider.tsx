@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, {
     createContext,
     Dispatch,
@@ -12,6 +11,7 @@ import type { history } from "../types/history";
 import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import type { category } from "../types/category";
+import { api } from "../lib/api";
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
@@ -54,13 +54,9 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const resizehandler = useRef(false);
 
     useEffect(() => {
-        axios
-            .get(`/api/category/all`, {
-                headers: { authorization: localStorage.getItem("token") || "" },
-            })
-            .then((res) => {
-                setCategories(res.data);
-            });
+        api.get(`/category/all`).then((res) => {
+            setCategories(res.data);
+        });
     }, []);
 
     function updateSize() {

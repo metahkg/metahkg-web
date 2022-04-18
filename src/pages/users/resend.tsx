@@ -7,9 +7,9 @@ import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
-import axios from "axios";
 import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
+import { api } from "../../lib/api";
 
 declare const grecaptcha: { reset: () => void };
 export default function Verify() {
@@ -29,17 +29,10 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
-        axios
-            .post(
-                "/api/users/resend",
-                {
-                    email: email,
-                    rtoken: rtoken,
-                },
-                {
-                    headers: { authorization: localStorage.getItem("token") || "" },
-                }
-            )
+        api.post("/users/resend", {
+            email: email,
+            rtoken: rtoken,
+        })
             .then(() => {
                 setNotification({
                     open: true,
