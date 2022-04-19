@@ -92,7 +92,7 @@ export default function Create() {
     const [rtoken, setRtoken] = useState(""); //recaptcha token
     const [title, setTitle] = useState(""); //this will be the post title
     const [imgurl, setImgurl] = useState("");
-    const [icomment, setIcomment] = useState(""); //initial comment (#1)
+    const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
@@ -146,7 +146,7 @@ export default function Create() {
         api.post("/posts/create", {
             title: title,
             category: catchoosed,
-            icomment: icomment,
+            comment: comment,
             rtoken: rtoken,
         })
             .then((res) => {
@@ -299,7 +299,7 @@ export default function Create() {
                     </div>
                     <TextEditor
                         changehandler={(v, e: any) => {
-                            setIcomment(e.getContent());
+                            setComment(e.getContent());
                         }}
                         text={inittext}
                     />
@@ -322,7 +322,7 @@ export default function Create() {
                         />
                         <Button
                             disabled={
-                                disabled || !(icomment && title && rtoken && catchoosed)
+                                disabled || !(comment && title && rtoken && catchoosed)
                             }
                             className={`${
                                 small ? "mt15 " : ""
