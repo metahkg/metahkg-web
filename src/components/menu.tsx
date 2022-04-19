@@ -172,8 +172,8 @@ function MainContent() {
             <Box className="min-height-full menu-bottom flex flex-dir-column">
                 {!!(data.length && data?.[0] !== null) && (
                     <Box className="flex flex-dir-column max-width-full menu-bottom">
-                        {data.map((thread: summary) => (
-                            <div>
+                        {data.map((thread: summary,index) => (
+                            <div key={index}>
                                 <MenuThread
                                     key={`${category}${id === thread.id}`}
                                     thread={thread}
