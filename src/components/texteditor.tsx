@@ -29,14 +29,14 @@ export default function TextEditor(props: {
                 mobile: {
                     menubar: "file edit view insert format tools",
                     toolbar:
-                        "undo redo | link image template codesample | emoticons | formatselect fontsizeselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+                        "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                 },
                 quickbars_selection_toolbar:
-                    "cut copy paste | fontsizeselect | quicklink",
+                    "cut copy paste | formatselect | quicklink",
                 quickbars_insert_toolbar: "",
                 menubar: "file edit view insert format tools table",
                 plugins:
-                    "print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
+                    "print preview paste searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons",
                 toolbar:
                     "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                 toolbar_sticky: true,

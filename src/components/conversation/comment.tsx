@@ -17,7 +17,7 @@ import { useNotification, useSettings } from "../ContextProvider";
 import MoreList from "./comment/more";
 import { isMobile } from "react-device-detect";
 import parse from "html-react-parser";
-import { modifycomment, replace } from "../../lib/modifycomments";
+import { replace } from "../../lib/modifycomments";
 import VoteButtons from "./comment/votebuttons";
 import { timetoword } from "../../lib/common";
 import axios from "axios";
@@ -258,7 +258,7 @@ function Comment(props: {
             <div className="ml20 mr20">
                 <Tag>{name}</Tag>
                 <p className="novmargin comment-body break-word-force">
-                    {parse(modifycomment(children), {
+                    {parse(children, {
                         replace: replace,
                     })}
                 </p>
