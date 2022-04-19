@@ -1,13 +1,22 @@
 import queryString from "query-string";
-import {useNavigate} from "react-router-dom";
-import {useCat, useData, useId, useProfile, useRecall, useSearch, useSelected, useSmode} from "./MenuProvider";
-import {useHistory, useNotification, useQuery} from "./ContextProvider";
-import React, {useEffect, useRef, useState} from "react";
-import {AxiosError} from "axios";
-import {splitarray} from "../lib/common";
-import {api} from "../lib/api";
-import {summary} from "../types/conversation/summary";
-import {Box, Paper, Typography} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+    useCat,
+    useData,
+    useId,
+    useProfile,
+    useRecall,
+    useSearch,
+    useSelected,
+    useSmode,
+} from "./MenuProvider";
+import { useHistory, useNotification, useQuery } from "./ContextProvider";
+import React, { useEffect, useRef, useState } from "react";
+import { AxiosError } from "axios";
+import { splitarray } from "../lib/common";
+import { api } from "../lib/api";
+import { summary } from "../types/conversation/summary";
+import { Box, Paper, Typography } from "@mui/material";
 import MenuThread from "./menu/thread";
 import MenuPreload from "./menu/preload";
 
@@ -45,8 +54,8 @@ export function MainContent() {
             open: true,
             text: err?.response?.data?.error || err?.response?.data || "",
         });
-        err?.response?.status === 404 && navigate("/404", {replace: true});
-        err?.response?.status === 401 && navigate("/401", {replace: true});
+        err?.response?.status === 404 && navigate("/404", { replace: true });
+        err?.response?.status === 401 && navigate("/401", { replace: true });
     }
 
     const mode =
@@ -183,10 +192,10 @@ export function MainContent() {
                                 />
                             </div>
                         ))}
-                        {updating && <MenuPreload/>}
+                        {updating && <MenuPreload />}
                     </Box>
                 )}
-                {!data.length && <MenuPreload/>}
+                {!data.length && <MenuPreload />}
                 {end && (
                     <Typography
                         className="mt10 mb10 text-align-center font-size-20-force"
