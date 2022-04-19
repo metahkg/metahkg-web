@@ -239,6 +239,7 @@ function Menu() {
                 menu ? "flex" : "display-none"
             } menu-root`}
         >
+            {/*show when screen is not wide enough*/}
             <Dock
                 btns={[
                     {
@@ -261,6 +262,8 @@ function Menu() {
                     },
                 ]}
             />
+            {/*title and refresh and add button*/}
+            {/*latest and viral*/}
             <MenuTop
                 refresh={() => {
                     setData([]);
