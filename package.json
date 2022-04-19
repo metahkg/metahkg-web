@@ -25,7 +25,7 @@
     "humanize-duration": "^3.27.1",
     "humanize-duration-shortened-english": "^3.27.1-ts2",
     "is-sn-integer": "^0.3.0",
-    "metahkg-css": "^1.0.1",
+    "metahkg-css": "^1.0.2",
     "prismjs": "^1.28.0",
     "query-string": "^7.1.1",
     "react": "^18.0.0",
