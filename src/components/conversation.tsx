@@ -198,19 +198,8 @@ function Conversation(props: { id: number }) {
                                                         ? story === comment?.user.id
                                                         : 1) && (
                                                         <Comment
-                                                            name={comment.user.name}
-                                                            id={comment.id}
-                                                            op={
-                                                                comment.user.id ===
-                                                                thread.op.id
-                                                            }
-                                                            sex={comment.user.sex}
-                                                            date={comment?.createdAt}
-                                                            up={comment.U || 0}
-                                                            down={comment.D || 0}
+                                                            comment={comment}
                                                             vote={votes?.[comment.id]}
-                                                            userid={comment?.user.id}
-                                                            slink={comment?.slink}
                                                         >
                                                             {comment?.comment}
                                                         </Comment>
