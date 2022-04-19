@@ -43,6 +43,7 @@
 }
 
 .comment-body img,
+.comment-body i,
 .comment-body video {
     height: 100%;
     max-height: 400px;
