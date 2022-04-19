@@ -73,6 +73,7 @@ export default function MenuTop(props: {
     }, [category, id, profile, recall, search, setTitle, title]);
     return (
         <div>
+            {/*title and refresh and add button*/}
             <Box
                 className="fullwidth menutop-root"
                 sx={{
@@ -115,6 +116,8 @@ export default function MenuTop(props: {
                         )}
                     </div>
                 )}
+
+                {/*now should be latest and viral*/}
                 {Boolean(tabs.length) && (
                     <Box
                         sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
