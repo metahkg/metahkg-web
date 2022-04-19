@@ -37,7 +37,7 @@ export default function useChangePage() {
         setReRender(Math.random());
         navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
         setCurrentPage(newPage);
-        api.get(`/thread/${threadId}?type=2&page=${newPage}`).then(
+        api.get(`/thread/${threadId}?page=${newPage}`).then(
             (res: { data: threadType }) => {
                 if (!res.data.conversation.length) {
                     setNotification({ open: true, text: "Page not found!" });
