@@ -276,6 +276,7 @@ function Menu() {
                 }}
                 selected={selected}
             />
+            {/*if search something in drawer, also show the search bar under the tab (Relevance, topic ,last reply*/}
             {search && (
                 <div className="flex fullwidth">
                     <div className="flex fullwidth justify-center align-center m10 menu-search">
@@ -285,7 +286,9 @@ function Menu() {
                             }}
                             onKeyPress={(e) => {
                                 if (e.key === "Enter" && tempq) {
+                                    // navigate with router lib
                                     navigate(`/search?q=${encodeURIComponent(tempq)}`);
+
                                     setQuery(tempq);
                                     setData([]);
                                     setBack(`/search?q=${encodeURIComponent(tempq)}`);
