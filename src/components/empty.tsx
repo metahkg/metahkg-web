@@ -90,7 +90,7 @@ export default function Empty() {
                             </ListItem>
                         </Link>
                     )}
-                    {links.map((i,index) => (
+                    {links.map((i, index) => (
                         <Link className="notextdecoration white" to={i.link} key={index}>
                             <ListItem button className="fullwidth">
                                 <ListItemIcon>{i.icon}</ListItemIcon>

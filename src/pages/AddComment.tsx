@@ -66,11 +66,11 @@ export default function AddComment() {
             if (quote) {
                 setAlert({ severity: "info", text: "Fetching comment..." });
                 setNotification({ open: true, text: "Fetching comment..." });
-                api.get(`/thread/${id}?type=2&start=${quote}&end=${quote}`)
+                api.get(`/thread/${id}?start=${quote}&end=${quote}`)
                     .then((res) => {
                         if (res.data?.[0]) {
                             setInittext(
-                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.[0]?.comment}</div></blockquote><p></p>`
+                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.conversation?.[0]?.comment}</div></blockquote><p></p>`
                             );
                             setAlert({ severity: "info", text: "" });
                             setTimeout(() => {
