@@ -112,7 +112,7 @@ export default function Create() {
             setNotification({ open: true, text: "Fetching comment..." });
             api.get(`/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
                 .then((res) => {
-                    if (res.data?.[0]?.comment) {
+                    if (res.data?.conversation?.[0]?.comment) {
                         setInittext(
                             `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.conversation?.[0]?.comment}</div></blockquote><p></p>`
                         );
