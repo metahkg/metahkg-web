@@ -1,7 +1,7 @@
-import {SetValueAction} from './todos';
+import { SetValueAction } from "./todos";
 
 export enum ActionTypes {
-  SETvalue,
+    SETvalue,
 }
 
 export type Action = SetValueAction;
