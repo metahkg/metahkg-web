@@ -69,34 +69,37 @@ export default function AddComment() {
                 }
             });
             edit &&
-                api.get(`/thread/${id}?start=${edit}&end=${edit}`).then((res) => {
-                    if (res.data?.conversation?.[0]) {
-                        setInitText(
-                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
-                                <RenderComment
-                                    comment={res.data?.conversation?.[0]}
-                                    depth={1}
-                                />
-                            )}</div></blockquote><p></p>`
-                        );
-                        setAlert({ severity: "info", text: "" });
-                        setTimeout(() => {
-                            setNotification({ open: false, text: "" });
-                        }, 1000);
-                    } else {
-                        setAlert({ severity: "error", text: " Comment not found!" });
-                        setNotification({ open: true, text: "Comment not found!" });
-                    }
-                }).catch(() => {
-                    setAlert({
-                        severity: "warning",
-                        text: "Unable to fetch comment. This comment would not be a quote.",
+                api
+                    .get(`/thread/${id}?start=${edit}&end=${edit}`)
+                    .then((res) => {
+                        if (res.data?.conversation?.[0]) {
+                            setInitText(
+                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
+                                    <RenderComment
+                                        comment={res.data?.conversation?.[0]}
+                                        depth={1}
+                                    />
+                                )}</div></blockquote><p></p>`
+                            );
+                            setAlert({ severity: "info", text: "" });
+                            setTimeout(() => {
+                                setNotification({ open: false, text: "" });
+                            }, 1000);
+                        } else {
+                            setAlert({ severity: "error", text: " Comment not found!" });
+                            setNotification({ open: true, text: "Comment not found!" });
+                        }
+                    })
+                    .catch(() => {
+                        setAlert({
+                            severity: "warning",
+                            text: "Unable to fetch comment. This comment would not be a quote.",
+                        });
+                        setNotification({
+                            open: true,
+                            text: "Unable to fetch comment. This comment would not be a quote.",
+                        });
                     });
-                    setNotification({
-                        open: true,
-                        text: "Unable to fetch comment. This comment would not be a quote.",
-                    });
-                });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
