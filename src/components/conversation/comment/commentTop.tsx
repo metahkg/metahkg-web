@@ -4,6 +4,7 @@ import {
     Reply as ReplyIcon,
     Share as ShareIcon,
     Feed as FeedIcon,
+    Edit,
 } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
@@ -89,6 +90,13 @@ export default function CommentTop(props: { comment: commentType }) {
             title: "Create new topic",
             action: () => {
                 navigate(`/create?quote=${threadId}.${comment.id}`);
+            },
+        },
+        {
+            icon: <Edit className="font-size-19-force" />,
+            title: "Edit comment",
+            action: () => {
+                navigate(`/comment/${threadId}?edit=${comment.id}`);
             },
         },
     ];

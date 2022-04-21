@@ -32,8 +32,8 @@ import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
-
-declare const tinymce: any;
+import type { TinyMCE } from "tinymce";
+declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 
 /**
