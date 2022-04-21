@@ -3,12 +3,11 @@ import React, { memo } from "react";
 import { Box } from "@mui/material";
 import VoteBar from "./comment/VoteBar";
 import { useSettings } from "../ContextProvider";
-import parse from "html-react-parser";
-import { replace } from "../../lib/modifycomments";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
 import CommentTop from "./comment/commentTop";
+import CommentBody from "./comment/commentBody";
 
 /**
  * Comment component renders a comment
@@ -27,25 +26,22 @@ import CommentTop from "./comment/commentTop";
  * @param {string} props.children the comment
  * @returns a comment
  */
-function Comment(props: { comment: commentType; vote?: "U" | "D"; children: string }) {
-    const { comment, vote, children } = props;
+function Comment(props: { comment: commentType; vote?: "U" | "D"; noId?: boolean }) {
+    const { comment, vote, noId } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
 
-    const commentJSX = parse(children, {
-        replace: replace,
-    });
     return (
         <Box
-            id={`c${comment.user.id}`}
-            className="text-align-left mt6"
+            id={noId ? undefined : `c${comment.id}`}
+            className="text-align-left mt6 fullwidth"
             sx={{
                 bgcolor: "primary.main",
             }}
         >
             <div className="ml20 mr20">
                 <CommentTop comment={comment} />
-                <p className="novmargin comment-body break-word-force">{commentJSX}</p>
+                <CommentBody comment={comment} depth={1} />
                 <div className="comment-internal-spacer" />
             </div>
             <div className="ml20 mr20">

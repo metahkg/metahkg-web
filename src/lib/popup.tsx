@@ -18,24 +18,27 @@ export function PopUp(props: {
     button?: { text: string; link: string };
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
+    fullWidth?: boolean;
 }) {
+    const { title, open, setOpen, button, children, fullScreen, fullWidth } = props;
     return (
         <Dialog
-            open={props.open}
-            fullScreen={props.fullScreen}
+            open={open}
+            fullScreen={fullScreen}
             PaperProps={{
                 sx: {
                     backgroundImage: "none",
                     bgcolor: "primary.main",
                 },
             }}
+            fullWidth={fullWidth}
         >
             <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
-                <p className="ml20 novmargin">{props.title}</p>
+                <p className="ml20 novmargin">{title}</p>
                 <IconButton
                     className="mr5"
                     onClick={() => {
-                        props.setOpen(false);
+                        setOpen(false);
                     }}
                 >
                     <Close className="font-size-18-force" />
@@ -44,18 +47,18 @@ export function PopUp(props: {
             <Divider />
             <DialogContent className="nopadding">
                 <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
-                    {props.children}
+                    {children}
                 </div>
-                {props.button && <Divider />}
-                {props.button && (
-                    <Link className="notextdecoration" to={props.button.link}>
+                {button && <Divider />}
+                {button && (
+                    <Link className="notextdecoration" to={button.link}>
                         <Button
                             className="notexttransform font-size-18-force"
                             color="secondary"
                             variant="text"
                             fullWidth
                         >
-                            {props.button.text}
+                            {button.text}
                         </Button>
                     </Link>
                 )}

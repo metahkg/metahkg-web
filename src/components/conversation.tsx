@@ -200,9 +200,7 @@ function Conversation(props: { id: number }) {
                                                         <Comment
                                                             comment={comment}
                                                             vote={votes?.[comment.id]}
-                                                        >
-                                                            {comment?.comment}
-                                                        </Comment>
+                                                        />
                                                     )
                                             )}
                                         </React.Fragment>

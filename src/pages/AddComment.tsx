@@ -27,7 +27,6 @@ export default function AddComment() {
     const [width] = useWidth();
     const [comment, setComment] = useState("");
     const [imgurl, setImgurl] = useState("");
-    const [inittext, setInittext] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [rtoken, setRtoken] = useState("");
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
@@ -63,35 +62,6 @@ export default function AddComment() {
                     });
                 }
             });
-            if (quote) {
-                setAlert({ severity: "info", text: "Fetching comment..." });
-                setNotification({ open: true, text: "Fetching comment..." });
-                api.get(`/thread/${id}?start=${quote}&end=${quote}`)
-                    .then((res) => {
-                        if (res.data?.conversation?.[0]) {
-                            setInittext(
-                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.conversation?.[0]?.comment}</div></blockquote><p></p>`
-                            );
-                            setAlert({ severity: "info", text: "" });
-                            setTimeout(() => {
-                                setNotification({ open: false, text: "" });
-                            }, 1000);
-                        } else {
-                            setAlert({ severity: "error", text: " Comment not found!" });
-                            setNotification({ open: true, text: "Comment not found!" });
-                        }
-                    })
-                    .catch(() => {
-                        setAlert({
-                            severity: "warning",
-                            text: "Unable to fetch comment. This comment would not be a quote.",
-                        });
-                        setNotification({
-                            open: true,
-                            text: "Unable to fetch comment. This comment would not be a quote.",
-                        });
-                    });
-            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -105,7 +75,12 @@ export default function AddComment() {
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
-        api.post("/posts/comment", { id: id, comment: comment, rtoken: rtoken })
+        api.post("/posts/comment", {
+            id: id,
+            comment: comment,
+            rtoken: rtoken,
+            quote: quote || undefined,
+        })
             .then((res) => {
                 data.length && setData([]);
                 navigate(
@@ -245,7 +220,6 @@ export default function AddComment() {
                     </div>
                     <TextEditor
                         key={id}
-                        text={inittext}
                         changehandler={(v, e: any) => {
                             setComment(e.getContent());
                         }}

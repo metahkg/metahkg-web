@@ -57,10 +57,10 @@
     padding: 0;
 }
 
-.comment-body > blockquote * {
-    color: #aca9a9;
-}
-
 .comment-body blockquote > div:first-child {
     margin-left: 15px;
+}
+
+.comment-body > blockquote * {
+    color: #aca9a9;
 }
