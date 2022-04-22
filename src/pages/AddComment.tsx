@@ -121,7 +121,8 @@ export default function AddComment() {
             .then((res) => {
                 data.length && setData([]);
                 navigate(
-                    `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
+                    `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`,
+                    { replace: true }
                 );
                 setTimeout(() => {
                     setNotification({ open: false, text: "" });

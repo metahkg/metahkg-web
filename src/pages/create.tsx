@@ -156,7 +156,7 @@ export default function Create() {
                 profile && setProfile(0);
                 data.length && setData([]);
                 mtitle && setMtitle("");
-                navigate(`/thread/${res.data.id}`);
+                navigate(`/thread/${res.data.id}`, { replace: true });
                 setTimeout(() => {
                     setNotification({ open: false, text: "" });
                 }, 100);
