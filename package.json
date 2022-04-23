@@ -22,6 +22,7 @@
     "express": "^4.17.3",
     "hash.js": "^1.1.7",
     "html-react-parser": "^1.4.11",
+    "html2plaintext": "^2.1.4",
     "humanize-duration": "^3.27.1",
     "humanize-duration-shortened-english": "^3.27.1-ts2",
     "is-sn-integer": "^0.3.0",

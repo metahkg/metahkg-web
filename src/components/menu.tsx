@@ -31,19 +31,19 @@ function Menu() {
                 btns={[
                     {
                         icon: <Autorenew />,
-                        useAction: () => {
+                        action: () => {
                             setData([]);
                         },
                     },
                     {
                         icon: <Add />,
-                        useAction: () => {
+                        action: () => {
                             navigate("/create");
                         },
                     },
                     {
                         icon: <Settings />,
-                        useAction: () => {
+                        action: () => {
                             setSettingsOpen(true);
                         },
                     },

@@ -6,10 +6,12 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../../../lib/popup";
 import Comment from "../comment";
 import Prism from "prismjs";
+import { useVotes } from "../ConversationContext";
 export default function CommentBody(props: { comment: commentType; depth: number }) {
     const { comment, depth } = props;
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
+    const [votes] = useVotes();
     const content = [
         comment.quote && (
             <blockquote
@@ -37,7 +39,11 @@ export default function CommentBody(props: { comment: commentType; depth: number
         <React.Fragment>
             {comment.quote && (
                 <PopUp title="Quote" open={quoteOpen} setOpen={setQuoteOpen} fullWidth>
-                    <Comment noId comment={comment.quote} />
+                    <Comment
+                        noId
+                        comment={comment.quote}
+                        vote={votes?.[comment.quote.id]}
+                    />
                 </PopUp>
             )}
             {depth === 1 ? (

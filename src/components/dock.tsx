@@ -8,7 +8,7 @@ import { useWidth } from "./ContextProvider";
  * mobile dock
  */
 export default function Dock(props: {
-    btns: { icon: JSX.Element; useAction: () => void }[];
+    btns: { icon: JSX.Element; action: () => void }[];
 }) {
     const { btns } = props;
     const [width] = useWidth();
@@ -22,7 +22,7 @@ export default function Dock(props: {
                     <div className="flex justify-space-between fullwidth ml20 mr20 align-center">
                         <SideBar />
                         {btns.map((btn) => (
-                            <IconButton onClick={btn.useAction}>{btn.icon}</IconButton>
+                            <IconButton onClick={btn.action}>{btn.icon}</IconButton>
                         ))}
                     </div>
                 </Box>

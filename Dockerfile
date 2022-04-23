@@ -5,8 +5,6 @@ ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
 WORKDIR /usr/src/app
 
-RUN yarn add typescript
-
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
@@ -23,6 +21,7 @@ COPY ./package.json .
 COPY ./yarn.lock .
 COPY ./server.js .
 COPY --from=build /usr/src/app/build ./build
+COPY --from=build /usr/src/app/node_modules ./node_modules
 
 RUN yarn install
 

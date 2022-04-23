@@ -38,7 +38,7 @@ import {
 import { MoreHoriz } from "@mui/icons-material";
 
 export default function MoreList(props: {
-    buttons: { title: string; icon?: JSX.Element; action: () => void }[];
+    buttons: ({ title: string; icon?: JSX.Element; action: () => void } | undefined)[];
 }) {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -118,19 +118,24 @@ export default function MoreList(props: {
                                         aria-labelledby="composition-button"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        {props.buttons.map((button) => (
-                                            <MenuItem
-                                                onClick={(e) => {
-                                                    button.action();
-                                                    handleClose(e);
-                                                }}
-                                            >
-                                                <ListItemIcon>{button.icon}</ListItemIcon>
-                                                <ListItemText>
-                                                    {button.title}
-                                                </ListItemText>
-                                            </MenuItem>
-                                        ))}
+                                        {props.buttons.map(
+                                            (button) =>
+                                                button && (
+                                                    <MenuItem
+                                                        onClick={(e) => {
+                                                            button.action();
+                                                            handleClose(e);
+                                                        }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            {button.icon}
+                                                        </ListItemIcon>
+                                                        <ListItemText>
+                                                            {button.title}
+                                                        </ListItemText>
+                                                    </MenuItem>
+                                                )
+                                        )}
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>

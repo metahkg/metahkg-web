@@ -20,6 +20,7 @@ const ConversationContext = createContext<{
     images: [{ src: string }[], React.Dispatch<React.SetStateAction<{ src: string }[]>>];
     title: string | undefined;
     threadId: number;
+    croot: React.MutableRefObject<HTMLDivElement | null>;
     // @ts-ignore
 }>(null);
 
@@ -29,7 +30,7 @@ export default function ConversationProvider(props: {
 }) {
     const query = queryString.parse(window.location.search);
     const { threadId, children } = props;
-    const [thread, setThread] = useState<null | threadType>(null);
+    const [thread, setThread] = useState<threadType | null>(null);
     const [finalPage, setFinalPage] = useState(
         Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
     );
@@ -47,6 +48,7 @@ export default function ConversationProvider(props: {
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [images, setImages] = useState<{ src: string }[]>([]);
+    const croot = useRef<HTMLDivElement>(null);
     return (
         <ConversationContext.Provider
             value={{
@@ -65,6 +67,7 @@ export default function ConversationProvider(props: {
                 lastHeight: lastHeight,
                 title: thread?.title,
                 threadId: threadId,
+                croot: croot,
             }}
         >
             {children}
@@ -145,4 +148,9 @@ export function useThreadId() {
 export function useTitle() {
     const { title } = React.useContext(ConversationContext);
     return title;
+}
+
+export function useCRoot() {
+    const { croot } = React.useContext(ConversationContext);
+    return croot;
 }

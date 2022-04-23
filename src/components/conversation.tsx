@@ -18,7 +18,6 @@ import VisibilityDetector from "react-visibility-detector";
 import { useHistory, useWidth } from "./ContextProvider";
 import Share from "./conversation/share";
 import PageBottom from "./conversation/pagebottom";
-import Prism from "prismjs";
 import PageSelect from "./conversation/pageselect";
 import Dock from "./dock";
 import useBtns from "./conversation/functions/btns";
@@ -27,6 +26,7 @@ import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { commentType } from "../types/conversation/comment";
 import {
+    useCRoot,
     useCurrentPage,
     useEnd,
     useFinalPage,
@@ -45,6 +45,7 @@ import useFirstFetch from "./conversation/functions/firstfetch";
 import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
+import PinnedComment from "./conversation/pin";
 
 /**
  * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
@@ -69,6 +70,7 @@ function Conversation(props: { id: number }) {
     const [galleryOpen, setGalleryOpen] = useGalleryOpen();
     const [images] = useImages();
     const [history, setHistory] = useHistory();
+    const croot = useCRoot();
     const navigate = useNavigate();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
     !query.page &&
@@ -76,7 +78,6 @@ function Conversation(props: { id: number }) {
         navigate(`${window.location.pathname}?page=1`, { replace: true });
     useFirstFetch();
     useEffect(() => {
-        Prism.highlightAll();
         if (history.findIndex((i) => i.id === props.id) === -1) {
             history.push({ id: props.id, cid: 1, c: 1 });
             setHistory(history);
@@ -106,7 +107,7 @@ function Conversation(props: { id: number }) {
     if (ready && loading) {
         setTimeout(() => {
             loading && setLoading(false);
-        }, 200);
+        }, 100);
     }
     if (ready && query.c) {
         navigate(`${window.location.pathname}?page=${finalPage}`, {
@@ -115,7 +116,7 @@ function Conversation(props: { id: number }) {
         setCurrentPage(finalPage);
         setTimeout(() => {
             document.getElementById(`c${query.c}`)?.scrollIntoView();
-        }, 1);
+        });
     }
     const numofpages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();
@@ -144,10 +145,11 @@ function Conversation(props: { id: number }) {
             )}
             {loading && <LinearProgress className="fullwidth" color="secondary" />}
             <Title category={thread?.category} title={thread?.title} btns={btns} />
+            {thread?.pin && <PinnedComment comment={thread?.pin} />}
             <Paper
-                id="croot"
+                ref={croot}
                 key={reRender}
-                className={`overflow-auto nobgimage noshadow conversation-paper${
+                className={`overflow-auto nobgimage noshadow conversation-paper${thread?.pin ? "-pin" : ""}${
                     loading ? "-loading" : ""
                 }`}
                 sx={{ bgcolor: "primary.dark" }}

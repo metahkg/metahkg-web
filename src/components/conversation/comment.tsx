@@ -14,19 +14,14 @@ import CommentBody from "./comment/commentBody";
  * which includes a title (Tag)
  * the comment body
  * and upvote and downvote buttons
- * @param {boolean} props.op whether the comment user is op
- * @param {"M" | "F"} props.sex comment user sex
- * @param {number} props.id comment id
- * @param {number} props.tid thread id
- * @param {number} props.userid comment user id
- * @param {string} props.date created date
- * @param {number} props.up number of upvotes
- * @param {number} props.down number of downvotes
- * @param {string | undefined} props.vote user(client)'s vote
- * @param {string} props.children the comment
- * @returns a comment
  */
-function Comment(props: { comment: commentType; vote?: "U" | "D"; noId?: boolean }) {
+function Comment(props: {
+    comment: commentType;
+    vote?: "U" | "D";
+    noId?: boolean;
+    // TODO: add an option to fetch votes after render
+    fetchVotes?: boolean;
+}) {
     const { comment, vote, noId } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();

@@ -87,7 +87,7 @@ export function MainContent() {
                     setTimeout(() => {
                         // @ts-ignore
                         paperRef.current.scrollTop = 0;
-                    }, 1);
+                    });
                 })
                 .catch(onError);
         }

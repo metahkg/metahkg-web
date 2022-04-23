@@ -1,14 +1,10 @@
-import { userRole, userSex } from "../user";
+import { userType } from "../user";
 import { commentType } from "./comment";
 
 export type threadType = {
     id: number;
-    op: {
-        id: number;
-        name: string;
-        sex: userSex;
-        role: userRole;
-    };
+    pin?: commentType;
+    op: userType;
     c: number;
     vote: number;
     slink?: string;

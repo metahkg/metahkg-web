@@ -5,18 +5,27 @@ import {
     Share as ShareIcon,
     Feed as FeedIcon,
     Edit,
+    PushPin,
 } from "@mui/icons-material";
 import { IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PopUp } from "../../../lib/popup";
 import { commentType } from "../../../types/conversation/comment";
-import { useStory, useThread, useThreadId, useTitle } from "../ConversationContext";
+import {
+    useCRoot,
+    useStory,
+    useThread,
+    useThreadId,
+    useTitle,
+} from "../ConversationContext";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import dateat from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timetoword } from "../../../lib/common";
 import MoreList from "./more";
+import { useNotification } from "../../ContextProvider";
+import { api } from "../../../lib/api";
 export default function CommentTop(props: { comment: commentType }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
@@ -24,12 +33,15 @@ export default function CommentTop(props: { comment: commentType }) {
     const [, setShareTitle] = useShareTitle();
     const [, setShareOpen] = useShareOpen();
     const [story, setStory] = useStory();
+    const [, setNotification] = useNotification();
     const threadId = useThreadId();
     const title = useTitle();
     const navigate = useNavigate();
-    const [thread] = useThread();
+    const [thread, setThread] = useThread();
+    const croot = useCRoot();
     const { comment } = props;
     const isOp = thread && thread.op.id === comment.user.id;
+    const clientIsOp = thread && Number(localStorage.getItem("id")) === thread.op.id;
     const leftbtns = [
         {
             icon: story ? (
@@ -39,22 +51,22 @@ export default function CommentTop(props: { comment: commentType }) {
             ),
             title: story ? "Quit story mode" : "Story mode",
             action: () => {
-                const bheight =
+                const beforeHeight =
                     //@ts-ignore
                     document.getElementById(`c${id}`)?.offsetTop -
                     47 -
                     //@ts-ignore
-                    document.getElementById("croot")?.scrollTop;
+                    croot.current?.scrollTop;
                 setStory(story ? 0 : comment.user.id);
                 setTimeout(() => {
-                    const aheight =
+                    const afterHeight =
                         //@ts-ignore
                         document.getElementById(`c${id}`)?.offsetTop -
                         47 -
                         //@ts-ignore
-                        document.getElementById("croot")?.scrollTop;
+                        croot.current?.scrollTop;
                     //@ts-ignore
-                    document.getElementById("croot").scrollTop += aheight - bheight;
+                    croot.current.scrollTop += afterHeight - beforeHeight;
                 });
             },
         },
@@ -84,7 +96,33 @@ export default function CommentTop(props: { comment: commentType }) {
             },
         },
     ];
-    const morelist: { icon: JSX.Element; title: string; action: () => void }[] = [
+    const moreList: (
+        | { icon: JSX.Element; title: string; action: () => void }
+        | undefined
+    )[] = [
+        clientIsOp
+            ? {
+                  icon: <PushPin />,
+                  title: "Pin Comment",
+                  action: () => {
+                      setNotification({ open: true, text: "Pining Comment..." });
+                      api.post("/posts/pin", { id: threadId, cid: comment.id })
+                          .then(() => {
+                              setNotification({ open: true, text: "Comment pinned!" });
+                              setThread({ ...thread, pin: comment });
+                          })
+                          .catch((err) => {
+                              setNotification({
+                                  open: true,
+                                  text:
+                                      err.response?.data?.error ||
+                                      err.response?.data ||
+                                      "",
+                              });
+                          });
+                  },
+              }
+            : undefined,
         {
             icon: <FeedIcon className="font-size-19-force" />,
             title: "Create new topic",
@@ -177,7 +215,7 @@ export default function CommentTop(props: { comment: commentType }) {
                         </IconButton>
                     </Tooltip>
                 ))}
-                <MoreList buttons={morelist} />
+                <MoreList buttons={moreList} />
             </div>
         </div>
     );

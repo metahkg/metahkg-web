@@ -17,7 +17,7 @@ export default function Title(props: {
     /** thread title */
     title: string | undefined;
     /** buttons */
-    btns: { icon: JSX.Element; useAction: () => void; title: string }[];
+    btns: { icon: JSX.Element; action: () => void; title: string }[];
 }) {
     const { category, title, btns } = props;
     const [history] = useBack();
@@ -53,9 +53,7 @@ export default function Title(props: {
                     {!(width < 760) &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
-                                <IconButton onClick={btn.useAction}>
-                                    {btn.icon}
-                                </IconButton>
+                                <IconButton onClick={btn.action}>{btn.icon}</IconButton>
                             </Tooltip>
                         ))}
                 </div>
