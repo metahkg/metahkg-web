@@ -149,9 +149,9 @@ function Conversation(props: { id: number }) {
             <Paper
                 ref={croot}
                 key={reRender}
-                className={`overflow-auto nobgimage noshadow conversation-paper${thread?.pin ? "-pin" : ""}${
-                    loading ? "-loading" : ""
-                }`}
+                className={`overflow-auto nobgimage noshadow conversation-paper${
+                    thread?.pin ? "-pin" : ""
+                }${loading ? "-loading" : ""}`}
                 sx={{ bgcolor: "primary.dark" }}
                 onScroll={onScroll}
             >
