@@ -9,21 +9,21 @@ import {
     useSearch,
     useSelected,
     useSmode,
-} from "./MenuProvider";
-import { useHistory, useNotification, useQuery } from "./ContextProvider";
+} from "../MenuProvider";
+import { useHistory, useNotification, useQuery } from "../ContextProvider";
 import React, { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
-import { splitarray } from "../lib/common";
-import { api } from "../lib/api";
-import { summary } from "../types/conversation/summary";
-import { Box, Paper, Typography } from "@mui/material";
-import MenuThread from "./menu/thread";
-import MenuPreload from "./menu/preload";
+import { splitarray } from "../../lib/common";
+import { api } from "../../lib/api";
+import { summary } from "../../types/conversation/summary";
+import { Box, Divider, Paper, Typography } from "@mui/material";
+import MenuThread from "./menuThread";
+import MenuPreload from "./menuPreload";
 
 /**
  * This function renders the main content of the menu
  */
-export function MainContent() {
+export function MenuBody() {
     const querystring = queryString.parse(window.location.search);
     const navigate = useNavigate();
     const [category] = useCat();
@@ -190,6 +190,7 @@ export function MainContent() {
                                         }
                                     }}
                                 />
+                                <Divider />
                             </div>
                         ))}
                         {updating && <MenuPreload />}

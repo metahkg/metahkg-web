@@ -26,6 +26,7 @@ import { timetoword } from "../../../lib/common";
 import MoreList from "./more";
 import { useNotification } from "../../ContextProvider";
 import { api } from "../../../lib/api";
+import { AxiosError } from "axios";
 export default function CommentTop(props: { comment: commentType }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
@@ -41,7 +42,6 @@ export default function CommentTop(props: { comment: commentType }) {
     const croot = useCRoot();
     const { comment } = props;
     const isOp = thread && thread.op.id === comment.user.id;
-    const clientIsOp = thread && Number(localStorage.getItem("id")) === thread.op.id;
     const leftbtns = [
         {
             icon: story ? (
@@ -100,29 +100,44 @@ export default function CommentTop(props: { comment: commentType }) {
         | { icon: JSX.Element; title: string; action: () => void }
         | undefined
     )[] = [
-        clientIsOp
-            ? {
-                  icon: <PushPin />,
-                  title: "Pin Comment",
-                  action: () => {
-                      setNotification({ open: true, text: "Pining Comment..." });
-                      api.post("/posts/pin", { id: threadId, cid: comment.id })
-                          .then(() => {
-                              setNotification({ open: true, text: "Comment pinned!" });
-                              setThread({ ...thread, pin: comment });
-                          })
-                          .catch((err) => {
-                              setNotification({
-                                  open: true,
-                                  text:
-                                      err.response?.data?.error ||
-                                      err.response?.data ||
-                                      "",
-                              });
-                          });
-                  },
-              }
-            : undefined,
+        (() => {
+            const clientIsOp = thread && Number(localStorage.getItem("id")) === thread.op.id;
+            if (clientIsOp) {
+                const pinned = thread.pin?.id === comment.id;
+                const onError = (err: AxiosError) => {
+                    setNotification({
+                        open: true,
+                        text: err.response?.data?.error || err.response?.data || "",
+                    });
+                };
+                return {
+                    icon: <PushPin />,
+                    title: `${pinned ? "Unpin" : "Pin"} Comment`,
+                    action: () => {
+                        setNotification({
+                            open: true,
+                            text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
+                        });
+                        api.post(`/posts/${pinned ? "un" : ""}pin`, {
+                            id: threadId,
+                            cid: pinned ? undefined : comment.id,
+                        })
+                            .then(() => {
+                                setNotification({
+                                    open: true,
+                                    text: `Comment ${pinned ? "un" : ""}pinned!`,
+                                });
+                                setThread({
+                                    ...thread,
+                                    pin: pinned ? undefined : comment,
+                                });
+                            })
+                            .catch(onError);
+                    },
+                };
+            }
+            return undefined;
+        })(),
         {
             icon: <FeedIcon className="font-size-19-force" />,
             title: "Create new topic",

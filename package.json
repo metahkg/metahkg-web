@@ -75,6 +75,7 @@
     "build:nocheck": "yarn run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "docker": "cd docker && docker-compose up -d --build",
     "deploy": "yarn run build && yarn run start",
     "dev": "yarn run deploy",
     "prepare": "husky install"
