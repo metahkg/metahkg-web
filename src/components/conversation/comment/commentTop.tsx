@@ -101,7 +101,8 @@ export default function CommentTop(props: { comment: commentType }) {
         | undefined
     )[] = [
         (() => {
-            const clientIsOp = thread && Number(localStorage.getItem("id")) === thread.op.id;
+            const clientIsOp =
+                thread && Number(localStorage.getItem("id")) === thread.op.id;
             if (clientIsOp) {
                 const pinned = thread.pin?.id === comment.id;
                 const onError = (err: AxiosError) => {
