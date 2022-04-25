@@ -64,3 +64,10 @@
 .comment-body > blockquote * {
     color: #aca9a9;
 }
+
+.comment-body blockquote > .comment-body > *:first-child {
+    margin-top: 5px;
+}
+.comment-body blockquote > .comment-body > *:last-child {
+    margin-bottom: 5px;
+}
