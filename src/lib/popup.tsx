@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 
 export function PopUp(props: {
-    title: string;
+    title?: string;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     button?: { text: string; link: string };
@@ -21,6 +21,9 @@ export function PopUp(props: {
     fullWidth?: boolean;
 }) {
     const { title, open, setOpen, button, children, fullScreen, fullWidth } = props;
+    const handleClose = () => {
+        setOpen(false);
+    };
     return (
         <Dialog
             open={open}
@@ -32,19 +35,19 @@ export function PopUp(props: {
                 },
             }}
             fullWidth={fullWidth}
+            onClose={handleClose}
         >
-            <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
-                <p className="ml20 novmargin">{title}</p>
-                <IconButton
-                    className="mr5"
-                    onClick={() => {
-                        setOpen(false);
-                    }}
-                >
-                    <Close className="font-size-18-force" />
-                </IconButton>
-            </DialogTitle>
-            <Divider />
+            {title && (
+                <React.Fragment>
+                    <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
+                        <p className="ml20 novmargin">{title}</p>
+                        <IconButton className="mr5" onClick={handleClose}>
+                            <Close className="font-size-18-force" />
+                        </IconButton>
+                    </DialogTitle>
+                    <Divider />
+                </React.Fragment>
+            )}
             <DialogContent className="nopadding">
                 <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
                     {children}

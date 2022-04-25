@@ -8,9 +8,14 @@ ENV env $env
 
 WORKDIR /usr/src/app
 
-COPY . ./
+COPY ./package.json ./
+COPY ./yarn.lock ./
+COPY ./tsconfig.json ./
 
 RUN yarn install
+
+COPY . ./
+
 RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn run build; fi;
 
 FROM node:latest
