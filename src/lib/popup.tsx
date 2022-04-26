@@ -49,7 +49,7 @@ export function PopUp(props: {
                 </React.Fragment>
             )}
             <DialogContent className="nopadding">
-                <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
+                <div className="fullwidth flex justify-center text-align-center mt5 mb5">
                     {children}
                 </div>
                 {buttons && <Divider />}

@@ -65,7 +65,7 @@ export default function Share() {
     ];
     return (
         <PopUp open={open} setOpen={setOpen} title="Share">
-            <div className="ml10 mr10 text-align-start">
+            <div className="ml10 mr10 text-align-start font-size-20">
                 <TextField
                     className="mt0"
                     sx={{

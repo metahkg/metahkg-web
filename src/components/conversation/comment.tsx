@@ -48,10 +48,14 @@ function Comment(props: {
     return (
         <Box
             id={noId ? undefined : `c${comment.id}`}
-            className="text-align-left mt6 fullwidth"
-            sx={{
+            className="text-align-left mt6 fullwidth comment-root"
+            sx={(theme) => ({
+                "& *::selection": {
+                    background: theme.palette.secondary.main,
+                    color: "black",
+                },
                 bgcolor: "primary.main",
-            }}
+            })}
         >
             <div className="ml20 mr20">
                 <CommentTop comment={comment} />

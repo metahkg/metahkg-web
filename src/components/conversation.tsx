@@ -122,7 +122,15 @@ function Conversation(props: { id: number }) {
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
     return (
-        <div className="min-height-fullvh conversation-root">
+        <Box
+            className="min-height-fullvh conversation-root"
+            sx={(theme) => ({
+                "& *::selection": {
+                    background: theme.palette.secondary.main,
+                    color: "black",
+                },
+            })}
+        >
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
             <Dock btns={btns} />
             <Share />
@@ -231,7 +239,7 @@ function Conversation(props: { id: number }) {
                 </Box>
                 <PageBottom />
             </Paper>
-        </div>
+        </Box>
     );
 }
 
