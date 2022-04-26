@@ -24,7 +24,7 @@ interface Props {
 }
 
 const VoteBar = React.memo<Props>((props) => {
-    const {commentId, upVoteCount, downVoteCount} = props;
+    const { commentId, upVoteCount, downVoteCount } = props;
     const [votes, setVotes] = useVotes();
     const threadId = useThreadId();
     const vote = votes?.[commentId];
@@ -53,9 +53,7 @@ const VoteBar = React.memo<Props>((props) => {
                     vote: value,
                 });
             } catch (err: any) {
-                value === "U"
-                    ? setUpVotes(upVotes)
-                    : setDownVotes(downVotes);
+                value === "U" ? setUpVotes(upVotes) : setDownVotes(downVotes);
                 setVotes(votes);
                 setNotification({
                     open: true,
