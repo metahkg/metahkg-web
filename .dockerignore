@@ -1,0 +1,8 @@
+.lh/
+node_modules/
+.husky/
+.vscode/
+.env
+.idea/
+Dockerfile
+*.md
