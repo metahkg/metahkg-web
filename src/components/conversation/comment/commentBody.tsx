@@ -37,11 +37,7 @@ export default function CommentBody(props: { comment: commentType; depth: number
         <React.Fragment>
             {comment.quote && (
                 <PopUp open={quoteOpen} setOpen={setQuoteOpen} fullWidth>
-                    <Comment
-                        fetchComment
-                        noId
-                        comment={comment.quote}
-                    />
+                    <Comment fetchComment noId comment={comment.quote} />
                 </PopUp>
             )}
             {depth === 1 ? (
