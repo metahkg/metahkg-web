@@ -4,42 +4,43 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification } from "../../ContextProvider";
 import { api } from "../../../lib/api";
+import { useThreadId, useVotes } from "../ConversationContext";
 
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
- * @param {"U" | "D" | undefined} props.vote user(client)'s vote
- * @param {number} props.id thread id
- * @param {number} props.cid comment id
- * @param {number} props.up number of upvotes
- * @param {number} props.down number of downvotes
+ * @param {"U" | "D" | undefined} props.userVote user(client)'s vote
+ * @param {number} props.commentId comment id
+ * @param {number} props.upVotes number of upvotes
+ * @param {number} props.downVotes number of downvotes
  * @returns A button group with two buttons, one for upvote and one for downvote.
  */
 export default function VoteButtons(props: {
-    vote?: "U" | "D";
-    id: number;
-    cid: number;
-    up: number;
-    down: number;
+    commentId: number;
+    upVotes: number;
+    downVotes: number;
 }) {
-    const [vote, setVote] = useState(props.vote);
-    const [up, setUp] = useState(props.up);
-    const [down, setDown] = useState(props.down);
+    const { commentId, upVotes, downVotes } = props;
+    const threadId = useThreadId();
+    const [votes, setVotes] = useVotes();
+    const [up, setUp] = useState(upVotes);
+    const [down, setDown] = useState(downVotes);
     const [, setNotification] = useNotification();
+    const vote = votes?.[commentId];
 
     /**
      * It sends a vote to the server.
-     * @param {"U" | "D"} v - "U" | "D"
+     * @param {"U" | "D"} newVote - "U" | "D"
      */
-    function sendvote(v: "U" | "D") {
-        v === "U" ? setUp(up + 1) : setDown(down + 1);
-        setVote(v);
+    function sendVote(newVote: "U" | "D") {
+        newVote === "U" ? setUp(up + 1) : setDown(down + 1);
+        setVotes({ ...votes, [commentId]: newVote });
         api.post("/posts/vote", {
-            id: Number(props.id),
-            cid: Number(props.cid),
-            vote: v,
+            id: Number(threadId),
+            cid: Number(commentId),
+            vote: newVote,
         }).catch((err) => {
-            v === "U" ? setUp(up) : setDown(down);
-            setVote(undefined);
+            newVote === "U" ? setUp(up) : setDown(down);
+            setVotes(votes);
             setNotification({
                 open: true,
                 text: err?.response?.data?.error || err?.response?.data || "",
@@ -53,7 +54,7 @@ export default function VoteButtons(props: {
                 className="nopadding vb-btn vb-btn-left"
                 disabled={!localStorage.user || !!vote}
                 onClick={() => {
-                    sendvote("U");
+                    sendVote("U");
                 }}
             >
                 <Typography
@@ -70,7 +71,7 @@ export default function VoteButtons(props: {
                 className="nopadding vb-btn vb-btn-right"
                 disabled={!localStorage.user || !!vote}
                 onClick={() => {
-                    sendvote("D");
+                    sendVote("D");
                 }}
             >
                 <Typography

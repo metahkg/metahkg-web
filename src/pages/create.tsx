@@ -32,8 +32,8 @@ import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
-
-declare const tinymce: any;
+import type { TinyMCE } from "tinymce";
+declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 
 /**
@@ -92,7 +92,7 @@ export default function Create() {
     const [rtoken, setRtoken] = useState(""); //recaptcha token
     const [title, setTitle] = useState(""); //this will be the post title
     const [imgurl, setImgurl] = useState("");
-    const [icomment, setIcomment] = useState(""); //initial comment (#1)
+    const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
@@ -110,7 +110,7 @@ export default function Create() {
         if (localStorage.user && quote.id && quote.cid) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(`/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
+            api.get(`/posts/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
                 .then((res) => {
                     if (res.data?.conversation?.[0]?.comment) {
                         setInittext(
@@ -146,7 +146,7 @@ export default function Create() {
         api.post("/posts/create", {
             title: title,
             category: catchoosed,
-            icomment: icomment,
+            comment: comment,
             rtoken: rtoken,
         })
             .then((res) => {
@@ -156,7 +156,7 @@ export default function Create() {
                 profile && setProfile(0);
                 data.length && setData([]);
                 mtitle && setMtitle("");
-                navigate(`/thread/${res.data.id}`);
+                navigate(`/thread/${res.data.id}`, { replace: true });
                 setTimeout(() => {
                     setNotification({ open: false, text: "" });
                 }, 100);
@@ -299,7 +299,7 @@ export default function Create() {
                     </div>
                     <TextEditor
                         changehandler={(v, e: any) => {
-                            setIcomment(e.getContent());
+                            setComment(e.getContent());
                         }}
                         text={inittext}
                     />
@@ -322,7 +322,7 @@ export default function Create() {
                         />
                         <Button
                             disabled={
-                                disabled || !(icomment && title && rtoken && catchoosed)
+                                disabled || !(comment && title && rtoken && catchoosed)
                             }
                             className={`${
                                 small ? "mt15 " : ""

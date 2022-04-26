@@ -5,7 +5,10 @@ const ConversationContext = createContext<{
     thread: [null | threadType, React.Dispatch<React.SetStateAction<null | threadType>>];
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
-    votes: [any, React.Dispatch<React.SetStateAction<any>>];
+    votes: [
+        { [id: number]: "U" | "D" },
+        React.Dispatch<React.SetStateAction<{ [id: number]: "U" | "D" }>>
+    ];
     updating: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     pages: [number, React.Dispatch<React.SetStateAction<number>>];
     end: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -17,6 +20,7 @@ const ConversationContext = createContext<{
     images: [{ src: string }[], React.Dispatch<React.SetStateAction<{ src: string }[]>>];
     title: string | undefined;
     threadId: number;
+    croot: React.MutableRefObject<HTMLDivElement | null>;
     // @ts-ignore
 }>(null);
 
@@ -26,7 +30,7 @@ export default function ConversationProvider(props: {
 }) {
     const query = queryString.parse(window.location.search);
     const { threadId, children } = props;
-    const [thread, setThread] = useState<null | threadType>(null);
+    const [thread, setThread] = useState<threadType | null>(null);
     const [finalPage, setFinalPage] = useState(
         Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
     );
@@ -34,7 +38,7 @@ export default function ConversationProvider(props: {
     const [currentPage, setCurrentPage] = useState(
         Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
     );
-    const [votes, setVotes] = useState<any>({});
+    const [votes, setVotes] = useState<{ [id: number]: "U" | "D" }>({});
     const [updating, setUpdating] = useState(false);
     const [pages, setPages] = useState(1);
     const [end, setEnd] = useState(false);
@@ -44,6 +48,7 @@ export default function ConversationProvider(props: {
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [images, setImages] = useState<{ src: string }[]>([]);
+    const croot = useRef<HTMLDivElement>(null);
     return (
         <ConversationContext.Provider
             value={{
@@ -62,6 +67,7 @@ export default function ConversationProvider(props: {
                 lastHeight: lastHeight,
                 title: thread?.title,
                 threadId: threadId,
+                croot: croot,
             }}
         >
             {children}
@@ -142,4 +148,9 @@ export function useThreadId() {
 export function useTitle() {
     const { title } = React.useContext(ConversationContext);
     return title;
+}
+
+export function useCRoot() {
+    const { croot } = React.useContext(ConversationContext);
+    return croot;
 }

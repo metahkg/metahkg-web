@@ -12,53 +12,61 @@ import {
 import { Link } from "react-router-dom";
 
 export function PopUp(props: {
-    title: string;
+    title?: string;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    button?: { text: string; link: string };
+    buttons?: { text: string; link: string }[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
+    fullWidth?: boolean;
 }) {
+    const { title, open, setOpen, buttons, children, fullScreen, fullWidth } = props;
+    const handleClose = () => {
+        setOpen(false);
+    };
     return (
         <Dialog
-            open={props.open}
-            fullScreen={props.fullScreen}
+            open={open}
+            fullScreen={fullScreen}
             PaperProps={{
                 sx: {
                     backgroundImage: "none",
                     bgcolor: "primary.main",
                 },
             }}
+            fullWidth={fullWidth}
+            onClose={handleClose}
         >
-            <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
-                <p className="ml20 novmargin">{props.title}</p>
-                <IconButton
-                    className="mr5"
-                    onClick={() => {
-                        props.setOpen(false);
-                    }}
-                >
-                    <Close className="font-size-18-force" />
-                </IconButton>
-            </DialogTitle>
-            <Divider />
+            {title && (
+                <React.Fragment>
+                    <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
+                        <p className="ml20 novmargin">{title}</p>
+                        <IconButton className="mr5" onClick={handleClose}>
+                            <Close className="font-size-18-force" />
+                        </IconButton>
+                    </DialogTitle>
+                    <Divider />
+                </React.Fragment>
+            )}
             <DialogContent className="nopadding">
                 <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
-                    {props.children}
+                    {children}
                 </div>
-                {props.button && <Divider />}
-                {props.button && (
-                    <Link className="notextdecoration" to={props.button.link}>
-                        <Button
-                            className="notexttransform font-size-18-force"
-                            color="secondary"
-                            variant="text"
-                            fullWidth
-                        >
-                            {props.button.text}
-                        </Button>
-                    </Link>
-                )}
+                {buttons && <Divider />}
+                <div className="flex fullwidth">
+                    {buttons?.map((button) => (
+                        <Link className="notextdecoration fullwidth" to={button.link}>
+                            <Button
+                                className="notexttransform font-size-18-force"
+                                color="secondary"
+                                variant="text"
+                                fullWidth
+                            >
+                                {button.text}
+                            </Button>
+                        </Link>
+                    ))}
+                </div>
             </DialogContent>
         </Dialog>
     );

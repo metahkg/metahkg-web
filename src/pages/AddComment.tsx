@@ -4,6 +4,7 @@ import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ReactDOMServer from "react-dom/server";
 import { useNotification, useWidth } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
@@ -14,8 +15,10 @@ import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
 import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
-
-declare const tinymce: any;
+import type { TinyMCE } from "tinymce";
+import RenderComment from "../components/renderComment";
+import { commentType } from "../types/conversation/comment";
+declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 /**
  * This page is used to add a comment to a thread
@@ -26,17 +29,20 @@ export default function AddComment() {
     const [data, setData] = useData();
     const [width] = useWidth();
     const [comment, setComment] = useState("");
-    const [imgurl, setImgurl] = useState("");
-    const [inittext, setInittext] = useState("");
+    const [imgUrl, setImgUrl] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [rtoken, setRtoken] = useState("");
+    const [initText, setInitText] = useState("");
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
     const [, setNotification] = useNotification();
     const query = queryString.parse(window.location.search);
+    const edit = Number(query.edit);
     const quote = Number(query.quote);
+    const params = useParams();
+    const id = Number(params.id);
     useEffect(() => {
         if (localStorage.user) {
             api.post("/posts/check", { id: id }).catch((err) => {
@@ -63,23 +69,22 @@ export default function AddComment() {
                     });
                 }
             });
-            if (quote) {
-                setAlert({ severity: "info", text: "Fetching comment..." });
-                setNotification({ open: true, text: "Fetching comment..." });
-                api.get(`/thread/${id}?start=${quote}&end=${quote}`)
-                    .then((res) => {
-                        if (res.data?.conversation?.[0]) {
-                            setInittext(
-                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.conversation?.[0]?.comment}</div></blockquote><p></p>`
-                            );
-                            setAlert({ severity: "info", text: "" });
-                            setTimeout(() => {
-                                setNotification({ open: false, text: "" });
-                            }, 1000);
-                        } else {
-                            setAlert({ severity: "error", text: " Comment not found!" });
-                            setNotification({ open: true, text: "Comment not found!" });
-                        }
+            edit &&
+                api
+                    .get(`/posts/thread/${id}/comment/${edit}`)
+                    .then((res: {data: commentType}) => {
+                        setInitText(
+                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
+                                <RenderComment
+                                    comment={res.data}
+                                    depth={1}
+                                />
+                            )}</div></blockquote><p></p>`
+                        );
+                        setAlert({ severity: "info", text: "" });
+                        setTimeout(() => {
+                            setNotification({ open: false, text: "" });
+                        }, 500);
                     })
                     .catch(() => {
                         setAlert({
@@ -91,7 +96,6 @@ export default function AddComment() {
                             text: "Unable to fetch comment. This comment would not be a quote.",
                         });
                     });
-            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -99,17 +103,22 @@ export default function AddComment() {
     /**
      * It sends a post request to the server with the comment data.
      */
-    const params = useParams();
     function addcomment() {
         //send data to server /api/posts/comment
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
-        api.post("/posts/comment", { id: id, comment: comment, rtoken: rtoken })
+        api.post("/posts/comment", {
+            id: id,
+            comment: comment,
+            rtoken: rtoken,
+            quote: quote || undefined,
+        })
             .then((res) => {
                 data.length && setData([]);
                 navigate(
-                    `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`
+                    `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`,
+                    { replace: true }
                 );
                 setTimeout(() => {
                     setNotification({ open: false, text: "" });
@@ -141,7 +150,6 @@ export default function AddComment() {
             />
         );
     }
-    const id = Number(params.id);
     menu && setMenu(false);
     document.title = "Comment | Metahkg";
     const small = width * 0.8 - 40 <= 450;
@@ -165,9 +173,13 @@ export default function AddComment() {
                         <h1 className="nomargin">Add comment</h1>
                     </div>
                     <h4 className="mt5 mb10 font-size-22">
-                        target: thread{" "}
-                        <Link to={`/thread/${id}`} target="_blank" rel="noreferrer">
-                            {id}
+                        {quote ? "Reply to comment #" : "target: thread "}
+                        <Link
+                            to={`/thread/${id}${quote && `?c=${quote}`}`}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {quote || id}
                         </Link>
                     </h4>
                     {alert.text && (
@@ -193,7 +205,7 @@ export default function AddComment() {
                                 setTimeout(() => {
                                     setNotification({ open: false, text: "" });
                                 }, 1000);
-                                setImgurl(res.data.url);
+                                setImgUrl(res.data.url);
                                 tinymce.activeEditor.insertContent(
                                     `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
                                 );
@@ -209,7 +221,7 @@ export default function AddComment() {
                                 });
                             }}
                         />
-                        {imgurl && (
+                        {imgUrl && (
                             <p
                                 className={`ml10 novmargin flex${
                                     width < 760 ? " mt5" : ""
@@ -219,19 +231,19 @@ export default function AddComment() {
                                     arrow
                                     title={
                                         <img
-                                            src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
+                                            src={`https://i.metahkg.org/thumbnail?src=${imgUrl}`}
                                             alt=""
                                         />
                                     }
                                 >
-                                    <a href={imgurl} target="_blank" rel="noreferrer">
-                                        {imgurl}
+                                    <a href={imgUrl} target="_blank" rel="noreferrer">
+                                        {imgUrl}
                                     </a>
                                 </Tooltip>
                                 <p
                                     className="link novmargin metahkg-grey-force ml5"
                                     onClick={() => {
-                                        navigator.clipboard.writeText(imgurl);
+                                        navigator.clipboard.writeText(imgUrl);
                                         setNotification({
                                             open: true,
                                             text: "Copied to clipboard!",
@@ -245,10 +257,10 @@ export default function AddComment() {
                     </div>
                     <TextEditor
                         key={id}
-                        text={inittext}
                         changehandler={(v, e: any) => {
                             setComment(e.getContent());
                         }}
+                        text={edit ? initText : undefined}
                     />
                     <div
                         className={`mt15 ${

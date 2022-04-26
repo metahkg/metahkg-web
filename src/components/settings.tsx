@@ -38,7 +38,7 @@ export default function Settings(props: {
         { value: "Purple", main: "#651fff", dark: "#4615b2" },
     ];
     return (
-        <PopUp title="Settings" open={open} setOpen={setOpen} fullScreen>
+        <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
             <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
                     <div

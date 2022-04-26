@@ -1,14 +1,9 @@
-import type { userRole, userSex } from "../user";
+import type { userType } from "../user";
 export type commentType = {
     /** comment id */
     id: number;
     /** comment user */
-    user: {
-        id: number;
-        name: string;
-        sex: userSex;
-        role: userRole;
-    };
+    user: userType;
     /** the comment (in stringified html) */
     comment: string;
     /** date string */
@@ -21,4 +16,5 @@ export type commentType = {
     U?: number;
     /** if this is true, all other keys (except id) doesn't exist! */
     removed?: boolean;
+    quote?: commentType;
 };
