@@ -21,11 +21,8 @@ docker-build:
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - |
-        tag="$CI_COMMIT_BRANCH"
-        echo "Running on branch '$CI_COMMIT_BRANCH': tag = 'latest'"
-    - docker build --pull -t "registry.gitlab.io/metahkg/metahkg-web/$CI_COMMIT_BRANCH:latest" .
-    - docker push "registry.gitlab.io/metahkg/metahkg-web/$CI_COMMIT_BRANCH:latest"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
   # Run this job in a branch where a Dockerfile exists
   rules:
     - if: $CI_COMMIT_BRANCH
