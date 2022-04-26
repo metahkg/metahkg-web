@@ -22,11 +22,11 @@ export default function PinnedComment(props: { comment: commentType }) {
                 }}
             >
                 <InfoOutlined className="metahkg-grey-force ml10 mr10" />
-                <div>
+                <div className="overflow-hidden">
                     <Typography className="novmargin" color="secondary">
                         Pinned Comment #{comment.id}
                     </Typography>
-                    <Typography className="metahkg-grey-force text-overflow-ellipsis overflow-hidden nowrap novmargin">
+                    <Typography className="metahkg-grey-force text-overflow-ellipsis overflow-hidden nowrap novmargin mr15">
                         {h2p(comment.comment)}
                     </Typography>
                 </div>
