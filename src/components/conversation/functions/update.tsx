@@ -27,7 +27,9 @@ export function useUpdate() {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
             api.get(
-                `/posts/thread/${threadId}?page=${openNewPage ? finalPage + 1 : finalPage}${
+                `/posts/thread/${threadId}?page=${
+                    openNewPage ? finalPage + 1 : finalPage
+                }${
                     openNewPage
                         ? ""
                         : `&start=${
