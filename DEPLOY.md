@@ -6,8 +6,8 @@ It is recommended to use docker for deployment (also supports hot reload).
 
 Docs:
 
-- master branch [master.docs.metahkg.org/docker](https://master.docs.metahkg.org/docker)
-- dev branch [dev.docs.metahkg.org/docker](https://dev.docs.metahkg.org/docker)
+-   master branch [master.docs.metahkg.org/docker](https://master.docs.metahkg.org/docker)
+-   dev branch [dev.docs.metahkg.org/docker](https://dev.docs.metahkg.org/docker)
 
 ## Manually
 
@@ -19,8 +19,8 @@ use the public dev api server (dev branch only!)
 
 ### Prerequisites
 
-- x86_64 linux (only tested on ubuntu & arch)
-- recaptcha site key (for anti-spamming)
+-   x86_64 linux (only tested on ubuntu & arch)
+-   recaptcha site key (for anti-spamming)
 
 ### Set up
 
@@ -43,7 +43,7 @@ yarn run build
 
 #### Local metahkg-server
 
-Running  `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
+Running `yarn run start` will start the react app at localhost:3199. (for if you deploy metahkg-server locally)
 
 #### Public dev server
 

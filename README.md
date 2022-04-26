@@ -15,7 +15,7 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=metahkg/metahkg-web&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=metahkg/metahkg-web&utm_campaign=Badge_Grade)
 
 ## About
 
@@ -33,8 +33,8 @@ It is recommended to use docker for deployment (also supports hot reload).
 
 Docs:
 
-- master branch [master.docs.metahkg.org/docker](https://master.docs.metahkg.org/docker)
-- dev branch [dev.docs.metahkg.org/docker](https://dev.docs.metahkg.org/docker)
+-   master branch [master.docs.metahkg.org/docker](https://master.docs.metahkg.org/docker)
+-   dev branch [dev.docs.metahkg.org/docker](https://dev.docs.metahkg.org/docker)
 
 ### Manually
 
