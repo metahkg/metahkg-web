@@ -27,8 +27,18 @@ As contrasted with lihkg, metahkg is open to everyone and anyone can create an a
 
 ## Deploying
 
-See DEPLOY.md.
-For a fast setup run ./setup.sh.
+### Docker
+
+It is recommended to use docker for deployment (also supports hot reload).
+
+- master branch [master.docs.metahkg.org/docker](https://master.docs.metahkg.org/docker)
+- dev branch [dev.docs.metahkg.org/docker](https://dev.docs.metahkg.org/docker)
+
+### Manually
+
+**_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED.
+
+For manual deployment, see DEPLOY.md.
 
 ## Logo
 
