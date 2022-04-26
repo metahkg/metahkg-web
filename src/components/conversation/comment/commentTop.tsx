@@ -162,7 +162,7 @@ export default function CommentTop(props: { comment: commentType }) {
                 title="User information"
                 buttons={[{ text: "View Profile", link: `/profile/${comment.user.id}` }]}
             >
-                <p className="text-align-center mt5 mb5">
+                <p className="text-align-center mt5 mb5 font-size-20">
                     {comment.user.name}
                     <br />#{comment.user.id}
                 </p>

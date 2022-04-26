@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { PopUp } from "../../../lib/popup";
 import Comment from "../comment";
 import Prism from "prismjs";
+import { Box } from "@mui/material";
 export default function CommentBody(props: { comment: commentType; depth: number }) {
     const { comment, depth } = props;
     const commentJSX = parse(comment.comment, { replace: replace });
@@ -16,9 +17,14 @@ export default function CommentBody(props: { comment: commentType; depth: number
                 style={{ border: "none" }}
                 className={`flex fullwidth${depth !== 1 ? " novmargin" : ""}`}
             >
-                <div
-                    className="pointer comment-body-quote-div"
-                    style={{ width: 15, marginLeft: 0 }}
+                <Box
+                    className="pointer comment-body-quote-div nopadding metahkg-grey ml0"
+                    sx={(theme) => ({
+                        width: 15,
+                        "&:hover": {
+                            borderLeft: `2px solid ${theme.palette.secondary.main}`,
+                        },
+                    })}
                     onClick={() => {
                         setQuoteOpen(true);
                     }}
