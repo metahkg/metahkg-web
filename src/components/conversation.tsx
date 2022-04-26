@@ -48,7 +48,7 @@ import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
 import PinnedComment from "./conversation/pin";
 
 /**
- * Gets data from /api/thread/<thread id(props.id)>/<conversation/users>
+ * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
  * @param {number} props.id the thread id
  * @returns full conversation as Comments

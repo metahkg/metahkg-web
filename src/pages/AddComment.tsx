@@ -17,6 +17,7 @@ import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import RenderComment from "../components/renderComment";
+import { commentType } from "../types/conversation/comment";
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 /**
@@ -70,25 +71,20 @@ export default function AddComment() {
             });
             edit &&
                 api
-                    .get(`/thread/${id}?start=${edit}&end=${edit}`)
-                    .then((res) => {
-                        if (res.data?.conversation?.[0]) {
-                            setInitText(
-                                `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
-                                    <RenderComment
-                                        comment={res.data?.conversation?.[0]}
-                                        depth={1}
-                                    />
-                                )}</div></blockquote><p></p>`
-                            );
-                            setAlert({ severity: "info", text: "" });
-                            setTimeout(() => {
-                                setNotification({ open: false, text: "" });
-                            }, 1000);
-                        } else {
-                            setAlert({ severity: "error", text: " Comment not found!" });
-                            setNotification({ open: true, text: "Comment not found!" });
-                        }
+                    .get(`/posts/thread/${id}/comment/${edit}`)
+                    .then((res: {data: commentType}) => {
+                        setInitText(
+                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
+                                <RenderComment
+                                    comment={res.data}
+                                    depth={1}
+                                />
+                            )}</div></blockquote><p></p>`
+                        );
+                        setAlert({ severity: "info", text: "" });
+                        setTimeout(() => {
+                            setNotification({ open: false, text: "" });
+                        }, 500);
                     })
                     .catch(() => {
                         setAlert({
