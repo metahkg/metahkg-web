@@ -37,12 +37,11 @@ export default function useChangePage() {
         setReRender(Math.random());
         navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
         setCurrentPage(newPage);
-        api.get(`/thread/${threadId}?page=${newPage}`).then(
+        api.get(`/api/posts/thread/${threadId}?page=${newPage}`).then(
             (res: { data: threadType }) => {
-                if (!res.data.conversation.length) {
-                    setNotification({ open: true, text: "Page not found!" });
-                    return;
-                }
+                if (!res.data.conversation.length)
+                    return setNotification({ open: true, text: "Page not found!" });
+
                 setThread(res.data);
                 res.data.conversation.length % 25 && setEnd(true);
                 document.getElementById(String(finalPage))?.scrollIntoView();

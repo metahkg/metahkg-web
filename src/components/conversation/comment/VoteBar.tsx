@@ -13,30 +13,23 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
 import { green, red } from "@mui/material/colors";
 import { api } from "../../../lib/api";
+import { useThreadId, useVotes } from "../ConversationContext";
 
 type VoteType = "U" | "D";
 
 interface Props {
-    vote?: VoteType;
-    postId: number;
-    clientId: number;
+    commentId: number;
     upVoteCount: number;
     downVoteCount: number;
 }
 
-/**
- * It creates a button group with two buttons. One for upvotes and one for downvotes.
- * @param {"U" | "D" | undefined} props.vote user(client)'s vote
- * @param {number} props.id thread id
- * @param {number} props.cid comment id
- * @param {number} props.up number of upvotes
- * @param {number} props.down number of downvotes
- * @returns A button group with two buttons, one for upvote and one for downvote.
- */
 const VoteBar = React.memo<Props>((props) => {
-    const [vote, setVote] = useState(props.vote);
-    const [upVoteCount, setUpVoteCount] = useState(props.upVoteCount);
-    const [downVoteCount, setDownVoteCount] = useState(props.downVoteCount);
+    const {commentId, upVoteCount, downVoteCount} = props;
+    const [votes, setVotes] = useVotes();
+    const threadId = useThreadId();
+    const vote = votes?.[commentId];
+    const [upVotes, setUpVotes] = useState(upVoteCount);
+    const [downVotes, setDownVotes] = useState(downVoteCount);
     const [, setNotification] = useNotification();
 
     /**
@@ -45,32 +38,32 @@ const VoteBar = React.memo<Props>((props) => {
      */
     const onVote = React.useCallback(
         async (value: VoteType) => {
-            setVote(value);
+            setVotes({ ...votes, [commentId]: value });
 
             if (value === "U") {
-                setUpVoteCount((_) => _ + 1);
+                setUpVotes((_) => _ + 1);
             } else {
-                setDownVoteCount((_) => _ + 1);
+                setDownVotes((_) => _ + 1);
             }
 
             try {
                 await api.post("/posts/vote", {
-                    id: Number(props.postId),
-                    cid: Number(props.clientId),
+                    id: Number(threadId),
+                    cid: Number(commentId),
                     vote: value,
                 });
             } catch (err: any) {
                 value === "U"
-                    ? setUpVoteCount(upVoteCount)
-                    : setDownVoteCount(downVoteCount);
-                setVote(undefined);
+                    ? setUpVotes(upVotes)
+                    : setDownVotes(downVotes);
+                setVotes(votes);
                 setNotification({
                     open: true,
                     text: err?.response?.data?.error || err?.response?.data || "",
                 });
             }
         },
-        [downVoteCount, props.clientId, props.postId, setNotification, upVoteCount]
+        [setVotes, votes, commentId, threadId, upVotes, downVotes, setNotification]
     );
 
     const isVoted = vote !== undefined;

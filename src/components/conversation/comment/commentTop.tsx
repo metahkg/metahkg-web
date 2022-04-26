@@ -160,7 +160,7 @@ export default function CommentTop(props: { comment: commentType }) {
                 open={open}
                 setOpen={setOpen}
                 title="User information"
-                button={{ text: "View Profile", link: `/profile/${comment.user.id}` }}
+                buttons={[{ text: "View Profile", link: `/profile/${comment.user.id}` }]}
             >
                 <p className="text-align-center mt5 mb5">
                     {comment.user.name}

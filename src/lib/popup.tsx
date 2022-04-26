@@ -15,12 +15,12 @@ export function PopUp(props: {
     title?: string;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    button?: { text: string; link: string };
+    buttons?: { text: string; link: string }[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
 }) {
-    const { title, open, setOpen, button, children, fullScreen, fullWidth } = props;
+    const { title, open, setOpen, buttons, children, fullScreen, fullWidth } = props;
     const handleClose = () => {
         setOpen(false);
     };
@@ -52,19 +52,21 @@ export function PopUp(props: {
                 <div className="fullwidth flex justify-center text-align-center font-size-20 mt5 mb5">
                     {children}
                 </div>
-                {button && <Divider />}
-                {button && (
-                    <Link className="notextdecoration" to={button.link}>
-                        <Button
-                            className="notexttransform font-size-18-force"
-                            color="secondary"
-                            variant="text"
-                            fullWidth
-                        >
-                            {button.text}
-                        </Button>
-                    </Link>
-                )}
+                {buttons && <Divider />}
+                <div className="flex fullwidth">
+                    {buttons?.map((button) => (
+                        <Link className="notextdecoration fullwidth" to={button.link}>
+                            <Button
+                                className="notexttransform font-size-18-force"
+                                color="secondary"
+                                variant="text"
+                                fullWidth
+                            >
+                                {button.text}
+                            </Button>
+                        </Link>
+                    ))}
+                </div>
             </DialogContent>
         </Dialog>
     );

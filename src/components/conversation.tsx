@@ -199,10 +199,7 @@ function Conversation(props: { id: number }) {
                                                     (story
                                                         ? story === comment?.user.id
                                                         : 1) && (
-                                                        <Comment
-                                                            comment={comment}
-                                                            vote={votes?.[comment.id]}
-                                                        />
+                                                        <Comment comment={comment} />
                                                     )
                                             )}
                                         </React.Fragment>

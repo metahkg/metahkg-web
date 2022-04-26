@@ -110,7 +110,7 @@ export default function Create() {
         if (localStorage.user && quote.id && quote.cid) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(`/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
+            api.get(`/posts/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
                 .then((res) => {
                     if (res.data?.conversation?.[0]?.comment) {
                         setInittext(

@@ -40,7 +40,7 @@ export default function useFirstFetch() {
         err?.response?.status === 401 && navigate("/401", { replace: true });
     };
     useEffect(() => {
-        api.get(`/thread/${threadId}?page=${finalPage}`)
+        api.get(`/posts/thread/${threadId}?page=${finalPage}`)
             .then((res: { data: threadType }) => {
                 res.data.slink && setThread(res.data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
@@ -71,7 +71,7 @@ export default function useFirstFetch() {
             })
             .catch(onError);
         if (localStorage.user) {
-            api.get(`/posts/votes?id=${threadId}`)
+            api.get(`/posts/uservotes/${threadId}`)
                 .then((res) => {
                     setVotes(res.data);
                 })

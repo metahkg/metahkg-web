@@ -6,15 +6,13 @@ import h2p from "html2plaintext";
 import React, { useState } from "react";
 import { PopUp } from "../../lib/popup";
 import Comment from "./comment";
-import { useVotes } from "./ConversationContext";
 export default function PinnedComment(props: { comment: commentType }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
-    const [votes] = useVotes();
     return (
         <React.Fragment>
-            <PopUp title="Pinned Comment" open={open} setOpen={setOpen} fullWidth>
-                <Comment comment={comment} noId vote={votes?.[comment.id]} />
+            <PopUp open={open} setOpen={setOpen} fullWidth>
+                <Comment comment={comment} noId fetchComment />
             </PopUp>
             <Box
                 sx={{ bgcolor: "primary.dark", height: 50 }}
