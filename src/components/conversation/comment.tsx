@@ -183,7 +183,10 @@ function Comment(props: {
                                 <Comment comment={comment} noId noQuote />
                             ))}
                             <div className="flex justify-center align-center">
-                                <Typography className="mt5 mb5 font-size-18-force" color="secondary">
+                                <Typography
+                                    className="mt5 mb5 font-size-18-force"
+                                    color="secondary"
+                                >
                                     End
                                 </Typography>
                             </div>
