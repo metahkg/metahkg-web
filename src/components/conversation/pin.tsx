@@ -11,6 +11,7 @@ import { useWidth } from "../ContextProvider";
 export default function PinnedComment(props: { comment: commentType }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [width] = useWidth();
     return (
         <React.Fragment>
@@ -18,8 +19,8 @@ export default function PinnedComment(props: { comment: commentType }) {
                 open={open}
                 setOpen={setOpen}
                 fullWidth
-                closeBtn
-                className={`height-fullvh novmargin ${
+                closeBtn={isExpanded}
+                className={`${isExpanded ? "height-fullvh" : ""} novmargin ${
                     width < 760 ? "nohmargin fullwidth-force" : ""
                 }`}
                 sx={{
@@ -27,7 +28,13 @@ export default function PinnedComment(props: { comment: commentType }) {
                     bgcolor: "primary.dark",
                 }}
             >
-                <Comment comment={comment} noId fetchComment inPopUp />
+                <Comment
+                    comment={comment}
+                    noId
+                    fetchComment
+                    inPopUp
+                    setIsExpanded={setIsExpanded}
+                />
             </PopUp>
             <Box
                 sx={{ bgcolor: "primary.dark", height: 50 }}

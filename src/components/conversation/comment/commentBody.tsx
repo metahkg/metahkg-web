@@ -17,6 +17,7 @@ export default function CommentBody(props: {
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
+    const [quoteExpanded, setQuoteExpanded] = useState(false);
     const [width] = useWidth();
     const content = [
         comment.quote && !noQuote && (
@@ -75,8 +76,8 @@ export default function CommentBody(props: {
                     open={quoteOpen}
                     setOpen={setQuoteOpen}
                     fullWidth
-                    closeBtn
-                    className={`height-fullvh novmargin ${
+                    closeBtn={quoteExpanded}
+                    className={`${quoteExpanded ? "height-fullvh" : ""} novmargin ${
                         width < 760 ? "nohmargin fullwidth-force" : ""
                     }`}
                     sx={{
@@ -84,7 +85,13 @@ export default function CommentBody(props: {
                         bgcolor: "primary.dark",
                     }}
                 >
-                    <Comment fetchComment noId comment={comment.quote} inPopUp />
+                    <Comment
+                        fetchComment
+                        noId
+                        comment={comment.quote}
+                        inPopUp
+                        setIsExpanded={setQuoteExpanded}
+                    />
                 </PopUp>
             )}
             {depth === 0 ? (

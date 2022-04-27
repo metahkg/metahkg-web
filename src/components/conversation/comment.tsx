@@ -26,8 +26,9 @@ function Comment(props: {
     showReplies?: boolean;
     fetchComment?: boolean;
     noQuote?: boolean;
+    setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-    const { noId, fetchComment, inPopUp, noQuote } = props;
+    const { noId, fetchComment, inPopUp, noQuote, setIsExpanded } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
     const [comment, setComment] = useState(props.comment);
@@ -37,6 +38,7 @@ function Comment(props: {
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
+    const [popupExpanded, setPopupExpanded] = useState(true);
     const [width] = useWidth();
 
     useEffect(() => {
@@ -74,8 +76,8 @@ function Comment(props: {
                     open={popupOpen}
                     setOpen={setPopupOpen}
                     fullWidth
-                    closeBtn
-                    className={`height-fullvh novmargin ${
+                    closeBtn={popupExpanded}
+                    className={`${popupExpanded ? "height-fullvh" : ""} novmargin ${
                         width < 760 ? "nohmargin fullwidth-force" : ""
                     }`}
                     sx={{
@@ -83,7 +85,13 @@ function Comment(props: {
                         bgcolor: "primary.dark",
                     }}
                 >
-                    <Comment comment={comment} showReplies noId inPopUp />
+                    <Comment
+                        comment={comment}
+                        showReplies
+                        noId
+                        inPopUp
+                        setIsExpanded={setPopupExpanded}
+                    />
                 </PopUp>
             )}
             <Box
@@ -166,6 +174,7 @@ function Comment(props: {
                         className="flex align-center justify-center text-align-center pointer"
                         onClick={() => {
                             setShowReplies(!showReplies);
+                            setIsExpanded && setIsExpanded(!showReplies);
                         }}
                     >
                         <Typography className="mt5 mb5" color="secondary">
@@ -183,7 +192,10 @@ function Comment(props: {
                                 <Comment comment={comment} noId noQuote />
                             ))}
                             <div className="flex justify-center align-center">
-                                <Typography className="mt5 mb5 font-size-18-force" color="secondary">
+                                <Typography
+                                    className="mt5 mb5 font-size-18-force"
+                                    color="secondary"
+                                >
                                     End
                                 </Typography>
                             </div>
