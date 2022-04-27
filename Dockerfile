@@ -33,6 +33,8 @@ COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
 COPY ./server.js ./
+COPY ./.babelrc ./
+COPY ./config-overrides.js ./
 
 RUN yarn install
 
