@@ -6181,10 +6181,10 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-metahkg-css@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/metahkg-css/-/metahkg-css-1.0.2.tgz#24f57df63716843e731b2921820baa28fd02c964"
-  integrity sha512-/94AlBgWZu7F2WuxkSWQK8+2umAclMIXy4Ve+xBwVZunP9M3rePlEIbKwWOJA9xPR0+qi9W6hVYZRoyGgVSBOQ==
+metahkg-css@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/metahkg-css/-/metahkg-css-1.0.4.tgz#639cae95154c82d80937849159e1b7cc942828c6"
+  integrity sha512-B7tdxrBJ7s88hC17BhKX/JaDkjdIaqs0AJIFVE2vFonyiFQn9soWzlPRlfzC/phzbh5XEjGDFDlGRJqVth+M1A==
 
 methods@~1.1.2:
   version "1.1.2"

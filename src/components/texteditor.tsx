@@ -22,9 +22,9 @@ export default function TextEditor(props: {
             init={{
                 height: width < 760 ? 310 : 350,
                 skin_url:
-                    "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.2/dist/tinymce/skins/ui/metahkg-dark",
+                    "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.3/dist/tinymce/skins/ui/metahkg-dark",
                 content_css:
-                    "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.2/dist/tinymce/skins/content/metahkg-dark/content.min.css",
+                    "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.3/dist/tinymce/skins/content/metahkg-dark/content.min.css",
                 branding: false,
                 mobile: {
                     menubar: "file edit view insert format tools",

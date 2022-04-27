@@ -5,9 +5,8 @@ import { commentType } from "../types/conversation/comment";
 export default function RenderComment(props: { comment: commentType; depth: number }) {
     const { comment, depth } = props;
     const commentJSX = parse(comment.comment);
-    console.log(depth);
     const content = [
-        comment.quote && depth < 4 && (
+        comment.quote && depth < 3 && (
             <blockquote
                 style={{
                     color: "#aca9a9",

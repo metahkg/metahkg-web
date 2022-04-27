@@ -59,7 +59,7 @@ function Comment(props: {
         >
             <div className="ml20 mr20">
                 <CommentTop comment={comment} />
-                <CommentBody comment={comment} depth={1} />
+                <CommentBody comment={comment} depth={0} />
                 <div className="comment-internal-spacer" />
             </div>
             {ready && (

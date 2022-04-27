@@ -75,7 +75,7 @@ export default function AddComment() {
                     .then((res: { data: commentType }) => {
                         setInitText(
                             `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
-                                <RenderComment comment={res.data} depth={1} />
+                                <RenderComment comment={res.data} depth={0} />
                             )}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
