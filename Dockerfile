@@ -38,4 +38,4 @@ COPY ./config-overrides.js ./
 
 RUN yarn install
 
-CMD export PORT=${port} && if [ "${env}" = dev ]; then npx react-app-rewired start; else node server.js; fi;
+CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i 's/6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-/${REACT_APP_recaptchasitekey}/g' build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = dev ]; then npx react-app-rewired start; else node server.js; fi;
