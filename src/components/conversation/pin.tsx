@@ -12,7 +12,7 @@ export default function PinnedComment(props: { comment: commentType }) {
     return (
         <React.Fragment>
             <PopUp open={open} setOpen={setOpen} fullWidth>
-                <Comment comment={comment} noId fetchComment />
+                <Comment comment={comment} noId fetchComment inPopUp />
             </PopUp>
             <Box
                 sx={{ bgcolor: "primary.dark", height: 50 }}

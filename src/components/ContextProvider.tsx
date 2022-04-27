@@ -37,7 +37,10 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<settings>(
-        JSON.parse(localStorage.getItem("settings") || "{}")
+        JSON.parse(
+            localStorage.getItem("settings") ||
+                JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
+        )
     );
     const [categories, setCategories] = useState<category[]>([]);
     const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(

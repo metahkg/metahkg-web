@@ -7,13 +7,17 @@ import { PopUp } from "../../../lib/popup";
 import Comment from "../comment";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
-export default function CommentBody(props: { comment: commentType; depth: number }) {
-    const { comment, depth } = props;
+export default function CommentBody(props: {
+    comment: commentType;
+    depth: number;
+    noQuote?: boolean;
+}) {
+    const { comment, depth, noQuote } = props;
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const content = [
-        comment.quote && (
+        comment.quote && !noQuote && (
             <blockquote
                 style={{ border: "none" }}
                 className={`flex fullwidth${depth !== 0 ? " novmargin" : ""}`}
@@ -66,7 +70,7 @@ export default function CommentBody(props: { comment: commentType; depth: number
         <React.Fragment>
             {comment.quote && showQuote && (
                 <PopUp open={quoteOpen} setOpen={setQuoteOpen} fullWidth>
-                    <Comment fetchComment noId comment={comment.quote} />
+                    <Comment fetchComment noId comment={comment.quote} inPopUp />
                 </PopUp>
             )}
             {depth === 0 ? (

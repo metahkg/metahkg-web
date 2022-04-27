@@ -115,3 +115,7 @@ node server/migrate/migratetov0.5.2.js
 ## v0.5.10rc1
 
 - move part of the html modification to server
+
+## v0.6.0rc1
+
+- replies

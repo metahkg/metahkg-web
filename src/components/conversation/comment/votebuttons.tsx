@@ -51,7 +51,7 @@ export default function VoteButtons(props: {
     return (
         <ButtonGroup variant="text" className="vb-btn-group">
             <Button
-                className="nopadding vb-btn vb-btn-left"
+                className="nopadding nomargin vb-btn vb-btn-left"
                 disabled={!localStorage.user || !!vote}
                 onClick={() => {
                     sendVote("U");
@@ -68,7 +68,7 @@ export default function VoteButtons(props: {
                 </Typography>
             </Button>
             <Button
-                className="nopadding vb-btn vb-btn-right"
+                className="nopadding nomargin vb-btn vb-btn-right"
                 disabled={!localStorage.user || !!vote}
                 onClick={() => {
                     sendVote("D");

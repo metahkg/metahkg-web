@@ -17,4 +17,5 @@ export type commentType = {
     /** if this is true, all other keys (except id) doesn't exist! */
     removed?: boolean;
     quote?: commentType;
+    replies?: number[];
 };

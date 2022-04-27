@@ -49,24 +49,35 @@ export function PopUp(props: {
                 </React.Fragment>
             )}
             <DialogContent className="nopadding">
-                <div className="fullwidth flex justify-center text-align-center mt5 mb5">
+                <div
+                    className={`fullwidth flex justify-center text-align-center ${
+                        title ? "mt5" : ""
+                    } ${buttons?.length ? "mb5" : ""}`}
+                >
                     {children}
                 </div>
-                {buttons && <Divider />}
-                <div className="flex fullwidth">
-                    {buttons?.map((button) => (
-                        <Link className="notextdecoration fullwidth" to={button.link}>
-                            <Button
-                                className="notexttransform font-size-18-force"
-                                color="secondary"
-                                variant="text"
-                                fullWidth
-                            >
-                                {button.text}
-                            </Button>
-                        </Link>
-                    ))}
-                </div>
+                {!!buttons?.length && (
+                    <React.Fragment>
+                        <Divider />
+                        <div className="flex fullwidth">
+                            {buttons?.map((button) => (
+                                <Link
+                                    className="notextdecoration fullwidth"
+                                    to={button.link}
+                                >
+                                    <Button
+                                        className="notexttransform font-size-18-force"
+                                        color="secondary"
+                                        variant="text"
+                                        fullWidth
+                                    >
+                                        {button.text}
+                                    </Button>
+                                </Link>
+                            ))}
+                        </div>
+                    </React.Fragment>
+                )}
             </DialogContent>
         </Dialog>
     );
