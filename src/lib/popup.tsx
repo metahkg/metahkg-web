@@ -1,4 +1,3 @@
-import "./css/popup.css";
 import React from "react";
 import { Close } from "@mui/icons-material";
 import {
@@ -10,17 +9,33 @@ import {
     IconButton,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import type { SxProps } from "@mui/system/styleFunctionSx";
+import type { Theme } from "@mui/system";
 
 export function PopUp(props: {
     title?: string;
+    closeBtn?: boolean;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     buttons?: { text: string; link: string }[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
+    sx?: SxProps<Theme>;
+    className?: string;
 }) {
-    const { title, open, setOpen, buttons, children, fullScreen, fullWidth } = props;
+    const {
+        title,
+        open,
+        setOpen,
+        buttons,
+        children,
+        fullScreen,
+        fullWidth,
+        sx,
+        className,
+        closeBtn,
+    } = props;
     const handleClose = () => {
         setOpen(false);
     };
@@ -32,14 +47,19 @@ export function PopUp(props: {
                 sx: {
                     backgroundImage: "none",
                     bgcolor: "primary.main",
+                    ...sx,
                 },
+                className: className,
             }}
             fullWidth={fullWidth}
             onClose={handleClose}
         >
-            {title && (
+            {(title || closeBtn) && (
                 <React.Fragment>
-                    <DialogTitle className="nopadding flex mt5 mb5 popup-dialogtitle">
+                    <DialogTitle
+                        sx={{ minWidth: 270, bgcolor: "primary.main" }}
+                        className="pr0 pl0 flex pt5 pb5 justify-space-between align-center"
+                    >
                         <p className="ml20 novmargin">{title}</p>
                         <IconButton className="mr5" onClick={handleClose}>
                             <Close className="font-size-18-force" />

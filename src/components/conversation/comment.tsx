@@ -2,7 +2,7 @@ import "./css/comment.css";
 import React, { memo, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import VoteBar from "./comment/VoteBar";
-import { useNotification, useSettings } from "../ContextProvider";
+import { useNotification, useSettings, useWidth } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
@@ -37,6 +37,7 @@ function Comment(props: {
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
+    const [width] = useWidth();
 
     useEffect(() => {
         if (fetchComment) {
@@ -69,13 +70,27 @@ function Comment(props: {
     return (
         <Box className="fullwidth">
             {comment.replies?.length && (
-                <PopUp open={popupOpen} setOpen={setPopupOpen} fullWidth>
+                <PopUp
+                    open={popupOpen}
+                    setOpen={setPopupOpen}
+                    fullWidth
+                    closeBtn
+                    className={`height-fullvh novmargin ${
+                        width < 760 ? "nohmargin fullwidth-force" : ""
+                    }`}
+                    sx={{
+                        maxHeight: "none !important",
+                        bgcolor: "primary.dark",
+                    }}
+                >
                     <Comment comment={comment} showReplies noId inPopUp />
                 </PopUp>
             )}
             <Box
                 id={noId ? undefined : `c${comment.id}`}
-                className="text-align-left mt6 fullwidth comment-root"
+                className={`text-align-left ${
+                    !inPopUp ? "mt6" : ""
+                } fullwidth comment-root`}
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
@@ -162,10 +177,18 @@ function Comment(props: {
                             <KeyboardArrowDown color="secondary" />
                         )}
                     </Box>
-                    {showReplies &&
-                        replies.map((comment) => (
-                            <Comment comment={comment} noId noQuote />
-                        ))}
+                    {showReplies && (
+                        <React.Fragment>
+                            {replies.map((comment) => (
+                                <Comment comment={comment} noId noQuote />
+                            ))}
+                            <div className="flex justify-center align-center">
+                                <Typography className="mt5 mb5 font-size-18-force" color="secondary">
+                                    End
+                                </Typography>
+                            </div>
+                        </React.Fragment>
+                    )}
                 </Box>
             )}
         </Box>

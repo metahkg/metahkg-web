@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./css/common.css";
 import "./css/App.css";
 import Theme from "./lib/theme";
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
