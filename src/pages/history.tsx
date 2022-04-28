@@ -31,7 +31,7 @@ export default function History() {
     const [, setData] = useData();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
-    if (!(isSmallScreen)) {
+    if (!isSmallScreen) {
         return <Navigate to={`/profile/${params.id}`} replace />;
     }
 

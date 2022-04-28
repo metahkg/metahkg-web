@@ -45,7 +45,7 @@ export default function Search() {
                 bgcolor: "primary.dark",
             }}
         >
-            {!(isSmallScreen) && <Template />}
+            {!isSmallScreen && <Template />}
         </Box>
     );
 }

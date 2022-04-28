@@ -5,7 +5,12 @@ import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
-import { useNotification, useUser, useIsSmallScreen, useWidth } from "../components/ContextProvider";
+import {
+    useNotification,
+    useUser,
+    useIsSmallScreen,
+    useWidth,
+} from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
 import { roundup, setTitle, wholepath } from "../lib/common";
@@ -29,7 +34,7 @@ export default function AddComment() {
     const [menu, setMenu] = useMenu();
     const [data, setData] = useData();
     const isSmallScreen = useIsSmallScreen();
-    const [width] = useWidth()
+    const [width] = useWidth();
     const [comment, setComment] = useState("");
     const [imgUrl, setImgUrl] = useState("");
     const [disabled, setDisabled] = useState(false);
@@ -186,7 +191,7 @@ export default function AddComment() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={`${!(isSmallScreen) ? "flex" : ""} align-center mb15`}>
+                    <div className={`${!isSmallScreen ? "flex" : ""} align-center mb15`}>
                         <UploadImage
                             onUpload={() => {
                                 setAlert({

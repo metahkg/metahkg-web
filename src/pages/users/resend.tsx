@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import {
-    useNotification,
-    useUser,
-    useWidth,
-} from "../../components/ContextProvider";
+import { useNotification, useUser, useWidth } from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
