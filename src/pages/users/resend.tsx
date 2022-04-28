@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useWidth } from "../../components/ContextProvider";
+import {
+    useNotification,
+    useUser,
+    useWidth,
+} from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -10,9 +14,11 @@ import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
+import { setTitle } from "../../lib/common";
 
 declare const grecaptcha: { reset: () => void };
 export default function Verify() {
+    setTitle("Resend Verification Email | Metahkg");
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -24,6 +30,7 @@ export default function Verify() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [rtoken, setRtoken] = useState("");
+    const [user] = useUser();
 
     function resend() {
         setAlert({ severity: "info", text: "Requesting resend..." });
@@ -62,12 +69,11 @@ export default function Verify() {
     }
 
     useEffect(() => {
-        if (query.email && !localStorage.user) resend();
+        if (query.email && !user) resend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    if (localStorage.user) return <Navigate to="/" replace />;
+    if (user) return <Navigate to="/" replace />;
     menu && setMenu(false);
-    document.title = "Resend Verification Email | Metahkg";
     const small = width / 2 - 100 <= 450;
     return (
         <Box

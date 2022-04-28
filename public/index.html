@@ -1,43 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link rel="preconnect" href="https://na.cx" />
-    <link rel="preconnect" href="https://api.na.cx" />
-    <link rel="preconnect" href="https://metahkg.s3.amazonaws.com" />
-    <link rel="preconnect" href="https://i.metahkg.org" />
-    <link rel="preconnect" href="https://google.com" />
-    <link rel="preconnect" href="https://gstatic.com" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f5bd1f" />
-    <meta name="background-color" content="#222222" />
-    <meta
-      name="description"
-      content="Metahkg is a free and open source lihkg-style forum."
-    />
-    <meta
-      name="twitter:description"
-      content="Metahkg is a free and open source lihkg-style forum."
-    />
-    <meta
-      name="og:description"
-      content="Metahkg is a free and open source lihkg-style forum."
-    />
-    <meta name="og:site_name" content="Metahkg forum" />
-    <meta name="twitter:title" content="Metahkg" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="%PUBLIC_URL%/" />
-    <meta property="og:image" content="%PUBLIC_URL%/images/logo.png" />
-    <meta name="twitter:card" content="summary" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Metahkg</title>
-  </head>
-  <body class="nopadding max-width-full">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+        <!-- preconnects -->
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://na.cx" />
+        <link rel="preconnect" href="https://api.na.cx" />
+        <link rel="preconnect" href="https://i.metahkg.org" />
+        <link rel="preconnect" href="https://google.com" />
+        <link rel="preconnect" href="https://gstatic.com" />
+        <!-- end - preconnects -->
+
+        <!-- viewport and colors -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#f5bd1f" />
+        <meta name="background-color" content="#222222" />
+        <!-- end - viewport and colors -->
+
+        <!-- name and description -->
+        <title>Metahkg</title>
+        <meta
+            name="description"
+            content="Metahkg is a free and open source lihkg-style forum."
+        />
+        <!-- end - name and description -->
+
+        <!-- og -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Metahkg" />
+        <meta property="og:site_name" content="Metahkg forum" />
+        <meta
+            property="og:description"
+            content="Metahkg is a free and open source lihkg-style forum."
+        />
+        <meta property="og:url" content="%PUBLIC_URL%/" />
+        <meta property="og:image" content="%PUBLIC_URL%/images/logo.png" />
+        <!-- end - og -->
+
+        <!-- twitter -->
+        <meta name="twitter:title" content="Metahkg" />
+        <meta name="twitter:card" content="summary" />
+        <meta
+            name="twitter:description"
+            content="Metahkg is a free and open source lihkg-style forum."
+        />
+        <meta name="twitter:image" content="%PUBLIC_URL%/images/logo.png" />
+        <!-- end - twitter -->
+
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo192.png" />
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    </head>
+
+    <body class="nopadding max-width-full" style="overflow-x: hidden">
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+
+        <!-- the element where the react app is rendered -->
+        <div id="root"></div>
+    </body>
 </html>

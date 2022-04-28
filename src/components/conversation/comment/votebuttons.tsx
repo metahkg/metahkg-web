@@ -2,7 +2,7 @@ import "./css/votebuttons.css";
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
-import { useNotification } from "../../ContextProvider";
+import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { useThreadId, useVotes } from "../ConversationContext";
 
@@ -25,6 +25,7 @@ export default function VoteButtons(props: {
     const [up, setUp] = useState(upVotes);
     const [down, setDown] = useState(downVotes);
     const [, setNotification] = useNotification();
+    const [user] = useUser();
     const vote = votes?.[commentId];
 
     /**
@@ -52,7 +53,7 @@ export default function VoteButtons(props: {
         <ButtonGroup variant="text" className="vb-btn-group">
             <Button
                 className="nopadding nomargin vb-btn vb-btn-left"
-                disabled={!localStorage.user || !!vote}
+                disabled={!user || !!vote}
                 onClick={() => {
                     sendVote("U");
                 }}
@@ -69,7 +70,7 @@ export default function VoteButtons(props: {
             </Button>
             <Button
                 className="nopadding nomargin vb-btn vb-btn-right"
-                disabled={!localStorage.user || !!vote}
+                disabled={!user || !!vote}
                 onClick={() => {
                     sendVote("D");
                 }}

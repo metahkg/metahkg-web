@@ -24,9 +24,10 @@ import dateat from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timetoword } from "../../../lib/common";
 import MoreList from "./more";
-import { useNotification } from "../../ContextProvider";
+import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
+
 export default function CommentTop(props: { comment: commentType }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
@@ -39,6 +40,7 @@ export default function CommentTop(props: { comment: commentType }) {
     const title = useTitle();
     const navigate = useNavigate();
     const [thread, setThread] = useThread();
+    const [user] = useUser();
     const croot = useCRoot();
     const { comment } = props;
     const isOp = thread && thread.op.id === comment.user.id;
@@ -101,8 +103,7 @@ export default function CommentTop(props: { comment: commentType }) {
         | undefined
     )[] = [
         (() => {
-            const clientIsOp =
-                thread && Number(localStorage.getItem("id")) === thread.op.id;
+            const clientIsOp = thread && user?.id === thread.op.id;
             if (clientIsOp) {
                 const pinned = thread.pin?.id === comment.id;
                 const onError = (err: AxiosError) => {

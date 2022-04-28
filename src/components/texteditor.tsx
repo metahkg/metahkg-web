@@ -1,6 +1,6 @@
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useWidth } from "./ContextProvider";
+import { useIsSmallScreen } from "./ContextProvider";
 
 /**
  * It creates a text editor that can be used to edit text
@@ -13,14 +13,14 @@ export default function TextEditor(props: {
     text?: string;
 }) {
     const { changehandler, text } = props;
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     return (
         <Editor
-            key={Number(width < 760)}
+            key={Number(isSmallScreen)}
             onEditorChange={changehandler}
             initialValue={text}
             init={{
-                height: width < 760 ? 310 : 350,
+                height: isSmallScreen ? 310 : 350,
                 skin_url:
                     "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.3/dist/tinymce/skins/ui/metahkg-dark",
                 content_css:

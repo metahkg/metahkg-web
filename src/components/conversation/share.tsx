@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import { IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
-import { useNotification, useWidth } from "../ContextProvider";
+import { useNotification, useIsSmallScreen } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 
 /**
@@ -24,7 +24,7 @@ export default function Share() {
     const [open, setOpen] = useShareOpen();
     const text = title + "\n" + link + "\n- Shared from Metahkg forum";
     const [, setNotification] = useNotification();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     type external = {
         icon: JSX.Element;
         title: string;
@@ -69,7 +69,7 @@ export default function Share() {
                 <TextField
                     className="mt0"
                     sx={{
-                        minWidth: width < 760 ? "250px" : "500px",
+                        minWidth: isSmallScreen ? "250px" : "500px",
                     }}
                     multiline
                     variant="outlined"

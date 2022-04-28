@@ -2,7 +2,7 @@ import "./css/dock.css";
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import SideBar from "./sidebar";
-import { useWidth } from "./ContextProvider";
+import { useIsSmallScreen } from "./ContextProvider";
 
 /**
  * mobile dock
@@ -11,10 +11,10 @@ export default function Dock(props: {
     btns: { icon: JSX.Element; action: () => void }[];
 }) {
     const { btns } = props;
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     return (
         <div>
-            {width < 760 && (
+            {isSmallScreen && (
                 <Box
                     className="flex fullwidth dock-root"
                     sx={{ bgcolor: "primary.dark", height: 50 }}

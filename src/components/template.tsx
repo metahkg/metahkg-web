@@ -9,16 +9,17 @@ import {
     Telegram as TelegramIcon,
 } from "@mui/icons-material";
 import { List, ListItem, ListItemIcon, ListItemText, Paper } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholepath } from "../lib/common";
+import { useUser } from "./ContextProvider";
 
 /**
  * just a template for large screens if there's no content
  * e.g. /category/:id, in which there's no main content but only the menu
  */
-export default function Empty() {
+export default function Template() {
     /* It's a list of objects. */
     const links: { icon: JSX.Element; title: string; link: string }[] = [
         {
@@ -29,14 +30,15 @@ export default function Empty() {
         {
             icon: <TelegramIcon />,
             title: "Telegram group",
-            link: "/telegram",
+            link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
         {
             icon: <CodeIcon />,
             title: "Source code",
-            link: "/source",
+            link: "https://gitlab.com/metahkg/metahkg",
         },
     ];
+    const [user] = useUser();
     return (
         <Paper
             className="overflow-auto justify-center flex empty-paper"
@@ -64,37 +66,38 @@ export default function Empty() {
                     <Link
                         className="notextdecoration white"
                         to={`/${
-                            localStorage.user ? "users/logout" : "users/signin"
+                            user ? "users/logout" : "users/signin"
                         }?returnto=${encodeURIComponent(wholepath())}`}
                     >
                         <ListItem button className="fullwidth">
                             <ListItemIcon>
-                                {localStorage.user ? (
-                                    <LogoutIcon />
-                                ) : (
-                                    <AccountCircleIcon />
-                                )}
+                                {user ? <LogoutIcon /> : <AccountCircleIcon />}
                             </ListItemIcon>
                             <ListItemText>
-                                {localStorage.user ? "Logout" : "Sign in / Register"}
+                                {user ? "Logout" : "Sign in / Register"}
                             </ListItemText>
                         </ListItem>
                     </Link>
-                    {localStorage.user && (
+                    {user && (
                         <Link to="/profile/self" className="notextdecoration white">
                             <ListItem button className="fullwidth">
                                 <ListItemIcon>
                                     <ManageAccountsIcon />
                                 </ListItemIcon>
-                                <ListItemText>{localStorage.user}</ListItemText>
+                                <ListItemText>{user.name}</ListItemText>
                             </ListItem>
                         </Link>
                     )}
-                    {links.map((i, index) => (
-                        <Link className="notextdecoration white" to={i.link} key={index}>
+
+                    {links.map((link, index) => (
+                        <Link
+                            className="notextdecoration white"
+                            to={link.link}
+                            key={index}
+                        >
                             <ListItem button className="fullwidth">
-                                <ListItemIcon>{i.icon}</ListItemIcon>
-                                <ListItemText>{i.title}</ListItemText>
+                                <ListItemIcon>{link.icon}</ListItemIcon>
+                                <ListItemText>{link.title}</ListItemText>
                             </ListItem>
                         </Link>
                     ))}

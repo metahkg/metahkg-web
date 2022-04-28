@@ -1,8 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
-import Empty from "../components/empty";
-import { useBack, useCategories, useWidth } from "../components/ContextProvider";
+import Template from "../components/template";
+import { useBack, useCategories, useIsSmallScreen } from "../components/ContextProvider";
 import {
     useCat,
     useData,
@@ -12,8 +12,9 @@ import {
     useRecall,
     useSearch,
     useSelected,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
+import { setTitle } from "../lib/common";
 
 /**
  * It's a function that
@@ -30,17 +31,17 @@ export default function Category() {
     const [back, setBack] = useBack();
     const [recall, setRecall] = useRecall();
     const [, setData] = useData();
-    const [width] = useWidth();
-    const [, setTitle] = useTitle();
+    const isSmallScreen = useIsSmallScreen();
+    const [, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
     const categories = useCategories();
 
     // set the title, in future categories may be just fetch from server and store in redux
-    document.title = categories.find((i) => i.id === category)?.name + " | Metahkg";
+    setTitle(categories.find((i) => i.id === category)?.name + " | Metahkg");
 
     function cleardata() {
         setData([]);
-        setTitle("");
+        setMenuTitle("");
         setSelected(0);
     }
 
@@ -68,7 +69,7 @@ export default function Category() {
             }}
         >
             {/*if not enough width , dont show the default screen, in this case, just left menu will be shown */}
-            {!(width < 760) && <Empty />}
+            {!(isSmallScreen) && <Template />}
         </Box>
     );
 }

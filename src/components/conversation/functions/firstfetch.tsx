@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { threadType } from "../../../types/conversation/thread";
-import { useHistory, useNotification } from "../../ContextProvider";
+import { useHistory, useNotification, useUser } from "../../ContextProvider";
 import { useCat, useId, useProfile, useRecall, useSearch } from "../../MenuProvider";
 import {
     useEnd,
@@ -13,6 +13,7 @@ import {
     useVotes,
     useRerender,
 } from "../ConversationContext";
+import { setTitle } from "../../../lib/common";
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
     const [, setThread] = useThread();
@@ -30,6 +31,7 @@ export default function useFirstFetch() {
     const navigate = useNavigate();
     const [notification, setNotification] = useNotification();
     const [reRender] = useRerender();
+    const [user] = useUser();
     const onError = (err: AxiosError) => {
         !notification.open &&
             setNotification({
@@ -51,7 +53,7 @@ export default function useFirstFetch() {
                 }
                 !cat && !(recall || search || profile) && setCat(res.data.category);
                 id !== res.data.id && setId(res.data.id);
-                document.title = `${res.data.title} | Metahkg`;
+                setTitle(`${res.data.title} | Metahkg`);
                 if (!res.data.slink) {
                     res.data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
                     setThread(res.data);
@@ -70,7 +72,7 @@ export default function useFirstFetch() {
                 res.data.length && setImages(images);
             })
             .catch(onError);
-        if (localStorage.user) {
+        if (user) {
             api.get(`/posts/uservotes/${threadId}`)
                 .then((res) => {
                     setVotes(res.data);

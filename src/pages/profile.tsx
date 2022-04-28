@@ -26,12 +26,17 @@ import {
     useRecall,
     useSearch,
     useSelected,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
-import { timetoword_long } from "../lib/common";
+import { setTitle, timetoword_long } from "../lib/common";
 import { Link } from "react-router-dom";
-import { useBack, useNotification, useWidth } from "../components/ContextProvider";
+import {
+    useBack,
+    useNotification,
+    useUser,
+    useIsSmallScreen,
+} from "../components/ContextProvider";
 import { Save } from "@mui/icons-material";
 import { api } from "../lib/api";
 
@@ -47,7 +52,7 @@ interface DataTableProps {
     setUser: React.Dispatch<React.SetStateAction<any>>;
 }
 function DataTable(props: DataTableProps) {
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [, setData] = useData();
     const [, setNotification] = useNotification();
     const [name, setName] = useState(props.user.name);
@@ -123,7 +128,7 @@ function DataTable(props: DataTableProps) {
     return (
         <div
             className="ml50 mr50 fullwidth"
-            style={{ maxWidth: width < 760 ? "100%" : "70%" }}
+            style={{ maxWidth: isSmallScreen ? "100%" : "70%" }}
         >
             <TableContainer className="fullwidth" component={Paper}>
                 <Table className="fullwidth" aria-label="simple table">
@@ -181,22 +186,23 @@ export default function Profile() {
     const [recall, setRecall] = useRecall();
     const [user, setUser] = useState<any>({});
     const [menu, setMenu] = useMenu();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [, setData] = useData();
-    const [, setTitle] = useTitle();
+    const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
     const [selected, setSelected] = useSelected();
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
+    const [client] = useUser();
     const navigate = useNavigate();
     /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
     useEffect(() => {
-        if (!(params.id === "self" && !localStorage.user) && !Object.keys(user).length) {
+        if (!(params.id === "self" && !client) && !Object.keys(user).length) {
             api.get(`/profile/${Number(params.id) || "self"}`)
                 .then((res) => {
                     setUser(res.data);
-                    document.title = `${res.data.name} | Metahkg`;
+                    setTitle(`${res.data.name} | Metahkg`);
                 })
                 .catch((err: AxiosError) => {
                     setNotification({ open: true, text: err?.response?.data?.error });
@@ -212,14 +218,14 @@ export default function Profile() {
      */
     function cleardata() {
         setData([]);
-        setTitle("");
+        setMenuTitle("");
         selected && setSelected(0);
     }
 
-    if (params?.id === "self" && !localStorage.user) return <Navigate to="/" replace />;
+    if (params?.id === "self" && !client) return <Navigate to="/" replace />;
     back !== window.location.pathname && setBack(window.location.pathname);
-    !menu && !(width < 760) && setMenu(true);
-    menu && width < 760 && setMenu(false);
+    !menu && !(isSmallScreen) && setMenu(true);
+    menu && isSmallScreen && setMenu(false);
     (profile !== (Number(params.id) || "self") || search) && cleardata();
     profile !== (Number(params.id) || "self") && setProfile(Number(params.id) || "self");
     search && setSearch(false);
@@ -242,14 +248,14 @@ export default function Profile() {
                             <Box
                                 className="flex justify-center align-center max-width-full mt20"
                                 sx={{
-                                    width: width < 760 ? "100vw" : "70vw",
+                                    width: isSmallScreen ? "100vw" : "70vw",
                                 }}
                             >
                                 <img
                                     src={`/api/avatars/${user.id}`}
                                     alt="User avatar"
-                                    height={width < 760 ? 150 : 200}
-                                    width={width < 760 ? 150 : 200}
+                                    height={isSmallScreen ? 150 : 200}
+                                    width={isSmallScreen ? 150 : 200}
                                 />
                                 <br />
                                 <div
@@ -264,7 +270,7 @@ export default function Profile() {
                                             className="overflow-hidden"
                                             style={{
                                                 maxWidth:
-                                                    width < 760
+                                                    isSmallScreen
                                                         ? "calc(100vw - 250px)"
                                                         : "calc(70vw - 350px)",
                                             }}
@@ -324,7 +330,7 @@ export default function Profile() {
                             <Box className="flex mt20 mb10 fullwidth font justify-center">
                                 <DataTable setUser={setUser} user={user} />
                             </Box>
-                            {width < 760 && (
+                            {isSmallScreen && (
                                 <div className="mt20">
                                     <Link
                                         className="notextdecoration"

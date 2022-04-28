@@ -16,7 +16,12 @@ import History from "./pages/history";
 import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import { useSettings, useSettingsOpen, useWidth } from "./components/ContextProvider";
+import {
+    useSettings,
+    useSettingsOpen,
+    useUser,
+    useIsSmallScreen,
+} from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import NotFound from "./pages/notfound";
 import Verify from "./pages/users/verify";
@@ -26,42 +31,27 @@ import Settings from "./components/settings";
 import Forbidden from "./pages/forbidden";
 import { api } from "./lib/api";
 
-function Source() {
-    window.location.replace("https://gitlab.com/metahkg/metahkg");
-    return <div />;
-}
-
-function Telegram() {
-    window.location.replace("https://t.me/+WbB7PyRovUY1ZDFl");
-    return <div />;
-}
-
 /**
  * Menu is not in the Routes to prevent unnecessary rerenders
  * Instead it is controlled by components inside Routes
  */
 export default function App() {
     const [menu] = useMenu();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
+    const [user] = useUser();
     useEffect(() => {
-        if (localStorage.user || localStorage.id || localStorage.token) {
+        if (user) {
             api.get("/users/loggedin").then((res) => {
-                if (!res.data.loggedin) {
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("id");
-                    localStorage.removeItem("token");
-                    return;
-                }
-                localStorage.user !== res.data.name &&
-                    localStorage.setItem("user", res.data.name);
-                localStorage.id !== Number(res.data.id) &&
-                    localStorage.setItem("id", res.data.id);
+                if (!res.data.loggedin)
+                    return localStorage.removeItem("token");
+
                 localStorage.token !== res.data.token &&
                     localStorage.setItem("token", res.data.token);
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <Theme
@@ -74,7 +64,7 @@ export default function App() {
                 <Router>
                     <div className="flex">
                         <div
-                            style={{ width: !menu ? 0 : width < 760 ? "100vw" : "30vw" }}
+                            style={{ width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw" }}
                         >
                             <Menu />
                         </div>
@@ -93,8 +83,6 @@ export default function App() {
                             <Route path="/users/logout" element={<Logout />} />
                             <Route path="/create" element={<Create />} />
                             <Route path="/search" element={<Search />} />
-                            <Route path="/source" element={<Source />} />
-                            <Route path="/telegram" element={<Telegram />} />
                             <Route path="/profile/:id" element={<Profile />} />
                             <Route path="/history/:id" element={<History />} />
                             <Route path="/recall" element={<Recall />} />

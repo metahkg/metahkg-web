@@ -24,11 +24,10 @@ import {
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchbar";
-import { useCategories, useQuery, useSettingsOpen } from "./ContextProvider";
+import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
 import { wholepath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
-
 /**
  * The sidebar is a
  * drawer that is opened by clicking on the menu icon on the top left of the
@@ -41,6 +40,7 @@ export default function SideBar() {
     const [profile] = useProfile();
     const [search] = useSearch();
     const [, setSettingsOpen] = useSettingsOpen();
+    const [user] = useUser();
     const categories = useCategories();
     const navigate = useNavigate();
     const toggleDrawer =
@@ -120,17 +120,11 @@ export default function SideBar() {
                                 icon: <AccessTimeFilled />,
                             },
                             {
-                                title: localStorage.user
-                                    ? "Logout"
-                                    : "Sign in / Register",
+                                title: user ? "Logout" : "Sign in / Register",
                                 link: `/${
-                                    localStorage.user ? "users/logout" : "users/signin"
+                                    user ? "users/logout" : "users/signin"
                                 }?returnto=${encodeURIComponent(wholepath())}`,
-                                icon: localStorage.user ? (
-                                    <LogoutIcon />
-                                ) : (
-                                    <AccountCircleIcon />
-                                ),
+                                icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
                         ].map((item, index) => (
                             <Link
@@ -148,49 +142,43 @@ export default function SideBar() {
                     <Divider />
                     {[
                         categories.filter((i) => !i.hidden),
-                        localStorage.user && categories.filter((i) => i.hidden),
-                    ].map(
-                        (
-                            cats: { id: number; name: string; hidden?: boolean }[],
-                            index
-                        ) => (
-                            <div key={index}>
-                                {cats && (
-                                    <div
-                                        className={`m20${
-                                            localStorage.user && !index ? " mb10" : ""
-                                        }${index ? " mt0" : ""}`}
-                                    >
-                                        {cats.map((category, index) => (
-                                            <Link
-                                                key={index}
-                                                to={`/category/${category.id}`}
-                                                className="notextdecoration"
+                        user && categories.filter((i) => i.hidden),
+                    ].map((cats, index) => (
+                        <div key={index}>
+                            {cats && (
+                                <div
+                                    className={`m20${user && !index ? " mb10" : ""}${
+                                        index ? " mt0" : ""
+                                    }`}
+                                >
+                                    {cats.map((category, index) => (
+                                        <Link
+                                            key={index}
+                                            to={`/category/${category.id}`}
+                                            className="notextdecoration"
+                                        >
+                                            <Typography
+                                                className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
+                                                sx={(theme) => ({
+                                                    color:
+                                                        cat === category.id &&
+                                                        !(profile || search)
+                                                            ? theme.palette.secondary.main
+                                                            : "white",
+                                                    "&:hover": {
+                                                        color: `${theme.palette.secondary.main} !important`,
+                                                    },
+                                                })}
+                                                onClick={onClick}
                                             >
-                                                <Typography
-                                                    className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
-                                                    sx={(theme) => ({
-                                                        color:
-                                                            cat === category.id &&
-                                                            !(profile || search)
-                                                                ? theme.palette.secondary
-                                                                      .main
-                                                                : "white",
-                                                        "&:hover": {
-                                                            color: `${theme.palette.secondary.main} !important`,
-                                                        },
-                                                    })}
-                                                    onClick={onClick}
-                                                >
-                                                    {category.name}
-                                                </Typography>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )
-                    )}
+                                                {category.name}
+                                            </Typography>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
                     <Divider />
                     <List>
                         {[
@@ -219,13 +207,13 @@ export default function SideBar() {
                     </List>
                     <Divider />
                     <List>
-                        {localStorage.user && (
+                        {user && (
                             <Link to="/profile/self" className="notextdecoration white">
                                 <ListItem button onClick={onClick}>
                                     <ListItemIcon>
                                         <ManageAccountsIcon />
                                     </ListItemIcon>
-                                    <ListItemText>{localStorage.user}</ListItemText>
+                                    <ListItemText>{user?.name}</ListItemText>
                                 </ListItem>
                             </Link>
                         )}

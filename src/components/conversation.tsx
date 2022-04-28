@@ -15,7 +15,7 @@ import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
-import { useHistory, useWidth } from "./ContextProvider";
+import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
 import Share from "./conversation/share";
 import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
@@ -65,11 +65,12 @@ function Conversation(props: { id: number }) {
     const [, setEnd] = useEnd();
     const [loading, setLoading] = useLoading();
     const [reRender] = useRerender();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [story] = useStory();
     const [galleryOpen, setGalleryOpen] = useGalleryOpen();
     const [images] = useImages();
     const [history, setHistory] = useHistory();
+    const [user] = useUser();
     const croot = useCRoot();
     const navigate = useNavigate();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
@@ -102,7 +103,7 @@ function Conversation(props: { id: number }) {
     const ready = !!(
         thread &&
         thread.conversation.length &&
-        (localStorage.user ? Object.keys(votes).length : 1)
+        (user ? Object.keys(votes).length : 1)
     );
     if (ready && loading) {
         setTimeout(() => {
@@ -134,7 +135,7 @@ function Conversation(props: { id: number }) {
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
             <Dock btns={btns} />
             <Share />
-            {!(width < 760) && (
+            {!(isSmallScreen) && (
                 <PageSelect
                     last={currentPage !== 1 && numofpages > 1}
                     next={currentPage !== numofpages && numofpages > 1}

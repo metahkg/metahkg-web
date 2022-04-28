@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Empty from "../components/empty";
-import { useBack, useWidth } from "../components/ContextProvider";
+import Template from "../components/template";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 import {
     useCat,
     useData,
@@ -11,8 +11,9 @@ import {
     useRecall,
     useSearch,
     useSelected,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
+import { setTitle } from "../lib/common";
 
 /**
  * It's a function that
@@ -20,6 +21,7 @@ import {
  * @returns The empty component is being returned.
  */
 export default function Recall() {
+    setTitle("Recall | Metahkg");
     const [id, setId] = useId();
     const [menu, setMenu] = useMenu();
     const [category, setCategory] = useCat();
@@ -28,14 +30,13 @@ export default function Recall() {
     const [back, setBack] = useBack();
     const [recall, setRecall] = useRecall();
     const [data, setData] = useData();
-    const [width] = useWidth();
-    const [title, setTitle] = useTitle();
+    const isSmallScreen = useIsSmallScreen();
+    const [title, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
-    document.title = "Recall | Metahkg";
 
     function cleardata() {
         data.length && setData([]);
-        title && setTitle("");
+        title && setMenuTitle("");
         selected && setSelected(0);
     }
 
@@ -55,7 +56,7 @@ export default function Recall() {
                 backgroundColor: "primary.dark",
             }}
         >
-            {!(width < 760) && <Empty />}
+            {!(isSmallScreen) && <Template />}
         </Box>
     );
 }

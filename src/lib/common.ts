@@ -1,5 +1,7 @@
 import humanizeDurationShortened from "humanize-duration-shortened-english";
 import humanizeDuration from "humanize-duration";
+import jwtDecode from "jwt-decode";
+import { userType } from "../types/user";
 
 export function roundup(num: number, precision = 0): number {
     precision = Math.pow(10, precision);
@@ -47,20 +49,13 @@ export function splitarray(arr: any[], start: number, end: number) {
     return r;
 }
 
-export function logout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("id");
-    localStorage.removeItem("token");
-}
-
 export function wholepath(): string {
     return window.location.href.replace(window.location.origin, "");
 }
 
 export function checkpwd(pwd: string): boolean {
-    if (pwd.length < 8) {
-        return false;
-    }
+    if (pwd.length < 8) return false;
+
     const lower = "abcdefghijklmnopqrstuvwxyz";
     const upper = lower.toUpperCase();
     const numbers = "1234567890";
@@ -86,3 +81,22 @@ export function allequal(arr: any[]) {
     }
     return true;
 }
+
+export function setTitle(title: string) {
+    document.title = title;
+    document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
+    document.querySelector(`meta[name="twitter:title"]`)?.setAttribute("content", title);
+}
+
+export function setDescription(description: string) {
+    document
+        .querySelector(`meta[name="description"]`)
+        ?.setAttribute("content", description);
+    document
+        .querySelector(`meta[property="og:description"]`)
+        ?.setAttribute("content", description);
+    document
+        .querySelector(`meta[name="twitter:description"]`)
+        ?.setAttribute("content", description);
+}
+

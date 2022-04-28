@@ -3,12 +3,13 @@ import React from "react";
 import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
+import { setTitle } from "../lib/common";
 
 /**
  * 401 page
  */
 export default function Forbidden() {
-    document.title = "401 Forbidden | Metahkg";
+    setTitle("401 Forbidden | Metahkg");
     const [menu, setMenu] = useMenu();
     menu && setMenu(false);
     return (

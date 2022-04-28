@@ -5,10 +5,10 @@ import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
-import { useNotification, useWidth } from "../components/ContextProvider";
+import { useNotification, useUser, useIsSmallScreen, useWidth } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, wholepath } from "../lib/common";
+import { roundup, setTitle, wholepath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
@@ -24,10 +24,12 @@ declare const grecaptcha: { reset: () => void };
  * This page is used to add a comment to a thread
  */
 export default function AddComment() {
+    setTitle("Comment | Metahkg");
     const navigate = useNavigate();
     const [menu, setMenu] = useMenu();
     const [data, setData] = useData();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
+    const [width] = useWidth()
     const [comment, setComment] = useState("");
     const [imgUrl, setImgUrl] = useState("");
     const [disabled, setDisabled] = useState(false);
@@ -38,13 +40,14 @@ export default function AddComment() {
         text: "",
     });
     const [, setNotification] = useNotification();
+    const [user] = useUser();
     const query = queryString.parse(window.location.search);
     const edit = Number(query.edit);
     const quote = Number(query.quote);
     const params = useParams();
     const id = Number(params.id);
     useEffect(() => {
-        if (localStorage.user) {
+        if (user) {
             api.post("/posts/check", { id: id }).catch((err) => {
                 if (err.response.status === 404) {
                     setAlert({
@@ -137,7 +140,7 @@ export default function AddComment() {
     }
 
     /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
-    if (!localStorage.user) {
+    if (!user)
         return (
             <Navigate
                 to={`/users/signin?continue=true&returnto=${encodeURIComponent(
@@ -146,9 +149,8 @@ export default function AddComment() {
                 replace
             />
         );
-    }
+
     menu && setMenu(false);
-    document.title = "Comment | Metahkg";
     const small = width * 0.8 - 40 <= 450;
     return (
         <Box
@@ -157,7 +159,7 @@ export default function AddComment() {
                 bgcolor: "primary.dark",
             }}
         >
-            <div style={{ width: width < 760 ? "100vw" : "80vw" }}>
+            <div style={{ width: isSmallScreen ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
                         <MetahkgLogo
@@ -184,7 +186,7 @@ export default function AddComment() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={`${!(width < 760) ? "flex" : ""} align-center mb15`}>
+                    <div className={`${!(isSmallScreen) ? "flex" : ""} align-center mb15`}>
                         <UploadImage
                             onUpload={() => {
                                 setAlert({
@@ -221,7 +223,7 @@ export default function AddComment() {
                         {imgUrl && (
                             <p
                                 className={`ml10 novmargin flex${
-                                    width < 760 ? " mt5" : ""
+                                    isSmallScreen ? " mt5" : ""
                                 }`}
                             >
                                 <Tooltip

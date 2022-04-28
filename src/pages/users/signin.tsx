@@ -6,11 +6,17 @@ import { Link } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useMenu } from "../../components/MenuProvider";
-import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
+import {
+    useNotification,
+    useSettings,
+    useIsSmallScreen,
+    useUser,
+} from "../../components/ContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
 import { api } from "../../lib/api";
+import { decodeToken, setTitle } from "../../lib/common";
 
 /**
  * /signin
@@ -24,10 +30,11 @@ export default function Signin() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [settings] = useSettings();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [name, setName] = useState("");
     const [pwd, setPwd] = useState("");
     const [disabled, setDisabled] = useState(false);
+    const [user, setUser] = useUser();
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
@@ -39,11 +46,11 @@ export default function Signin() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    if (localStorage.user) {
-        return <Navigate to="/" replace />;
-    }
+
+    if (user) return <Navigate to="/" replace />;
+
     menu && setMenu(false);
-    document.title = "Sign in | Metahkg";
+    setTitle("Sign in | Metahkg");
     const query = queryString.parse(window.location.search);
 
     function signin() {
@@ -59,9 +66,8 @@ export default function Signin() {
                     setNotification({ open: true, text: "Please verify your account." });
                     return;
                 }
-                localStorage.setItem("user", res.data.name);
-                localStorage.setItem("id", res.data.id);
                 localStorage.setItem("token", res.data.token);
+                setUser(decodeToken(res.data.token));
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
@@ -90,7 +96,7 @@ export default function Signin() {
             <Box
                 className="signin-main-box"
                 sx={{
-                    width: width < 760 ? "100vw" : "50vw",
+                    width: isSmallScreen ? "100vw" : "50vw",
                 }}
             >
                 <div className="ml50 mr50">

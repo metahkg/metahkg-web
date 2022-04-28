@@ -7,7 +7,7 @@ import { PopUp } from "../../../lib/popup";
 import Comment from "../comment";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
-import { useWidth } from "../../ContextProvider";
+import { useIsSmallScreen } from "../../ContextProvider";
 export default function CommentBody(props: {
     comment: commentType;
     depth: number;
@@ -18,7 +18,7 @@ export default function CommentBody(props: {
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const [quoteExpanded, setQuoteExpanded] = useState(false);
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const content = [
         comment.quote && !noQuote && (
             <blockquote
@@ -78,11 +78,11 @@ export default function CommentBody(props: {
                     fullWidth
                     closeBtn={quoteExpanded}
                     className={`${quoteExpanded ? "height-fullvh" : ""} novmargin ${
-                        width < 760 ? "nohmargin fullwidth-force" : ""
+                        isSmallScreen ? "nohmargin fullwidth-force" : ""
                     }`}
                     sx={{
                         maxHeight: "none !important",
-                        bgcolor: "primary.dark",
+                        bgcolor: quoteExpanded ? "primary.dark" : "transparent",
                     }}
                 >
                     <Comment

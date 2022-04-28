@@ -12,6 +12,8 @@ import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import type { category } from "../types/category";
 import { api } from "../lib/api";
+import { userType } from "../types/user";
+import jwtDecode from "jwt-decode";
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
@@ -22,6 +24,7 @@ const Context = createContext<{
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [category[], Dispatch<category[]>];
+    user: [userType | null, Dispatch<SetStateAction<userType | null>>];
     //@ts-ignore
 }>(null);
 /**
@@ -41,6 +44,15 @@ export default function ContextProvider(props: { children: JSX.Element }) {
             localStorage.getItem("settings") ||
                 JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
         )
+    );
+    const [user, setUser] = useState(
+        (() => {
+            try {
+                return jwtDecode(localStorage.token || "") as userType | null;
+            } catch {
+                return null;
+            }
+        })()
     );
     const [categories, setCategories] = useState<category[]>([]);
     const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
@@ -83,6 +95,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
                 settings: [settings, setSettings],
                 history: [history, setHistory],
                 categories: [categories, setCategories],
+                user: [user, setUser],
             }}
         >
             {props.children}
@@ -180,4 +193,12 @@ export function useHistory() {
 export function useCategories() {
     const { categories } = useContext(Context);
     return categories[0];
+}
+export function useUser() {
+    const { user } = useContext(Context);
+    return user;
+}
+export function useIsSmallScreen() {
+    const { width } = useContext(Context);
+    return width[0] < 760;
 }

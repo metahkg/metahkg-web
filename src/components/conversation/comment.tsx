@@ -2,7 +2,7 @@ import "./css/comment.css";
 import React, { memo, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import VoteBar from "./comment/VoteBar";
-import { useNotification, useSettings, useWidth } from "../ContextProvider";
+import { useIsSmallScreen, useNotification, useSettings } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
@@ -39,7 +39,7 @@ function Comment(props: {
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupExpanded, setPopupExpanded] = useState(true);
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
 
     useEffect(() => {
         if (fetchComment) {
@@ -78,11 +78,11 @@ function Comment(props: {
                     fullWidth
                     closeBtn={popupExpanded}
                     className={`${popupExpanded ? "height-fullvh" : ""} novmargin ${
-                        width < 760 ? "nohmargin fullwidth-force" : ""
+                        isSmallScreen ? "nohmargin fullwidth-force" : ""
                     }`}
                     sx={{
                         maxHeight: "none !important",
-                        bgcolor: "primary.dark",
+                        bgcolor: popupExpanded ? "primary.dark" : "transparent",
                     }}
                 >
                     <Comment
@@ -169,7 +169,7 @@ function Comment(props: {
                 </Box>
             )}
             {!!replies.length && (
-                <Box sx={{ bgcolor: "primary.dark" }}>
+                <Box>
                     <Box
                         className="flex align-center justify-center text-align-center pointer"
                         onClick={() => {

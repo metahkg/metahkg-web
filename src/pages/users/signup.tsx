@@ -17,8 +17,13 @@ import {
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
-import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
-import { checkpwd } from "../../lib/common";
+import {
+    useNotification,
+    useSettings,
+    useUser,
+    useWidth,
+} from "../../components/ContextProvider";
+import { checkpwd, setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
@@ -74,7 +79,7 @@ function SexSelect(props: {
  * @returns register page
  */
 export default function Register() {
-    document.title = "Register | Metahkg";
+    setTitle("Register | Metahkg");
     const [width] = useWidth();
     const [, setNotification] = useNotification();
     const [name, setName] = useState("");
@@ -89,6 +94,8 @@ export default function Register() {
     });
     const [menu, setMenu] = useMenu();
     const [settings] = useSettings();
+    const [user] = useUser();
+
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
 
@@ -150,7 +157,7 @@ export default function Register() {
             });
     }
 
-    if (localStorage.user) return <Navigate to="/" replace />;
+    if (user) return <Navigate to="/" replace />;
     menu && setMenu(false);
     const small = width / 2 - 100 <= 450;
     return (

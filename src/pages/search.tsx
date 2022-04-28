@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import Empty from "../components/empty";
+import Template from "../components/template";
 import {
     useCat,
     useData,
@@ -9,9 +9,10 @@ import {
     useRecall,
     useSearch,
     useSelected,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useWidth } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
+import { setTitle } from "../lib/common";
 
 export default function Search() {
     const [search, setSearch] = useSearch();
@@ -19,12 +20,12 @@ export default function Search() {
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [data, setData] = useData();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
-    const [, setTitle] = useTitle();
+    const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
-    document.title = "Search | Metahkg";
+    setTitle("Search | Metahkg");
     back !== window.location.pathname &&
         setBack(window.location.pathname + window.location.search);
     !menu && setMenu(true);
@@ -34,7 +35,7 @@ export default function Search() {
         setSearch(true);
         data && setData([]);
         selected && setSelected(0);
-        setTitle("");
+        setMenuTitle("");
     }
     recall && setRecall(false);
     return (
@@ -44,7 +45,7 @@ export default function Search() {
                 bgcolor: "primary.dark",
             }}
         >
-            {!(width < 760) && <Empty />}
+            {!(isSmallScreen) && <Template />}
         </Box>
     );
 }
