@@ -158,7 +158,7 @@ export default function SideBar() {
                                             className="notextdecoration"
                                         >
                                             <Typography
-                                                className="font-size-16-force text-align-left mt5 mb5 halfwidth sidebar-catlink"
+                                                className="font-size-16-force text-align-left halfwidth sidebar-catlink"
                                                 sx={(theme) => ({
                                                     color:
                                                         cat === category.id &&

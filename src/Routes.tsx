@@ -1,21 +1,32 @@
 import React, { useEffect } from "react";
 import { setDescription, setTitle } from "./lib/common";
 import { Navigate, Route, Routes as Switch, useLocation } from "react-router-dom";
-import Register from "./pages/users/signup";
-import Signin from "./pages/users/signin";
-import Thread from "./pages/thread";
-import AddComment from "./pages/AddComment";
-import Create from "./pages/create";
-import Category from "./pages/category";
-import Logout from "./pages/users/logout";
-import Search from "./pages/search";
-import Profile from "./pages/profile";
-import History from "./pages/history";
-import NotFound from "./pages/notfound";
-import Verify from "./pages/users/verify";
-import Resend from "./pages/users/resend";
-import Recall from "./pages/recall";
-import Forbidden from "./pages/forbidden";
+import loadable from "@loadable/component";
+
+const Thread = loadable(() => import("./pages/thread"));
+
+// menu
+const Category = loadable(() => import("./pages/category"));
+const Search = loadable(() => import("./pages/search"));
+const Profile = loadable(() => import("./pages/profile"));
+const History = loadable(() => import("./pages/history"));
+const Recall = loadable(() => import("./pages/recall"));
+
+// posts
+const AddComment = loadable(() => import("./pages/AddComment"));
+const Create = loadable(() => import("./pages/create"));
+
+// users
+const Verify = loadable(() => import("./pages/users/verify"));
+const Resend = loadable(() => import("./pages/users/resend"));
+const Register = loadable(() => import("./pages/users/signup"));
+const Signin = loadable(() => import("./pages/users/signin"));
+const Logout = loadable(() => import("./pages/users/logout"));
+
+// errors
+const NotFound = loadable(() => import("./pages/notfound"));
+const Forbidden = loadable(() => import("./pages/forbidden"));
+
 export default function Routes() {
     const location = useLocation();
     const prev = React.useRef(location.pathname);

@@ -3,7 +3,6 @@ import "./css/common.css";
 import "./css/App.css";
 import Theme from "./lib/theme";
 import { BrowserRouter as Router } from "react-router-dom";
-import Menu from "./components/menu";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
 import {
@@ -13,9 +12,12 @@ import {
     useIsSmallScreen,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
-import Settings from "./components/settings";
 import { api } from "./lib/api";
 import Routes from "./Routes";
+import loadable from "@loadable/component";
+
+const Menu = loadable(() => import("./components/menu"));
+const Settings = loadable(() => import("./components/settings"));
 
 /**
  * Menu is not in the Routes to prevent unnecessary rerenders
