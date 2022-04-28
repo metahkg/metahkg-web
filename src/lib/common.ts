@@ -100,3 +100,10 @@ export function setDescription(description: string) {
         ?.setAttribute("content", description);
 }
 
+export const decodeToken = (token?: string) => {
+    try {
+        return jwtDecode(token || "") as userType | null;
+    } catch {
+        return null;
+    }
+};
