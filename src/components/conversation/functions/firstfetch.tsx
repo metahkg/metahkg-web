@@ -13,7 +13,11 @@ import {
     useVotes,
     useRerender,
 } from "../ConversationContext";
-import { setTitle } from "../../../lib/common";
+import { setDescription, setTitle } from "../../../lib/common";
+import queryString from "query-string";
+// @ts-ignore
+import h2p from "html2plaintext";
+
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
     const [, setThread] = useThread();
@@ -32,6 +36,7 @@ export default function useFirstFetch() {
     const [notification, setNotification] = useNotification();
     const [reRender] = useRerender();
     const [user] = useUser();
+    const query = queryString.parse(window.location.search);
     const onError = (err: AxiosError) => {
         !notification.open &&
             setNotification({
@@ -54,6 +59,12 @@ export default function useFirstFetch() {
                 !cat && !(recall || search || profile) && setCat(res.data.category);
                 id !== res.data.id && setId(res.data.id);
                 setTitle(`${res.data.title} | Metahkg`);
+                setDescription(
+                    h2p(
+                        (query.c && res.data.conversation?.[Number(query.c)]?.comment) ||
+                            res.data.conversation?.[0]?.comment
+                    )
+                );
                 if (!res.data.slink) {
                     res.data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
                     setThread(res.data);
