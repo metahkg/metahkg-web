@@ -9,19 +9,16 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import queryString from "query-string";
-import Comment from "./conversation/comment";
+import loadable from "@loadable/component";
 import Title from "./conversation/title";
 import { roundup, splitarray } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
 import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
-import Share from "./conversation/share";
 import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
-import Dock from "./dock";
 import useBtns from "./conversation/functions/btns";
-import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { commentType } from "../types/conversation/comment";
@@ -45,7 +42,12 @@ import useFirstFetch from "./conversation/functions/firstfetch";
 import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
-import PinnedComment from "./conversation/pin";
+
+const PinnedComment = loadable(() => import("./conversation/pin"));
+const Comment = loadable(() => import("./conversation/comment"));
+const Share = loadable(() => import("./conversation/share"));
+const Gallery = loadable(() => import("./conversation/gallery"));
+const Dock = loadable(() => import("./dock"));
 
 /**
  * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>

@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +12,6 @@ import {
     useSmode,
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
-import React, { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
 import { splitarray } from "../../lib/common";
 import { api } from "../../lib/api";
@@ -23,7 +23,7 @@ import MenuPreload from "./menuPreload";
 /**
  * This function renders the main content of the menu
  */
-export function MenuBody() {
+export default function MenuBody() {
     const querystring = queryString.parse(window.location.search);
     const navigate = useNavigate();
     const [category] = useCat();

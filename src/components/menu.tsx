@@ -1,14 +1,17 @@
 import "./css/menu.css";
 import React, { memo } from "react";
 import { Box } from "@mui/material";
-import MenuTop from "./menu/menuTop";
 import { useData, useMenu, useSearch, useSelected } from "./MenuProvider";
 import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
-import SearchBar from "./searchbar";
+
 import { useNavigate } from "react-router-dom";
-import Dock from "./dock";
+import loadable from "@loadable/component";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
-import { MenuBody } from "./menu/menuBody";
+
+const Dock = loadable(() => import("./dock"));
+const SearchBar = loadable(() => import("./searchbar"));
+const MenuTop = loadable(() => import("./menu/menuTop"));
+const MenuBody = loadable(() => import("./menu/menuBody"));
 
 function Menu() {
     const [selected, setSelected] = useSelected();
