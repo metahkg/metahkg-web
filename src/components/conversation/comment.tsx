@@ -2,7 +2,7 @@ import "./css/comment.css";
 import React, { memo, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import VoteBar from "./comment/VoteBar";
-import { useIsSmallScreen, useNotification, useSettings } from "../ContextProvider";
+import { useNotification, useSettings } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
@@ -11,7 +11,7 @@ import CommentBody from "./comment/commentBody";
 import { api } from "../../lib/api";
 import { Forum, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import Spinner from "react-spinner-material";
-import { PopUp } from "../../lib/popup";
+import CommentPopup from "../../lib/commentPopup";
 
 /**
  * Comment component renders a comment
@@ -38,8 +38,6 @@ function Comment(props: {
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
-    const [popupExpanded, setPopupExpanded] = useState(true);
-    const isSmallScreen = useIsSmallScreen();
 
     useEffect(() => {
         if (fetchComment) {
@@ -72,27 +70,12 @@ function Comment(props: {
     return (
         <Box className="fullwidth">
             {comment.replies?.length && (
-                <PopUp
+                <CommentPopup
+                    comment={comment}
+                    showReplies
                     open={popupOpen}
                     setOpen={setPopupOpen}
-                    fullWidth
-                    closeBtn={popupExpanded}
-                    className={`${popupExpanded ? "height-fullvh" : ""} novmargin ${
-                        isSmallScreen ? "nohmargin fullwidth-force" : ""
-                    }`}
-                    sx={{
-                        maxHeight: "none !important",
-                        bgcolor: popupExpanded ? "primary.dark" : "transparent",
-                    }}
-                >
-                    <Comment
-                        comment={comment}
-                        showReplies
-                        noId
-                        inPopUp
-                        setIsExpanded={setPopupExpanded}
-                    />
-                </PopUp>
+                />
             )}
             <Box
                 id={noId ? undefined : `c${comment.id}`}

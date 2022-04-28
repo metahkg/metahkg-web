@@ -1,0 +1,41 @@
+import React, { SetStateAction, useState } from "react";
+import { useIsSmallScreen } from "../components/ContextProvider";
+import Comment from "../components/conversation/comment";
+import { commentType } from "../types/conversation/comment";
+import { PopUp } from "./popup";
+
+export default function CommentPopup(props: {
+    open: boolean;
+    setOpen: React.Dispatch<SetStateAction<boolean>>;
+    showReplies?: boolean;
+    comment: commentType;
+    fetchComment?: boolean;
+}) {
+    const { open, setOpen, comment, showReplies, fetchComment } = props;
+    const [isExpanded, setIsExpanded] = useState(!!showReplies);
+    const isSmallScreen = useIsSmallScreen();
+    return (
+        <PopUp
+            open={open}
+            setOpen={setOpen}
+            fullWidth
+            closeBtn={isExpanded}
+            className={`${isExpanded ? "height-fullvh" : ""} novmargin noshadow ${
+                isSmallScreen ? "nohmargin fullwidth-force" : ""
+            }`}
+            sx={{
+                maxHeight: "none !important",
+                bgcolor: isExpanded ? "primary.dark" : "transparent",
+            }}
+        >
+            <Comment
+                comment={comment}
+                noId
+                fetchComment={fetchComment}
+                inPopUp
+                setIsExpanded={setIsExpanded}
+                showReplies={showReplies}
+            />
+        </PopUp>
+    );
+}

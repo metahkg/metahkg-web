@@ -3,11 +3,9 @@ import { replace } from "../../../lib/modifycomments";
 import { commentType } from "../../../types/conversation/comment";
 import parse from "html-react-parser";
 import React, { useEffect, useState } from "react";
-import { PopUp } from "../../../lib/popup";
-import Comment from "../comment";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
-import { useIsSmallScreen } from "../../ContextProvider";
+import CommentPopup from "../../../lib/commentPopup";
 export default function CommentBody(props: {
     comment: commentType;
     depth: number;
@@ -17,8 +15,6 @@ export default function CommentBody(props: {
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
-    const [quoteExpanded, setQuoteExpanded] = useState(false);
-    const isSmallScreen = useIsSmallScreen();
     const content = [
         comment.quote && !noQuote && (
             <blockquote
@@ -72,27 +68,12 @@ export default function CommentBody(props: {
     return (
         <React.Fragment>
             {comment.quote && showQuote && (
-                <PopUp
+                <CommentPopup
                     open={quoteOpen}
                     setOpen={setQuoteOpen}
-                    fullWidth
-                    closeBtn={quoteExpanded}
-                    className={`${quoteExpanded ? "height-fullvh" : ""} novmargin ${
-                        isSmallScreen ? "nohmargin fullwidth-force" : ""
-                    }`}
-                    sx={{
-                        maxHeight: "none !important",
-                        bgcolor: quoteExpanded ? "primary.dark" : "transparent",
-                    }}
-                >
-                    <Comment
-                        fetchComment
-                        noId
-                        comment={comment.quote}
-                        inPopUp
-                        setIsExpanded={setQuoteExpanded}
-                    />
-                </PopUp>
+                    comment={comment.quote}
+                    fetchComment
+                />
             )}
             {depth === 0 ? (
                 <p className="novmargin comment-body fullwidth break-word-force">
