@@ -20,7 +20,7 @@ export default function Thread() {
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
     if (!isInteger(params.id)) return <Navigate to="/404" replace />;
-    !menu && !(isSmallScreen) && setMenu(true);
+    !menu && !isSmallScreen && setMenu(true);
     menu && isSmallScreen && setMenu(false);
     !category && !id && setId(Number(params.id));
     const threadId = Number(params.id);

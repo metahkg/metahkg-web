@@ -135,7 +135,7 @@ function Conversation(props: { id: number }) {
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
             <Dock btns={btns} />
             <Share />
-            {!(isSmallScreen) && (
+            {!isSmallScreen && (
                 <PageSelect
                     last={currentPage !== 1 && numofpages > 1}
                     next={currentPage !== numofpages && numofpages > 1}

@@ -50,7 +50,7 @@ export default function Title(props: {
                     </Typography>
                 </div>
                 <div className="flex">
-                    {!(isSmallScreen) &&
+                    {!isSmallScreen &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
                                 <IconButton onClick={btn.action}>{btn.icon}</IconButton>

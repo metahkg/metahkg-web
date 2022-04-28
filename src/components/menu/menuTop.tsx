@@ -86,7 +86,7 @@ export default function MenuTop(props: {
                             isSmallScreen ? "center" : "space-between"
                         }`}
                     >
-                        {!(isSmallScreen) && (
+                        {!isSmallScreen && (
                             <div className="ml10 mr40">
                                 <SideBar />
                             </div>
@@ -97,7 +97,7 @@ export default function MenuTop(props: {
                         >
                             {menuTitle || inittitle}
                         </Typography>
-                        {!(isSmallScreen) && (
+                        {!isSmallScreen && (
                             <div className="flex">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>

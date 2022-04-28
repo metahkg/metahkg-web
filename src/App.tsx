@@ -44,14 +44,13 @@ export default function App() {
     useEffect(() => {
         if (user) {
             api.get("/users/loggedin").then((res) => {
-                if (!res.data.loggedin)
-                    return localStorage.removeItem("token");
+                if (!res.data.loggedin) return localStorage.removeItem("token");
 
                 localStorage.token !== res.data.token &&
                     localStorage.setItem("token", res.data.token);
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <Theme
@@ -64,7 +63,9 @@ export default function App() {
                 <Router>
                     <div className="flex">
                         <div
-                            style={{ width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw" }}
+                            style={{
+                                width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw",
+                            }}
                         >
                             <Menu />
                         </div>

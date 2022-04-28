@@ -224,7 +224,7 @@ export default function Profile() {
 
     if (params?.id === "self" && !client) return <Navigate to="/" replace />;
     back !== window.location.pathname && setBack(window.location.pathname);
-    !menu && !(isSmallScreen) && setMenu(true);
+    !menu && !isSmallScreen && setMenu(true);
     menu && isSmallScreen && setMenu(false);
     (profile !== (Number(params.id) || "self") || search) && cleardata();
     profile !== (Number(params.id) || "self") && setProfile(Number(params.id) || "self");
@@ -269,10 +269,9 @@ export default function Profile() {
                                         <div
                                             className="overflow-hidden"
                                             style={{
-                                                maxWidth:
-                                                    isSmallScreen
-                                                        ? "calc(100vw - 250px)"
-                                                        : "calc(70vw - 350px)",
+                                                maxWidth: isSmallScreen
+                                                    ? "calc(100vw - 250px)"
+                                                    : "calc(70vw - 350px)",
                                             }}
                                         >
                                             <span

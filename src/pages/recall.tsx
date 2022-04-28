@@ -56,7 +56,7 @@ export default function Recall() {
                 backgroundColor: "primary.dark",
             }}
         >
-            {!(isSmallScreen) && <Template />}
+            {!isSmallScreen && <Template />}
         </Box>
     );
 }
