@@ -104,8 +104,8 @@ export default function CommentTop(props: { comment: commentType }) {
     )[] = [
         (() => {
             const clientIsOp = thread && user?.id === thread.op.id;
-            if (clientIsOp) {
-                const pinned = thread.pin?.id === comment.id;
+            const pinned = thread?.pin?.id === comment.id;
+            if (clientIsOp || (user?.role === "admin" && pinned)) {
                 const onError = (err: AxiosError) => {
                     setNotification({
                         open: true,
@@ -129,9 +129,10 @@ export default function CommentTop(props: { comment: commentType }) {
                                     open: true,
                                     text: `Comment ${pinned ? "un" : ""}pinned!`,
                                 });
-                                setThread({
-                                    ...thread,
-                                    pin: pinned ? undefined : comment,
+                                setThread((thread) => {
+                                    if (!pinned && thread) thread.pin = comment;
+                                    else if (thread) delete thread.pin;
+                                    return thread;
                                 });
                             })
                             .catch(onError);
