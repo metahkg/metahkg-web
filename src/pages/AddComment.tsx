@@ -114,10 +114,10 @@ export default function AddComment() {
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
         api.post("/posts/comment", {
-            id: id,
-            comment: comment,
-            rtoken: rtoken,
-            quote: quote || undefined,
+            id,
+            comment,
+            rtoken,
+            quote,
         })
             .then((res) => {
                 data.length && setData([]);

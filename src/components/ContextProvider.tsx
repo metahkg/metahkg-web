@@ -14,6 +14,7 @@ import type { category } from "../types/category";
 import { api } from "../lib/api";
 import { userType } from "../types/user";
 import jwtDecode from "jwt-decode";
+
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
@@ -66,7 +67,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         localStorage.setItem("history", JSON.stringify(parsedhistory));
     }
     const [history, setHistory] = useState(parsedhistory);
-    const resizehandler = useRef(false);
+    const listeningResize = useRef(false);
 
     useEffect(() => {
         api.get(`/category/all`).then((res) => {
@@ -83,8 +84,8 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         setHeight(window.innerHeight);
     }
 
-    if (!resizehandler.current) {
-        resizehandler.current = true;
+    if (!listeningResize.current) {
+        listeningResize.current = true;
         window.addEventListener("resize", updateSize);
     }
     return (

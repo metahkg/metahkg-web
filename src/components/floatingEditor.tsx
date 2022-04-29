@@ -1,75 +1,129 @@
-import { Close } from "@mui/icons-material";
-import { Box, DialogTitle, IconButton, Snackbar } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
+import { Close, Comment as CommentIcon } from "@mui/icons-material";
+import { Box, Button, DialogTitle, IconButton, Snackbar } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
-import { commentType } from "../types/conversation/comment";
 import Comment from "./conversation/comment";
-import { useCRoot } from "./conversation/ConversationContext";
+import {
+    useCRoot,
+    useEditor,
+    useThread,
+    useThreadId,
+} from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import TextEditor from "./texteditor";
+import { useIsSmallScreen, useNotification } from "./ContextProvider";
 
-export default function FloatingEditor(props: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
-    threadId: number;
-    quote?: commentType;
-}) {
-    const { threadId, open, setOpen, quote } = props;
+export default function FloatingEditor() {
+    const threadId = useThreadId();
+    const [editor, setEditor] = useEditor();
     const handleClose = () => {
-        setOpen(false);
+        setEditor({ ...editor, open: false });
     };
     const [comment, setComment] = useState("");
     const [rtoken, setRtoken] = useState<null | string>(null);
+    const [sending, setSending] = useState(false);
+    const [fold, setFold] = useState(false);
+    const [, setNotification] = useNotification();
+    const [thread] = useThread();
+    const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
     const croot = useCRoot();
     function sendComment() {
+        setSending(true);
         api.post("/posts/comment", {
             id: threadId,
             comment,
-            quote: quote?.id,
+            quote: editor.quote?.id,
             rtoken,
-        }).then(() => {
-            update();
-            if (croot.current) {
-                const newscrollTop =
-                    croot.current?.scrollHeight - croot.current?.clientHeight;
-                croot.current.scrollTop = newscrollTop;
-            }
-        });
+        })
+            .then(() => {
+                setEditor({ ...editor, open: false });
+                update();
+                if (croot.current) {
+                    const newscrollTop =
+                        croot.current?.scrollHeight - croot.current?.clientHeight;
+                    croot.current.scrollTop = newscrollTop;
+                }
+                setSending(false);
+            })
+            .catch((err) => {
+                setNotification({ open: true, text: err.response.data.error });
+                setSending(false);
+            });
     }
     return (
         <Snackbar
-            sx={{ bgcolor: "primary.main" }}
+            sx={{ zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important` }}
+            className="border-radius-20"
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
-            open={open}
+            open={editor.open}
         >
-            <React.Fragment>
-                <DialogTitle className="flex justify-space-between align-center">
-                    <p className="ml20 novmargin">{quote ? "Reply" : "Comment"}</p>
-                    <IconButton className="mr5" onClick={handleClose}>
-                        <Close className="font-size-18-force" />
-                    </IconButton>
+            <Box
+                sx={{
+                    maxWidth: isSmallScreen ? "100vw" : "70vw",
+                    width: isSmallScreen ? "100vw" : "50vw",
+                    maxHeight: "70vh",
+                    bgcolor: "primary.dark",
+                    overflow: "auto",
+                }}
+                className="border-radius-15"
+            >
+                <DialogTitle className="flex justify-space-between align-center nopadding">
+                    <p className="ml20 mt10 mb10">{editor.quote ? "Reply" : "Comment"}</p>
+                    <Box className="flex">
+                        <p
+                            className="novmargin pointer mr10 metahkg-yellow"
+                            onClick={() => {
+                                setFold(!fold);
+                            }}
+                        >
+                            {fold ? "Expand" : "Fold"}
+                        </p>
+                        <IconButton className="mr5" onClick={handleClose}>
+                            <Close className="font-size-18-force" />
+                        </IconButton>
+                    </Box>
                 </DialogTitle>
-                {quote && <Comment comment={quote} fold noId />}
-                <TextEditor
-                    onChange={(e) => {
-                        setComment(e);
-                    }}
-                />
-                <Box className="flex">
-                    <ReCAPTCHA
-                        theme="dark"
-                        sitekey={
-                            process.env.REACT_APP_recaptchasitekey ||
-                            "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                        }
-                        onChange={(e) => {
-                            setRtoken(e);
-                        }}
-                    />
-                </Box>
-            </React.Fragment>
+                {editor.quote && <Comment comment={editor.quote} fold noId />}
+                {!fold && (
+                    <Box className="border-radius-20">
+                        <TextEditor
+                            onChange={(e) => {
+                                setComment(e);
+                            }}
+                            autoresize
+                            className="ml10 mr10"
+                        />
+                        <Box
+                            className={`${
+                                isSmallScreen ? "" : "flex"
+                            } justify-space-between align-center m10`}
+                        >
+                            <ReCAPTCHA
+                                theme="dark"
+                                sitekey={
+                                    process.env.REACT_APP_recaptchasitekey ||
+                                    "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                                }
+                                onChange={(token) => {
+                                    setRtoken(token || "");
+                                }}
+                            />
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={sendComment}
+                                disabled={!rtoken || !comment || sending}
+                                className={isSmallScreen ? "mt10" : ""}
+                            >
+                                <CommentIcon />
+                                Comment
+                            </Button>
+                        </Box>
+                    </Box>
+                )}
+            </Box>
         </Snackbar>
     );
 }

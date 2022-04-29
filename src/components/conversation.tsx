@@ -43,6 +43,7 @@ import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
 import Comment from "./conversation/comment";
+import FloatingEditor from "./floatingEditor";
 
 const PinnedComment = loadable(() => import("./conversation/pin"));
 const Share = loadable(() => import("./conversation/share"));
@@ -132,6 +133,7 @@ function Conversation(props: { id: number }) {
                 },
             })}
         >
+            <FloatingEditor />
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
             <Dock btns={btns} />
             <Share />

@@ -1,6 +1,13 @@
 import React, { createContext, useState, useRef } from "react";
 import { threadType } from "../../types/conversation/thread";
 import queryString from "query-string";
+import { commentType } from "../../types/conversation/comment";
+
+interface editorStateType {
+    open: boolean;
+    quote?: commentType;
+}
+
 const ConversationContext = createContext<{
     thread: [null | threadType, React.Dispatch<React.SetStateAction<null | threadType>>];
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -18,6 +25,7 @@ const ConversationContext = createContext<{
     lastHeight: React.MutableRefObject<number>;
     galleryOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     images: [{ src: string }[], React.Dispatch<React.SetStateAction<{ src: string }[]>>];
+    editor: [editorStateType, React.Dispatch<React.SetStateAction<editorStateType>>];
     title: string | undefined;
     threadId: number;
     croot: React.MutableRefObject<HTMLDivElement | null>;
@@ -48,6 +56,7 @@ export default function ConversationProvider(props: {
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [images, setImages] = useState<{ src: string }[]>([]);
+    const [editor, setEditor] = useState<editorStateType>({ open: false });
     const croot = useRef<HTMLDivElement>(null);
     return (
         <ConversationContext.Provider
@@ -68,6 +77,7 @@ export default function ConversationProvider(props: {
                 title: thread?.title,
                 threadId: threadId,
                 croot: croot,
+                editor: [editor, setEditor],
             }}
         >
             {children}
@@ -153,4 +163,9 @@ export function useTitle() {
 export function useCRoot() {
     const { croot } = React.useContext(ConversationContext);
     return croot;
+}
+
+export function useEditor() {
+    const { editor } = React.useContext(ConversationContext);
+    return editor;
 }
