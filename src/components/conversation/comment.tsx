@@ -211,7 +211,13 @@ function Comment(props: {
                     {showReplies && (
                         <React.Fragment>
                             {replies.map((comment) => (
-                                <Comment comment={comment} noId noQuote noStory openComment />
+                                <Comment
+                                    comment={comment}
+                                    noId
+                                    noQuote
+                                    noStory
+                                    openComment
+                                />
                             ))}
                             <div className="flex justify-center align-center">
                                 <Typography
