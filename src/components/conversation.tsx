@@ -49,7 +49,6 @@ const Share = loadable(() => import("./conversation/share"));
 const Gallery = loadable(() => import("./conversation/gallery"));
 const Dock = loadable(() => import("./dock"));
 
-
 /**
  * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
@@ -87,7 +86,7 @@ function Conversation(props: { id: number }) {
             setHistory(history);
             localStorage.setItem("history", JSON.stringify(history));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     /**
      * It fetches new comments, or the next page (if last comment id % 25 = 0)
