@@ -28,7 +28,7 @@ import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 
-export default function CommentTop(props: { comment: commentType, noStory?: boolean }) {
+export default function CommentTop(props: { comment: commentType; noStory?: boolean }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
@@ -45,30 +45,31 @@ export default function CommentTop(props: { comment: commentType, noStory?: bool
     const { comment, noStory } = props;
     const isOp = thread && thread.op.id === comment.user.id;
     const leftbtns = [
-        (story ? story === comment.user.id : 1) && !noStory && {
-            icon: story ? (
-                <VisibilityOff className="metahkg-grey-force font-size-19-force" />
-            ) : (
-                <Visibility className="metahkg-grey-force font-size-19-force" />
-            ),
-            title: story ? "Quit story mode" : "Story mode",
-            action: () => {
-                const commentEle = document.getElementById(`c${comment.id}`);
-                if (croot.current && commentEle) {
-                    const beforeHeight =
-                        commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                    setStory(story ? 0 : comment.user.id);
-                    setTimeout(() => {
-                        const commentEle = document.getElementById(`c${comment.id}`);
-                        if (croot.current && commentEle) {
-                            const afterHeight =
-                                commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                            croot.current.scrollTop += afterHeight - beforeHeight;
-                        }
-                    });
-                }
+        (story ? story === comment.user.id : 1) &&
+            !noStory && {
+                icon: story ? (
+                    <VisibilityOff className="metahkg-grey-force font-size-19-force" />
+                ) : (
+                    <Visibility className="metahkg-grey-force font-size-19-force" />
+                ),
+                title: story ? "Quit story mode" : "Story mode",
+                action: () => {
+                    const commentEle = document.getElementById(`c${comment.id}`);
+                    if (croot.current && commentEle) {
+                        const beforeHeight =
+                            commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                        setStory(story ? 0 : comment.user.id);
+                        setTimeout(() => {
+                            const commentEle = document.getElementById(`c${comment.id}`);
+                            if (croot.current && commentEle) {
+                                const afterHeight =
+                                    commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                                croot.current.scrollTop += afterHeight - beforeHeight;
+                            }
+                        });
+                    }
+                },
             },
-        },
         {
             icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
             title: "Quote",
