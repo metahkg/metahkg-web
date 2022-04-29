@@ -49,6 +49,7 @@ const Share = loadable(() => import("./conversation/share"));
 const Gallery = loadable(() => import("./conversation/gallery"));
 const Dock = loadable(() => import("./dock"));
 
+
 /**
  * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>
  * Then renders it as Comments
@@ -86,7 +87,8 @@ function Conversation(props: { id: number }) {
             setHistory(history);
             localStorage.setItem("history", JSON.stringify(history));
         }
-    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     /**
      * It fetches new comments, or the next page (if last comment id % 25 = 0)
      * of messages from the server and appends them to the conversation array
@@ -117,9 +119,6 @@ function Conversation(props: { id: number }) {
             replace: true,
         });
         setCurrentPage(finalPage);
-        setTimeout(() => {
-            document.getElementById(`c${query.c}`)?.scrollIntoView();
-        });
     }
     const numofpages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();
@@ -210,7 +209,13 @@ function Conversation(props: { id: number }) {
                                                     (story
                                                         ? story === comment?.user.id
                                                         : 1) && (
-                                                        <Comment comment={comment} />
+                                                        <Comment
+                                                            comment={comment}
+                                                            scrollIntoView={
+                                                                Number(query.c) ===
+                                                                comment.id
+                                                            }
+                                                        />
                                                     )
                                             )}
                                         </React.Fragment>

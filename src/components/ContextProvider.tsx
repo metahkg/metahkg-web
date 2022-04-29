@@ -74,6 +74,10 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         });
     }, []);
 
+    useEffect(() => {
+        localStorage.setItem("history", JSON.stringify(history));
+    }, [history]);
+
     function updateSize() {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);

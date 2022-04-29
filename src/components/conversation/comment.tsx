@@ -1,5 +1,5 @@
 import "./css/comment.css";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import VoteBar from "./comment/VoteBar";
 import { useNotification, useSettings } from "../ContextProvider";
@@ -37,8 +37,18 @@ function Comment(props: {
     goTo?: boolean;
     blocked?: boolean;
     noStory?: boolean;
+    scrollIntoView?: boolean;
 }) {
-    const { noId, fetchComment, inPopUp, noQuote, setIsExpanded, noStory, goTo } = props;
+    const {
+        noId,
+        scrollIntoView,
+        fetchComment,
+        inPopUp,
+        noQuote,
+        setIsExpanded,
+        noStory,
+        goTo,
+    } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
     const [comment, setComment] = useState(props.comment);
@@ -48,8 +58,10 @@ function Comment(props: {
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
+    const commentRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
+        commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
         if (fetchComment) {
             api.get(`/posts/thread/${threadId}/comment/${comment.id}`)
                 .then((res) => {
@@ -78,7 +90,11 @@ function Comment(props: {
     }, []);
 
     return (
-        <Box className="fullwidth">
+        <Box
+            className="fullwidth"
+            ref={commentRef}
+            id={noId ? undefined : `c${comment.id}`}
+        >
             {comment.replies?.length && (
                 <CommentPopup
                     comment={comment}
@@ -88,7 +104,6 @@ function Comment(props: {
                 />
             )}
             <Box
-                id={noId ? undefined : `c${comment.id}`}
                 className={`text-align-left ${
                     !inPopUp ? "mt6" : ""
                 } fullwidth comment-root`}
