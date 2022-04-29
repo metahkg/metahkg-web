@@ -28,7 +28,7 @@ import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 
-export default function CommentTop(props: { comment: commentType }) {
+export default function CommentTop(props: { comment: commentType, noStory?: boolean }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
@@ -42,10 +42,10 @@ export default function CommentTop(props: { comment: commentType }) {
     const [thread, setThread] = useThread();
     const [user] = useUser();
     const croot = useCRoot();
-    const { comment } = props;
+    const { comment, noStory } = props;
     const isOp = thread && thread.op.id === comment.user.id;
     const leftbtns = [
-        {
+        (story ? story === comment.user.id : 1) && !noStory && {
             icon: story ? (
                 <VisibilityOff className="metahkg-grey-force font-size-19-force" />
             ) : (
@@ -59,7 +59,8 @@ export default function CommentTop(props: { comment: commentType }) {
                         commentEle?.offsetTop - 47 - croot.current?.scrollTop;
                     setStory(story ? 0 : comment.user.id);
                     setTimeout(() => {
-                        if (croot.current) {
+                        const commentEle = document.getElementById(`c${comment.id}`);
+                        if (croot.current && commentEle) {
                             const afterHeight =
                                 commentEle?.offsetTop - 47 - croot.current?.scrollTop;
                             croot.current.scrollTop += afterHeight - beforeHeight;
@@ -213,13 +214,19 @@ export default function CommentTop(props: { comment: commentType }) {
                         }
                     </p>
                 </Tooltip>
-                {leftbtns.map((button, index) => (
-                    <Tooltip key={index} title={button.title} arrow>
-                        <IconButton className="ml10 nopadding" onClick={button.action}>
-                            {button.icon}
-                        </IconButton>
-                    </Tooltip>
-                ))}
+                {leftbtns.map(
+                    (button, index) =>
+                        button && (
+                            <Tooltip key={index} title={button.title} arrow>
+                                <IconButton
+                                    className="ml10 nopadding"
+                                    onClick={button.action}
+                                >
+                                    {button.icon}
+                                </IconButton>
+                            </Tooltip>
+                        )
+                )}
             </div>
             <div className="flex align-center">
                 {rightbtns.map((button) => (

@@ -9,7 +9,12 @@ import { commentType } from "../../types/conversation/comment";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
 import { api } from "../../lib/api";
-import { Forum, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import {
+    EscalatorOutlined,
+    Forum,
+    KeyboardArrowDown,
+    KeyboardArrowUp,
+} from "@mui/icons-material";
 import Spinner from "react-spinner-material";
 import CommentPopup from "../../lib/commentPopup";
 
@@ -31,8 +36,9 @@ function Comment(props: {
     fold?: boolean;
     goTo?: boolean;
     blocked?: boolean;
+    noStory?: boolean;
 }) {
-    const { noId, fetchComment, inPopUp, noQuote, setIsExpanded } = props;
+    const { noId, fetchComment, inPopUp, noQuote, setIsExpanded, noStory, goTo } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
     const [comment, setComment] = useState(props.comment);
@@ -95,52 +101,65 @@ function Comment(props: {
                 })}
             >
                 <div className="ml20 mr20">
-                    <CommentTop comment={comment} />
+                    <CommentTop comment={comment} noStory={noStory} />
                     <CommentBody noQuote={noQuote} comment={comment} depth={0} />
                     <div className="comment-internal-spacer" />
                 </div>
                 {ready && (
-                    <div className="flex ml20 mr20">
-                        {settings.votebar ? (
-                            <VoteBar
-                                key={threadId}
-                                commentId={comment.id}
-                                upVoteCount={comment.U || 0}
-                                downVoteCount={comment.D || 0}
-                            />
-                        ) : (
-                            <VoteButtons
-                                upVotes={comment.U || 0}
-                                downVotes={comment.D || 0}
-                                commentId={comment.id}
-                            />
-                        )}
-                        {!inPopUp && comment.replies?.length && (
-                            <Button
-                                sx={{
-                                    minWidth: "0 !important",
-                                    bgcolor: "#333 !important",
-                                }}
-                                className="br5 nomargin ml10 metahkg-grey-force nopadding mt0 mb0 pl10 pr10 pt3 pb3"
-                                variant="text"
-                                onClick={() => {
-                                    setPopupOpen(true);
-                                }}
-                            >
-                                <Forum
-                                    sx={{
-                                        "&:hover": {
-                                            color: "white",
-                                        },
-                                    }}
-                                    className="font-size-14-force"
+                    <Box className="flex justify-space-between align-center fullwidth">
+                        <div className="flex ml20 mr20">
+                            {settings.votebar ? (
+                                <VoteBar
+                                    key={threadId}
+                                    commentId={comment.id}
+                                    upVoteCount={comment.U || 0}
+                                    downVoteCount={comment.D || 0}
                                 />
-                                <p className="ml5 novmargin metahkg-grey">
-                                    {comment.replies?.length}
-                                </p>
-                            </Button>
+                            ) : (
+                                <VoteButtons
+                                    upVotes={comment.U || 0}
+                                    downVotes={comment.D || 0}
+                                    commentId={comment.id}
+                                />
+                            )}
+                            {!inPopUp && comment.replies?.length && (
+                                <Button
+                                    sx={{
+                                        minWidth: "0 !important",
+                                        bgcolor: "#333 !important",
+                                    }}
+                                    className="br5 nomargin ml10 metahkg-grey-force nopadding mt0 mb0 pl10 pr10 pt3 pb3"
+                                    variant="text"
+                                    onClick={() => {
+                                        setPopupOpen(true);
+                                    }}
+                                >
+                                    <Forum
+                                        sx={{
+                                            "&:hover": {
+                                                color: "white",
+                                            },
+                                        }}
+                                        className="font-size-14-force"
+                                    />
+                                    <p className="ml5 novmargin metahkg-grey">
+                                        {comment.replies?.length}
+                                    </p>
+                                </Button>
+                            )}
+                        </div>
+                        {goTo && (
+                            <a
+                                href={`/thread/${threadId}?c=${comment.id}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex metahkg-grey-force mr10 notextdecoration"
+                            >
+                                <EscalatorOutlined />
+                                Go to reply
+                            </a>
                         )}
-                    </div>
+                    </Box>
                 )}
                 <div className="comment-spacer" />
             </Box>
@@ -176,7 +195,7 @@ function Comment(props: {
                     {showReplies && (
                         <React.Fragment>
                             {replies.map((comment) => (
-                                <Comment comment={comment} noId noQuote />
+                                <Comment comment={comment} noId noQuote noStory goTo />
                             ))}
                             <div className="flex justify-center align-center">
                                 <Typography

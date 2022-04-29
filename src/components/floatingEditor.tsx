@@ -31,9 +31,11 @@ export default function FloatingEditor(props: {
             rtoken,
         }).then(() => {
             update();
-            const newscrollTop =
-                croot.current?.scrollHeight || 0 - (croot.current?.clientHeight || 0);
-            if (croot.current) croot.current.scrollTop = newscrollTop;
+            if (croot.current) {
+                const newscrollTop =
+                    croot.current?.scrollHeight - croot.current?.clientHeight;
+                croot.current.scrollTop = newscrollTop;
+            }
         });
     }
     return (

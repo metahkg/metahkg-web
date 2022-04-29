@@ -29,13 +29,22 @@
 .fullheight {
     height: 100%;
 }
+.fullheight-force {
+    height: 100% !important;
+}
 .halfheight {
     height: 50%;
 }
 .notextdecoration {
     text-decoration: none !important;
 }
+.text-decoration-none {
+    text-decoration: none !important;
+}
 .notexttransform {
+    text-transform: none !important;
+}
+.text-transfrom-none {
     text-transform: none !important;
 }
 .flex {

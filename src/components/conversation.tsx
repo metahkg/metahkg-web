@@ -42,9 +42,9 @@ import useFirstFetch from "./conversation/functions/firstfetch";
 import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
+import Comment from "./conversation/comment";
 
 const PinnedComment = loadable(() => import("./conversation/pin"));
-const Comment = loadable(() => import("./conversation/comment"));
 const Share = loadable(() => import("./conversation/share"));
 const Gallery = loadable(() => import("./conversation/gallery"));
 const Dock = loadable(() => import("./dock"));
