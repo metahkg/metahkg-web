@@ -26,10 +26,8 @@ export default function useOnVisibilityChange() {
             }
         }
         if (!isVisible && thread && thread.conversation.length) {
-            if (lastHeight.current !== croot.current?.scrollTop) {
-                Page =
-                    // @ts-ignore
-                    croot.current.scrollTop > lastHeight.current ? Page : Page - 1;
+            if (lastHeight.current !== croot.current?.scrollTop && croot.current) {
+                Page = croot.current.scrollTop > lastHeight.current ? Page : Page - 1;
                 if (lastHeight.current && Page !== Number(query.page) && Page) {
                     navigate(`${window.location.pathname}?page=${Page}`, {
                         replace: true,

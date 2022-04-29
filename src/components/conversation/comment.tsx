@@ -27,6 +27,10 @@ function Comment(props: {
     fetchComment?: boolean;
     noQuote?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
+    // TODO: Some more options for the comment component
+    fold?: boolean;
+    goTo?: boolean;
+    blocked?: boolean;
 }) {
     const { noId, fetchComment, inPopUp, noQuote, setIsExpanded } = props;
     const threadId = useThreadId();

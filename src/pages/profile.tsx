@@ -88,8 +88,8 @@ function DataTable(props: DataTableProps) {
                         variant="standard"
                         value={sex}
                         onChange={(e) => {
-                            // @ts-ignore
-                            setSex(e.target.value);
+                            const newValue = e.target.value;
+                            if (newValue === "M" || newValue === "F") setSex(newValue);
                         }}
                     >
                         <MenuItem value="M">Male</MenuItem>

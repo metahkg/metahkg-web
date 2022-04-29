@@ -24,8 +24,7 @@ export default function useBtns() {
                 update();
                 const newscrollTop =
                     croot.current?.scrollHeight || 0 - (croot.current?.clientHeight || 0);
-                // @ts-ignore
-                croot.current.scrollTop = newscrollTop;
+                if (croot.current) croot.current.scrollTop = newscrollTop;
             },
             title: "Refresh",
         },

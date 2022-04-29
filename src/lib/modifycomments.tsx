@@ -57,15 +57,13 @@ export function replace(node: any): JSX.Element | void {
                   </div>
                 );
               }*/
+                const firstChild = domNode.children?.[0] as Element;
                 if (
                     domNode.children?.length === 1 &&
-                    // @ts-ignore
-                    domNode.children[0]?.name === "img" &&
-                    // @ts-ignore
-                    domNode.children[0]?.attribs
+                    firstChild?.name === "img" &&
+                    firstChild?.attribs
                 ) {
-                    // @ts-ignore
-                    const { src, height, width, style } = domNode.children[0].attribs;
+                    const { src, height, width, style } = firstChild.attribs;
                     if (src && domNode.attribs.href === src) {
                         return (
                             <a

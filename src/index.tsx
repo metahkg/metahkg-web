@@ -14,16 +14,18 @@ const ContextProvider = loadable(() => import("./components/ContextProvider"));
 // import { Provider } from "react-redux";
 
 // const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
-// @ts-ignore
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = document.getElementById("root");
+if (root) {
+    const ReactRoot = ReactDOM.createRoot(root);
 
-root.render(
-    // <Provider store={store}>
-    <ContextProvider>
-        <MenuProvider>
-            <App />
-        </MenuProvider>
-    </ContextProvider>
-    // </Provider>
-);
+    ReactRoot.render(
+        // <Provider store={store}>
+        <ContextProvider>
+            <MenuProvider>
+                <App />
+            </MenuProvider>
+        </ContextProvider>
+        // </Provider>
+    );
+}

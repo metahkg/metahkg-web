@@ -85,8 +85,7 @@ export default function MenuBody() {
                     res.data.length < 25 && setEnd(true);
                     setUpdating(false);
                     setTimeout(() => {
-                        // @ts-ignore
-                        paperRef.current.scrollTop = 0;
+                        if (paperRef.current) paperRef.current.scrollTop = 0;
                     });
                 })
                 .catch(onError);

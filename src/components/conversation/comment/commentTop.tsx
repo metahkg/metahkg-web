@@ -53,23 +53,19 @@ export default function CommentTop(props: { comment: commentType }) {
             ),
             title: story ? "Quit story mode" : "Story mode",
             action: () => {
-                const beforeHeight =
-                    //@ts-ignore
-                    document.getElementById(`c${id}`)?.offsetTop -
-                    47 -
-                    //@ts-ignore
-                    croot.current?.scrollTop;
-                setStory(story ? 0 : comment.user.id);
-                setTimeout(() => {
-                    const afterHeight =
-                        //@ts-ignore
-                        document.getElementById(`c${id}`)?.offsetTop -
-                        47 -
-                        //@ts-ignore
-                        croot.current?.scrollTop;
-                    //@ts-ignore
-                    croot.current.scrollTop += afterHeight - beforeHeight;
-                });
+                const commentEle = document.getElementById(`c${comment.id}`);
+                if (croot.current && commentEle) {
+                    const beforeHeight =
+                        commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                    setStory(story ? 0 : comment.user.id);
+                    setTimeout(() => {
+                        if (croot.current) {
+                            const afterHeight =
+                                commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                            croot.current.scrollTop += afterHeight - beforeHeight;
+                        }
+                    });
+                }
             },
         },
         {

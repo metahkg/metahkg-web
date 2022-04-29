@@ -29,8 +29,8 @@ export default function Player(props: { url: string }) {
             title: "Full Screen (press ESC/F11 to exit)",
             icon: <Fullscreen className="font-size-18-force" />,
             onClick: () => {
-                //@ts-ignore
-                screenfull.request(findDOMNode(player.current));
+                const Player = findDOMNode(player.current);
+                Player instanceof Element && screenfull.request(Player);
             },
         },
         {

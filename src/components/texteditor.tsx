@@ -9,15 +9,15 @@ import { useIsSmallScreen } from "./ContextProvider";
  * @returns A text editor.
  */
 export default function TextEditor(props: {
-    changehandler: (a: string, editor: import("tinymce/tinymce").Editor) => void;
+    onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
     text?: string;
 }) {
-    const { changehandler, text } = props;
+    const { onChange, text } = props;
     const isSmallScreen = useIsSmallScreen();
     return (
         <Editor
             key={Number(isSmallScreen)}
-            onEditorChange={changehandler}
+            onEditorChange={onChange}
             initialValue={text}
             init={{
                 height: isSmallScreen ? 310 : 350,

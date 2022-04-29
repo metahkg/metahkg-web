@@ -28,8 +28,8 @@ export default function useChangePage() {
     const threadId = useThreadId();
     return (newPage: number) => {
         setLoading(true);
-        // @ts-ignore
-        setThread({ ...thread, conversation: [] });
+        if (thread) thread.conversation = [];
+        setThread(thread);
         setPages(1);
         setFinalPage(newPage);
         lastHeight.current = 0;

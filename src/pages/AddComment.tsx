@@ -261,7 +261,7 @@ export default function AddComment() {
                     </div>
                     <TextEditor
                         key={id}
-                        changehandler={(v, e: any) => {
+                        onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
                         text={edit ? initText : undefined}

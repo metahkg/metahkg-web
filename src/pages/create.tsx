@@ -306,7 +306,7 @@ export default function Create() {
                         )}
                     </div>
                     <TextEditor
-                        changehandler={(v, e: any) => {
+                        onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
                         text={inittext}
