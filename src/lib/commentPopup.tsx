@@ -10,8 +10,9 @@ export default function CommentPopup(props: {
     showReplies?: boolean;
     comment: commentType;
     fetchComment?: boolean;
+    openComment?: boolean;
 }) {
-    const { open, setOpen, comment, showReplies, fetchComment } = props;
+    const { open, setOpen, comment, showReplies, fetchComment, openComment } = props;
     const [isExpanded, setIsExpanded] = useState(!!showReplies);
     const isSmallScreen = useIsSmallScreen();
     return (
@@ -35,6 +36,7 @@ export default function CommentPopup(props: {
                 inPopUp
                 setIsExpanded={setIsExpanded}
                 showReplies={showReplies}
+                openComment={openComment}
             />
         </PopUp>
     );

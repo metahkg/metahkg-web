@@ -34,7 +34,7 @@ function Comment(props: {
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     // TODO: Some more options for the comment component
     fold?: boolean;
-    goTo?: boolean;
+    openComment?: boolean;
     blocked?: boolean;
     noStory?: boolean;
     scrollIntoView?: boolean;
@@ -47,7 +47,7 @@ function Comment(props: {
         noQuote,
         setIsExpanded,
         noStory,
-        goTo,
+        openComment,
     } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
@@ -101,6 +101,7 @@ function Comment(props: {
                     showReplies
                     open={popupOpen}
                     setOpen={setPopupOpen}
+                    openComment
                 />
             )}
             <Box
@@ -163,7 +164,7 @@ function Comment(props: {
                                 </Button>
                             )}
                         </div>
-                        {goTo && (
+                        {openComment && (
                             <a
                                 href={`/thread/${threadId}?c=${comment.id}`}
                                 target="_blank"
@@ -171,7 +172,7 @@ function Comment(props: {
                                 className="flex metahkg-grey-force mr10 notextdecoration"
                             >
                                 <EscalatorOutlined />
-                                Go to reply
+                                Open Comment
                             </a>
                         )}
                     </Box>
@@ -210,7 +211,7 @@ function Comment(props: {
                     {showReplies && (
                         <React.Fragment>
                             {replies.map((comment) => (
-                                <Comment comment={comment} noId noQuote noStory goTo />
+                                <Comment comment={comment} noId noQuote noStory openComment />
                             ))}
                             <div className="flex justify-center align-center">
                                 <Typography
