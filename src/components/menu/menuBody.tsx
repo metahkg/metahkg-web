@@ -115,12 +115,7 @@ export default function MenuBody() {
         }[mode];
         api.get(url)
             .then((res: { data: summary[] }) => {
-                if (res.data?.[0] !== null) {
-                    res.data.forEach((item: summary) => {
-                        data.push(item);
-                    });
-                    setData(data);
-                }
+                setData([...data, ...res.data]);
                 res.data.length < 25 && setEnd(true);
                 setPage((page) => page + 1);
                 setUpdating(false);
@@ -157,7 +152,7 @@ export default function MenuBody() {
             ref={paperRef}
         >
             <Box className="min-height-full menu-bottom flex flex-dir-column">
-                {!!(data.length && data?.[0] !== null) && (
+                {Boolean(data.length) && (
                     <Box className="flex flex-dir-column max-width-full menu-bottom">
                         {data.map((thread: summary, index) => (
                             <div key={index}>

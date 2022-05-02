@@ -234,7 +234,7 @@ export default function Profile() {
     cat && setCat(0);
     return (
         <Box
-            className="flex min-height-fullvh profile-root"
+            className="flex min-height-fullvh profile-root fullwidth"
             sx={{
                 backgroundColor: "primary.dark",
             }}
@@ -242,112 +242,104 @@ export default function Profile() {
             {!Object.keys(user).length ? (
                 <LinearProgress className="fullwidth" color="secondary" />
             ) : (
-                user?.[0] !== null && (
-                    <Paper className="nobgimage max-height-fullvh overflow-auto">
-                        <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
-                            <Box
-                                className="flex justify-center align-center max-width-full mt20"
-                                sx={{
-                                    width: isSmallScreen ? "100vw" : "70vw",
+                <Paper className="nobgimage max-height-fullvh overflow-auto">
+                    <Box className="flex min-height-fullvh justify-center align-center flex-dir-column">
+                        <Box
+                            className="flex justify-center align-center max-width-full mt20"
+                            sx={{
+                                width: isSmallScreen ? "100vw" : "70vw",
+                            }}
+                        >
+                            <img
+                                src={`/api/avatars/${user.id}`}
+                                alt="User avatar"
+                                height={isSmallScreen ? 150 : 200}
+                                width={isSmallScreen ? 150 : 200}
+                            />
+                            <br />
+                            <div
+                                className="ml20 flex justify-center profile-toptextdiv"
+                                style={{
+                                    flexDirection:
+                                        params.id === "self" ? "column" : "row",
                                 }}
                             >
-                                <img
-                                    src={`/api/avatars/${user.id}`}
-                                    alt="User avatar"
-                                    height={isSmallScreen ? 150 : 200}
-                                    width={isSmallScreen ? 150 : 200}
-                                />
-                                <br />
-                                <div
-                                    className="ml20 flex justify-center profile-toptextdiv"
-                                    style={{
-                                        flexDirection:
-                                            params.id === "self" ? "column" : "row",
-                                    }}
-                                >
-                                    <h1 className="font-size-30 profile-toptext">
-                                        <div
-                                            className="overflow-hidden"
-                                            style={{
-                                                maxWidth: isSmallScreen
-                                                    ? "calc(100vw - 250px)"
-                                                    : "calc(70vw - 350px)",
-                                            }}
-                                        >
-                                            <span
-                                                className="overflow-hidden text-overflow-ellipsis nowrap"
-                                                style={{
-                                                    color:
-                                                        user.sex === "M"
-                                                            ? "#34aadc"
-                                                            : "red",
-                                                }}
-                                            >
-                                                {user.name}
-                                            </span>
-                                        </div>
-                                        #{user.id}
-                                    </h1>
+                                <h1 className="font-size-30 profile-toptext">
                                     <div
-                                        className="profile-uploaddiv"
+                                        className="overflow-hidden"
                                         style={{
-                                            marginTop: params.id === "self" ? 25 : 0,
+                                            maxWidth: isSmallScreen
+                                                ? "calc(100vw - 250px)"
+                                                : "calc(70vw - 350px)",
                                         }}
                                     >
-                                        {params.id === "self" && (
-                                            <Tooltip
-                                                title="jpg / png / svg supported"
-                                                arrow
-                                            >
-                                                <UploadAvatar
-                                                    onUpload={() => {
-                                                        setNotification({
-                                                            open: true,
-                                                            text: "Uploading...",
-                                                        });
-                                                    }}
-                                                    onSuccess={() => {
-                                                        window.location.reload();
-                                                    }}
-                                                    onError={(err) => {
-                                                        setNotification({
-                                                            open: true,
-                                                            text: `Upload failed: ${
-                                                                err.response?.data
-                                                                    ?.error ||
-                                                                err.response?.data ||
-                                                                ""
-                                                            }`,
-                                                        });
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        )}
-                                    </div>
-                                </div>
-                            </Box>
-                            <Box className="flex mt20 mb10 fullwidth font justify-center">
-                                <DataTable setUser={setUser} user={user} />
-                            </Box>
-                            {isSmallScreen && (
-                                <div className="mt20">
-                                    <Link
-                                        className="notextdecoration"
-                                        to={`/history/${params.id}`}
-                                    >
-                                        <Button
-                                            className="font-size-16"
-                                            variant="text"
-                                            color="secondary"
+                                        <span
+                                            className="overflow-hidden text-overflow-ellipsis nowrap"
+                                            style={{
+                                                color:
+                                                    user.sex === "M" ? "#34aadc" : "red",
+                                            }}
                                         >
-                                            View History
-                                        </Button>
-                                    </Link>
+                                            {user.name}
+                                        </span>
+                                    </div>
+                                    #{user.id}
+                                </h1>
+                                <div
+                                    className="profile-uploaddiv"
+                                    style={{
+                                        marginTop: params.id === "self" ? 25 : 0,
+                                    }}
+                                >
+                                    {params.id === "self" && (
+                                        <Tooltip title="jpg / png / svg supported" arrow>
+                                            <UploadAvatar
+                                                onUpload={() => {
+                                                    setNotification({
+                                                        open: true,
+                                                        text: "Uploading...",
+                                                    });
+                                                }}
+                                                onSuccess={() => {
+                                                    window.location.reload();
+                                                }}
+                                                onError={(err) => {
+                                                    setNotification({
+                                                        open: true,
+                                                        text: `Upload failed: ${
+                                                            err.response?.data?.error ||
+                                                            err.response?.data ||
+                                                            ""
+                                                        }`,
+                                                    });
+                                                }}
+                                            />
+                                        </Tooltip>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </Box>
-                    </Paper>
-                )
+                        <Box className="flex mt20 mb10 fullwidth font justify-center">
+                            <DataTable setUser={setUser} user={user} />
+                        </Box>
+                        {isSmallScreen && (
+                            <div className="mt20">
+                                <Link
+                                    className="notextdecoration"
+                                    to={`/history/${params.id}`}
+                                >
+                                    <Button
+                                        className="font-size-16"
+                                        variant="text"
+                                        color="secondary"
+                                    >
+                                        View History
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
+                    </Box>
+                </Paper>
             )}
         </Box>
     );

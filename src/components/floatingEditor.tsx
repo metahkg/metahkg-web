@@ -48,7 +48,10 @@ export default function FloatingEditor() {
                 setSending(false);
             })
             .catch((err) => {
-                setNotification({ open: true, text: err.response.data.error });
+                setNotification({
+                    open: true,
+                    text: err.response.data?.error || err.response.data || "",
+                });
                 setSending(false);
             });
     }
