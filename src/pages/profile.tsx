@@ -234,7 +234,7 @@ export default function Profile() {
     cat && setCat(0);
     return (
         <Box
-            className="flex min-height-fullvh profile-root fullwidth"
+            className="flex min-height-fullvh profile-root"
             sx={{
                 backgroundColor: "primary.dark",
             }}
