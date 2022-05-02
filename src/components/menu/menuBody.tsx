@@ -38,7 +38,7 @@ export default function MenuBody() {
     const [smode] = useSmode();
     const [page, setPage] = useState(1);
     const [end, setEnd] = useState(false);
-    const [updating, setUpdating] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [history, setHistory] = useHistory();
     const paperRef = useRef<HTMLDivElement>(null);
     const q = decodeURIComponent(String(querystring.q || query || ""));
@@ -64,6 +64,7 @@ export default function MenuBody() {
     useEffect(() => {
         if (!data.length && (category || profile || search || id || recall)) {
             setEnd(false);
+            setLoading(true);
             const url = {
                 search: `/search?q=${encodeURIComponent(
                     q
@@ -81,9 +82,9 @@ export default function MenuBody() {
             api.get(url)
                 .then((res) => {
                     !(page === 1) && setPage(1);
-                    setData(res.data);
+                    res.data.length && setData(res.data);
                     res.data.length < 25 && setEnd(true);
-                    setUpdating(false);
+                    setLoading(false);
                     setTimeout(() => {
                         if (paperRef.current) paperRef.current.scrollTop = 0;
                     });
@@ -98,7 +99,7 @@ export default function MenuBody() {
      */
     function update() {
         setEnd(false);
-        setUpdating(true);
+        setLoading(true);
         const url = {
             search: `/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
                 page + 1
@@ -118,7 +119,7 @@ export default function MenuBody() {
                 setData([...data, ...res.data]);
                 res.data.length < 25 && setEnd(true);
                 setPage((page) => page + 1);
-                setUpdating(false);
+                setLoading(false);
             })
             .catch(onError);
     }
@@ -128,7 +129,7 @@ export default function MenuBody() {
      * @param {any} e - The event object.
      */
     function onScroll(e: any) {
-        if (!end && !updating) {
+        if (!end && !loading) {
             const diff = e.target.scrollHeight - e.target.scrollTop;
             if (
                 (e.target.clientHeight >= diff - 1.5 &&
@@ -187,10 +188,9 @@ export default function MenuBody() {
                                 <Divider />
                             </div>
                         ))}
-                        {updating && <MenuPreload />}
+                        {loading && <MenuPreload />}
                     </Box>
                 )}
-                {!data.length && <MenuPreload />}
                 {end && (
                     <Typography
                         className="mt10 mb10 text-align-center font-size-20-force"
