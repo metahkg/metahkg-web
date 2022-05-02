@@ -40,8 +40,9 @@ export default function TextEditor(props: {
                         "cut copy paste | formatselect | quicklink",
                     quickbars_insert_toolbar: "",
                     menubar: "file edit view insert format tools table",
-                    plugins:
-                        `${autoresize ? "autoresize" : ""} print preview paste searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons`,
+                    plugins: `${
+                        autoresize ? "autoresize" : ""
+                    } print preview paste searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons`,
                     toolbar:
                         "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                     toolbar_sticky: true,
