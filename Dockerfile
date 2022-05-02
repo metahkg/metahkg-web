@@ -3,6 +3,9 @@ FROM node:latest AS build
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
+ARG REACT_APP_build
+ENV REACT_APP_build $REACT_APP_build
+
 ARG env
 ENV env $env
 
