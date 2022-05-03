@@ -13,7 +13,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDown from "@mui/icons-material/ThumbDown";
 import { green, red } from "@mui/material/colors";
 import { api } from "../../../lib/api";
-import { useThreadId, useVotes } from "../ConversationContext";
+import { useThreadId, useUserVotes } from "../ConversationContext";
 
 type VoteType = "U" | "D";
 
@@ -25,7 +25,7 @@ interface Props {
 
 const VoteBar = React.memo<Props>((props) => {
     const { commentId, upVoteCount, downVoteCount } = props;
-    const [votes, setVotes] = useVotes();
+    const [votes, setVotes] = useUserVotes();
     const threadId = useThreadId();
     const vote = votes?.[commentId];
     const [upVotes, setUpVotes] = useState(upVoteCount);

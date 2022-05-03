@@ -10,7 +10,7 @@ import {
     useFinalPage,
     useThread,
     useImages,
-    useVotes,
+    useUserVotes,
     useRerender,
 } from "../ConversationContext";
 import { setDescription, setTitle } from "../../../lib/common";
@@ -29,7 +29,7 @@ export default function useFirstFetch() {
     const [id, setId] = useId();
     const [, setEnd] = useEnd();
     const [images, setImages] = useImages();
-    const [, setVotes] = useVotes();
+    const [, setVotes] = useUserVotes();
     const params = useParams();
     const threadId = Number(params.id);
     const navigate = useNavigate();

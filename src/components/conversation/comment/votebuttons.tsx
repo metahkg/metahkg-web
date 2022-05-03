@@ -4,7 +4,7 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
-import { useThreadId, useVotes } from "../ConversationContext";
+import { useThreadId, useUserVotes } from "../ConversationContext";
 
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
@@ -21,7 +21,7 @@ export default function VoteButtons(props: {
 }) {
     const { commentId, upVotes, downVotes } = props;
     const threadId = useThreadId();
-    const [votes, setVotes] = useVotes();
+    const [votes, setVotes] = useUserVotes();
     const [up, setUp] = useState(upVotes);
     const [down, setDown] = useState(downVotes);
     const [, setNotification] = useNotification();

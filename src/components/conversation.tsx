@@ -35,7 +35,7 @@ import {
     useStory,
     useThread,
     useUpdating,
-    useVotes,
+    useUserVotes,
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import useFirstFetch from "./conversation/functions/firstfetch";
@@ -62,7 +62,7 @@ function Conversation(props: { id: number }) {
     const [finalPage] = useFinalPage();
     /** Current page */
     const [currentPage, setCurrentPage] = useCurrentPage();
-    const [votes] = useVotes();
+    const [userVotes] = useUserVotes();
     const [updating] = useUpdating();
     const [pages] = usePages();
     const [, setEnd] = useEnd();
@@ -103,23 +103,20 @@ function Conversation(props: { id: number }) {
      */
     const onScroll = useOnScroll();
 
-    /* It's checking if the conversation, users, details and votes are all ready. */
-    const ready = !!(
-        thread &&
-        thread.conversation.length &&
-        (user ? Object.keys(votes).length : 1)
-    );
-    if (ready && loading) {
+    const ready = !!(thread && thread.conversation.length && (user ? userVotes : 1));
+
+    if (ready && loading)
         setTimeout(() => {
             loading && setLoading(false);
         }, 100);
-    }
+
     if (ready && query.c) {
         navigate(`${window.location.pathname}?page=${finalPage}`, {
             replace: true,
         });
         setCurrentPage(finalPage);
     }
+
     const numofpages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
