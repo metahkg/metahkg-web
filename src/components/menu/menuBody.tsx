@@ -188,9 +188,9 @@ export default function MenuBody() {
                                 <Divider />
                             </div>
                         ))}
-                        {loading && <MenuPreload />}
                     </Box>
                 )}
+                {loading && <MenuPreload />}
                 {end && (
                     <Typography
                         className="mt10 mb10 text-align-center font-size-20-force"

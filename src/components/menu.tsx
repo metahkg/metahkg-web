@@ -7,11 +7,11 @@ import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
 import { useNavigate } from "react-router-dom";
 import loadable from "@loadable/component";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
+import MenuBody from "./menu/menuBody";
 
 const Dock = loadable(() => import("./dock"));
 const SearchBar = loadable(() => import("./searchbar"));
 const MenuTop = loadable(() => import("./menu/menuTop"));
-const MenuBody = loadable(() => import("./menu/menuBody"));
 
 function Menu() {
     const [selected, setSelected] = useSelected();
