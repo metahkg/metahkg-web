@@ -175,7 +175,7 @@ function Conversation(props: { id: number }) {
 
                                 const page =
                                     roundup(thread.conversation[0].id / 25) + index;
-                                const totalPages = roundup((thread.conversation.length || 0) / 25);
+                                const totalPages = roundup((thread.c || 0) / 25);
 
                                 return (
                                     <Box key={index}>

@@ -17,7 +17,7 @@ export function useUpdate() {
     const [thread, setThread] = useThread();
     const [finalPage, setFinalPage] = useFinalPage();
     const [, setEnd] = useEnd();
-    const [, setPages] = usePages();
+    const [pages, setPages] = usePages();
     const lastHeight = useLastHeight();
     const [, setCurrentPage] = useCurrentPage();
     const navigate = useNavigate();
@@ -45,26 +45,28 @@ export function useUpdate() {
                 }
                 if (!openNewPage) {
                     lastHeight.current = 0;
+                    const conversation = [...thread.conversation, ...res.data.conversation];
                     setThread({
                         ...thread,
-                        conversation: [...thread.conversation, ...res.data.conversation],
-                        c: thread.c + res.data.conversation?.length
+                        ...res.data,
+                        conversation
                     });
                     setTimeout(() => {
                         document
                             .getElementById(`c${res.data?.conversation[0]?.id}`)
-                            ?.scrollIntoView();
+                            ?.scrollIntoView({behavior: "smooth"});
                     });
-                    thread.conversation.length % 25 && setEnd(true);
+                    conversation.length % 25 && setEnd(true);
                 } else {
                     setThread({
                         ...thread,
+                        ...res.data,
                         conversation: [...thread.conversation, ...res.data.conversation],
-                        c: thread.c + res.data.conversation?.length
                     });
+                    console.log([...thread.conversation, ...res.data.conversation])
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
-                    setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
+                    setPages(pages + 1);
                     navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
                         replace: true,
                     });
