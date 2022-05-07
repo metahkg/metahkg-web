@@ -161,7 +161,7 @@ function Conversation(props: { id: number }) {
             {thread?.pin && <PinnedComment comment={thread?.pin} />}
             <Paper
                 ref={cRoot}
-                key={reRender}
+                key={Number(reRender)}
                 className={`overflow-auto nobgimage noshadow conversation-paper${
                     thread?.pin ? "-pin" : ""
                 }${loading ? "-loading" : ""}`}
