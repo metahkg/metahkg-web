@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Template from "../components/template";
@@ -52,7 +52,8 @@ export default function Category() {
         !menu && setMenu(true);
 
         // clear data, if category in context is not updated  or  search/profile/recall have some value
-        (category !== Number(params.category) || search || profile || recall) && clearData();
+        (category !== Number(params.category) || search || profile || recall) &&
+            clearData();
 
         // update the category in context
         category !== Number(params.category) && setCategory(Number(params.category));
@@ -62,7 +63,7 @@ export default function Category() {
         recall && setRecall(false);
         profile && setProfile(0);
         ![0, 1].includes(selected) && setSelected(0);
-    })
+    });
 
     return (
         <Box

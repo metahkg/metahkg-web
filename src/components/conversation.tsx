@@ -1,5 +1,5 @@
 import "./css/conversation.css";
-import React, {memo, useEffect} from "react";
+import React, { memo, useEffect } from "react";
 import {
     Box,
     Button,
@@ -11,17 +11,17 @@ import {
 import queryString from "query-string";
 import loadable from "@loadable/component";
 import Title from "./conversation/title";
-import {roundup, splitArray} from "../lib/common";
-import {useNavigate} from "react-router-dom";
+import { roundup, splitArray } from "../lib/common";
+import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
-import {useHistory, useIsSmallScreen, useUser} from "./ContextProvider";
+import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
 import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
 import useBtns from "./conversation/functions/btns";
-import {PhotoProvider} from "react-photo-view";
+import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
-import {commentType} from "../types/conversation/comment";
+import { commentType } from "../types/conversation/comment";
 import {
     useCRoot,
     useCurrentPage,
@@ -37,7 +37,7 @@ import {
     useUpdating,
     useUserVotes,
 } from "./conversation/ConversationContext";
-import {useUpdate} from "./conversation/functions/update";
+import { useUpdate } from "./conversation/functions/update";
 import useFirstFetch from "./conversation/functions/firstfetch";
 import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
@@ -81,7 +81,7 @@ function Conversation(props: { id: number }) {
     useFirstFetch();
     useEffect(() => {
         if (history.findIndex((i) => i.id === props.id) === -1) {
-            history.push({id: props.id, cid: 1, c: 1});
+            history.push({ id: props.id, cid: 1, c: 1 });
             setHistory(history);
             localStorage.setItem("history", JSON.stringify(history));
         }
@@ -101,8 +101,8 @@ function Conversation(props: { id: number }) {
 
     useEffect(() => {
         !query.page &&
-        !query.c &&
-        navigate(`${window.location.pathname}?page=1`, {replace: true});
+            !query.c &&
+            navigate(`${window.location.pathname}?page=1`, { replace: true });
 
         if (ready) {
             if (loading)
@@ -133,10 +133,10 @@ function Conversation(props: { id: number }) {
                 },
             })}
         >
-            <FloatingEditor/>
-            <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images}/>
-            <Dock btns={btns}/>
-            <Share/>
+            <FloatingEditor />
+            <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
+            <Dock btns={btns} />
+            <Share />
             {!isSmallScreen && (
                 <PageSelect
                     last={currentPage !== 1 && numOfPages > 1}
@@ -154,16 +154,16 @@ function Conversation(props: { id: number }) {
                     }}
                 />
             )}
-            {loading && <LinearProgress className="fullwidth" color="secondary"/>}
-            <Title category={thread?.category} title={thread?.title} btns={btns}/>
-            {thread?.pin && <PinnedComment comment={thread?.pin}/>}
+            {loading && <LinearProgress className="fullwidth" color="secondary" />}
+            <Title category={thread?.category} title={thread?.title} btns={btns} />
+            {thread?.pin && <PinnedComment comment={thread?.pin} />}
             <Paper
                 ref={croot}
                 key={reRender}
                 className={`overflow-auto nobgimage noshadow conversation-paper${
                     thread?.pin ? "-pin" : ""
                 }${loading ? "-loading" : ""}`}
-                sx={{bgcolor: "primary.dark"}}
+                sx={{ bgcolor: "primary.dark" }}
                 onScroll={onScroll}
             >
                 <Box className="fullwidth max-height-full max-width-full">
@@ -243,10 +243,10 @@ function Conversation(props: { id: number }) {
                             Update
                         </Button>
                     ) : (
-                        <CircularProgress disableShrink color="secondary"/>
+                        <CircularProgress disableShrink color="secondary" />
                     )}
                 </Box>
-                <PageBottom/>
+                <PageBottom />
             </Paper>
         </Box>
     );

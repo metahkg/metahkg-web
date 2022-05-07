@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {Box} from "@mui/material";
+import React, { useEffect } from "react";
+import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
     useCat,
@@ -11,8 +11,8 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import {useBack, useIsSmallScreen} from "../components/ContextProvider";
-import {setTitle} from "../lib/common";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
+import { setTitle } from "../lib/common";
 
 export default function Search() {
     const [search, setSearch] = useSearch();
@@ -30,7 +30,7 @@ export default function Search() {
 
     useEffect(() => {
         back !== window.location.pathname &&
-        setBack(window.location.pathname + window.location.search);
+            setBack(window.location.pathname + window.location.search);
 
         !menu && setMenu(true);
         id && setId(0);
@@ -44,7 +44,7 @@ export default function Search() {
         }
 
         recall && setRecall(false);
-    })
+    });
 
     return (
         <Box
@@ -53,7 +53,7 @@ export default function Search() {
                 bgcolor: "primary.dark",
             }}
         >
-            {!isSmallScreen && <Template/>}
+            {!isSmallScreen && <Template />}
         </Box>
     );
 }
