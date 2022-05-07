@@ -12,7 +12,7 @@ import { List, ListItem, ListItemIcon, ListItemText, Paper } from "@mui/material
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
-import { wholepath } from "../lib/common";
+import { wholePath } from "../lib/common";
 import { useUser } from "./ContextProvider";
 
 /**
@@ -67,7 +67,7 @@ export default function Template() {
                         className="notextdecoration white"
                         to={`/${
                             user ? "users/logout" : "users/signin"
-                        }?returnto=${encodeURIComponent(wholepath())}`}
+                        }?returnto=${encodeURIComponent(wholePath())}`}
                     >
                         <ListItem button className="fullwidth">
                             <ListItemIcon>

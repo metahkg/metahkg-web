@@ -1,5 +1,5 @@
-import React from "react";
-import { Box } from "@mui/material";
+import React, {useEffect} from "react";
+import {Box} from "@mui/material";
 import Template from "../components/template";
 import {
     useCat,
@@ -11,8 +11,8 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useIsSmallScreen } from "../components/ContextProvider";
-import { setTitle } from "../lib/common";
+import {useBack, useIsSmallScreen} from "../components/ContextProvider";
+import {setTitle} from "../lib/common";
 
 export default function Search() {
     const [search, setSearch] = useSearch();
@@ -25,19 +25,27 @@ export default function Search() {
     const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
+
     setTitle("Search | Metahkg");
-    back !== window.location.pathname &&
+
+    useEffect(() => {
+        back !== window.location.pathname &&
         setBack(window.location.pathname + window.location.search);
-    !menu && setMenu(true);
-    id && setId(0);
-    cat && setCat(0);
-    if (!search) {
-        setSearch(true);
-        data && setData([]);
-        selected && setSelected(0);
-        setMenuTitle("");
-    }
-    recall && setRecall(false);
+
+        !menu && setMenu(true);
+        id && setId(0);
+        cat && setCat(0);
+
+        if (!search) {
+            setSearch(true);
+            data.length && setData([]);
+            selected && setSelected(0);
+            setMenuTitle("");
+        }
+
+        recall && setRecall(false);
+    })
+
     return (
         <Box
             className="flex min-height-fullvh"
@@ -45,7 +53,7 @@ export default function Search() {
                 bgcolor: "primary.dark",
             }}
         >
-            {!isSmallScreen && <Template />}
+            {!isSmallScreen && <Template/>}
         </Box>
     );
 }

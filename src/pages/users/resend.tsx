@@ -13,6 +13,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 
 declare const grecaptcha: { reset: () => void };
+
 export default function Verify() {
     setTitle("Resend Verification Email | Metahkg");
     const [menu, setMenu] = useMenu();

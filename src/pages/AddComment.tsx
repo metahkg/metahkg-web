@@ -13,7 +13,7 @@ import {
 } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, setTitle, wholepath } from "../lib/common";
+import { roundup, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
@@ -51,6 +51,7 @@ export default function AddComment() {
     const quote = Number(query.quote);
     const params = useParams();
     const id = Number(params.id);
+
     useEffect(() => {
         if (user) {
             api.post("/posts/check", { id: id }).catch((err) => {
@@ -108,7 +109,7 @@ export default function AddComment() {
     /**
      * It sends a post request to the server with the comment data.
      */
-    function addcomment() {
+    function addComment() {
         //send data to server /api/posts/comment
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
@@ -149,7 +150,7 @@ export default function AddComment() {
         return (
             <Navigate
                 to={`/users/signin?continue=true&returnto=${encodeURIComponent(
-                    wholepath()
+                    wholePath()
                 )}`}
                 replace
             />
@@ -288,7 +289,7 @@ export default function AddComment() {
                             className={`${
                                 small ? "mt15 " : ""
                             }font-size-16-force notexttransform ac-btn`}
-                            onClick={addcomment}
+                            onClick={addComment}
                             variant="contained"
                             color="secondary"
                         >

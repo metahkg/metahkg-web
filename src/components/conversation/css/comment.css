@@ -71,3 +71,11 @@
 .comment-body blockquote > .comment-body > *:last-child {
     margin-bottom: 5px;
 }
+
+.comment-body > *:first-child {
+    margin-top: 15px;
+}
+
+.comment-body > *:last-child {
+    margin-bottom: 15px;
+}

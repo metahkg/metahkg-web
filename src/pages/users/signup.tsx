@@ -23,7 +23,7 @@ import {
     useUser,
     useWidth,
 } from "../../components/ContextProvider";
-import { checkpwd, setTitle } from "../../lib/common";
+import { checkPwd, setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
@@ -113,7 +113,7 @@ export default function Register() {
                 alert: "Username must not be a email.",
             },
             {
-                cond: !checkpwd(pwd),
+                cond: !checkPwd(pwd),
                 alert: "Password must contain 8 characters, an uppercase, a lowercase, and a number.",
             },
         ];

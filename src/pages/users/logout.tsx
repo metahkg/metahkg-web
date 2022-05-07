@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Alert, Box } from "@mui/material";
 import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
@@ -15,13 +15,20 @@ export default function Logout() {
     const [, setUser] = useUser();
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
-    menu && setMenu(false);
-    localStorage.removeItem("token");
-    setUser(null);
-    navigate(decodeURIComponent(String(query.returnto || "/")), {
-        replace: true,
-    });
-    setNotification({ open: true, text: "Logged out." });
+
+    useEffect(() => {
+        menu && setMenu(false);
+
+        // logout
+        localStorage.removeItem("token");
+        setUser(null);
+
+        // go back
+        navigate(decodeURIComponent(String(query.returnto || "/")), {
+            replace: true,
+        });
+        setNotification({ open: true, text: "Logged out." });
+    })
     return (
         <Box
             className="min-height-fullvh justify-center width-fullvw"

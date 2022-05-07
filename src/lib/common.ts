@@ -8,8 +8,8 @@ export function roundup(num: number, precision = 0): number {
     return Math.ceil(num * precision) / precision;
 }
 
-export function timetoword(sdate: string): string {
-    const startDate = new Date(sdate);
+export function timeToWord(sDate: string): string {
+    const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
     const shortened: string = humanizeDurationShortened(diff, {
@@ -24,8 +24,8 @@ export function timetoword(sdate: string): string {
     return r;
 }
 
-export function timetoword_long(sdate: string): string {
-    const startDate = new Date(sdate);
+export function timeToWord_long(sDate: string): string {
+    const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
     let r: any = humanizeDuration(diff, {
@@ -41,7 +41,7 @@ export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function splitarray(arr: any[], start: number, end: number) {
+export function splitArray(arr: any[], start: number, end: number) {
     const r: any[] = [];
     for (let i = start; i <= end; i++) {
         arr[i] !== undefined && r.push(arr[i]);
@@ -49,11 +49,11 @@ export function splitarray(arr: any[], start: number, end: number) {
     return r;
 }
 
-export function wholepath(): string {
+export function wholePath(): string {
     return window.location.href.replace(window.location.origin, "");
 }
 
-export function checkpwd(pwd: string): boolean {
+export function checkPwd(pwd: string): boolean {
     if (pwd.length < 8) return false;
 
     const lower = "abcdefghijklmnopqrstuvwxyz";

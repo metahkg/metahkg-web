@@ -25,7 +25,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchbar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
-import { wholepath } from "../lib/common";
+import { wholePath } from "../lib/common";
 import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
 /**
@@ -123,7 +123,7 @@ export default function SideBar() {
                                 title: user ? "Logout" : "Sign in / Register",
                                 link: `/${
                                     user ? "users/logout" : "users/signin"
-                                }?returnto=${encodeURIComponent(wholepath())}`,
+                                }?returnto=${encodeURIComponent(wholePath())}`,
                                 icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
                         ].map((item, index) => (

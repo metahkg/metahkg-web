@@ -7,7 +7,7 @@ import {
     ThumbDown as ThumbDownIcon,
     ThumbUp as ThumbUpIcon,
 } from "@mui/icons-material";
-import { roundup, timetoword } from "../../lib/common";
+import { roundup, timeToWord } from "../../lib/common";
 import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
 import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
@@ -53,7 +53,7 @@ export default function MenuThread(props: {
                             {thread.op.name}
                         </p>
                         <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
-                            {timetoword(thread.lastModified)}
+                            {timeToWord(thread.lastModified)}
                         </p>
                     </div>
                     <div className="flex align-center">

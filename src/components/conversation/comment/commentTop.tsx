@@ -22,7 +22,7 @@ import {
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import dateat from "date-and-time";
 import { isMobile } from "react-device-detect";
-import { timetoword } from "../../../lib/common";
+import { timeToWord } from "../../../lib/common";
 import MoreList from "./more";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
@@ -206,7 +206,7 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
                     >
                         {
                             {
-                                short: timetoword(comment.createdAt),
+                                short: timeToWord(comment.createdAt),
                                 long: dateat.format(
                                     new Date(comment.createdAt),
                                     "DD/MM/YY HH:mm"

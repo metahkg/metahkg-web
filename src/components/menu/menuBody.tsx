@@ -13,7 +13,7 @@ import {
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
 import { AxiosError } from "axios";
-import { splitarray } from "../../lib/common";
+import { splitArray } from "../../lib/common";
 import { api } from "../../lib/api";
 import { summary } from "../../types/conversation/summary";
 import { Box, Divider, Paper, Typography } from "@mui/material";
@@ -72,7 +72,7 @@ export default function MenuBody() {
                 profile: `/history/${profile}?sort=${selected}`,
                 menu: `/menu/${c}?sort=${selected}`,
                 recall: `/threads?threads=${JSON.stringify(
-                    splitarray(
+                    splitArray(
                         history.map((item) => item.id),
                         0,
                         24
@@ -107,7 +107,7 @@ export default function MenuBody() {
             profile: `/history/${profile}?sort=${selected}&page=${page + 1}`,
             menu: `/menu/${c}?sort=${selected}&page=${page + 1}`,
             recall: `/threads?threads=${JSON.stringify(
-                splitarray(
+                splitArray(
                     history.map((item) => item.id),
                     page * 25,
                     (page + 1) * 25 - 1

@@ -4,11 +4,6 @@ import {
     Alert,
     Box,
     Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
     TextField,
     Tooltip,
 } from "@mui/material";
@@ -33,51 +28,15 @@ import {
     useUser,
     useWidth,
 } from "../components/ContextProvider";
-import { setTitle, wholepath } from "../lib/common";
+import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
+import ChooseCat from "../components/create/ChooseCat";
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
-
-/**
- * It takes in a category number and a setter function for the category number, and returns a form
- * control with a select menu that allows the user to choose a category
- * @param {number} props.cat The currently choosed category
- * @param {React.Dispatch<React.SetStateAction<number>>} props.setCat The function to update props.cat
- * @returns A form control with a select menu.
- */
-function ChooseCat(props: {
-    cat: number;
-    setCat: React.Dispatch<React.SetStateAction<number>>;
-}) {
-    const { cat, setCat } = props;
-    const changeHandler = (e: SelectChangeEvent<number>) => {
-        setCat(Number(e.target.value));
-    };
-    const categories = useCategories();
-    return (
-        <div>
-            {categories.length && (
-                <FormControl className="create-choosecat-form">
-                    <InputLabel color="secondary">Category</InputLabel>
-                    <Select
-                        color="secondary"
-                        value={cat}
-                        label="Category"
-                        onChange={changeHandler}
-                    >
-                        {categories.map((category) => (
-                            <MenuItem value={category.id}>{category.name}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            )}
-        </div>
-    );
-}
 
 /**
  * Page for creating a new topic
@@ -190,7 +149,7 @@ export default function Create() {
         return (
             <Navigate
                 to={`/users/signin?continue=true&returnto=${encodeURIComponent(
-                    wholepath()
+                    wholePath()
                 )}`}
                 replace
             />

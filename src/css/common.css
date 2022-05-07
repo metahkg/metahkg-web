@@ -104,6 +104,11 @@
 .height-fullvh {
     height: 100vh;
 }
+
+.fullvh {
+    height: 100vh;
+}
+
 .min-height-fullvh {
     min-height: 100vh;
 }
@@ -169,3 +174,4 @@
 .metahkg-blue-force {
     color: #3498db;
 }
+
