@@ -48,7 +48,7 @@ export default function useChangePage() {
             if (shouldReRender) {
                 if (thread) thread.conversation = [];
                 setThread(thread);
-                setReRender(Math.random());
+                setReRender((reRender) => !reRender);
             }
 
             setLoading(true);

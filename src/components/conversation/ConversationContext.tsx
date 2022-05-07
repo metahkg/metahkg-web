@@ -20,7 +20,7 @@ const ConversationContext = createContext<{
     pages: [number, React.Dispatch<React.SetStateAction<number>>];
     end: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-    reRender: [number, React.Dispatch<React.SetStateAction<number>>];
+    reRender: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     story: [number, React.Dispatch<React.SetStateAction<number>>];
     lastHeight: React.MutableRefObject<number>;
     galleryOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -52,7 +52,7 @@ export default function ConversationProvider(props: {
     const [pages, setPages] = useState(1);
     const [end, setEnd] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [reRender, setReRender] = useState(Math.random());
+    const [reRender, setReRender] = useState(false);
     const [story, setStory] = useState(0);
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
