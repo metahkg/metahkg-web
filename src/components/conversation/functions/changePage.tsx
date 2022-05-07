@@ -37,8 +37,7 @@ export default function useChangePage() {
 
         const targetElement = document.getElementById(`${newPage}`);
 
-        if (targetElement)
-            return targetElement.scrollIntoView({ behavior: "smooth" });
+        if (targetElement) return targetElement.scrollIntoView({ behavior: "smooth" });
 
         setLoading(true);
         if (thread) thread.conversation = [];
