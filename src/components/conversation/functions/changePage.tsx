@@ -1,7 +1,7 @@
-import {useNavigate} from "react-router-dom";
-import {api} from "../../../lib/api";
-import {threadType} from "../../../types/conversation/thread";
-import {useNotification} from "../../ContextProvider";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../../lib/api";
+import { threadType } from "../../../types/conversation/thread";
+import { useNotification } from "../../ContextProvider";
 import {
     useCurrentPage,
     useEnd,
@@ -13,7 +13,7 @@ import {
     useThread,
     useThreadId,
 } from "../ConversationContext";
-import {roundup} from "../../../lib/common";
+import { roundup } from "../../../lib/common";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();
@@ -35,12 +35,12 @@ export default function useChangePage() {
 
             lastHeight.current = 0;
 
-            navigate(`${window.location.pathname}?page=${newPage}`, {replace: true});
+            navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
 
             const targetElement = document.getElementById(`${newPage}`);
 
             if (targetElement)
-                return targetElement.scrollIntoView({behavior: "smooth"});
+                return targetElement.scrollIntoView({ behavior: "smooth" });
 
             const shouldReRender =
                 newPage - finalPage !== 1 && newPage - firstPage !== -1;
@@ -54,34 +54,38 @@ export default function useChangePage() {
             setLoading(true);
             setEnd(false);
             setPages(shouldReRender ? 1 : pages + 1);
-            setFinalPage(shouldReRender || newPage - finalPage === 1 ? newPage : finalPage);
+            setFinalPage(
+                shouldReRender || newPage - finalPage === 1 ? newPage : finalPage
+            );
 
             api.get(`/posts/thread/${threadId}?page=${newPage}`).then(
                 (res: { data: threadType }) => {
                     if (!res.data.conversation.length)
-                        return setNotification({open: true, text: "Page not found!"});
+                        return setNotification({ open: true, text: "Page not found!" });
 
                     setThread(
                         shouldReRender
                             ? res.data
                             : {
-                                ...thread,
-                                ...res.data,
-                                conversation:
-                                    newPage - finalPage === 1
-                                        ? [
-                                            ...thread.conversation,
-                                            ...res.data.conversation,
-                                        ]
-                                        : [
-                                            ...res.data.conversation,
-                                            ...thread.conversation,
-                                        ],
-                            }
+                                  ...thread,
+                                  ...res.data,
+                                  conversation:
+                                      newPage - finalPage === 1
+                                          ? [
+                                                ...thread.conversation,
+                                                ...res.data.conversation,
+                                            ]
+                                          : [
+                                                ...res.data.conversation,
+                                                ...thread.conversation,
+                                            ],
+                              }
                     );
 
                     res.data.conversation.length % 25 && setEnd(true);
-                    document.getElementById(String(newPage))?.scrollIntoView({behavior: "smooth"});
+                    document
+                        .getElementById(String(newPage))
+                        ?.scrollIntoView({ behavior: "smooth" });
                 }
             );
         }
