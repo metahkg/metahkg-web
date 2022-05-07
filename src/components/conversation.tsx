@@ -172,10 +172,11 @@ function Conversation(props: { id: number }) {
                     <PhotoProvider>
                         {ready &&
                             [...Array(pages)].map((p, index) => {
-
                                 const page =
                                     roundup(thread.conversation[0].id / 25) + index;
-                                const totalPages = roundup((thread.conversation.length || 0) / 25);
+                                const totalPages = roundup(
+                                    (thread.conversation.length || 0) / 25
+                                );
 
                                 return (
                                     <Box key={index}>

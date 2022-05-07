@@ -1,3 +1,1 @@
-export function useNextPage() {
-
-}
+export function useNextPage() {}

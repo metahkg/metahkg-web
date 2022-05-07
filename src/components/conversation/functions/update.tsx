@@ -1,6 +1,6 @@
-import {useNavigate} from "react-router-dom";
-import {api} from "../../../lib/api";
-import {threadType} from "../../../types/conversation/thread";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../../lib/api";
+import { threadType } from "../../../types/conversation/thread";
 import {
     useCurrentPage,
     useEnd,
@@ -34,8 +34,8 @@ export function useUpdate() {
                     openNewPage
                         ? ""
                         : `&start=${
-                            thread.conversation[thread.conversation.length - 1].id + 1
-                        }`
+                              thread.conversation[thread.conversation.length - 1].id + 1
+                          }`
                 }`
             ).then((res: { data: threadType }) => {
                 if (!res.data.conversation.length) {
@@ -48,7 +48,7 @@ export function useUpdate() {
                     setThread({
                         ...thread,
                         conversation: [...thread.conversation, ...res.data.conversation],
-                        c: thread.c + res.data.conversation?.length
+                        c: thread.c + res.data.conversation?.length,
                     });
                     setTimeout(() => {
                         document
@@ -60,7 +60,7 @@ export function useUpdate() {
                     setThread({
                         ...thread,
                         conversation: [...thread.conversation, ...res.data.conversation],
-                        c: thread.c + res.data.conversation?.length
+                        c: thread.c + res.data.conversation?.length,
                     });
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
