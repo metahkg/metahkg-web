@@ -1,17 +1,17 @@
 import React from "react";
 import "./css/thread.css";
-import {Box, Button} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import {
     Article as ArticleIcon,
     Comment as CommentIcon,
     ThumbDown as ThumbDownIcon,
     ThumbUp as ThumbUpIcon,
 } from "@mui/icons-material";
-import {roundup, timeToWord} from "../../lib/common";
-import {summary} from "../../types/conversation/summary";
-import {Link} from "react-router-dom";
-import {useCat, useId, useProfile, useRecall, useSearch} from "../MenuProvider";
-import {useCategories, useHistory} from "../ContextProvider";
+import { roundup, timeToWord } from "../../lib/common";
+import { summary } from "../../types/conversation/summary";
+import { Link } from "react-router-dom";
+import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
+import { useCategories, useHistory } from "../ContextProvider";
 
 /**
  * A component that renders a thread in the menu.
@@ -29,7 +29,7 @@ export default function MenuThread(props: {
     const [id] = useId();
     const [history] = useHistory();
     const categories = useCategories();
-    const {thread, onClick} = props;
+    const { thread, onClick } = props;
     const cid = history.find((i) => i.id === thread.id)?.cid;
     return (
         <Link
@@ -43,7 +43,7 @@ export default function MenuThread(props: {
                 }`}
             >
                 <div className="flex fullwidth align-center justify-space-between menuthread-top">
-                    <div style={{display: "flex", alignItems: "center"}}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                         <p
                             className="font-size-16 ml20 metahkg-grey menuthread-op"
                             style={{
@@ -58,18 +58,18 @@ export default function MenuThread(props: {
                     </div>
                     <div className="flex align-center">
                         {thread.vote >= 0 ? (
-                            <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons"/>
+                            <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         ) : (
-                            <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons"/>
+                            <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         )}
                         <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {thread.vote}
                         </p>
-                        <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons"/>
+                        <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {thread.c}
                         </p>
-                        <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons"/>
+                        <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {String(roundup(thread.c / 25))}
                         </p>
