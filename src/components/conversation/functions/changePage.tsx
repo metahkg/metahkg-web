@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { api } from "../../../lib/api";
-import { threadType } from "../../../types/conversation/thread";
-import { useNotification } from "../../ContextProvider";
+import {useNavigate} from "react-router-dom";
+import {api} from "../../../lib/api";
+import {threadType} from "../../../types/conversation/thread";
+import {useNotification} from "../../ContextProvider";
 import {
     useCurrentPage,
     useEnd,
@@ -13,10 +13,11 @@ import {
     useThread,
     useThreadId,
 } from "../ConversationContext";
+import {roundup} from "../../../lib/common";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();
-    const [, setPages] = usePages();
+    const [pages, setPages] = usePages();
     const [finalPage, setFinalPage] = useFinalPage();
     const lastHeight = useLastHeight();
     const [, setEnd] = useEnd();
@@ -26,35 +27,63 @@ export default function useChangePage() {
     const [thread, setThread] = useThread();
     const navigate = useNavigate();
     const threadId = useThreadId();
+    const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
 
     return (newPage: number) => {
-        setFinalPage(newPage);
-        setCurrentPage(newPage);
+        if (thread) {
+            setCurrentPage(newPage);
 
-        lastHeight.current = 0;
+            lastHeight.current = 0;
 
-        navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
+            navigate(`${window.location.pathname}?page=${newPage}`, {replace: true});
 
-        const targetElement = document.getElementById(`${newPage}`);
+            const targetElement = document.getElementById(`${newPage}`);
 
-        if (targetElement) return targetElement.scrollIntoView({ behavior: "smooth" });
+            if (targetElement)
+                return targetElement.scrollIntoView({behavior: "smooth"});
 
-        setLoading(true);
-        if (thread) thread.conversation = [];
-        setThread(thread);
-        setEnd(false);
-        setReRender(Math.random());
-        setPages(1);
+            const shouldReRender =
+                newPage - finalPage !== 1 && newPage - firstPage !== -1;
 
-        api.get(`/api/posts/thread/${threadId}?page=${newPage}`).then(
-            (res: { data: threadType }) => {
-                if (!res.data.conversation.length)
-                    return setNotification({ open: true, text: "Page not found!" });
-
-                setThread(res.data);
-                res.data.conversation.length % 25 && setEnd(true);
-                document.getElementById(String(finalPage))?.scrollIntoView();
+            if (shouldReRender) {
+                if (thread) thread.conversation = [];
+                setThread(thread);
+                setReRender(Math.random());
             }
-        );
+
+            setLoading(true);
+            setEnd(false);
+            setPages(shouldReRender ? 1 : pages + 1);
+            setFinalPage(shouldReRender || newPage - finalPage === 1 ? newPage : finalPage);
+
+            api.get(`/posts/thread/${threadId}?page=${newPage}`).then(
+                (res: { data: threadType }) => {
+                    if (!res.data.conversation.length)
+                        return setNotification({open: true, text: "Page not found!"});
+
+                    setThread(
+                        shouldReRender
+                            ? res.data
+                            : {
+                                ...thread,
+                                ...res.data,
+                                conversation:
+                                    newPage - finalPage === 1
+                                        ? [
+                                            ...thread.conversation,
+                                            ...res.data.conversation,
+                                        ]
+                                        : [
+                                            ...res.data.conversation,
+                                            ...thread.conversation,
+                                        ],
+                            }
+                    );
+
+                    res.data.conversation.length % 25 && setEnd(true);
+                    document.getElementById(String(newPage))?.scrollIntoView({behavior: "smooth"});
+                }
+            );
+        }
     };
 }

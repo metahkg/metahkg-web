@@ -174,9 +174,6 @@ function Conversation(props: { id: number }) {
                             [...Array(pages)].map((p, index) => {
                                 const page =
                                     roundup(thread.conversation[0].id / 25) + index;
-                                const totalPages = roundup(
-                                    (thread.conversation.length || 0) / 25
-                                );
 
                                 return (
                                     <Box key={index}>
@@ -187,7 +184,7 @@ function Conversation(props: { id: number }) {
                                         >
                                             <PageTop
                                                 id={page}
-                                                pages={totalPages}
+                                                pages={numOfPages}
                                                 page={page}
                                                 onChange={(
                                                     e: SelectChangeEvent<number>
@@ -195,7 +192,7 @@ function Conversation(props: { id: number }) {
                                                     changePage(Number(e.target.value));
                                                 }}
                                                 last={!(page === 1 && !index)}
-                                                next={page !== totalPages}
+                                                next={page !== numOfPages}
                                                 onLastClicked={() => {
                                                     changePage(page - 1);
                                                 }}
