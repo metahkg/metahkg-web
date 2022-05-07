@@ -45,16 +45,19 @@ export function useUpdate() {
                 }
                 if (!openNewPage) {
                     lastHeight.current = 0;
-                    const conversation = [...thread.conversation, ...res.data.conversation];
+                    const conversation = [
+                        ...thread.conversation,
+                        ...res.data.conversation,
+                    ];
                     setThread({
                         ...thread,
                         ...res.data,
-                        conversation
+                        conversation,
                     });
                     setTimeout(() => {
                         document
                             .getElementById(`c${res.data?.conversation[0]?.id}`)
-                            ?.scrollIntoView({behavior: "smooth"});
+                            ?.scrollIntoView({ behavior: "smooth" });
                     });
                     conversation.length % 25 && setEnd(true);
                 } else {
@@ -63,7 +66,7 @@ export function useUpdate() {
                         ...res.data,
                         conversation: [...thread.conversation, ...res.data.conversation],
                     });
-                    console.log([...thread.conversation, ...res.data.conversation])
+                    console.log([...thread.conversation, ...res.data.conversation]);
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
                     setPages(pages + 1);
