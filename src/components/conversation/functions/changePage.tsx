@@ -26,17 +26,27 @@ export default function useChangePage() {
     const [thread, setThread] = useThread();
     const navigate = useNavigate();
     const threadId = useThreadId();
+
     return (newPage: number) => {
+        setFinalPage(newPage);
+        setCurrentPage(newPage);
+
+        lastHeight.current = 0;
+
+        navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
+
+        const targetElement = document.getElementById(`${newPage}`);
+
+        if (targetElement)
+            return targetElement.scrollIntoView({ behavior: "smooth" });
+
         setLoading(true);
         if (thread) thread.conversation = [];
         setThread(thread);
-        setPages(1);
-        setFinalPage(newPage);
-        lastHeight.current = 0;
         setEnd(false);
         setReRender(Math.random());
-        navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
-        setCurrentPage(newPage);
+        setPages(1);
+
         api.get(`/api/posts/thread/${threadId}?page=${newPage}`).then(
             (res: { data: threadType }) => {
                 if (!res.data.conversation.length)

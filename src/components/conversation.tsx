@@ -23,6 +23,7 @@ import {PhotoProvider} from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import {commentType} from "../types/conversation/comment";
 import {
+    useCBottom,
     useCRoot,
     useCurrentPage,
     useEnd,
@@ -74,7 +75,8 @@ function Conversation(props: { id: number }) {
     const [images] = useImages();
     const [history, setHistory] = useHistory();
     const [user] = useUser();
-    const croot = useCRoot();
+    const cRoot = useCRoot();
+    const cBottom = useCBottom();
     const navigate = useNavigate();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
 
@@ -158,7 +160,7 @@ function Conversation(props: { id: number }) {
             <Title category={thread?.category} title={thread?.title} btns={btns}/>
             {thread?.pin && <PinnedComment comment={thread?.pin}/>}
             <Paper
-                ref={croot}
+                ref={cRoot}
                 key={reRender}
                 className={`overflow-auto nobgimage noshadow conversation-paper${
                     thread?.pin ? "-pin" : ""
@@ -170,9 +172,11 @@ function Conversation(props: { id: number }) {
                     <PhotoProvider>
                         {ready &&
                             [...Array(pages)].map((p, index) => {
+
                                 const page =
                                     roundup(thread.conversation[0].id / 25) + index;
-                                const totalpages = roundup((thread.c || 0) / 25);
+                                const totalPages = roundup((thread.conversation.length || 0) / 25);
+
                                 return (
                                     <Box key={index}>
                                         <VisibilityDetector
@@ -182,7 +186,7 @@ function Conversation(props: { id: number }) {
                                         >
                                             <PageTop
                                                 id={page}
-                                                pages={totalpages}
+                                                pages={totalPages}
                                                 page={page}
                                                 onChange={(
                                                     e: SelectChangeEvent<number>
@@ -190,7 +194,7 @@ function Conversation(props: { id: number }) {
                                                     changePage(Number(e.target.value));
                                                 }}
                                                 last={!(page === 1 && !index)}
-                                                next={page !== totalpages}
+                                                next={page !== totalPages}
                                                 onLastClicked={() => {
                                                     changePage(page - 1);
                                                 }}
@@ -226,6 +230,7 @@ function Conversation(props: { id: number }) {
                     </PhotoProvider>
                 </Box>
                 <Box
+                    ref={cBottom}
                     className="flex justify-center align-center conversation-bottom"
                     sx={{
                         bgcolor: "primary.dark",

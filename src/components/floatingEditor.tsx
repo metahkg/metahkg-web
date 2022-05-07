@@ -1,36 +1,32 @@
-import React, { useState } from "react";
-import { Close, Comment as CommentIcon } from "@mui/icons-material";
-import { Box, Button, DialogTitle, IconButton, Snackbar } from "@mui/material";
+import React, {useState} from "react";
+import {Close, Comment as CommentIcon} from "@mui/icons-material";
+import {Box, Button, CircularProgress, DialogTitle, IconButton, Snackbar} from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
-import { api } from "../lib/api";
+import {api} from "../lib/api";
 import Comment from "./conversation/comment";
-import {
-    useCRoot,
-    useEditor,
-    useThread,
-    useThreadId,
-} from "./conversation/ConversationContext";
-import { useUpdate } from "./conversation/functions/update";
+import {useCBottom, useEditor, useThread, useThreadId,} from "./conversation/ConversationContext";
+import {useUpdate} from "./conversation/functions/update";
 import TextEditor from "./texteditor";
-import { useIsSmallScreen, useNotification } from "./ContextProvider";
+import {useIsSmallScreen, useNotification} from "./ContextProvider";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const handleClose = () => {
-        setEditor({ ...editor, open: false });
+        setEditor({...editor, open: false});
     };
     const [comment, setComment] = useState("");
     const [rtoken, setRtoken] = useState<null | string>(null);
-    const [sending, setSending] = useState(false);
+    const [creating, setCreating] = useState(false);
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
     const [thread] = useThread();
     const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
-    const croot = useCRoot();
-    function sendComment() {
-        setSending(true);
+    const cBottom = useCBottom();
+
+    function CreateComment() {
+        setCreating(true);
         api.post("/posts/comment", {
             id: threadId,
             comment,
@@ -38,28 +34,28 @@ export default function FloatingEditor() {
             rtoken,
         })
             .then(() => {
-                setEditor({ ...editor, open: false });
+                setEditor({...editor, open: false});
                 update();
-                if (croot.current) {
-                    const newscrollTop =
-                        croot.current?.scrollHeight - croot.current?.clientHeight;
-                    croot.current.scrollTop = newscrollTop;
-                }
-                setSending(false);
+
+                if (cBottom.current)
+                    cBottom.current.scrollIntoView({behavior: "smooth"});
+
+                setCreating(false);
             })
             .catch((err) => {
                 setNotification({
                     open: true,
                     text: err.response.data?.error || err.response.data || "",
                 });
-                setSending(false);
+                setCreating(false);
             });
     }
+
     return (
         <Snackbar
-            sx={{ zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important` }}
+            sx={{zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important`}}
             className="border-radius-20"
-            anchorOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{horizontal: "right", vertical: "top"}}
             open={editor.open}
         >
             <Box
@@ -84,11 +80,11 @@ export default function FloatingEditor() {
                             {fold ? "Expand" : "Fold"}
                         </p>
                         <IconButton className="mr5" onClick={handleClose}>
-                            <Close className="font-size-18-force" />
+                            <Close className="font-size-18-force"/>
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                {editor.quote && <Comment comment={editor.quote} fold noId />}
+                {editor.quote && <Comment comment={editor.quote} fold noId/>}
                 {!fold && (
                     <Box className="border-radius-20">
                         <TextEditor
@@ -113,16 +109,17 @@ export default function FloatingEditor() {
                                     setRtoken(token || "");
                                 }}
                             />
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={sendComment}
-                                disabled={!rtoken || !comment || sending}
-                                className={isSmallScreen ? "mt10" : ""}
-                            >
-                                <CommentIcon />
-                                Comment
-                            </Button>
+                            {creating ? <CircularProgress color="secondary" disableShrink /> :
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={CreateComment}
+                                    disabled={!rtoken || !comment}
+                                    className={isSmallScreen ? "mt10" : ""}
+                                >
+                                    <CommentIcon/>
+                                    Comment
+                                </Button>}
                         </Box>
                     </Box>
                 )}

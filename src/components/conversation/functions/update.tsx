@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { api } from "../../../lib/api";
-import { threadType } from "../../../types/conversation/thread";
+import {useNavigate} from "react-router-dom";
+import {api} from "../../../lib/api";
+import {threadType} from "../../../types/conversation/thread";
 import {
     useCurrentPage,
     useEnd,
@@ -26,6 +26,7 @@ export function useUpdate() {
         if (thread) {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
+
             api.get(
                 `/posts/thread/${threadId}?page=${
                     openNewPage ? finalPage + 1 : finalPage
@@ -33,8 +34,8 @@ export function useUpdate() {
                     openNewPage
                         ? ""
                         : `&start=${
-                              thread.conversation[thread.conversation.length - 1].id + 1
-                          }`
+                            thread.conversation[thread.conversation.length - 1].id + 1
+                        }`
                 }`
             ).then((res: { data: threadType }) => {
                 if (!res.data.conversation.length) {
@@ -43,21 +44,24 @@ export function useUpdate() {
                     return;
                 }
                 if (!openNewPage) {
-                    res.data.conversation.forEach((item) => {
-                        thread.conversation.push(item);
-                    });
                     lastHeight.current = 0;
-                    setThread({ ...thread, conversation: thread.conversation });
+                    setThread({
+                        ...thread,
+                        conversation: [...thread.conversation, ...res.data.conversation],
+                        c: thread.c + res.data.conversation?.length
+                    });
                     setTimeout(() => {
                         document
                             .getElementById(`c${res.data?.conversation[0]?.id}`)
                             ?.scrollIntoView();
-                    }, 1);
+                    });
                     thread.conversation.length % 25 && setEnd(true);
                 } else {
-                    for (let i = 0; i < res.data.conversation.length; i++)
-                        thread.conversation.push(res.data.conversation?.[i]);
-                    setThread({ ...thread, conversation: thread.conversation });
+                    setThread({
+                        ...thread,
+                        conversation: [...thread.conversation, ...res.data.conversation],
+                        c: thread.c + res.data.conversation?.length
+                    });
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
                     setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);

@@ -28,7 +28,8 @@ const ConversationContext = createContext<{
     editor: [editorStateType, React.Dispatch<React.SetStateAction<editorStateType>>];
     title: string | undefined;
     threadId: number;
-    croot: React.MutableRefObject<HTMLDivElement | null>;
+    cRoot: React.MutableRefObject<HTMLDivElement | null>;
+    cBottom: React.MutableRefObject<HTMLDivElement | null>;
     // @ts-ignore
 }>(null);
 
@@ -57,7 +58,8 @@ export default function ConversationProvider(props: {
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [images, setImages] = useState<{ src: string }[]>([]);
     const [editor, setEditor] = useState<editorStateType>({ open: false });
-    const croot = useRef<HTMLDivElement>(null);
+    const cRoot = useRef<HTMLDivElement>(null);
+    const cBottom = useRef<HTMLDivElement>(null);
     return (
         <ConversationContext.Provider
             value={{
@@ -76,7 +78,8 @@ export default function ConversationProvider(props: {
                 lastHeight: lastHeight,
                 title: thread?.title,
                 threadId: threadId,
-                croot: croot,
+                cRoot: cRoot,
+                cBottom: cBottom,
                 editor: [editor, setEditor],
             }}
         >
@@ -161,8 +164,13 @@ export function useTitle() {
 }
 
 export function useCRoot() {
-    const { croot } = React.useContext(ConversationContext);
-    return croot;
+    const { cRoot } = React.useContext(ConversationContext);
+    return cRoot;
+}
+
+export function useCBottom() {
+    const { cBottom } = React.useContext(ConversationContext);
+    return cBottom;
 }
 
 export function useEditor() {
