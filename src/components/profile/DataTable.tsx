@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {useIsSmallScreen, useNotification} from "../ContextProvider";
-import {useData} from "../MenuProvider";
-import {useParams} from "react-router-dom";
+import React, { useState } from "react";
+import { useIsSmallScreen, useNotification } from "../ContextProvider";
+import { useData } from "../MenuProvider";
+import { useParams } from "react-router-dom";
 import {
     Button,
     MenuItem,
@@ -12,11 +12,11 @@ import {
     TableCell,
     TableContainer,
     TableRow,
-    TextField
+    TextField,
 } from "@mui/material";
-import {timeToWord_long} from "../../lib/common";
-import {api} from "../../lib/api";
-import {Save} from "@mui/icons-material";
+import { timeToWord_long } from "../../lib/common";
+import { api } from "../../lib/api";
+import { Save } from "@mui/icons-material";
 
 export interface UserData {
     id: number;
@@ -33,7 +33,7 @@ interface DataTableProps {
 }
 
 export default function DataTable(props: DataTableProps) {
-    const {requestedUser, setUser} = props;
+    const { requestedUser, setUser } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setData] = useData();
     const [, setNotification] = useNotification();
@@ -78,10 +78,10 @@ export default function DataTable(props: DataTableProps) {
                         <MenuItem value="F">Female</MenuItem>
                     </Select>
                 ) : (
-                    {M: "male", F: "female"}[props.requestedUser.sex] || ""
+                    { M: "male", F: "female" }[props.requestedUser.sex] || ""
                 ),
         },
-        {title: "Role", content: props.requestedUser.role},
+        { title: "Role", content: props.requestedUser.role },
         {
             title: "Joined",
             content: `${timeToWord_long(props.requestedUser.createdAt)} ago`,
@@ -90,13 +90,13 @@ export default function DataTable(props: DataTableProps) {
 
     function editProfile() {
         setSaveDisabled(true);
-        setNotification({open: true, text: "Saving..."});
-        api.post("/users/editprofile", {name: name, sex: sex})
+        setNotification({ open: true, text: "Saving..." });
+        api.post("/users/editprofile", { name: name, sex: sex })
             .then((res) => {
                 setSaveDisabled(false);
                 setUser(null);
                 setData([]);
-                setNotification({open: true, text: res.data?.response});
+                setNotification({ open: true, text: res.data?.response });
             })
             .catch((err) => {
                 setSaveDisabled(false);
@@ -110,14 +110,14 @@ export default function DataTable(props: DataTableProps) {
     return (
         <div
             className="ml50 mr50 fullwidth"
-            style={{maxWidth: isSmallScreen ? "100%" : "70%"}}
+            style={{ maxWidth: isSmallScreen ? "100%" : "70%" }}
         >
             <TableContainer className="fullwidth" component={Paper}>
                 <Table className="fullwidth" aria-label="simple table">
                     <TableBody>
                         {items.map((item) => (
                             <TableRow
-                                sx={{"&:last-child td, &:last-child th": {border: 0}}}
+                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                             >
                                 <TableCell
                                     component="th"
@@ -144,12 +144,13 @@ export default function DataTable(props: DataTableProps) {
                     variant="contained"
                     disabled={
                         saveDisabled ||
-                        (name === props.requestedUser.name && sex === props.requestedUser.sex)
+                        (name === props.requestedUser.name &&
+                            sex === props.requestedUser.sex)
                     }
                     color="secondary"
                     onClick={editProfile}
                 >
-                    <Save/>
+                    <Save />
                     Save
                 </Button>
             )}

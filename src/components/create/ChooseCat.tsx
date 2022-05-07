@@ -1,6 +1,12 @@
 import React from "react";
-import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
-import {useCategories} from "../ContextProvider";
+import {
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from "@mui/material";
+import { useCategories } from "../ContextProvider";
 
 /**
  * It takes in a category number and a setter function for the category number, and returns a form
@@ -13,7 +19,7 @@ export default function ChooseCat(props: {
     cat: number;
     setCat: React.Dispatch<React.SetStateAction<number>>;
 }) {
-    const {cat, setCat} = props;
+    const { cat, setCat } = props;
     const changeHandler = (e: SelectChangeEvent<number>) => {
         setCat(Number(e.target.value));
     };

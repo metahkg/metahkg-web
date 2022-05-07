@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {Navigate, useParams} from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import {
     useCat,
     useData,
@@ -11,7 +11,7 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import {useBack, useIsSmallScreen} from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 
 /**
  * Only for small screens
@@ -44,17 +44,17 @@ export default function History() {
             back !== window.location.pathname && setBack(window.location.pathname);
 
             (profile !== (Number(params.id) || "self") || search) && clearData();
-            profile !== (Number(params.id) || "self") && setProfile(Number(params.id) || "self");
+            profile !== (Number(params.id) || "self") &&
+                setProfile(Number(params.id) || "self");
 
             search && setSearch(false);
             recall && setRecall(false);
             id && setId(0);
             cat && setCat(0);
         }
-    })
+    });
 
-    if (!isSmallScreen)
-        return <Navigate to={`/profile/${params.id}`} replace/>;
+    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
 
-    return <React.Fragment/>;
+    return <React.Fragment />;
 }

@@ -1,13 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./css/profile.css";
-import {
-    Box,
-    Button,
-    LinearProgress,
-    Tooltip,
-} from "@mui/material";
-import {AxiosError} from "axios";
-import {Navigate, useNavigate, useParams} from "react-router-dom";
+import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
+import { AxiosError } from "axios";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
     useData,
@@ -20,16 +15,16 @@ import {
     useMenuTitle,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/uploadavatar";
-import {setTitle} from "../lib/common";
-import {Link} from "react-router-dom";
+import { setTitle } from "../lib/common";
+import { Link } from "react-router-dom";
 import {
     useBack,
     useNotification,
     useUser,
     useIsSmallScreen,
 } from "../components/ContextProvider";
-import {api} from "../lib/api";
-import DataTable, {UserData} from "../components/profile/DataTable";
+import { api } from "../lib/api";
+import DataTable, { UserData } from "../components/profile/DataTable";
 
 /**
  * This function renders the profile page
@@ -60,9 +55,9 @@ export default function Profile() {
                     setTitle(`${res.data.name} | Metahkg`);
                 })
                 .catch((err: AxiosError) => {
-                    setNotification({open: true, text: err?.response?.data?.error});
-                    err?.response?.status === 404 && navigate("/404", {replace: true});
-                    err?.response?.status === 401 && navigate("/401", {replace: true});
+                    setNotification({ open: true, text: err?.response?.data?.error });
+                    err?.response?.status === 404 && navigate("/404", { replace: true });
+                    err?.response?.status === 401 && navigate("/401", { replace: true });
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,9 +93,9 @@ export default function Profile() {
             id && setId(0);
             cat && setCat(0);
         }
-    })
+    });
 
-    if (params?.id === "self" && !user) return <Navigate to="/" replace/>;
+    if (params?.id === "self" && !user) return <Navigate to="/" replace />;
 
     return (
         <Box
@@ -110,7 +105,7 @@ export default function Profile() {
             }}
         >
             {!requestedUser ? (
-                <LinearProgress className="fullwidth" color="secondary"/>
+                <LinearProgress className="fullwidth" color="secondary" />
             ) : (
                 <Box className="flex justify-center align-center flex-dir-column">
                     <Box
@@ -125,12 +120,11 @@ export default function Profile() {
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
                         />
-                        <br/>
+                        <br />
                         <div
                             className="ml20 flex justify-center profile-toptextdiv"
                             style={{
-                                flexDirection:
-                                    params.id === "self" ? "column" : "row",
+                                flexDirection: params.id === "self" ? "column" : "row",
                             }}
                         >
                             <h1 className="font-size-30 profile-toptext">
@@ -142,15 +136,17 @@ export default function Profile() {
                                             : "calc(70vw - 350px)",
                                     }}
                                 >
-                                        <span
-                                            className="overflow-hidden text-overflow-ellipsis nowrap"
-                                            style={{
-                                                color:
-                                                    requestedUser.sex === "M" ? "#34aadc" : "red",
-                                            }}
-                                        >
-                                            {requestedUser.name}
-                                        </span>
+                                    <span
+                                        className="overflow-hidden text-overflow-ellipsis nowrap"
+                                        style={{
+                                            color:
+                                                requestedUser.sex === "M"
+                                                    ? "#34aadc"
+                                                    : "red",
+                                        }}
+                                    >
+                                        {requestedUser.name}
+                                    </span>
                                 </div>
                                 #{requestedUser.id}
                             </h1>
@@ -187,7 +183,10 @@ export default function Profile() {
                         </div>
                     </Box>
                     <Box className="flex mt20 mb10 fullwidth font justify-center">
-                        <DataTable setUser={setRequestedUser} requestedUser={requestedUser}/>
+                        <DataTable
+                            setUser={setRequestedUser}
+                            requestedUser={requestedUser}
+                        />
                     </Box>
                     {isSmallScreen && (
                         <div className="mt20">

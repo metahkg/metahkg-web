@@ -1,7 +1,7 @@
-import React, {useEffect} from "react";
-import {Box} from "@mui/material";
+import React, { useEffect } from "react";
+import { Box } from "@mui/material";
 import Template from "../components/template";
-import {useBack, useIsSmallScreen} from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 import {
     useCat,
     useData,
@@ -13,7 +13,7 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import {setTitle} from "../lib/common";
+import { setTitle } from "../lib/common";
 
 /**
  * It's a function that
@@ -62,7 +62,7 @@ export default function Recall() {
                 backgroundColor: "primary.dark",
             }}
         >
-            {!isSmallScreen && <Template/>}
+            {!isSmallScreen && <Template />}
         </Box>
     );
 }
