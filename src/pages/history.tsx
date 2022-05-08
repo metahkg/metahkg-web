@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 import {
     useCat,
@@ -32,29 +32,27 @@ export default function History() {
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
 
-    function clearData() {
-        setData([]);
-        setMenuTitle("");
-        selected && setSelected(0);
-    }
-
-    useEffect(() => {
-        if (isSmallScreen) {
-            !menu && setMenu(true);
-            back !== window.location.pathname && setBack(window.location.pathname);
-
-            (profile !== (Number(params.id) || "self") || search) && clearData();
-            profile !== (Number(params.id) || "self") &&
-                setProfile(Number(params.id) || "self");
-
-            search && setSearch(false);
-            recall && setRecall(false);
-            id && setId(0);
-            cat && setCat(0);
-        }
-    });
-
     if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
+
+    (function onRender() {
+        function clearData() {
+            setData([]);
+            setMenuTitle("");
+            selected && setSelected(0);
+        }
+
+        !menu && setMenu(true);
+        back !== window.location.pathname && setBack(window.location.pathname);
+
+        (profile !== (Number(params.id) || "self") || search) && clearData();
+        profile !== (Number(params.id) || "self") &&
+            setProfile(Number(params.id) || "self");
+
+        search && setSearch(false);
+        recall && setRecall(false);
+        id && setId(0);
+        cat && setCat(0);
+    })();
 
     return <React.Fragment />;
 }

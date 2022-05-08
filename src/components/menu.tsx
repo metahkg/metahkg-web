@@ -1,17 +1,17 @@
 import "./css/menu.css";
-import React, { memo } from "react";
-import { Box } from "@mui/material";
-import { useData, useMenu, useSearch, useSelected } from "./MenuProvider";
-import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
+import React, {memo} from "react";
+import {Box} from "@mui/material";
+import {useData, useMenu, useSearch, useSelected} from "./MenuProvider";
+import {useBack, useQuery, useSettingsOpen} from "./ContextProvider";
 
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import loadable from "@loadable/component";
-import { Add, Autorenew, Settings } from "@mui/icons-material";
-import MenuBody from "./menu/menuBody";
+import {Add, Autorenew, Settings} from "@mui/icons-material";
 
 const Dock = loadable(() => import("./dock"));
 const SearchBar = loadable(() => import("./searchbar"));
 const MenuTop = loadable(() => import("./menu/menuTop"));
+const MenuBody = loadable(() => import("./menu/menuBody"));
 
 function Menu() {
     const [selected, setSelected] = useSelected();
@@ -33,19 +33,19 @@ function Menu() {
             <Dock
                 btns={[
                     {
-                        icon: <Autorenew />,
+                        icon: <Autorenew/>,
                         action: () => {
                             setData([]);
                         },
                     },
                     {
-                        icon: <Add />,
+                        icon: <Add/>,
                         action: () => {
                             navigate("/create");
                         },
                     },
                     {
-                        icon: <Settings />,
+                        icon: <Settings/>,
                         action: () => {
                             setSettingsOpen(true);
                         },
@@ -88,7 +88,7 @@ function Menu() {
                     </div>
                 </div>
             )}
-            <MenuBody />
+            <MenuBody/>
         </Box>
     );
 }

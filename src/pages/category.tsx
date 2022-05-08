@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Template from "../components/template";
@@ -36,16 +36,15 @@ export default function Category() {
     const [selected, setSelected] = useSelected();
     const categories = useCategories();
 
-    // set the title, in future categories may be just fetch from server and store in redux
-    setTitle(categories.find((i) => i.id === category)?.name + " | Metahkg");
+    (function onRender() {
+        setTitle(categories.find((i) => i.id === category)?.name + " | Metahkg");
 
-    function clearData() {
-        setData([]);
-        setMenuTitle("");
-        setSelected(0);
-    }
+        function clearData() {
+            setData([]);
+            setMenuTitle("");
+            setSelected(0);
+        }
 
-    useEffect(() => {
         back !== window.location.pathname && setBack(window.location.pathname);
 
         // if menu is not open, open it
@@ -63,7 +62,7 @@ export default function Category() {
         recall && setRecall(false);
         profile && setProfile(0);
         ![0, 1].includes(selected) && setSelected(0);
-    });
+    })();
 
     return (
         <Box

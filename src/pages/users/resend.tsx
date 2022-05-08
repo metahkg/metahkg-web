@@ -69,9 +69,13 @@ export default function Verify() {
         if (query.email && !user) resend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     if (user) return <Navigate to="/" replace />;
+
     menu && setMenu(false);
+
     const small = width / 2 - 100 <= 450;
+
     return (
         <Box
             className="flex align-center justify-center min-height-fullvh fullwidth"

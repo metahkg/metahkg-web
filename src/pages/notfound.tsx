@@ -9,9 +9,11 @@ import { setTitle } from "../lib/common";
  * 404 page
  */
 export default function NotFound() {
-    setTitle("404 Not Found | Metahkg");
     const [menu, setMenu] = useMenu();
+
+    setTitle("404 Not Found | Metahkg");
     menu && setMenu(false);
+
     return (
         <Box
             className="flex align-center justify-center notfound-root"

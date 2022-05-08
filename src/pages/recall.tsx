@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import { useBack, useIsSmallScreen } from "../components/ContextProvider";
@@ -34,13 +34,13 @@ export default function Recall() {
     const [title, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
 
-    function clearData() {
-        data.length && setData([]);
-        title && setMenuTitle("");
-        selected && setSelected(0);
-    }
+    (function onRender() {
+        function clearData() {
+            data.length && setData([]);
+            title && setMenuTitle("");
+            selected && setSelected(0);
+        }
 
-    useEffect(() => {
         back !== window.location.pathname && setBack(window.location.pathname);
         !menu && setMenu(true);
 
@@ -53,7 +53,7 @@ export default function Recall() {
         !recall && setRecall(true);
 
         ![0, 1].includes(selected) && setSelected(0);
-    });
+    })();
 
     return (
         <Box

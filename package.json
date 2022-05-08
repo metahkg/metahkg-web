@@ -79,10 +79,11 @@
     "build:nocheck": "yarn run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "docker": "cd docker && docker-compose up -d --build",
+    "docker": "docker build -t metahkg/metahkg-web .",
     "deploy": "yarn run build && yarn run start",
     "dev": "yarn run deploy",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "npx eslint --cache --fix src && (npx prettier --check src || npx prettier --write src)"
   },
   "eslintConfig": {
     "extends": [

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
@@ -28,7 +28,7 @@ export default function Search() {
 
     setTitle("Search | Metahkg");
 
-    useEffect(() => {
+    (function onRender() {
         back !== window.location.pathname &&
             setBack(window.location.pathname + window.location.search);
 
@@ -44,7 +44,7 @@ export default function Search() {
         }
 
         recall && setRecall(false);
-    });
+    })();
 
     return (
         <Box

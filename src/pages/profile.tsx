@@ -63,16 +63,18 @@ export default function Profile() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id, requestedUser]);
 
-    /**
-     * Clear the data and reset the title and selected index.
-     */
-    function clearData() {
-        setData([]);
-        setMenuTitle("");
-        selected && setSelected(0);
-    }
+    if (params?.id === "self" && !user) return <Navigate to="/" replace />;
 
-    useEffect(() => {
+    (function onRender() {
+        /**
+         * Clear the data and reset the title and selected index.
+         */
+        function clearData() {
+            setData([]);
+            setMenuTitle("");
+            selected && setSelected(0);
+        }
+
         if (!(params.id === "self" && !user)) {
             back !== window.location.pathname && setBack(window.location.pathname);
 
@@ -93,9 +95,7 @@ export default function Profile() {
             id && setId(0);
             cat && setCat(0);
         }
-    });
-
-    if (params?.id === "self" && !user) return <Navigate to="/" replace />;
+    })();
 
     return (
         <Box

@@ -16,7 +16,6 @@ import {
     useMenuTitle,
 } from "../components/MenuProvider";
 import {
-    useCategories,
     useIsSmallScreen,
     useNotification,
     useUser,
@@ -139,6 +138,7 @@ export default function Create() {
     }
 
     menu && setMenu(false);
+
     if (!user)
         return (
             <Navigate
@@ -148,7 +148,9 @@ export default function Create() {
                 replace
             />
         );
-    const small = width * 0.8 - 40 <= 450;
+
+    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
+
     return (
         <Box
             className="flex fullwidth min-height-fullvh justify-center max-width-full"
@@ -156,7 +158,7 @@ export default function Create() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <div style={{ width: small ? "100vw" : "80vw" }}>
+            <div style={{ width: isSmallSmallScreen ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
                         <MetahkgLogo
@@ -266,7 +268,7 @@ export default function Create() {
                     />
                     <div
                         className={`mt15 ${
-                            small
+                            isSmallSmallScreen
                                 ? ""
                                 : "flex fullwidth justify-space-between align-center"
                         }`}
@@ -287,7 +289,7 @@ export default function Create() {
                                 !(comment && postTitle && rtoken && catchoosed)
                             }
                             className={`${
-                                small ? "mt15 " : ""
+                                isSmallSmallScreen ? "mt15 " : ""
                             }font-size-16-force create-btn novpadding notexttransform`}
                             onClick={create}
                             variant="contained"

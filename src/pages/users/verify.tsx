@@ -66,10 +66,14 @@ export default function Verify() {
         if (query.code && query.email && !user) verify();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     if (user) return <Navigate to="/" replace />;
+
     menu && setMenu(false);
     setTitle("Verify | Metahkg");
+
     const small = width / 2 - 100 <= 450;
+
     return (
         <Box
             className="flex align-center justify-center min-height-fullvh fullwidth"

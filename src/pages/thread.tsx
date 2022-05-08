@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Conversation from "../components/conversation";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -20,15 +20,11 @@ export default function Thread() {
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
 
-    useEffect(() => {
-        if (isInteger(params.id)) {
-            !menu && !isSmallScreen && setMenu(true);
-            menu && isSmallScreen && setMenu(false);
-            !category && !id && setId(Number(params.id));
-        }
-    });
-
     if (!isInteger(params.id)) return <Navigate to="/404" replace />;
+
+    !menu && !isSmallScreen && setMenu(true);
+    menu && isSmallScreen && setMenu(false);
+    !category && !id && setId(Number(params.id));
 
     const threadId = Number(params.id);
 

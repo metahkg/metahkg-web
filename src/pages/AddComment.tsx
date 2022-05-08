@@ -157,7 +157,9 @@ export default function AddComment() {
         );
 
     menu && setMenu(false);
-    const small = width * 0.8 - 40 <= 450;
+
+    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
+
     return (
         <Box
             className="min-height-fullvh flex justify-center fullwidth align-center"
@@ -269,7 +271,7 @@ export default function AddComment() {
                     />
                     <div
                         className={`mt15 ${
-                            small
+                            isSmallSmallScreen
                                 ? ""
                                 : "flex fullwidth justify-space-between align-center"
                         }`}
@@ -287,7 +289,7 @@ export default function AddComment() {
                         <Button
                             disabled={disabled || !comment || !rtoken}
                             className={`${
-                                small ? "mt15 " : ""
+                                isSmallSmallScreen ? "mt15 " : ""
                             }font-size-16-force notexttransform ac-btn`}
                             onClick={addComment}
                             variant="contained"

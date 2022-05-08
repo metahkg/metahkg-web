@@ -9,9 +9,11 @@ import { setTitle } from "../lib/common";
  * 401 page
  */
 export default function Forbidden() {
-    setTitle("401 Forbidden | Metahkg");
     const [menu, setMenu] = useMenu();
+
+    setTitle("401 Forbidden | Metahkg");
     menu && setMenu(false);
+
     return (
         <Box
             className="flex align-center justify-center notfound-root"
