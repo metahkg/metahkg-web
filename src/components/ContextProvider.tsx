@@ -56,17 +56,17 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         })()
     );
     const [categories, setCategories] = useState<category[]>([]);
-    const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
+    const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
     );
     /** migrate from old */
-    if (parsedhistory.length && !parsedhistory[0].id) {
-        for (let i = 0; i < parsedhistory.length; i++) {
-            parsedhistory.push({ id: Number(parsedhistory.shift()), cid: 1, c: 1 });
+    if (parsedHistory.length && !parsedHistory[0].id) {
+        for (let i = 0; i < parsedHistory.length; i++) {
+            parsedHistory.push({ id: Number(parsedHistory.shift()), cid: 1, c: 1 });
         }
-        localStorage.setItem("history", JSON.stringify(parsedhistory));
+        localStorage.setItem("history", JSON.stringify(parsedHistory));
     }
-    const [history, setHistory] = useState(parsedhistory);
+    const [history, setHistory] = useState(parsedHistory);
     const listeningResize = useRef(false);
 
     useEffect(() => {

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import {
     useCat,
@@ -24,7 +23,6 @@ import MenuPreload from "./menuPreload";
  * This function renders the main content of the menu
  */
 export default function MenuBody() {
-    const querystring = queryString.parse(window.location.search);
     const navigate = useNavigate();
     const [category] = useCat();
     const [search] = useSearch();
@@ -41,8 +39,8 @@ export default function MenuBody() {
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useHistory();
     const paperRef = useRef<HTMLDivElement>(null);
-    const q = decodeURIComponent(String(querystring.q || query || ""));
-    const c: string | number = category || `bytid${id}`;
+
+    const categoryKey: string | number = category || `bytid${id}`;
 
     /**
      * It sets the notification state to an object with the open property set to true and the text
@@ -67,10 +65,10 @@ export default function MenuBody() {
             setLoading(true);
             const url = {
                 search: `/search?q=${encodeURIComponent(
-                    q
+                    query
                 )}&sort=${selected}&mode=${smode}`,
                 profile: `/history/${profile}?sort=${selected}`,
-                menu: `/menu/${c}?sort=${selected}`,
+                menu: `/menu/${categoryKey}?sort=${selected}`,
                 recall: `/threads?threads=${JSON.stringify(
                     splitArray(
                         history.map((item) => item.id),
@@ -94,6 +92,11 @@ export default function MenuBody() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, recall, profile, data, selected, category]);
 
+    useEffect(() => {
+        if (query && search) setData([]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [query, search]);
+
     /**
      * It updates the data array with the new data from the API.
      */
@@ -101,11 +104,11 @@ export default function MenuBody() {
         setEnd(false);
         setLoading(true);
         const url = {
-            search: `/search?q=${encodeURIComponent(q)}&sort=${selected}&page=${
+            search: `/search?q=${encodeURIComponent(query)}&sort=${selected}&page=${
                 page + 1
             }&mode=${smode}`,
             profile: `/history/${profile}?sort=${selected}&page=${page + 1}`,
-            menu: `/menu/${c}?sort=${selected}&page=${page + 1}`,
+            menu: `/menu/${categoryKey}?sort=${selected}&page=${page + 1}`,
             recall: `/threads?threads=${JSON.stringify(
                 splitArray(
                     history.map((item) => item.id),

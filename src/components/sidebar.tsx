@@ -6,7 +6,7 @@ import {
     Drawer,
     IconButton,
     List,
-    ListItem,
+    ListItemButton,
     ListItemIcon,
     ListItemText,
     Typography,
@@ -26,8 +26,9 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchbar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
 import { wholePath } from "../lib/common";
-import { useCat, useData, useProfile, useSearch } from "./MenuProvider";
+import { useCat, useProfile, useSearch } from "./MenuProvider";
 import MetahkgLogo from "./logo";
+
 /**
  * The sidebar is a
  * drawer that is opened by clicking on the menu icon on the top left of the
@@ -44,7 +45,7 @@ export default function SideBar() {
     const categories = useCategories();
     const navigate = useNavigate();
     const toggleDrawer =
-        (o: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
             if (
                 event.type === "keydown" &&
                 ((event as React.KeyboardEvent).key === "Tab" ||
@@ -52,15 +53,13 @@ export default function SideBar() {
             ) {
                 return;
             }
-            setOpen(o);
+            setOpen(open);
         };
 
     function onClick() {
         setOpen(false);
     }
 
-    const [data, setData] = useData();
-    let tempq = decodeURIComponent(query || "");
     return (
         <div>
             <div>
@@ -82,31 +81,29 @@ export default function SideBar() {
                 <Box className="sidebar-box max-width-full" role="presentation">
                     <div className="fullwidth">
                         <List className="fullwidth">
-                            <a
+                            <ListItemButton
+                                onClick={onClick}
+                                component={"a"}
                                 href="https://war.ukraine.ua/support-ukraine/"
-                                className="notextdecoration white"
+                                className="text-decoration-none white"
                             >
-                                <ListItem button onClick={onClick}>
-                                    <ListItemIcon>
-                                        <MetahkgLogo height={24} width={30} ua />
-                                    </ListItemIcon>
-                                    <ListItemText>Support Ukraine</ListItemText>
-                                </ListItem>
-                            </a>
+                                <ListItemIcon>
+                                    <MetahkgLogo height={24} width={30} ua />
+                                </ListItemIcon>
+                                <ListItemText>Support Ukraine</ListItemText>
+                            </ListItemButton>
                         </List>
                         <div className="ml10 mr10">
                             <SearchBar
                                 onChange={(e) => {
-                                    tempq = e.target.value;
+                                    setQuery(e.target.value);
                                 }}
-                                onKeyPress={(e: any) => {
-                                    if (e.key === "Enter" && tempq) {
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter" && query) {
                                         navigate(
-                                            `/search?q=${encodeURIComponent(tempq)}`
+                                            `/search?q=${encodeURIComponent(query)}`
                                         );
-                                        data && setData([]);
                                         setOpen(false);
-                                        setQuery(tempq);
                                     }
                                 }}
                             />
@@ -127,58 +124,60 @@ export default function SideBar() {
                                 icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
                         ].map((item, index) => (
-                            <Link
+                            <ListItemButton
                                 key={index}
+                                component={Link}
+                                onClick={onClick}
                                 to={item.link}
-                                className="notextdecoration white"
+                                className="text-decoration-none white"
                             >
-                                <ListItem button onClick={onClick}>
-                                    <ListItemIcon>{item.icon}</ListItemIcon>
-                                    <ListItemText>{item.title}</ListItemText>
-                                </ListItem>
-                            </Link>
+                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                <ListItemText>{item.title}</ListItemText>
+                            </ListItemButton>
                         ))}
                     </List>
                     <Divider />
                     {[
                         categories.filter((i) => !i.hidden),
                         user && categories.filter((i) => i.hidden),
-                    ].map((cats, index) => (
-                        <div key={index}>
-                            {cats && (
-                                <div
-                                    className={`m20${user && !index ? " mb10" : ""}${
-                                        index ? " mt0" : ""
-                                    }`}
-                                >
-                                    {cats.map((category, index) => (
-                                        <Link
-                                            key={index}
-                                            to={`/category/${category.id}`}
-                                            className="notextdecoration"
-                                        >
-                                            <Typography
-                                                className="font-size-16-force text-align-left halfwidth sidebar-catlink"
-                                                sx={(theme) => ({
-                                                    color:
-                                                        cat === category.id &&
-                                                        !(profile || search)
-                                                            ? theme.palette.secondary.main
-                                                            : "white",
-                                                    "&:hover": {
-                                                        color: `${theme.palette.secondary.main} !important`,
-                                                    },
-                                                })}
-                                                onClick={onClick}
+                    ].map(
+                        (cats, index) =>
+                            cats && (
+                                <div key={index}>
+                                    <div
+                                        className={`m20${user && !index ? " mb10" : ""}${
+                                            index ? " mt0" : ""
+                                        }`}
+                                    >
+                                        {cats.map((category, index) => (
+                                            <Link
+                                                key={index}
+                                                to={`/category/${category.id}`}
+                                                className="notextdecoration"
                                             >
-                                                {category.name}
-                                            </Typography>
-                                        </Link>
-                                    ))}
+                                                <Typography
+                                                    className="font-size-16-force text-align-left halfwidth sidebar-catlink"
+                                                    sx={(theme) => ({
+                                                        color:
+                                                            cat === category.id &&
+                                                            !(profile || search)
+                                                                ? theme.palette.secondary
+                                                                      .main
+                                                                : "white",
+                                                        "&:hover": {
+                                                            color: `${theme.palette.secondary.main} !important`,
+                                                        },
+                                                    })}
+                                                    onClick={onClick}
+                                                >
+                                                    {category.name}
+                                                </Typography>
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
-                            )}
-                        </div>
-                    ))}
+                            )
+                    )}
                     <Divider />
                     <List>
                         {[
@@ -193,32 +192,34 @@ export default function SideBar() {
                                 link: "https://gitlab.com/metahkg/metahkg",
                             },
                         ].map((item, index) => (
-                            <a
+                            <ListItemButton
+                                component={"a"}
                                 key={index}
-                                className="notextdecoration white"
+                                onClick={onClick}
+                                className="text-decoration-none white"
                                 href={item.link}
                             >
-                                <ListItem button key={index} onClick={onClick}>
-                                    <ListItemIcon>{item.icon}</ListItemIcon>
-                                    <ListItemText primary={item.title} />
-                                </ListItem>
-                            </a>
+                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                <ListItemText primary={item.title} />
+                            </ListItemButton>
                         ))}
                     </List>
                     <Divider />
                     <List>
                         {user && (
-                            <Link to="/profile/self" className="notextdecoration white">
-                                <ListItem button onClick={onClick}>
-                                    <ListItemIcon>
-                                        <ManageAccountsIcon />
-                                    </ListItemIcon>
-                                    <ListItemText>{user?.name}</ListItemText>
-                                </ListItem>
-                            </Link>
+                            <ListItemButton
+                                component={Link}
+                                className="text-decoration-none white"
+                                to={"/profile/self"}
+                                onClick={onClick}
+                            >
+                                <ListItemIcon>
+                                    <ManageAccountsIcon />
+                                </ListItemIcon>
+                                <ListItemText>{user?.name}</ListItemText>
+                            </ListItemButton>
                         )}
-                        <ListItem
-                            button
+                        <ListItemButton
                             onClick={() => {
                                 setOpen(false);
                                 setSettingsOpen(true);
@@ -228,7 +229,7 @@ export default function SideBar() {
                                 <SettingsIcon />
                             </ListItemIcon>
                             <ListItemText>Settings</ListItemText>
-                        </ListItem>
+                        </ListItemButton>
                     </List>
                     <p className="ml5">
                         Metahkg Web {process.env.REACT_APP_build || "v0.6.0rc1"}

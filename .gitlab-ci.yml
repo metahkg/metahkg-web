@@ -2,6 +2,7 @@ lint:
   image: node:18
   script:
     - git checkout $CI_COMMIT_BRANCH
+    - yarn install
     - yarn lint
     - git config user.name wcyat-bot
     - git config user.email bot@wcyat.me

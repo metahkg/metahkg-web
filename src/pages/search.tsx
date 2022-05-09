@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
@@ -11,8 +11,9 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useIsSmallScreen } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen, useQuery } from "../components/ContextProvider";
 import { setTitle } from "../lib/common";
+import queryString from "query-string";
 
 export default function Search() {
     const [search, setSearch] = useSearch();
@@ -20,15 +21,22 @@ export default function Search() {
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [data, setData] = useData();
+    const [, setQuery] = useQuery();
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
+    const querystring = queryString.parse(window.location.search);
 
-    setTitle("Search | Metahkg");
+    useEffect(() => {
+        if (querystring.q) setQuery(decodeURIComponent(String(querystring.q)));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     (function onRender() {
+        setTitle("Search | Metahkg");
+
         back !== window.location.pathname &&
             setBack(window.location.pathname + window.location.search);
 

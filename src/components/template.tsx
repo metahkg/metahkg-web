@@ -1,4 +1,3 @@
-import "./css/empty.css";
 import React from "react";
 import {
     AccountCircle as AccountCircleIcon,
@@ -8,7 +7,7 @@ import {
     ManageAccounts as ManageAccountsIcon,
     Telegram as TelegramIcon,
 } from "@mui/icons-material";
-import { List, ListItem, ListItemIcon, ListItemText, Paper } from "@mui/material";
+import { List, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
@@ -41,65 +40,65 @@ export default function Template() {
     const [user] = useUser();
     return (
         <Paper
-            className="overflow-auto justify-center flex empty-paper"
+            className="overflow-auto justify-center flex max-height-fullvh"
             sx={{
-                bgcolor: "parmary.dark",
+                bgcolor: "primary.dark",
+                width: "70vw",
             }}
         >
-            <div className="fullwidth empty-main-div">
+            <div className="fullwidth m50">
                 <div className="flex align-center">
                     <MetahkgIcon height={40} width={50} svg light />
                     <h1>Metahkg</h1>
                 </div>
                 <List>
-                    <a
-                        className="notextdecoration white"
+                    <ListItemButton
+                        className="fullwidth text-decoration-none white"
+                        component={"a"}
                         href="https://war.ukraine.ua/support-ukraine/"
                     >
-                        <ListItem button className="fullwidth">
-                            <ListItemIcon>
-                                <MetahkgLogo ua height={24} width={30} />
-                            </ListItemIcon>
-                            <ListItemText>Support Ukraine</ListItemText>
-                        </ListItem>
-                    </a>
-                    <Link
-                        className="notextdecoration white"
+                        <ListItemIcon>
+                            <MetahkgLogo ua height={24} width={30} />
+                        </ListItemIcon>
+                        <ListItemText>Support Ukraine</ListItemText>
+                    </ListItemButton>
+                    <ListItemButton
+                        component={Link}
+                        className="notextdecoration white fullwidth"
                         to={`/${
                             user ? "users/logout" : "users/signin"
                         }?returnto=${encodeURIComponent(wholePath())}`}
                     >
-                        <ListItem button className="fullwidth">
-                            <ListItemIcon>
-                                {user ? <LogoutIcon /> : <AccountCircleIcon />}
-                            </ListItemIcon>
-                            <ListItemText>
-                                {user ? "Logout" : "Sign in / Register"}
-                            </ListItemText>
-                        </ListItem>
-                    </Link>
+                        <ListItemIcon>
+                            {user ? <LogoutIcon /> : <AccountCircleIcon />}
+                        </ListItemIcon>
+                        <ListItemText>
+                            {user ? "Logout" : "Sign in / Register"}
+                        </ListItemText>
+                    </ListItemButton>
                     {user && (
-                        <Link to="/profile/self" className="notextdecoration white">
-                            <ListItem button className="fullwidth">
-                                <ListItemIcon>
-                                    <ManageAccountsIcon />
-                                </ListItemIcon>
-                                <ListItemText>{user.name}</ListItemText>
-                            </ListItem>
-                        </Link>
+                        <ListItemButton
+                            component={Link}
+                            to="/profile/self"
+                            className="fullwidth text-decoration-none white"
+                        >
+                            <ListItemIcon>
+                                <ManageAccountsIcon />
+                            </ListItemIcon>
+                            <ListItemText>{user.name}</ListItemText>
+                        </ListItemButton>
                     )}
 
                     {links.map((link, index) => (
-                        <Link
-                            className="notextdecoration white"
-                            to={link.link}
+                        <ListItemButton
                             key={index}
+                            component={Link}
+                            to={link.link}
+                            className="fullwidth text-decoration-none white"
                         >
-                            <ListItem button className="fullwidth">
-                                <ListItemIcon>{link.icon}</ListItemIcon>
-                                <ListItemText>{link.title}</ListItemText>
-                            </ListItem>
-                        </Link>
+                            <ListItemIcon>{link.icon}</ListItemIcon>
+                            <ListItemText>{link.title}</ListItemText>
+                        </ListItemButton>
                     ))}
                 </List>
             </div>
