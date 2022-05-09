@@ -60,7 +60,7 @@ export default function MenuBody() {
         (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {
-        if (!data.length && (category || profile || search || id || recall)) {
+        if (!data.length && (category || profile || (search && query) || id || recall)) {
             setEnd(false);
             setLoading(true);
             const url = {
@@ -143,6 +143,13 @@ export default function MenuBody() {
             }
         }
     }
+
+    if (search && !query)
+        return (
+            <Typography className={"text-align-center mt10"} color={"secondary"}>
+                Please enter a query.
+            </Typography>
+        );
 
     return (
         <Paper

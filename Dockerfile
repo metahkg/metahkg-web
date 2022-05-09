@@ -15,7 +15,7 @@ COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
 
-RUN yarn install --ignore-optional
+RUN yarn install --production --ignore-optional
 
 COPY ./src ./src
 COPY ./public ./public
