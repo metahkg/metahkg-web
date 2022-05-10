@@ -1,4 +1,4 @@
-FROM node:latest AS build
+FROM node:18 AS build
 
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
@@ -21,7 +21,7 @@ COPY ./config-overrides.js ./
 
 RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn run build; fi;
 
-FROM node:latest
+FROM node:18
 
 WORKDIR /usr/src/app
 

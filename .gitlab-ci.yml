@@ -6,7 +6,7 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 prettify:
-  image: node:latest
+  image: node:18
   before_script:
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
