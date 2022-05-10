@@ -27,8 +27,10 @@ docker-build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" .
+    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" .
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
+    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
   rules:
     - if: "$CI_COMMIT_BRANCH"
       exists:

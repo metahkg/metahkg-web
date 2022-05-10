@@ -34,10 +34,10 @@ export default function App() {
 
     useEffect(() => {
         if (user) {
-            api.get("/users/loggedin").then((res) => {
-                if (!res.data.loggedin) localStorage.removeItem("token");
+            api.get("/users/status").then((res) => {
+                if (!res.data.signedIn) localStorage.removeItem("token");
 
-                res.data.loggedin &&
+                res.data.signedIn &&
                     localStorage.token !== res.data.token &&
                     localStorage.setItem("token", res.data.token);
 
