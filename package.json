@@ -73,7 +73,6 @@
     "start:react": "npx react-app-rewired start",
     "build": "export REACT_APP_build=$(git rev-parse --short HEAD) && npx react-app-rewired build",
     "build:nocheck": "yarn run build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "docker": "cd docker && docker-compose up -d --build",
     "deploy": "yarn run build && yarn run start",
