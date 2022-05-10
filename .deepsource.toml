@@ -10,11 +10,3 @@ enabled = true
 
   [analyzers.meta]
   plugins = ["react"]
-
-[[transformers]]
-name = "standardjs"
-enabled = true
-
-[[transformers]]
-name = "prettier"
-enabled = true
