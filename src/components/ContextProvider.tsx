@@ -12,6 +12,9 @@ import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import type { category } from "../types/category";
 import { api } from "../lib/api";
+import { userType } from "../types/user";
+import jwtDecode from "jwt-decode";
+
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
@@ -22,6 +25,7 @@ const Context = createContext<{
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [category[], Dispatch<category[]>];
+    user: [userType | null, Dispatch<SetStateAction<userType | null>>];
     //@ts-ignore
 }>(null);
 /**
@@ -37,21 +41,33 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<settings>(
-        JSON.parse(localStorage.getItem("settings") || "{}")
+        JSON.parse(
+            localStorage.getItem("settings") ||
+                JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
+        )
+    );
+    const [user, setUser] = useState(
+        (() => {
+            try {
+                return jwtDecode(localStorage.token || "") as userType | null;
+            } catch {
+                return null;
+            }
+        })()
     );
     const [categories, setCategories] = useState<category[]>([]);
-    const parsedhistory: { id: number; cid: number; c: number }[] = JSON.parse(
+    const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
     );
     /** migrate from old */
-    if (parsedhistory.length && !parsedhistory[0].id) {
-        for (let i = 0; i < parsedhistory.length; i++) {
-            parsedhistory.push({ id: Number(parsedhistory.shift()), cid: 1, c: 1 });
+    if (parsedHistory.length && !parsedHistory[0].id) {
+        for (let i = 0; i < parsedHistory.length; i++) {
+            parsedHistory.push({ id: Number(parsedHistory.shift()), cid: 1, c: 1 });
         }
-        localStorage.setItem("history", JSON.stringify(parsedhistory));
+        localStorage.setItem("history", JSON.stringify(parsedHistory));
     }
-    const [history, setHistory] = useState(parsedhistory);
-    const resizehandler = useRef(false);
+    const [history, setHistory] = useState(parsedHistory);
+    const listeningResize = useRef(false);
 
     useEffect(() => {
         api.get(`/category/all`).then((res) => {
@@ -59,13 +75,17 @@ export default function ContextProvider(props: { children: JSX.Element }) {
         });
     }, []);
 
+    useEffect(() => {
+        localStorage.setItem("history", JSON.stringify(history));
+    }, [history]);
+
     function updateSize() {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
     }
 
-    if (!resizehandler.current) {
-        resizehandler.current = true;
+    if (!listeningResize.current) {
+        listeningResize.current = true;
         window.addEventListener("resize", updateSize);
     }
     return (
@@ -80,6 +100,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
                 settings: [settings, setSettings],
                 history: [history, setHistory],
                 categories: [categories, setCategories],
+                user: [user, setUser],
             }}
         >
             {props.children}
@@ -177,4 +198,12 @@ export function useHistory() {
 export function useCategories() {
     const { categories } = useContext(Context);
     return categories[0];
+}
+export function useUser() {
+    const { user } = useContext(Context);
+    return user;
+}
+export function useIsSmallScreen() {
+    const { width } = useContext(Context);
+    return width[0] < 760;
 }

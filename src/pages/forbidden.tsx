@@ -3,14 +3,17 @@ import React from "react";
 import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
+import { setTitle } from "../lib/common";
 
 /**
  * 401 page
  */
 export default function Forbidden() {
-    document.title = "401 Forbidden | Metahkg";
     const [menu, setMenu] = useMenu();
+
+    setTitle("401 Forbidden | Metahkg");
     menu && setMenu(false);
+
     return (
         <Box
             className="flex align-center justify-center notfound-root"

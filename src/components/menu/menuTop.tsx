@@ -10,10 +10,11 @@ import {
     useProfile,
     useRecall,
     useSearch,
-    useTitle,
+    useMenuTitle,
 } from "../MenuProvider";
-import { useWidth } from "../ContextProvider";
+import { useIsSmallScreen } from "../ContextProvider";
 import { api } from "../../lib/api";
+import { setTitle } from "../../lib/common";
 
 /**
  * The top part of the menu consists of a title part
@@ -37,7 +38,7 @@ export default function MenuTop(props: {
     const [category] = useCat();
     const [recall] = useRecall();
     const [id] = useId();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const mode =
         (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     const inittitle = {
@@ -46,31 +47,29 @@ export default function MenuTop(props: {
         menu: "Metahkg",
         recall: "Recall",
     }[mode];
-    const [title, setTitle] = useTitle();
+    const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = {
         search: ["Relevance", "Topic", "Last Reply"],
         profile: ["Topic", "Last Reply"],
-        menu: [width < 760 && title ? title : "Latest", "Viral"],
+        menu: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
         recall: [],
     }[mode];
     const mobileTop = mode !== "menu";
     useEffect(() => {
-        if (!search && !recall && !title && (category || profile || id)) {
+        if (!search && !recall && !menuTitle && (category || profile || id)) {
             if (profile) {
                 api.get(`/profile/${profile}?nameonly=true`).then((res) => {
-                    setTitle(res.data.name);
-                    document.title = `${res.data.name} | Metahkg`;
+                    setMenuTitle(res.data.name);
+                    setTitle(`${res.data.name} | Metahkg`);
                 });
             } else {
                 api.get(`/category/${category || `bytid${id}`}`).then((res) => {
-                    setTitle(res.data.name);
-                    if (!id) {
-                        document.title = `${res.data.name} | Metahkg`;
-                    }
+                    setMenuTitle(res.data.name);
+                    if (!id) setTitle(`${res.data.name} | Metahkg`);
                 });
             }
         }
-    }, [category, id, profile, recall, search, setTitle, title]);
+    }, [category, id, profile, recall, search, setMenuTitle, menuTitle]);
     return (
         <div>
             {/*title and refresh and add button*/}
@@ -78,16 +77,16 @@ export default function MenuTop(props: {
                 className="fullwidth menutop-root"
                 sx={{
                     bgcolor: "primary.main",
-                    height: recall ? 50 : width < 760 && !mobileTop ? 50 : 90,
+                    height: recall ? 50 : isSmallScreen && !mobileTop ? 50 : 90,
                 }}
             >
-                {Boolean(width < 760 ? mobileTop : 1) && (
+                {Boolean(isSmallScreen ? mobileTop : 1) && (
                     <div
                         className={`flex fullwidth align-center menutop-top justify-${
-                            width < 760 ? "center" : "space-between"
+                            isSmallScreen ? "center" : "space-between"
                         }`}
                     >
-                        {!(width < 760) && (
+                        {!isSmallScreen && (
                             <div className="ml10 mr40">
                                 <SideBar />
                             </div>
@@ -96,9 +95,9 @@ export default function MenuTop(props: {
                             sx={{ color: "secondary.main" }}
                             className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
                         >
-                            {title || inittitle}
+                            {menuTitle || inittitle}
                         </Typography>
-                        {!(width < 760) && (
+                        {!isSmallScreen && (
                             <div className="flex">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
@@ -120,7 +119,7 @@ export default function MenuTop(props: {
                 {/*now should be latest and viral*/}
                 {Boolean(tabs.length) && (
                     <Box
-                        sx={{ height: width < 760 && !mobileTop ? 50 : 40 }}
+                        sx={{ height: isSmallScreen && !mobileTop ? 50 : 40 }}
                         className="flex fullwidth align-flex-end"
                     >
                         <Tabs

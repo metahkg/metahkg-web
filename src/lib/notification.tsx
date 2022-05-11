@@ -9,16 +9,14 @@ import { useNotification } from "../components/ContextProvider";
  */
 export function Notification() {
     const [notification, setNotification] = useNotification();
-    const vertical: "top" | "bottom" = "top";
-    const horizontal: "left" | "right" | "center" = "right";
     const open = notification.open;
     return (
         <Snackbar
-            className="notification-root"
+            className="border-radius-8 notification-root"
             sx={{
                 bgcolor: "primary.main",
             }}
-            anchorOrigin={{ horizontal, vertical }}
+            anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={open}
             autoHideDuration={3000}
             onClick={() => {
@@ -28,7 +26,7 @@ export function Notification() {
                 setNotification({ ...notification, open: false });
             }}
         >
-            <Box className="fullwidth pointer notification-mainbox">
+            <Box className="fullwidth pointer border-radius-8 notification-mainbox">
                 <Box className="flex fullwidth font-size-14 notification-top">
                     <div className="ml15 flex align-center fullwidth justify-space-between">
                         <div className="flex align-center">
@@ -38,7 +36,7 @@ export function Notification() {
                         <Close className="icon-white-onhover metahkg-grey-force font-size-16-force mr12" />
                     </div>
                 </Box>
-                <Box className="fullwidth notification-bottom">
+                <Box className="fullwidth notification-bottom border-radius-8">
                     <p className="m15 text-overflow-ellipsis overflow-hidden font-size-15 notification-text">
                         {notification.text}
                     </p>

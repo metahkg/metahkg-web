@@ -3,7 +3,7 @@ import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useBack, useWidth } from "../ContextProvider";
+import { useBack, useIsSmallScreen } from "../ContextProvider";
 
 /**
  * It's a component that renders the title of the thread.
@@ -21,7 +21,7 @@ export default function Title(props: {
 }) {
     const { category, title, btns } = props;
     const [history] = useBack();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     return (
         <Box
             className="title-root"
@@ -40,7 +40,7 @@ export default function Title(props: {
                     )}
                     <Typography
                         className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
-                            width < 760 ? " text-align-center" : ""
+                            isSmallScreen ? " text-align-center" : ""
                         }`}
                         sx={{
                             color: "secondary.main",
@@ -50,7 +50,7 @@ export default function Title(props: {
                     </Typography>
                 </div>
                 <div className="flex">
-                    {!(width < 760) &&
+                    {!isSmallScreen &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
                                 <IconButton onClick={btn.action}>{btn.icon}</IconButton>

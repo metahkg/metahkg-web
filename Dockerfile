@@ -3,6 +3,9 @@ FROM node:18 AS build
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
+ARG REACT_APP_build
+ENV REACT_APP_build $REACT_APP_build
+
 ARG env
 ENV env $env
 
@@ -12,7 +15,7 @@ COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
 
-RUN yarn install
+RUN yarn install --production --ignore-optional
 
 COPY ./src ./src
 COPY ./public ./public

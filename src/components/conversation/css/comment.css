@@ -1,4 +1,4 @@
-@import url(https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-material-dark.min.css);
+@import "~prismjs/themes/prism-tomorrow.min.css";
 
 .comment-tag-userlink {
     line-height: 22px;
@@ -22,7 +22,7 @@
 }
 
 .comment-spacer {
-    height: 10px;
+    height: 15px;
 }
 
 .comment-body a {
@@ -70,4 +70,12 @@
 }
 .comment-body blockquote > .comment-body > *:last-child {
     margin-bottom: 5px;
+}
+
+.comment-body > *:first-child {
+    margin-top: 15px;
+}
+
+.comment-body > *:last-child {
+    margin-bottom: 15px;
 }

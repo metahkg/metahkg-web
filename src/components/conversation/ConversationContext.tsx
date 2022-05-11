@@ -1,26 +1,35 @@
 import React, { createContext, useState, useRef } from "react";
 import { threadType } from "../../types/conversation/thread";
 import queryString from "query-string";
+import { commentType } from "../../types/conversation/comment";
+
+interface editorStateType {
+    open: boolean;
+    quote?: commentType;
+}
+
 const ConversationContext = createContext<{
     thread: [null | threadType, React.Dispatch<React.SetStateAction<null | threadType>>];
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
-    votes: [
-        { [id: number]: "U" | "D" },
-        React.Dispatch<React.SetStateAction<{ [id: number]: "U" | "D" }>>
+    userVotes: [
+        { [id: number]: "U" | "D" } | null,
+        React.Dispatch<React.SetStateAction<{ [id: number]: "U" | "D" } | null>>
     ];
     updating: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     pages: [number, React.Dispatch<React.SetStateAction<number>>];
     end: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-    reRender: [number, React.Dispatch<React.SetStateAction<number>>];
+    reRender: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     story: [number, React.Dispatch<React.SetStateAction<number>>];
     lastHeight: React.MutableRefObject<number>;
     galleryOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     images: [{ src: string }[], React.Dispatch<React.SetStateAction<{ src: string }[]>>];
+    editor: [editorStateType, React.Dispatch<React.SetStateAction<editorStateType>>];
     title: string | undefined;
     threadId: number;
-    croot: React.MutableRefObject<HTMLDivElement | null>;
+    cRoot: React.MutableRefObject<HTMLDivElement | null>;
+    cBottom: React.MutableRefObject<HTMLDivElement | null>;
     // @ts-ignore
 }>(null);
 
@@ -38,24 +47,26 @@ export default function ConversationProvider(props: {
     const [currentPage, setCurrentPage] = useState(
         Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
     );
-    const [votes, setVotes] = useState<{ [id: number]: "U" | "D" }>({});
+    const [userVotes, setUserVotes] = useState<{ [id: number]: "U" | "D" } | null>(null);
     const [updating, setUpdating] = useState(false);
     const [pages, setPages] = useState(1);
     const [end, setEnd] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [reRender, setReRender] = useState(Math.random());
+    const [reRender, setReRender] = useState(false);
     const [story, setStory] = useState(0);
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [images, setImages] = useState<{ src: string }[]>([]);
-    const croot = useRef<HTMLDivElement>(null);
+    const [editor, setEditor] = useState<editorStateType>({ open: false });
+    const cRoot = useRef<HTMLDivElement>(null);
+    const cBottom = useRef<HTMLDivElement>(null);
     return (
         <ConversationContext.Provider
             value={{
                 thread: [thread, setThread],
                 finalPage: [finalPage, setFinalPage],
                 currentPage: [currentPage, setCurrentPage],
-                votes: [votes, setVotes],
+                userVotes: [userVotes, setUserVotes],
                 updating: [updating, setUpdating],
                 pages: [pages, setPages],
                 end: [end, setEnd],
@@ -67,7 +78,9 @@ export default function ConversationProvider(props: {
                 lastHeight: lastHeight,
                 title: thread?.title,
                 threadId: threadId,
-                croot: croot,
+                cRoot: cRoot,
+                cBottom: cBottom,
+                editor: [editor, setEditor],
             }}
         >
             {children}
@@ -90,8 +103,8 @@ export function useCurrentPage() {
     return currentPage;
 }
 
-export function useVotes() {
-    const { votes } = React.useContext(ConversationContext);
+export function useUserVotes() {
+    const { userVotes: votes } = React.useContext(ConversationContext);
     return votes;
 }
 
@@ -151,6 +164,16 @@ export function useTitle() {
 }
 
 export function useCRoot() {
-    const { croot } = React.useContext(ConversationContext);
-    return croot;
+    const { cRoot } = React.useContext(ConversationContext);
+    return cRoot;
+}
+
+export function useCBottom() {
+    const { cBottom } = React.useContext(ConversationContext);
+    return cBottom;
+}
+
+export function useEditor() {
+    const { editor } = React.useContext(ConversationContext);
+    return editor;
 }

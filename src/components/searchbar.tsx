@@ -26,7 +26,6 @@ import React, { KeyboardEventHandler } from "react";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { useQuery } from "./ContextProvider";
-import queryString from "query-string";
 import { useData, useSearch, useSmode } from "./MenuProvider";
 
 const Search = styled("div")(({ theme }) => ({
@@ -80,19 +79,17 @@ export default function SearchBar(props: {
     const [, setData] = useData();
     const [smode, setSmode] = useSmode();
     const [search] = useSearch();
-    const querystring = queryString.parse(window.location.search);
     return (
         <Search>
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-                key={query}
                 placeholder="Search"
                 inputProps={{ "aria-label": "search" }}
                 onKeyPress={props.onKeyPress}
                 onChange={props.onChange}
-                defaultValue={decodeURIComponent(String(querystring.q || query || ""))}
+                defaultValue={query}
             />
             {search && (
                 <Chip

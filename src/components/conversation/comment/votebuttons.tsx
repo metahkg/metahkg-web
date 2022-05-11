@@ -2,9 +2,9 @@ import "./css/votebuttons.css";
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
-import { useNotification } from "../../ContextProvider";
+import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
-import { useThreadId, useVotes } from "../ConversationContext";
+import { useThreadId, useUserVotes } from "../ConversationContext";
 
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
@@ -21,10 +21,11 @@ export default function VoteButtons(props: {
 }) {
     const { commentId, upVotes, downVotes } = props;
     const threadId = useThreadId();
-    const [votes, setVotes] = useVotes();
+    const [votes, setVotes] = useUserVotes();
     const [up, setUp] = useState(upVotes);
     const [down, setDown] = useState(downVotes);
     const [, setNotification] = useNotification();
+    const [user] = useUser();
     const vote = votes?.[commentId];
 
     /**
@@ -51,8 +52,8 @@ export default function VoteButtons(props: {
     return (
         <ButtonGroup variant="text" className="vb-btn-group">
             <Button
-                className="nopadding vb-btn vb-btn-left"
-                disabled={!localStorage.user || !!vote}
+                className="nopadding nomargin vb-btn vb-btn-left"
+                disabled={!user || !!vote}
                 onClick={() => {
                     sendVote("U");
                 }}
@@ -68,8 +69,8 @@ export default function VoteButtons(props: {
                 </Typography>
             </Button>
             <Button
-                className="nopadding vb-btn vb-btn-right"
-                disabled={!localStorage.user || !!vote}
+                className="nopadding nomargin vb-btn vb-btn-right"
+                disabled={!user || !!vote}
                 onClick={() => {
                     sendVote("D");
                 }}

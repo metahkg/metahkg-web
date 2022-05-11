@@ -93,7 +93,7 @@ export default function MoreList(props: {
                 </Tooltip>
                 <Popper
                     open={open}
-                    style={{ zIndex: 2147483647 }}
+                    style={{ zIndex: 1000 }}
                     anchorEl={anchorRef.current}
                     role={undefined}
                     placement="bottom-start"

@@ -5,10 +5,15 @@ import { AddComment as AddCommentIcon } from "@mui/icons-material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
-import { useNotification, useWidth } from "../components/ContextProvider";
+import {
+    useNotification,
+    useUser,
+    useIsSmallScreen,
+    useWidth,
+} from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, wholepath } from "../lib/common";
+import { roundup, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
@@ -24,9 +29,11 @@ declare const grecaptcha: { reset: () => void };
  * This page is used to add a comment to a thread
  */
 export default function AddComment() {
+    setTitle("Comment | Metahkg");
     const navigate = useNavigate();
     const [menu, setMenu] = useMenu();
     const [data, setData] = useData();
+    const isSmallScreen = useIsSmallScreen();
     const [width] = useWidth();
     const [comment, setComment] = useState("");
     const [imgUrl, setImgUrl] = useState("");
@@ -38,13 +45,15 @@ export default function AddComment() {
         text: "",
     });
     const [, setNotification] = useNotification();
+    const [user] = useUser();
     const query = queryString.parse(window.location.search);
     const edit = Number(query.edit);
     const quote = Number(query.quote);
     const params = useParams();
     const id = Number(params.id);
+
     useEffect(() => {
-        if (localStorage.user) {
+        if (user) {
             api.post("/posts/check", { id: id }).catch((err) => {
                 if (err.response.status === 404) {
                     setAlert({
@@ -75,7 +84,7 @@ export default function AddComment() {
                     .then((res: { data: commentType }) => {
                         setInitText(
                             `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
-                                <RenderComment comment={res.data} depth={1} />
+                                <RenderComment comment={res.data} depth={0} />
                             )}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
@@ -100,16 +109,16 @@ export default function AddComment() {
     /**
      * It sends a post request to the server with the comment data.
      */
-    function addcomment() {
+    function addComment() {
         //send data to server /api/posts/comment
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
         api.post("/posts/comment", {
-            id: id,
-            comment: comment,
-            rtoken: rtoken,
-            quote: quote || undefined,
+            id,
+            comment,
+            rtoken,
+            quote,
         })
             .then((res) => {
                 data.length && setData([]);
@@ -137,19 +146,20 @@ export default function AddComment() {
     }
 
     /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
-    if (!localStorage.user) {
+    if (!user)
         return (
             <Navigate
                 to={`/users/signin?continue=true&returnto=${encodeURIComponent(
-                    wholepath()
+                    wholePath()
                 )}`}
                 replace
             />
         );
-    }
+
     menu && setMenu(false);
-    document.title = "Comment | Metahkg";
-    const small = width * 0.8 - 40 <= 450;
+
+    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
+
     return (
         <Box
             className="min-height-fullvh flex justify-center fullwidth align-center"
@@ -157,7 +167,7 @@ export default function AddComment() {
                 bgcolor: "primary.dark",
             }}
         >
-            <div style={{ width: width < 760 ? "100vw" : "80vw" }}>
+            <div style={{ width: isSmallScreen ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
                         <MetahkgLogo
@@ -184,7 +194,7 @@ export default function AddComment() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={`${!(width < 760) ? "flex" : ""} align-center mb15`}>
+                    <div className={`${!isSmallScreen ? "flex" : ""} align-center mb15`}>
                         <UploadImage
                             onUpload={() => {
                                 setAlert({
@@ -221,7 +231,7 @@ export default function AddComment() {
                         {imgUrl && (
                             <p
                                 className={`ml10 novmargin flex${
-                                    width < 760 ? " mt5" : ""
+                                    isSmallScreen ? " mt5" : ""
                                 }`}
                             >
                                 <Tooltip
@@ -254,14 +264,14 @@ export default function AddComment() {
                     </div>
                     <TextEditor
                         key={id}
-                        changehandler={(v, e: any) => {
+                        onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
                         text={edit ? initText : undefined}
                     />
                     <div
                         className={`mt15 ${
-                            small
+                            isSmallSmallScreen
                                 ? ""
                                 : "flex fullwidth justify-space-between align-center"
                         }`}
@@ -279,9 +289,9 @@ export default function AddComment() {
                         <Button
                             disabled={disabled || !comment || !rtoken}
                             className={`${
-                                small ? "mt15 " : ""
+                                isSmallSmallScreen ? "mt15 " : ""
                             }font-size-16-force notexttransform ac-btn`}
-                            onClick={addcomment}
+                            onClick={addComment}
                             variant="contained"
                             color="secondary"
                         >

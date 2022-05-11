@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useSettings, useWidth } from "../../components/ContextProvider";
+import {
+    useNotification,
+    useSettings,
+    useUser,
+    useWidth,
+} from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -9,6 +14,7 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
+import { decodeToken, setTitle } from "../../lib/common";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -23,6 +29,7 @@ export default function Verify() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
+    const [user, setUser] = useUser();
     const navigate = useNavigate();
 
     function verify() {
@@ -34,9 +41,8 @@ export default function Verify() {
             code: code,
         })
             .then((res) => {
-                localStorage.setItem("user", res.data.name);
-                localStorage.setItem("id", res.data.id);
                 localStorage.setItem("token", res.data.token);
+                setUser(decodeToken(res.data.token));
                 setNotification({
                     open: true,
                     text: `Logged in as ${res.data.name}.`,
@@ -57,13 +63,17 @@ export default function Verify() {
     }
 
     useEffect(() => {
-        if (query.code && query.email && !localStorage.user) verify();
+        if (query.code && query.email && !user) verify();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    if (localStorage.user) return <Navigate to="/" replace />;
+
+    if (user) return <Navigate to="/" replace />;
+
     menu && setMenu(false);
-    document.title = "Verify | Metahkg";
+    setTitle("Verify | Metahkg");
+
     const small = width / 2 - 100 <= 450;
+
     return (
         <Box
             className="flex align-center justify-center min-height-fullvh fullwidth"

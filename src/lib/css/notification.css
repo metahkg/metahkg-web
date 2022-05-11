@@ -1,15 +1,9 @@
-.notification-root,
-.notification-bottom {
-    border-radius: 8px;
-}
-
 .notification-root {
     width: 300px;
 }
 
 .notification-mainbox {
     background-color: #444;
-    border-radius: 8px;
 }
 
 .notification-top {

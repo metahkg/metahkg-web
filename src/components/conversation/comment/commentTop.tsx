@@ -22,12 +22,13 @@ import {
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import dateat from "date-and-time";
 import { isMobile } from "react-device-detect";
-import { timetoword } from "../../../lib/common";
+import { timeToWord } from "../../../lib/common";
 import MoreList from "./more";
-import { useNotification } from "../../ContextProvider";
+import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
-export default function CommentTop(props: { comment: commentType }) {
+
+export default function CommentTop(props: { comment: commentType; noStory?: boolean }) {
     const [open, setOpen] = useState(false);
     const [timemode, setTimemode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
@@ -39,34 +40,36 @@ export default function CommentTop(props: { comment: commentType }) {
     const title = useTitle();
     const navigate = useNavigate();
     const [thread, setThread] = useThread();
+    const [user] = useUser();
     const croot = useCRoot();
-    const { comment } = props;
+    const { comment, noStory } = props;
     const isOp = thread && thread.op.id === comment.user.id;
     const leftbtns = [
-        {
-            icon: story ? (
-                <VisibilityOff className="metahkg-grey-force font-size-19-force" />
-            ) : (
-                <Visibility className="metahkg-grey-force font-size-19-force" />
-            ),
-            title: story ? "Quit story mode" : "Story mode",
-            action: () => {
-                const commentEle = document.getElementById(`c${comment.id}`);
-                if (commentEle && croot.current) {
-                    const beforeHeight =
-                        commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                    setStory(story ? 0 : comment.user.id);
-                    setTimeout(() => {
-                        const commentEle = document.getElementById(`c${comment.id}`);
-                        if (croot.current && commentEle) {
-                            const afterHeight =
-                                commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                            croot.current.scrollTop += afterHeight - beforeHeight;
-                        }
-                    });
-                }
+        (story ? story === comment.user.id : 1) &&
+            !noStory && {
+                icon: story ? (
+                    <VisibilityOff className="metahkg-grey-force font-size-19-force" />
+                ) : (
+                    <Visibility className="metahkg-grey-force font-size-19-force" />
+                ),
+                title: story ? "Quit story mode" : "Story mode",
+                action: () => {
+                    const commentEle = document.getElementById(`c${comment.id}`);
+                    if (croot.current && commentEle) {
+                        const beforeHeight =
+                            commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                        setStory(story ? 0 : comment.user.id);
+                        setTimeout(() => {
+                            const commentEle = document.getElementById(`c${comment.id}`);
+                            if (croot.current && commentEle) {
+                                const afterHeight =
+                                    commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                                croot.current.scrollTop += afterHeight - beforeHeight;
+                            }
+                        });
+                    }
+                },
             },
-        },
         {
             icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
             title: "Quote",
@@ -98,10 +101,9 @@ export default function CommentTop(props: { comment: commentType }) {
         | undefined
     )[] = [
         (() => {
-            const clientIsOp =
-                thread && Number(localStorage.getItem("id")) === thread.op.id;
-            if (clientIsOp) {
-                const pinned = thread.pin?.id === comment.id;
+            const clientIsOp = thread && user?.id === thread.op.id;
+            const pinned = thread?.pin?.id === comment.id;
+            if (clientIsOp || (user?.role === "admin" && pinned)) {
                 const onError = (err: AxiosError) => {
                     setNotification({
                         open: true,
@@ -125,9 +127,10 @@ export default function CommentTop(props: { comment: commentType }) {
                                     open: true,
                                     text: `Comment ${pinned ? "un" : ""}pinned!`,
                                 });
-                                setThread({
-                                    ...thread,
-                                    pin: pinned ? undefined : comment,
+                                setThread((thread) => {
+                                    if (!pinned && thread) thread.pin = comment;
+                                    else if (thread) delete thread.pin;
+                                    return thread;
                                 });
                             })
                             .catch(onError);
@@ -203,7 +206,7 @@ export default function CommentTop(props: { comment: commentType }) {
                     >
                         {
                             {
-                                short: timetoword(comment.createdAt),
+                                short: timeToWord(comment.createdAt),
                                 long: dateat.format(
                                     new Date(comment.createdAt),
                                     "DD/MM/YY HH:mm"
@@ -212,13 +215,19 @@ export default function CommentTop(props: { comment: commentType }) {
                         }
                     </p>
                 </Tooltip>
-                {leftbtns.map((button, index) => (
-                    <Tooltip key={index} title={button.title} arrow>
-                        <IconButton className="ml10 nopadding" onClick={button.action}>
-                            {button.icon}
-                        </IconButton>
-                    </Tooltip>
-                ))}
+                {leftbtns.map(
+                    (button, index) =>
+                        button && (
+                            <Tooltip key={index} title={button.title} arrow>
+                                <IconButton
+                                    className="ml10 nopadding"
+                                    onClick={button.action}
+                                >
+                                    {button.icon}
+                                </IconButton>
+                            </Tooltip>
+                        )
+                )}
             </div>
             <div className="flex align-center">
                 {rightbtns.map((button) => (

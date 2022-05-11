@@ -9,9 +9,9 @@ import {
     useRecall,
     useSearch,
     useSelected,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useWidth } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 
 /**
  * Only for small screens
@@ -25,29 +25,34 @@ export default function History() {
     const [recall, setRecall] = useRecall();
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
-    const [, setTitle] = useTitle();
+    const [, setMenuTitle] = useMenuTitle();
     const [, setData] = useData();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
-    if (!(width < 760)) {
-        return <Navigate to={`/profile/${params.id}`} replace />;
-    }
 
-    function cleardata() {
-        setData([]);
-        setTitle("");
-        selected && setSelected(0);
-    }
+    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
 
-    !menu && setMenu(true);
-    back !== window.location.pathname && setBack(window.location.pathname);
-    (profile !== (Number(params.id) || "self") || search) && cleardata();
-    profile !== (Number(params.id) || "self") && setProfile(Number(params.id) || "self");
-    search && setSearch(false);
-    recall && setRecall(false);
-    id && setId(0);
-    cat && setCat(0);
-    return <div />;
+    (function onRender() {
+        function clearData() {
+            setData([]);
+            setMenuTitle("");
+            selected && setSelected(0);
+        }
+
+        !menu && setMenu(true);
+        back !== window.location.pathname && setBack(window.location.pathname);
+
+        (profile !== (Number(params.id) || "self") || search) && clearData();
+        profile !== (Number(params.id) || "self") &&
+            setProfile(Number(params.id) || "self");
+
+        search && setSearch(false);
+        recall && setRecall(false);
+        id && setId(0);
+        cat && setCat(0);
+    })();
+
+    return <React.Fragment />;
 }

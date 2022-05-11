@@ -6,7 +6,7 @@ export default function RenderComment(props: { comment: commentType; depth: numb
     const { comment, depth } = props;
     const commentJSX = parse(comment.comment);
     const content = [
-        comment.quote && depth < 4 && (
+        comment.quote && depth < 3 && (
             <blockquote
                 style={{
                     color: "#aca9a9",

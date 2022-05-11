@@ -9,23 +9,21 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import queryString from "query-string";
-import Comment from "./conversation/comment";
+import loadable from "@loadable/component";
 import Title from "./conversation/title";
-import { roundup, splitarray } from "../lib/common";
+import { roundup, splitArray } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
-import { useHistory, useWidth } from "./ContextProvider";
-import Share from "./conversation/share";
+import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
 import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
-import Dock from "./dock";
 import useBtns from "./conversation/functions/btns";
-import Gallery from "./conversation/gallery";
 import { PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { commentType } from "../types/conversation/comment";
 import {
+    useCBottom,
     useCRoot,
     useCurrentPage,
     useEnd,
@@ -38,14 +36,20 @@ import {
     useStory,
     useThread,
     useUpdating,
-    useVotes,
+    useUserVotes,
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import useFirstFetch from "./conversation/functions/firstfetch";
 import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
-import PinnedComment from "./conversation/pin";
+import FloatingEditor from "./floatingEditor";
+import Comment from "./conversation/comment";
+
+const PinnedComment = loadable(() => import("./conversation/pin"));
+const Share = loadable(() => import("./conversation/share"));
+const Gallery = loadable(() => import("./conversation/gallery"));
+const Dock = loadable(() => import("./dock"));
 
 /**
  * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>
@@ -59,23 +63,23 @@ function Conversation(props: { id: number }) {
     const [finalPage] = useFinalPage();
     /** Current page */
     const [currentPage, setCurrentPage] = useCurrentPage();
-    const [votes] = useVotes();
+    const [userVotes] = useUserVotes();
     const [updating] = useUpdating();
     const [pages] = usePages();
     const [, setEnd] = useEnd();
     const [loading, setLoading] = useLoading();
     const [reRender] = useRerender();
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const [story] = useStory();
     const [galleryOpen, setGalleryOpen] = useGalleryOpen();
     const [images] = useImages();
     const [history, setHistory] = useHistory();
-    const croot = useCRoot();
+    const [user] = useUser();
+    const cRoot = useCRoot();
+    const cBottom = useCBottom();
     const navigate = useNavigate();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
-    !query.page &&
-        !query.c &&
-        navigate(`${window.location.pathname}?page=1`, { replace: true });
+
     useFirstFetch();
     useEffect(() => {
         if (history.findIndex((i) => i.id === props.id) === -1) {
@@ -83,7 +87,8 @@ function Conversation(props: { id: number }) {
             setHistory(history);
             localStorage.setItem("history", JSON.stringify(history));
         }
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     /**
      * It fetches new comments, or the next page (if last comment id % 25 = 0)
      * of messages from the server and appends them to the conversation array
@@ -92,35 +97,34 @@ function Conversation(props: { id: number }) {
 
     const changePage = useChangePage();
 
-    /**
-     * When the user scrolls to the bottom of the page, the function calls the update function
-     * @param {any} e - The event object.
-     */
     const onScroll = useOnScroll();
 
-    /* It's checking if the conversation, users, details and votes are all ready. */
-    const ready = !!(
-        thread &&
-        thread.conversation.length &&
-        (localStorage.user ? Object.keys(votes).length : 1)
-    );
-    if (ready && loading) {
-        setTimeout(() => {
-            loading && setLoading(false);
-        }, 100);
-    }
-    if (ready && query.c) {
-        navigate(`${window.location.pathname}?page=${finalPage}`, {
-            replace: true,
-        });
-        setCurrentPage(finalPage);
-        setTimeout(() => {
-            document.getElementById(`c${query.c}`)?.scrollIntoView();
-        });
-    }
-    const numofpages = roundup((thread?.c || 0) / 25);
+    const ready = !!(thread && thread.conversation.length && (user ? userVotes : 1));
+
+    useEffect(() => {
+        !query.page &&
+            !query.c &&
+            navigate(`${window.location.pathname}?page=1`, { replace: true });
+
+        if (ready) {
+            if (loading)
+                setTimeout(() => {
+                    loading && setLoading(false);
+                }, 100);
+
+            if (query.c) {
+                navigate(`${window.location.pathname}?page=${finalPage}`, {
+                    replace: true,
+                });
+                setCurrentPage(finalPage);
+            }
+        }
+    });
+
+    const numOfPages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
+
     return (
         <Box
             className="min-height-fullvh conversation-root"
@@ -131,14 +135,15 @@ function Conversation(props: { id: number }) {
                 },
             })}
         >
+            <FloatingEditor />
             <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
             <Dock btns={btns} />
             <Share />
-            {!(width < 760) && (
+            {!isSmallScreen && (
                 <PageSelect
-                    last={currentPage !== 1 && numofpages > 1}
-                    next={currentPage !== numofpages && numofpages > 1}
-                    pages={numofpages}
+                    last={currentPage !== 1 && numOfPages > 1}
+                    next={currentPage !== numOfPages && numOfPages > 1}
+                    pages={numOfPages}
                     page={currentPage}
                     onLastClicked={() => {
                         changePage(currentPage - 1);
@@ -155,8 +160,8 @@ function Conversation(props: { id: number }) {
             <Title category={thread?.category} title={thread?.title} btns={btns} />
             {thread?.pin && <PinnedComment comment={thread?.pin} />}
             <Paper
-                ref={croot}
-                key={reRender}
+                ref={cRoot}
+                key={Number(reRender)}
                 className={`overflow-auto nobgimage noshadow conversation-paper${
                     thread?.pin ? "-pin" : ""
                 }${loading ? "-loading" : ""}`}
@@ -169,7 +174,7 @@ function Conversation(props: { id: number }) {
                             [...Array(pages)].map((p, index) => {
                                 const page =
                                     roundup(thread.conversation[0].id / 25) + index;
-                                const totalpages = roundup((thread.c || 0) / 25);
+
                                 return (
                                     <Box key={index}>
                                         <VisibilityDetector
@@ -179,7 +184,7 @@ function Conversation(props: { id: number }) {
                                         >
                                             <PageTop
                                                 id={page}
-                                                pages={totalpages}
+                                                pages={numOfPages}
                                                 page={page}
                                                 onChange={(
                                                     e: SelectChangeEvent<number>
@@ -187,7 +192,7 @@ function Conversation(props: { id: number }) {
                                                     changePage(Number(e.target.value));
                                                 }}
                                                 last={!(page === 1 && !index)}
-                                                next={page !== totalpages}
+                                                next={page !== numOfPages}
                                                 onLastClicked={() => {
                                                     changePage(page - 1);
                                                 }}
@@ -197,7 +202,7 @@ function Conversation(props: { id: number }) {
                                             />
                                         </VisibilityDetector>
                                         <React.Fragment>
-                                            {splitarray(
+                                            {splitArray(
                                                 thread.conversation,
                                                 index * 25,
                                                 (index + 1) * 25 - 1
@@ -207,7 +212,13 @@ function Conversation(props: { id: number }) {
                                                     (story
                                                         ? story === comment?.user.id
                                                         : 1) && (
-                                                        <Comment comment={comment} />
+                                                        <Comment
+                                                            comment={comment}
+                                                            scrollIntoView={
+                                                                Number(query.c) ===
+                                                                comment.id
+                                                            }
+                                                        />
                                                     )
                                             )}
                                         </React.Fragment>
@@ -217,6 +228,7 @@ function Conversation(props: { id: number }) {
                     </PhotoProvider>
                 </Box>
                 <Box
+                    ref={cBottom}
                     className="flex justify-center align-center conversation-bottom"
                     sx={{
                         bgcolor: "primary.dark",

@@ -13,10 +13,11 @@ import {
     useThread,
     useThreadId,
 } from "../ConversationContext";
+import { roundup } from "../../../lib/common";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();
-    const [, setPages] = usePages();
+    const [pages, setPages] = usePages();
     const [finalPage, setFinalPage] = useFinalPage();
     const lastHeight = useLastHeight();
     const [, setEnd] = useEnd();
@@ -26,26 +27,67 @@ export default function useChangePage() {
     const [thread, setThread] = useThread();
     const navigate = useNavigate();
     const threadId = useThreadId();
-    return (newPage: number) => {
-        setLoading(true);
-        // @ts-ignore
-        setThread({ ...thread, conversation: [] });
-        setPages(1);
-        setFinalPage(newPage);
-        lastHeight.current = 0;
-        setEnd(false);
-        setReRender(Math.random());
-        navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
-        setCurrentPage(newPage);
-        api.get(`/api/posts/thread/${threadId}?page=${newPage}`).then(
-            (res: { data: threadType }) => {
-                if (!res.data.conversation.length)
-                    return setNotification({ open: true, text: "Page not found!" });
+    const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
 
-                setThread(res.data);
-                res.data.conversation.length % 25 && setEnd(true);
-                document.getElementById(String(finalPage))?.scrollIntoView();
+    return (newPage: number) => {
+        if (thread) {
+            setCurrentPage(newPage);
+
+            lastHeight.current = 0;
+
+            navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
+
+            const targetElement = document.getElementById(`${newPage}`);
+
+            if (targetElement)
+                return targetElement.scrollIntoView({ behavior: "smooth" });
+
+            const shouldReRender =
+                newPage - finalPage !== 1 && newPage - firstPage !== -1;
+
+            if (shouldReRender) {
+                if (thread) thread.conversation = [];
+                setThread(thread);
+                setReRender((reRender) => !reRender);
             }
-        );
+
+            setLoading(true);
+            setEnd(false);
+            setPages(shouldReRender ? 1 : pages + 1);
+            setFinalPage(
+                shouldReRender || newPage - finalPage === 1 ? newPage : finalPage
+            );
+
+            api.get(`/posts/thread/${threadId}?page=${newPage}`).then(
+                (res: { data: threadType }) => {
+                    if (!res.data.conversation.length)
+                        return setNotification({ open: true, text: "Page not found!" });
+
+                    setThread(
+                        shouldReRender
+                            ? res.data
+                            : {
+                                  ...thread,
+                                  ...res.data,
+                                  conversation:
+                                      newPage - finalPage === 1
+                                          ? [
+                                                ...thread.conversation,
+                                                ...res.data.conversation,
+                                            ]
+                                          : [
+                                                ...res.data.conversation,
+                                                ...thread.conversation,
+                                            ],
+                              }
+                    );
+
+                    res.data.conversation.length % 25 && setEnd(true);
+                    document
+                        .getElementById(String(newPage))
+                        ?.scrollIntoView({ behavior: "smooth" });
+                }
+            );
+        }
     };
 }

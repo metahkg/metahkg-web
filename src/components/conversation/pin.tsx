@@ -4,16 +4,14 @@ import { commentType } from "../../types/conversation/comment";
 // @ts-ignore
 import h2p from "html2plaintext";
 import React, { useState } from "react";
-import { PopUp } from "../../lib/popup";
-import Comment from "./comment";
+import CommentPopup from "../../lib/commentPopup";
+
 export default function PinnedComment(props: { comment: commentType }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
     return (
         <React.Fragment>
-            <PopUp open={open} setOpen={setOpen} fullWidth>
-                <Comment comment={comment} noId fetchComment />
-            </PopUp>
+            <CommentPopup comment={comment} open={open} setOpen={setOpen} fetchComment />
             <Box
                 sx={{ bgcolor: "primary.dark", height: 50 }}
                 className="flex fullwidth align-center pointer"

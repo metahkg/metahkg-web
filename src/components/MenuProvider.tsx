@@ -10,7 +10,7 @@ const MenuContext = createContext<{
     selected: [number, React.Dispatch<React.SetStateAction<number>>];
     recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     data: [summary[], React.Dispatch<React.SetStateAction<summary[]>>];
-    title: [string, React.Dispatch<React.SetStateAction<string>>];
+    menuTitle: [string, React.Dispatch<React.SetStateAction<string>>];
     smode: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
 }>({});
@@ -29,7 +29,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
     const [recall, setRecall] = useState(false);
     const [selected, setSelected] = useState(0);
     const [data, setData] = useState<any[]>([]);
-    const [title, setTitle] = useState("");
+    const [menuTitle, setMenuTitle] = useState("");
     const [smode, setSmode] = useState(0); //search mode
     return (
         <MenuContext.Provider
@@ -42,7 +42,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
                 selected: [selected, setSelected],
                 recall: [recall, setRecall],
                 data: [data, setData],
-                title: [title, setTitle],
+                menuTitle: [menuTitle, setMenuTitle],
                 smode: [smode, setSmode],
             }}
         >
@@ -110,9 +110,9 @@ export function useData() {
  * It returns the current menu title and a setter for the title
  * @returns The menu title of the current page.
  */
-export function useTitle() {
-    const { title } = useContext(MenuContext);
-    return title;
+export function useMenuTitle() {
+    const { menuTitle } = useContext(MenuContext);
+    return menuTitle;
 }
 
 /**

@@ -3,14 +3,17 @@ import React from "react";
 import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
+import { setTitle } from "../lib/common";
 
 /**
  * 404 page
  */
 export default function NotFound() {
-    document.title = "404 Not Found | Metahkg";
     const [menu, setMenu] = useMenu();
+
+    setTitle("404 Not Found | Metahkg");
     menu && setMenu(false);
+
     return (
         <Box
             className="flex align-center justify-center notfound-root"

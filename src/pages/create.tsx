@@ -1,17 +1,6 @@
 import "./css/create.css";
 import React, { useEffect, useState } from "react";
-import {
-    Alert,
-    Box,
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField,
-    Tooltip,
-} from "@mui/material";
+import { Alert, Box, Button, TextField, Tooltip } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/texteditor";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -24,73 +13,44 @@ import {
     useProfile,
     useRecall,
     useSearch,
-    useTitle,
+    useMenuTitle,
 } from "../components/MenuProvider";
-import { useCategories, useNotification, useWidth } from "../components/ContextProvider";
-import { wholepath } from "../lib/common";
+import {
+    useIsSmallScreen,
+    useNotification,
+    useUser,
+    useWidth,
+} from "../components/ContextProvider";
+import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
+import ChooseCat from "../components/create/ChooseCat";
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
-
-/**
- * It takes in a category number and a setter function for the category number, and returns a form
- * control with a select menu that allows the user to choose a category
- * @param {number} props.cat The currently choosed category
- * @param {React.Dispatch<React.SetStateAction<number>>} props.setCat The function to update props.cat
- * @returns A form control with a select menu.
- */
-function ChooseCat(props: {
-    cat: number;
-    setCat: React.Dispatch<React.SetStateAction<number>>;
-}) {
-    const { cat, setCat } = props;
-    const changeHandler = (e: SelectChangeEvent<number>) => {
-        setCat(Number(e.target.value));
-    };
-    const categories = useCategories();
-    return (
-        <div>
-            {categories.length && (
-                <FormControl className="create-choosecat-form">
-                    <InputLabel color="secondary">Category</InputLabel>
-                    <Select
-                        color="secondary"
-                        value={cat}
-                        label="Category"
-                        onChange={changeHandler}
-                    >
-                        {categories.map((category) => (
-                            <MenuItem value={category.id}>{category.name}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            )}
-        </div>
-    );
-}
 
 /**
  * Page for creating a new topic
  */
 export default function Create() {
+    setTitle("Create topic | Metahkg");
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
+    const isSmallScreen = useIsSmallScreen();
     const [width] = useWidth();
     const [profile, setProfile] = useProfile();
     const [cat, setCat] = useCat();
     const [search, setSearch] = useSearch();
     const [recall, setRecall] = useRecall();
     const [data, setData] = useData();
-    const [mtitle, setMtitle] = useTitle();
+    const [mtitle, setMtitle] = useMenuTitle();
     const [, setNotification] = useNotification();
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
     const [rtoken, setRtoken] = useState(""); //recaptcha token
-    const [title, setTitle] = useState(""); //this will be the post title
+    const [postTitle, setPostTitle] = useState(""); //this will be the post title
     const [imgurl, setImgurl] = useState("");
     const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
@@ -103,11 +63,12 @@ export default function Create() {
         cid: Number(String(query.quote).split(".")[1]),
     };
     const [inittext, setInittext] = useState("");
+    const [user] = useUser();
     /**
      * It sends data to the /api/posts/create route.
      */
     useEffect(() => {
-        if (localStorage.user && quote.id && quote.cid) {
+        if (user && quote.id && quote.cid) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
             api.get(`/posts/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
@@ -136,7 +97,7 @@ export default function Create() {
                     });
                 });
         }
-    }, [quote.cid, quote.id, setNotification]);
+    }, [quote.cid, quote.id, setNotification, user]);
 
     function create() {
         //send data to /api/posts/create
@@ -144,7 +105,7 @@ export default function Create() {
         setNotification({ open: true, text: "Creating topic..." });
         setDisabled(true);
         api.post("/posts/create", {
-            title: title,
+            title: postTitle,
             category: catchoosed,
             comment: comment,
             rtoken: rtoken,
@@ -176,18 +137,20 @@ export default function Create() {
             });
     }
 
-    document.title = "Create topic | Metahkg";
     menu && setMenu(false);
-    if (!localStorage.user)
+
+    if (!user)
         return (
             <Navigate
                 to={`/users/signin?continue=true&returnto=${encodeURIComponent(
-                    wholepath()
+                    wholePath()
                 )}`}
                 replace
             />
         );
-    const small = width * 0.8 - 40 <= 450;
+
+    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
+
     return (
         <Box
             className="flex fullwidth min-height-fullvh justify-center max-width-full"
@@ -195,7 +158,7 @@ export default function Create() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <div style={{ width: small ? "100vw" : "80vw" }}>
+            <div style={{ width: isSmallSmallScreen ? "100vw" : "80vw" }}>
                 <div className="m20">
                     <div className="flex align-center">
                         <MetahkgLogo
@@ -212,22 +175,22 @@ export default function Create() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={width < 760 ? "" : "flex "}>
+                    <div className={isSmallScreen ? "" : "flex "}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
-                            className={width < 760 ? "mt15" : "ml15"}
+                            className={isSmallScreen ? "mt15" : "ml15"}
                             variant="filled"
                             color="secondary"
                             fullWidth
                             label="Title"
                             onChange={(e) => {
-                                setTitle(e.target.value);
+                                setPostTitle(e.target.value);
                             }}
                         />
                     </div>
                     <div
                         className={`${
-                            !(width < 760) ? "flex" : ""
+                            !isSmallScreen ? "flex" : ""
                         } align-center mb15 mt15`}
                     >
                         <UploadImage
@@ -266,7 +229,7 @@ export default function Create() {
                         {imgurl && (
                             <p
                                 className={`ml10 novmargin flex${
-                                    width < 760 ? " mt5" : ""
+                                    isSmallScreen ? " mt5" : ""
                                 }`}
                             >
                                 <Tooltip
@@ -298,14 +261,14 @@ export default function Create() {
                         )}
                     </div>
                     <TextEditor
-                        changehandler={(v, e: any) => {
+                        onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
                         text={inittext}
                     />
                     <div
                         className={`mt15 ${
-                            small
+                            isSmallSmallScreen
                                 ? ""
                                 : "flex fullwidth justify-space-between align-center"
                         }`}
@@ -322,10 +285,11 @@ export default function Create() {
                         />
                         <Button
                             disabled={
-                                disabled || !(comment && title && rtoken && catchoosed)
+                                disabled ||
+                                !(comment && postTitle && rtoken && catchoosed)
                             }
                             className={`${
-                                small ? "mt15 " : ""
+                                isSmallSmallScreen ? "mt15 " : ""
                             }font-size-16-force create-btn novpadding notexttransform`}
                             onClick={create}
                             variant="contained"

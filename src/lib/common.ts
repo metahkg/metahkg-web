@@ -1,13 +1,15 @@
 import humanizeDurationShortened from "humanize-duration-shortened-english";
 import humanizeDuration from "humanize-duration";
+import jwtDecode from "jwt-decode";
+import { userType } from "../types/user";
 
 export function roundup(num: number, precision = 0): number {
     precision = Math.pow(10, precision);
     return Math.ceil(num * precision) / precision;
 }
 
-export function timetoword(sdate: string): string {
-    const startDate = new Date(sdate);
+export function timeToWord(sDate: string): string {
+    const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
     const shortened: string = humanizeDurationShortened(diff, {
@@ -22,8 +24,8 @@ export function timetoword(sdate: string): string {
     return r;
 }
 
-export function timetoword_long(sdate: string): string {
-    const startDate = new Date(sdate);
+export function timeToWord_long(sDate: string): string {
+    const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
     let r: any = humanizeDuration(diff, {
@@ -39,7 +41,7 @@ export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function splitarray(arr: any[], start: number, end: number) {
+export function splitArray(arr: any[], start: number, end: number) {
     const r: any[] = [];
     for (let i = start; i <= end; i++) {
         arr[i] !== undefined && r.push(arr[i]);
@@ -47,20 +49,13 @@ export function splitarray(arr: any[], start: number, end: number) {
     return r;
 }
 
-export function logout() {
-    localStorage.removeItem("user");
-    localStorage.removeItem("id");
-    localStorage.removeItem("token");
-}
-
-export function wholepath(): string {
+export function wholePath(): string {
     return window.location.href.replace(window.location.origin, "");
 }
 
-export function checkpwd(pwd: string): boolean {
-    if (pwd.length < 8) {
-        return false;
-    }
+export function checkPwd(pwd: string): boolean {
+    if (pwd.length < 8) return false;
+
     const lower = "abcdefghijklmnopqrstuvwxyz";
     const upper = lower.toUpperCase();
     const numbers = "1234567890";
@@ -86,3 +81,31 @@ export function allequal(arr: any[]) {
     }
     return true;
 }
+
+export function setTitle(title: string = "Metahkg") {
+    document.title = title;
+    document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
+    document.querySelector(`meta[name="twitter:title"]`)?.setAttribute("content", title);
+}
+
+export function setDescription(
+    description: string = "Metahkg is a free and open source lihkg-style forum."
+) {
+    document
+        .querySelector(`meta[name="description"]`)
+        ?.setAttribute("content", description);
+    document
+        .querySelector(`meta[property="og:description"]`)
+        ?.setAttribute("content", description);
+    document
+        .querySelector(`meta[name="twitter:description"]`)
+        ?.setAttribute("content", description);
+}
+
+export const decodeToken = (token?: string) => {
+    try {
+        return jwtDecode(token || "") as userType | null;
+    } catch {
+        return null;
+    }
+};

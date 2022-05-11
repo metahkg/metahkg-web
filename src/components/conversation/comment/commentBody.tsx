@@ -3,35 +3,61 @@ import { replace } from "../../../lib/modifycomments";
 import { commentType } from "../../../types/conversation/comment";
 import parse from "html-react-parser";
 import React, { useEffect, useState } from "react";
-import { PopUp } from "../../../lib/popup";
-import Comment from "../comment";
 import Prism from "prismjs";
-import { Box } from "@mui/material";
-export default function CommentBody(props: { comment: commentType; depth: number }) {
-    const { comment, depth } = props;
+import { Box, Button } from "@mui/material";
+import CommentPopup from "../../../lib/commentPopup";
+export default function CommentBody(props: {
+    comment: commentType;
+    depth: number;
+    noQuote?: boolean;
+}) {
+    const { comment, depth, noQuote } = props;
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
+    const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const content = [
-        comment.quote && (
+        comment.quote && !noQuote && (
             <blockquote
                 style={{ border: "none" }}
-                className={`flex fullwidth${depth !== 1 ? " novmargin" : ""}`}
+                className={`flex fullwidth${depth !== 0 ? " novmargin" : ""}`}
             >
                 <Box
-                    className="pointer comment-body-quote-div nopadding metahkg-grey ml0"
+                    className={`${
+                        showQuote ? "pointer " : ""
+                    }comment-body-quote-div nopadding metahkg-grey ml0`}
                     sx={(theme) => ({
                         width: 15,
                         "&:hover": {
-                            borderLeft: `2px solid ${theme.palette.secondary.main}`,
+                            borderLeft:
+                                showQuote && `2px solid ${theme.palette.secondary.main}`,
                         },
                     })}
                     onClick={() => {
-                        setQuoteOpen(true);
+                        showQuote && setQuoteOpen(true);
                     }}
                 />
-                <div className="comment-body fullwidth">
-                    <CommentBody comment={comment.quote} depth={depth + 1} />
-                </div>
+                {showQuote ? (
+                    <div className="comment-body fullwidth">
+                        <CommentBody comment={comment.quote} depth={depth + 1} />
+                    </div>
+                ) : (
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            border: "1px solid #aca6a6",
+                            "&:hover": {
+                                border: "1px solid #aca6a6",
+                                background: "rgba(255, 255, 255, 0.1)",
+                            },
+                        }}
+                        className="metahkg-grey-force notexttransform pt3 pb3 pl5 pr5"
+                        onClick={() => {
+                            setShowQuote(true);
+                        }}
+                    >
+                        Show more
+                    </Button>
+                )}
             </blockquote>
         ),
         commentJSX,
@@ -41,12 +67,15 @@ export default function CommentBody(props: { comment: commentType; depth: number
     });
     return (
         <React.Fragment>
-            {comment.quote && (
-                <PopUp open={quoteOpen} setOpen={setQuoteOpen} fullWidth>
-                    <Comment fetchComment noId comment={comment.quote} />
-                </PopUp>
+            {comment.quote && showQuote && (
+                <CommentPopup
+                    open={quoteOpen}
+                    setOpen={setQuoteOpen}
+                    comment={comment.quote}
+                    fetchComment
+                />
             )}
-            {depth === 1 ? (
+            {depth === 0 ? (
                 <p className="novmargin comment-body fullwidth break-word-force">
                     {content}
                 </p>

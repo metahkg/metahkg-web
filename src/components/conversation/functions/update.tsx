@@ -17,7 +17,7 @@ export function useUpdate() {
     const [thread, setThread] = useThread();
     const [finalPage, setFinalPage] = useFinalPage();
     const [, setEnd] = useEnd();
-    const [, setPages] = usePages();
+    const [pages, setPages] = usePages();
     const lastHeight = useLastHeight();
     const [, setCurrentPage] = useCurrentPage();
     const navigate = useNavigate();
@@ -26,6 +26,7 @@ export function useUpdate() {
         if (thread) {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
+
             api.get(
                 `/posts/thread/${threadId}?page=${
                     openNewPage ? finalPage + 1 : finalPage
@@ -43,24 +44,32 @@ export function useUpdate() {
                     return;
                 }
                 if (!openNewPage) {
-                    res.data.conversation.forEach((item) => {
-                        thread.conversation.push(item);
-                    });
                     lastHeight.current = 0;
-                    setThread({ ...thread, conversation: thread.conversation });
+                    const conversation = [
+                        ...thread.conversation,
+                        ...res.data.conversation,
+                    ];
+                    setThread({
+                        ...thread,
+                        ...res.data,
+                        conversation,
+                    });
                     setTimeout(() => {
                         document
                             .getElementById(`c${res.data?.conversation[0]?.id}`)
-                            ?.scrollIntoView();
-                    }, 1);
-                    thread.conversation.length % 25 && setEnd(true);
+                            ?.scrollIntoView({ behavior: "smooth" });
+                    });
+                    conversation.length % 25 && setEnd(true);
                 } else {
-                    for (let i = 0; i < res.data.conversation.length; i++)
-                        thread.conversation.push(res.data.conversation?.[i]);
-                    setThread({ ...thread, conversation: thread.conversation });
+                    setThread({
+                        ...thread,
+                        ...res.data,
+                        conversation: [...thread.conversation, ...res.data.conversation],
+                    });
+                    console.log([...thread.conversation, ...res.data.conversation]);
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
-                    setPages(Math.floor((thread.conversation.length - 1) / 25) + 1);
+                    setPages(pages + 1);
                     navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
                         replace: true,
                     });

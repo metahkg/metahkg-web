@@ -1,12 +1,22 @@
 import { Refresh, Collections, Reply, Share as ShareIcon } from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
 import { useUpdate } from "./update";
-import { useImages, useGalleryOpen, useThread, useCRoot } from "../ConversationContext";
+import {
+    useImages,
+    useGalleryOpen,
+    useThread,
+    useCRoot,
+    useEditor,
+    useThreadId,
+} from "../ConversationContext";
 import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
-import { useNotification } from "../../ContextProvider";
+import { useNotification, useUser } from "../../ContextProvider";
+import { useNavigate } from "react-router-dom";
+
 export default function useBtns() {
     const update = useUpdate();
+    const threadId = useThreadId();
     const navigate = useNavigate();
+    const [user] = useUser();
     const [images] = useImages();
     const [, setGalleryOpen] = useGalleryOpen();
     const [, setNotification] = useNotification();
@@ -14,9 +24,8 @@ export default function useBtns() {
     const [shareLink, setShareLink] = useShareLink();
     const [shareTitle, setShareTitle] = useShareTitle();
     const [thread] = useThread();
+    const [, setEditor] = useEditor();
     const croot = useCRoot();
-    const params = useParams();
-    const threadId = Number(params.id);
     const btns = [
         {
             icon: <Refresh />,
@@ -24,8 +33,7 @@ export default function useBtns() {
                 update();
                 const newscrollTop =
                     croot.current?.scrollHeight || 0 - (croot.current?.clientHeight || 0);
-                // @ts-ignore
-                croot.current.scrollTop = newscrollTop;
+                if (croot.current) croot.current.scrollTop = newscrollTop;
             },
             title: "Refresh",
         },
@@ -40,7 +48,13 @@ export default function useBtns() {
         {
             icon: <Reply />,
             action: () => {
-                navigate(`/comment/${threadId}`);
+                if (user) setEditor({ open: true });
+                else
+                    navigate(
+                        `/users/signin?continue=true&returnto=${encodeURIComponent(
+                            `/thread/${threadId}`
+                        )}`
+                    );
             },
             title: "Reply",
         },
