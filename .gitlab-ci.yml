@@ -1,10 +1,3 @@
-stages:
-  - lint
-  - test
-  - review
-  - dast
-  - build
-
 lint:
   stage: lint
   image: node:18
@@ -43,3 +36,10 @@ docker:
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml
+  
+stages:
+  - lint
+  - test
+  - review
+  - dast
+  - build
