@@ -40,6 +40,6 @@ include:
 stages:
   - lint
   - test
+  - build
   - review
   - dast
-  - build
