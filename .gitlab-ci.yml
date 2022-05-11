@@ -37,6 +37,7 @@ sast:
 docker:
   image: docker:latest
   stage: build
+  needs: []
   services:
     - docker:dind
   before_script:
