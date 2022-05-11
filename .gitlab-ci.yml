@@ -1,6 +1,8 @@
 stages:
   - lint
   - test
+  - review
+  - dast
   - build
 
 lint:
