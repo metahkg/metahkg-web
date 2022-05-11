@@ -2,6 +2,7 @@ stages:
   - lint
   - test
   - build
+  - deploy
   - review
   - dast
   - staging
