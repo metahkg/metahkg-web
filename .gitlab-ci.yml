@@ -23,7 +23,7 @@ lint:
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
     - git config user.email bot@metahkg.org
-    - git remote set-url origin https://metahkg-bot:$CI_JOB_TOKEN@gitlab.com/$CI_PROJECT_NAMESPACE
+    - git remote set-url origin https://metahkg-bot:$CI_JOB_TOKEN@gitlab.com/$CI_PROJECT_PATH
   script:
     - yarn install
     - yarn lint
