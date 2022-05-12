@@ -12,13 +12,14 @@ const Input = styled("input")({
  * @returns A form with a file input.
  */
 export default function UploadImage(props: {
+    className?: string;
     onUpload?: () => void;
     onSuccess: (res: AxiosResponse<any, any>) => void;
     onError: (err: any) => void;
 }) {
-    const { onUpload, onSuccess, onError } = props;
+    const { className, onUpload, onSuccess, onError } = props;
     return (
-        <Box>
+        <Box className={className}>
             <form name="image" encType="multipart/form-data">
                 <label htmlFor="upload-image">
                     <Input
