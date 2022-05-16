@@ -99,7 +99,7 @@ export default function Profile() {
 
     return (
         <Box
-            className="max-height-fullvh overflow-auto"
+            className="max-height-fullvh height-fullvh overflow-auto"
             sx={{
                 backgroundColor: "primary.dark",
             }}
