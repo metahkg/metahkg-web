@@ -232,7 +232,7 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     <p className="ml5">
-                        Metahkg Web {process.env.REACT_APP_build || "v0.6.0"}
+                        Metahkg Web {process.env.REACT_APP_build || "v0.6.0rc1"}
                     </p>
                 </Box>
             </Drawer>

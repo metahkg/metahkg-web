@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useIsSmallScreen, useNotification } from "../ContextProvider";
+import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
 import { useData } from "../MenuProvider";
 import { useParams } from "react-router-dom";
 import {
@@ -14,7 +14,7 @@ import {
     TableRow,
     TextField,
 } from "@mui/material";
-import { timeToWord_long } from "../../lib/common";
+import { decodeToken, timeToWord_long } from "../../lib/common";
 import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 
@@ -40,6 +40,8 @@ export default function DataTable(props: DataTableProps) {
     const [name, setName] = useState(requestedUser.name);
     const [sex, setSex] = useState<"M" | "F">(requestedUser.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
+    const [, setClient] = useUser();
+
     const params = useParams();
     const items = [
         {
@@ -95,6 +97,14 @@ export default function DataTable(props: DataTableProps) {
             .then((res) => {
                 setSaveDisabled(false);
                 setUser(null);
+
+                const { token } = res.data;
+
+                if (token) {
+                    localStorage.setItem("token", token);
+                    setClient(decodeToken(token));
+                }
+
                 setData([]);
                 setNotification({ open: true, text: res.data?.response });
             })
