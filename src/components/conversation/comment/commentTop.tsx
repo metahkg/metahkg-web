@@ -21,7 +21,7 @@ import {
     useTitle,
 } from "../ConversationContext";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-import dateat from "date-and-time";
+import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timeToWord } from "../../../lib/common";
 import MoreList from "./more";
@@ -96,7 +96,7 @@ export default function CommentTop(props: {
             },
         },
     ];
-    const rightbtns: {
+    const rightBtns: {
         icon: JSX.Element;
         title: string;
         action: () => void;
@@ -214,7 +214,7 @@ export default function CommentTop(props: {
                     {comment.user.name}
                 </p>
                 <Tooltip
-                    title={dateat.format(
+                    title={dateAndTime.format(
                         new Date(comment.createdAt),
                         "ddd, MMM DD YYYY HH:mm:ss"
                     )}
@@ -233,7 +233,7 @@ export default function CommentTop(props: {
                         {
                             {
                                 short: timeToWord(comment.createdAt),
-                                long: dateat.format(
+                                long: dateAndTime.format(
                                     new Date(comment.createdAt),
                                     "DD/MM/YY HH:mm"
                                 ),
@@ -269,7 +269,7 @@ export default function CommentTop(props: {
             </div>
             <div className="flex align-center">
                 {!fold &&
-                    rightbtns.map((button) => (
+                    rightBtns.map((button) => (
                         <Tooltip title={button.title} arrow>
                             <IconButton
                                 className="ml10 nopadding"
