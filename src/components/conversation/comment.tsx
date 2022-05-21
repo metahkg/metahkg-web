@@ -58,6 +58,7 @@ function Comment(props: {
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
+    const [fold, setFold] = useState(props.fold);
     const commentRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -91,7 +92,10 @@ function Comment(props: {
 
     return (
         <Box
-            className="fullwidth"
+            className={`fullwidth ${fold ? "pointer" : ""}`}
+            onClick={() => {
+                fold && setFold(false);
+            }}
             ref={commentRef}
             id={noId ? undefined : `c${comment.id}`}
         >
@@ -117,11 +121,15 @@ function Comment(props: {
                 })}
             >
                 <div className="ml20 mr20">
-                    <CommentTop comment={comment} noStory={noStory} />
-                    <CommentBody noQuote={noQuote} comment={comment} depth={0} />
-                    <div className="comment-internal-spacer" />
+                    <CommentTop comment={comment} noStory={noStory} fold={fold} />
+                    {!fold && (
+                        <React.Fragment>
+                            <CommentBody noQuote={noQuote} comment={comment} depth={0} />
+                            <div className="comment-internal-spacer" />
+                        </React.Fragment>
+                    )}
                 </div>
-                {ready && (
+                {ready && !fold && (
                     <Box className="flex justify-space-between align-center fullwidth">
                         <div className="flex ml20 mr20">
                             {settings.votebar ? (
