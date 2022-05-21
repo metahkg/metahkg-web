@@ -110,7 +110,7 @@ function Comment(props: {
             )}
             <Box
                 className={`text-align-left ${
-                    !inPopUp ? "mt6" : ""
+                    !inPopUp ? "mt6" : showReplies ? "" : "overflow-auto"
                 } fullwidth comment-root`}
                 sx={(theme) => ({
                     "& *::selection": {
@@ -118,6 +118,7 @@ function Comment(props: {
                         color: "black",
                     },
                     bgcolor: "primary.main",
+                    maxHeight: inPopUp && !showReplies ? "90vh" : "",
                 })}
             >
                 <div className="ml20 mr20">

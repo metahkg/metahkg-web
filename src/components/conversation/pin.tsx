@@ -1,8 +1,6 @@
 import { InfoOutlined } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import { commentType } from "../../types/conversation/comment";
-// @ts-ignore
-import h2p from "html2plaintext";
 import React, { useState } from "react";
 import CommentPopup from "../../lib/commentPopup";
 
@@ -25,7 +23,7 @@ export default function PinnedComment(props: { comment: commentType }) {
                         Pinned Comment #{comment.id}
                     </Typography>
                     <Typography className="metahkg-grey-force text-overflow-ellipsis overflow-hidden nowrap novmargin mr15">
-                        {h2p(comment.comment)}
+                        {comment.text}
                     </Typography>
                 </div>
             </Box>

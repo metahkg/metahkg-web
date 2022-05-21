@@ -1,9 +1,9 @@
 import "./css/addcomment.css";
-import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, Tooltip } from "@mui/material";
-import { AddComment as AddCommentIcon } from "@mui/icons-material";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Alert, Box, Button, Tooltip} from "@mui/material";
+import {AddComment as AddCommentIcon} from "@mui/icons-material";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import {
     useNotification,
@@ -11,18 +11,19 @@ import {
     useIsSmallScreen,
     useWidth,
 } from "../components/ContextProvider";
-import { useData, useMenu } from "../components/MenuProvider";
+import {useData, useMenu} from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, setTitle, wholePath } from "../lib/common";
-import { severity } from "../types/severity";
+import {roundup, setTitle, wholePath} from "../lib/common";
+import {severity} from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
 import UploadImage from "../components/uploadimage";
-import { api } from "../lib/api";
-import type { TinyMCE } from "tinymce";
+import {api} from "../lib/api";
+import type {TinyMCE} from "tinymce";
 import RenderComment from "../components/renderComment";
-import { commentType } from "../types/conversation/comment";
+import {commentType} from "../types/conversation/comment";
+
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 /**
@@ -54,7 +55,7 @@ export default function AddComment() {
 
     useEffect(() => {
         if (user) {
-            api.post("/posts/check", { id: id }).catch((err) => {
+            api.post("/posts/check", {id: id}).catch((err) => {
                 if (err.response.status === 404) {
                     setAlert({
                         severity: "warning",
@@ -65,7 +66,7 @@ export default function AddComment() {
                         text: "Thread not found. Redirecting you to the homepage in 5 seconds.",
                     });
                     setTimeout(() => {
-                        navigate("/", { replace: true });
+                        navigate("/", {replace: true});
                     }, 5000);
                 } else {
                     setAlert({
@@ -79,29 +80,29 @@ export default function AddComment() {
                 }
             });
             edit &&
-                api
-                    .get(`/posts/thread/${id}/comment/${edit}`)
-                    .then((res: { data: commentType }) => {
-                        setInitText(
-                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
-                                <RenderComment comment={res.data} depth={0} />
-                            )}</div></blockquote><p></p>`
-                        );
-                        setAlert({ severity: "info", text: "" });
-                        setTimeout(() => {
-                            setNotification({ open: false, text: "" });
-                        }, 500);
-                    })
-                    .catch(() => {
-                        setAlert({
-                            severity: "warning",
-                            text: "Unable to fetch comment. This comment would not be a quote.",
-                        });
-                        setNotification({
-                            open: true,
-                            text: "Unable to fetch comment. This comment would not be a quote.",
-                        });
+            api
+                .get(`/posts/thread/${id}/comment/${edit}`)
+                .then((res: { data: commentType }) => {
+                    setInitText(
+                        `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
+                            <RenderComment comment={res.data} depth={0}/>
+                        )}</div></blockquote><p></p>`
+                    );
+                    setAlert({severity: "info", text: ""});
+                    setTimeout(() => {
+                        setNotification({open: false, text: ""});
+                    }, 500);
+                })
+                .catch(() => {
+                    setAlert({
+                        severity: "warning",
+                        text: "Unable to fetch comment. This comment would not be a quote.",
                     });
+                    setNotification({
+                        open: true,
+                        text: "Unable to fetch comment. This comment would not be a quote.",
+                    });
+                });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -112,8 +113,8 @@ export default function AddComment() {
     function addComment() {
         //send data to server /api/posts/comment
         setDisabled(true);
-        setAlert({ severity: "info", text: "Adding comment..." });
-        setNotification({ open: true, text: "Adding comment..." });
+        setAlert({severity: "info", text: "Adding comment..."});
+        setNotification({open: true, text: "Adding comment..."});
         api.post("/posts/comment", {
             id,
             comment,
@@ -124,10 +125,10 @@ export default function AddComment() {
                 data.length && setData([]);
                 navigate(
                     `/thread/${id}?page=${roundup(res.data.id / 25)}&c=${res.data.id}`,
-                    { replace: true }
+                    {replace: true}
                 );
                 setTimeout(() => {
-                    setNotification({ open: false, text: "" });
+                    setNotification({open: false, text: ""});
                 }, 100);
             })
             .catch((err) => {
@@ -167,7 +168,7 @@ export default function AddComment() {
                 bgcolor: "primary.dark",
             }}
         >
-            <div style={{ width: isSmallScreen ? "100vw" : "80vw" }}>
+            <div style={{width: isSmallScreen ? "100vw" : "80vw"}}>
                 <div className="m20">
                     <div className="flex align-center">
                         <MetahkgLogo
@@ -207,14 +208,14 @@ export default function AddComment() {
                                 });
                             }}
                             onSuccess={(res) => {
-                                setAlert({ severity: "info", text: "Image uploaded!" });
-                                setNotification({ open: true, text: "Image uploaded!" });
+                                setAlert({severity: "info", text: "Image uploaded!"});
+                                setNotification({open: true, text: "Image uploaded!"});
                                 setTimeout(() => {
-                                    setNotification({ open: false, text: "" });
+                                    setNotification({open: false, text: ""});
                                 }, 1000);
                                 setImgUrl(res.data.url);
                                 tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                    `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt=""/>`
                                 );
                             }}
                             onError={() => {
@@ -295,7 +296,7 @@ export default function AddComment() {
                             variant="contained"
                             color="secondary"
                         >
-                            <AddCommentIcon className="mr5 font-size-16-force" />
+                            <AddCommentIcon className="mr5 font-size-16-force"/>
                             Comment
                         </Button>
                     </div>

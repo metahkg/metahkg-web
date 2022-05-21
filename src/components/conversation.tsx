@@ -135,41 +135,41 @@ function Conversation(props: { id: number }) {
                 },
             })}
         >
-            <FloatingEditor />
-            <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
-            <Dock btns={btns} />
-            <Share />
-            {!isSmallScreen && (
-                <PageSelect
-                    last={currentPage !== 1 && numOfPages > 1}
-                    next={currentPage !== numOfPages && numOfPages > 1}
-                    pages={numOfPages}
-                    page={currentPage}
-                    onLastClicked={() => {
-                        changePage(currentPage - 1);
-                    }}
-                    onNextClicked={() => {
-                        changePage(currentPage + 1);
-                    }}
-                    onSelect={(e) => {
-                        changePage(Number(e.target.value));
-                    }}
-                />
-            )}
-            {loading && <LinearProgress className="fullwidth" color="secondary" />}
-            <Title category={thread?.category} title={thread?.title} btns={btns} />
-            {thread?.pin && <PinnedComment comment={thread?.pin} />}
-            <Paper
-                ref={cRoot}
-                key={Number(reRender)}
-                className={`overflow-auto nobgimage noshadow conversation-paper${
-                    thread?.pin ? "-pin" : ""
-                }${loading ? "-loading" : ""}`}
-                sx={{ bgcolor: "primary.dark" }}
-                onScroll={onScroll}
-            >
-                <Box className="fullwidth max-height-full max-width-full">
-                    <PhotoProvider>
+            <PhotoProvider>
+                <FloatingEditor />
+                <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
+                <Dock btns={btns} />
+                <Share />
+                {!isSmallScreen && (
+                    <PageSelect
+                        last={currentPage !== 1 && numOfPages > 1}
+                        next={currentPage !== numOfPages && numOfPages > 1}
+                        pages={numOfPages}
+                        page={currentPage}
+                        onLastClicked={() => {
+                            changePage(currentPage - 1);
+                        }}
+                        onNextClicked={() => {
+                            changePage(currentPage + 1);
+                        }}
+                        onSelect={(e) => {
+                            changePage(Number(e.target.value));
+                        }}
+                    />
+                )}
+                {loading && <LinearProgress className="fullwidth" color="secondary" />}
+                <Title category={thread?.category} title={thread?.title} btns={btns} />
+                {thread?.pin && <PinnedComment comment={thread?.pin} />}
+                <Paper
+                    ref={cRoot}
+                    key={Number(reRender)}
+                    className={`overflow-auto nobgimage noshadow conversation-paper${
+                        thread?.pin ? "-pin" : ""
+                    }${loading ? "-loading" : ""}`}
+                    sx={{ bgcolor: "primary.dark" }}
+                    onScroll={onScroll}
+                >
+                    <Box className="fullwidth max-height-full max-width-full">
                         {ready &&
                             [...Array(pages)].map((p, index) => {
                                 const page =
@@ -225,32 +225,32 @@ function Conversation(props: { id: number }) {
                                     </Box>
                                 );
                             })}
-                    </PhotoProvider>
-                </Box>
-                <Box
-                    ref={cBottom}
-                    className="flex justify-center align-center conversation-bottom"
-                    sx={{
-                        bgcolor: "primary.dark",
-                    }}
-                >
-                    {!updating ? (
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() => {
-                                setEnd(false);
-                                update();
-                            }}
-                        >
-                            Update
-                        </Button>
-                    ) : (
-                        <CircularProgress disableShrink color="secondary" />
-                    )}
-                </Box>
-                <PageBottom />
-            </Paper>
+                    </Box>
+                    <Box
+                        ref={cBottom}
+                        className="flex justify-center align-center conversation-bottom"
+                        sx={{
+                            bgcolor: "primary.dark",
+                        }}
+                    >
+                        {!updating ? (
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                onClick={() => {
+                                    setEnd(false);
+                                    update();
+                                }}
+                            >
+                                Update
+                            </Button>
+                        ) : (
+                            <CircularProgress disableShrink color="secondary" />
+                        )}
+                    </Box>
+                    <PageBottom />
+                </Paper>
+            </PhotoProvider>
         </Box>
     );
 }

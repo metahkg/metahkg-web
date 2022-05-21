@@ -134,7 +134,7 @@ export default function FloatingEditor() {
                                 setAlert({ severity: "info", text: "Image uploaded!" });
                                 setImgUrl(res.data.url);
                                 tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                    `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt="" />`
                                 );
                             }}
                             onError={() => {

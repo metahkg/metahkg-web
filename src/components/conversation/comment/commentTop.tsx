@@ -28,8 +28,6 @@ import MoreList from "./more";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
-// @ts-ignore
-import h2p from "html2plaintext";
 import React from "react";
 
 export default function CommentTop(props: {
@@ -56,7 +54,7 @@ export default function CommentTop(props: {
 
     const isOp = thread && thread.op.id === comment.user.id;
 
-    const leftbtns = [
+    const leftBtns = [
         (story ? story === comment.user.id : 1) &&
             !noStory && {
                 icon: story ? (
@@ -248,12 +246,12 @@ export default function CommentTop(props: {
                             className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis"
                             style={{ display: "inline-block" }}
                         >
-                            {h2p(comment.comment)}
+                            {comment.text}
                         </p>
                     </React.Fragment>
                 )}
                 {!fold &&
-                    leftbtns.map(
+                    leftBtns.map(
                         (button, index) =>
                             button && (
                                 <Tooltip key={index} title={button.title} arrow>

@@ -70,7 +70,7 @@ export function PopUp(props: {
             )}
             <DialogContent className="nopadding">
                 <div
-                    className={`fullwidth flex justify-center text-align-center ${
+                    className={`fullwidth flex flex-dir-column justify-center text-align-center ${
                         title ? "mt5" : ""
                     } ${buttons?.length ? "mb5" : ""}`}
                 >
