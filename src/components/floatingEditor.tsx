@@ -110,7 +110,9 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                {editor.quote && <Comment comment={editor.quote} fold noId fetchComment noStory />}
+                {editor.quote && (
+                    <Comment comment={editor.quote} fold noId fetchComment noStory />
+                )}
                 {!fold && (
                     <Box className="border-radius-20">
                         <UploadImage
