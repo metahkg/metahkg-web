@@ -1,7 +1,6 @@
 import "./css/signup.css";
 import React, { useState } from "react";
 import hash from "hash.js";
-import * as EmailValidator from "email-validator";
 import {
     Alert,
     Box,
@@ -13,6 +12,7 @@ import {
     Select,
     SelectChangeEvent,
     TextField,
+    TextFieldProps,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ import {
     useUser,
     useWidth,
 } from "../../components/ContextProvider";
-import { checkPwd, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
@@ -45,18 +45,19 @@ function SexSelect(props: {
     disabled: boolean;
 }) {
     const { sex, setSex, disabled } = props;
-    const onChange = function (e: SelectChangeEvent<string>) {
+    const onChange = function (e: SelectChangeEvent) {
         setSex(e.target.value ? "M" : "F");
     };
     return (
         <FormControl className="signup-sex-form">
-            <InputLabel color="secondary">Sex</InputLabel>
+            <InputLabel color="secondary">Gender</InputLabel>
             <Select
                 color="secondary"
                 disabled={disabled}
                 value={sex}
                 label="Gender"
                 onChange={onChange}
+                required
             >
                 <MenuItem value={1}>Male</MenuItem>
                 <MenuItem value={0}>Female</MenuItem>
@@ -99,38 +100,16 @@ export default function Register() {
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
 
-    function register() {
+    function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         setAlert({ severity: "info", text: "Registering..." });
         setDisabled(true);
-        const errors = [
-            { cond: !EmailValidator.validate(email), alert: "Email invalid." },
-            {
-                cond: name.split(" ")[1] || name.length > 15,
-                alert: "Username must be one word and less than 16 characters.",
-            },
-            {
-                cond: EmailValidator.validate(name),
-                alert: "Username must not be a email.",
-            },
-            {
-                cond: !checkPwd(pwd),
-                alert: "Password must contain 8 characters, an uppercase, a lowercase, and a number.",
-            },
-        ];
-        for (const error of errors) {
-            if (error.cond) {
-                setAlert({ severity: "error", text: error.alert });
-                setNotification({ open: true, text: error.alert });
-                setDisabled(false);
-                return;
-            }
-        }
         api.post("/users/register", {
-            email: email,
-            name: name,
+            email,
+            name,
             pwd: hash.sha256().update(pwd).digest("hex"),
-            sex: sex,
-            rtoken: rtoken,
+            sex,
+            rtoken,
         })
             .then(() => {
                 setAlert({
@@ -158,8 +137,45 @@ export default function Register() {
     }
 
     if (user) return <Navigate to="/" replace />;
+
     menu && setMenu(false);
     const small = width / 2 - 100 <= 450;
+
+    const inputs: TextFieldProps[] = [
+        {
+            label: "Username",
+            onChange: (e) => {
+                setName(e.target.value);
+            },
+            type: "text",
+            inputProps: { pattern: "S{1, 15}" },
+            helperText: !name.match(/^\S{1,15}$/)
+                ? "Username must be one word and less than 16 characters."
+                : "",
+        },
+        {
+            label: "Email",
+            onChange: (e) => setEmail(e.target.value),
+            type: "email",
+            inputProps: {
+                pattern:
+                    "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
+            },
+            helperText: !email.match(
+                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9}$/
+            )
+                ? "Please enter a valid email address."
+                : "",
+        },
+        {
+            label: "Password",
+            onChange: (e) => setPwd(e.target.value),
+            type: "password",
+            inputProps: { pattern: ".{8,}" },
+            helperText: pwd.length < 8 ? "Password must have at least 8 characters." : "",
+        },
+    ];
+
     return (
         <Box
             className="signup-root flex fullwidth fullheight justify-center align-center"
@@ -173,7 +189,7 @@ export default function Register() {
                     width: small ? "100vw" : "50vw",
                 }}
             >
-                <div className="m40">
+                <form className="m40" onSubmit={onSubmit}>
                     {query.returnto && (
                         <div className="flex align-center justify-flex-end">
                             <IconButton
@@ -194,22 +210,14 @@ export default function Register() {
                             {alert.text}
                         </Alert>
                     )}
-                    {[
-                        { label: "Username", set: setName, type: "text" },
-                        { label: "Email", set: setEmail, type: "email" },
-                        { label: "Password", set: setPwd, type: "password" },
-                    ].map((item) => (
+                    {inputs.map((props, index) => (
                         <TextField
                             className="mb15"
-                            sx={{ input: { color: "white" } }}
+                            key={index}
+                            {...props}
                             color="secondary"
                             disabled={disabled}
                             variant="filled"
-                            type={item.type}
-                            onChange={(e) => {
-                                item.set(e.target.value);
-                            }}
-                            label={item.label}
                             required
                             fullWidth
                         />
@@ -227,7 +235,9 @@ export default function Register() {
                     </h4>
                     <div
                         className={`${
-                            small ? "" : "flex fullwidth justify-space-between"
+                            small
+                                ? ""
+                                : "flex fullwidth justify-space-between align-center"
                         } mt15`}
                     >
                         <ReCAPTCHA
@@ -241,20 +251,17 @@ export default function Register() {
                             }}
                         />
                         <Button
-                            disabled={
-                                disabled || !(rtoken && name && email && pwd && sex)
-                            }
+                            disabled={disabled || !rtoken}
                             type="submit"
-                            className="mt20 font-size-16-force notexttransform signup-btn"
+                            className="font-size-16-force text-transform-none signup-btn"
                             color="secondary"
                             variant="contained"
-                            onClick={register}
                         >
                             <HowToReg className="mr5 font-size-17-force" />
                             Register
                         </Button>
                     </div>
-                </div>
+                </form>
             </Box>
         </Box>
     );

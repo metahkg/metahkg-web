@@ -19,7 +19,7 @@ const Create = loadable(() => import("./pages/create"));
 // users
 const Verify = loadable(() => import("./pages/users/verify"));
 const Resend = loadable(() => import("./pages/users/resend"));
-const Register = loadable(() => import("./pages/users/signup"));
+const Register = loadable(() => import("./pages/users/register"));
 const Signin = loadable(() => import("./pages/users/signin"));
 const Logout = loadable(() => import("./pages/users/logout"));
 
