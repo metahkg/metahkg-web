@@ -14,8 +14,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
 import {
-    useCBottom,
     useEditor,
+    useFinalPage,
     useThread,
     useThreadId,
 } from "./conversation/ConversationContext";
@@ -25,6 +25,8 @@ import { useIsSmallScreen, useNotification } from "./ContextProvider";
 import UploadImage from "./uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
+import useChangePage from "./conversation/functions/changePage";
+import { roundup } from "../lib/common";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -48,7 +50,9 @@ export default function FloatingEditor() {
     });
     const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
-    const cBottom = useCBottom();
+    const changePage = useChangePage();
+    const [finalPage] = useFinalPage();
+    const numOfPages = roundup((thread?.c || 0) / 25);
 
     function CreateComment() {
         setCreating(true);
@@ -60,10 +64,9 @@ export default function FloatingEditor() {
         })
             .then(() => {
                 setEditor({ ...editor, open: false });
-                update();
 
-                if (cBottom.current)
-                    cBottom.current.scrollIntoView({ behavior: "smooth" });
+                if (numOfPages !== finalPage) changePage(numOfPages, () => update(true));
+                else update(true);
 
                 setCreating(false);
             })
@@ -110,9 +113,18 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                {editor.quote && <Comment comment={editor.quote} fold noId />}
                 {!fold && (
                     <Box className="border-radius-20">
+                        {editor.quote && (
+                            <Comment
+                                comment={editor.quote}
+                                fold
+                                noId
+                                fetchComment
+                                noStory
+                                noQuote
+                            />
+                        )}
                         <UploadImage
                             className="m10"
                             onUpload={() => {
@@ -125,7 +137,7 @@ export default function FloatingEditor() {
                                 setAlert({ severity: "info", text: "Image uploaded!" });
                                 setImgUrl(res.data.url);
                                 tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                    `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt="" />`
                                 );
                             }}
                             onError={() => {

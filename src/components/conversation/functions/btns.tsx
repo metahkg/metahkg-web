@@ -6,7 +6,7 @@ import {
     useThread,
     useCRoot,
     useEditor,
-    useThreadId,
+    useThreadId, useCurrentPage,
 } from "../ConversationContext";
 import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
 import { useNotification, useUser } from "../../ContextProvider";
@@ -25,7 +25,9 @@ export default function useBtns() {
     const [shareTitle, setShareTitle] = useShareTitle();
     const [thread] = useThread();
     const [, setEditor] = useEditor();
+    const [currentPage] = useCurrentPage();
     const croot = useCRoot();
+
     const btns = [
         {
             icon: <Refresh />,
@@ -52,7 +54,7 @@ export default function useBtns() {
                 else
                     navigate(
                         `/users/signin?continue=true&returnto=${encodeURIComponent(
-                            `/thread/${threadId}`
+                            `/thread/${threadId}?page=${currentPage}`
                         )}`
                     );
             },
@@ -74,5 +76,6 @@ export default function useBtns() {
             title: "Share",
         },
     ];
+
     return btns;
 }

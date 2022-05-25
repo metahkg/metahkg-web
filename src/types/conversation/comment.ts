@@ -6,6 +6,8 @@ export type commentType = {
     user: userType;
     /** the comment (in stringified html) */
     comment: string;
+    /** the comment converted to plain text */
+    text: string;
     /** date string */
     createdAt: string;
     /** shortened link */

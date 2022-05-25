@@ -1,4 +1,4 @@
-FROM node:18 AS build
+FROM node:18-alpine AS build
 
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey

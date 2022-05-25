@@ -6,7 +6,7 @@ import TweetEmbed from "../components/conversation/comment/twitter";
 
 //import { LinkPreview } from "@dhaiwat10/react-link-preview";
 /**
- * @param {DOMNode} node
+ * @param {any} node
  */
 export function replace(node: any): JSX.Element | void {
     const domNode: Element = node;
@@ -85,7 +85,18 @@ export function replace(node: any): JSX.Element | void {
             }
             if (domNode.name === "img" && domNode.attribs?.src) {
                 const { src, height, width, style } = domNode.attribs;
-                return <Img src={src} height={height} width={width} style={style} />;
+                return (
+                    <a
+                        href={src}
+                        target={"_blank"}
+                        rel={"noopener noreferrer"}
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        <Img src={src} height={height} width={width} style={style} />
+                    </a>
+                );
             }
         } catch {}
     }

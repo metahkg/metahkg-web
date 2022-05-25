@@ -15,8 +15,6 @@ import {
 } from "../ConversationContext";
 import { setDescription, setTitle } from "../../../lib/common";
 import queryString from "query-string";
-// @ts-ignore
-import h2p from "html2plaintext";
 
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
@@ -60,10 +58,8 @@ export default function useFirstFetch() {
                 id !== res.data.id && setId(res.data.id);
                 setTitle(`${res.data.title} | Metahkg`);
                 setDescription(
-                    h2p(
-                        (query.c && res.data.conversation?.[Number(query.c)]?.comment) ||
-                            res.data.conversation?.[0]?.comment
-                    )
+                    (query.c && res.data.conversation?.[Number(query.c)]?.text) ||
+                        res.data.conversation?.[0]?.text
                 );
                 if (!res.data.slink) {
                     res.data.slink = `${window.location.origin}/thread/${threadId}?page=1`;

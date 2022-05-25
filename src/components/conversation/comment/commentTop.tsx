@@ -14,23 +14,29 @@ import { PopUp } from "../../../lib/popup";
 import { commentType } from "../../../types/conversation/comment";
 import {
     useCRoot,
+    useEditor,
     useStory,
     useThread,
     useThreadId,
     useTitle,
 } from "../ConversationContext";
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
-import dateat from "date-and-time";
+import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timeToWord } from "../../../lib/common";
 import MoreList from "./more";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
+import React from "react";
 
-export default function CommentTop(props: { comment: commentType; noStory?: boolean }) {
+export default function CommentTop(props: {
+    comment: commentType;
+    noStory?: boolean;
+    fold?: boolean;
+}) {
     const [open, setOpen] = useState(false);
-    const [timemode, setTimemode] = useState<"short" | "long">("short");
+    const [timeMode, setTimeMode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
     const [, setShareTitle] = useShareTitle();
     const [, setShareOpen] = useShareOpen();
@@ -41,10 +47,14 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
     const navigate = useNavigate();
     const [thread, setThread] = useThread();
     const [user] = useUser();
+    const [, setEditor] = useEditor();
     const croot = useCRoot();
-    const { comment, noStory } = props;
+
+    const { comment, noStory, fold } = props;
+
     const isOp = thread && thread.op.id === comment.user.id;
-    const leftbtns = [
+
+    const leftBtns = [
         (story ? story === comment.user.id : 1) &&
             !noStory && {
                 icon: story ? (
@@ -74,11 +84,17 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
             icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
             title: "Quote",
             action: () => {
-                navigate(`/comment/${threadId}?quote=${comment.id}`);
+                if (user) setEditor({ open: true, quote: comment });
+                else
+                    navigate(
+                        `/users/signin?continue=true&returnto=${encodeURIComponent(
+                            `/thread/${threadId}`
+                        )}`
+                    );
             },
         },
     ];
-    const rightbtns: {
+    const rightBtns: {
         icon: JSX.Element;
         title: string;
         action: () => void;
@@ -155,7 +171,11 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
         },
     ];
     return (
-        <div className="flex align-center font-size-17 pt10 justify-space-between">
+        <div
+            className={`flex align-center font-size-17 pt10 ${
+                !fold ? "justify-space-between" : ""
+            }`}
+        >
             <PopUp
                 open={open}
                 setOpen={setOpen}
@@ -167,7 +187,11 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
                     <br />#{comment.user.id}
                 </p>
             </PopUp>
-            <div className="flex align-center comment-tag-left">
+            <div
+                className={`flex align-center ${
+                    !fold ? "comment-tag-left" : "fullwidth"
+                }`}
+            >
                 <Typography
                     className="novmargin font-size-17-force"
                     sx={(theme) => ({
@@ -188,7 +212,7 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
                     {comment.user.name}
                 </p>
                 <Tooltip
-                    title={dateat.format(
+                    title={dateAndTime.format(
                         new Date(comment.createdAt),
                         "ddd, MMM DD YYYY HH:mm:ss"
                     )}
@@ -197,7 +221,7 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
                     <p
                         onClick={() => {
                             if (isMobile) {
-                                setTimemode(timemode === "short" ? "long" : "short");
+                                setTimeMode(timeMode === "short" ? "long" : "short");
                             }
                         }}
                         className={`novmargin metahkg-grey ml10 font-size-15${
@@ -207,37 +231,53 @@ export default function CommentTop(props: { comment: commentType; noStory?: bool
                         {
                             {
                                 short: timeToWord(comment.createdAt),
-                                long: dateat.format(
+                                long: dateAndTime.format(
                                     new Date(comment.createdAt),
                                     "DD/MM/YY HH:mm"
                                 ),
-                            }[timemode]
+                            }[timeMode]
                         }
                     </p>
                 </Tooltip>
-                {leftbtns.map(
-                    (button, index) =>
-                        button && (
-                            <Tooltip key={index} title={button.title} arrow>
-                                <IconButton
-                                    className="ml10 nopadding"
-                                    onClick={button.action}
-                                >
-                                    {button.icon}
-                                </IconButton>
-                            </Tooltip>
-                        )
+                {fold && (
+                    <React.Fragment>
+                        <p className={"novmargin ml5 metahkg-grey"}>:</p>
+                        <p
+                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis"
+                            style={{ display: "inline-block" }}
+                        >
+                            {comment.text}
+                        </p>
+                    </React.Fragment>
                 )}
+                {!fold &&
+                    leftBtns.map(
+                        (button, index) =>
+                            button && (
+                                <Tooltip key={index} title={button.title} arrow>
+                                    <IconButton
+                                        className="ml10 nopadding"
+                                        onClick={button.action}
+                                    >
+                                        {button.icon}
+                                    </IconButton>
+                                </Tooltip>
+                            )
+                    )}
             </div>
             <div className="flex align-center">
-                {rightbtns.map((button) => (
-                    <Tooltip title={button.title} arrow>
-                        <IconButton className="ml10 nopadding" onClick={button.action}>
-                            {button.icon}
-                        </IconButton>
-                    </Tooltip>
-                ))}
-                <MoreList buttons={moreList} />
+                {!fold &&
+                    rightBtns.map((button) => (
+                        <Tooltip title={button.title} arrow>
+                            <IconButton
+                                className="ml10 nopadding"
+                                onClick={button.action}
+                            >
+                                {button.icon}
+                            </IconButton>
+                        </Tooltip>
+                    ))}
+                {!fold && <MoreList buttons={moreList} />}
             </div>
         </div>
     );

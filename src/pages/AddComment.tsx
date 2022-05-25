@@ -23,6 +23,7 @@ import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import RenderComment from "../components/renderComment";
 import { commentType } from "../types/conversation/comment";
+
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 /**
@@ -214,7 +215,7 @@ export default function AddComment() {
                                 }, 1000);
                                 setImgUrl(res.data.url);
                                 tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                    `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt=""/>`
                                 );
                             }}
                             onError={() => {
