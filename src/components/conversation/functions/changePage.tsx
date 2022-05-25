@@ -29,7 +29,7 @@ export default function useChangePage() {
     const threadId = useThreadId();
     const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
 
-    return (newPage: number) => {
+    return (newPage: number, callback?: () => void) => {
         if (thread) {
             setCurrentPage(newPage);
 
@@ -58,8 +58,8 @@ export default function useChangePage() {
                 shouldReRender || newPage - finalPage === 1 ? newPage : finalPage
             );
 
-            api.get(`/posts/thread/${threadId}?page=${newPage}`).then(
-                (res: { data: threadType }) => {
+            api.get(`/posts/thread/${threadId}?page=${newPage}`)
+                .then((res: { data: threadType }) => {
                     if (!res.data.conversation.length)
                         return setNotification({ open: true, text: "Page not found!" });
 
@@ -83,11 +83,19 @@ export default function useChangePage() {
                     );
 
                     res.data.conversation.length % 25 && setEnd(true);
+
                     document
                         .getElementById(String(newPage))
                         ?.scrollIntoView({ behavior: "smooth" });
-                }
-            );
+
+                    if (callback) callback();
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        text: err.response.data?.error || err.response.data,
+                    });
+                });
         }
     };
 }

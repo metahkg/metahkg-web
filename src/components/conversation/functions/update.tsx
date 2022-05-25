@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { threadType } from "../../../types/conversation/thread";
 import {
+    useCBottom,
     useCurrentPage,
     useEnd,
     useFinalPage,
@@ -22,7 +23,9 @@ export function useUpdate() {
     const [, setCurrentPage] = useCurrentPage();
     const navigate = useNavigate();
     const threadId = useThreadId();
-    return () => {
+    const cBottom = useCBottom();
+
+    return (scrollToBottom?: boolean) => {
         if (thread) {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
@@ -76,6 +79,9 @@ export function useUpdate() {
                     setCurrentPage(finalPage + 1);
                 }
                 setUpdating(false);
+
+                if (scrollToBottom && cBottom.current)
+                    cBottom.current.scrollIntoView({ behavior: "smooth" });
             });
         }
     };
