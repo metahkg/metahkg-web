@@ -208,7 +208,6 @@ function Conversation(props: { id: number }) {
                                                 (index + 1) * 25 - 1
                                             ).map(
                                                 (comment: commentType) =>
-
                                                     !comment?.removed &&
                                                     (story
                                                         ? story === comment?.user.id
