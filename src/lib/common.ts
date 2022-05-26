@@ -17,10 +17,9 @@ export function timeToWord(sDate: string): string {
         spacer: "",
         delimiter: " ",
     });
-    let r: string = shortened.split(" ")[0];
-    if (r.endsWith("s")) {
+    let r = shortened.split(" ")[0];
+    if (r.endsWith("s"))
         r = "now";
-    }
     return r;
 }
 
@@ -28,13 +27,13 @@ export function timeToWord_long(sDate: string): string {
     const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
-    let r: any = humanizeDuration(diff, {
+    let r = humanizeDuration(diff, {
         round: true,
         spacer: " ",
         delimiter: ",",
     });
-    r = r.split(",");
-    return r[0];
+    const o = r.split(",");
+    return o[0];
 }
 
 export function sleep(ms: number) {
@@ -49,7 +48,7 @@ export function splitArray(arr: any[], start: number, end: number) {
     return r;
 }
 
-export function wholePath(): string {
+export function wholePath() {
     return window.location.href.replace(window.location.origin, "");
 }
 
@@ -74,7 +73,7 @@ export function checkPwd(pwd: string): boolean {
     return true;
 }
 
-export function allequal(arr: any[]) {
+export function allEqual(arr: any[]) {
     const first = arr[0];
     for (const i of arr) {
         if (i !== first) return false;
