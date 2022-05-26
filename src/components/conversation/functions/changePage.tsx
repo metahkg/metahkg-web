@@ -88,7 +88,7 @@ export default function useChangePage() {
                         .getElementById(String(newPage))
                         ?.scrollIntoView({ behavior: "smooth" });
 
-                    if (callback) callback();
+                    callback && setTimeout(callback);
                 })
                 .catch((err) => {
                     setNotification({
