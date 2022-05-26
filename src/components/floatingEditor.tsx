@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
 import {
     Alert,
@@ -49,7 +49,18 @@ export default function FloatingEditor() {
     const update = useUpdate();
     const changePage = useChangePage();
     const [finalPage] = useFinalPage();
-    const numOfPages = roundup((thread?.c || 0) / 25);
+    const [shouldUpdate, setShouldUpdate] = useState(false);
+    const [newCommentId, setNewCommentId] = useState(0);
+
+    console.log(shouldUpdate, newCommentId);
+
+    useEffect(() => {
+        if (shouldUpdate && newCommentId) {
+            setShouldUpdate(false);
+            setNewCommentId(0);
+            update({ scrollToComment: newCommentId });
+        }
+    }, [newCommentId, shouldUpdate, update]);
 
     function clearState() {
         setComment("");
@@ -74,11 +85,18 @@ export default function FloatingEditor() {
             quote: editor.quote?.id,
             rtoken,
         })
-            .then(() => {
+            .then((res: { data: { id: number } }) => {
+                setNewCommentId(res.data.id);
+
+                const numOfPages = roundup((res.data.id || 0) / 25);
+
                 setEditor({ ...editor, open: false });
 
-                if (numOfPages !== finalPage) changePage(numOfPages, () => update(true));
-                else update(true);
+                if (numOfPages !== finalPage)
+                    changePage(numOfPages, () => {
+                        setShouldUpdate(true);
+                    });
+                else update({ scrollToComment: res.data.id });
 
                 setCreating(false);
                 clearState();

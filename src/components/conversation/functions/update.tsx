@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { threadType } from "../../../types/conversation/thread";
 import {
-    useCBottom,
     useCurrentPage,
     useEnd,
     useFinalPage,
@@ -23,10 +22,11 @@ export function useUpdate() {
     const [, setCurrentPage] = useCurrentPage();
     const navigate = useNavigate();
     const threadId = useThreadId();
-    const cBottom = useCBottom();
 
-    return (scrollToBottom?: boolean) => {
+    return (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
+        console.log(thread);
         if (thread) {
+            console.log("update");
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
 
@@ -41,9 +41,23 @@ export function useUpdate() {
                           }`
                 }`
             ).then((res: { data: threadType }) => {
+                const scroll = () => {document
+                    .getElementById(
+                        `c${
+                            options?.scrollToComment ||
+                            res.data?.conversation[
+                                options?.scrollToBottom
+                                    ? res.data?.conversation?.length - 1
+                                    : 0
+                                ]?.id
+                        }`
+                    )
+                    ?.scrollIntoView({ behavior: "smooth" });}
                 if (!res.data.conversation.length) {
                     setEnd(true);
                     setUpdating(false);
+                    if (options?.scrollToBottom || options?.scrollToComment)
+                        setTimeout(scroll);
                     return;
                 }
                 if (!openNewPage) {
@@ -57,11 +71,7 @@ export function useUpdate() {
                         ...res.data,
                         conversation,
                     });
-                    setTimeout(() => {
-                        document
-                            .getElementById(`c${res.data?.conversation[0]?.id}`)
-                            ?.scrollIntoView({ behavior: "smooth" });
-                    });
+                    setTimeout(scroll);
                     conversation.length % 25 && setEnd(true);
                 } else {
                     setThread({
@@ -69,7 +79,6 @@ export function useUpdate() {
                         ...res.data,
                         conversation: [...thread.conversation, ...res.data.conversation],
                     });
-                    console.log([...thread.conversation, ...res.data.conversation]);
                     setUpdating(false);
                     setFinalPage(finalPage + 1);
                     setPages(pages + 1);
@@ -79,9 +88,6 @@ export function useUpdate() {
                     setCurrentPage(finalPage + 1);
                 }
                 setUpdating(false);
-
-                if (scrollToBottom && cBottom.current)
-                    cBottom.current.scrollIntoView({ behavior: "smooth" });
             });
         }
     };
