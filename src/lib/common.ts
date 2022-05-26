@@ -18,8 +18,7 @@ export function timeToWord(sDate: string): string {
         delimiter: " ",
     });
     let r = shortened.split(" ")[0];
-    if (r.endsWith("s"))
-        r = "now";
+    if (r.endsWith("s")) r = "now";
     return r;
 }
 
