@@ -41,18 +41,20 @@ export function useUpdate() {
                           }`
                 }`
             ).then((res: { data: threadType }) => {
-                const scroll = () => {document
-                    .getElementById(
-                        `c${
-                            options?.scrollToComment ||
-                            res.data?.conversation[
-                                options?.scrollToBottom
-                                    ? res.data?.conversation?.length - 1
-                                    : 0
+                const scroll = () => {
+                    document
+                        .getElementById(
+                            `c${
+                                options?.scrollToComment ||
+                                res.data?.conversation[
+                                    options?.scrollToBottom
+                                        ? res.data?.conversation?.length - 1
+                                        : 0
                                 ]?.id
-                        }`
-                    )
-                    ?.scrollIntoView({ behavior: "smooth" });}
+                            }`
+                        )
+                        ?.scrollIntoView({ behavior: "smooth" });
+                };
                 if (!res.data.conversation.length) {
                     setEnd(true);
                     setUpdating(false);
