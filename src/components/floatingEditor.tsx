@@ -69,7 +69,6 @@ export default function FloatingEditor() {
         setRtoken(null);
         setCreating(false);
         setFold(false);
-        grecaptcha?.reset();
     }
 
     const handleClose = () => {
