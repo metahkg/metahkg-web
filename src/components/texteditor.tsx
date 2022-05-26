@@ -11,19 +11,19 @@ import { Box, SxProps, Theme } from "@mui/material";
  */
 export default function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
-    text?: string;
+    initText?: string;
     className?: string;
     sx?: SxProps<Theme>;
     autoresize?: boolean;
 }) {
-    const { onChange, text, className, sx, autoresize } = props;
+    const { onChange, initText, className, sx, autoresize } = props;
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box sx={sx} className={className}>
             <Editor
                 key={Number(isSmallScreen)}
                 onEditorChange={onChange}
-                initialValue={text}
+                initialValue={initText}
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     skin_url:

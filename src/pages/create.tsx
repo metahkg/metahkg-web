@@ -264,7 +264,7 @@ export default function Create() {
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
-                        text={inittext}
+                        initText={inittext}
                     />
                     <div
                         className={`mt15 ${

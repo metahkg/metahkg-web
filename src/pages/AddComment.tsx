@@ -268,7 +268,7 @@ export default function AddComment() {
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
-                        text={edit ? initText : undefined}
+                        initText={edit ? initText : undefined}
                     />
                     <div
                         className={`mt15 ${

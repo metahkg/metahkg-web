@@ -34,9 +34,6 @@ declare const grecaptcha: { reset: () => void };
 export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
-    const handleClose = () => {
-        setEditor({ ...editor, open: false });
-    };
     const [comment, setComment] = useState("");
     const [rtoken, setRtoken] = useState<null | string>(null);
     const [creating, setCreating] = useState(false);
@@ -54,6 +51,21 @@ export default function FloatingEditor() {
     const [finalPage] = useFinalPage();
     const numOfPages = roundup((thread?.c || 0) / 25);
 
+    function clearState() {
+        setComment("");
+        setImgUrl("");
+        setAlert({ severity: "info", text: "" });
+        setRtoken(null);
+        setCreating(false);
+        setFold(false);
+        grecaptcha?.reset();
+    }
+
+    const handleClose = () => {
+        setEditor({ ...editor, open: false });
+        clearState();
+    };
+
     function CreateComment() {
         setCreating(true);
         api.post("/posts/comment", {
@@ -69,6 +81,7 @@ export default function FloatingEditor() {
                 else update(true);
 
                 setCreating(false);
+                clearState();
             })
             .catch((err) => {
                 setNotification({
@@ -113,8 +126,7 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                {!fold && (
-                    <Box className="border-radius-20">
+                    <Box className={`border-radius-20 ${fold ? "display-none" : ""}`}>
                         {editor.quote && (
                             <Comment
                                 comment={editor.quote}
@@ -223,7 +235,6 @@ export default function FloatingEditor() {
                             )}
                         </Box>
                     </Box>
-                )}
             </Box>
         </Snackbar>
     );
