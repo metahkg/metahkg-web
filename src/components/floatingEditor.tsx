@@ -126,115 +126,115 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                    <Box className={`border-radius-20 ${fold ? "display-none" : ""}`}>
-                        {editor.quote && (
-                            <Comment
-                                comment={editor.quote}
-                                fold
-                                noId
-                                fetchComment
-                                noStory
-                                noQuote
-                            />
-                        )}
-                        <UploadImage
-                            className="m10"
-                            onUpload={() => {
-                                setAlert({
-                                    severity: "info",
-                                    text: "Uploading image...",
-                                });
-                            }}
-                            onSuccess={(res) => {
-                                setAlert({ severity: "info", text: "Image uploaded!" });
-                                setImgUrl(res.data.url);
-                                tinymce.activeEditor.insertContent(
-                                    `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt="" />`
-                                );
-                            }}
-                            onError={() => {
-                                setAlert({
-                                    severity: "error",
-                                    text: "Error uploading image.",
-                                });
-                            }}
+                <Box className={`border-radius-20 ${fold ? "display-none" : ""}`}>
+                    {editor.quote && (
+                        <Comment
+                            comment={editor.quote}
+                            fold
+                            noId
+                            fetchComment
+                            noStory
+                            noQuote
                         />
-                        {imgUrl && (
-                            <p
-                                className={`ml10 novmargin flex${
-                                    isSmallScreen ? " mt5" : ""
-                                }`}
-                            >
-                                <Tooltip
-                                    arrow
-                                    title={
-                                        <img
-                                            src={`https://i.metahkg.org/thumbnail?src=${imgUrl}`}
-                                            alt=""
-                                        />
-                                    }
-                                >
-                                    <a href={imgUrl} target="_blank" rel="noreferrer">
-                                        {imgUrl}
-                                    </a>
-                                </Tooltip>
-                                <p
-                                    className="link novmargin metahkg-grey-force ml5"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(imgUrl);
-                                        setNotification({
-                                            open: true,
-                                            text: "Copied to clipboard!",
-                                        });
-                                    }}
-                                >
-                                    copy
-                                </p>
-                            </p>
-                        )}
-                        {alert.text && (
-                            <Alert className="m10" severity={alert.severity}>
-                                {alert.text}
-                            </Alert>
-                        )}
-                        <TextEditor
-                            onChange={(e) => {
-                                setComment(e);
-                            }}
-                            autoresize
-                            className="ml10 mr10"
-                        />
-                        <Box
-                            className={`${
-                                isSmallScreen ? "" : "flex"
-                            } justify-space-between align-center m10`}
+                    )}
+                    <UploadImage
+                        className="m10"
+                        onUpload={() => {
+                            setAlert({
+                                severity: "info",
+                                text: "Uploading image...",
+                            });
+                        }}
+                        onSuccess={(res) => {
+                            setAlert({ severity: "info", text: "Image uploaded!" });
+                            setImgUrl(res.data.url);
+                            tinymce.activeEditor.insertContent(
+                                `<img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" alt="" />`
+                            );
+                        }}
+                        onError={() => {
+                            setAlert({
+                                severity: "error",
+                                text: "Error uploading image.",
+                            });
+                        }}
+                    />
+                    {imgUrl && (
+                        <p
+                            className={`ml10 novmargin flex${
+                                isSmallScreen ? " mt5" : ""
+                            }`}
                         >
-                            <ReCAPTCHA
-                                theme="dark"
-                                sitekey={
-                                    process.env.REACT_APP_recaptchasitekey ||
-                                    "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            <Tooltip
+                                arrow
+                                title={
+                                    <img
+                                        src={`https://i.metahkg.org/thumbnail?src=${imgUrl}`}
+                                        alt=""
+                                    />
                                 }
-                                onChange={(token) => {
-                                    setRtoken(token || "");
+                            >
+                                <a href={imgUrl} target="_blank" rel="noreferrer">
+                                    {imgUrl}
+                                </a>
+                            </Tooltip>
+                            <p
+                                className="link novmargin metahkg-grey-force ml5"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(imgUrl);
+                                    setNotification({
+                                        open: true,
+                                        text: "Copied to clipboard!",
+                                    });
                                 }}
-                            />
-                            {creating ? (
-                                <CircularProgress color="secondary" disableShrink />
-                            ) : (
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={CreateComment}
-                                    disabled={!rtoken || !comment}
-                                    className={isSmallScreen ? "mt10" : ""}
-                                >
-                                    <CommentIcon />
-                                    Comment
-                                </Button>
-                            )}
-                        </Box>
+                            >
+                                copy
+                            </p>
+                        </p>
+                    )}
+                    {alert.text && (
+                        <Alert className="m10" severity={alert.severity}>
+                            {alert.text}
+                        </Alert>
+                    )}
+                    <TextEditor
+                        onChange={(e) => {
+                            setComment(e);
+                        }}
+                        autoresize
+                        className="ml10 mr10"
+                    />
+                    <Box
+                        className={`${
+                            isSmallScreen ? "" : "flex"
+                        } justify-space-between align-center m10`}
+                    >
+                        <ReCAPTCHA
+                            theme="dark"
+                            sitekey={
+                                process.env.REACT_APP_recaptchasitekey ||
+                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
+                            }
+                            onChange={(token) => {
+                                setRtoken(token || "");
+                            }}
+                        />
+                        {creating ? (
+                            <CircularProgress color="secondary" disableShrink />
+                        ) : (
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={CreateComment}
+                                disabled={!rtoken || !comment}
+                                className={isSmallScreen ? "mt10" : ""}
+                            >
+                                <CommentIcon />
+                                Comment
+                            </Button>
+                        )}
                     </Box>
+                </Box>
             </Box>
         </Snackbar>
     );
