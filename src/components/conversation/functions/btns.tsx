@@ -6,7 +6,8 @@ import {
     useThread,
     useCRoot,
     useEditor,
-    useThreadId, useCurrentPage,
+    useThreadId,
+    useCurrentPage,
 } from "../ConversationContext";
 import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
 import { useNotification, useUser } from "../../ContextProvider";
