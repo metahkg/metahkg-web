@@ -37,7 +37,7 @@ export default function useOnScroll() {
                 Math,
                 arr.filter((i) => Boolean(i.top)).map((i) => i.top)
             );
-            const currentComment = arr.find((i) => Math.abs(i.top) === min)?.id;
+            const currentComment = arr.find((i) => i.top === min)?.id;
             if (history[index]?.cid !== currentComment && currentComment) {
                 history[index].cid = currentComment;
                 setHistory(history);
