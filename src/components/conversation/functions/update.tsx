@@ -24,9 +24,7 @@ export function useUpdate() {
     const threadId = useThreadId();
 
     return (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
-        console.log(thread);
         if (thread) {
-            console.log("update");
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
 
