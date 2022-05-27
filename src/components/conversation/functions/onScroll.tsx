@@ -22,11 +22,11 @@ export default function useOnScroll() {
         }
         const index = history.findIndex((i) => i.id === threadId);
         if (index !== -1 && thread) {
-            const arr = thread.conversation.map((comment, c) => {
+            const arr = thread.conversation.map((comment) => {
                 return {
                     top: Math.abs(
                         Number(
-                            document.getElementById(`c${c + 1}`)?.getBoundingClientRect()
+                            document.getElementById(`c${comment.id}`)?.getBoundingClientRect()
                                 ?.top
                         )
                     ),
@@ -37,9 +37,9 @@ export default function useOnScroll() {
                 Math,
                 arr.filter((i) => Boolean(i.top)).map((i) => i.top)
             );
-            const currentcomment = arr.find((i) => i.top === min)?.id;
-            if (history[index]?.cid !== currentcomment && currentcomment) {
-                history[index].cid = currentcomment;
+            const currentComment = arr.find((i) => i.top === min)?.id;
+            if (history[index]?.cid !== currentComment && currentComment) {
+                history[index].cid = currentComment;
                 setHistory(history);
                 localStorage.setItem("history", JSON.stringify(history));
             }

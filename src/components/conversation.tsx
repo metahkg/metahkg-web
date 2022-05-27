@@ -81,6 +81,7 @@ function Conversation(props: { id: number }) {
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
 
     useFirstFetch();
+
     useEffect(() => {
         if (history.findIndex((i) => i.id === props.id) === -1) {
             history.push({ id: props.id, cid: 1, c: 1 });
@@ -119,7 +120,7 @@ function Conversation(props: { id: number }) {
                 setCurrentPage(finalPage);
             }
         }
-    });
+    }, [ready, loading, navigate, query.c, finalPage, setCurrentPage]);
 
     const numOfPages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();

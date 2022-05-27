@@ -52,8 +52,6 @@ export default function FloatingEditor() {
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
 
-    console.log(shouldUpdate, newCommentId);
-
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
             setShouldUpdate(false);
