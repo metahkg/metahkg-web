@@ -26,18 +26,17 @@ export default function useOnScroll() {
                 return {
                     top: Math.abs(
                         Number(
-                            document.getElementById(`c${comment.id}`)?.getBoundingClientRect()
-                                ?.top
+                            document
+                                .getElementById(`c${comment.id}`)
+                                ?.getBoundingClientRect()?.top
                         )
                     ),
                     id: comment.id,
                 };
             });
-            const min = Math.min.apply(
-                Math,
-                arr.filter((i) => Boolean(i.top)).map((i) => i.top)
-            );
-            const currentComment = arr.find((i) => i.top === min)?.id;
+
+            const currentComment = arr.reduce((a, b) => (a.top < b.top ? a : b)).id;
+
             if (history[index]?.cid !== currentComment && currentComment) {
                 history[index].cid = currentComment;
                 setHistory(history);
