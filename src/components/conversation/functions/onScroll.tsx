@@ -26,8 +26,9 @@ export default function useOnScroll() {
                 return {
                     top: Math.abs(
                         Number(
-                            document.getElementById(`c${comment.id}`)?.getBoundingClientRect()
-                                ?.top
+                            document
+                                .getElementById(`c${comment.id}`)
+                                ?.getBoundingClientRect()?.top
                         )
                     ),
                     id: comment.id,
