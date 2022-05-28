@@ -41,11 +41,11 @@ export default function ConversationProvider(props: {
     const { threadId, children } = props;
     const [thread, setThread] = useState<threadType | null>(null);
     const [finalPage, setFinalPage] = useState(
-        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
     );
     /** Current page */
     const [currentPage, setCurrentPage] = useState(
-        Number(query.page) || Math.floor(Number(query.c) / 25) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
     );
     const [userVotes, setUserVotes] = useState<{ [id: number]: "U" | "D" } | null>(null);
     const [updating, setUpdating] = useState(false);

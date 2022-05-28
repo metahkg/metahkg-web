@@ -267,8 +267,8 @@ export default function CommentTop(props: {
             </div>
             <div className="flex align-center">
                 {!fold &&
-                    rightBtns.map((button) => (
-                        <Tooltip title={button.title} arrow>
+                    rightBtns.map((button, index) => (
+                        <Tooltip key={index} title={button.title} arrow>
                             <IconButton
                                 className="ml10 nopadding"
                                 onClick={button.action}
