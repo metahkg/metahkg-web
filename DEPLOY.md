@@ -47,6 +47,6 @@ Running  `yarn run start` will start the react app at localhost:3199. (for if yo
 
 #### Public dev server
 
-**_WARNING:_** You must use `metahkg.test.wcyat.me` as the domain, or recaptcha can't be used!
+> **_WARNING:_** You must use `metahkg.test.wcyat.me` as the domain, or recaptcha can't be used!
 
 Run `yarn run start:react` to start the react app at localhost:3000 and use the public dev server.
