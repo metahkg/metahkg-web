@@ -120,7 +120,16 @@ function Conversation(props: { id: number }) {
                 setCurrentPage(finalPage);
             }
         }
-    }, [ready, loading, navigate, query.c, finalPage, setCurrentPage, query.page, setLoading]);
+    }, [
+        ready,
+        loading,
+        navigate,
+        query.c,
+        finalPage,
+        setCurrentPage,
+        query.page,
+        setLoading,
+    ]);
 
     const numOfPages = roundup((thread?.c || 0) / 25);
     const btns = useBtns();
