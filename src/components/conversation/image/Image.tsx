@@ -37,7 +37,6 @@ function ImgComponent(props: {
             const commentEle = document.getElementById(`c${thread?.conversation[0].id}`);
             if (croot.current && commentEle) {
                 const afterHeight = commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                console.log(croot.current.scrollTop, afterHeight - beforeHeight.current);
                 croot.current.scrollTop += afterHeight - beforeHeight.current;
             }
         }
