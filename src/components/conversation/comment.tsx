@@ -78,7 +78,7 @@ function Comment(props: {
         }
         if (inPopUp) {
             setLoading(true);
-            api.get(`/thread/${threadId}/replies/${comment.id}`)
+            api.get(`/thread/${threadId}/comment/${comment.id}/replies`)
                 .then((res) => {
                     setReplies(res.data);
                     setLoading(false);
