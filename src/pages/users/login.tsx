@@ -60,11 +60,12 @@ export default function Login() {
                     return;
                 }
                 localStorage.setItem("token", res.data.token);
-                setUser(decodeToken(res.data.token));
+                const user = decodeToken(res.data.token);
+                setUser(user);
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
-                setNotification({ open: true, text: `Logged in as ${res.data.name}.` });
+                setNotification({ open: true, text: `Logged in as ${user?.name}.` });
             })
             .catch((err) => {
                 setAlert({

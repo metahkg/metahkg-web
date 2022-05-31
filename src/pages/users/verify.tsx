@@ -42,10 +42,11 @@ export default function Verify() {
         })
             .then((res) => {
                 localStorage.setItem("token", res.data.token);
-                setUser(decodeToken(res.data.token));
+                const user = decodeToken(res.data.token);
+                setUser(user);
                 setNotification({
                     open: true,
-                    text: `Logged in as ${res.data.name}.`,
+                    text: `Logged in as ${user?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })
