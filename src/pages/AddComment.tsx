@@ -55,7 +55,7 @@ export default function AddComment() {
 
     useEffect(() => {
         if (user) {
-            api.post("/posts/check", { id: id }).catch((err) => {
+            api.get(`/thread/check?id=${id}`).catch((err) => {
                 if (err.response.status === 404) {
                     setAlert({
                         severity: "warning",
@@ -81,7 +81,7 @@ export default function AddComment() {
             });
             edit &&
                 api
-                    .get(`/posts/thread/${id}/comment/${edit}`)
+                    .get(`/thread/${id}/comment/${edit}`)
                     .then((res: { data: commentType }) => {
                         setInitText(
                             `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
@@ -111,12 +111,10 @@ export default function AddComment() {
      * It sends a post request to the server with the comment data.
      */
     function addComment() {
-        //send data to server /api/posts/comment
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
-        api.post("/posts/comment", {
-            id,
+        api.post(`/thread/${id}/comment`, {
             comment,
             rtoken,
             quote,
@@ -146,11 +144,11 @@ export default function AddComment() {
             });
     }
 
-    /* It checks if the user is logged in. If not, it redirects the user to the signin page. */
+    /* It checks if the user is logged in. If not, it redirects the user to the login page. */
     if (!user)
         return (
             <Navigate
-                to={`/users/signin?continue=true&returnto=${encodeURIComponent(
+                to={`/users/login?continue=true&returnto=${encodeURIComponent(
                     wholePath()
                 )}`}
                 replace

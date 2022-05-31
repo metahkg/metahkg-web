@@ -1,4 +1,4 @@
-import "./css/signin.css";
+import "./css/login.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import hash from "hash.js";
@@ -18,14 +18,7 @@ import { Login as LoginIcon } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 
-/**
- * /signin
- * The Signin component collects data from user then send to the server /api/users/signin
- * If sign in is successful, a cookie "key" would be set by the server, which is the api key
- * If user is already signed in, he is redirected to /
- * After signing in, user is redirected to query.returnto if it exists, otherwise /
- */
-export default function Signin() {
+export default function Login() {
     const navigate = useNavigate();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
@@ -41,8 +34,8 @@ export default function Signin() {
     });
     useEffect(() => {
         if (query?.continue) {
-            setAlert({ severity: "info", text: "Sign in to continue." });
-            setNotification({ open: true, text: "Sign in to continue." });
+            setAlert({ severity: "info", text: "Login to continue." });
+            setNotification({ open: true, text: "Login in to continue." });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -50,14 +43,14 @@ export default function Signin() {
     if (user) return <Navigate to="/" replace />;
 
     menu && setMenu(false);
-    setTitle("Sign in | Metahkg");
+    setTitle("Login | Metahkg");
     const query = queryString.parse(window.location.search);
 
-    function signin() {
-        setAlert({ severity: "info", text: "Signing in..." });
+    function login() {
+        setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
-        api.post("/users/signin", {
-            name: name,
+        api.post("/users/login", {
+            name,
             pwd: hash.sha256().update(pwd).digest("hex"),
         })
             .then((res) => {
@@ -71,7 +64,7 @@ export default function Signin() {
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
-                setNotification({ open: true, text: `Signed in as ${res.data.name}.` });
+                setNotification({ open: true, text: `Logged in as ${res.data.name}.` });
             })
             .catch((err) => {
                 setAlert({
@@ -94,7 +87,7 @@ export default function Signin() {
             }}
         >
             <Box
-                className="signin-main-box"
+                className="login-main-box"
                 sx={{
                     width: isSmallScreen ? "100vw" : "50vw",
                 }}
@@ -116,7 +109,7 @@ export default function Signin() {
                     </div>
                     <div className="flex justify-center align-center">
                         <MetahkgLogo height={50} width={40} svg light className="mb10" />
-                        <h1 className="font-size-25 mb20">Sign in</h1>
+                        <h1 className="font-size-25 mb20">Login</h1>
                     </div>
                     {alert.text && (
                         <Alert className="mb15 mt10" severity={alert.severity}>
@@ -151,13 +144,13 @@ export default function Signin() {
                     </h4>
                     <Button
                         disabled={disabled || !(name && pwd)}
-                        className="font-size-16-force notexttransform signin-btn"
+                        className="font-size-16-force notexttransform login-btn"
                         color="secondary"
                         variant="contained"
-                        onClick={signin}
+                        onClick={login}
                     >
                         <LoginIcon className="mr5 font-size-16-force" />
-                        Sign in
+                        Login
                     </Button>
                 </div>
             </Box>

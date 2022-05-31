@@ -58,7 +58,7 @@ export default function useChangePage() {
                 shouldReRender || newPage - finalPage === 1 ? newPage : finalPage
             );
 
-            api.get(`/posts/thread/${threadId}?page=${newPage}`)
+            api.get(`/thread/${threadId}?page=${newPage}`)
                 .then((res: { data: threadType }) => {
                     if (!res.data.conversation.length)
                         return setNotification({ open: true, text: "Page not found!" });

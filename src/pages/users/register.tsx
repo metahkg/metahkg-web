@@ -1,4 +1,4 @@
-import "./css/signup.css";
+import "./css/register.css";
 import React, { useState } from "react";
 import hash from "hash.js";
 import {
@@ -49,7 +49,7 @@ function SexSelect(props: {
         setSex(e.target.value ? "M" : "F");
     };
     return (
-        <FormControl className="signup-sex-form">
+        <FormControl className="register-sex-form">
             <InputLabel color="secondary">Gender</InputLabel>
             <Select
                 color="secondary"
@@ -76,7 +76,7 @@ function SexSelect(props: {
  * the captcha would reload
  * process: register --> verify --> account created -->
  * redirect to query.returnto if exists, otherwise homepage after verification
- * If user already signed in, he is redirected to /
+ * If user already logged in, he is redirected to /
  * @returns register page
  */
 export default function Register() {
@@ -178,13 +178,13 @@ export default function Register() {
 
     return (
         <Box
-            className="signup-root flex fullwidth fullheight justify-center align-center"
+            className="register-root flex fullwidth fullheight justify-center align-center"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
             <Box
-                className="signup-main-box"
+                className="register-main-box"
                 sx={{
                     width: small ? "100vw" : "50vw",
                 }}
@@ -253,7 +253,7 @@ export default function Register() {
                         <Button
                             disabled={disabled || !rtoken}
                             type="submit"
-                            className="font-size-16-force text-transform-none signup-btn"
+                            className="font-size-16-force text-transform-none register-btn"
                             color="secondary"
                             variant="contained"
                         >

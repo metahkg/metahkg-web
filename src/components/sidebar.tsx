@@ -117,9 +117,9 @@ export default function SideBar() {
                                 icon: <AccessTimeFilled />,
                             },
                             {
-                                title: user ? "Logout" : "Sign in / Register",
-                                link: `/${
-                                    user ? "users/logout" : "users/signin"
+                                title: user ? "Logout" : "Login / Register",
+                                link: `/users/${
+                                    user ? "logout" : "login"
                                 }?returnto=${encodeURIComponent(wholePath())}`,
                                 icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },

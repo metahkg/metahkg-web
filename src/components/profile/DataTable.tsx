@@ -61,7 +61,7 @@ export default function DataTable(props: DataTableProps) {
                 ),
         },
         {
-            title: "Posts",
+            title: "Threads",
             content: props.requestedUser.count,
         },
         {
@@ -93,7 +93,7 @@ export default function DataTable(props: DataTableProps) {
     function editProfile() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
-        api.post("/users/editprofile", { name: name, sex: sex })
+        api.put("/users/editprofile", { name: name, sex: sex })
             .then((res) => {
                 setSaveDisabled(false);
                 setUser(null);

@@ -1,19 +1,19 @@
-.signup-root {
+.register-root {
     min-height: 100vh;
 }
 
-.signup-main-box {
+.register-main-box {
     min-height: 50vh;
 }
 
-.signup-main-div {
+.register-main-div {
     margin: 50px;
 }
 
-.signup-btn {
+.register-btn {
     height: 40px;
 }
 
-.signup-sex-form {
+.register-sex-form {
     min-width: 200px !important;
 }

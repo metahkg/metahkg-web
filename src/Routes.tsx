@@ -12,7 +12,7 @@ const Profile = loadable(() => import("./pages/profile"));
 const History = loadable(() => import("./pages/history"));
 const Recall = loadable(() => import("./pages/recall"));
 
-// posts
+// threads
 const AddComment = loadable(() => import("./pages/AddComment"));
 const Create = loadable(() => import("./pages/create"));
 
@@ -20,7 +20,7 @@ const Create = loadable(() => import("./pages/create"));
 const Verify = loadable(() => import("./pages/users/verify"));
 const Resend = loadable(() => import("./pages/users/resend"));
 const Register = loadable(() => import("./pages/users/register"));
-const Signin = loadable(() => import("./pages/users/signin"));
+const Login = loadable(() => import("./pages/users/login"));
 const Logout = loadable(() => import("./pages/users/logout"));
 
 // errors
@@ -48,7 +48,7 @@ export default function Routes() {
             <Route path="/users/register" element={<Register />} />
             <Route path="/users/verify" element={<Verify />} />
             <Route path="/users/resend" element={<Resend />} />
-            <Route path="/users/signin" element={<Signin />} />
+            <Route path="/users/login" element={<Login />} />
             <Route path="/users/logout" element={<Logout />} />
             <Route path="/create" element={<Create />} />
             <Route path="/search" element={<Search />} />

@@ -48,9 +48,7 @@ const VoteBar = React.memo<Props>((props) => {
             }
 
             try {
-                await api.post("/posts/vote", {
-                    id: Number(threadId),
-                    cid: Number(commentId),
+                await api.post(`/thread/${Number(threadId)}/vote/${Number(commentId)}`, {
                     vote: value,
                 });
             } catch (err: any) {

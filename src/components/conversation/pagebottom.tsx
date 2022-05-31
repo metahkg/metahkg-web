@@ -36,7 +36,7 @@ export default function PageBottom() {
                 ))}
             </div>
             <div className="mt8">
-                Copyright (c) 2022 wcyat.{" "}
+                Copyright (c) 2022 wcyat, Metahkg Contributors.{" "}
                 <a
                     className="metahkg-grey-force"
                     href="https://www.gnu.org/licenses/agpl-3.0.en.html"

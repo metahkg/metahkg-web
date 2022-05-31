@@ -45,7 +45,7 @@ export default function useFirstFetch() {
         err?.response?.status === 401 && navigate("/401", { replace: true });
     };
     useEffect(() => {
-        api.get(`/posts/thread/${threadId}?page=${finalPage}`)
+        api.get(`/thread/${threadId}?page=${finalPage}`)
             .then((res: { data: threadType }) => {
                 res.data.slink && setThread(res.data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
@@ -68,7 +68,7 @@ export default function useFirstFetch() {
                 res.data.conversation.length % 25 && setEnd(true);
             })
             .catch(onError);
-        api.get(`/posts/images/${threadId}`)
+        api.get(`/thread/${threadId}/images`)
             .then((res) => {
                 res.data.forEach((item: { image: string }) => {
                     images.push({
@@ -79,7 +79,7 @@ export default function useFirstFetch() {
             })
             .catch(onError);
         if (user) {
-            api.get(`/posts/uservotes/${threadId}`)
+            api.get(`/thread/${threadId}/uservotes`)
                 .then((res) => {
                     setVotes(res.data);
                 })

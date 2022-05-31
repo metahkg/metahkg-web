@@ -87,7 +87,7 @@ export default function CommentTop(props: {
                 if (user) setEditor({ open: true, quote: comment });
                 else
                     navigate(
-                        `/users/signin?continue=true&returnto=${encodeURIComponent(
+                        `/users/login?continue=true&returnto=${encodeURIComponent(
                             `/thread/${threadId}`
                         )}`
                     );
@@ -134,8 +134,7 @@ export default function CommentTop(props: {
                             open: true,
                             text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
                         });
-                        api.post(`/posts/${pinned ? "un" : ""}pin`, {
-                            id: threadId,
+                        api.put(`/thread/${threadId}/${pinned ? "un" : ""}pin`, {
                             cid: pinned ? undefined : comment.id,
                         })
                             .then(() => {

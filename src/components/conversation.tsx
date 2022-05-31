@@ -51,12 +51,6 @@ const Share = loadable(() => import("./conversation/share"));
 const Gallery = loadable(() => import("./conversation/gallery"));
 const Dock = loadable(() => import("./dock"));
 
-/**
- * Gets data from /api/posts/thread/<thread id(props.id)>/<conversation/users>
- * Then renders it as Comments
- * @param {number} props.id the thread id
- * @returns full conversation as Comments
- */
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
     const [thread] = useThread();
