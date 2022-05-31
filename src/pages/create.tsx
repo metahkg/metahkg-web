@@ -70,9 +70,7 @@ export default function Create() {
         if (user && quote.threadId && quote.commentId) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(
-                `/thread/${quote.threadId}/comment/${quote.commentId}`
-            )
+            api.get(`/thread/${quote.threadId}/comment/${quote.commentId}`)
                 .then((res) => {
                     if (res.data) {
                         setInittext(
