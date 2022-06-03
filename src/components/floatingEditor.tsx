@@ -76,8 +76,7 @@ export default function FloatingEditor() {
 
     function CreateComment() {
         setCreating(true);
-        api.post("/posts/comment", {
-            id: threadId,
+        api.post(`/thread/${threadId}/comment`, {
             comment,
             quote: editor.quote?.id,
             rtoken,

@@ -64,12 +64,12 @@ export default function MenuBody() {
             setEnd(false);
             setLoading(true);
             const url = {
-                search: `/search?q=${encodeURIComponent(
+                search: `/menu/search?q=${encodeURIComponent(
                     query
                 )}&sort=${selected}&mode=${smode}`,
-                profile: `/history/${profile}?sort=${selected}`,
+                profile: `/menu/history/${profile}?sort=${selected}`,
                 menu: `/menu/${categoryKey}?sort=${selected}`,
-                recall: `/threads?threads=${JSON.stringify(
+                recall: `/menu/threads?threads=${JSON.stringify(
                     splitArray(
                         history.map((item) => item.id),
                         0,
@@ -104,12 +104,12 @@ export default function MenuBody() {
         setEnd(false);
         setLoading(true);
         const url = {
-            search: `/search?q=${encodeURIComponent(query)}&sort=${selected}&page=${
+            search: `/menu/search?q=${encodeURIComponent(query)}&sort=${selected}&page=${
                 page + 1
             }&mode=${smode}`,
-            profile: `/history/${profile}?sort=${selected}&page=${page + 1}`,
+            profile: `/menu/history/${profile}?sort=${selected}&page=${page + 1}`,
             menu: `/menu/${categoryKey}?sort=${selected}&page=${page + 1}`,
-            recall: `/threads?threads=${JSON.stringify(
+            recall: `/menu/threads?threads=${JSON.stringify(
                 splitArray(
                     history.map((item) => item.id),
                     page * 25,

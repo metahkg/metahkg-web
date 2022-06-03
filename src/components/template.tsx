@@ -66,14 +66,14 @@ export default function Template() {
                         component={Link}
                         className="notextdecoration white fullwidth"
                         to={`/${
-                            user ? "users/logout" : "users/signin"
+                            user ? "users/logout" : "users/login"
                         }?returnto=${encodeURIComponent(wholePath())}`}
                     >
                         <ListItemIcon>
                             {user ? <LogoutIcon /> : <AccountCircleIcon />}
                         </ListItemIcon>
                         <ListItemText>
-                            {user ? "Logout" : "Sign in / Register"}
+                            {user ? "Logout" : "Login / Register"}
                         </ListItemText>
                     </ListItemButton>
                     {user && (

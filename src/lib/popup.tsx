@@ -80,8 +80,9 @@ export function PopUp(props: {
                     <React.Fragment>
                         <Divider />
                         <div className="flex fullwidth">
-                            {buttons?.map((button) => (
+                            {buttons?.map((button, index) => (
                                 <Link
+                                    key={index}
                                     className="notextdecoration fullwidth"
                                     to={button.link}
                                 >

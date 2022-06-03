@@ -1,5 +1,5 @@
 > All code in this repository is licensed under the GNU Affero General Public License
-> Version 3.0 OR LATER, unless the directory contains a LICENSE or LICENSE.md file, in 
+> Version 3.0 OR LATER, unless the directory contains a LICENSE or LICENSE.md file, in
 > which case that file applies to the code in that subdirectory.
 
 ### GNU AFFERO GENERAL PUBLIC LICENSE
@@ -632,7 +632,7 @@ the exclusion of warranty; and each file should have at least the
 "copyright" line and a pointer to where the full notice is found.
 
         <one line to give the program's name and a brief idea of what it does.>
-        Copyright (C) 2022 Metahkg Contributors
+        Copyright (C) 2022 Metahkg
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU Affero General Public License as

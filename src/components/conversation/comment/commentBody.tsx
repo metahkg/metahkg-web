@@ -18,6 +18,7 @@ export default function CommentBody(props: {
     const content = [
         comment.quote && !noQuote && (
             <blockquote
+                key={depth}
                 style={{ border: "none" }}
                 className={`flex fullwidth${depth !== 0 ? " novmargin" : ""}`}
             >

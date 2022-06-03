@@ -54,7 +54,7 @@ export default function useBtns() {
                 if (user) setEditor({ open: true });
                 else
                     navigate(
-                        `/users/signin?continue=true&returnto=${encodeURIComponent(
+                        `/users/login?continue=true&returnto=${encodeURIComponent(
                             `/thread/${threadId}?page=${currentPage}`
                         )}`
                     );

@@ -28,6 +28,7 @@ import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import ChooseCat from "../components/create/ChooseCat";
+
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 
@@ -59,23 +60,21 @@ export default function Create() {
         text: "",
     });
     const quote = {
-        id: Number(String(query.quote).split(".")[0]),
-        cid: Number(String(query.quote).split(".")[1]),
+        threadId: Number(String(query.quote).split(".")[0]),
+        commentId: Number(String(query.quote).split(".")[1]),
     };
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
-    /**
-     * It sends data to the /api/posts/create route.
-     */
+
     useEffect(() => {
-        if (user && quote.id && quote.cid) {
+        if (user && quote.threadId && quote.commentId) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(`/posts/thread/${quote.id}?start=${quote.cid}&end=${quote.cid}`)
+            api.get(`/thread/${quote.threadId}/comment/${quote.commentId}`)
                 .then((res) => {
-                    if (res.data?.conversation?.[0]?.comment) {
+                    if (res.data) {
                         setInittext(
-                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data?.conversation?.[0]?.comment}</div></blockquote><p></p>`
+                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
@@ -97,14 +96,13 @@ export default function Create() {
                     });
                 });
         }
-    }, [quote.cid, quote.id, setNotification, user]);
+    }, [quote.commentId, quote.threadId, setNotification, user]);
 
     function create() {
-        //send data to /api/posts/create
         setAlert({ severity: "info", text: "Creating topic..." });
         setNotification({ open: true, text: "Creating topic..." });
         setDisabled(true);
-        api.post("/posts/create", {
+        api.post("/thread/create", {
             title: postTitle,
             category: catchoosed,
             comment: comment,
@@ -142,7 +140,7 @@ export default function Create() {
     if (!user)
         return (
             <Navigate
-                to={`/users/signin?continue=true&returnto=${encodeURIComponent(
+                to={`/users/login?continue=true&returnto=${encodeURIComponent(
                     wholePath()
                 )}`}
                 replace

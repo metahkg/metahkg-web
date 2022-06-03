@@ -11,7 +11,7 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://gitlab.com/metahkg/metahkg-web)
 [![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg/metahkg-web)
-[![GitHub license](https://img.shields.io/github/license/metahkg/metahkg-web)](https://github.com/metahkg/metahkg-web/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/metahkg/metahkg-web)](https://gitlab.com/metahkg/metahkg-web/-/blob/master/LICENSE.md)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
@@ -38,7 +38,7 @@ Docs:
 
 ### Manually
 
-**_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED!
+> **_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED!
 
 For manual deployment, see DEPLOY.md.
 

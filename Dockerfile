@@ -24,7 +24,7 @@ COPY ./config-overrides.js ./
 
 RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn run build; fi;
 
-FROM node:18
+FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
