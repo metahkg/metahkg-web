@@ -35,16 +35,14 @@ export default function VoteButtons(props: {
     function sendVote(newVote: "U" | "D") {
         newVote === "U" ? setUp(up + 1) : setDown(down + 1);
         setVotes({ ...votes, [commentId]: newVote });
-        api.threads.comments
-            .vote({ threadId, commentId, vote: newVote })
-            .catch((err) => {
-                newVote === "U" ? setUp(up) : setDown(down);
-                setVotes(votes);
-                setNotification({
-                    open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
-                });
+        api.threads.comments.vote({ threadId, commentId, vote: newVote }).catch((err) => {
+            newVote === "U" ? setUp(up) : setDown(down);
+            setVotes(votes);
+            setNotification({
+                open: true,
+                text: err?.response?.data?.error || err?.response?.data || "",
             });
+        });
     }
 
     return (
