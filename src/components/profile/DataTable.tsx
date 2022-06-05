@@ -15,7 +15,7 @@ import {
     TextField,
 } from "@mui/material";
 import { decodeToken, timeToWord_long } from "../../lib/common";
-import { api } from "../../lib/api";
+import { api, resetApi } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 
 export interface UserData {
@@ -93,7 +93,8 @@ export default function DataTable(props: DataTableProps) {
     function editProfile() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Saving..." });
-        api.put("/users/editprofile", { name: name, sex: sex })
+        api.users
+            .editprofile({ name, sex })
             .then((res) => {
                 setSaveDisabled(false);
                 setUser(null);
@@ -103,6 +104,7 @@ export default function DataTable(props: DataTableProps) {
                 if (token) {
                     localStorage.setItem("token", token);
                     setClient(decodeToken(token));
+                    resetApi();
                 }
 
                 setData([]);

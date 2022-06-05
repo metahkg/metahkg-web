@@ -55,7 +55,7 @@ export default function AddComment() {
 
     useEffect(() => {
         if (user) {
-            api.get(`/thread/check?id=${id}`).catch((err) => {
+            api.threads.checkExist({ threadId: id }).catch((err) => {
                 if (err.response.status === 404) {
                     setAlert({
                         severity: "warning",
@@ -80,8 +80,8 @@ export default function AddComment() {
                 }
             });
             edit &&
-                api
-                    .get(`/thread/${id}/comment/${edit}`)
+                api.threads.comments
+                    .get({ threadId: id, commentId: edit })
                     .then((res: { data: commentType }) => {
                         setInitText(
                             `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${ReactDOMServer.renderToStaticMarkup(
@@ -114,11 +114,13 @@ export default function AddComment() {
         setDisabled(true);
         setAlert({ severity: "info", text: "Adding comment..." });
         setNotification({ open: true, text: "Adding comment..." });
-        api.post(`/thread/${id}/comment`, {
-            comment,
-            rtoken,
-            quote,
-        })
+        api.threads.comments
+            .add({
+                threadId: id,
+                comment,
+                rtoken,
+                quote,
+            })
             .then((res) => {
                 data.length && setData([]);
                 navigate(

@@ -58,12 +58,14 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!search && !recall && !menuTitle && (category || profile || id)) {
             if (profile) {
-                api.get(`/profile/${profile}?nameonly=true`).then((res) => {
-                    setMenuTitle(res.data.name);
-                    setTitle(`${res.data.name} | Metahkg`);
-                });
+                api.profile
+                    .userProfile({ userId: profile, nameonly: true })
+                    .then((res) => {
+                        setMenuTitle(res.data.name);
+                        setTitle(`${res.data.name} | Metahkg`);
+                    });
             } else {
-                api.get(`/category/${category || `bytid${id}`}`).then((res) => {
+                api.category.info({ categoryId: category, threadId: id }).then((res) => {
                     setMenuTitle(res.data.name);
                     if (!id) setTitle(`${res.data.name} | Metahkg`);
                 });

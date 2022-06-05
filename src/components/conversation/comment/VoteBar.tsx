@@ -48,9 +48,7 @@ const VoteBar = React.memo<Props>((props) => {
             }
 
             try {
-                await api.post(`/thread/${Number(threadId)}/vote/${Number(commentId)}`, {
-                    vote: value,
-                });
+                await api.threads.comments.vote({ threadId, commentId, vote: value });
             } catch (err: any) {
                 value === "U" ? setUpVotes(upVotes) : setDownVotes(downVotes);
                 setVotes(votes);

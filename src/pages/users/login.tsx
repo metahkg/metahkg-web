@@ -15,7 +15,7 @@ import {
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
-import { api } from "../../lib/api";
+import { api, resetApi } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 
 export default function Login() {
@@ -49,19 +49,16 @@ export default function Login() {
     function login() {
         setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
-        api.post("/users/login", {
-            name,
-            pwd: hash.sha256().update(pwd).digest("hex"),
-        })
+        api.users
+            .login({
+                userNameOrEmail: name,
+                password: hash.sha256().update(pwd).digest("hex"),
+            })
             .then((res) => {
-                if (res.data.unverified) {
-                    navigate("/users/verify");
-                    setNotification({ open: true, text: "Please verify your account." });
-                    return;
-                }
                 localStorage.setItem("token", res.data.token);
                 const user = decodeToken(res.data.token);
                 setUser(user);
+                resetApi();
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });

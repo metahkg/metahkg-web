@@ -70,7 +70,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     const listeningResize = useRef(false);
 
     useEffect(() => {
-        api.get(`/category`).then((res) => {
+        api.category.categories().then((res) => {
             setCategories(res.data);
         });
     }, []);

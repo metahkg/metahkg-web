@@ -11,13 +11,14 @@ import {
     useSmode,
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { splitArray } from "../../lib/common";
 import { api } from "../../lib/api";
 import { summary } from "../../types/conversation/summary";
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import MenuThread from "./menuThread";
 import MenuPreload from "./menuPreload";
+import { Summary } from "metahkg-api/dist/types/thread/thread";
 
 /**
  * This function renders the main content of the menu
@@ -40,14 +41,12 @@ export default function MenuBody() {
     const [history, setHistory] = useHistory();
     const paperRef = useRef<HTMLDivElement>(null);
 
-    const categoryKey: string | number = category || `bytid${id}`;
-
     /**
      * It sets the notification state to an object with the open property set to true and the text
      * property set to the error message.
      * @param {AxiosError} err - The error object.
      */
-    function onError(err: AxiosError) {
+    function onError(err: AxiosError<any>) {
         setNotification({
             open: true,
             text: err?.response?.data?.error || err?.response?.data || "",
@@ -63,31 +62,54 @@ export default function MenuBody() {
         if (!data.length && (category || profile || (search && query) || id || recall)) {
             setEnd(false);
             setLoading(true);
-            const url = {
-                search: `/menu/search?q=${encodeURIComponent(
-                    query
-                )}&sort=${selected}&mode=${smode}`,
-                profile: `/menu/history/${profile}?sort=${selected}`,
-                menu: `/menu/${categoryKey}?sort=${selected}`,
-                recall: `/menu/threads?threads=${JSON.stringify(
-                    splitArray(
-                        history.map((item) => item.id),
-                        0,
-                        24
-                    )
-                )}`,
-            }[mode];
-            api.get(url)
-                .then((res) => {
-                    !(page === 1) && setPage(1);
-                    res.data.length && setData(res.data);
-                    res.data.length < 25 && setEnd(true);
-                    setLoading(false);
-                    setTimeout(() => {
-                        if (paperRef.current) paperRef.current.scrollTop = 0;
-                    });
-                })
-                .catch(onError);
+
+            const onSuccess = (res: AxiosResponse<Summary[]>) => {
+                page !== 1 && setPage(1);
+                res.data.length && setData(res.data);
+                res.data.length < 25 && setEnd(true);
+                setLoading(false);
+                setTimeout(() => {
+                    if (paperRef.current) paperRef.current.scrollTop = 0;
+                });
+            };
+
+            switch (mode) {
+                case "menu":
+                    api.menu
+                        .main({
+                            ...(category ? { categoryId: category } : { threadId: id }),
+                        })
+                        .then(onSuccess)
+                        .catch(onError);
+                    break;
+                case "profile":
+                    api.menu
+                        .history({ userId: profile, sort: selected as 0 | 1 })
+                        .then(onSuccess)
+                        .catch(onError);
+                    break;
+                case "search":
+                    api.menu
+                        .search({
+                            searchQuery: encodeURIComponent(query),
+                            sort: selected as 0 | 1 | 2,
+                        })
+                        .then(onSuccess)
+                        .catch(onError);
+                    break;
+                case "recall":
+                    api.menu
+                        .threads({
+                            threads: splitArray(
+                                history.map((item) => item.id),
+                                0,
+                                24
+                            ),
+                        })
+                        .then(onSuccess)
+                        .catch(onError);
+                    break;
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, recall, profile, data, selected, category]);
@@ -103,28 +125,59 @@ export default function MenuBody() {
     function update() {
         setEnd(false);
         setLoading(true);
-        const url = {
-            search: `/menu/search?q=${encodeURIComponent(query)}&sort=${selected}&page=${
-                page + 1
-            }&mode=${smode}`,
-            profile: `/menu/history/${profile}?sort=${selected}&page=${page + 1}`,
-            menu: `/menu/${categoryKey}?sort=${selected}&page=${page + 1}`,
-            recall: `/menu/threads?threads=${JSON.stringify(
-                splitArray(
-                    history.map((item) => item.id),
-                    page * 25,
-                    (page + 1) * 25 - 1
-                )
-            )}`,
-        }[mode];
-        api.get(url)
-            .then((res: { data: summary[] }) => {
-                setData([...data, ...res.data]);
-                res.data.length < 25 && setEnd(true);
-                setPage((page) => page + 1);
-                setLoading(false);
-            })
-            .catch(onError);
+
+        const onSuccess = (res: AxiosResponse<Summary[]>) => {
+            setData([...data, ...res.data]);
+            res.data.length < 25 && setEnd(true);
+            setPage((page) => page + 1);
+            setLoading(false);
+        };
+
+        switch (mode) {
+            case "menu":
+                api.menu
+                    .main({
+                        ...(category ? { categoryId: category } : { threadId: id }),
+                        sort: selected as 0 | 1,
+                        page: page + 1,
+                    })
+                    .then(onSuccess)
+                    .catch(onError);
+                break;
+            case "profile":
+                api.menu
+                    .history({
+                        userId: profile,
+                        sort: selected as 0 | 1,
+                        page: page + 1,
+                    })
+                    .then(onSuccess)
+                    .catch(onError);
+                break;
+            case "search":
+                api.menu
+                    .search({
+                        searchQuery: encodeURIComponent(query),
+                        sort: selected as 0 | 1 | 2,
+                        page: page + 1,
+                        mode: smode as 0 | 1,
+                    })
+                    .then(onSuccess)
+                    .catch(onError);
+                break;
+            case "recall":
+                api.menu
+                    .threads({
+                        threads: splitArray(
+                            history.map((item) => item.id),
+                            page * 25,
+                            (page + 1) * 25 - 1
+                        ),
+                    })
+                    .then(onSuccess)
+                    .catch(onError);
+                break;
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
 import { AxiosResponse } from "axios";
 import { api } from "../lib/api";
+import { OK } from "metahkg-api/dist/types/ok";
 
 const Input = styled("input")({
     display: "none",
@@ -14,7 +15,7 @@ const Input = styled("input")({
  */
 export default function UploadAvatar(props: {
     onUpload?: () => void;
-    onSuccess: (res: AxiosResponse<any, any>) => void;
+    onSuccess: (res: AxiosResponse<OK>) => void;
     onError: (err: any) => void;
 }) {
     const { onUpload, onSuccess, onError } = props;
@@ -29,15 +30,12 @@ export default function UploadAvatar(props: {
                         name="avatar"
                         onChange={(e) => {
                             onUpload && onUpload();
-                            const formData = new FormData();
-                            formData.append("avatar", e?.target?.files?.[0] || "");
-                            api.post("/users/avatar", formData, {
-                                headers: {
-                                    "Content-Type": "multipart/form-data",
-                                },
-                            })
-                                .then(onSuccess)
-                                .catch(onError);
+                            const avatar = e?.target?.files?.[0];
+                            avatar &&
+                                api.users
+                                    .uploadAvatar({ avatar })
+                                    .then(onSuccess)
+                                    .catch(onError);
                         }}
                     />
                     <Button

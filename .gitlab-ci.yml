@@ -14,7 +14,7 @@ stages:
   - incremental rollout 100%
   - performance
   - cleanup
-  
+
 lint:
   stage: lint
   image: node:18

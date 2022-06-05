@@ -70,7 +70,8 @@ export default function Create() {
         if (user && quote.threadId && quote.commentId) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.get(`/thread/${quote.threadId}/comment/${quote.commentId}`)
+            api.threads.comments
+                .get({ threadId: quote.threadId, commentId: quote.commentId })
                 .then((res) => {
                     if (res.data) {
                         setInittext(
@@ -102,12 +103,13 @@ export default function Create() {
         setAlert({ severity: "info", text: "Creating topic..." });
         setNotification({ open: true, text: "Creating topic..." });
         setDisabled(true);
-        api.post("/thread/create", {
-            title: postTitle,
-            category: catchoosed,
-            comment: comment,
-            rtoken: rtoken,
-        })
+        api.threads
+            .create({
+                title: postTitle,
+                category: catchoosed,
+                comment: comment,
+                rtoken: rtoken,
+            })
             .then((res) => {
                 cat && setCat(0);
                 search && setSearch(false);
@@ -210,7 +212,15 @@ export default function Create() {
                                 }, 1000);
                                 setImgurl(res.data.url);
                                 tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer"><img src="${res.data.url}" width="auto" height="auto" style="object-fit: contain; max-height: 400px; max-width: 100%;" /></a>`
+                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer">
+                                                <img 
+                                                    alt=""
+                                                    src="${res.data.url}"
+                                                    width="auto"
+                                                    height="auto"
+                                                    style="object-fit: contain; max-height: 400px; max-width: 100%;"
+                                                />
+                                            </a>`
                                 );
                             }}
                             onError={() => {

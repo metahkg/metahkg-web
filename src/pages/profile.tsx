@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./css/profile.css";
 import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
-import { AxiosError } from "axios";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
@@ -25,6 +24,7 @@ import {
 } from "../components/ContextProvider";
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
+import isInteger from "is-sn-integer";
 
 /**
  * This function renders the profile page
@@ -46,15 +46,16 @@ export default function Profile() {
     const [, setNotification] = useNotification();
     const [user] = useUser();
     const navigate = useNavigate();
-    /* It's a way to make sure that the component is re-rendered when the user changes the profile. */
+
     useEffect(() => {
-        if (!(params.id === "self" && !user) && !requestedUser) {
-            api.get(`/profile/${Number(params.id) || "self"}`)
+        if (((params.id === "self" && user) || isInteger(params.id)) && !requestedUser) {
+            api.profile
+                .userProfile({ userId: Number(params.id) || "self" })
                 .then((res) => {
                     setRequestedUser(res.data);
                     setTitle(`${res.data.name} | Metahkg`);
                 })
-                .catch((err: AxiosError) => {
+                .catch((err) => {
                     setNotification({ open: true, text: err?.response?.data?.error });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
                     err?.response?.status === 401 && navigate("/401", { replace: true });

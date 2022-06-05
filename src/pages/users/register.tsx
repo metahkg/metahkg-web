@@ -104,36 +104,38 @@ export default function Register() {
         e.preventDefault();
         setAlert({ severity: "info", text: "Registering..." });
         setDisabled(true);
-        api.post("/users/register", {
-            email,
-            name,
-            pwd: hash.sha256().update(pwd).digest("hex"),
-            sex,
-            rtoken,
-        })
-            .then(() => {
-                setAlert({
-                    severity: "success",
-                    text: "A link has been sent to your email address. Please click the link to verify.",
+        sex &&
+            api.users
+                .register({
+                    email,
+                    username: name,
+                    password: hash.sha256().update(pwd).digest("hex"),
+                    sex,
+                    rtoken,
+                })
+                .then(() => {
+                    setAlert({
+                        severity: "success",
+                        text: "A link has been sent to your email address. Please click the link to verify.",
+                    });
+                    setNotification({
+                        open: true,
+                        text: "Please click the link sent to your email address.",
+                    });
+                })
+                .catch((err) => {
+                    setAlert({
+                        severity: "error",
+                        text: err?.response?.data?.error || err?.response?.data || "",
+                    });
+                    setNotification({
+                        open: true,
+                        text: err?.response?.data?.error || err?.response?.data || "",
+                    });
+                    setRtoken("");
+                    setDisabled(false);
+                    grecaptcha.reset();
                 });
-                setNotification({
-                    open: true,
-                    text: "Please click the link sent to your email address.",
-                });
-            })
-            .catch((err) => {
-                setAlert({
-                    severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
-                });
-                setNotification({
-                    open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
-                });
-                setRtoken("");
-                setDisabled(false);
-                grecaptcha.reset();
-            });
     }
 
     if (user) return <Navigate to="/" replace />;
