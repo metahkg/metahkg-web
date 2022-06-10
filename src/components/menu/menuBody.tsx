@@ -12,7 +12,6 @@ import {
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
 import { AxiosError, AxiosResponse } from "axios";
-import { splitArray } from "../../lib/common";
 import { api } from "../../lib/api";
 import { summary } from "../../types/conversation/summary";
 import { Box, Divider, Paper, Typography } from "@mui/material";
@@ -100,11 +99,7 @@ export default function MenuBody() {
                 case "recall":
                     api.menu
                         .threads({
-                            threads: splitArray(
-                                history.map((item) => item.id),
-                                0,
-                                24
-                            ),
+                            threads: history.map((item) => item.id).slice(0, 24),
                         })
                         .then(onSuccess)
                         .catch(onError);
@@ -168,11 +163,9 @@ export default function MenuBody() {
             case "recall":
                 api.menu
                     .threads({
-                        threads: splitArray(
-                            history.map((item) => item.id),
-                            page * 25,
-                            (page + 1) * 25 - 1
-                        ),
+                        threads: history
+                            .map((item) => item.id)
+                            .slice(page * 25, (page + 1) * 25 - 1),
                     })
                     .then(onSuccess)
                     .catch(onError);

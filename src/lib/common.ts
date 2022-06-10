@@ -39,14 +39,6 @@ export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function splitArray(arr: any[], start: number, end: number) {
-    const r: any[] = [];
-    for (let i = start; i <= end; i++) {
-        arr[i] !== undefined && r.push(arr[i]);
-    }
-    return r;
-}
-
 export function wholePath() {
     return window.location.href.replace(window.location.origin, "");
 }
