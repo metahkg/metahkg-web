@@ -29,65 +29,68 @@ export function useUpdate() {
             setUpdating(true);
             const openNewPage = !(thread.conversation.length % 25);
 
-            api.get(
-                `/thread/${threadId}?page=${openNewPage ? finalPage + 1 : finalPage}${
-                    openNewPage
-                        ? ""
-                        : `&start=${
-                              thread.conversation[thread.conversation.length - 1].id + 1
-                          }`
-                }`
-            ).then((res: { data: threadType }) => {
-                const scroll = () => {
-                    document
-                        .getElementById(
-                            `c${
-                                options?.scrollToComment ||
-                                res.data?.conversation[
-                                    options?.scrollToBottom
-                                        ? res.data?.conversation?.length - 1
-                                        : 0
-                                ]?.id
-                            }`
-                        )
-                        ?.scrollIntoView({ behavior: "smooth" });
-                };
-                if (!res.data.conversation.length) {
-                    setEnd(true);
+            api.threads
+                .get({
+                    threadId,
+                    page: openNewPage ? finalPage + 1 : finalPage,
+                    ...(!openNewPage && {
+                        start: thread.conversation[thread.conversation.length - 1].id + 1,
+                    }),
+                })
+                .then((res: { data: threadType }) => {
+                    const scroll = () => {
+                        document
+                            .getElementById(
+                                `c${
+                                    options?.scrollToComment ||
+                                    res.data?.conversation[
+                                        options?.scrollToBottom
+                                            ? res.data?.conversation?.length - 1
+                                            : 0
+                                    ]?.id
+                                }`
+                            )
+                            ?.scrollIntoView({ behavior: "smooth" });
+                    };
+                    if (!res.data.conversation.length) {
+                        setEnd(true);
+                        setUpdating(false);
+                        if (options?.scrollToBottom || options?.scrollToComment)
+                            setTimeout(scroll, 1);
+                        return;
+                    }
+                    if (!openNewPage) {
+                        lastHeight.current = 0;
+                        const conversation = [
+                            ...thread.conversation,
+                            ...res.data.conversation,
+                        ];
+                        setThread({
+                            ...thread,
+                            ...res.data,
+                            conversation,
+                        });
+                        setTimeout(scroll, 1);
+                        conversation.length % 25 && setEnd(true);
+                    } else {
+                        setThread({
+                            ...thread,
+                            ...res.data,
+                            conversation: [
+                                ...thread.conversation,
+                                ...res.data.conversation,
+                            ],
+                        });
+                        setUpdating(false);
+                        setFinalPage(finalPage + 1);
+                        setPages(pages + 1);
+                        navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
+                            replace: true,
+                        });
+                        setCurrentPage(finalPage + 1);
+                    }
                     setUpdating(false);
-                    if (options?.scrollToBottom || options?.scrollToComment)
-                        setTimeout(scroll);
-                    return;
-                }
-                if (!openNewPage) {
-                    lastHeight.current = 0;
-                    const conversation = [
-                        ...thread.conversation,
-                        ...res.data.conversation,
-                    ];
-                    setThread({
-                        ...thread,
-                        ...res.data,
-                        conversation,
-                    });
-                    setTimeout(scroll);
-                    conversation.length % 25 && setEnd(true);
-                } else {
-                    setThread({
-                        ...thread,
-                        ...res.data,
-                        conversation: [...thread.conversation, ...res.data.conversation],
-                    });
-                    setUpdating(false);
-                    setFinalPage(finalPage + 1);
-                    setPages(pages + 1);
-                    navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
-                        replace: true,
-                    });
-                    setCurrentPage(finalPage + 1);
-                }
-                setUpdating(false);
-            });
+                });
         }
     };
 }

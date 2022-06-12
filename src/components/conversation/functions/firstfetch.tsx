@@ -35,7 +35,7 @@ export default function useFirstFetch() {
     const [reRender] = useRerender();
     const [user] = useUser();
     const query = queryString.parse(window.location.search);
-    const onError = (err: AxiosError) => {
+    const onError = (err: AxiosError<any>) => {
         !notification.open &&
             setNotification({
                 open: true,
@@ -45,7 +45,8 @@ export default function useFirstFetch() {
         err?.response?.status === 401 && navigate("/401", { replace: true });
     };
     useEffect(() => {
-        api.get(`/thread/${threadId}?page=${finalPage}`)
+        api.threads
+            .get({ threadId, page: finalPage })
             .then((res: { data: threadType }) => {
                 res.data.slink && setThread(res.data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
@@ -58,7 +59,7 @@ export default function useFirstFetch() {
                 id !== res.data.id && setId(res.data.id);
                 setTitle(`${res.data.title} | Metahkg`);
                 setDescription(
-                    (query.c && res.data.conversation?.[Number(query.c)]?.text) ||
+                    (query.c && res.data.conversation?.[Number(query.c) - 1]?.text) ||
                         res.data.conversation?.[0]?.text
                 );
                 if (!res.data.slink) {
@@ -68,7 +69,8 @@ export default function useFirstFetch() {
                 res.data.conversation.length % 25 && setEnd(true);
             })
             .catch(onError);
-        api.get(`/thread/${threadId}/images`)
+        api.threads
+            .images({ threadId })
             .then((res) => {
                 res.data.forEach((item: { image: string }) => {
                     images.push({
@@ -78,13 +80,15 @@ export default function useFirstFetch() {
                 res.data.length && setImages(images);
             })
             .catch(onError);
-        if (user) {
-            api.get(`/thread/${threadId}/uservotes`)
+
+        if (user)
+            api.threads
+                .userVotes({ threadId })
                 .then((res) => {
                     setVotes(res.data);
                 })
                 .catch(onError);
-        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reRender]);
 }

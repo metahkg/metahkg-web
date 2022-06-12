@@ -35,7 +35,7 @@ export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
-    const [rtoken, setRtoken] = useState<null | string>(null);
+    const [rtoken, setRtoken] = useState<string>("");
     const [creating, setCreating] = useState(false);
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
@@ -64,7 +64,7 @@ export default function FloatingEditor() {
         setComment("");
         setImgUrl("");
         setAlert({ severity: "info", text: "" });
-        setRtoken(null);
+        setRtoken("");
         setCreating(false);
         setFold(false);
     }
@@ -76,11 +76,13 @@ export default function FloatingEditor() {
 
     function CreateComment() {
         setCreating(true);
-        api.post(`/thread/${threadId}/comment`, {
-            comment,
-            quote: editor.quote?.id,
-            rtoken,
-        })
+        api.threads.comments
+            .add({
+                threadId,
+                comment,
+                quote: editor.quote?.id,
+                rtoken,
+            })
             .then((res: { data: { id: number } }) => {
                 setNewCommentId(res.data.id);
 

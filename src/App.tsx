@@ -12,7 +12,7 @@ import {
     useIsSmallScreen,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
-import { api } from "./lib/api";
+import { api, resetApi } from "./lib/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import jwtDecode from "jwt-decode";
@@ -34,12 +34,11 @@ export default function App() {
 
     useEffect(() => {
         if (user) {
-            api.get("/users/status").then((res) => {
-                if (!res.data.active) localStorage.removeItem("token");
+            api.users.status().then((res) => {
+                const { active, token } = res.data;
+                if (!active) localStorage.removeItem("token");
 
-                res.data.active &&
-                    localStorage.token !== res.data.token &&
-                    localStorage.setItem("token", res.data.token);
+                if (active && token) localStorage.setItem("token", token);
 
                 setUser(
                     (() => {
@@ -50,6 +49,7 @@ export default function App() {
                         }
                     })()
                 );
+                resetApi();
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -120,7 +120,7 @@ export default function CommentTop(props: {
             const clientIsOp = thread && user?.id === thread.op.id;
             const pinned = thread?.pin?.id === comment.id;
             if (clientIsOp || (user?.role === "admin" && pinned)) {
-                const onError = (err: AxiosError) => {
+                const onError = (err: AxiosError<any>) => {
                     setNotification({
                         open: true,
                         text: err.response?.data?.error || err.response?.data || "",
@@ -134,9 +134,10 @@ export default function CommentTop(props: {
                             open: true,
                             text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
                         });
-                        api.put(`/thread/${threadId}/${pinned ? "un" : ""}pin`, {
-                            cid: pinned ? undefined : comment.id,
-                        })
+                        (pinned
+                            ? api.threads.unpin({ threadId })
+                            : api.threads.pin({ threadId, commentId: comment.id })
+                        )
                             .then(() => {
                                 setNotification({
                                     open: true,

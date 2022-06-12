@@ -64,7 +64,8 @@ function Comment(props: {
     useEffect(() => {
         commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
         if (fetchComment) {
-            api.get(`/thread/${threadId}/comment/${comment.id}`)
+            api.threads.comments
+                .get({ threadId, commentId: comment.id })
                 .then((res) => {
                     setComment(res.data);
                     setReady(true);
@@ -78,7 +79,8 @@ function Comment(props: {
         }
         if (inPopUp) {
             setLoading(true);
-            api.get(`/thread/${threadId}/comment/${comment.id}/replies`)
+            api.threads.comments
+                .replies({ threadId, commentId: comment.id })
                 .then((res) => {
                     setReplies(res.data);
                     setLoading(false);

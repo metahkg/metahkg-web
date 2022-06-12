@@ -33,10 +33,11 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
-        api.post("/users/resend", {
-            email: email,
-            rtoken: rtoken,
-        })
+        api.users
+            .resend({
+                email: email,
+                rtoken: rtoken,
+            })
             .then(() => {
                 setNotification({
                     open: true,

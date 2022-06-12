@@ -1,4 +1,5 @@
 import "./css/conversation.css";
+import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect } from "react";
 import {
     Box,
@@ -11,7 +12,7 @@ import {
 import queryString from "query-string";
 import loadable from "@loadable/component";
 import Title from "./conversation/title";
-import { roundup, splitArray } from "../lib/common";
+import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
 import VisibilityDetector from "react-visibility-detector";
@@ -20,7 +21,6 @@ import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
 import useBtns from "./conversation/functions/btns";
 import { PhotoProvider } from "react-photo-view";
-import "react-photo-view/dist/react-photo-view.css";
 import { commentType } from "../types/conversation/comment";
 import {
     useCBottom,
@@ -206,26 +206,24 @@ function Conversation(props: { id: number }) {
                                             />
                                         </VisibilityDetector>
                                         <React.Fragment>
-                                            {splitArray(
-                                                thread.conversation,
-                                                index * 25,
-                                                (index + 1) * 25 - 1
-                                            ).map(
-                                                (comment: commentType) =>
-                                                    !comment?.removed &&
-                                                    (story
-                                                        ? story === comment?.user.id
-                                                        : 1) && (
-                                                        <Comment
-                                                            key={comment.id}
-                                                            comment={comment}
-                                                            scrollIntoView={
-                                                                Number(query.c) ===
-                                                                comment.id
-                                                            }
-                                                        />
-                                                    )
-                                            )}
+                                            {thread.conversation
+                                                .slice(index * 25, (index + 1) * 25 - 1)
+                                                .map(
+                                                    (comment: commentType) =>
+                                                        !comment?.removed &&
+                                                        (story
+                                                            ? story === comment?.user.id
+                                                            : 1) && (
+                                                            <Comment
+                                                                key={comment.id}
+                                                                comment={comment}
+                                                                scrollIntoView={
+                                                                    Number(query.c) ===
+                                                                    comment.id
+                                                                }
+                                                            />
+                                                        )
+                                                )}
                                         </React.Fragment>
                                     </Box>
                                 );
