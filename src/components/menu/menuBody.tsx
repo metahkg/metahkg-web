@@ -77,6 +77,7 @@ export default function MenuBody() {
                     api.menu
                         .main({
                             ...(category ? { categoryId: category } : { threadId: id }),
+                            sort: selected as 0 | 1,
                         })
                         .then(onSuccess)
                         .catch(onError);
