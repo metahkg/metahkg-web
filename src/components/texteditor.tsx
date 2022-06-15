@@ -44,7 +44,7 @@ export default function TextEditor(props: {
                         autoresize ? "autoresize" : ""
                     } print preview paste searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons`,
                     toolbar:
-                        "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+                        "undo redo | link image template codesample | emoticons | blocks bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
                     toolbar_sticky: true,
                     templates: [
                         {
@@ -78,7 +78,7 @@ export default function TextEditor(props: {
                     autosave_retention: "2m",
                     image_advtab: true,
                 }}
-                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.3/tinymce.min.js"
+                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min.js"
             />
         </Box>
     );
