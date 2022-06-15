@@ -58,7 +58,7 @@ export default function Profile() {
                 .catch((err) => {
                     setNotification({ open: true, text: err?.response?.data?.error });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
-                    err?.response?.status === 401 && navigate("/401", { replace: true });
+                    err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,12 +6,12 @@ import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
 
 /**
- * 401 page
+ * 403 page
  */
 export default function Forbidden() {
     const [menu, setMenu] = useMenu();
 
-    setTitle("401 Forbidden | Metahkg");
+    setTitle("403 Forbidden | Metahkg");
     menu && setMenu(false);
 
     return (
@@ -20,7 +20,7 @@ export default function Forbidden() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <MetahkgLogo className="mr10 mb20" svg light height={100} width={80} />
-            <h1>401 Forbidden</h1>
+            <h1>403 Forbidden</h1>
         </Box>
     );
 }
