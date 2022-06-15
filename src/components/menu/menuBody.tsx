@@ -51,7 +51,7 @@ export default function MenuBody() {
             text: err?.response?.data?.error || err?.response?.data || "",
         });
         err?.response?.status === 404 && navigate("/404", { replace: true });
-        err?.response?.status === 401 && navigate("/401", { replace: true });
+        err?.response?.status === 403 && navigate("/403", { replace: true });
     }
 
     const mode =

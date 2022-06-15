@@ -15,7 +15,7 @@ COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
 
-RUN yarn install --production --ignore-optional
+RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; fi;
 
 COPY ./src ./src
 COPY ./public ./public
@@ -28,15 +28,14 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/build ./build
 
-COPY ./public ./public
 COPY ./package.json ./
-COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
-COPY ./server.js ./
 COPY ./.babelrc ./
 COPY ./config-overrides.js ./
+COPY ./serve.json ./
 
-CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = dev ]; then npx react-app-rewired start; else node server.js; fi;
+RUN if [ "${env}" = "dev" ]; then yarn install; else (rm tsconfig.json .babelrc config-overrides.js; yarn global add serve); fi;
+
+CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;

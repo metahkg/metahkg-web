@@ -28,9 +28,7 @@
     "babel-plugin-prismjs": "^2.1.0",
     "customize-cra": "^1.0.0",
     "date-and-time": "^2.3.1",
-    "dotenv": "^16.0.1",
     "email-validator": "^2.0.4",
-    "express": "^4.18.1",
     "hash.js": "^1.1.7",
     "html-react-parser": "^1.4.12",
     "humanize-duration": "^3.27.1",
@@ -58,7 +56,8 @@
     "redux": "^4.2.0",
     "screenfull": "^6.0.1",
     "typescript": "^4.6.4",
-    "webpack": "^5.72.1"
+    "webpack": "^5.72.1",
+    "serve": "^13.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -77,12 +76,10 @@
   },
   "scripts": {
     "analyze": "node analyze.js",
-    "start": "node server.js",
-    "start:api": "yarn start",
+    "start": "serve -s",
     "start:react": "npx react-app-rewired start",
-    "build": "export REACT_APP_build=$(git rev-parse --short HEAD) && npx react-app-rewired build",
-    "build:nocheck": "yarn build",
-    "test": "react-scripts test || echo \"no testes\"",
+    "build": "export REACT_APP_build=$(git rev-parse --short HEAD); npx react-app-rewired build",
+    "test": "react-scripts test || echo \"no tests\"",
     "eject": "react-scripts eject",
     "docker": "docker build -t metahkg/metahkg-web .",
     "deploy": "yarn build && yarn start",
