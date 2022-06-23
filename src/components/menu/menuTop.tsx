@@ -18,7 +18,7 @@ import { setTitle } from "../../lib/common";
 
 /**
  * The top part of the menu consists of a title part
- * (sidebar, title, refresh and create topic button link)
+ * (sidebar, title, refresh and create thread button link)
  * and a buttons part (normally two to three buttons)
  * which serve as tabs to decide the data fetch location
  * @param {MouseEventHandler<HTMLButtonElement>} props.refresh event handler for when refresh is clicked
@@ -49,8 +49,8 @@ export default function MenuTop(props: {
     }[mode];
     const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = {
-        search: ["Relevance", "Topic", "Last Reply"],
-        profile: ["Topic", "Last Reply"],
+        search: ["Relevance", "Created", "Last Reply"],
+        profile: ["Created", "Last Reply"],
         menu: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
         recall: [],
     }[mode];
@@ -106,7 +106,7 @@ export default function MenuTop(props: {
                                         <AutorenewIcon className="force-white" />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Create topic" arrow>
+                                <Tooltip title="Create thread" arrow>
                                     <Link className="flex" to="/create">
                                         <IconButton className="mr10">
                                             <AddIcon className="force-white" />

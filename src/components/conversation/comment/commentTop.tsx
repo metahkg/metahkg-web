@@ -157,7 +157,7 @@ export default function CommentTop(props: {
         })(),
         {
             icon: <FeedIcon className="font-size-19-force" />,
-            title: "Create new topic",
+            title: "Create new thread",
             action: () => {
                 navigate(`/create?quote=${threadId}.${comment.id}`);
             },
