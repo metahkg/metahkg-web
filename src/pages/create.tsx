@@ -33,10 +33,10 @@ declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 
 /**
- * Page for creating a new topic
+ * Page for creating a new thread
  */
 export default function Create() {
-    setTitle("Create topic | Metahkg");
+    setTitle("Create thread | Metahkg");
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
@@ -100,8 +100,8 @@ export default function Create() {
     }, [quote.commentId, quote.threadId, setNotification, user]);
 
     function create() {
-        setAlert({ severity: "info", text: "Creating topic..." });
-        setNotification({ open: true, text: "Creating topic..." });
+        setAlert({ severity: "info", text: "Creating thread..." });
+        setNotification({ open: true, text: "Creating thread..." });
         setDisabled(true);
         api.threads
             .create({
@@ -168,7 +168,7 @@ export default function Create() {
                             light
                             className="mr10 mb10"
                         />
-                        <h1>Create topic</h1>
+                        <h1>Create thread</h1>
                     </div>
                     {alert.text && (
                         <Alert className="mb15" severity={alert.severity}>
@@ -213,7 +213,7 @@ export default function Create() {
                                 setImgurl(res.data.url);
                                 tinymce.activeEditor.insertContent(
                                     `<a href="${res.data.url}" target="_blank" rel="noreferrer">
-                                                <img 
+                                                <img
                                                     alt=""
                                                     src="${res.data.url}"
                                                     width="auto"

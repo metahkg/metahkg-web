@@ -23,7 +23,7 @@ export default function Template() {
     const links: { icon: JSX.Element; title: string; link: string }[] = [
         {
             icon: <CreateIcon />,
-            title: "Create topic",
+            title: "Create thread",
             link: "/create",
         },
         {
