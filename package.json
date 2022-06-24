@@ -57,7 +57,7 @@
     "screenfull": "^6.0.1",
     "serve": "^13.0.2",
     "typescript": "^4.6.4",
-    "webpack": "^5.72.1"
+    "webpack": "^5.73.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
