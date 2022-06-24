@@ -31,7 +31,7 @@
     "email-validator": "^2.0.4",
     "hash.js": "^1.1.7",
     "html-react-parser": "^1.4.12",
-    "humanize-duration": "^3.27.1",
+    "humanize-duration": "^3.27.2",
     "humanize-duration-shortened-english": "^3.27.1-ts2",
     "is-sn-integer": "^0.3.0",
     "jwt-decode": "^3.1.2",
