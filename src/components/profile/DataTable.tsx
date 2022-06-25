@@ -5,9 +5,7 @@ import { useParams } from "react-router-dom";
 import {
     Box,
     Button,
-    MenuItem,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
