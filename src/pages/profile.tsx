@@ -47,10 +47,13 @@ export default function Profile() {
     const [user] = useUser();
     const navigate = useNavigate();
 
+    const isSelf = params.id === "self" || Number(params.id) === user?.id;
+    const userId = (params.id === "self" ? user?.id : Number(params.id)) as number;
+
     useEffect(() => {
-        if (((params.id === "self" && user) || isInteger(params.id)) && !requestedUser) {
+        if (isInteger(userId) && !requestedUser) {
             api.profile
-                .userProfile({ userId: Number(params.id) || "self" })
+                .userProfile({ userId })
                 .then((res) => {
                     setRequestedUser(res.data);
                     setTitle(`${res.data.name} | Metahkg`);
@@ -64,7 +67,7 @@ export default function Profile() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id, requestedUser]);
 
-    if (params?.id === "self" && !user) return <Navigate to="/" replace />;
+    if (!userId) return <Navigate to="/" replace />;
 
     (function onRender() {
         /**
@@ -76,26 +79,24 @@ export default function Profile() {
             selected && setSelected(0);
         }
 
-        if (!(params.id === "self" && !user)) {
-            back !== window.location.pathname && setBack(window.location.pathname);
+        back !== window.location.pathname && setBack(window.location.pathname);
 
-            !menu && !isSmallScreen && setMenu(true);
-            menu && isSmallScreen && setMenu(false);
+        !menu && !isSmallScreen && setMenu(true);
+        menu && isSmallScreen && setMenu(false);
 
-            if (profile !== (Number(params.id) || "self")) {
-                setProfile(Number(params.id) || "self");
-                clearData();
-            }
-
-            if (search) {
-                setSearch(false);
-                clearData();
-            }
-
-            recall && setRecall(false);
-            id && setId(0);
-            cat && setCat(0);
+        if (profile !== userId) {
+            setProfile(userId);
+            clearData();
         }
+
+        if (search) {
+            setSearch(false);
+            clearData();
+        }
+
+        recall && setRecall(false);
+        id && setId(0);
+        cat && setCat(0);
     })();
 
     return (
@@ -125,7 +126,7 @@ export default function Profile() {
                         <div
                             className="ml20 flex justify-center profile-toptextdiv"
                             style={{
-                                flexDirection: params.id === "self" ? "column" : "row",
+                                flexDirection: isSelf ? "column" : "row",
                             }}
                         >
                             <h1 className="font-size-30 profile-toptext">
@@ -154,10 +155,10 @@ export default function Profile() {
                             <div
                                 className="profile-uploaddiv"
                                 style={{
-                                    marginTop: params.id === "self" ? 25 : 0,
+                                    marginTop: isSelf ? 25 : 0,
                                 }}
                             >
-                                {params.id === "self" && (
+                                {isSelf && (
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
                                             onUpload={() => {
@@ -173,7 +174,7 @@ export default function Profile() {
                                                     text: `Upload failed: ${
                                                         err.response?.data?.error ||
                                                         err.response?.data ||
-                                                        ""
+                                                        "An error occurred"
                                                     }`,
                                                 });
                                             }}
@@ -185,6 +186,7 @@ export default function Profile() {
                     </Box>
                     <Box className="flex mt20 mb10 fullwidth font justify-center">
                         <DataTable
+                            isSelf={isSelf}
                             setUser={setRequestedUser}
                             requestedUser={requestedUser}
                         />

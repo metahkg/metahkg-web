@@ -13,7 +13,7 @@ import {
 } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { roundup, setTitle, wholePath } from "../lib/common";
+import { reCaptchaSiteKey, roundup, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
@@ -279,10 +279,7 @@ export default function AddComment() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

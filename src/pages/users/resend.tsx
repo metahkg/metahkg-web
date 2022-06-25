@@ -10,7 +10,7 @@ import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
-import { setTitle } from "../../lib/common";
+import { reCaptchaSiteKey, setTitle } from "../../lib/common";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -116,10 +116,7 @@ export default function Verify() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

@@ -26,7 +26,7 @@ import UploadImage from "./uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
 import useChangePage from "./conversation/functions/changePage";
-import { roundup } from "../lib/common";
+import { reCaptchaSiteKey, roundup } from "../lib/common";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -227,10 +227,7 @@ export default function FloatingEditor() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

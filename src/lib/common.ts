@@ -99,3 +99,5 @@ export const decodeToken = (token?: string) => {
         return null;
     }
 };
+
+export const reCaptchaSiteKey = process.env.recaptchasitekey || "{RECAPTCHA_SITE_KEY}";

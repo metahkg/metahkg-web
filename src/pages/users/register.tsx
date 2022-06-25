@@ -23,7 +23,7 @@ import {
     useUser,
     useWidth,
 } from "../../components/ContextProvider";
-import { setTitle } from "../../lib/common";
+import { reCaptchaSiteKey, setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
@@ -244,10 +244,7 @@ export default function Register() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

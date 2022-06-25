@@ -21,7 +21,7 @@ import {
     useUser,
     useWidth,
 } from "../components/ContextProvider";
-import { setTitle, wholePath } from "../lib/common";
+import { reCaptchaSiteKey, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/uploadimage";
@@ -283,10 +283,7 @@ export default function Create() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

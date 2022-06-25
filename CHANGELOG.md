@@ -119,3 +119,7 @@ node server/migrate/migratetov0.5.2.js
 ## v0.6.0rc1
 
 - replies
+
+## v2.2.0
+
+- switch to versioning same as server
