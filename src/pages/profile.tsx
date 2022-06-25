@@ -47,8 +47,8 @@ export default function Profile() {
     const [user] = useUser();
     const navigate = useNavigate();
 
-    const isSelf = params.id === "self" || Number(params.id) === user?.id;
-    const userId = (params.id === "self" ? user?.id : Number(params.id)) as number;
+    const userId = Number(params.id);
+    const isSelf = userId === user?.id;
 
     useEffect(() => {
         if (isInteger(userId) && !requestedUser) {
@@ -195,7 +195,7 @@ export default function Profile() {
                         <div className="mt20">
                             <Link
                                 className="text-decoration-none"
-                                to={`/history/${params.id}`}
+                                to={`/history/${userId}`}
                             >
                                 <Button
                                     className="font-size-16"

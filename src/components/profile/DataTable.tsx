@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
 import { useData } from "../MenuProvider";
-import { useParams } from "react-router-dom";
 import {
     Box,
     Button,
@@ -41,7 +40,6 @@ export default function DataTable(props: DataTableProps) {
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [, setClient] = useUser();
 
-    const params = useParams();
     const items = [
         {
             title: "Name",
@@ -133,7 +131,7 @@ export default function DataTable(props: DataTableProps) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {params.id === "self" && (
+            {isSelf && (
                 <Button
                     className="mt20 mb10"
                     variant="contained"

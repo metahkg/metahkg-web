@@ -44,9 +44,8 @@ export default function History() {
         !menu && setMenu(true);
         back !== window.location.pathname && setBack(window.location.pathname);
 
-        (profile !== (Number(params.id) || "self") || search) && clearData();
-        profile !== (Number(params.id) || "self") &&
-            setProfile(Number(params.id) || "self");
+        (profile !== Number(params.id) || search) && clearData();
+        profile !== Number(params.id) && setProfile(Number(params.id));
 
         search && setSearch(false);
         recall && setRecall(false);

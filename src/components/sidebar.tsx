@@ -210,7 +210,7 @@ export default function SideBar() {
                             <ListItemButton
                                 component={Link}
                                 className="text-decoration-none white"
-                                to={"/profile/self"}
+                                to={`/profile/${user?.id}`}
                                 onClick={onClick}
                             >
                                 <ListItemIcon>
