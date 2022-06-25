@@ -7,7 +7,8 @@ export function parseError(err: AxiosError<any>): string {
         if (err.response?.data && err.response.data?.length < 50)
             return err.response.data;
 
-        if (err.response?.statusText) return `${err.response?.status} ${err.response?.statusText}`;
+        if (err.response?.statusText)
+            return `${err.response?.status} ${err.response?.statusText}`;
         else return "An error occurred.";
     } catch {
         return "An error occurred.";
