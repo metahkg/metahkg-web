@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material";
 import Spinner from "react-spinner-material";
 import CommentPopup from "../../lib/commentPopup";
+import { parseError } from "../../lib/parseError";
 
 /**
  * Comment component renders a comment
@@ -73,7 +74,7 @@ function Comment(props: {
                 .catch((err) => {
                     setNotification({
                         open: true,
-                        text: err?.response?.data?.errpr || err?.response?.data || "",
+                        text: parseError(err),
                     });
                 });
         }

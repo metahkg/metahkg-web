@@ -28,6 +28,7 @@ import UploadImage from "../components/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import ChooseCat from "../components/create/ChooseCat";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -125,11 +126,11 @@ export default function Create() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setDisabled(false);
                 setRtoken("");

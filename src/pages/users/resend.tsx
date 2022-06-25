@@ -11,6 +11,7 @@ import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
 import { reCaptchaSiteKey, setTitle } from "../../lib/common";
+import { parseError } from "../../lib/parseError";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -54,11 +55,11 @@ export default function Verify() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 grecaptcha.reset();
                 setRtoken("");

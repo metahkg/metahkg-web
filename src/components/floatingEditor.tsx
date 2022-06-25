@@ -27,6 +27,7 @@ import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
 import useChangePage from "./conversation/functions/changePage";
 import { reCaptchaSiteKey, roundup } from "../lib/common";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -102,7 +103,7 @@ export default function FloatingEditor() {
             .catch((err) => {
                 setNotification({
                     open: true,
-                    text: err.response.data?.error || err.response.data || "",
+                    text: parseError(err),
                 });
                 setCreating(false);
                 grecaptcha.reset();

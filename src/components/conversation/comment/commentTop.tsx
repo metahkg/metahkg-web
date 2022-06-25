@@ -29,6 +29,7 @@ import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";
+import { parseError } from "../../../lib/parseError";
 
 export default function CommentTop(props: {
     comment: commentType;
@@ -123,7 +124,7 @@ export default function CommentTop(props: {
                 const onError = (err: AxiosError<any>) => {
                     setNotification({
                         open: true,
-                        text: err.response?.data?.error || err.response?.data || "",
+                        text: parseError(err),
                     });
                 };
                 return {

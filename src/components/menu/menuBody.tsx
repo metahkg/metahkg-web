@@ -18,6 +18,7 @@ import { Box, Divider, Paper, Typography } from "@mui/material";
 import MenuThread from "./menuThread";
 import MenuPreload from "./menuPreload";
 import { Summary } from "metahkg-api/dist/types/thread/thread";
+import { parseError } from "../../lib/parseError";
 
 /**
  * This function renders the main content of the menu
@@ -48,7 +49,7 @@ export default function MenuBody() {
     function onError(err: AxiosError<any>) {
         setNotification({
             open: true,
-            text: err?.response?.data?.error || err?.response?.data || "",
+            text: parseError(err),
         });
         err?.response?.status === 404 && navigate("/404", { replace: true });
         err?.response?.status === 403 && navigate("/403", { replace: true });

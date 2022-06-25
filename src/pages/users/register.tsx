@@ -30,6 +30,7 @@ import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import queryString from "query-string";
 import { api } from "../../lib/api";
+import { parseError } from "../../lib/parseError";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -126,11 +127,11 @@ export default function Register() {
                 .catch((err) => {
                     setAlert({
                         severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setNotification({
                         open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setRtoken("");
                     setDisabled(false);

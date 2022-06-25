@@ -5,6 +5,7 @@ import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { useThreadId, useUserVotes } from "../ConversationContext";
+import { parseError } from "../../../lib/parseError";
 
 /**
  * It creates a button group with two buttons. One for upvotes and one for downvotes.
@@ -40,7 +41,7 @@ export default function VoteButtons(props: {
             setVotes(votes);
             setNotification({
                 open: true,
-                text: err?.response?.data?.error || err?.response?.data || "",
+                text: parseError(err),
             });
         });
     }

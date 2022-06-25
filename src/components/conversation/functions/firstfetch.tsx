@@ -15,6 +15,7 @@ import {
 } from "../ConversationContext";
 import { setDescription, setTitle } from "../../../lib/common";
 import queryString from "query-string";
+import { parseError } from "../../../lib/parseError";
 
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
@@ -39,7 +40,7 @@ export default function useFirstFetch() {
         !notification.open &&
             setNotification({
                 open: true,
-                text: err?.response?.data?.error || err?.response?.data || "",
+                text: parseError(err),
             });
         err?.response?.status === 404 && navigate("/404", { replace: true });
         err?.response?.status === 403 && navigate("/403", { replace: true });

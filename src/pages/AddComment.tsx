@@ -23,6 +23,7 @@ import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import RenderComment from "../components/renderComment";
 import { commentType } from "../types/conversation/comment";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -71,11 +72,11 @@ export default function AddComment() {
                 } else {
                     setAlert({
                         severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setNotification({
                         open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                 }
             });
@@ -134,11 +135,11 @@ export default function AddComment() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setDisabled(false);
                 setRtoken("");

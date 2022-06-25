@@ -17,6 +17,7 @@ import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
 import { api, resetApi } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
+import { parseError } from "../../lib/parseError";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -67,11 +68,11 @@ export default function Login() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setDisabled(false);
             });

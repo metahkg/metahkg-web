@@ -14,6 +14,7 @@ import {
     useThreadId,
 } from "../ConversationContext";
 import { roundup } from "../../../lib/common";
+import { parseError } from "../../../lib/parseError";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();
@@ -94,7 +95,7 @@ export default function useChangePage() {
                 .catch((err) => {
                     setNotification({
                         open: true,
-                        text: err.response.data?.error || err.response.data,
+                        text: parseError(err),
                     });
                 });
         }

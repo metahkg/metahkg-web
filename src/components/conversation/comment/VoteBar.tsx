@@ -14,6 +14,7 @@ import ThumbDown from "@mui/icons-material/ThumbDown";
 import { green, red } from "@mui/material/colors";
 import { api } from "../../../lib/api";
 import { useThreadId, useUserVotes } from "../ConversationContext";
+import { parseError } from "../../../lib/parseError";
 
 type VoteType = "U" | "D";
 
@@ -54,7 +55,7 @@ const VoteBar = React.memo<Props>((props) => {
                 setVotes(votes);
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
             }
         },

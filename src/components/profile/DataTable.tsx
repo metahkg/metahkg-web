@@ -15,6 +15,7 @@ import {
 import { decodeToken, timeToWord_long } from "../../lib/common";
 import { api, resetApi } from "../../lib/api";
 import { Save } from "@mui/icons-material";
+import { parseError } from "../../lib/parseError";
 
 export interface UserData {
     id: number;
@@ -95,7 +96,7 @@ export default function DataTable(props: DataTableProps) {
                 setSaveDisabled(false);
                 setNotification({
                     open: true,
-                    text: err.response?.data?.error || err.response?.data || "",
+                    text: parseError(err),
                 });
             });
     }

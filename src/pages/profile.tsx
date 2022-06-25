@@ -25,6 +25,7 @@ import {
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import isInteger from "is-sn-integer";
+import { parseError } from "../lib/parseError";
 
 /**
  * This function renders the profile page
@@ -59,7 +60,7 @@ export default function Profile() {
                     setTitle(`${res.data.name} | Metahkg`);
                 })
                 .catch((err) => {
-                    setNotification({ open: true, text: err?.response?.data?.error });
+                    setNotification({ open: true, text: parseError(err) });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
@@ -171,11 +172,7 @@ export default function Profile() {
                                             onError={(err) => {
                                                 setNotification({
                                                     open: true,
-                                                    text: `Upload failed: ${
-                                                        err.response?.data?.error ||
-                                                        err.response?.data ||
-                                                        "An error occurred"
-                                                    }`,
+                                                    text: parseError(err),
                                                 });
                                             }}
                                         />
