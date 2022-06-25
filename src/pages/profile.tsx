@@ -51,7 +51,7 @@ export default function Profile() {
     const isSelf = userId === user?.id;
 
     useEffect(() => {
-        if (isInteger(userId) && !requestedUser) {
+        if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
             api.profile
                 .userProfile({ userId })
                 .then((res) => {
