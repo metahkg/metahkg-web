@@ -1,4 +1,3 @@
-import humanizeDurationShortened from "humanize-duration-shortened-english";
 import humanizeDuration from "humanize-duration";
 import jwtDecode from "jwt-decode";
 import { userType } from "../types/user";
@@ -8,11 +7,27 @@ export function roundup(num: number, precision = 0): number {
     return Math.ceil(num * precision) / precision;
 }
 
+export const shortEnglishHumanizer = humanizeDuration.humanizer({
+    language: "shortEn",
+    languages: {
+        shortEn: {
+            y: () => "y",
+            mo: () => "mo",
+            w: () => "w",
+            d: () => "d",
+            h: () => "h",
+            m: () => "m",
+            s: () => "s",
+            ms: () => "ms",
+        },
+    },
+});
+
 export function timeToWord(sDate: string): string {
     const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
-    const shortened: string = humanizeDurationShortened(diff, {
+    const shortened: string = shortEnglishHumanizer(diff, {
         round: true,
         spacer: "",
         delimiter: " ",
@@ -31,8 +46,7 @@ export function timeToWord_long(sDate: string): string {
         spacer: " ",
         delimiter: ",",
     });
-    const o = r.split(",");
-    return o[0];
+    return r.split(",")[0];
 }
 
 export function sleep(ms: number) {
