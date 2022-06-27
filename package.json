@@ -34,7 +34,7 @@
     "humanize-duration": "^3.27.2",
     "is-sn-integer": "^0.3.0",
     "jwt-decode": "^3.1.2",
-    "metahkg-api": "^2.1.0-1",
+    "metahkg-api": "^2.2.0-1-dev",
     "metahkg-css": "1.0.7",
     "prismjs": "^1.28.0",
     "query-string": "^7.1.1",
