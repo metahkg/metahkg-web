@@ -152,9 +152,6 @@ export default function Register() {
             },
             type: "text",
             inputProps: { pattern: "S{1, 15}" },
-            helperText: !name.match(/^\S{1,15}$/)
-                ? "Username must be one word and less than 16 characters."
-                : "",
         },
         {
             label: "Email",
@@ -164,18 +161,12 @@ export default function Register() {
                 pattern:
                     "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
             },
-            helperText: !email.match(
-                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9}$/
-            )
-                ? "Please enter a valid email address."
-                : "",
         },
         {
             label: "Password",
             onChange: (e) => setPwd(e.target.value),
             type: "password",
             inputProps: { pattern: ".{8,}" },
-            helperText: pwd.length < 8 ? "Password must have at least 8 characters." : "",
         },
     ];
 

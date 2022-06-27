@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./css/profile.css";
 import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -46,6 +46,7 @@ export default function Profile() {
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
     const [user] = useUser();
+    const avatarRef = useRef<HTMLImageElement>(null);
     const navigate = useNavigate();
 
     const userId = Number(params.id);
@@ -122,6 +123,7 @@ export default function Profile() {
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
+                            ref={avatarRef}
                         />
                         <br />
                         <div
@@ -168,7 +170,12 @@ export default function Profile() {
                                                     text: "Uploading...",
                                                 });
                                             }}
-                                            onSuccess={window.location.reload}
+                                            onSuccess={() => {
+                                                if (avatarRef.current)
+                                                    avatarRef.current.src = `/api/profile/avatars/${
+                                                        requestedUser.id
+                                                    }?rand=${Math.random()}`;
+                                            }}
                                             onError={(err) => {
                                                 setNotification({
                                                     open: true,
@@ -186,6 +193,7 @@ export default function Profile() {
                             isSelf={isSelf}
                             setUser={setRequestedUser}
                             requestedUser={requestedUser}
+                            key={requestedUser.id}
                         />
                     </Box>
                     {isSmallScreen && (
