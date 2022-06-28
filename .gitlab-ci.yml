@@ -47,6 +47,8 @@ docker-build:
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
     - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
+    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')" .
+    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')"
   rules:
     - if: "$CI_COMMIT_BRANCH"
       exists:
