@@ -34,10 +34,10 @@ export default function Gallery(props: {
                                     <img
                                         src={`${resizeBase}?src=${encodeURIComponent(
                                             item.src
-                                        )}&height=300&fit=cover`}
+                                        )}&height=300&width=300&fit=cover`}
                                         srcSet={`${resizeBase}?src=${encodeURIComponent(
                                             item.src
-                                        )}&height=300&fit=cover 2x`}
+                                        )}&height=300&width=300&fit=cover 2x`}
                                         alt=""
                                         loading="lazy"
                                     />
