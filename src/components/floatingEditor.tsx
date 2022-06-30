@@ -21,7 +21,11 @@ import {
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import TextEditor from "./texteditor";
-import { useIsSmallScreen, useNotification, useReCaptchaSiteKey } from "./ContextProvider";
+import {
+    useIsSmallScreen,
+    useNotification,
+    useReCaptchaSiteKey,
+} from "./ContextProvider";
 import UploadImage from "./conversation/uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";

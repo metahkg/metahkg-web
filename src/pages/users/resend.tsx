@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useReCaptchaSiteKey, useUser, useWidth } from "../../components/ContextProvider";
+import {
+    useNotification,
+    useReCaptchaSiteKey,
+    useUser,
+    useWidth,
+} from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -29,7 +34,7 @@ export default function Verify() {
     const [email, setEmail] = useState(String(query.email || ""));
     const [rtoken, setRtoken] = useState("");
     const [user] = useUser();
-    const reCaptchaSiteKey = useReCaptchaSiteKey()
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     function resend() {
         setAlert({ severity: "info", text: "Requesting resend..." });
