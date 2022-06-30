@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useUser, useWidth } from "../../components/ContextProvider";
+import { useNotification, useReCaptchaSiteKey, useUser, useWidth } from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -10,7 +10,7 @@ import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
-import { reCaptchaSiteKey, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 
 declare const grecaptcha: { reset: () => void };
@@ -29,6 +29,7 @@ export default function Verify() {
     const [email, setEmail] = useState(String(query.email || ""));
     const [rtoken, setRtoken] = useState("");
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey()
 
     function resend() {
         setAlert({ severity: "info", text: "Requesting resend..." });

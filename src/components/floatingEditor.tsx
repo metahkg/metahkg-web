@@ -21,12 +21,12 @@ import {
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import TextEditor from "./texteditor";
-import { useIsSmallScreen, useNotification } from "./ContextProvider";
+import { useIsSmallScreen, useNotification, useReCaptchaSiteKey } from "./ContextProvider";
 import UploadImage from "./conversation/uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
 import useChangePage from "./conversation/functions/changePage";
-import { reCaptchaSiteKey, roundup } from "../lib/common";
+import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
@@ -52,6 +52,7 @@ export default function FloatingEditor() {
     const [finalPage] = useFinalPage();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {

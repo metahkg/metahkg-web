@@ -10,10 +10,11 @@ import MenuProvider from "./components/MenuProvider";
 
 // const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
-export default function MetahkgWebApp() {
+export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
+    const { reCaptchaSiteKey } = props;
     return (
         // <Provider store={store}>
-        <ContextProvider>
+        <ContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
             <MenuProvider>
                 <App />
             </MenuProvider>

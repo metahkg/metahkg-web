@@ -19,11 +19,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
     useNotification,
+    useReCaptchaSiteKey,
     useSettings,
     useUser,
     useWidth,
 } from "../../components/ContextProvider";
-import { reCaptchaSiteKey, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Close, HowToReg } from "@mui/icons-material";
@@ -97,6 +98,7 @@ export default function Register() {
     const [menu, setMenu] = useMenu();
     const [settings] = useSettings();
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();

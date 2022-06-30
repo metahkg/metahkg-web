@@ -26,11 +26,7 @@ use the public dev api server (dev branch only!)
 
 #### Environmental variables
 
-```bash
-cp templates/template.env .env
-```
-
-Then edit values in the .env file.
+Edit values in the .env file.
 
 ### Build the React app
 

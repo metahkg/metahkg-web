@@ -10,10 +10,11 @@ import {
     useUser,
     useIsSmallScreen,
     useWidth,
+    useReCaptchaSiteKey,
 } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { reCaptchaSiteKey, roundup, setTitle, wholePath } from "../lib/common";
+import { roundup, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
@@ -47,6 +48,7 @@ export default function AddComment() {
         text: "",
     });
     const [, setNotification] = useNotification();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
     const [user] = useUser();
     const query = queryString.parse(window.location.search);
     const edit = Number(query.edit);

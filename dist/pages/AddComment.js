@@ -9,7 +9,7 @@ import ReactDOMServer from "react-dom/server";
 import { useNotification, useUser, useIsSmallScreen, useWidth, } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
-import { reCaptchaSiteKey, roundup, setTitle, wholePath } from "../lib/common";
+import { roundup, setTitle, wholePath } from "../lib/common";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";

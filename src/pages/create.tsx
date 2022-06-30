@@ -18,10 +18,11 @@ import {
 import {
     useIsSmallScreen,
     useNotification,
+    useReCaptchaSiteKey,
     useUser,
     useWidth,
 } from "../components/ContextProvider";
-import { reCaptchaSiteKey, setTitle, wholePath } from "../lib/common";
+import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import UploadImage from "../components/conversation/uploadimage";
@@ -66,6 +67,7 @@ export default function Create() {
     };
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
