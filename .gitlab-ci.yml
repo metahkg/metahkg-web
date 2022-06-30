@@ -53,5 +53,24 @@ docker-build:
       exists:
         - Dockerfile
 
+publish:
+  image: node:latest
+  stage: deploy
+  allow_failure: true
+  script:
+    - yarn install
+    - yarn lint
+    - yarn build:module
+    # login to npm registry
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> .npmrc
+    # Extract a few values from package.json
+    - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then suffix="-dev"; else suffix=""; fi;
+    - NPM_PACKAGE_ORIGINAL_VERSION=$(node -p "require('./package.json').version")
+    - NPM_PACKAGE_VERSION=$(node -p "require('./package.json').version + \"${suffix}\"")
+    - sed -i "s/${NPM_PACKAGE_ORIGINAL_VERSION}/${NPM_PACKAGE_VERSION}/" package.json
+    - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then npm publish --tag dev; else npm publish; fi;
+  rules:
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
+
 include:
   - template: Auto-DevOps.gitlab-ci.yml
