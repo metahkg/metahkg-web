@@ -18,7 +18,7 @@ import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
-import UploadImage from "../components/uploadimage";
+import UploadImage from "../components/conversation/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import RenderComment from "../components/renderComment";

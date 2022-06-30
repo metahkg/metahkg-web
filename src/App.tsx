@@ -12,11 +12,9 @@ import {
     useIsSmallScreen,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
-import { api, resetApi } from "./lib/api";
+import { api } from "./lib/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
-import jwtDecode from "jwt-decode";
-import { userType } from "./types/user";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -30,28 +28,15 @@ export default function App() {
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
-    const [user, setUser] = useUser();
+    const [user] = useUser();
 
     useEffect(() => {
-        if (user) {
+        if (user)
             api.users.status().then((res) => {
-                const { active, token } = res.data;
+                const { active } = res.data;
                 if (!active) localStorage.removeItem("token");
-
-                if (active && token) localStorage.setItem("token", token);
-
-                setUser(
-                    (() => {
-                        try {
-                            return jwtDecode(localStorage.token || "") as userType | null;
-                        } catch {
-                            return null;
-                        }
-                    })()
-                );
-                resetApi();
             });
-        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (

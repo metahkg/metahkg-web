@@ -13,7 +13,7 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import UploadAvatar from "../components/uploadavatar";
+import UploadAvatar from "../components/profile/uploadavatar";
 import { setTitle } from "../lib/common";
 import { Link } from "react-router-dom";
 import {

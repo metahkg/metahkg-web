@@ -22,7 +22,7 @@ import {
 import { useUpdate } from "./conversation/functions/update";
 import TextEditor from "./texteditor";
 import { useIsSmallScreen, useNotification } from "./ContextProvider";
-import UploadImage from "./uploadimage";
+import UploadImage from "./conversation/uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
 import useChangePage from "./conversation/functions/changePage";

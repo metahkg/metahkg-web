@@ -5,7 +5,7 @@ const MenuContext = createContext<{
     category: [number, React.Dispatch<React.SetStateAction<number>>];
     id: [number, React.Dispatch<React.SetStateAction<number>>];
     search: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-    profile: [number | "self", React.Dispatch<React.SetStateAction<number | "self">>];
+    profile: [number, React.Dispatch<React.SetStateAction<number>>];
     menu: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     selected: [number, React.Dispatch<React.SetStateAction<number>>];
     recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -23,7 +23,7 @@ const MenuContext = createContext<{
 export default function MenuProvider(props: { children: JSX.Element }) {
     const [category, setCategory] = useState(0);
     const [id, setId] = useState(0);
-    const [profile, setProfile] = useState<number | "self">(0);
+    const [profile, setProfile] = useState<number>(0);
     const [search, useSearch] = useState(false);
     const [menu, setMenu] = useState(false);
     const [recall, setRecall] = useState(false);

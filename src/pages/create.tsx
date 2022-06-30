@@ -24,7 +24,7 @@ import {
 import { reCaptchaSiteKey, setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
-import UploadImage from "../components/uploadimage";
+import UploadImage from "../components/conversation/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import ChooseCat from "../components/create/ChooseCat";
