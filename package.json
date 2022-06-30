@@ -74,7 +74,7 @@
     "start": "serve -s",
     "start:react": "npx react-app-rewired start",
     "build": "export REACT_APP_build=$(git rev-parse --short HEAD); npx react-app-rewired build",
-    "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --noEmit --skipLibCheck --removeComments && cp -r src/css dist",
+    "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --skipLibCheck --removeComments && cp -r src/css dist",
     "test": "react-scripts test || echo \"no tests\"",
     "eject": "react-scripts eject",
     "docker": "docker build -t metahkg/metahkg-web .",
