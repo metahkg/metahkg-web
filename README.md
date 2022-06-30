@@ -15,7 +15,7 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=metahkg/metahkg-web&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=metahkg/metahkg-web&utm_campaign=Badge_Grade)
 
 ## About
 
@@ -24,6 +24,27 @@ This open-source project was created primarily because of me being unable to reg
 Currently, it aims to be a fully featured alternative to lihkg. However, I might also add other useful features.
 
 As contrasted with lihkg, metahkg is open to everyone and anyone can create an account with a email address, no matter issued by a university or not.
+
+## Use as a module
+
+Since v2.4.0, you can use metahkg-web as a module.
+
+### Install
+
+```bash
+yarn add metahkg-web
+```
+
+### Usage
+
+```typescript
+import React from "react";
+import MetahkgWebApp from "metahkg-web";
+
+export default function App() {
+    return <MetahkgWebApp reCaptchaSiteKey={"<your-recaptcha-site-key>"} />;
+}
+```
 
 ## Deploying
 
