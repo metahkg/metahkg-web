@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
 import { AxiosResponse } from "axios";
-import { api } from "../lib/api";
+import { api } from "../../lib/api";
 import { OK } from "metahkg-api/dist/types/ok";
 
 const Input = styled("input")({

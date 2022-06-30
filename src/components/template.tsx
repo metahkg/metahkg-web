@@ -79,13 +79,13 @@ export default function Template() {
                     {user && (
                         <ListItemButton
                             component={Link}
-                            to="/profile/self"
+                            to={`/profile/${user?.id}`}
                             className="fullwidth text-decoration-none white"
                         >
                             <ListItemIcon>
                                 <ManageAccountsIcon />
                             </ListItemIcon>
-                            <ListItemText>{user.name}</ListItemText>
+                            <ListItemText>{user?.name}</ListItemText>
                         </ListItemButton>
                     )}
 

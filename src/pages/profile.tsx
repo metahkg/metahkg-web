@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./css/profile.css";
+import React, { useEffect, useRef, useState } from "react";
+import "../css/pages/profile.css";
 import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
@@ -13,7 +13,7 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import UploadAvatar from "../components/uploadavatar";
+import UploadAvatar from "../components/profile/uploadavatar";
 import { setTitle } from "../lib/common";
 import { Link } from "react-router-dom";
 import {
@@ -25,6 +25,7 @@ import {
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import isInteger from "is-sn-integer";
+import { parseError } from "../lib/parseError";
 
 /**
  * This function renders the profile page
@@ -45,18 +46,22 @@ export default function Profile() {
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
     const [user] = useUser();
+    const avatarRef = useRef<HTMLImageElement>(null);
     const navigate = useNavigate();
 
+    const userId = Number(params.id);
+    const isSelf = userId === user?.id;
+
     useEffect(() => {
-        if (((params.id === "self" && user) || isInteger(params.id)) && !requestedUser) {
+        if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
             api.profile
-                .userProfile({ userId: Number(params.id) || "self" })
+                .userProfile({ userId })
                 .then((res) => {
                     setRequestedUser(res.data);
                     setTitle(`${res.data.name} | Metahkg`);
                 })
                 .catch((err) => {
-                    setNotification({ open: true, text: err?.response?.data?.error });
+                    setNotification({ open: true, text: parseError(err) });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
@@ -64,7 +69,7 @@ export default function Profile() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id, requestedUser]);
 
-    if (params?.id === "self" && !user) return <Navigate to="/" replace />;
+    if (!userId) return <Navigate to="/" replace />;
 
     (function onRender() {
         /**
@@ -76,26 +81,24 @@ export default function Profile() {
             selected && setSelected(0);
         }
 
-        if (!(params.id === "self" && !user)) {
-            back !== window.location.pathname && setBack(window.location.pathname);
+        back !== window.location.pathname && setBack(window.location.pathname);
 
-            !menu && !isSmallScreen && setMenu(true);
-            menu && isSmallScreen && setMenu(false);
+        !menu && !isSmallScreen && setMenu(true);
+        menu && isSmallScreen && setMenu(false);
 
-            if (profile !== (Number(params.id) || "self")) {
-                setProfile(Number(params.id) || "self");
-                clearData();
-            }
-
-            if (search) {
-                setSearch(false);
-                clearData();
-            }
-
-            recall && setRecall(false);
-            id && setId(0);
-            cat && setCat(0);
+        if (profile !== userId) {
+            setProfile(userId);
+            clearData();
         }
+
+        if (search) {
+            setSearch(false);
+            clearData();
+        }
+
+        recall && setRecall(false);
+        id && setId(0);
+        cat && setCat(0);
     })();
 
     return (
@@ -120,12 +123,13 @@ export default function Profile() {
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
+                            ref={avatarRef}
                         />
                         <br />
                         <div
                             className="ml20 flex justify-center profile-toptextdiv"
                             style={{
-                                flexDirection: params.id === "self" ? "column" : "row",
+                                flexDirection: isSelf ? "column" : "row",
                             }}
                         >
                             <h1 className="font-size-30 profile-toptext">
@@ -154,10 +158,10 @@ export default function Profile() {
                             <div
                                 className="profile-uploaddiv"
                                 style={{
-                                    marginTop: params.id === "self" ? 25 : 0,
+                                    marginTop: isSelf ? 25 : 0,
                                 }}
                             >
-                                {params.id === "self" && (
+                                {isSelf && (
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
                                             onUpload={() => {
@@ -166,15 +170,16 @@ export default function Profile() {
                                                     text: "Uploading...",
                                                 });
                                             }}
-                                            onSuccess={window.location.reload}
+                                            onSuccess={() => {
+                                                if (avatarRef.current)
+                                                    avatarRef.current.src = `/api/profile/avatars/${
+                                                        requestedUser.id
+                                                    }?rand=${Math.random()}`;
+                                            }}
                                             onError={(err) => {
                                                 setNotification({
                                                     open: true,
-                                                    text: `Upload failed: ${
-                                                        err.response?.data?.error ||
-                                                        err.response?.data ||
-                                                        ""
-                                                    }`,
+                                                    text: parseError(err),
                                                 });
                                             }}
                                         />
@@ -185,15 +190,17 @@ export default function Profile() {
                     </Box>
                     <Box className="flex mt20 mb10 fullwidth font justify-center">
                         <DataTable
+                            isSelf={isSelf}
                             setUser={setRequestedUser}
                             requestedUser={requestedUser}
+                            key={requestedUser.id}
                         />
                     </Box>
                     {isSmallScreen && (
                         <div className="mt20">
                             <Link
                                 className="text-decoration-none"
-                                to={`/history/${params.id}`}
+                                to={`/history/${userId}`}
                             >
                                 <Button
                                     className="font-size-16"

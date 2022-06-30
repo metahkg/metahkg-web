@@ -26,6 +26,7 @@ const Context = createContext<{
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [category[], Dispatch<category[]>];
     user: [userType | null, Dispatch<SetStateAction<userType | null>>];
+    reCaptchaSiteKey: string;
     //@ts-ignore
 }>(null);
 /**
@@ -33,7 +34,10 @@ const Context = createContext<{
  * @param props - { children: JSX.Element }
  * @returns The ContextProvider is returning a JSX element.
  */
-export default function ContextProvider(props: { children: JSX.Element }) {
+export default function ContextProvider(props: {
+    children: JSX.Element;
+    reCaptchaSiteKey?: string;
+}) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState("");
     const [width, setWidth] = useState(window.innerWidth);
@@ -68,6 +72,9 @@ export default function ContextProvider(props: { children: JSX.Element }) {
     }
     const [history, setHistory] = useState(parsedHistory);
     const listeningResize = useRef(false);
+    const [reCaptchaSiteKey] = useState(
+        props.reCaptchaSiteKey || process.env.recaptchasitekey || "{RECAPTCHA_SITE_KEY}"
+    );
 
     useEffect(() => {
         api.category.categories().then((res) => {
@@ -101,6 +108,7 @@ export default function ContextProvider(props: { children: JSX.Element }) {
                 history: [history, setHistory],
                 categories: [categories, setCategories],
                 user: [user, setUser],
+                reCaptchaSiteKey,
             }}
         >
             {props.children}
@@ -206,4 +214,9 @@ export function useUser() {
 export function useIsSmallScreen() {
     const { width } = useContext(Context);
     return width[0] < 760;
+}
+
+export function useReCaptchaSiteKey() {
+    const { reCaptchaSiteKey } = useContext(Context);
+    return reCaptchaSiteKey;
 }

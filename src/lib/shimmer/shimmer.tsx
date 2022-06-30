@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
-import "./styles.css";
+import "../../css/lib/shimmer/styles.css";
 
 const DEFAULT_DURATION_MS = 1600;
 const DEFAULT_HEIGHT = 400;

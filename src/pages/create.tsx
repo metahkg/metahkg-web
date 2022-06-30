@@ -1,4 +1,4 @@
-import "./css/create.css";
+import "../css/pages/create.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField, Tooltip } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
@@ -18,16 +18,18 @@ import {
 import {
     useIsSmallScreen,
     useNotification,
+    useReCaptchaSiteKey,
     useUser,
     useWidth,
 } from "../components/ContextProvider";
 import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
-import UploadImage from "../components/uploadimage";
+import UploadImage from "../components/conversation/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import ChooseCat from "../components/create/ChooseCat";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -65,6 +67,7 @@ export default function Create() {
     };
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
@@ -125,11 +128,11 @@ export default function Create() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setDisabled(false);
                 setRtoken("");
@@ -283,10 +286,7 @@ export default function Create() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

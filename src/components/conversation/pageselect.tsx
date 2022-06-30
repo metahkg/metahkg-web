@@ -1,4 +1,4 @@
-import "./css/pageselect.css";
+import "../../css/components/conversation/pageselect.css";
 import React from "react";
 import { Box, IconButton, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";

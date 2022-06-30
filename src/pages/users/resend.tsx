@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
-import { useNotification, useUser, useWidth } from "../../components/ContextProvider";
+import {
+    useNotification,
+    useReCaptchaSiteKey,
+    useUser,
+    useWidth,
+} from "../../components/ContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
@@ -11,6 +16,7 @@ import { Send as SendIcon } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
+import { parseError } from "../../lib/parseError";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -28,6 +34,7 @@ export default function Verify() {
     const [email, setEmail] = useState(String(query.email || ""));
     const [rtoken, setRtoken] = useState("");
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     function resend() {
         setAlert({ severity: "info", text: "Requesting resend..." });
@@ -54,11 +61,11 @@ export default function Verify() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 grecaptcha.reset();
                 setRtoken("");
@@ -116,10 +123,7 @@ export default function Verify() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

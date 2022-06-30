@@ -1,4 +1,4 @@
-import "./css/sidebar.css";
+import "../css/components/sidebar.css";
 import React, { useState } from "react";
 import {
     Box,
@@ -210,7 +210,7 @@ export default function SideBar() {
                             <ListItemButton
                                 component={Link}
                                 className="text-decoration-none white"
-                                to={"/profile/self"}
+                                to={`/profile/${user?.id}`}
                                 onClick={onClick}
                             >
                                 <ListItemIcon>
@@ -232,7 +232,7 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     <p className="ml5">
-                        Metahkg Web {process.env.REACT_APP_build || "v0.6.1"}
+                        Metahkg Web {process.env.REACT_APP_build || "v2.4.0"}
                     </p>
                 </Box>
             </Drawer>

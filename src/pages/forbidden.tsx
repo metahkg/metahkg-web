@@ -1,4 +1,4 @@
-import "./css/notfound.css";
+import "../css/pages/notfound.css";
 import React from "react";
 import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";

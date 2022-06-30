@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/thread.css";
+import "../../css/components/menu/thread.css";
 import { Box, Button } from "@mui/material";
 import {
     Article as ArticleIcon,

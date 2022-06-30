@@ -1,4 +1,4 @@
-import "./css/register.css";
+import "../../css/pages/users/register.css";
 import React, { useState } from "react";
 import hash from "hash.js";
 import {
@@ -19,6 +19,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
     useNotification,
+    useReCaptchaSiteKey,
     useSettings,
     useUser,
     useWidth,
@@ -30,6 +31,7 @@ import { Close, HowToReg } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import queryString from "query-string";
 import { api } from "../../lib/api";
+import { parseError } from "../../lib/parseError";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -96,6 +98,7 @@ export default function Register() {
     const [menu, setMenu] = useMenu();
     const [settings] = useSettings();
     const [user] = useUser();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
@@ -126,11 +129,11 @@ export default function Register() {
                 .catch((err) => {
                     setAlert({
                         severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setNotification({
                         open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setRtoken("");
                     setDisabled(false);
@@ -151,9 +154,6 @@ export default function Register() {
             },
             type: "text",
             inputProps: { pattern: "S{1, 15}" },
-            helperText: !name.match(/^\S{1,15}$/)
-                ? "Username must be one word and less than 16 characters."
-                : "",
         },
         {
             label: "Email",
@@ -163,18 +163,12 @@ export default function Register() {
                 pattern:
                     "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
             },
-            helperText: !email.match(
-                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9}$/
-            )
-                ? "Please enter a valid email address."
-                : "",
         },
         {
             label: "Password",
             onChange: (e) => setPwd(e.target.value),
             type: "password",
             inputProps: { pattern: ".{8,}" },
-            helperText: pwd.length < 8 ? "Password must have at least 8 characters." : "",
         },
     ];
 
@@ -244,10 +238,7 @@ export default function Register() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

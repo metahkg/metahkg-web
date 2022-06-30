@@ -37,7 +37,8 @@ export default function Category() {
     const categories = useCategories();
 
     (function onRender() {
-        setTitle(categories.find((i) => i.id === category)?.name + " | Metahkg");
+        const categoryName = categories.find((i) => i.id === category)?.name;
+        categoryName && setTitle(categoryName + " | Metahkg");
 
         function clearData() {
             setData([]);

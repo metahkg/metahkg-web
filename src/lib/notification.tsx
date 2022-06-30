@@ -1,4 +1,4 @@
-import "./css/notification.css";
+import "../css/lib/notification.css";
 import React from "react";
 import { Close, Notifications } from "@mui/icons-material";
 import { Box, Snackbar } from "@mui/material";

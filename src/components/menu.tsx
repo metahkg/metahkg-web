@@ -1,4 +1,4 @@
-import "./css/menu.css";
+import "../css/components/menu.css";
 import React, { memo } from "react";
 import { Box } from "@mui/material";
 import { useData, useMenu, useSearch, useSelected } from "./MenuProvider";

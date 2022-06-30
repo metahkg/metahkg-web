@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
 import { useData } from "../MenuProvider";
-import { useParams } from "react-router-dom";
 import {
+    Box,
     Button,
-    MenuItem,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
@@ -17,6 +15,7 @@ import {
 import { decodeToken, timeToWord_long } from "../../lib/common";
 import { api, resetApi } from "../../lib/api";
 import { Save } from "@mui/icons-material";
+import { parseError } from "../../lib/parseError";
 
 export interface UserData {
     id: number;
@@ -30,71 +29,54 @@ export interface UserData {
 interface DataTableProps {
     requestedUser: UserData;
     setUser: React.Dispatch<React.SetStateAction<null | UserData>>;
+    isSelf: boolean;
 }
 
 export default function DataTable(props: DataTableProps) {
-    const { requestedUser, setUser } = props;
+    const { requestedUser, setUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setData] = useData();
     const [, setNotification] = useNotification();
     const [name, setName] = useState(requestedUser.name);
-    const [sex, setSex] = useState<"M" | "F">(requestedUser.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [, setClient] = useUser();
 
-    const params = useParams();
     const items = [
         {
             title: "Name",
-            content:
-                params.id === "self" ? (
-                    <TextField
-                        variant="standard"
-                        color="secondary"
-                        value={name}
-                        onChange={(e) => {
-                            setName(e.target.value);
-                        }}
-                    />
-                ) : (
-                    props.requestedUser.name
-                ),
+            content: isSelf ? (
+                <TextField
+                    variant="standard"
+                    color="secondary"
+                    value={name}
+                    onChange={(e) => {
+                        setName(e.target.value);
+                    }}
+                />
+            ) : (
+                requestedUser.name
+            ),
         },
         {
             title: "Threads",
-            content: props.requestedUser.count,
+            content: requestedUser.count,
         },
         {
             title: "Gender",
-            content:
-                params.id === "self" ? (
-                    <Select
-                        variant="standard"
-                        value={sex}
-                        onChange={(e) => {
-                            const newValue = e.target.value;
-                            if (newValue === "M" || newValue === "F") setSex(newValue);
-                        }}
-                    >
-                        <MenuItem value="M">Male</MenuItem>
-                        <MenuItem value="F">Female</MenuItem>
-                    </Select>
-                ) : (
-                    { M: "male", F: "female" }[props.requestedUser.sex] || ""
-                ),
+            content: { M: "male", F: "female" }[requestedUser.sex] || "",
         },
-        { title: "Role", content: props.requestedUser.role },
+        { title: "Role", content: requestedUser.role },
         {
             title: "Joined",
-            content: `${timeToWord_long(props.requestedUser.createdAt)} ago`,
+            content: `${timeToWord_long(requestedUser.createdAt)} ago`,
         },
     ];
 
-    function editProfile() {
+    function rename() {
         setSaveDisabled(true);
-        setNotification({ open: true, text: "Saving..." });
+        setNotification({ open: true, text: "Renaming..." });
         api.users
-            .editprofile({ name, sex })
+            .rename({ name })
             .then((res) => {
                 setSaveDisabled(false);
                 setUser(null);
@@ -114,13 +96,13 @@ export default function DataTable(props: DataTableProps) {
                 setSaveDisabled(false);
                 setNotification({
                     open: true,
-                    text: err.response?.data?.error || err.response?.data || "",
+                    text: parseError(err),
                 });
             });
     }
 
     return (
-        <div
+        <Box
             className="ml50 mr50 fullwidth"
             style={{ maxWidth: isSmallScreen ? "100%" : "70%" }}
         >
@@ -150,22 +132,18 @@ export default function DataTable(props: DataTableProps) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {params.id === "self" && (
+            {isSelf && (
                 <Button
                     className="mt20 mb10"
                     variant="contained"
-                    disabled={
-                        saveDisabled ||
-                        (name === props.requestedUser.name &&
-                            sex === props.requestedUser.sex)
-                    }
+                    disabled={saveDisabled || name === requestedUser.name}
                     color="secondary"
-                    onClick={editProfile}
+                    onClick={rename}
                 >
                     <Save />
                     Save
                 </Button>
             )}
-        </div>
+        </Box>
     );
 }

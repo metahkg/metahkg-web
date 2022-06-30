@@ -15,6 +15,7 @@ import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api, resetApi } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
+import { parseError } from "../../lib/parseError";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -56,11 +57,11 @@ export default function Verify() {
                 setDisabled(false);
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
             });
     }

@@ -21,12 +21,17 @@ import {
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import TextEditor from "./texteditor";
-import { useIsSmallScreen, useNotification } from "./ContextProvider";
-import UploadImage from "./uploadimage";
+import {
+    useIsSmallScreen,
+    useNotification,
+    useReCaptchaSiteKey,
+} from "./ContextProvider";
+import UploadImage from "./conversation/uploadimage";
 import { severity } from "../types/severity";
 import { TinyMCE } from "tinymce";
 import useChangePage from "./conversation/functions/changePage";
 import { roundup } from "../lib/common";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -51,6 +56,7 @@ export default function FloatingEditor() {
     const [finalPage] = useFinalPage();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
@@ -102,7 +108,7 @@ export default function FloatingEditor() {
             .catch((err) => {
                 setNotification({
                     open: true,
-                    text: err.response.data?.error || err.response.data || "",
+                    text: parseError(err),
                 });
                 setCreating(false);
                 grecaptcha.reset();
@@ -227,10 +233,7 @@ export default function FloatingEditor() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

@@ -1,4 +1,4 @@
-import "./css/addcomment.css";
+import "../css/pages/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
@@ -10,6 +10,7 @@ import {
     useUser,
     useIsSmallScreen,
     useWidth,
+    useReCaptchaSiteKey,
 } from "../components/ContextProvider";
 import { useData, useMenu } from "../components/MenuProvider";
 import TextEditor from "../components/texteditor";
@@ -18,11 +19,12 @@ import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
 import queryString from "query-string";
 import ReCAPTCHA from "react-google-recaptcha";
-import UploadImage from "../components/uploadimage";
+import UploadImage from "../components/conversation/uploadimage";
 import { api } from "../lib/api";
 import type { TinyMCE } from "tinymce";
 import RenderComment from "../components/renderComment";
 import { commentType } from "../types/conversation/comment";
+import { parseError } from "../lib/parseError";
 
 declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
@@ -46,6 +48,7 @@ export default function AddComment() {
         text: "",
     });
     const [, setNotification] = useNotification();
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
     const [user] = useUser();
     const query = queryString.parse(window.location.search);
     const edit = Number(query.edit);
@@ -71,11 +74,11 @@ export default function AddComment() {
                 } else {
                     setAlert({
                         severity: "error",
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                     setNotification({
                         open: true,
-                        text: err?.response?.data?.error || err?.response?.data || "",
+                        text: parseError(err),
                     });
                 }
             });
@@ -134,11 +137,11 @@ export default function AddComment() {
             .catch((err) => {
                 setAlert({
                     severity: "error",
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setNotification({
                     open: true,
-                    text: err?.response?.data?.error || err?.response?.data || "",
+                    text: parseError(err),
                 });
                 setDisabled(false);
                 setRtoken("");
@@ -279,10 +282,7 @@ export default function AddComment() {
                     >
                         <ReCAPTCHA
                             theme="dark"
-                            sitekey={
-                                process.env.REACT_APP_recaptchasitekey ||
-                                "6LcX4bceAAAAAIoJGHRxojepKDqqVLdH9_JxHQJ-"
-                            }
+                            sitekey={reCaptchaSiteKey}
                             onChange={(token) => {
                                 setRtoken(token || "");
                             }}

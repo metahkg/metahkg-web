@@ -41,16 +41,36 @@ docker-build:
   services:
     - docker:dind
   before_script:
+    - apk add nodejs-current
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" .
+    - docker build --build-arg REACT_APP_build=$(git rev-parse --short HEAD) --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')" .
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
-    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')"
   rules:
     - if: "$CI_COMMIT_BRANCH"
       exists:
         - Dockerfile
+
+publish:
+  image: node:latest
+  stage: deploy
+  allow_failure: true
+  script:
+    - yarn install
+    - yarn lint
+    - yarn build:module
+    # login to npm registry
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> .npmrc
+    # Extract a few values from package.json
+    - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then suffix="-dev"; else suffix=""; fi;
+    - NPM_PACKAGE_ORIGINAL_VERSION=$(node -p "require('./package.json').version")
+    - NPM_PACKAGE_VERSION=$(node -p "require('./package.json').version + \"${suffix}\"")
+    - sed -i "s/${NPM_PACKAGE_ORIGINAL_VERSION}/${NPM_PACKAGE_VERSION}/" package.json
+    - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then npm publish --tag dev; else npm publish; fi;
+  rules:
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml

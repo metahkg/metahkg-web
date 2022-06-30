@@ -1,4 +1,4 @@
-import "./css/logo.css";
+import "../css/components/logo.css";
 import React from "react";
 
 /**
