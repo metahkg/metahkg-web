@@ -1,4 +1,4 @@
-import "./css/create.css";
+import "../css/pages/create.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField, Tooltip } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";

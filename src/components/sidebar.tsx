@@ -1,4 +1,4 @@
-import "./css/sidebar.css";
+import "../css/components/sidebar.css";
 import React, { useState } from "react";
 import {
     Box,

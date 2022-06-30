@@ -1,4 +1,4 @@
-import "./css/commentBody.css";
+import "../../../css/components/conversation/comment/commentBody.css";
 import { replace } from "../../../lib/modifycomments";
 import { commentType } from "../../../types/conversation/comment";
 import parse from "html-react-parser";

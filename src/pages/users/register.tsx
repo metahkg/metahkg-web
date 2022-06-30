@@ -1,4 +1,4 @@
-import "./css/register.css";
+import "../../css/pages/users/register.css";
 import React, { useState } from "react";
 import hash from "hash.js";
 import {

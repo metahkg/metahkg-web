@@ -1,4 +1,4 @@
-import "./css/comment.css";
+import "../../css/components/conversation/comment.css";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import VoteBar from "./comment/VoteBar";

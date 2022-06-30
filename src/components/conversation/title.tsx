@@ -1,4 +1,4 @@
-import "./css/title.css";
+import "../../css/components/conversation/title.css";
 import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";

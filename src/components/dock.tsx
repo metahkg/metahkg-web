@@ -1,4 +1,4 @@
-import "./css/dock.css";
+import "../css/components/dock.css";
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import SideBar from "./sidebar";

@@ -1,4 +1,4 @@
-import "./css/conversation.css";
+import "../css/components/conversation.css";
 import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect } from "react";
 import {

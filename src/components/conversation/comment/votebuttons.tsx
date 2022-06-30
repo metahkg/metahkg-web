@@ -1,4 +1,4 @@
-import "./css/votebuttons.css";
+import "../../../css/components/conversation/comment/votebuttons.css";
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";

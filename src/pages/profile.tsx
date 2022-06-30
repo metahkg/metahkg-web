@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./css/profile.css";
+import "../css/pages/profile.css"
 import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {

@@ -1,4 +1,4 @@
-import "./css/preload.css";
+import "../../css/components/menu/preload.css";
 import React from "react";
 import { Box, Button, Divider } from "@mui/material";
 import { Shimmer } from "../../lib/shimmer/shimmer";

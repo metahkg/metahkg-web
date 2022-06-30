@@ -1,4 +1,4 @@
-@import "~prismjs/themes/prism-tomorrow.min.css";
+@import "../../../../node_modules/prismjs/themes/prism-tomorrow.min.css";
 
 .comment-tag-userlink {
     line-height: 22px;

@@ -2,11 +2,10 @@
   "name": "metahkg-web",
   "homepage": "https://metahkg.org",
   "repository": "https://github.com/metahkg/metahkg-web",
-  "version": "2.4.0-2",
+  "version": "2.4.0-3",
   "main": "dist/main.js",
   "author": "wcyat <wcyat@wcyat.me>",
   "license": "AGPL-3.0-or-later",
-  "type": "module",
   "keywords": [
     "forum",
     "react"
@@ -75,7 +74,7 @@
     "start": "serve -s",
     "start:react": "npx react-app-rewired start",
     "build": "export REACT_APP_build=$(git rev-parse --short HEAD); npx react-app-rewired build",
-    "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --noEmit --skipLibCheck --removeComments",
+    "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --noEmit --skipLibCheck --removeComments && cp -r src/css dist",
     "test": "react-scripts test || echo \"no tests\"",
     "eject": "react-scripts eject",
     "docker": "docker build -t metahkg/metahkg-web .",

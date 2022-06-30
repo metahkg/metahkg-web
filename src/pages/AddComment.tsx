@@ -1,4 +1,4 @@
-import "./css/addcomment.css";
+import "../css/pages/addcomment.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Tooltip } from "@mui/material";
 import { AddComment as AddCommentIcon } from "@mui/icons-material";
