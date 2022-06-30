@@ -46,6 +46,14 @@ export default function App() {
 }
 ```
 
+### Build from source
+
+```bash
+yarn build:module
+```
+
+The artifact would be in ./dist
+
 ## Deploying
 
 ### Docker
