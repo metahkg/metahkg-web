@@ -35,5 +35,3 @@ internal/
 .idea
 .eslintcache
 .husky
-
-/dist/
