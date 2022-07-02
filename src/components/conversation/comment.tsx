@@ -1,7 +1,6 @@
 import "../../css/components/conversation/comment.css";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme } from "@mui/material";
-import VoteBar from "./comment/VoteBar";
 import { useNotification, useSettings } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
@@ -56,7 +55,7 @@ function Comment(props: {
         sx,
         className,
         maxHeight,
-        noFullWidth
+        noFullWidth,
     } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
@@ -152,20 +151,7 @@ function Comment(props: {
                 {ready && !fold && (
                     <Box className="flex justify-space-between align-center fullwidth">
                         <div className="flex ml20 mr20">
-                            {settings.votebar ? (
-                                <VoteBar
-                                    key={threadId}
-                                    commentId={comment.id}
-                                    upVoteCount={comment.U || 0}
-                                    downVoteCount={comment.D || 0}
-                                />
-                            ) : (
-                                <VoteButtons
-                                    upVotes={comment.U || 0}
-                                    downVotes={comment.D || 0}
-                                    commentId={comment.id}
-                                />
-                            )}
+                            <VoteButtons commentId={comment.id} />
                             {!inPopUp && comment.replies?.length && (
                                 <Button
                                     sx={{

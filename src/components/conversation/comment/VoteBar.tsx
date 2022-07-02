@@ -1,3 +1,4 @@
+/** deprecated */
 import "../../../css/components/conversation/comment/votebuttons.css";
 import React, { useState } from "react";
 import {

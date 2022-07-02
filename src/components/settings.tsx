@@ -19,13 +19,14 @@ export default function Settings(props: {
         action: (e: React.ChangeEvent<HTMLInputElement>) => void;
         checked?: boolean;
     }[] = [
-        {
+        /** votebar is deprecated */
+        /*{
             title: "Voting Bar",
             action: (e) => {
                 setSettings({ ...settings, votebar: e.target.checked });
             },
             checked: settings.votebar,
-        },
+        },*/
     ];
     const colorOptions: {
         value: string;

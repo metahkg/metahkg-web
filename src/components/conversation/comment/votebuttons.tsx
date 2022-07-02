@@ -1,49 +1,55 @@
 import "../../../css/components/conversation/comment/votebuttons.css";
-import React, { useState } from "react";
+import React from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
-import { useThreadId, useUserVotes } from "../ConversationContext";
+import { useThread, useThreadId, useUserVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
+import { commentType } from "../../../types/conversation/comment";
 
-/**
- * It creates a button group with two buttons. One for upvotes and one for downvotes.
- * @param {"U" | "D" | undefined} props.userVote user(client)'s vote
- * @param {number} props.commentId comment id
- * @param {number} props.upVotes number of upvotes
- * @param {number} props.downVotes number of downvotes
- * @returns A button group with two buttons, one for upvote and one for downvote.
- */
-export default function VoteButtons(props: {
-    commentId: number;
-    upVotes: number;
-    downVotes: number;
-}) {
-    const { commentId, upVotes, downVotes } = props;
+export default function VoteButtons(props: { commentId: number }) {
+    const { commentId } = props;
     const threadId = useThreadId();
+    const [thread, setThread] = useThread();
     const [votes, setVotes] = useUserVotes();
-    const [up, setUp] = useState(upVotes);
-    const [down, setDown] = useState(downVotes);
     const [, setNotification] = useNotification();
     const [user] = useUser();
+
+    const comment = thread?.conversation?.find((i) => i.id === commentId) as commentType;
+    if (!comment) return <React.Fragment />;
+
     const vote = votes?.[commentId];
+    const up = comment.U || 0;
+    const down = comment.D || 0;
 
     /**
      * It sends a vote to the server.
      * @param {"U" | "D"} newVote - "U" | "D"
      */
     function sendVote(newVote: "U" | "D") {
-        newVote === "U" ? setUp(up + 1) : setDown(down + 1);
+        if (thread) {
+            thread.conversation[
+                thread.conversation.findIndex((i) => i.id === commentId)
+            ][newVote] = (comment[newVote] || 0) + 1;
+            setThread(thread);
+        }
         setVotes({ ...votes, [commentId]: newVote });
-        api.threads.comments.vote({ threadId, commentId, vote: newVote }).catch((err) => {
-            newVote === "U" ? setUp(up) : setDown(down);
-            setVotes(votes);
-            setNotification({
-                open: true,
-                text: parseError(err),
+        api.threads.comments
+            .vote({ threadId, commentId: commentId, vote: newVote })
+            .catch((err) => {
+                setVotes(votes);
+                if (thread) {
+                    thread.conversation[
+                        thread.conversation.findIndex((i) => i.id === commentId)
+                    ] = { ...comment, [newVote]: comment[newVote] };
+                    setThread(thread);
+                }
+                setNotification({
+                    open: true,
+                    text: parseError(err),
+                });
             });
-        });
     }
 
     return (

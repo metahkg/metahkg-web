@@ -90,7 +90,7 @@ export default function CommentTop(props: {
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `/thread/${threadId}`
+                            `${wholePath()}?c=${comment.id}`
                         )}`
                     );
             },
@@ -172,7 +172,7 @@ export default function CommentTop(props: {
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                            wholePath()
+                            `${wholePath()}?c=${comment.id}`
                         )}`
                     );
             },
