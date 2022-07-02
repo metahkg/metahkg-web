@@ -2,6 +2,8 @@ import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useIsSmallScreen } from "./ContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
+import axios from "axios";
+import { parse } from "node-html-parser";
 
 /**
  * It creates a text editor that can be used to edit text
@@ -15,14 +17,39 @@ export default function TextEditor(props: {
     className?: string;
     sx?: SxProps<Theme>;
     autoresize?: boolean;
+    toolbarBottom?: boolean;
+    toolbarSticky?: boolean;
+    noMenuBar?: boolean;
+    noStatusBar?: boolean;
 }) {
-    const { onChange, initText, className, sx, autoresize } = props;
+    const {
+        onChange,
+        initText,
+        className,
+        sx,
+        autoresize,
+        toolbarBottom,
+        toolbarSticky,
+        noMenuBar,
+        noStatusBar,
+    } = props;
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box sx={sx} className={className}>
             <Editor
                 key={Number(isSmallScreen)}
-                onEditorChange={onChange}
+                onEditorChange={(a, editor) => {
+                    const parsed = parse(a);
+                    parsed.querySelectorAll("img").forEach((img) => {
+                        console.log("set attribute");
+                        img.setAttribute(
+                            "style",
+                            "object-fit: contain; max-height: 400px; max-width: 100%;"
+                        );
+                    });
+                    editor.setContent(parsed.toString());
+                    onChange && onChange(parsed.toString(), editor);
+                }}
                 initialValue={initText}
                 init={{
                     height: isSmallScreen ? 310 : 350,
@@ -31,21 +58,26 @@ export default function TextEditor(props: {
                     content_css:
                         "https://cdn.jsdelivr.net/npm/metahkg-css@latest/dist/tinymce/skins/content/metahkg-dark/content.min.css",
                     branding: false,
+                    ...(noStatusBar && { statusbar: false }),
                     mobile: {
-                        menubar: "file edit view insert format tools",
+                        menubar: noMenuBar ? false : "file edit view insert format tools",
                         toolbar:
-                            "undo redo | link image template codesample | emoticons | formatselect bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
+                            "undo redo | bold italic underline strikethrough | image template link codesample | fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | insertfile media anchor | ltr rtl",
                     },
                     quickbars_selection_toolbar:
                         "cut copy paste | formatselect | quicklink",
                     quickbars_insert_toolbar: "",
-                    menubar: "file edit view insert format tools table",
+                    menubar: noMenuBar
+                        ? false
+                        : "file edit view insert format tools table",
                     plugins: `${
                         autoresize ? "autoresize" : ""
-                    } print preview paste searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount textpattern noneditable help charmap quickbars emoticons`,
+                    } preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons`,
                     toolbar:
-                        "undo redo | link image template codesample | emoticons | blocks bold italic underline strikethrough forecolor backcolor | numlist bullist | alignleft aligncenter alignright alignjustify | outdent indent | media table removeformat pagebreak | charmap | fullscreen preview save print | ltr rtl | anchor help",
-                    toolbar_sticky: true,
+                        "undo redo | bold italic underline strikethrough | image template link codesample | fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview save print | insertfile media anchor | ltr rtl",
+                    toolbar_sticky: toolbarSticky,
+                    toolbar_mode: "sliding",
+                    ...(toolbarBottom && { toolbar_location: "bottom" }),
                     templates: [
                         {
                             title: "Quote",
@@ -77,6 +109,20 @@ export default function TextEditor(props: {
                     autosave_restore_when_empty: false,
                     autosave_retention: "2m",
                     image_advtab: true,
+                    images_upload_handler: async (blobInfo, progress) => {
+                        const formData = new FormData();
+                        formData.append("image", blobInfo.blob());
+                        const { data } = await axios.post(
+                            "https://api.na.cx/upload",
+                            formData,
+                            {
+                                headers: {
+                                    "Content-Type": "multipart/form-data",
+                                },
+                            }
+                        );
+                        return data.url;
+                    },
                 }}
                 tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min.js"
             />
