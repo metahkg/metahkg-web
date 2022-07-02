@@ -54,10 +54,13 @@ docker-build:
         - Dockerfile
 
 tagging:
+  image: alpine:latest
   stage: deploy
   only:
     - master
     - dev
+  before_script:
+    - apk add git
   script:
     - git config --global user.name metahkg-bot
     - git config --global user.email bot@metahkg.org
