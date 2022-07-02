@@ -18,7 +18,7 @@ import {
     useThreadId,
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
-import TextEditor from "./texteditor";
+import TextEditor from "./textEditor";
 import {
     useIsSmallScreen,
     useNotification,

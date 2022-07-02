@@ -2,7 +2,7 @@ import "../css/pages/create.css";
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
-import TextEditor from "../components/texteditor";
+import TextEditor from "../components/textEditor";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
@@ -174,7 +174,7 @@ export default function Create() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={isSmallScreen ? "" : "flex "}>
+                    <div className={`mb15 ${isSmallScreen ? "" : "flex "}`}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
                             className={isSmallScreen ? "mt15" : "ml15"}
@@ -188,6 +188,7 @@ export default function Create() {
                         />
                     </div>
                     <TextEditor
+                        key={Number(isSmallScreen)}
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
