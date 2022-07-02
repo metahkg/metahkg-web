@@ -13,7 +13,7 @@ export default function CommentBody(props: {
     maxHeight?: string | number;
 }) {
     const { comment, depth, noQuote, maxHeight } = props;
-    const commentJSX = parse(comment.comment, { replace });
+    const [commentJSX] = useState(parse(comment.comment, { replace }));
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const content = useMemo(

@@ -7,6 +7,7 @@ import TweetEmbed from "../components/conversation/comment/twitter";
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import Spinner from "react-spinner-material";
 import { Box } from "@mui/material";
+import axios from "axios";
 /**
  * @param {any} node
  */
@@ -65,6 +66,12 @@ export function replace(node: any): JSX.Element | void {
                                 backgroundColor="#333"
                                 primaryTextColor="white"
                                 secondaryTextColor="#aca9a9"
+                                fetcher={async (url: string) => {
+                                    const { data } = await axios.get(
+                                        `https://rlp.metahkg.org/v2?url=${url}`
+                                    );
+                                    return data.metadata;
+                                }}
                                 customLoader={
                                     <Spinner
                                         className="mt5 mb5"
