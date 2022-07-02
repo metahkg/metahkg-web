@@ -108,12 +108,13 @@ export default function FloatingEditor() {
             className="border-radius-20"
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
+            key={editor?.quote?.id || 0}
         >
             <Box
                 sx={{
                     maxWidth: isSmallScreen ? "100vw" : "70vw",
                     width: isSmallScreen ? "100vw" : "50vw",
-                    maxHeight: "70vh",
+                    maxHeight: isSmallScreen ? "50vh" : "70vh",
                     bgcolor: "primary.dark",
                     overflow: "auto",
                 }}
@@ -135,7 +136,11 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                <Box className={`border-radius-20 ${fold ? "display-none" : ""}`}>
+                <Box
+                    className={`border-radius-20 flex flex-dir-column ${
+                        fold ? "display-none" : ""
+                    }`}
+                >
                     {editor.quote && (
                         <Comment
                             comment={editor.quote}
@@ -144,10 +149,13 @@ export default function FloatingEditor() {
                             fetchComment
                             noStory
                             noQuote
+                            noFullWidth
+                            className="mb10 ml10 mr10"
+                            sx={{ "& > div": { borderRadius: 2 } }}
+                            maxHeight={200}
                         />
                     )}
                     <TextEditor
-                        key={editor?.quote?.id || 0}
                         onChange={(e) => {
                             setComment(e);
                         }}

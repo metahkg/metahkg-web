@@ -7,7 +7,7 @@ import {
     Edit,
     PushPin,
 } from "@mui/icons-material";
-import { IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PopUp } from "../../../lib/popup";
@@ -35,6 +35,7 @@ export default function CommentTop(props: {
     comment: commentType;
     noStory?: boolean;
     fold?: boolean;
+    setFold?: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }) {
     const [open, setOpen] = useState(false);
     const [timeMode, setTimeMode] = useState<"short" | "long">("short");
@@ -51,7 +52,7 @@ export default function CommentTop(props: {
     const [, setEditor] = useEditor();
     const croot = useCRoot();
 
-    const { comment, noStory, fold } = props;
+    const { comment, noStory, fold, setFold } = props;
 
     const isOp = thread && thread.op.id === comment.user.id;
 
@@ -241,15 +242,21 @@ export default function CommentTop(props: {
                     </p>
                 </Tooltip>
                 {fold && (
-                    <React.Fragment>
+                    <Box
+                        onClick={() => {
+                            setFold && setFold(false);
+                        }}
+                        sx={{ flexGrow: 1 }}
+                        className="pointer flex overflow-hidden"
+                    >
                         <p className={"novmargin ml5 metahkg-grey"}>:</p>
                         <p
-                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis"
-                            style={{ display: "inline-block" }}
+                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
+                            style={{ display: "inline-block"  }}
                         >
                             {comment.text}
                         </p>
-                    </React.Fragment>
+                    </Box>
                 )}
                 {!fold &&
                     leftBtns.map(

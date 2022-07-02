@@ -10,8 +10,9 @@ export default function CommentBody(props: {
     comment: commentType;
     depth: number;
     noQuote?: boolean;
+    maxHeight?: string | number;
 }) {
-    const { comment, depth, noQuote } = props;
+    const { comment, depth, noQuote, maxHeight } = props;
     const commentJSX = parse(comment.comment, { replace: replace });
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
@@ -77,9 +78,11 @@ export default function CommentBody(props: {
                 />
             )}
             {depth === 0 ? (
-                <p className="novmargin comment-body fullwidth break-word-force">
-                    {content}
-                </p>
+                <Box className={maxHeight ? "overflow-auto" : ""} style={{ maxHeight }}>
+                    <p className={`novmargin comment-body fullwidth break-word-force`}>
+                        {content}
+                    </p>
+                </Box>
             ) : (
                 content
             )}
