@@ -3,7 +3,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useIsSmallScreen } from "./ContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
-import { parse } from "node-html-parser";
 
 /**
  * It creates a text editor that can be used to edit text
@@ -38,26 +37,14 @@ export default function TextEditor(props: {
         <Box sx={sx} className={className}>
             <Editor
                 key={Number(isSmallScreen)}
-                onEditorChange={(a, editor) => {
-                    const parsed = parse(a);
-                    parsed.querySelectorAll("img").forEach((img) => {
-                        console.log("set attribute");
-                        img.setAttribute(
-                            "style",
-                            "object-fit: contain; height: 100%; max-height: 400px; max-width: 100%;"
-                        );
-                    });
-                    if (parsed.toString() !== parse(a).toString())
-                        editor.setContent(parsed.toString());
-                    onChange && onChange(parsed.toString(), editor);
-                }}
+                onEditorChange={onChange}
                 initialValue={initText}
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     skin_url:
-                        "https://cdn.jsdelivr.net/npm/metahkg-css@latest/dist/tinymce/skins/ui/metahkg-dark",
+                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.9/dist/tinymce/skins/ui/metahkg-dark",
                     content_css:
-                        "https://cdn.jsdelivr.net/npm/metahkg-css@latest/dist/tinymce/skins/content/metahkg-dark/content.min.css",
+                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.9/dist/tinymce/skins/content/metahkg-dark/content.min.css",
                     branding: false,
                     ...(noStatusBar && { statusbar: false }),
                     mobile: {
@@ -125,7 +112,7 @@ export default function TextEditor(props: {
                         return data.url;
                     },
                 }}
-                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min.js"
+                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.1.0/tinymce.min.js"
             />
         </Box>
     );

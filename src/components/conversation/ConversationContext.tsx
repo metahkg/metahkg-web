@@ -6,6 +6,7 @@ import { commentType } from "../../types/conversation/comment";
 interface editorStateType {
     open: boolean;
     quote?: commentType;
+    edit?: string;
 }
 
 const ConversationContext = createContext<{

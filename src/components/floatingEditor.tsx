@@ -108,7 +108,7 @@ export default function FloatingEditor() {
             className="border-radius-20"
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
-            key={editor?.quote?.id || 0}
+            key={editor?.quote?.id || editor.edit || 0}
         >
             <Box
                 sx={{
@@ -159,6 +159,10 @@ export default function FloatingEditor() {
                         onChange={(e) => {
                             setComment(e);
                         }}
+                        initText={
+                            editor.edit &&
+                            /*html*/`<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
+                        }
                         autoresize
                         noMenuBar
                         noStatusBar

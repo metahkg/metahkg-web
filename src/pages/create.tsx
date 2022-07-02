@@ -74,7 +74,7 @@ export default function Create() {
                 .then((res) => {
                     if (res.data) {
                         setInittext(
-                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data.comment}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {

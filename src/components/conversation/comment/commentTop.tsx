@@ -23,7 +23,7 @@ import {
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
-import { timeToWord } from "../../../lib/common";
+import { timeToWord, wholePath } from "../../../lib/common";
 import MoreList from "./more";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
@@ -166,9 +166,15 @@ export default function CommentTop(props: {
         },
         {
             icon: <Edit className="font-size-19-force" />,
-            title: "Edit comment",
+            title: "Edit comment in new comment",
             action: () => {
-                navigate(`/comment/${threadId}?edit=${comment.id}`);
+                if (user) setEditor({ open: true, edit: comment.comment });
+                else
+                    navigate(
+                        `/users/login?continue=true&returnto=${encodeURIComponent(
+                            wholePath()
+                        )}`
+                    );
             },
         },
     ];
@@ -252,7 +258,7 @@ export default function CommentTop(props: {
                         <p className={"novmargin ml5 metahkg-grey"}>:</p>
                         <p
                             className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
-                            style={{ display: "inline-block"  }}
+                            style={{ display: "inline-block" }}
                         >
                             {comment.text}
                         </p>

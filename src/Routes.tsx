@@ -13,7 +13,6 @@ const History = loadable(() => import("./pages/history"));
 const Recall = loadable(() => import("./pages/recall"));
 
 // threads
-const AddComment = loadable(() => import("./pages/AddComment"));
 const Create = loadable(() => import("./pages/create"));
 
 // users
@@ -43,7 +42,6 @@ export default function Routes() {
         <Switch>
             <Route path="/" element={<Navigate to="/category/1" replace />} />
             <Route path="/thread/:id" element={<Thread />} />
-            <Route path="/comment/:id" element={<AddComment />} />
             <Route path="/category/:category" element={<Category />} />
             <Route path="/users/register" element={<Register />} />
             <Route path="/users/verify" element={<Verify />} />
