@@ -4,7 +4,9 @@ import Img from "../components/conversation/image/Image";
 import Player from "../components/conversation/comment/player";
 import TweetEmbed from "../components/conversation/comment/twitter";
 
-//import { LinkPreview } from "@dhaiwat10/react-link-preview";
+import { LinkPreview } from "@dhaiwat10/react-link-preview";
+import Spinner from "react-spinner-material";
+import { Box } from "@mui/material";
 /**
  * @param {any} node
  */
@@ -43,20 +45,40 @@ export function replace(node: any): JSX.Element | void {
                 }
                 // TODO: embed instagram and facebook
                 // TODO: Link preview for specific websites
-                /*else {
-                return (
-                  <div>
-                    <LinkPreview
-                      url={href}
-                      width={window.innerWidth < 760 ? "100%" : "65%"}
-                      backgroundColor="#333"
-                      primaryTextColor="white"
-                      secondaryTextColor="#aca9a9"
-                    />
-                    {domToReact([node])}
-                  </div>
-                );
-              }*/
+                else {
+                    return (
+                        <Box
+                            sx={{
+                                "& .Container, & .Container *:hover, & .LowerContainer, & .LowerContainer:hover, & .LinkPreview, & .LinkPreview:hover, & .LinkPreview *, & .LinkPreview *:hover":
+                                    {
+                                        backgroundColor: "#333 !important",
+                                    },
+                            }}
+                        >
+                            <LinkPreview
+                                url={href}
+                                height={250}
+                                imageHeight={150}
+                                width={window.innerWidth < 760 ? "100%" : "50%"}
+                                className="mt5 mb5 LinkPreview"
+                                borderColor="#555"
+                                backgroundColor="#333"
+                                primaryTextColor="white"
+                                secondaryTextColor="#aca9a9"
+                                customLoader={
+                                    <Spinner
+                                        className="mt5 mb5"
+                                        radius={50}
+                                        color="gray"
+                                        stroke={3}
+                                        visible={true}
+                                    />
+                                }
+                            />
+                            {domToReact([node])}
+                        </Box>
+                    );
+                }
                 const firstChild = domNode.children?.[0] as Element;
                 if (
                     domNode.children?.length === 1 &&

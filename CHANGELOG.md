@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.5.0
+
+- improved the floating editor (bottom toolbar, removed menubar and statusbar)
+- remove upload image button in favor of implementing the functionality in the photo plugin of tinymce
+- configure image styles using content css in tinymce, setContent not needed
+- deprecate votebar which doesn't work well with replies button
+- vote buttons can now update the global state
+- remove the addcomment page, as all comments now use the floating editor
+
 ## v2.4.0
 
 - metahkg-web can now be used as a module

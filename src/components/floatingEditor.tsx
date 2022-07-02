@@ -195,7 +195,7 @@ export default function FloatingEditor() {
                                 disabled={!rtoken || !comment}
                                 className={isSmallScreen ? "mt10" : ""}
                             >
-                                <CommentIcon />
+                                <CommentIcon className="mr5" />
                                 Comment
                             </Button>
                         )}

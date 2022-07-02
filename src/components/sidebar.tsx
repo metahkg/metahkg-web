@@ -232,7 +232,16 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     <p className="ml5">
-                        Metahkg Web {process.env.REACT_APP_build || ""} (v2.5.0)
+                        Metahkg Web{" "}
+                        {process.env.REACT_APP_build && (
+                            <a
+                                style={{ display: "inline-block" }}
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
+                            >
+                                {process.env.REACT_APP_build}
+                            </a>
+                        )}
+                        (v2.5.0)
                     </p>
                 </Box>
             </Drawer>
