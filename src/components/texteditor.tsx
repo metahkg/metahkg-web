@@ -44,10 +44,11 @@ export default function TextEditor(props: {
                         console.log("set attribute");
                         img.setAttribute(
                             "style",
-                            "object-fit: contain; max-height: 400px; max-width: 100%;"
+                            "object-fit: contain; height: 100%; max-height: 400px; max-width: 100%;"
                         );
                     });
-                    editor.setContent(parsed.toString());
+                    if (parsed.toString() !== parse(a).toString())
+                        editor.setContent(parsed.toString());
                     onChange && onChange(parsed.toString(), editor);
                 }}
                 initialValue={initText}
