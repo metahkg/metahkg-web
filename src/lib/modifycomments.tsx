@@ -54,18 +54,22 @@ export function replace(node: any): JSX.Element | void {
                                     {
                                         backgroundColor: "#333 !important",
                                     },
+                                "& .Container": {
+                                    maxWidth: "500px !important",
+                                },
                             }}
                         >
                             <LinkPreview
                                 url={href}
                                 height={250}
                                 imageHeight={150}
-                                width={window.innerWidth < 760 ? "100%" : "50%"}
+                                width={"100%"}
                                 className="mt5 mb5 LinkPreview"
                                 borderColor="#555"
                                 backgroundColor="#333"
                                 primaryTextColor="white"
                                 secondaryTextColor="#aca9a9"
+                                descriptionLength={100}
                                 fetcher={async (url: string) => {
                                     const { data } = await axios.get(
                                         `https://rlp.metahkg.org/v2?url=${url}`
