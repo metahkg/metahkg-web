@@ -56,6 +56,7 @@ docker-build:
 tagging:
   image: alpine:latest
   stage: deploy
+  allow_failure: true
   before_script:
     - apk add git
   script:
