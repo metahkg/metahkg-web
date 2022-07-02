@@ -68,6 +68,8 @@ tagging:
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
     - git tag "$tag"
     - git push --tags https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:${CI_COMMIT_BRANCH}
+  rules:
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
 
 publish:
   image: node:latest
