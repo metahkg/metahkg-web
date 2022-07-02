@@ -166,7 +166,7 @@ export default function CommentTop(props: {
         },
         {
             icon: <Edit className="font-size-19-force" />,
-            title: "Edit comment in new comment",
+            title: "Edit comment",
             action: () => {
                 if (user) setEditor({ open: true, edit: comment.comment });
                 else
