@@ -56,9 +56,6 @@ docker-build:
 tagging:
   image: alpine:latest
   stage: deploy
-  only:
-    - master
-    - dev
   before_script:
     - apk add git
   script:
@@ -69,7 +66,7 @@ tagging:
     - git tag "$tag"
     - git push --tags https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:${CI_COMMIT_BRANCH}
   rules:
-    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
 
 publish:
   image: node:latest
