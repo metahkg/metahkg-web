@@ -170,7 +170,11 @@ export default function FloatingEditor() {
                             }}
                         />
                         {creating ? (
-                            <CircularProgress color="secondary" disableShrink />
+                            <CircularProgress
+                                color="secondary"
+                                className={isSmallScreen ? "mt10" : ""}
+                                disableShrink
+                            />
                         ) : (
                             <Button
                                 variant="contained"
