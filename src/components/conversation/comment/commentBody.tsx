@@ -82,7 +82,12 @@ export default function CommentBody(props: {
                 />
             )}
             {depth === 0 ? (
-                <Box className={maxHeight ? "overflow-auto" : ""} style={{ maxHeight }}>
+                <Box
+                    className={maxHeight ? "overflow-auto" : ""}
+                    style={{
+                        maxHeight,
+                    }}
+                >
                     <p className={`novmargin comment-body fullwidth break-word-force`}>
                         {content}
                     </p>
