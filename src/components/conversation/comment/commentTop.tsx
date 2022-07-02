@@ -252,7 +252,7 @@ export default function CommentTop(props: {
                         <p className={"novmargin ml5 metahkg-grey"}>:</p>
                         <p
                             className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
-                            style={{ display: "inline-block"  }}
+                            style={{ display: "inline-block" }}
                         >
                             {comment.text}
                         </p>

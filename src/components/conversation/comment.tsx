@@ -56,7 +56,7 @@ function Comment(props: {
         sx,
         className,
         maxHeight,
-        noFullWidth
+        noFullWidth,
     } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
