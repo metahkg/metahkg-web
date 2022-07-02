@@ -29,9 +29,9 @@ export default function VoteButtons(props: { commentId: number }) {
      */
     function sendVote(newVote: "U" | "D") {
         if (thread) {
-            thread.conversation[
-                thread.conversation.findIndex((i) => i.id === commentId)
-            ][newVote] = (comment[newVote] || 0) + 1;
+            thread.conversation[thread.conversation.findIndex((i) => i.id === commentId)][
+                newVote
+            ] = (comment[newVote] || 0) + 1;
             setThread(thread);
         }
         setVotes({ ...votes, [commentId]: newVote });

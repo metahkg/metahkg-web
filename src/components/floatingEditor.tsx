@@ -161,7 +161,7 @@ export default function FloatingEditor() {
                         }}
                         initText={
                             editor.edit &&
-                            /*html*/`<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
                         }
                         autoresize
                         noMenuBar
