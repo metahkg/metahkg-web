@@ -94,6 +94,7 @@ export default function MenuBody() {
                         .search({
                             searchQuery: encodeURIComponent(query),
                             sort: selected as 0 | 1 | 2,
+                            mode: smode as 0 | 1,
                         })
                         .then(onSuccess)
                         .catch(onError);
