@@ -6,6 +6,9 @@ ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
 
+ARG REACT_APP_version
+ENV REACT_APP_version $REACT_APP_version
+
 ARG env
 ENV env $env
 
