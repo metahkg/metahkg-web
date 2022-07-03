@@ -1,5 +1,5 @@
 import { domToReact } from "html-react-parser";
-import { Element } from "domhandler/lib/node";
+import { Element, Text } from "domhandler/lib/node";
 import Img from "../components/conversation/image/Image";
 import Player from "../components/conversation/comment/player";
 import TweetEmbed from "../components/conversation/comment/twitter";
@@ -70,7 +70,10 @@ export function replace(node: any): JSX.Element | void {
                             </a>
                         );
                     }
-                } else {
+                } else if (
+                    firstChild?.type === "text" &&
+                    domNode?.attribs?.href === (firstChild as unknown as Text)?.data
+                ) {
                     return (
                         <Box
                             sx={{
