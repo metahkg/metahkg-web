@@ -15,6 +15,13 @@ stages:
   - performance
   - cleanup
 
+container_scanning:
+  variables:
+    GIT_STRATEGY: fetch
+
+sast:
+  stage: test
+
 lint:
   stage: lint
   image: node:18
@@ -30,9 +37,6 @@ lint:
     - git push origin $CI_COMMIT_BRANCH
   rules:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
-
-sast:
-  stage: test
 
 docker-build:
   image: docker:latest
