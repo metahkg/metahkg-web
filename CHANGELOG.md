@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.5.2
+
+- link preview only if the href match the text
+
+## v2.5.1
+
+- add link preview
+
 ## v2.5.0
 
 - improved the floating editor (bottom toolbar, removed menubar and statusbar)
