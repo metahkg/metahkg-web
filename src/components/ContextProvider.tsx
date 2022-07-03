@@ -73,7 +73,9 @@ export default function ContextProvider(props: {
     const [history, setHistory] = useState(parsedHistory);
     const listeningResize = useRef(false);
     const [reCaptchaSiteKey] = useState(
-        props.reCaptchaSiteKey || process.env.recaptchasitekey || "{RECAPTCHA_SITE_KEY}"
+        props.reCaptchaSiteKey ||
+            process.env.REACT_APP_recaptchasitekey ||
+            "{RECAPTCHA_SITE_KEY}"
     );
 
     useEffect(() => {

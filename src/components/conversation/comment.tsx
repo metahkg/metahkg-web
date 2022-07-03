@@ -1,7 +1,6 @@
 import "../../css/components/conversation/comment.css";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import VoteBar from "./comment/VoteBar";
+import { Box, Button, Typography, SxProps, Theme } from "@mui/material";
 import { useNotification, useSettings } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
@@ -39,6 +38,10 @@ function Comment(props: {
     blocked?: boolean;
     noStory?: boolean;
     scrollIntoView?: boolean;
+    className?: string;
+    sx?: SxProps<Theme>;
+    maxHeight?: string | number;
+    noFullWidth?: boolean;
 }) {
     const {
         noId,
@@ -49,6 +52,10 @@ function Comment(props: {
         setIsExpanded,
         noStory,
         openComment,
+        sx,
+        className,
+        maxHeight,
+        noFullWidth,
     } = props;
     const threadId = useThreadId();
     const [settings] = useSettings();
@@ -95,10 +102,8 @@ function Comment(props: {
 
     return (
         <Box
-            className={`fullwidth ${fold ? "pointer" : ""}`}
-            onClick={() => {
-                fold && setFold(false);
-            }}
+            className={`${noFullWidth ? "" : "fullwidth"} ${className || ""}`}
+            sx={sx}
             ref={commentRef}
             id={noId ? undefined : `c${comment.id}`}
         >
@@ -125,10 +130,20 @@ function Comment(props: {
                 })}
             >
                 <div className="ml20 mr20">
-                    <CommentTop comment={comment} noStory={noStory} fold={fold} />
+                    <CommentTop
+                        comment={comment}
+                        noStory={noStory}
+                        fold={fold}
+                        setFold={setFold}
+                    />
                     {!fold && (
                         <React.Fragment>
-                            <CommentBody noQuote={noQuote} comment={comment} depth={0} />
+                            <CommentBody
+                                maxHeight={maxHeight}
+                                noQuote={noQuote}
+                                comment={comment}
+                                depth={0}
+                            />
                             <div className="comment-internal-spacer" />
                         </React.Fragment>
                     )}
@@ -136,20 +151,7 @@ function Comment(props: {
                 {ready && !fold && (
                     <Box className="flex justify-space-between align-center fullwidth">
                         <div className="flex ml20 mr20">
-                            {settings.votebar ? (
-                                <VoteBar
-                                    key={threadId}
-                                    commentId={comment.id}
-                                    upVoteCount={comment.U || 0}
-                                    downVoteCount={comment.D || 0}
-                                />
-                            ) : (
-                                <VoteButtons
-                                    upVotes={comment.U || 0}
-                                    downVotes={comment.D || 0}
-                                    commentId={comment.id}
-                                />
-                            )}
+                            <VoteButtons commentId={comment.id} />
                             {!inPopUp && comment.replies?.length && (
                                 <Button
                                     sx={{

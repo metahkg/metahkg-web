@@ -1,10 +1,11 @@
 import React, { Suspense } from "react";
-import Img from "react-cool-img";
 import Spinner from "react-spinner-material";
 import { useImage } from "react-image";
-import { CSSstring } from "../../../lib/cssstring";
 import ImageErrorBoundary from "./ImageErrorBoundary";
 import { PhotoView } from "react-photo-view";
+import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
+import prettier from "prettier/standalone";
+import prettierCss from "prettier/parser-postcss";
 
 function ImgComponent(props: {
     src: string;
@@ -14,15 +15,27 @@ function ImgComponent(props: {
 }) {
     const { height, style, width } = props;
     const { src } = useImage({ srcList: props.src });
+
     return (
         <PhotoView src={src}>
-            <Img
+            <img
                 src={src}
                 alt=""
-                style={CSSstring(String(style))}
                 height={height}
                 width={width}
-                lazy
+                style={
+                    style
+                        ? toJSON(
+                              prettier
+                                  .format(style, {
+                                      parser: "css",
+                                      plugins: [prettierCss],
+                                  })
+                                  .replaceAll("\n", "")
+                          ).attributes
+                        : undefined
+                }
+                loading="lazy"
             />
         </PhotoView>
     );

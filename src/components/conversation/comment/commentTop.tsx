@@ -7,7 +7,7 @@ import {
     Edit,
     PushPin,
 } from "@mui/icons-material";
-import { IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PopUp } from "../../../lib/popup";
@@ -23,7 +23,7 @@ import {
 import { useShareLink, useShareOpen, useShareTitle } from "../ShareProvider";
 import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
-import { timeToWord } from "../../../lib/common";
+import { timeToWord, wholePath } from "../../../lib/common";
 import MoreList from "./more";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
@@ -35,6 +35,7 @@ export default function CommentTop(props: {
     comment: commentType;
     noStory?: boolean;
     fold?: boolean;
+    setFold?: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }) {
     const [open, setOpen] = useState(false);
     const [timeMode, setTimeMode] = useState<"short" | "long">("short");
@@ -51,7 +52,7 @@ export default function CommentTop(props: {
     const [, setEditor] = useEditor();
     const croot = useCRoot();
 
-    const { comment, noStory, fold } = props;
+    const { comment, noStory, fold, setFold } = props;
 
     const isOp = thread && thread.op.id === comment.user.id;
 
@@ -89,7 +90,7 @@ export default function CommentTop(props: {
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `/thread/${threadId}`
+                            `${wholePath()}?c=${comment.id}`
                         )}`
                     );
             },
@@ -167,7 +168,13 @@ export default function CommentTop(props: {
             icon: <Edit className="font-size-19-force" />,
             title: "Edit comment",
             action: () => {
-                navigate(`/comment/${threadId}?edit=${comment.id}`);
+                if (user) setEditor({ open: true, edit: comment.comment });
+                else
+                    navigate(
+                        `/users/login?continue=true&returnto=${encodeURIComponent(
+                            `${wholePath()}?c=${comment.id}`
+                        )}`
+                    );
             },
         },
     ];
@@ -241,15 +248,21 @@ export default function CommentTop(props: {
                     </p>
                 </Tooltip>
                 {fold && (
-                    <React.Fragment>
+                    <Box
+                        onClick={() => {
+                            setFold && setFold(false);
+                        }}
+                        sx={{ flexGrow: 1 }}
+                        className="pointer flex overflow-hidden"
+                    >
                         <p className={"novmargin ml5 metahkg-grey"}>:</p>
                         <p
-                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis"
+                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
                             style={{ display: "inline-block" }}
                         >
                             {comment.text}
                         </p>
-                    </React.Fragment>
+                    </Box>
                 )}
                 {!fold &&
                     leftBtns.map(

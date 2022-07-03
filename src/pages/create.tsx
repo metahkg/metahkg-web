@@ -1,8 +1,8 @@
 import "../css/pages/create.css";
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, TextField, Tooltip } from "@mui/material";
+import { Alert, Box, Button, TextField } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
-import TextEditor from "../components/texteditor";
+import TextEditor from "../components/textEditor";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
@@ -25,13 +25,10 @@ import {
 import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";
-import UploadImage from "../components/conversation/uploadimage";
 import { api } from "../lib/api";
-import type { TinyMCE } from "tinymce";
 import ChooseCat from "../components/create/ChooseCat";
 import { parseError } from "../lib/parseError";
 
-declare const tinymce: TinyMCE;
 declare const grecaptcha: { reset: () => void };
 
 /**
@@ -54,7 +51,6 @@ export default function Create() {
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
     const [rtoken, setRtoken] = useState(""); //recaptcha token
     const [postTitle, setPostTitle] = useState(""); //this will be the post title
-    const [imgurl, setImgurl] = useState("");
     const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
@@ -78,7 +74,7 @@ export default function Create() {
                 .then((res) => {
                     if (res.data) {
                         setInittext(
-                            `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data.comment}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
@@ -178,7 +174,7 @@ export default function Create() {
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={isSmallScreen ? "" : "flex "}>
+                    <div className={`mb15 ${isSmallScreen ? "" : "flex "}`}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
                             className={isSmallScreen ? "mt15" : "ml15"}
@@ -191,91 +187,13 @@ export default function Create() {
                             }}
                         />
                     </div>
-                    <div
-                        className={`${
-                            !isSmallScreen ? "flex" : ""
-                        } align-center mb15 mt15`}
-                    >
-                        <UploadImage
-                            onUpload={() => {
-                                setAlert({
-                                    severity: "info",
-                                    text: "Uploading image...",
-                                });
-                                setNotification({
-                                    open: true,
-                                    text: "Uploading image...",
-                                });
-                            }}
-                            onSuccess={(res) => {
-                                setAlert({ severity: "info", text: "Image uploaded!" });
-                                setNotification({ open: true, text: "Image uploaded!" });
-                                setTimeout(() => {
-                                    setNotification({ open: false, text: "" });
-                                }, 1000);
-                                setImgurl(res.data.url);
-                                tinymce.activeEditor.insertContent(
-                                    `<a href="${res.data.url}" target="_blank" rel="noreferrer">
-                                                <img
-                                                    alt=""
-                                                    src="${res.data.url}"
-                                                    width="auto"
-                                                    height="auto"
-                                                    style="object-fit: contain; max-height: 400px; max-width: 100%;"
-                                                />
-                                            </a>`
-                                );
-                            }}
-                            onError={() => {
-                                setAlert({
-                                    severity: "error",
-                                    text: "Error uploading image.",
-                                });
-                                setNotification({
-                                    open: true,
-                                    text: "Error uploading image.",
-                                });
-                            }}
-                        />
-                        {imgurl && (
-                            <p
-                                className={`ml10 novmargin flex${
-                                    isSmallScreen ? " mt5" : ""
-                                }`}
-                            >
-                                <Tooltip
-                                    arrow
-                                    title={
-                                        <img
-                                            src={`https://i.metahkg.org/thumbnail?src=${imgurl}`}
-                                            alt=""
-                                        />
-                                    }
-                                >
-                                    <a href={imgurl} target="_blank" rel="noreferrer">
-                                        {imgurl}
-                                    </a>
-                                </Tooltip>
-                                <p
-                                    className="link novmargin metahkg-grey-force ml5"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(imgurl);
-                                        setNotification({
-                                            open: true,
-                                            text: "Copied to clipboard!",
-                                        });
-                                    }}
-                                >
-                                    copy
-                                </p>
-                            </p>
-                        )}
-                    </div>
                     <TextEditor
+                        key={Number(isSmallScreen)}
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
                         initText={inittext}
+                        toolbarSticky
                     />
                     <div
                         className={`mt15 ${

@@ -207,7 +207,7 @@ function Conversation(props: { id: number }) {
                                         </VisibilityDetector>
                                         <React.Fragment>
                                             {thread.conversation
-                                                .slice(index * 25, (index + 1) * 25 - 1)
+                                                .slice(index * 25, (index + 1) * 25)
                                                 .map(
                                                     (comment: commentType) =>
                                                         !comment?.removed &&
