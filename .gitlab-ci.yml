@@ -18,7 +18,6 @@ stages:
 lint:
   stage: lint
   image: node:18
-  needs: []
   before_script:
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
@@ -44,17 +43,18 @@ docker-build:
     - apk add nodejs-current
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')" .
+    - version=$(node -e 'console.log(require("./package.json").version)')
+    - docker build --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA --build-arg REACT_APP_version=$version --pull -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$version" .
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
     - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$(node -e 'console.log(require("./package.json").version)')"
+    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$version"
   rules:
     - if: "$CI_COMMIT_BRANCH"
       exists:
         - Dockerfile
 
 tagging:
-  image: alpine:latest
+  image: node:18-alpine
   stage: deploy
   allow_failure: true
   before_script:
@@ -62,7 +62,7 @@ tagging:
   script:
     - git config --global user.name metahkg-bot
     - git config --global user.email bot@metahkg.org
-    - tag=$(cat package.json | grep version | grep -Eo "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+")
+    - tag=$(node -e "console.log(require('./package.json').version)"
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
     - git tag "$tag"
     - git push --tags https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:${CI_COMMIT_BRANCH}
