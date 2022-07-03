@@ -6699,10 +6699,10 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-metahkg-api@^2.5.0-dev:
-  version "2.5.0-dev"
-  resolved "https://registry.yarnpkg.com/metahkg-api/-/metahkg-api-2.5.0-dev.tgz#85c81b75dd93a295bd035a6a04a169be9244428f"
-  integrity sha512-XMG/tXHnYcikq93tNFi/QWCTMqV7lIHIOF1QWYu+EoEtqvnTt6s+Rv6eZUQaj90Df9vc7Zr26tvIjc8GXYI+4g==
+metahkg-api@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/metahkg-api/-/metahkg-api-2.5.0.tgz#168f253078e360cc7cbd3b15423d18f03f30c51f"
+  integrity sha512-+j0iOk5DVr9D80e+DzW6QuOYDuJzExcl7oHuWVz5hrc5dHyLBOUX2GwTt86QMP/qXaXjIjeFrcdwVyXfxR9KjA==
   dependencies:
     axios "^0.27.2"
 
