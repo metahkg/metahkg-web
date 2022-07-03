@@ -88,7 +88,7 @@ export default function CommentBody(props: {
                         maxHeight,
                     }}
                 >
-                    <p className={`novmargin comment-body fullwidth break-word-force`}>
+                    <p className={`novmargin comment-body fullwidth break-word-force font-size-16`}>
                         {content}
                     </p>
                 </Box>

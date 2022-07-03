@@ -88,8 +88,8 @@ export function replace(node: any): JSX.Element | void {
                         >
                             <LinkPreview
                                 url={href}
-                                height={220}
-                                imageHeight={150}
+                                height={280}
+                                imageHeight={250}
                                 width={"100%"}
                                 className="mt5 mb5 LinkPreview"
                                 borderColor="#555"
