@@ -79,8 +79,8 @@
   "scripts": {
     "start": "serve -s",
     "start:react": "npx react-app-rewired start",
-    "build": "if [ -z \"$REACT_APP_version\" ]; then export REACT_APP_version=$(node -e \"console.log(require('./package.json').version)\"); fi; if [ -z \"$REACT_APP_build\" ]; then export REACT_APP_build=$(git rev-parse --short HEAD); fi; npx react-app-rewired build",
-    "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --skipLibCheck --removeComments && cp -r src/css dist",
+    "build": "if [ -z \"$REAtsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --skipLibCheck --lib dom,dom.iterable,esnext --removeComments && cp -r src/css distCT_APP_version\" ]; then export REACT_APP_version=$(node -e \"console.log(require('./package.json').version)\"); fi; if [ -z \"$REACT_APP_build\" ]; then export REACT_APP_build=$(git rev-parse --short HEAD); fi; npx react-app-rewired build",
+    "build:module": "",
     "test": "react-scripts test || echo \"no tests\"",
     "eject": "react-scripts eject",
     "docker": "docker build -t metahkg/metahkg-web .",
