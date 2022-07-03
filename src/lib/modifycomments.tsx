@@ -69,50 +69,50 @@ export function replace(node: any): JSX.Element | void {
                                 />
                             </a>
                         );
-                    } else {
-                        return (
-                            <Box
-                                sx={{
-                                    "& .Container, & .Container *:hover, & .LowerContainer, & .LowerContainer:hover, & .LinkPreview, & .LinkPreview:hover, & .LinkPreview *, & .LinkPreview *:hover":
-                                        {
-                                            backgroundColor: "#333 !important",
-                                        },
-                                    "& .Container": {
-                                        maxWidth: "500px !important",
-                                    },
-                                }}
-                            >
-                                <LinkPreview
-                                    url={href}
-                                    height={220}
-                                    imageHeight={150}
-                                    width={"100%"}
-                                    className="mt5 mb5 LinkPreview"
-                                    borderColor="#555"
-                                    backgroundColor="#333"
-                                    primaryTextColor="white"
-                                    secondaryTextColor="#aca9a9"
-                                    descriptionLength={60}
-                                    fetcher={async (url: string) => {
-                                        const { data } = await axios.get(
-                                            `https://rlp.metahkg.org/v2?url=${url}`
-                                        );
-                                        return data.metadata;
-                                    }}
-                                    customLoader={
-                                        <Spinner
-                                            className="mt5 mb5"
-                                            radius={50}
-                                            color="gray"
-                                            stroke={3}
-                                            visible={true}
-                                        />
-                                    }
-                                />
-                                {domToReact([node])}
-                            </Box>
-                        );
                     }
+                } else {
+                    return (
+                        <Box
+                            sx={{
+                                "& .Container, & .Container *:hover, & .LowerContainer, & .LowerContainer:hover, & .LinkPreview, & .LinkPreview:hover, & .LinkPreview *, & .LinkPreview *:hover":
+                                    {
+                                        backgroundColor: "#333 !important",
+                                    },
+                                "& .Container": {
+                                    maxWidth: "500px !important",
+                                },
+                            }}
+                        >
+                            <LinkPreview
+                                url={href}
+                                height={220}
+                                imageHeight={150}
+                                width={"100%"}
+                                className="mt5 mb5 LinkPreview"
+                                borderColor="#555"
+                                backgroundColor="#333"
+                                primaryTextColor="white"
+                                secondaryTextColor="#aca9a9"
+                                descriptionLength={60}
+                                fetcher={async (url: string) => {
+                                    const { data } = await axios.get(
+                                        `https://rlp.metahkg.org/v2?url=${url}`
+                                    );
+                                    return data.metadata;
+                                }}
+                                customLoader={
+                                    <Spinner
+                                        className="mt5 mb5"
+                                        radius={50}
+                                        color="gray"
+                                        stroke={3}
+                                        visible={true}
+                                    />
+                                }
+                            />
+                            {domToReact([node])}
+                        </Box>
+                    );
                 }
             }
             if (domNode.name === "img" && domNode.attribs?.src) {
