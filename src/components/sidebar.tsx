@@ -242,7 +242,7 @@ export default function SideBar() {
                                     {process.env.REACT_APP_build}
                                 </a>
                             )}{" "}
-                            ({process.env.REACT_APP_version})
+                            (v{process.env.REACT_APP_version})
                         </p>
                     )}
                 </Box>
