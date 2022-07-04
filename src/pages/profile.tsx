@@ -107,7 +107,7 @@ export default function Profile() {
             className="max-height-fullvh height-fullvh overflow-auto"
             sx={{
                 backgroundColor: "primary.dark",
-                width: isSmallScreen ? "100vw" : "70vw"
+                width: isSmallScreen ? "100vw" : "70vw",
             }}
         >
             {!requestedUser ? (
