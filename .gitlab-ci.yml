@@ -31,9 +31,6 @@ lint:
   rules:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
 
-sast:
-  stage: test
-
 docker-build:
   image: docker:latest
   stage: build
@@ -87,6 +84,21 @@ publish:
     - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then npm publish --tag dev; else npm publish; fi;
   rules:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
+
+container_scanning:
+  stage: review
+  needs: ["docker-build"]
+  variables:
+    GIT_STRATEGY: fetch
+    CI_APPLICATION_REPOSITORY: "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH"
+    CI_APPLICATION_TAG: $CI_COMMIT_SHORT_SHA
+    CLAIR_OUTPUT: High
+  artifacts:
+    paths:
+      - gl-container-scanning-report.json
+
+sast:
+  stage: test
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml
