@@ -2164,13 +2164,6 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
-"@types/mui-image@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/mui-image/-/mui-image-1.0.0.tgz#52b3d3e1af2e5109860ad7e39d9142db34c50e3a"
-  integrity sha512-sMBj/VJ6lEE+GRHon4v08gy32b4YWYqMFh8fdb8cX3y9+pwnQv4lID2g9CBij3VOew9BvTpVeOALJTYVBtjI/A==
-  dependencies:
-    "@types/react" "*"
-
 "@types/node@*":
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.0.0.tgz#67c7b724e1bcdd7a8821ce0d5ee184d3b4dd525a"
@@ -6828,11 +6821,6 @@ ms@2.1.3, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mui-image@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/mui-image/-/mui-image-1.0.5.tgz#ac4ff1ffed6f9fea666c984b82fe070ae33cd3ca"
-  integrity sha512-/dv6rnTMYJ6JFGJoAdvjH0OTFQCDYjNh3Jb5QIhEGMQ1MNDldmeu5mpnVxklcIq/52jDHN9FiWdqAQX38FykPQ==
-
 multicast-dns@^7.2.5:
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/multicast-dns/-/multicast-dns-7.2.5.tgz#77eb46057f4d7adbd16d9290fa7299f6fa64cced"
@@ -8262,11 +8250,6 @@ react-scripts@^5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
-
-react-spinner-material@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/react-spinner-material/-/react-spinner-material-1.4.0.tgz#f12fe62b315214d87116df4408fbfaa2a43353f2"
-  integrity sha512-4EAL+QgU/b5ubCjX3Yxmy4i0OGncix2wzfFlo25d4PXdDKFPGc1y6I57YmJ7QZykLkUIk32YSGeYP59FAq6sRA==
 
 react-transition-group@^4.4.2:
   version "4.4.2"

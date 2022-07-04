@@ -1,7 +1,7 @@
 import "../../css/components/conversation/comment.css";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Box, Button, Typography, SxProps, Theme } from "@mui/material";
-import { useNotification, useSettings } from "../ContextProvider";
+import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
+import { useNotification } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
@@ -14,7 +14,6 @@ import {
     KeyboardArrowDown,
     KeyboardArrowUp,
 } from "@mui/icons-material";
-import Spinner from "react-spinner-material";
 import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
 
@@ -58,7 +57,6 @@ function Comment(props: {
         noFullWidth,
     } = props;
     const threadId = useThreadId();
-    const [settings] = useSettings();
     const [comment, setComment] = useState(props.comment);
     const [, setNotification] = useNotification();
     const [ready, setReady] = useState(!fetchComment);
@@ -195,13 +193,7 @@ function Comment(props: {
             </Box>
             {loading && (
                 <Box className="flex justify-center align-center">
-                    <Spinner
-                        className="mt5 mb5"
-                        radius={30}
-                        color={settings.secondaryColor?.main}
-                        stroke={4}
-                        visible
-                    />
+                    <CircularProgress size={30} className="mt10 mb5" color={"secondary"} />
                 </Box>
             )}
             {!!replies.length && (

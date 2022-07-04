@@ -3,11 +3,11 @@ import { Element, Text } from "domhandler/lib/node";
 import Img from "../components/conversation/image/Image";
 import Player from "../components/conversation/comment/player";
 import TweetEmbed from "../components/conversation/comment/twitter";
-
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
-import Spinner from "react-spinner-material";
 import { Box } from "@mui/material";
 import axios from "axios";
+import Loader from "./loader";
+
 /**
  * @param {any} node
  */
@@ -82,7 +82,7 @@ export function replace(node: any): JSX.Element | void {
                                         backgroundColor: "#333 !important",
                                     },
                                 "& .Container": {
-                                    maxWidth: "500px !important",
+                                    maxWidth: "450px !important",
                                 },
                             }}
                         >
@@ -104,12 +104,12 @@ export function replace(node: any): JSX.Element | void {
                                     return data.metadata;
                                 }}
                                 customLoader={
-                                    <Spinner
+                                    <Loader
+                                        position="flex-start"
                                         className="mt5 mb5"
-                                        radius={50}
-                                        color="gray"
-                                        stroke={3}
-                                        visible={true}
+                                        sxProgress={{ color: "darkgrey" }}
+                                        thickness={2}
+                                        size={50}
                                     />
                                 }
                             />

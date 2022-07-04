@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Spinner from "react-spinner-material";
 import { TwitterTweetEmbed } from "react-twitter-embed";
+import Loader from "../../../lib/loader";
 
 export default function TweetEmbed(props: { tweetId: string }) {
     const { tweetId } = props;
@@ -8,12 +8,12 @@ export default function TweetEmbed(props: { tweetId: string }) {
     return (
         <div>
             {loading && (
-                <Spinner
+                <Loader
+                    position="flex-start"
                     className="mt5 mb5"
-                    radius={50}
-                    color="gray"
-                    stroke={3}
-                    visible={true}
+                    sxProgress={{ color: "darkgrey" }}
+                    thickness={2}
+                    size={50}
                 />
             )}
             <TwitterTweetEmbed
