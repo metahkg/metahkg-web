@@ -3,6 +3,9 @@ FROM node:18-alpine AS build
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
+ARG REACT_APP_IMAGES_API_URL
+ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
+
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
 

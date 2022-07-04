@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../css/pages/profile.css";
-import { Box, Button, LinearProgress, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
@@ -26,6 +26,7 @@ import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import isInteger from "is-sn-integer";
 import { parseError } from "../lib/parseError";
+import Loader from "../lib/loader";
 
 /**
  * This function renders the profile page
@@ -106,10 +107,11 @@ export default function Profile() {
             className="max-height-fullvh height-fullvh overflow-auto"
             sx={{
                 backgroundColor: "primary.dark",
+                width: isSmallScreen ? "100vw" : "70vw"
             }}
         >
             {!requestedUser ? (
-                <LinearProgress className="fullwidth" color="secondary" />
+                <Loader position="center" />
             ) : (
                 <Box className="flex justify-center align-center flex-dir-column">
                     <Box
