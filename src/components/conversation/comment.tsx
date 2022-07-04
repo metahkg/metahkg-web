@@ -193,7 +193,11 @@ function Comment(props: {
             </Box>
             {loading && (
                 <Box className="flex justify-center align-center">
-                    <CircularProgress size={30} className="mt10 mb5" color={"secondary"} />
+                    <CircularProgress
+                        size={30}
+                        className="mt10 mb5"
+                        color={"secondary"}
+                    />
                 </Box>
             )}
             {!!replies.length && (
