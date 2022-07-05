@@ -228,6 +228,14 @@
     color: #3498db;
 }
 
+.metahkg-grey {
+    color: #aca9a9
+}
+
+.metahkg-grey-force {
+    color: #aca9a9 !important
+}
+
 .display-block {
     display: block;
 }

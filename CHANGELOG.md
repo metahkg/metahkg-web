@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.5
+
+- swipeable views for menu
+
 ## v2.5.4
 
 - fix the white space above and below images in mobile devices (new comments only, old comments still have this issue)

@@ -1,6 +1,6 @@
 # Metahkg Web
 
-This is the metahkg web app. For backend api, please refer to [metahkg/metahkg-server](https://gitlab.com/metahkg/metahkg-server).
+This is the metahkg web app. See the [metahkg polyrepo](https://gitlab.com/metahkg/metahkg).
 
 stable: [metahkg.org](https://metahkg.org)
 
@@ -17,17 +17,27 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=metahkg/metahkg-web&utm_campaign=Badge_Grade)
 
-## About
+[![Telegram](https://patrolavia.github.io/telegram-badge/chat.svg)](https://t.me/+WbB7PyRovUY1ZDFl)
+[![Discord](https://img.shields.io/discord/992390401740775555)](https://discord.gg/yrf2v8KGdc)
 
-This open-source project was created primarily because of me being unable to register a lihkg account as a high school student.
 
-Currently, it aims to be a fully featured alternative to lihkg. However, I might also add other useful features.
+## Deploying
 
-As contrasted with lihkg, metahkg is open to everyone and anyone can create an account with a email address, no matter issued by a university or not.
+### Docker
+
+It is recommended to use docker for deployment (also supports hot reload).
+
+[Docs](https://docs.metahkg.org/docs/category/deploy-metahkg)
+
+### Manually
+
+> **_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED!
+
+For manual deployment, see DEPLOY.md.
 
 ## Use as a module
 
-Since v2.4.0, you can use metahkg-web as a module.
+Since v2.4.0, metahkg-web can be used as a module.
 
 ### Install
 
@@ -53,20 +63,6 @@ yarn build:module
 ```
 
 The artifact would be in ./dist
-
-## Deploying
-
-### Docker
-
-It is recommended to use docker for deployment (also supports hot reload).
-
-[Docs](https://docs.metahkg.org/docs/category/deploy-metahkg)
-
-### Manually
-
-> **_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED!
-
-For manual deployment, see DEPLOY.md.
 
 ## License
 
