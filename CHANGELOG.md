@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.5.3
+
+- add a circular loader for profile and gallery
+- add an upload images button in tinymce (so users don't need to use images plugin and click three buttons)
+- allow users to resize images, small and normal, in quotes it is small by default
+
 ## v2.5.2
 
 - link preview only if the href match the text

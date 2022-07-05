@@ -30,11 +30,11 @@ export default function MenuThread(props: {
     const [history] = useHistory();
     const categories = useCategories();
     const { thread, onClick } = props;
-    const cid = history.find((i) => i.id === thread.id)?.cid;
+    const categoryId = history.find((i) => i.id === thread.id)?.cid;
     return (
         <Link
-            className="fullwidth notextdecoration"
-            to={`/thread/${thread.id}?${cid && id !== thread.id ? `c=${cid}` : "page=1"}`}
+            className="fullwidth text-decoration-none"
+            to={`/thread/${thread.id}?${categoryId && id !== thread.id ? `c=${categoryId}` : "page=1"}`}
             onClick={onClick}
         >
             <Box
@@ -81,12 +81,12 @@ export default function MenuThread(props: {
                     </p>
                     {Boolean(cat === 1 || search || profile || recall) && (
                         <Link
-                            className="mr10 notextdecoration"
+                            className="mr10 text-decoration-none"
                             to={`/category/${thread.category}`}
                         >
                             <Button
                                 variant="contained"
-                                className="nomargin nopadding notexttransform menuthread-catbtn"
+                                className="nomargin nopadding text-transform-none menuthread-catbtn"
                             >
                                 <p className="nomargin font-size-12 menuthread-catname">
                                     {
