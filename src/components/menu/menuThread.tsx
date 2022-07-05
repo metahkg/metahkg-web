@@ -34,7 +34,9 @@ export default function MenuThread(props: {
     return (
         <Link
             className="fullwidth text-decoration-none"
-            to={`/thread/${thread.id}?${categoryId && id !== thread.id ? `c=${categoryId}` : "page=1"}`}
+            to={`/thread/${thread.id}?${
+                categoryId && id !== thread.id ? `c=${categoryId}` : "page=1"
+            }`}
             onClick={onClick}
         >
             <Box
