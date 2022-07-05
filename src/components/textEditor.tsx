@@ -88,7 +88,7 @@ export default function TextEditor(props: {
                                             .then((res) => {
                                                 editor.windowManager.close();
                                                 editor.insertContent(
-                                                    `<img src="${res.data.url}" />`
+                                                    `<img alt="" src="${res.data.url}" />`
                                                 );
                                             })
                                             .catch((err) => {
@@ -176,7 +176,7 @@ export default function TextEditor(props: {
                     autosave_restore_when_empty: false,
                     autosave_retention: "2m",
                     image_advtab: true,
-                    images_upload_handler: async (blobInfo, progress) => {
+                    images_upload_handler: async (blobInfo, _progress) => {
                         const formData = new FormData();
                         formData.append("image", blobInfo.blob());
                         const { data } = await axios.post(

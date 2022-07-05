@@ -34,11 +34,14 @@ export default function App() {
         if (user)
             api.users.status().then((res) => {
                 const { active } = res.data;
-                if (!active) localStorage.removeItem("token");
+                if (!active) {
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                }
             });
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <Theme
             primary={{ main: "#222" }}

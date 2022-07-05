@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.5.4
+
+- fix the white space above and below images in mobile devices (new comments only, old comments still have this issue)
+- reload after the token is removed because of expiration
+
 ## v2.5.3
 
 - add a circular loader for profile and gallery

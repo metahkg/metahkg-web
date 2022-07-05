@@ -19,7 +19,10 @@ export default function PageBottom() {
         },
     ];
     return (
-        <div className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10 mb55">
+        <div
+            style={{ marginBottom: 70 }}
+            className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10"
+        >
             <div className="flex">
                 {socialicons.map((icon, index) => (
                     <a
@@ -39,11 +42,11 @@ export default function PageBottom() {
                 Copyright (c) 2022 Metahkg.{" "}
                 <a
                     className="metahkg-grey-force"
-                    href="https://www.gnu.org/licenses/agpl-3.0.en.html"
+                    href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"
                 >
-                    AGPL-3.0
+                    AGPL-3.0-or-later
                 </a>
                 .
             </div>

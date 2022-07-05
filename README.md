@@ -11,7 +11,7 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![Gitlab](https://badges.aleen42.com/src/gitlab.svg)](https://gitlab.com/metahkg/metahkg-web)
 [![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg/metahkg-web)
-[![GitHub license](https://img.shields.io/github/license/metahkg/metahkg-web)](https://gitlab.com/metahkg/metahkg-web/-/blob/master/LICENSE.md)
+[![License](https://img.shields.io/gitlab/license/metahkg/metahkg-web)](https://gitlab.com/metahkg/metahkg-web/-/tree/master/LICENSE.md)
 
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
@@ -37,7 +37,7 @@ yarn add metahkg-web
 
 ### Usage
 
-```typescript
+```tsx
 import React from "react";
 import MetahkgWebApp from "metahkg-web";
 
@@ -68,8 +68,12 @@ It is recommended to use docker for deployment (also supports hot reload).
 
 For manual deployment, see DEPLOY.md.
 
-## Logo
+## License
+
+[AGPL-3.0-or-later](./LICENSE.md).
+
+### Logo
 
 Logo (public/images/logo.svg) originally by "white card", CC-BY-4.0.
 Modified versions by wcyat, CC0.
-See public/images/LICENSE for details.
+See [public/images/LICENSE](./public/images/LICENSE) for details.

@@ -70,6 +70,7 @@ function ImgComponent(props: Props) {
                 <img
                     src={src}
                     alt=""
+                    className={"block"}
                     height={height}
                     width={width}
                     style={{
