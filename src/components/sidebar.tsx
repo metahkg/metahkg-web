@@ -95,6 +95,7 @@ export default function SideBar() {
                         </List>
                         <div className="ml10 mr10">
                             <SearchBar
+                                query={query}
                                 onChange={(e) => {
                                     setQuery(e.target.value);
                                 }}

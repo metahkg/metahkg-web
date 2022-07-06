@@ -14,6 +14,7 @@ import {
 import { useBack, useIsSmallScreen, useQuery } from "../components/ContextProvider";
 import { setTitle } from "../lib/common";
 import queryString from "query-string";
+import { useNavigate } from "react-router-dom";
 
 export default function Search() {
     const [search, setSearch] = useSearch();
@@ -21,18 +22,23 @@ export default function Search() {
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [, setReFetch] = useReFetch();
-    const [, setQuery] = useQuery();
+    const [query, setQuery] = useQuery();
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
+    const navigate = useNavigate();
     const querystring = queryString.parse(window.location.search);
 
     useEffect(() => {
         if (querystring.q) setQuery(decodeURIComponent(String(querystring.q)));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        navigate(`${window.location.pathname}?q=${encodeURIComponent(query)}`);
+    }, [navigate, query]);
 
     (function onRender() {
         setTitle("Search | Metahkg");

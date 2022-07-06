@@ -96,6 +96,7 @@ function Menu() {
                 <div className="flex fullwidth">
                     <div className="flex fullwidth justify-center align-center m10 menu-search">
                         <SearchBar
+                            query={query}
                             onChange={(e) => {
                                 setQuery(e.target.value);
                             }}

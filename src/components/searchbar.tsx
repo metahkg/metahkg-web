@@ -25,7 +25,6 @@ import "../css/components/searchbar.css";
 import React, { KeyboardEventHandler } from "react";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { useQuery } from "./ContextProvider";
 import { useReFetch, useSearch, useSmode } from "./MenuProvider";
 
 const Search = styled("div")(({ theme }) => ({
@@ -72,13 +71,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  * @returns A search bar with a search icon and an input field.
  */
 export default function SearchBar(props: {
+    query: string;
     onKeyPress: KeyboardEventHandler<HTMLDivElement>;
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
-    const [query] = useQuery();
+    const { query, onKeyPress, onChange } = props;
     const [, setReFetch] = useReFetch();
     const [smode, setSmode] = useSmode();
     const [search] = useSearch();
+
     return (
         <Search>
             <SearchIconWrapper>
@@ -87,9 +88,9 @@ export default function SearchBar(props: {
             <StyledInputBase
                 placeholder="Search"
                 inputProps={{ "aria-label": "search" }}
-                onKeyPress={props.onKeyPress}
-                onChange={props.onChange}
-                defaultValue={query}
+                onKeyPress={onKeyPress}
+                onChange={onChange}
+                value={query}
             />
             {search && (
                 <Chip
