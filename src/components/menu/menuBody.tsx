@@ -60,7 +60,7 @@ export default function MenuBody(props: { selected: number }) {
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {
         if (
-            (reFetch || !data.length) &&
+            (reFetch || (!loading && !data.length)) &&
             (category || profile || (search && query) || id || recall)
         ) {
             data.length && setData([]);
