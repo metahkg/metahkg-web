@@ -30,7 +30,6 @@ function ImgComponent(props: Props) {
 
     const checkCanResize = () => {
         if (isIOS || isSafari || engineName === "Webkit") return;
-        console.log(isIOS, isSafari, engineName)
 
         const img = imgRef.current;
         if (img) {
