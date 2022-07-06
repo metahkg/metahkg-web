@@ -118,7 +118,6 @@ export default function MenuBody(props: { selected: number }) {
     }, [search, recall, profile, data, selected, category, reFetch]);
 
     useEffect(() => {
-        console.log(query, search);
         if (query && search) setData([]);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [query, search]);

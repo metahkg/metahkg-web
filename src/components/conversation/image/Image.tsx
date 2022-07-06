@@ -8,6 +8,7 @@ import prettierCss from "prettier/parser-postcss";
 import Loader from "../../../lib/loader";
 import { IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
+import { useCRoot } from "../ConversationContext";
 
 interface Props {
     src: string;
@@ -22,7 +23,9 @@ function ImgComponent(props: Props) {
     const { src } = useImage({ srcList: props.src });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
+    const cRoot = useCRoot();
     const imgRef = useRef<HTMLImageElement>(null);
+    const [reRender, setReRender] = useState(false);
 
     const checkCanResize = () => {
         const img = imgRef.current;
@@ -38,11 +41,22 @@ function ImgComponent(props: Props) {
 
     useEffect(checkCanResize, [small]);
 
+    imgRef.current &&
+        cRoot.current &&
+        console.log(imgRef.current.clientWidth, cRoot.current.clientWidth - 40);
+
     return (
         <PhotoView src={src}>
             <div
                 className={"flex"}
-                style={{ position: "relative", display: "inline-block" }}
+                style={{
+                    position: "relative",
+                    ...(imgRef.current &&
+                        cRoot.current &&
+                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
+                            display: "inline-block",
+                        }),
+                }}
             >
                 {!disableResize && (
                     <IconButton
@@ -90,7 +104,10 @@ function ImgComponent(props: Props) {
                     }}
                     loading="lazy"
                     ref={imgRef}
-                    onLoad={checkCanResize}
+                    onLoad={() => {
+                        checkCanResize();
+                        setReRender(!reRender);
+                    }}
                 />
             </div>
         </PhotoView>
