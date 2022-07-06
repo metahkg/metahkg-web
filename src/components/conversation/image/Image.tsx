@@ -39,7 +39,11 @@ function ImgComponent(props: Props) {
         }
     };
 
-    useEffect(checkCanResize, [small]);
+    useEffect(() => {
+        checkCanResize();
+        setReRender(!reRender);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [small]);
 
     return (
         <PhotoView src={src}>
