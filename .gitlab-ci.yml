@@ -49,6 +49,8 @@ docker-build:
     - if: "$CI_COMMIT_BRANCH"
       exists:
         - Dockerfile
+  except:
+    - tags
 
 tagging:
   image: node:18-alpine
@@ -65,6 +67,8 @@ tagging:
     - git push --tags https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git HEAD:${CI_COMMIT_BRANCH}
   rules:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
+  except:
+    - tags
 
 publish:
   image: node:latest
@@ -84,6 +88,8 @@ publish:
     - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then npm publish --tag dev; else npm publish; fi;
   rules:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
+  except:
+    - tags
 
 container_scanning:
   stage: review
@@ -96,9 +102,13 @@ container_scanning:
   artifacts:
     paths:
       - gl-container-scanning-report.json
+  except:
+    - tags
 
 sast:
   stage: test
+  except:
+    - tags
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml

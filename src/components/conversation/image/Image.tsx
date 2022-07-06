@@ -53,6 +53,7 @@ function ImgComponent(props: Props) {
                     position: "relative",
                     ...(imgRef.current &&
                         cRoot.current &&
+                        // TODO: should not hard code
                         imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
                             display: "inline-block",
                         }),

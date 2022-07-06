@@ -31,7 +31,6 @@ function Comment(props: {
     fetchComment?: boolean;
     noQuote?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
-    // TODO: Some more options for the comment component
     fold?: boolean;
     openComment?: boolean;
     blocked?: boolean;
