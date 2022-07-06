@@ -41,10 +41,6 @@ function ImgComponent(props: Props) {
 
     useEffect(checkCanResize, [small]);
 
-    imgRef.current &&
-        cRoot.current &&
-        console.log(imgRef.current.clientWidth, cRoot.current.clientWidth - 40);
-
     return (
         <PhotoView src={src}>
             <div
