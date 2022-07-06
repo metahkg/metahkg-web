@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useMenu,
     useRecall,
@@ -20,7 +20,7 @@ export default function Search() {
     const [recall, setRecall] = useRecall();
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
-    const [data, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const [, setQuery] = useQuery();
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
@@ -46,7 +46,7 @@ export default function Search() {
 
         if (!search) {
             setSearch(true);
-            data.length && setData([]);
+            setReFetch(true);
             selected && setSelected(0);
             setMenuTitle("");
         }

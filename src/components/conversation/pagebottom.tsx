@@ -21,7 +21,8 @@ export default function PageBottom() {
         {
             icon: (
                 <DiscordIcon
-                    height={17} width={17}
+                    height={17}
+                    width={17}
                     className="font-size-17-force metahkg-grey-force"
                     color={"#aca9a9"}
                 />

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.6
+
+- fix the swipeable view feature (rewrite)
+
 ## v2.5.5
 
 - swipeable views for menu

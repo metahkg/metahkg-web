@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useMenu,
     useProfile,
@@ -28,7 +28,7 @@ export default function History() {
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
-    const [, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
 
@@ -36,7 +36,7 @@ export default function History() {
 
     (function onRender() {
         function clearData() {
-            setData([]);
+            setReFetch(true);
             setMenuTitle("");
             selected && setSelected(0);
         }

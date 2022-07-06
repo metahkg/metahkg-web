@@ -4,7 +4,7 @@ import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useMenu,
     useProfile,
@@ -39,7 +39,7 @@ export default function Profile() {
     const [requestedUser, setRequestedUser] = useState<UserData | null>(null);
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
-    const [, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const [, setMenuTitle] = useMenuTitle();
     const [id, setId] = useId();
     const [cat, setCat] = useCat();
@@ -77,7 +77,7 @@ export default function Profile() {
          * Clear the data and reset the title and selected index.
          */
         function clearData() {
-            setData([]);
+            setReFetch(true);
             setMenuTitle("");
             selected && setSelected(0);
         }

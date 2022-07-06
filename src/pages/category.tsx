@@ -5,7 +5,7 @@ import Template from "../components/template";
 import { useBack, useCategories, useIsSmallScreen } from "../components/ContextProvider";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useMenu,
     useProfile,
@@ -30,7 +30,7 @@ export default function Category() {
     const [profile, setProfile] = useProfile();
     const [back, setBack] = useBack();
     const [recall, setRecall] = useRecall();
-    const [, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const isSmallScreen = useIsSmallScreen();
     const [, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
@@ -41,7 +41,7 @@ export default function Category() {
         categoryName && setTitle(categoryName + " | Metahkg");
 
         function clearData() {
-            setData([]);
+            setReFetch(true);
             setMenuTitle("");
             setSelected(0);
         }
