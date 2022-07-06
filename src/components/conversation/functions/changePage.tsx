@@ -29,7 +29,6 @@ export default function useChangePage() {
     const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
 
     return (newPage: number, callback?: () => void) => {
-        console.log(newPage);
         if (thread) {
             setCurrentPage(newPage);
 
