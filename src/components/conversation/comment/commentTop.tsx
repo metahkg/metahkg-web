@@ -50,7 +50,7 @@ export default function CommentTop(props: {
     const [thread, setThread] = useThread();
     const [user] = useUser();
     const [, setEditor] = useEditor();
-    const croot = useCRoot();
+    const cRoot = useCRoot();
 
     const { comment, noStory, fold, setFold } = props;
 
@@ -67,16 +67,16 @@ export default function CommentTop(props: {
                 title: story ? "Quit story mode" : "Story mode",
                 action: () => {
                     const commentEle = document.getElementById(`c${comment.id}`);
-                    if (croot.current && commentEle) {
+                    if (cRoot.current && commentEle) {
                         const beforeHeight =
-                            commentEle?.offsetTop - 47 - croot.current?.scrollTop;
+                            commentEle?.offsetTop - 47 - cRoot.current?.scrollTop;
                         setStory(story ? 0 : comment.user.id);
                         setTimeout(() => {
                             const commentEle = document.getElementById(`c${comment.id}`);
-                            if (croot.current && commentEle) {
+                            if (cRoot.current && commentEle) {
                                 const afterHeight =
-                                    commentEle?.offsetTop - 47 - croot.current?.scrollTop;
-                                croot.current.scrollTop += afterHeight - beforeHeight;
+                                    commentEle?.offsetTop - 47 - cRoot.current?.scrollTop;
+                                cRoot.current.scrollTop += afterHeight - beforeHeight;
                             }
                         });
                     }
@@ -159,7 +159,7 @@ export default function CommentTop(props: {
         })(),
         {
             icon: <FeedIcon className="font-size-19-force" />,
-            title: "Create new thread",
+            title: "Create thread",
             action: () => {
                 navigate(`/create?quote=${threadId}.${comment.id}`);
             },

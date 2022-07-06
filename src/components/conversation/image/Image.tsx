@@ -1,70 +1,148 @@
-import React, { Suspense } from "react";
-import Spinner from "react-spinner-material";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useImage } from "react-image";
 import ImageErrorBoundary from "./ImageErrorBoundary";
 import { PhotoView } from "react-photo-view";
 import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
 import prettier from "prettier/standalone";
 import prettierCss from "prettier/parser-postcss";
+import Loader from "../../../lib/loader";
+import { IconButton } from "@mui/material";
+import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
+import { useCRoot } from "../ConversationContext";
 
-function ImgComponent(props: {
+interface Props {
     src: string;
-    height?: string;
-    width?: string;
+    height?: string | number;
+    width?: string | number;
     style?: string;
-}) {
+    small?: boolean;
+}
+
+function ImgComponent(props: Props) {
     const { height, style, width } = props;
     const { src } = useImage({ srcList: props.src });
+    const [small, setSmall] = useState(props.small || false);
+    const [disableResize, setDisableResize] = useState(false);
+    const cRoot = useCRoot();
+    const imgRef = useRef<HTMLImageElement>(null);
+    const [reRender, setReRender] = useState(false);
+
+    const checkCanResize = () => {
+        const img = imgRef.current;
+        if (img) {
+            const { clientWidth: width, clientHeight: height } = img;
+            if (
+                (width < 200 && height < 200) ||
+                (!small && width <= 200 && height <= 200)
+            )
+                setDisableResize(true);
+        }
+    };
+
+    useEffect(() => {
+        checkCanResize();
+        setReRender(!reRender);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [small]);
 
     return (
         <PhotoView src={src}>
-            <img
-                src={src}
-                alt=""
-                height={height}
-                width={width}
-                style={
-                    style
-                        ? toJSON(
-                              prettier
-                                  .format(style, {
-                                      parser: "css",
-                                      plugins: [prettierCss],
-                                  })
-                                  .replaceAll("\n", "")
-                          ).attributes
-                        : undefined
-                }
-                loading="lazy"
-            />
+            <div
+                className={"flex"}
+                style={{
+                    position: "relative",
+                    ...(imgRef.current &&
+                        cRoot.current &&
+                        // TODO: should not hard code
+                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
+                            display: "inline-block",
+                        }),
+                }}
+            >
+                {!disableResize && (
+                    <IconButton
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSmall(!small);
+                        }}
+                        className={"border-radius-10-force"}
+                        sx={{
+                            position: "absolute",
+                            bgcolor: "primary.main",
+                            "&:hover": {
+                                bgcolor: "primary.dark",
+                                opacity: 0.9,
+                            },
+                            right: 10,
+                            bottom: 10,
+                            opacity: 0.6,
+                        }}
+                    >
+                        {small ? <ZoomOutMap /> : <ZoomInMap />}
+                    </IconButton>
+                )}
+                <img
+                    src={src}
+                    alt=""
+                    className={"block"}
+                    height={height}
+                    width={width}
+                    style={{
+                        ...(style &&
+                            toJSON(
+                                prettier
+                                    .format(style, {
+                                        parser: "css",
+                                        plugins: [prettierCss],
+                                    })
+                                    .replaceAll("\n", "")
+                            ).attributes),
+                        ...(small && {
+                            maxWidth: 200,
+                            maxHeight: 200,
+                        }),
+                    }}
+                    loading="lazy"
+                    ref={imgRef}
+                    onLoad={() => {
+                        checkCanResize();
+                        setReRender(!reRender);
+                    }}
+                />
+            </div>
         </PhotoView>
     );
 }
 
-export default function Image(props: {
-    src: string;
-    height?: string;
-    width?: string;
-    style?: string;
-}) {
-    const { height, style, width, src } = props;
+export default function Image(props: Props) {
+    const { src } = props;
     return (
-        <Suspense
-            fallback={
-                <a href={src} target="_blank" rel="noreferrer">
-                    <Spinner
-                        className="mt5 mb5"
-                        radius={50}
-                        color="gray"
-                        stroke={3}
-                        visible={true}
-                    />
-                </a>
-            }
+        <a
+            href={src}
+            target={"_blank"}
+            rel={"noreferrer"}
+            onClick={(e) => {
+                e.preventDefault();
+            }}
         >
-            <ImageErrorBoundary src={src}>
-                <ImgComponent src={src} height={height} width={width} style={style} />
-            </ImageErrorBoundary>
-        </Suspense>
+            <Suspense
+                fallback={
+                    <a href={src} target="_blank" rel="noreferrer">
+                        <Loader
+                            position="flex-start"
+                            className="mt5 mb5"
+                            sxProgress={{ color: "darkgrey" }}
+                            thickness={2}
+                            size={50}
+                        />
+                    </a>
+                }
+            >
+                <ImageErrorBoundary src={src}>
+                    <ImgComponent {...props} />
+                </ImageErrorBoundary>
+            </Suspense>
+        </a>
     );
 }

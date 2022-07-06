@@ -1,11 +1,12 @@
 import "../../../css/components/conversation/comment/commentBody.css";
-import { replace } from "../../../lib/modifycomments";
+import { replace } from "../../../lib/domReplace";
 import { commentType } from "../../../types/conversation/comment";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
+
 export default function CommentBody(props: {
     comment: commentType;
     depth: number;
@@ -13,7 +14,9 @@ export default function CommentBody(props: {
     maxHeight?: string | number;
 }) {
     const { comment, depth, noQuote, maxHeight } = props;
-    const [commentJSX] = useState(parse(comment.comment, { replace }));
+    const [commentJSX] = useState(
+        parse(comment.comment, { replace: replace({ quote: depth > 0 }) })
+    );
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const content = useMemo(

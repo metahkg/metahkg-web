@@ -1,12 +1,13 @@
 import React from "react";
-import { GitHub, Telegram } from "@mui/icons-material";
+import { GitHub, Reddit, Telegram } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
+import DiscordIcon from "../../lib/icons/dicord";
 
 export default function PageBottom() {
-    const socialicons = [
+    const socialIcons = [
         {
-            icon: <GitlabIcon className="metahkg-grey-force" height={17} width={17} />,
+            icon: <GitlabIcon className="metahkg-grey-force" height={16} width={16} />,
             link: "https://gitlab.com/metahkg",
         },
         {
@@ -17,15 +18,33 @@ export default function PageBottom() {
             icon: <Telegram className="font-size-17-force metahkg-grey-force" />,
             link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
+        {
+            icon: (
+                <DiscordIcon
+                    height={17}
+                    width={17}
+                    className="font-size-17-force metahkg-grey-force"
+                    color={"#aca9a9"}
+                />
+            ),
+            link: "https://discord.gg/yrf2v8KGdc",
+        },
+        {
+            icon: <Reddit className="font-size-17-force metahkg-grey-force" />,
+            link: "https://reddit.com/r/metahkg",
+        },
     ];
     return (
-        <div className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10 mb55">
+        <div
+            style={{ marginBottom: 80 }}
+            className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10"
+        >
             <div className="flex">
-                {socialicons.map((icon, index) => (
+                {socialIcons.map((icon, index) => (
                     <a
                         key={index}
                         className={`metahkg-grey-force notextdecoration${
-                            index !== socialicons.length - 1 ? " mr7" : ""
+                            index !== socialIcons.length - 1 ? " mr7" : ""
                         }`}
                         href={icon.link}
                         target="_blank"
@@ -39,11 +58,11 @@ export default function PageBottom() {
                 Copyright (c) 2022 Metahkg.{" "}
                 <a
                     className="metahkg-grey-force"
-                    href="https://www.gnu.org/licenses/agpl-3.0.en.html"
+                    href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"
                 >
-                    AGPL-3.0
+                    AGPL-3.0-or-later
                 </a>
                 .
             </div>

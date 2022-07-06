@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
-import { useData } from "../MenuProvider";
+import { useReFetch } from "../MenuProvider";
 import {
     Box,
     Button,
@@ -35,7 +35,7 @@ interface DataTableProps {
 export default function DataTable(props: DataTableProps) {
     const { requestedUser, setUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
-    const [, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const [, setNotification] = useNotification();
     const [name, setName] = useState(requestedUser.name);
     const [saveDisabled, setSaveDisabled] = useState(false);
@@ -89,7 +89,7 @@ export default function DataTable(props: DataTableProps) {
                     resetApi();
                 }
 
-                setData([]);
+                setReFetch(true);
                 setNotification({ open: true, text: res.data?.response });
             })
             .catch((err) => {

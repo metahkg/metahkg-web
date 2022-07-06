@@ -1,7 +1,6 @@
 import "../../css/components/menu/preload.css";
 import React from "react";
-import { Box, Button, Divider } from "@mui/material";
-import { Shimmer } from "../../lib/shimmer/shimmer";
+import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
 import { useSearch } from "../MenuProvider";
 import { useHeight, useIsSmallScreen, useWidth } from "../ContextProvider";
@@ -11,21 +10,25 @@ export default function MenuPreload() {
     const isSmallScreen = useIsSmallScreen();
     const [height] = useHeight();
     const [width] = useWidth();
-    const totalheight = height - (search ? 151 : 91);
-    const amount = roundup(totalheight / 72);
-    const buttonwidth = isSmallScreen ? width : 0.3 * width;
+    const totalHeight = height - (search ? 151 : 91);
+    const amount = roundup(totalHeight / 72);
+    const buttonWidth = isSmallScreen ? width : 0.3 * width;
     return (
-        <Box className="preload-root" sx={{ minHeight: totalheight }}>
+        <Box className="preload-root" sx={{ minHeight: totalHeight }}>
             {[...Array(amount)].map((_, index) => (
                 <div key={index}>
                     <Button className="fullwidth flex align-flex-start flex-dir-column justify-center preload-btn">
-                        <Shimmer
+                        <Skeleton
                             className="ml10"
-                            height={18}
-                            width={buttonwidth * 0.45}
+                            height={90}
+                            width={buttonWidth * 0.45}
                         />
                         <div className="ml10 preload-spacer" />
-                        <Shimmer className="ml10" height={22} width={buttonwidth * 0.8} />
+                        <Skeleton
+                            className="ml10"
+                            height={100}
+                            width={buttonWidth * 0.8}
+                        />
                     </Button>
                     <Divider />
                 </div>

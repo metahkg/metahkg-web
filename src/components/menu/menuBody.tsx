@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useProfile,
     useRecall,
     useSearch,
-    useSelected,
     useSmode,
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
@@ -23,22 +22,23 @@ import { parseError } from "../../lib/parseError";
 /**
  * This function renders the main content of the menu
  */
-export default function MenuBody() {
+export default function MenuBody(props: { selected: number }) {
+    const { selected } = props;
     const navigate = useNavigate();
     const [category] = useCat();
     const [search] = useSearch();
     const [profile] = useProfile();
-    const [selected] = useSelected();
     const [recall] = useRecall();
     const [query] = useQuery();
     const [, setNotification] = useNotification();
     const [id] = useId();
-    const [data, setData] = useData();
+    const [data, setData] = useState<Summary[]>([]);
     const [smode] = useSmode();
     const [page, setPage] = useState(1);
     const [end, setEnd] = useState(false);
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useHistory();
+    const [reFetch, setReFetch] = useReFetch();
     const paperRef = useRef<HTMLDivElement>(null);
 
     /**
@@ -59,7 +59,12 @@ export default function MenuBody() {
         (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {
-        if (!data.length && (category || profile || (search && query) || id || recall)) {
+        if (
+            (reFetch || (!loading && !data.length)) &&
+            (category || profile || (search && query) || id || recall)
+        ) {
+            data.length && setData([]);
+            setReFetch(false);
             setEnd(false);
             setLoading(true);
 
@@ -110,7 +115,7 @@ export default function MenuBody() {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, recall, profile, data, selected, category]);
+    }, [search, recall, profile, data, selected, category, reFetch]);
 
     useEffect(() => {
         if (query && search) setData([]);
@@ -252,7 +257,7 @@ export default function MenuBody() {
                 {loading && <MenuPreload />}
                 {end && (
                     <Typography
-                        className="mt10 mb10 text-align-center font-size-20-force"
+                        className="mt10 mb40 text-align-center font-size-20-force"
                         sx={{
                             color: "secondary.main",
                         }}

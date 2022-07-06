@@ -1,5 +1,28 @@
 # Changelog
 
+## v2.5.7
+
+- re-fix the images on mobile devices by disabling display inline-block on condition 
+
+## v2.5.6
+
+- fix the swipeable view feature (rewrite)
+
+## v2.5.5
+
+- swipeable views for menu
+
+## v2.5.4
+
+- fix the white space above and below images on mobile devices (new comments only, old comments still have this issue)
+- reload after the token is removed because of expiration
+
+## v2.5.3
+
+- add a circular loader for profile and gallery
+- add an upload images button in tinymce (so users don't need to use images plugin and click three buttons)
+- allow users to resize images, small and normal, in quotes it is small by default
+
 ## v2.5.2
 
 - link preview only if the href match the text

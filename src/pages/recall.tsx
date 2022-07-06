@@ -4,7 +4,7 @@ import Template from "../components/template";
 import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 import {
     useCat,
-    useData,
+    useReFetch,
     useId,
     useMenu,
     useProfile,
@@ -29,14 +29,14 @@ export default function Recall() {
     const [profile, setProfile] = useProfile();
     const [back, setBack] = useBack();
     const [recall, setRecall] = useRecall();
-    const [data, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const isSmallScreen = useIsSmallScreen();
     const [title, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
 
     (function onRender() {
         function clearData() {
-            data.length && setData([]);
+            setReFetch(true);
             title && setMenuTitle("");
             selected && setSelected(0);
         }

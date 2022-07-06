@@ -9,7 +9,6 @@ import {
     useLastHeight,
     useLoading,
     usePages,
-    useRerender,
     useThread,
     useThreadId,
 } from "../ConversationContext";
@@ -22,7 +21,6 @@ export default function useChangePage() {
     const [finalPage, setFinalPage] = useFinalPage();
     const lastHeight = useLastHeight();
     const [, setEnd] = useEnd();
-    const [, setReRender] = useRerender();
     const [, setCurrentPage] = useCurrentPage();
     const [, setNotification] = useNotification();
     const [thread, setThread] = useThread();
@@ -31,6 +29,7 @@ export default function useChangePage() {
     const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
 
     return (newPage: number, callback?: () => void) => {
+        console.log(newPage);
         if (thread) {
             setCurrentPage(newPage);
 
@@ -46,17 +45,13 @@ export default function useChangePage() {
             const shouldReRender =
                 newPage - finalPage !== 1 && newPage - firstPage !== -1;
 
-            if (shouldReRender) {
-                if (thread) thread.conversation = [];
-                setThread(thread);
-                setReRender((reRender) => !reRender);
-            }
-
             setLoading(true);
             setEnd(false);
             setPages(shouldReRender ? 1 : pages + 1);
             setFinalPage(
-                shouldReRender || newPage - finalPage === 1 ? newPage : finalPage
+                (shouldReRender && newPage) || newPage - finalPage === 1
+                    ? newPage
+                    : finalPage
             );
 
             api.threads
@@ -86,11 +81,19 @@ export default function useChangePage() {
 
                     res.data.conversation.length % 25 && setEnd(true);
 
-                    document
-                        .getElementById(String(newPage))
-                        ?.scrollIntoView({ behavior: "smooth" });
+                    setTimeout(() => {
+                        setCurrentPage(newPage);
 
-                    callback && setTimeout(callback);
+                        document
+                            .getElementById(String(newPage))
+                            ?.scrollIntoView({ behavior: "smooth" });
+
+                        navigate(`${window.location.pathname}?page=${newPage}`, {
+                            replace: true,
+                        });
+
+                        callback && setTimeout(callback);
+                    });
                 })
                 .catch((err) => {
                     setNotification({

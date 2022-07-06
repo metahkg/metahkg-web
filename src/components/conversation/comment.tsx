@@ -1,9 +1,9 @@
 import "../../css/components/conversation/comment.css";
 import React, { memo, useEffect, useRef, useState } from "react";
-import { Box, Button, Typography, SxProps, Theme } from "@mui/material";
-import { useNotification, useSettings } from "../ContextProvider";
+import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
+import { useNotification } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
-import { useThreadId } from "./ConversationContext";
+import { useThreadId, useUserVotes } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
@@ -14,7 +14,6 @@ import {
     KeyboardArrowDown,
     KeyboardArrowUp,
 } from "@mui/icons-material";
-import Spinner from "react-spinner-material";
 import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
 
@@ -32,7 +31,6 @@ function Comment(props: {
     fetchComment?: boolean;
     noQuote?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
-    // TODO: Some more options for the comment component
     fold?: boolean;
     openComment?: boolean;
     blocked?: boolean;
@@ -58,10 +56,11 @@ function Comment(props: {
         noFullWidth,
     } = props;
     const threadId = useThreadId();
-    const [settings] = useSettings();
     const [comment, setComment] = useState(props.comment);
+    const [userVotes] = useUserVotes();
     const [, setNotification] = useNotification();
     const [ready, setReady] = useState(!fetchComment);
+    const [reFetch, setReFetch] = useState(false);
     const [showReplies, setShowReplies] = useState(props.showReplies);
     const [replies, setReplies] = useState<commentType[]>([]);
     const [loading, setLoading] = useState(false);
@@ -70,8 +69,13 @@ function Comment(props: {
     const commentRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
+        setReFetch(true);
+    }, [userVotes?.[comment.id]]);
+
+    useEffect(() => {
         commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
-        if (fetchComment) {
+        if (!ready || reFetch) {
+            setReFetch(false);
             api.threads.comments
                 .get({ threadId, commentId: comment.id })
                 .then((res) => {
@@ -98,7 +102,7 @@ function Comment(props: {
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [ready, reFetch]);
 
     return (
         <Box
@@ -151,7 +155,10 @@ function Comment(props: {
                 {ready && !fold && (
                     <Box className="flex justify-space-between align-center fullwidth">
                         <div className="flex ml20 mr20">
-                            <VoteButtons commentId={comment.id} />
+                            <VoteButtons
+                                comment={comment}
+                                key={`${comment.U}${comment.D}`}
+                            />
                             {!inPopUp && comment.replies?.length && (
                                 <Button
                                     sx={{
@@ -195,12 +202,10 @@ function Comment(props: {
             </Box>
             {loading && (
                 <Box className="flex justify-center align-center">
-                    <Spinner
-                        className="mt5 mb5"
-                        radius={30}
-                        color={settings.secondaryColor?.main}
-                        stroke={4}
-                        visible
+                    <CircularProgress
+                        size={30}
+                        className="mt10 mb5"
+                        color={"secondary"}
                     />
                 </Box>
             )}

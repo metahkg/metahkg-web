@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import { summary } from "../types/conversation/summary";
 
 const MenuContext = createContext<{
     category: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -9,7 +8,7 @@ const MenuContext = createContext<{
     menu: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     selected: [number, React.Dispatch<React.SetStateAction<number>>];
     recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-    data: [summary[], React.Dispatch<React.SetStateAction<summary[]>>];
+    reFetch: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     menuTitle: [string, React.Dispatch<React.SetStateAction<string>>];
     smode: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
@@ -28,7 +27,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
     const [menu, setMenu] = useState(false);
     const [recall, setRecall] = useState(false);
     const [selected, setSelected] = useState(0);
-    const [data, setData] = useState<any[]>([]);
+    const [reFetch, setReFetch] = useState<boolean>(false);
     const [menuTitle, setMenuTitle] = useState("");
     const [smode, setSmode] = useState(0); //search mode
     return (
@@ -41,7 +40,7 @@ export default function MenuProvider(props: { children: JSX.Element }) {
                 menu: [menu, setMenu],
                 selected: [selected, setSelected],
                 recall: [recall, setRecall],
-                data: [data, setData],
+                reFetch: [reFetch, setReFetch],
                 menuTitle: [menuTitle, setMenuTitle],
                 smode: [smode, setSmode],
             }}
@@ -101,9 +100,9 @@ export function useSelected() {
  * It returns the data from the MenuContext.
  * @returns The data array and a setter function.
  */
-export function useData() {
-    const { data } = useContext(MenuContext);
-    return data;
+export function useReFetch() {
+    const { reFetch } = useContext(MenuContext);
+    return reFetch;
 }
 
 /**

@@ -8,7 +8,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import {
     useCat,
-    useData,
+    useReFetch,
     useMenu,
     useProfile,
     useRecall,
@@ -45,7 +45,7 @@ export default function Create() {
     const [cat, setCat] = useCat();
     const [search, setSearch] = useSearch();
     const [recall, setRecall] = useRecall();
-    const [data, setData] = useData();
+    const [, setReFetch] = useReFetch();
     const [mtitle, setMtitle] = useMenuTitle();
     const [, setNotification] = useNotification();
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
@@ -114,7 +114,7 @@ export default function Create() {
                 search && setSearch(false);
                 recall && setRecall(false);
                 profile && setProfile(0);
-                data.length && setData([]);
+                setReFetch(true);
                 mtitle && setMtitle("");
                 navigate(`/thread/${res.data.id}`, { replace: true });
                 setTimeout(() => {
