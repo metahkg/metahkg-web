@@ -28,7 +28,7 @@ export default function PageSelect(props: {
             >
                 <Select
                     value={page}
-                    label="Age"
+                    label="Page"
                     onChange={onSelect}
                     color="secondary"
                     variant="standard"
