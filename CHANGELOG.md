@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.7
+
+- re-fix the images on mobile devices by disabling display inline-block on condition 
+
 ## v2.5.6
 
 - fix the swipeable view feature (rewrite)
