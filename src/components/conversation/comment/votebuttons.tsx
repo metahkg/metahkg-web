@@ -10,7 +10,6 @@ import { commentType } from "../../../types/conversation/comment";
 
 export default function VoteButtons(props: { comment: commentType }) {
     const threadId = useThreadId();
-    const [thread, setThread] = useThread();
     const [votes, setVotes] = useUserVotes();
     const [, setNotification] = useNotification();
     const [user] = useUser();

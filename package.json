@@ -80,7 +80,7 @@
   "scripts": {
     "start": "serve -s",
     "start:react": "npx react-app-rewired start",
-    "build": "export REACT_APP_build=$(git rev-parse --short HEAD); npx react-app-rewired build",
+    "build": "if [ -z \"$REACT_APP_version\" ]; then export REACT_APP_version=$(node -e \"console.log(require('./package.json').version)\"); fi; if [ -z \"$REACT_APP_build\" ]; then export REACT_APP_build=$(git rev-parse --short HEAD); fi; npx react-app-rewired build",
     "build:module": "tsc src/main.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --moduleResolution node --esModuleInterop --skipLibCheck --removeComments && cp -r src/css dist",
     "test": "react-scripts test || echo \"no tests\"",
     "eject": "react-scripts eject",
