@@ -1,6 +1,6 @@
 # Metahkg Web
 
-This is the metahkg web app. See the [metahkg polyrepo](https://gitlab.com/metahkg/metahkg).
+This is the metahkg web app. See the [metahkg repository](https://gitlab.com/metahkg/metahkg).
 
 stable: [metahkg.org](https://metahkg.org)
 
@@ -20,35 +20,6 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 [![Telegram](https://patrolavia.github.io/telegram-badge/chat.svg)](https://t.me/+WbB7PyRovUY1ZDFl)
 [![Discord](https://img.shields.io/discord/992390401740775555)](https://discord.gg/yrf2v8KGdc)
 
-
-## Use as a module
-
-Since v2.4.0, you can use metahkg-web as a module.
-
-### Install
-
-```bash
-yarn add metahkg-web
-```
-
-### Usage
-
-```typescript
-import React from "react";
-import MetahkgWebApp from "metahkg-web";
-
-export default function App() {
-    return <MetahkgWebApp reCaptchaSiteKey={"<your-recaptcha-site-key>"} />;
-}
-```
-
-### Build from source
-
-```bash
-yarn build:module
-```
-
-The artifact would be in ./dist
 
 ## Deploying
 

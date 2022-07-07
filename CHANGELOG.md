@@ -1,8 +1,14 @@
 # Changelog
 
+## v2.5.8
+
+- synchronized search bars
+- sync query to url
+- record last query
+
 ## v2.5.7
 
-- re-fix the images on mobile devices by disabling display inline-block on condition 
+- re-fix the images on mobile devices by disabling display inline-block on condition
 
 ## v2.5.6
 

@@ -144,7 +144,7 @@ export default function Profile() {
                                     }}
                                 >
                                     <span
-                                        className="overflow-hidden text-overflow-ellipsis nowrap"
+                                        className="overflow-hidden text-overflow-ellipsis nowrap inline-block max-width-full"
                                         style={{
                                             color:
                                                 requestedUser.sex === "M"

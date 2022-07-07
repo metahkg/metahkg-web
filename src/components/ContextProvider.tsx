@@ -39,7 +39,7 @@ export default function ContextProvider(props: {
     reCaptchaSiteKey?: string;
 }) {
     const [back, setBack] = useState("");
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
     const [notification, setNotification] = useState({ open: false, text: "" });
@@ -87,6 +87,10 @@ export default function ContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("history", JSON.stringify(history));
     }, [history]);
+
+    useEffect(() => {
+        localStorage.setItem("query", query);
+    }, [query]);
 
     function updateSize() {
         setWidth(window.innerWidth);
