@@ -1,6 +1,6 @@
 # Metahkg Web
 
-This is the metahkg web app. See the [metahkg polyrepo](https://gitlab.com/metahkg/metahkg).
+This is the metahkg web app. See the [metahkg repository](https://gitlab.com/metahkg/metahkg).
 
 stable: [metahkg.org](https://metahkg.org)
 
