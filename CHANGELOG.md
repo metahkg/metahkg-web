@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.5.10
+
+- service worker (alpha)
+
 ## v2.5.9
 
 - fixed conversation (scroll and pagify)
