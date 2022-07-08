@@ -27,7 +27,7 @@ export default function Recall() {
 
     useLayoutEffect(() => {
         setTitle("Recall | Metahkg");
-        
+
         function clearData() {
             setReFetch(true);
             title && setMenuTitle("");

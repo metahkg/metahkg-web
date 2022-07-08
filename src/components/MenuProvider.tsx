@@ -126,7 +126,7 @@ export function useSmode() {
     return smode;
 }
 
-export function useMenuMode () {
+export function useMenuMode() {
     const { menuMode } = useContext(MenuContext);
     return menuMode;
 }

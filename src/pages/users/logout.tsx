@@ -35,7 +35,7 @@ export default function Logout() {
             replace: true,
         });
         setNotification({ open: true, text: "Logged out." });
-    }, [navigate, query.returnto, setNotification, setUser])
+    }, [navigate, query.returnto, setNotification, setUser]);
 
     return (
         <Box

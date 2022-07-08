@@ -90,7 +90,15 @@ export default function Create() {
         }
     }, [notification.open, quote.commentId, quote.threadId, setNotification, user]);
 
-    if (!user) return <Navigate to={`/users/login?continue=true&returnto=${encodeURIComponent(wholePath())}`} replace />
+    if (!user)
+        return (
+            <Navigate
+                to={`/users/login?continue=true&returnto=${encodeURIComponent(
+                    wholePath()
+                )}`}
+                replace
+            />
+        );
 
     function create() {
         setAlert({ severity: "info", text: "Creating thread..." });
