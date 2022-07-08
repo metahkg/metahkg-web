@@ -49,7 +49,7 @@ export default function App() {
         >
             <Notification />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box className="max-height-fullvh" sx={{ bgcolor: "primary.dark" }}>
+            <Box className="max-height-fullvh height-fullvh" sx={{ bgcolor: "primary.dark" }}>
                 <Router>
                     <div className="flex">
                         <div

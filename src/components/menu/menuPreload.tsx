@@ -2,15 +2,15 @@ import "../../css/components/menu/preload.css";
 import React from "react";
 import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
-import { useSearch } from "../MenuProvider";
 import { useHeight, useIsSmallScreen, useWidth } from "../ContextProvider";
+import { useMenuMode } from "../MenuProvider";
 /* A component that is used to preload the menu. */
 export default function MenuPreload() {
-    const [search] = useSearch();
     const isSmallScreen = useIsSmallScreen();
     const [height] = useHeight();
     const [width] = useWidth();
-    const totalHeight = height - (search ? 151 : 91);
+    const [menuMode] = useMenuMode();
+    const totalHeight = height - (menuMode === "search" ? 151 : 91);
     const amount = roundup(totalHeight / 72);
     const buttonWidth = isSmallScreen ? width : 0.3 * width;
     return (

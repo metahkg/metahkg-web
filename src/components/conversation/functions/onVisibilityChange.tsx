@@ -6,7 +6,7 @@ import {
     useThread,
 } from "../ConversationContext";
 import queryString from "query-string";
-import { OnVisibilityChangeData } from "react-visibility-detector/dist/types";
+
 export default function useOnVisibilityChange() {
     const croot = useCRoot();
     const lastHeight = useLastHeight();
@@ -14,7 +14,8 @@ export default function useOnVisibilityChange() {
     const [thread] = useThread();
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
-    return (isVisible: OnVisibilityChangeData, page: number) => {
+
+    return (isVisible: boolean, page: number) => {
         let Page = page;
         if (isVisible) {
             lastHeight.current = croot.current?.scrollTop || lastHeight.current;

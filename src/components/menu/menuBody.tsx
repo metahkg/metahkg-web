@@ -5,9 +5,8 @@ import {
     useReFetch,
     useId,
     useProfile,
-    useRecall,
-    useSearch,
     useSmode,
+    useMenuMode,
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
 import { AxiosError, AxiosResponse } from "axios";
@@ -25,10 +24,9 @@ import { parseError } from "../../lib/parseError";
 export default function MenuBody(props: { selected: number }) {
     const { selected } = props;
     const navigate = useNavigate();
+    const [menuMode] = useMenuMode();
     const [category] = useCat();
-    const [search] = useSearch();
     const [profile] = useProfile();
-    const [recall] = useRecall();
     const [query] = useQuery();
     const [, setNotification] = useNotification();
     const [id] = useId();
@@ -55,13 +53,11 @@ export default function MenuBody(props: { selected: number }) {
         err?.response?.status === 403 && navigate("/403", { replace: true });
     }
 
-    const mode =
-        (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {
         if (
             (reFetch || (!loading && !data.length)) &&
-            (category || profile || (search && query) || id || recall)
+            { category: category || id, profile, search: query, recall: true }[menuMode]
         ) {
             data.length && setData([]);
             setReFetch(false);
@@ -78,8 +74,8 @@ export default function MenuBody(props: { selected: number }) {
                 });
             };
 
-            switch (mode) {
-                case "menu":
+            switch (menuMode) {
+                case "category":
                     api.menu
                         .main({
                             ...(category ? { categoryId: category } : { threadId: id }),
@@ -115,12 +111,11 @@ export default function MenuBody(props: { selected: number }) {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, recall, profile, data, selected, category, reFetch]);
+    }, [profile, data, selected, category, reFetch]);
 
     useEffect(() => {
-        if (query && search) setData([]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query, search]);
+        if (query && menuMode === "search") setData([]);
+    }, [query, menuMode]);
 
     /**
      * It updates the data array with the new data from the API.
@@ -136,8 +131,8 @@ export default function MenuBody(props: { selected: number }) {
             setLoading(false);
         };
 
-        switch (mode) {
-            case "menu":
+        switch (menuMode) {
+            case "category":
                 api.menu
                     .main({
                         ...(category ? { categoryId: category } : { threadId: id }),
@@ -198,7 +193,7 @@ export default function MenuBody(props: { selected: number }) {
         }
     }
 
-    if (search && !query)
+    if (menuMode === "search" && !query)
         return (
             <Typography className={"text-align-center mt10"} color={"secondary"}>
                 Please enter a query.
@@ -210,7 +205,7 @@ export default function MenuBody(props: { selected: number }) {
             className="nobgimage noshadow overflow-auto"
             style={{
                 maxHeight: `calc(100vh - ${
-                    (search && "151") || (recall && "51") || "91"
+                    { search: 151, recall: 51, category: 91, profile: 91 }[menuMode]
                 }px)`,
             }}
             onScroll={onScroll}

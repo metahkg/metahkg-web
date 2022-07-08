@@ -35,7 +35,7 @@ export default function PageSelect(props: {
                     className="pageselect-select nopadding flex align-center justify-center"
                     disableUnderline
                 >
-                    {[...Array(pages)].map((p, index) => (
+                    {[...Array(pages)].map((_p, index) => (
                         <MenuItem key={index} value={index + 1}>
                             {index + 1}
                         </MenuItem>

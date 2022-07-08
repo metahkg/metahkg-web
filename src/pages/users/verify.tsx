@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import {
     useNotification,
@@ -33,6 +33,8 @@ export default function Verify() {
     const [user, setUser] = useUser();
     const navigate = useNavigate();
 
+    const small = width / 2 - 100 <= 450;
+
     function verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, text: "Verifying..." });
@@ -66,17 +68,17 @@ export default function Verify() {
             });
     }
 
+    useLayoutEffect(() => {
+        setTitle("Verify | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu, user]);
+
     useEffect(() => {
         if (query.code && query.email && !user) verify();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (user) return <Navigate to="/" replace />;
-
-    menu && setMenu(false);
-    setTitle("Verify | Metahkg");
-
-    const small = width / 2 - 100 <= 450;
 
     return (
         <Box

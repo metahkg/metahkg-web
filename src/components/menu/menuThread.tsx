@@ -10,7 +10,7 @@ import {
 import { roundup, timeToWord } from "../../lib/common";
 import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
-import { useCat, useId, useProfile, useRecall, useSearch } from "../MenuProvider";
+import { useCat, useId, useMenuMode } from "../MenuProvider";
 import { useCategories, useHistory } from "../ContextProvider";
 
 /**
@@ -23,19 +23,18 @@ export default function MenuThread(props: {
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }) {
     const [cat] = useCat();
-    const [search] = useSearch();
-    const [profile] = useProfile();
-    const [recall] = useRecall();
     const [id] = useId();
     const [history] = useHistory();
+    const [menuMode] = useMenuMode();
     const categories = useCategories();
     const { thread, onClick } = props;
-    const categoryId = history.find((i) => i.id === thread.id)?.cid;
+    const commentId = history.find((i) => i.id === thread.id)?.cid;
+
     return (
         <Link
             className="fullwidth text-decoration-none"
             to={`/thread/${thread.id}?${
-                categoryId && id !== thread.id ? `c=${categoryId}` : "page=1"
+                commentId && id !== thread.id ? `c=${commentId}` : "page=1"
             }`}
             onClick={onClick}
         >
@@ -81,7 +80,7 @@ export default function MenuThread(props: {
                     <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
                         {thread.title}
                     </p>
-                    {Boolean(cat === 1 || search || profile || recall) && (
+                    {(menuMode !== "category" || cat === 1) && (
                         <Link
                             className="mr10 text-decoration-none"
                             to={`/category/${thread.category}`}

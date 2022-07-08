@@ -26,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchbar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
 import { wholePath } from "../lib/common";
-import { useCat, useProfile, useSearch } from "./MenuProvider";
+import { useCat, useMenuMode } from "./MenuProvider";
 import MetahkgLogo from "./logo";
 
 /**
@@ -38,12 +38,13 @@ export default function SideBar() {
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useQuery();
     const [cat] = useCat();
-    const [profile] = useProfile();
-    const [search] = useSearch();
+    const [menuMode] = useMenuMode();
     const [, setSettingsOpen] = useSettingsOpen();
     const [user] = useUser();
     const categories = useCategories();
+
     const navigate = useNavigate();
+
     const toggleDrawer =
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
             if (
@@ -161,7 +162,7 @@ export default function SideBar() {
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&
-                                                            !(profile || search)
+                                                            menuMode === "category"
                                                                 ? theme.palette.secondary
                                                                       .main
                                                                 : "white",

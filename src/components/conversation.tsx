@@ -1,6 +1,6 @@
 import "../css/components/conversation.css";
 import "react-photo-view/dist/react-photo-view.css";
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import {
     Box,
     Button,
@@ -15,7 +15,7 @@ import Title from "./conversation/title";
 import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pagetop";
-import VisibilityDetector from "react-visibility-detector";
+import VisibilitySensor from "react-visibility-sensor";
 import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
 import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
@@ -129,132 +129,152 @@ function Conversation(props: { id: number }) {
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
 
-    return (
-        <Box
-            className="min-height-fullvh conversation-root"
-            sx={(theme) => ({
-                "& *::selection": {
-                    background: theme.palette.secondary.main,
-                    color: "black",
-                },
-            })}
-        >
-            <PhotoProvider>
-                <FloatingEditor />
-                <Gallery open={galleryOpen} setOpen={setGalleryOpen} images={images} />
-                <Dock btns={btns} />
-                <Share />
-                {!isSmallScreen && (
-                    <PageSelect
-                        last={currentPage !== 1 && numOfPages > 1}
-                        next={currentPage !== numOfPages && numOfPages > 1}
-                        pages={numOfPages}
-                        page={currentPage}
-                        onLastClicked={() => {
-                            changePage(currentPage - 1);
-                        }}
-                        onNextClicked={() => {
-                            changePage(currentPage + 1);
-                        }}
-                        onSelect={(e) => {
-                            changePage(Number(e.target.value));
-                        }}
+    return useMemo(
+        () => (
+            <Box
+                className="min-height-fullvh conversation-root"
+                sx={(theme) => ({
+                    "& *::selection": {
+                        background: theme.palette.secondary.main,
+                        color: "black",
+                    },
+                })}
+            >
+                <PhotoProvider>
+                    <FloatingEditor />
+                    <Gallery
+                        open={galleryOpen}
+                        setOpen={setGalleryOpen}
+                        images={images}
                     />
-                )}
-                {loading && <LinearProgress className="fullwidth" color="secondary" />}
-                <Title category={thread?.category} title={thread?.title} btns={btns} />
-                {thread?.pin && <PinnedComment comment={thread?.pin} />}
-                <Paper
-                    ref={cRoot}
-                    key={Number(reRender)}
-                    className={`overflow-auto nobgimage noshadow conversation-paper${
-                        thread?.pin ? "-pin" : ""
-                    }${loading ? "-loading" : ""}`}
-                    sx={{ bgcolor: "primary.dark" }}
-                    onScroll={onScroll}
-                >
-                    <Box className="fullwidth max-height-full max-width-full">
-                        {ready &&
-                            [...Array(pages)].map((p, index) => {
-                                const page =
-                                    roundup(thread.conversation[0].id / 25) + index;
-
-                                return (
-                                    <Box key={index}>
-                                        <VisibilityDetector
-                                            onVisibilityChange={(isVisible) => {
-                                                onVisibilityChange(isVisible, page);
-                                            }}
-                                        >
-                                            <PageTop
-                                                id={page}
-                                                pages={numOfPages}
-                                                page={page}
-                                                onChange={(
-                                                    e: SelectChangeEvent<number>
-                                                ) => {
-                                                    changePage(Number(e.target.value));
-                                                }}
-                                                last={!(page === 1 && !index)}
-                                                next={page !== numOfPages}
-                                                onLastClicked={() => {
-                                                    changePage(page - 1);
-                                                }}
-                                                onNextClicked={() => {
-                                                    changePage(page + 1);
-                                                }}
-                                            />
-                                        </VisibilityDetector>
-                                        <React.Fragment>
-                                            {thread.conversation
-                                                .slice(index * 25, (index + 1) * 25)
-                                                .map(
-                                                    (comment: commentType) =>
-                                                        !comment?.removed &&
-                                                        (story
-                                                            ? story === comment?.user.id
-                                                            : 1) && (
-                                                            <Comment
-                                                                key={comment.id}
-                                                                comment={comment}
-                                                                scrollIntoView={
-                                                                    Number(query.c) ===
-                                                                    comment.id
-                                                                }
-                                                            />
-                                                        )
-                                                )}
-                                        </React.Fragment>
-                                    </Box>
-                                );
-                            })}
-                    </Box>
-                    <Box
-                        ref={cBottom}
-                        className="flex justify-center align-center conversation-bottom"
-                        sx={{
-                            bgcolor: "primary.dark",
-                        }}
+                    <Dock btns={btns} />
+                    <Share />
+                    {!isSmallScreen && (
+                        <PageSelect
+                            last={currentPage !== 1 && numOfPages > 1}
+                            next={currentPage !== numOfPages && numOfPages > 1}
+                            pages={numOfPages}
+                            page={currentPage}
+                            onLastClicked={() => {
+                                changePage(currentPage - 1);
+                            }}
+                            onNextClicked={() => {
+                                changePage(currentPage + 1);
+                            }}
+                            onSelect={(e) => {
+                                changePage(Number(e.target.value));
+                            }}
+                        />
+                    )}
+                    {loading && (
+                        <LinearProgress className="fullwidth" color="secondary" />
+                    )}
+                    <Title
+                        category={thread?.category}
+                        title={thread?.title}
+                        btns={btns}
+                    />
+                    {thread?.pin && <PinnedComment comment={thread?.pin} />}
+                    <Paper
+                        ref={cRoot}
+                        key={Number(reRender)}
+                        className={`overflow-auto nobgimage noshadow conversation-paper${
+                            thread?.pin ? "-pin" : ""
+                        }${loading ? "-loading" : ""}`}
+                        sx={{ bgcolor: "primary.dark" }}
+                        onScroll={onScroll}
                     >
-                        {!updating ? (
-                            <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={() => {
-                                    setEnd(false);
-                                    update();
-                                }}
-                            >
-                                Update
-                            </Button>
-                        ) : (
-                            <CircularProgress disableShrink color="secondary" />
-                        )}
-                    </Box>
-                    <PageBottom />
-                </Paper>
-            </PhotoProvider>
-        </Box>
+                        <Box className="fullwidth max-height-full max-width-full">
+                            {ready &&
+                                [...Array(pages)].map((p, index) => {
+                                    const page =
+                                        roundup(thread.conversation[0].id / 25) + index;
+
+                                    return (
+                                        <Box key={index}>
+                                            <VisibilitySensor
+                                                intervalDelay={200}
+                                                partialVisibility
+                                                scrollCheck
+                                                onChange={(isVisible: boolean) => {
+                                                    onVisibilityChange(isVisible, page);
+                                                }}
+                                            >
+                                                <PageTop
+                                                    id={page}
+                                                    pages={numOfPages}
+                                                    page={page}
+                                                    onChange={(
+                                                        e: SelectChangeEvent<number>
+                                                    ) => {
+                                                        changePage(
+                                                            Number(e.target.value)
+                                                        );
+                                                    }}
+                                                    last={!(page === 1 && !index)}
+                                                    next={page !== numOfPages}
+                                                    onLastClicked={() => {
+                                                        changePage(page - 1);
+                                                    }}
+                                                    onNextClicked={() => {
+                                                        changePage(page + 1);
+                                                    }}
+                                                />
+                                            </VisibilitySensor>
+                                            <React.Fragment>
+                                                {thread.conversation
+                                                    .slice(index * 25, (index + 1) * 25)
+                                                    .map(
+                                                        (comment: commentType) =>
+                                                            !comment?.removed &&
+                                                            (story
+                                                                ? story ===
+                                                                  comment?.user.id
+                                                                : 1) && (
+                                                                <Comment
+                                                                    key={comment.id}
+                                                                    comment={comment}
+                                                                    scrollIntoView={
+                                                                        Number(
+                                                                            query.c
+                                                                        ) === comment.id
+                                                                    }
+                                                                />
+                                                            )
+                                                    )}
+                                            </React.Fragment>
+                                        </Box>
+                                    );
+                                })}
+                        </Box>
+                        <Box
+                            ref={cBottom}
+                            className="flex justify-center align-center conversation-bottom"
+                            sx={{
+                                bgcolor: "primary.dark",
+                            }}
+                        >
+                            {!updating ? (
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() => {
+                                        setEnd(false);
+                                        update();
+                                    }}
+                                >
+                                    Update
+                                </Button>
+                            ) : (
+                                <CircularProgress disableShrink color="secondary" />
+                            )}
+                        </Box>
+                        <PageBottom />
+                    </Paper>
+                </PhotoProvider>
+            </Box>
+        ),
+        [btns, cBottom, cRoot, changePage, currentPage, galleryOpen, images, isSmallScreen, loading, numOfPages, onScroll, onVisibilityChange, pages, query.c, reRender, ready, setEnd, setGalleryOpen, story, thread?.category, thread?.conversation, thread?.pin, thread?.title, update, updating]
     );
 }
 

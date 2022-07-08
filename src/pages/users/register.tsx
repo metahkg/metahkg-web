@@ -1,5 +1,5 @@
 import "../../css/pages/users/register.css";
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import hash from "hash.js";
 import {
     Alert,
@@ -68,21 +68,7 @@ function SexSelect(props: {
     );
 }
 
-/**
- * Register component for /users/register
- * initially 3 text fields and a Select list (Sex)
- * When verification is pending
- * (waiting for user to type verification code sent to their email address),
- * there would be another textfield alongside Sex for the verification code
- * a captcha must be completed before registering, if registering fails,
- * the captcha would reload
- * process: register --> verify --> account created -->
- * redirect to query.returnto if exists, otherwise homepage after verification
- * If user already logged in, he is redirected to /
- * @returns register page
- */
 export default function Register() {
-    setTitle("Register | Metahkg");
     const [width] = useWidth();
     const [, setNotification] = useNotification();
     const [name, setName] = useState("");
@@ -102,6 +88,15 @@ export default function Register() {
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
+
+    const small = width / 2 - 100 <= 450;
+
+    useLayoutEffect(() => {
+        setTitle("Register | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu, user]);
+
+    if (user) <Navigate to="/" replace />;
 
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -127,24 +122,13 @@ export default function Register() {
                     });
                 })
                 .catch((err) => {
-                    setAlert({
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                    setNotification({
-                        open: true,
-                        text: parseError(err),
-                    });
+                    setAlert({ severity: "error", text: parseError(err) });
+                    setNotification({ open: true, text: parseError(err) });
                     setRtoken("");
                     setDisabled(false);
                     grecaptcha.reset();
                 });
     }
-
-    if (user) return <Navigate to="/" replace />;
-
-    menu && setMenu(false);
-    const small = width / 2 - 100 <= 450;
 
     const inputs: TextFieldProps[] = [
         {

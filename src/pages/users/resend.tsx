@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import {
     useNotification,
@@ -21,7 +21,6 @@ import { parseError } from "../../lib/parseError";
 declare const grecaptcha: { reset: () => void };
 
 export default function Verify() {
-    setTitle("Resend Verification Email | Metahkg");
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -35,6 +34,15 @@ export default function Verify() {
     const [rtoken, setRtoken] = useState("");
     const [user] = useUser();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+
+    const small = width / 2 - 100 <= 450;
+
+    useLayoutEffect(() => {
+        setTitle("Resend Verification Email | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu, user]);
+
+    if (user) <Navigate to="/" replace />;
 
     function resend() {
         setAlert({ severity: "info", text: "Requesting resend..." });
@@ -77,12 +85,6 @@ export default function Verify() {
         if (query.email && !user) resend();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    if (user) return <Navigate to="/" replace />;
-
-    menu && setMenu(false);
-
-    const small = width / 2 - 100 <= 450;
 
     return (
         <Box

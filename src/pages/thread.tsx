@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import Conversation from "../components/conversation";
 import { Box } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import { useCat, useId, useMenu } from "../components/MenuProvider";
+import { useParams, Navigate } from "react-router-dom";
+import { useId, useMenu } from "../components/MenuProvider";
 import { useIsSmallScreen } from "../components/ContextProvider";
 import isInteger from "is-sn-integer";
 import { ShareProvider } from "../components/conversation/ShareProvider";
@@ -15,18 +14,20 @@ import ConversationProvider from "../components/conversation/ConversationContext
  */
 export default function Thread() {
     const params = useParams();
-    const [category] = useCat();
     const [id, setId] = useId();
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
 
-    if (!isInteger(params.id)) return <Navigate to="/404" replace />;
-
-    !menu && !isSmallScreen && setMenu(true);
-    menu && isSmallScreen && setMenu(false);
-    !category && !id && setId(Number(params.id));
-
     const threadId = Number(params.id);
+
+    useLayoutEffect(() => {
+        !menu && !isSmallScreen && setMenu(true);
+        menu && isSmallScreen && setMenu(false);
+
+        id !== threadId && setId(threadId);
+    }, [menu, isSmallScreen, params.id, setMenu, setId, threadId, id]);
+
+    if (!isInteger(params.id)) return <Navigate to="/404" replace />;
 
     return (
         <Box

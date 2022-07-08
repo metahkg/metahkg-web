@@ -1,5 +1,5 @@
 import "../css/pages/notfound.css";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
@@ -11,8 +11,10 @@ import { setTitle } from "../lib/common";
 export default function NotFound() {
     const [menu, setMenu] = useMenu();
 
-    setTitle("404 Not Found | Metahkg");
-    menu && setMenu(false);
+    useLayoutEffect(() => {
+        setTitle("404 Not Found | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu]);
 
     return (
         <Box

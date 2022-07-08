@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Alert, Box } from "@mui/material";
 import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import { useNotification, useUser } from "../../components/ContextProvider";
 import { resetApi } from "../../lib/api";
+import { setTitle } from "../../lib/common";
 
 /**
  * Renders an alert while logging out.
@@ -17,9 +18,13 @@ export default function Logout() {
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
 
-    (function onRender() {
-        menu && setMenu(false);
+    useLayoutEffect(() => {
+        setTitle("Logout | Metahkg");
 
+        menu && setMenu(false);
+    }, [menu, setMenu]);
+
+    useEffect(() => {
         // logout
         localStorage.removeItem("token");
         setUser(null);
@@ -30,7 +35,7 @@ export default function Logout() {
             replace: true,
         });
         setNotification({ open: true, text: "Logged out." });
-    })();
+    }, [navigate, query.returnto, setNotification, setUser])
 
     return (
         <Box

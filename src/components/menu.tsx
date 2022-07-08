@@ -4,11 +4,9 @@ import { Box } from "@mui/material";
 import {
     useReFetch,
     useMenu,
-    useProfile,
-    useRecall,
-    useSearch,
     useSelected,
     useSmode,
+    useMenuMode,
 } from "./MenuProvider";
 import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
 import SearchBar from "./searchbar";
@@ -28,17 +26,13 @@ function Menu() {
     const [selected, setSelected] = useSelected();
     const [data, setReFetch] = useReFetch();
     const [menu] = useMenu();
-    const [search] = useSearch();
+    const [menuMode] = useMenuMode();
     const [smode] = useSmode();
-    const [profile] = useProfile();
-    const [recall] = useRecall();
+
     const [query, setQuery] = useQuery();
     const [, setBack] = useBack();
     const navigate = useNavigate();
     const [, setSettingsOpen] = useSettingsOpen();
-
-    const mode =
-        (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
 
     const slideRenderer = useCallback(
         (props: { key: number; index: number }) => {
@@ -92,7 +86,7 @@ function Menu() {
                 selected={selected}
             />
             {/*if search something in drawer, also show the search bar under the tab (Relevance, created, last reply*/}
-            {search && (
+            {menuMode === "search" && (
                 <div className="flex fullwidth">
                     <div className="flex fullwidth justify-center align-center m10 menu-search">
                         <SearchBar
@@ -115,18 +109,20 @@ function Menu() {
             {useMemo(
                 () => (
                     <VirtualizeSwipeableViews
-                        key={mode}
+                        key={menuMode}
                         index={selected}
                         onChangeIndex={(idx) => {
                             setSelected(idx);
                         }}
                         containerStyle={{ flex: 1 }}
-                        slideCount={{ menu: 2, profile: 2, search: 3, recall: 1 }[mode]}
+                        slideCount={
+                            { category: 2, profile: 2, search: 3, recall: 1 }[menuMode]
+                        }
                         slideRenderer={slideRenderer}
                         enableMouseEvents={true}
                     />
                 ),
-                [mode, selected, setSelected, slideRenderer]
+                [menuMode, selected, setSelected, slideRenderer]
             )}
         </Box>
     );

@@ -1,20 +1,12 @@
 import "../css/pages/create.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import {
-    useCat,
-    useReFetch,
-    useMenu,
-    useProfile,
-    useRecall,
-    useSearch,
-    useMenuTitle,
-} from "../components/MenuProvider";
+import { useCat, useMenu } from "../components/MenuProvider";
 import {
     useIsSmallScreen,
     useNotification,
@@ -35,35 +27,38 @@ declare const grecaptcha: { reset: () => void };
  * Page for creating a new thread
  */
 export default function Create() {
-    setTitle("Create thread | Metahkg");
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
     const [width] = useWidth();
-    const [profile, setProfile] = useProfile();
-    const [cat, setCat] = useCat();
-    const [search, setSearch] = useSearch();
-    const [recall, setRecall] = useRecall();
-    const [, setReFetch] = useReFetch();
-    const [mtitle, setMtitle] = useMenuTitle();
-    const [, setNotification] = useNotification();
+    const [cat] = useCat();
+    const [notification, setNotification] = useNotification();
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
     const [rtoken, setRtoken] = useState(""); //recaptcha token
-    const [postTitle, setPostTitle] = useState(""); //this will be the post title
+    const [threadTitle, setThreadTitle] = useState(""); //this will be the post title
     const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
+
     const quote = {
         threadId: Number(String(query.quote).split(".")[0]),
         commentId: Number(String(query.quote).split(".")[1]),
     };
+
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+
+    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
+
+    useLayoutEffect(() => {
+        setTitle("Create thread | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu, user]);
 
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
@@ -78,25 +73,24 @@ export default function Create() {
                         );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
-                            setNotification({ open: false, text: "" });
-                        }, 1000);
+                            if (notification.open)
+                                setNotification({ open: false, text: "" });
+                        }, 500);
                     } else {
                         setAlert({ severity: "error", text: "Comment not found!" });
                         setNotification({ open: true, text: "Comment not found!" });
                     }
                 })
                 .catch(() => {
-                    setAlert({
-                        severity: "warning",
-                        text: "Unable to fetch comment. This comment would not be a quote.",
-                    });
-                    setNotification({
-                        open: true,
-                        text: "Unable to fetch comment. This comment would not be a quote.",
-                    });
+                    const text =
+                        "Unable to fetch comment. This comment would not be a quote.";
+                    setAlert({ severity: "warning", text });
+                    setNotification({ open: true, text });
                 });
         }
-    }, [quote.commentId, quote.threadId, setNotification, user]);
+    }, [notification.open, quote.commentId, quote.threadId, setNotification, user]);
+
+    if (!user) return <Navigate to={`/users/login?continue=true&returnto=${encodeURIComponent(wholePath())}`} replace />
 
     function create() {
         setAlert({ severity: "info", text: "Creating thread..." });
@@ -104,51 +98,26 @@ export default function Create() {
         setDisabled(true);
         api.threads
             .create({
-                title: postTitle,
+                title: threadTitle,
                 category: catchoosed,
-                comment: comment,
-                rtoken: rtoken,
+                comment,
+                rtoken,
             })
             .then((res) => {
-                cat && setCat(0);
-                search && setSearch(false);
-                recall && setRecall(false);
-                profile && setProfile(0);
-                setReFetch(true);
-                mtitle && setMtitle("");
                 navigate(`/thread/${res.data.id}`, { replace: true });
                 setTimeout(() => {
-                    setNotification({ open: false, text: "" });
+                    notification.open && setNotification({ open: false, text: "" });
                 }, 100);
             })
             .catch((err) => {
-                setAlert({
-                    severity: "error",
-                    text: parseError(err),
-                });
-                setNotification({
-                    open: true,
-                    text: parseError(err),
-                });
+                const text = parseError(err);
+                setAlert({ severity: "error", text });
+                setNotification({ open: true, text });
                 setDisabled(false);
                 setRtoken("");
                 grecaptcha.reset();
             });
     }
-
-    menu && setMenu(false);
-
-    if (!user)
-        return (
-            <Navigate
-                to={`/users/login?continue=true&returnto=${encodeURIComponent(
-                    wholePath()
-                )}`}
-                replace
-            />
-        );
-
-    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
 
     return (
         <Box
@@ -183,7 +152,7 @@ export default function Create() {
                             fullWidth
                             label="Title"
                             onChange={(e) => {
-                                setPostTitle(e.target.value);
+                                setThreadTitle(e.target.value);
                             }}
                         />
                     </div>
@@ -212,7 +181,7 @@ export default function Create() {
                         <Button
                             disabled={
                                 disabled ||
-                                !(comment && postTitle && rtoken && catchoosed)
+                                !(comment && threadTitle && rtoken && catchoosed)
                             }
                             className={`${
                                 isSmallSmallScreen ? "mt15 " : ""
