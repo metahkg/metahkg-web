@@ -82,8 +82,22 @@ export default function Profile() {
 
         if (menuMode !== "profile") setMenuMode("profile");
         if (profile !== userId) setProfile(userId);
-
-    }, [back, isSmallScreen, menu, menuMode, profile, selected, setBack, setMenu, setMenuMode, setMenuTitle, setProfile, setReFetch, setSelected, userId]);
+    }, [
+        back,
+        isSmallScreen,
+        menu,
+        menuMode,
+        profile,
+        selected,
+        setBack,
+        setMenu,
+        setMenuMode,
+        setMenuTitle,
+        setProfile,
+        setReFetch,
+        setSelected,
+        userId,
+    ]);
 
     if (!userId) return <Navigate to="/" replace />;
 

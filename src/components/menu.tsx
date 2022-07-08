@@ -1,13 +1,7 @@
 import "../css/components/menu.css";
 import React, { memo, useCallback, useMemo } from "react";
 import { Box } from "@mui/material";
-import {
-    useReFetch,
-    useMenu,
-    useSelected,
-    useSmode,
-    useMenuMode,
-} from "./MenuProvider";
+import { useReFetch, useMenu, useSelected, useSmode, useMenuMode } from "./MenuProvider";
 import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
 import SearchBar from "./searchbar";
 import { useNavigate } from "react-router-dom";

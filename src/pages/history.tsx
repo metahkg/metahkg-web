@@ -40,10 +40,24 @@ export default function History() {
 
         if (profile !== Number(params.id)) setProfile(Number(params.id));
         if (menuMode !== "profile") setMenuMode("profile");
+    }, [
+        back,
+        isSmallScreen,
+        menu,
+        menuMode,
+        params.id,
+        profile,
+        selected,
+        setMenuTitle,
+        setReFetch,
+        setSelected,
+        setMenuMode,
+        setMenu,
+        setBack,
+        setProfile,
+    ]);
 
-    }, [back, isSmallScreen, menu, menuMode, params.id, profile, selected, setMenuTitle, setReFetch, setSelected, setMenuMode, setMenu, setBack, setProfile]);
-
-    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />
+    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
 
     return <React.Fragment />;
 }

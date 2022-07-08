@@ -274,7 +274,33 @@ function Conversation(props: { id: number }) {
                 </PhotoProvider>
             </Box>
         ),
-        [btns, cBottom, cRoot, changePage, currentPage, galleryOpen, images, isSmallScreen, loading, numOfPages, onScroll, onVisibilityChange, pages, query.c, reRender, ready, setEnd, setGalleryOpen, story, thread?.category, thread?.conversation, thread?.pin, thread?.title, update, updating]
+        [
+            btns,
+            cBottom,
+            cRoot,
+            changePage,
+            currentPage,
+            galleryOpen,
+            images,
+            isSmallScreen,
+            loading,
+            numOfPages,
+            onScroll,
+            onVisibilityChange,
+            pages,
+            query.c,
+            reRender,
+            ready,
+            setEnd,
+            setGalleryOpen,
+            story,
+            thread?.category,
+            thread?.conversation,
+            thread?.pin,
+            thread?.title,
+            update,
+            updating,
+        ]
     );
 }
 
