@@ -10,7 +10,6 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import queryString from "query-string";
-import loadable from "@loadable/component";
 import Title from "./conversation/title";
 import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
@@ -45,11 +44,10 @@ import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
 import FloatingEditor from "./floatingEditor";
 import Comment from "./conversation/comment";
-
-const PinnedComment = loadable(() => import("./conversation/pin"));
-const Share = loadable(() => import("./conversation/share"));
-const Gallery = loadable(() => import("./conversation/gallery"));
-const Dock = loadable(() => import("./dock"));
+import Gallery from "./conversation/gallery";
+import Dock from "./dock";
+import Share from "./conversation/share";
+import PinnedComment from "./conversation/pin";
 
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
