@@ -242,7 +242,7 @@ export function useReCaptchaSiteKey() {
     return reCaptchaSiteKey;
 }
 
-export function useAlertDialog () {
+export function useAlertDialog() {
     const { alertDialog } = useContext(Context);
     return alertDialog;
 }
