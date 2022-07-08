@@ -17,7 +17,7 @@ import { api } from "./lib/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
-import {register, unregister} from "./serviceWorkerRegistration";
+import { register, unregister } from "./serviceWorkerRegistration";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -77,8 +77,8 @@ export default function App() {
                                         ...alertDialog,
                                         open: false,
                                     });
-                                }
-                            }
+                                },
+                            },
                         ],
                     });
                 },
