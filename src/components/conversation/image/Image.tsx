@@ -52,13 +52,7 @@ function ImgComponent(props: Props) {
         <PhotoView src={src}>
             <div
                 style={{
-                    position: "relative",
-                    ...(imgRef.current &&
-                        cRoot.current &&
-                        // TODO: should not hard code
-                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
-                            display: "inline-block",
-                        }),
+                    position: "relative",              display: "inline-block",
                 }}
             >
                 {!disableResize && (
