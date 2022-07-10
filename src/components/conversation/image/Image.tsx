@@ -54,7 +54,12 @@ function ImgComponent(props: Props) {
                 className={"flex"}
                 style={{
                     position: "relative",
-                    display: "inline-block",
+                    ...(imgRef.current &&
+                        cRoot.current &&
+                        // TODO: should not hard code
+                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
+                            display: "inline-block",
+                        }),
                 }}
             >
                 {!disableResize && (
