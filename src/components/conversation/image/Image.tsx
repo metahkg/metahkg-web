@@ -8,6 +8,7 @@ import prettierCss from "prettier/parser-postcss";
 import Loader from "../../../lib/loader";
 import { IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
+import { useCRoot } from "../ConversationContext";
 import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
@@ -23,6 +24,7 @@ function ImgComponent(props: Props) {
     const { src } = useImage({ srcList: props.src });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
+    const cRoot = useCRoot();
     const imgRef = useRef<HTMLImageElement>(null);
     const [reRender, setReRender] = useState(false);
 
