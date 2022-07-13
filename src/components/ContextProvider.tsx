@@ -110,11 +110,11 @@ export default function ContextProvider(props: {
 
     useEffect(() => {
         localStorage.setItem("settings", JSON.stringify(settings));
-    })
+    });
 
     useEffect(() => {
         localStorage.setItem("blocklist", JSON.stringify(blockList));
-    })
+    });
 
     function updateSize() {
         setWidth(window.innerWidth);
@@ -262,7 +262,7 @@ export function useAlertDialog() {
     return alertDialog;
 }
 
-export function useBlockList () {
+export function useBlockList() {
     const { blockList } = useContext(Context);
     return blockList;
 }
