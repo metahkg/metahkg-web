@@ -15,6 +15,7 @@ import { api } from "../lib/api";
 import { userType } from "../types/user";
 import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
+import { User } from "metahkg-api/dist/types/user";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -29,6 +30,7 @@ const Context = createContext<{
     user: [userType | null, Dispatch<SetStateAction<userType | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
+    blockList: [User[], Dispatch<SetStateAction<User[]>>];
     //@ts-ignore
 }>(null);
 /**
@@ -88,6 +90,9 @@ export default function ContextProvider(props: {
         message: "",
         btns: [],
     });
+    const [blockList, setBlockList] = useState<User[]>(
+        JSON.parse(localStorage.getItem("blocklist") || "[]")
+    );
 
     useEffect(() => {
         api.category.categories().then((res) => {
@@ -103,6 +108,14 @@ export default function ContextProvider(props: {
         localStorage.setItem("query", query);
     }, [query]);
 
+    useEffect(() => {
+        localStorage.setItem("settings", JSON.stringify(settings));
+    })
+
+    useEffect(() => {
+        localStorage.setItem("blocklist", JSON.stringify(blockList));
+    })
+
     function updateSize() {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
@@ -112,6 +125,7 @@ export default function ContextProvider(props: {
         listeningResize.current = true;
         window.addEventListener("resize", updateSize);
     }
+
     return (
         <Context.Provider
             value={{
@@ -127,6 +141,7 @@ export default function ContextProvider(props: {
                 user: [user, setUser],
                 reCaptchaSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
+                blockList: [blockList, setBlockList],
             }}
         >
             {props.children}
@@ -245,4 +260,9 @@ export function useReCaptchaSiteKey() {
 export function useAlertDialog() {
     const { alertDialog } = useContext(Context);
     return alertDialog;
+}
+
+export function useBlockList () {
+    const { blockList } = useContext(Context);
+    return blockList;
 }

@@ -29,7 +29,7 @@ COPY ./scripts ./scripts
 COPY ./.babelrc ./
 COPY ./config-overrides.js ./
 
-RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn run build; fi;
+RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn build && rm -rf node_modules; fi;
 
 FROM node:18-alpine
 
@@ -53,6 +53,7 @@ ENV REACT_APP_ENV $env
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/build ./build
+COPY --from=build /usr/src/app/node_modules* ./node_modules
 
 COPY ./scripts ./scripts
 
@@ -62,6 +63,6 @@ COPY ./.babelrc ./
 COPY ./config-overrides.js ./
 COPY ./serve.json ./
 
-RUN if [ "${env}" = "dev" ]; then yarn install; else (rm tsconfig.json .babelrc config-overrides.js; yarn global add serve); fi;
+RUN if [ "${env}" != "dev" ]; then rm tsconfig.json .babelrc config-overrides.js; yarn global add serve; fi;
 
 CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;

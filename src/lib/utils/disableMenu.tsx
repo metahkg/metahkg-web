@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { useMenu } from "../../MenuProvider";
+import { useMenu } from "../../components/MenuProvider";
 
 export default function DisableMenu(props: { children: React.ReactNode }) {
     const { children } = props;

@@ -11,9 +11,7 @@ export default function Settings(props: {
 }) {
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
-    useEffect(() => {
-        localStorage.setItem("settings", JSON.stringify(settings));
-    }, [settings]);
+
     const settingItems: {
         title: string;
         action: (e: React.ChangeEvent<HTMLInputElement>) => void;

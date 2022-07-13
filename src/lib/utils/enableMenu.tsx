@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
-import { useIsSmallScreen } from "../../ContextProvider";
-import { useMenu } from "../../MenuProvider";
+import { useIsSmallScreen } from "../../components/ContextProvider";
+import { useMenu } from "../../components/MenuProvider";
 
 export default function EnableMenu(props: {
     children: React.ReactNode;

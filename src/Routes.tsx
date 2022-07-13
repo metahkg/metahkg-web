@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { setDescription, setTitle } from "./lib/common";
 import { Navigate, Outlet, Route, Routes as Switch, useLocation } from "react-router-dom";
 import loadable from "@loadable/component";
-import EnableMenu from "./components/menu/utils/enableMenu";
-import DisableMenu from "./components/menu/utils/disableMenu";
+import EnableMenu from "./lib/utils/enableMenu";
+import DisableMenu from "./lib/utils/disableMenu";
 
 const Thread = loadable(() => import("./pages/thread"));
 

@@ -11,6 +11,7 @@ import {
     useUser,
     useIsSmallScreen,
     useAlertDialog,
+    useBlockList,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
@@ -22,10 +23,6 @@ import { register, unregister } from "./serviceWorkerRegistration";
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
 
-/**
- * Menu is not in the Routes to prevent unnecessary rerenders
- * Instead it is controlled by components inside Routes
- */
 export default function App() {
     const [menu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
@@ -33,16 +30,21 @@ export default function App() {
     const [settings] = useSettings();
     const [user] = useUser();
     const [alertDialog, setAlertDialog] = useAlertDialog();
+    const [, setBlockList] = useBlockList();
 
     useEffect(() => {
-        if (user)
+        if (user) {
             api.users.status().then((res) => {
                 const { active } = res.data;
                 if (!active) {
                     localStorage.removeItem("token");
-                    window.location.reload();
+                    return window.location.reload();
                 }
             });
+            api.users.blocklist().then((res) => {
+                setBlockList(res.data);
+            });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
