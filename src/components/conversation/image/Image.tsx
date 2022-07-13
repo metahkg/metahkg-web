@@ -51,7 +51,6 @@ function ImgComponent(props: Props) {
     return (
         <PhotoView src={src}>
             <div
-                className={"flex"}
                 style={{
                     position: "relative",
                     ...(imgRef.current &&

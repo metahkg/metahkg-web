@@ -25,6 +25,7 @@ RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; 
 
 COPY ./src ./src
 COPY ./public ./public
+COPY ./scripts ./scripts
 COPY ./.babelrc ./
 COPY ./config-overrides.js ./
 
@@ -35,12 +36,25 @@ FROM node:18-alpine
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
+ARG REACT_APP_IMAGES_API_URL
+ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
+
+ARG REACT_APP_build
+ENV REACT_APP_build $REACT_APP_build
+
+ARG REACT_APP_version
+ENV REACT_APP_version $REACT_APP_version
+
 ARG env
 ENV env $env
+
+ENV REACT_APP_ENV $env
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/build ./build
+
+COPY ./scripts ./scripts
 
 COPY ./package.json ./
 COPY ./tsconfig.json ./

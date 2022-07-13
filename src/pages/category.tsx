@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Template from "../components/template";
@@ -6,13 +6,10 @@ import { useBack, useCategories, useIsSmallScreen } from "../components/ContextP
 import {
     useCat,
     useReFetch,
-    useId,
     useMenu,
-    useProfile,
-    useRecall,
-    useSearch,
     useSelected,
     useMenuTitle,
+    useMenuMode,
 } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
 
@@ -23,27 +20,24 @@ import { setTitle } from "../lib/common";
  */
 export default function Category() {
     const params = useParams();
-    const [id, setId] = useId();
     const [menu, setMenu] = useMenu();
+    const [menuMode, setMenuMode] = useMenuMode();
     const [category, setCategory] = useCat();
-    const [search, setSearch] = useSearch();
-    const [profile, setProfile] = useProfile();
     const [back, setBack] = useBack();
-    const [recall, setRecall] = useRecall();
     const [, setReFetch] = useReFetch();
     const isSmallScreen = useIsSmallScreen();
     const [, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
     const categories = useCategories();
 
-    (function onRender() {
+    useLayoutEffect(() => {
         const categoryName = categories.find((i) => i.id === category)?.name;
         categoryName && setTitle(categoryName + " | Metahkg");
 
         function clearData() {
             setReFetch(true);
             setMenuTitle("");
-            setSelected(0);
+            if (selected !== 0) setSelected(0);
         }
 
         back !== window.location.pathname && setBack(window.location.pathname);
@@ -52,18 +46,28 @@ export default function Category() {
         !menu && setMenu(true);
 
         // clear data, if category in context is not updated  or  search/profile/recall have some value
-        (category !== Number(params.category) || search || profile || recall) &&
-            clearData();
+        if (menuMode !== "category" || category !== Number(params.category)) clearData();
+
+        if (menuMode !== "category") setMenuMode("category");
 
         // update the category in context
-        category !== Number(params.category) && setCategory(Number(params.category));
-
-        id && setId(0);
-        search && setSearch(false);
-        recall && setRecall(false);
-        profile && setProfile(0);
-        ![0, 1].includes(selected) && setSelected(0);
-    })();
+        if (category !== Number(params.category)) setCategory(Number(params.category));
+    }, [
+        back,
+        categories,
+        category,
+        menu,
+        menuMode,
+        params.category,
+        selected,
+        setBack,
+        setCategory,
+        setMenu,
+        setMenuMode,
+        setMenuTitle,
+        setReFetch,
+        setSelected,
+    ]);
 
     return (
         <Box

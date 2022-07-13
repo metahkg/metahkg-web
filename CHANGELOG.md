@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.5.10
+
+- service worker (alpha)
+
+## v2.5.9
+
+- fixed conversation (scroll and pagify)
+- mode-based menu, more simple
+- disable and enable menu before loading the components
+- general fixes
+
 ## v2.5.8
 
 - synchronized search bars

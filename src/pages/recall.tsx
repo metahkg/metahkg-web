@@ -1,15 +1,11 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 import {
-    useCat,
     useReFetch,
-    useId,
     useMenu,
-    useProfile,
-    useRecall,
-    useSearch,
+    useMenuMode,
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
@@ -21,20 +17,17 @@ import { setTitle } from "../lib/common";
  * @returns The empty component is being returned.
  */
 export default function Recall() {
-    setTitle("Recall | Metahkg");
-    const [id, setId] = useId();
     const [menu, setMenu] = useMenu();
-    const [category, setCategory] = useCat();
-    const [search, setSearch] = useSearch();
-    const [profile, setProfile] = useProfile();
     const [back, setBack] = useBack();
-    const [recall, setRecall] = useRecall();
+    const [menuMode, setMenuMode] = useMenuMode();
     const [, setReFetch] = useReFetch();
     const isSmallScreen = useIsSmallScreen();
     const [title, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
 
-    (function onRender() {
+    useLayoutEffect(() => {
+        setTitle("Recall | Metahkg");
+
         function clearData() {
             setReFetch(true);
             title && setMenuTitle("");
@@ -44,16 +37,23 @@ export default function Recall() {
         back !== window.location.pathname && setBack(window.location.pathname);
         !menu && setMenu(true);
 
-        (category || search || profile || !recall) && clearData();
-
-        id && setId(0);
-        category && setCategory(0);
-        search && setSearch(false);
-        profile && setProfile(0);
-        !recall && setRecall(true);
-
-        ![0, 1].includes(selected) && setSelected(0);
-    })();
+        if (menuMode !== "recall") {
+            clearData();
+            setMenuMode("recall");
+        }
+    }, [
+        back,
+        menu,
+        menuMode,
+        selected,
+        setBack,
+        setMenu,
+        setMenuMode,
+        setMenuTitle,
+        setReFetch,
+        setSelected,
+        title,
+    ]);
 
     return (
         <Box

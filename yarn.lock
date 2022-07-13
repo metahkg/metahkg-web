@@ -2279,6 +2279,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-visibility-sensor@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-visibility-sensor/-/react-visibility-sensor-5.1.0.tgz#10a4eace7cacf3c4dcb4ab1b5fbadb84acbd53df"
+  integrity sha512-7RaFo0tqqqC4uQtYpiulPIMxjxDPCp3ruxGQr5qxSJivDzhscdK1s9XgKHm9hdlVChTLO7CUgE6Jilw1whSs5g==
+  dependencies:
+    react-visibility-sensor "*"
+
 "@types/react@*":
   version "18.0.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.14.tgz#e016616ffff51dba01b04945610fe3671fdbe06d"
@@ -8350,10 +8357,12 @@ react-twitter-embed@^4.0.4:
   dependencies:
     scriptjs "^2.5.9"
 
-react-visibility-detector@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-visibility-detector/-/react-visibility-detector-1.1.1.tgz#323724207533fc82bb9b7defeb54de5c1811433f"
-  integrity sha512-j0DMlEMsavKb+5qQdX23mh3nxPQgehekjTMzNloULI76osFS7xfMVGj8YetSqaMNv+rH88mtsrv13HLo6Bbaag==
+react-visibility-sensor@*, react-visibility-sensor@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/react-visibility-sensor/-/react-visibility-sensor-5.1.1.tgz#5238380960d3a0b2be0b7faddff38541e337f5a9"
+  integrity sha512-cTUHqIK+zDYpeK19rzW6zF9YfT4486TIgizZW53wEZ+/GPBbK7cNS0EHyJVyHYacwFEvvHLEKfgJndbemWhB/w==
+  dependencies:
+    prop-types "^15.7.2"
 
 react@^18.2.0:
   version "18.2.0"

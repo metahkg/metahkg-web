@@ -14,6 +14,7 @@ import type { category } from "../types/category";
 import { api } from "../lib/api";
 import { userType } from "../types/user";
 import jwtDecode from "jwt-decode";
+import { AlertDialogProps } from "../lib/alertDialog";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -26,6 +27,7 @@ const Context = createContext<{
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [category[], Dispatch<category[]>];
     user: [userType | null, Dispatch<SetStateAction<userType | null>>];
+    alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
     //@ts-ignore
 }>(null);
@@ -77,6 +79,15 @@ export default function ContextProvider(props: {
             process.env.REACT_APP_recaptchasitekey ||
             "{RECAPTCHA_SITE_KEY}"
     );
+    const [alertDialog, setAlertDialog] = useState<AlertDialogProps>({
+        open: false,
+        setOpen: (x) => {
+            setAlertDialog({ ...alertDialog, open: x });
+        },
+        title: "",
+        message: "",
+        btns: [],
+    });
 
     useEffect(() => {
         api.category.categories().then((res) => {
@@ -115,6 +126,7 @@ export default function ContextProvider(props: {
                 categories: [categories, setCategories],
                 user: [user, setUser],
                 reCaptchaSiteKey,
+                alertDialog: [alertDialog, setAlertDialog],
             }}
         >
             {props.children}
@@ -209,14 +221,17 @@ export function useHistory() {
     const { history } = useContext(Context);
     return history;
 }
+
 export function useCategories() {
     const { categories } = useContext(Context);
     return categories[0];
 }
+
 export function useUser() {
     const { user } = useContext(Context);
     return user;
 }
+
 export function useIsSmallScreen() {
     const { width } = useContext(Context);
     return width[0] < 760;
@@ -225,4 +240,9 @@ export function useIsSmallScreen() {
 export function useReCaptchaSiteKey() {
     const { reCaptchaSiteKey } = useContext(Context);
     return reCaptchaSiteKey;
+}
+
+export function useAlertDialog() {
+    const { alertDialog } = useContext(Context);
+    return alertDialog;
 }

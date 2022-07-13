@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import {
-    useCat,
     useReFetch,
-    useId,
     useMenu,
     useProfile,
-    useRecall,
-    useSearch,
     useSelected,
     useMenuTitle,
+    useMenuMode,
 } from "../components/MenuProvider";
 import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 
@@ -21,20 +18,15 @@ import { useBack, useIsSmallScreen } from "../components/ContextProvider";
 export default function History() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
-    const [search, setSearch] = useSearch();
-    const [recall, setRecall] = useRecall();
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
     const [, setReFetch] = useReFetch();
-    const [id, setId] = useId();
-    const [cat, setCat] = useCat();
+    const [menuMode, setMenuMode] = useMenuMode();
 
-    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
-
-    (function onRender() {
+    useLayoutEffect(() => {
         function clearData() {
             setReFetch(true);
             setMenuTitle("");
@@ -44,14 +36,28 @@ export default function History() {
         !menu && setMenu(true);
         back !== window.location.pathname && setBack(window.location.pathname);
 
-        (profile !== Number(params.id) || search) && clearData();
-        profile !== Number(params.id) && setProfile(Number(params.id));
+        if (profile !== Number(params.id) || menuMode !== "profile") clearData();
 
-        search && setSearch(false);
-        recall && setRecall(false);
-        id && setId(0);
-        cat && setCat(0);
-    })();
+        if (profile !== Number(params.id)) setProfile(Number(params.id));
+        if (menuMode !== "profile") setMenuMode("profile");
+    }, [
+        back,
+        isSmallScreen,
+        menu,
+        menuMode,
+        params.id,
+        profile,
+        selected,
+        setMenuTitle,
+        setReFetch,
+        setSelected,
+        setMenuMode,
+        setMenu,
+        setBack,
+        setProfile,
+    ]);
+
+    if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
 
     return <React.Fragment />;
 }

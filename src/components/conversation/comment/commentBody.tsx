@@ -23,7 +23,7 @@ export default function CommentBody(props: {
         () => [
             comment.quote && !noQuote && (
                 <blockquote
-                    key={depth}
+                    key={0}
                     style={{ border: "none" }}
                     className={`flex fullwidth${depth !== 0 ? " novmargin" : ""}`}
                 >
@@ -67,7 +67,7 @@ export default function CommentBody(props: {
                     )}
                 </blockquote>
             ),
-            commentJSX,
+            <React.Fragment key={1}>{commentJSX}</React.Fragment>,
         ],
         [comment.quote, commentJSX, depth, noQuote, showQuote]
     );
@@ -75,7 +75,7 @@ export default function CommentBody(props: {
         Prism.highlightAll();
     });
     return (
-        <React.Fragment>
+        <React.Fragment key={depth}>
             {comment.quote && showQuote && (
                 <CommentPopup
                     open={quoteOpen}
@@ -91,11 +91,11 @@ export default function CommentBody(props: {
                         maxHeight,
                     }}
                 >
-                    <p
+                    <Box
                         className={`novmargin comment-body fullwidth break-word-force font-size-16`}
                     >
                         {content}
-                    </p>
+                    </Box>
                 </Box>
             ) : (
                 content

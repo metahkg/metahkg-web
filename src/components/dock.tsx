@@ -21,8 +21,10 @@ export default function Dock(props: {
                 >
                     <div className="flex justify-space-between fullwidth ml20 mr20 align-center">
                         <SideBar />
-                        {btns.map((btn) => (
-                            <IconButton onClick={btn.action}>{btn.icon}</IconButton>
+                        {btns.map((btn, index) => (
+                            <IconButton key={index} onClick={btn.action}>
+                                {btn.icon}
+                            </IconButton>
                         ))}
                     </div>
                 </Box>

@@ -4,14 +4,7 @@ import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material"
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
-import {
-    useCat,
-    useId,
-    useProfile,
-    useRecall,
-    useSearch,
-    useMenuTitle,
-} from "../MenuProvider";
+import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
 import { useIsSmallScreen } from "../ContextProvider";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
@@ -33,45 +26,46 @@ export default function MenuTop(props: {
     /** event handler for when a tab is selected */
     onClick: (e: number) => void;
 }) {
-    const [search] = useSearch();
     const [profile] = useProfile();
     const [category] = useCat();
-    const [recall] = useRecall();
     const [id] = useId();
+    const [menuMode] = useMenuMode();
     const isSmallScreen = useIsSmallScreen();
-    const mode =
-        (search && "search") || (profile && "profile") || (recall && "recall") || "menu";
+
     const inittitle = {
         search: "Search",
         profile: "User Profile",
-        menu: "Metahkg",
+        category: "Metahkg",
         recall: "Recall",
-    }[mode];
+    }[menuMode];
     const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = {
         search: ["Relevance", "Created", "Last Reply"],
         profile: ["Created", "Last Reply"],
-        menu: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
+        category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
         recall: [],
-    }[mode];
-    const mobileTop = mode !== "menu";
+    }[menuMode];
+
+    const noTitleBar = isSmallScreen && menuMode === "category";
+
     useEffect(() => {
-        if (!search && !recall && !menuTitle && (category || profile || id)) {
-            if (profile) {
+        if (!menuTitle) {
+            if (menuMode === "profile") {
                 api.profile
                     .userProfile({ userId: profile, nameonly: true })
                     .then((res) => {
                         setMenuTitle(res.data.name);
                         setTitle(`${res.data.name} | Metahkg`);
                     });
-            } else {
+            } else if (menuMode === "category" && (category || id)) {
                 api.category.info({ categoryId: category, threadId: id }).then((res) => {
                     setMenuTitle(res.data.name);
                     if (!id) setTitle(`${res.data.name} | Metahkg`);
                 });
             }
         }
-    }, [category, id, profile, recall, search, setMenuTitle, menuTitle]);
+    }, [category, id, profile, setMenuTitle, menuTitle, menuMode]);
+
     return (
         <div>
             {/*title and refresh and add button*/}
@@ -79,10 +73,10 @@ export default function MenuTop(props: {
                 className="fullwidth menutop-root"
                 sx={{
                     bgcolor: "primary.main",
-                    height: recall ? 50 : isSmallScreen && !mobileTop ? 50 : 90,
+                    height: menuMode === "recall" || noTitleBar ? 50 : 90,
                 }}
             >
-                {Boolean(isSmallScreen ? mobileTop : 1) && (
+                {!noTitleBar && (
                     <div
                         className={`flex fullwidth align-center menutop-top justify-${
                             isSmallScreen ? "center" : "space-between"
@@ -117,11 +111,10 @@ export default function MenuTop(props: {
                         )}
                     </div>
                 )}
-
                 {/*now should be latest and viral*/}
                 {Boolean(tabs.length) && (
                     <Box
-                        sx={{ height: isSmallScreen && !mobileTop ? 50 : 40 }}
+                        sx={{ height: noTitleBar ? 50 : 40 }}
                         className="flex fullwidth align-flex-end"
                     >
                         <Tabs

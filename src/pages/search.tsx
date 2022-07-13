@@ -1,13 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
-    useCat,
     useReFetch,
-    useId,
     useMenu,
-    useRecall,
-    useSearch,
+    useMenuMode,
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
@@ -17,17 +14,14 @@ import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 
 export default function Search() {
-    const [search, setSearch] = useSearch();
-    const [recall, setRecall] = useRecall();
     const [menu, setMenu] = useMenu();
+    const [menuMode, setMenuMode] = useMenuMode();
     const [back, setBack] = useBack();
     const [, setReFetch] = useReFetch();
     const [query, setQuery] = useQuery();
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
-    const [id, setId] = useId();
-    const [cat, setCat] = useCat();
     const navigate = useNavigate();
     const querystring = queryString.parse(window.location.search);
 
@@ -40,25 +34,36 @@ export default function Search() {
         navigate(`${window.location.pathname}?q=${encodeURIComponent(query)}`);
     }, [navigate, query]);
 
-    (function onRender() {
+    useLayoutEffect(() => {
         setTitle("Search | Metahkg");
 
-        back !== window.location.pathname &&
-            setBack(window.location.pathname + window.location.search);
-
-        !menu && setMenu(true);
-        id && setId(0);
-        cat && setCat(0);
-
-        if (!search) {
-            setSearch(true);
+        function clearData() {
             setReFetch(true);
             selected && setSelected(0);
             setMenuTitle("");
         }
 
-        recall && setRecall(false);
-    })();
+        back !== window.location.pathname &&
+            setBack(window.location.pathname + window.location.search);
+
+        !menu && setMenu(true);
+
+        if (menuMode !== "search") {
+            clearData();
+            setMenuMode("search");
+        }
+    }, [
+        back,
+        menu,
+        menuMode,
+        selected,
+        setBack,
+        setMenu,
+        setMenuMode,
+        setMenuTitle,
+        setReFetch,
+        setSelected,
+    ]);
 
     return (
         <Box

@@ -25,7 +25,7 @@ import "../css/components/searchbar.css";
 import React, { KeyboardEventHandler } from "react";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { useReFetch, useSearch, useSmode } from "./MenuProvider";
+import { useMenuMode, useReFetch, useSmode } from "./MenuProvider";
 
 const Search = styled("div")(({ theme }) => ({
     display: "flex",
@@ -78,7 +78,7 @@ export default function SearchBar(props: {
     const { query, onKeyPress, onChange } = props;
     const [, setReFetch] = useReFetch();
     const [smode, setSmode] = useSmode();
-    const [search] = useSearch();
+    const [menuMode] = useMenuMode();
 
     return (
         <Search>
@@ -92,7 +92,7 @@ export default function SearchBar(props: {
                 onChange={onChange}
                 value={query}
             />
-            {search && (
+            {menuMode === "search" && (
                 <Chip
                     label={smode ? "OP" : "Title"}
                     onClick={() => {

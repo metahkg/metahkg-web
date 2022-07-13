@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import "../css/pages/profile.css";
 import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
-    useCat,
     useReFetch,
-    useId,
     useMenu,
     useProfile,
-    useRecall,
-    useSearch,
     useSelected,
     useMenuTitle,
+    useMenuMode,
 } from "../components/MenuProvider";
 import UploadAvatar from "../components/profile/uploadavatar";
 import { setTitle } from "../lib/common";
@@ -34,15 +31,12 @@ import Loader from "../lib/loader";
 export default function Profile() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
-    const [search, setSearch] = useSearch();
-    const [recall, setRecall] = useRecall();
     const [requestedUser, setRequestedUser] = useState<UserData | null>(null);
     const [menu, setMenu] = useMenu();
+    const [menuMode, setMenuMode] = useMenuMode();
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
     const [, setMenuTitle] = useMenuTitle();
-    const [id, setId] = useId();
-    const [cat, setCat] = useCat();
     const [selected, setSelected] = useSelected();
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
@@ -67,12 +61,9 @@ export default function Profile() {
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params.id, requestedUser]);
+    }, [navigate, params.id, requestedUser, setNotification, userId]);
 
-    if (!userId) return <Navigate to="/" replace />;
-
-    (function onRender() {
+    useLayoutEffect(() => {
         /**
          * Clear the data and reset the title and selected index.
          */
@@ -87,20 +78,28 @@ export default function Profile() {
         !menu && !isSmallScreen && setMenu(true);
         menu && isSmallScreen && setMenu(false);
 
-        if (profile !== userId) {
-            setProfile(userId);
-            clearData();
-        }
+        if (profile !== userId || menuMode !== "profile") clearData();
 
-        if (search) {
-            setSearch(false);
-            clearData();
-        }
+        if (menuMode !== "profile") setMenuMode("profile");
+        if (profile !== userId) setProfile(userId);
+    }, [
+        back,
+        isSmallScreen,
+        menu,
+        menuMode,
+        profile,
+        selected,
+        setBack,
+        setMenu,
+        setMenuMode,
+        setMenuTitle,
+        setProfile,
+        setReFetch,
+        setSelected,
+        userId,
+    ]);
 
-        recall && setRecall(false);
-        id && setId(0);
-        cat && setCat(0);
-    })();
+    if (!userId) return <Navigate to="/" replace />;
 
     return (
         <Box

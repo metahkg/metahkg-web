@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { setDescription, setTitle } from "./lib/common";
-import { Navigate, Route, Routes as Switch, useLocation } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes as Switch, useLocation } from "react-router-dom";
 import loadable from "@loadable/component";
+import EnableMenu from "./components/menu/utils/enableMenu";
+import DisableMenu from "./components/menu/utils/disableMenu";
 
 const Thread = loadable(() => import("./pages/thread"));
 
@@ -41,20 +43,93 @@ export default function Routes() {
     return (
         <Switch>
             <Route path="/" element={<Navigate to="/category/1" replace />} />
-            <Route path="/thread/:id" element={<Thread />} />
-            <Route path="/category/:category" element={<Category />} />
-            <Route path="/users/register" element={<Register />} />
-            <Route path="/users/verify" element={<Verify />} />
-            <Route path="/users/resend" element={<Resend />} />
-            <Route path="/users/login" element={<Login />} />
-            <Route path="/users/logout" element={<Logout />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/history/:id" element={<History />} />
-            <Route path="/recall" element={<Recall />} />
-            <Route path="/404" element={<NotFound />} />
-            <Route path="/403" element={<Forbidden />} />
+            <Route
+                path="/category/:category"
+                element={
+                    <EnableMenu>
+                        <Category />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/thread/:id"
+                element={
+                    <EnableMenu notOnSmallScreen>
+                        <Thread />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/search"
+                element={
+                    <EnableMenu>
+                        <Search />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/recall"
+                element={
+                    <EnableMenu>
+                        <Recall />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/profile/:id"
+                element={
+                    <EnableMenu notOnSmallScreen>
+                        <Profile />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/history/:id"
+                element={
+                    <EnableMenu>
+                        <History />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/create"
+                element={
+                    <DisableMenu>
+                        <Create />
+                    </DisableMenu>
+                }
+            />
+            <Route
+                path="/users"
+                element={
+                    <DisableMenu>
+                        <Outlet />
+                    </DisableMenu>
+                }
+            >
+                <Route path="" element={<Navigate to="/users/login" replace />} />
+                <Route path="register" element={<Register />} />
+                <Route path="verify" element={<Verify />} />
+                <Route path="resend" element={<Resend />} />
+                <Route path="login" element={<Login />} />
+                <Route path="logout" element={<Logout />} />
+            </Route>
+            <Route
+                path="/404"
+                element={
+                    <DisableMenu>
+                        <NotFound />
+                    </DisableMenu>
+                }
+            />
+            <Route
+                path="/403"
+                element={
+                    <DisableMenu>
+                        <Forbidden />
+                    </DisableMenu>
+                }
+            />
             <Route path="*" element={<Navigate to="/404" replace />} />
         </Switch>
     );

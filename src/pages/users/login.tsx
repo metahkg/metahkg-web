@@ -1,9 +1,9 @@
 import "../../css/pages/users/login.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import hash from "hash.js";
-import { Link } from "react-router-dom";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useMenu } from "../../components/MenuProvider";
 import {
@@ -20,7 +20,6 @@ import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 
 export default function Login() {
-    const navigate = useNavigate();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [settings] = useSettings();
@@ -33,6 +32,8 @@ export default function Login() {
         severity: "info",
         text: "",
     });
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (query?.continue) {
             setAlert({ severity: "info", text: "Login to continue." });
@@ -41,10 +42,13 @@ export default function Login() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useLayoutEffect(() => {
+        setTitle("Login | Metahkg");
+        menu && setMenu(false);
+    }, [menu, setMenu, user]);
+
     if (user) return <Navigate to="/" replace />;
 
-    menu && setMenu(false);
-    setTitle("Login | Metahkg");
     const query = queryString.parse(window.location.search);
 
     function login() {

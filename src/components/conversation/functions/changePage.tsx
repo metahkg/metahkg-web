@@ -32,8 +32,6 @@ export default function useChangePage() {
         if (thread) {
             setCurrentPage(newPage);
 
-            lastHeight.current = 0;
-
             navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
 
             const targetElement = document.getElementById(`${newPage}`);
@@ -43,6 +41,11 @@ export default function useChangePage() {
 
             const shouldReRender =
                 newPage - finalPage !== 1 && newPage - firstPage !== -1;
+
+            if (shouldReRender) {
+                lastHeight.current = 0;
+                setThread({ ...thread, conversation: [] });
+            }
 
             setLoading(true);
             setEnd(false);

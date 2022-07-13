@@ -1,18 +1,20 @@
 import React, { createContext, useContext, useState } from "react";
 
+type menuMode = "category" | "search" | "profile" | "recall";
+
 const MenuContext = createContext<{
     category: [number, React.Dispatch<React.SetStateAction<number>>];
     id: [number, React.Dispatch<React.SetStateAction<number>>];
-    search: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     profile: [number, React.Dispatch<React.SetStateAction<number>>];
     menu: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    menuMode: [menuMode, React.Dispatch<React.SetStateAction<menuMode>>];
     selected: [number, React.Dispatch<React.SetStateAction<number>>];
-    recall: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     reFetch: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     menuTitle: [string, React.Dispatch<React.SetStateAction<string>>];
     smode: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
 }>({});
+
 /**
  * It creates a context object that is passed to the children.
  * @param props - { children: JSX.Element }
@@ -23,9 +25,8 @@ export default function MenuProvider(props: { children: JSX.Element }) {
     const [category, setCategory] = useState(0);
     const [id, setId] = useState(0);
     const [profile, setProfile] = useState<number>(0);
-    const [search, useSearch] = useState(false);
     const [menu, setMenu] = useState(false);
-    const [recall, setRecall] = useState(false);
+    const [menuMode, setMenuMode] = useState<menuMode>("category");
     const [selected, setSelected] = useState(0);
     const [reFetch, setReFetch] = useState<boolean>(false);
     const [menuTitle, setMenuTitle] = useState("");
@@ -35,11 +36,10 @@ export default function MenuProvider(props: { children: JSX.Element }) {
             value={{
                 category: [category, setCategory],
                 id: [id, setId],
-                search: [search, useSearch],
                 profile: [profile, setProfile],
                 menu: [menu, setMenu],
+                menuMode: [menuMode, setMenuMode],
                 selected: [selected, setSelected],
-                recall: [recall, setRecall],
                 reFetch: [reFetch, setReFetch],
                 menuTitle: [menuTitle, setMenuTitle],
                 smode: [smode, setSmode],
@@ -115,24 +115,6 @@ export function useMenuTitle() {
 }
 
 /**
- * It returns a boolean and a function that sets the boolean.
- * @returns A boolean and a function that sets the boolean.
- */
-export function useSearch() {
-    const { search } = useContext(MenuContext);
-    return search;
-}
-
-/**
- * It returns a boolean and a function that sets the boolean.
- * @returns A boolean and a setter function.
- */
-export function useRecall() {
-    const { recall } = useContext(MenuContext);
-    return recall;
-}
-
-/**
  * smode is the search mode
  * 0: title
  * 1: op
@@ -142,4 +124,9 @@ export function useRecall() {
 export function useSmode() {
     const { smode } = useContext(MenuContext);
     return smode;
+}
+
+export function useMenuMode() {
+    const { menuMode } = useContext(MenuContext);
+    return menuMode;
 }

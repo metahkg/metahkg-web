@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { threadType } from "../../../types/conversation/thread";
 import { useHistory, useNotification, useUser } from "../../ContextProvider";
-import { useCat, useId, useProfile, useRecall, useSearch } from "../../MenuProvider";
+import { useCat, useId, useMenuMode } from "../../MenuProvider";
 import {
     useEnd,
     useFinalPage,
@@ -22,9 +22,7 @@ export default function useFirstFetch() {
     const [, setThread] = useThread();
     const [history, setHistory] = useHistory();
     const [cat, setCat] = useCat();
-    const [recall] = useRecall();
-    const [search] = useSearch();
-    const [profile] = useProfile();
+    const [menuMode] = useMenuMode();
     const [id, setId] = useId();
     const [, setEnd] = useEnd();
     const [images, setImages] = useImages();
@@ -56,7 +54,7 @@ export default function useFirstFetch() {
                     setHistory(history);
                     localStorage.setItem("history", JSON.stringify(history));
                 }
-                !cat && !(recall || search || profile) && setCat(res.data.category);
+                !cat && menuMode === "category" && setCat(res.data.category);
                 id !== res.data.id && setId(res.data.id);
                 setTitle(`${res.data.title} | Metahkg`);
                 setDescription(
