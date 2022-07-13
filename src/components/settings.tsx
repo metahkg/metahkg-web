@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { PopUp } from "../lib/popup";
 import { useSettings } from "./ContextProvider";
