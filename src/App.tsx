@@ -41,9 +41,11 @@ export default function App() {
                     return window.location.reload();
                 }
             });
-            api.users.blocklist().then((res) => {
-                setBlockList(res.data);
-            });
+            setInterval(() => {
+                api.users.blocklist().then((res) => {
+                    setBlockList(res.data);
+                });
+            }, 1000 * 60 * 10);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
