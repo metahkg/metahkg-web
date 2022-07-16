@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.8.0
+
+- upgrade to metahkg-api v2.8.0
+
 ## v2.5.10
 
 - service worker (alpha)
