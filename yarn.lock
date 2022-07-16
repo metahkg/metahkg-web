@@ -6741,10 +6741,10 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-metahkg-api@^2.8.0-dev:
-  version "2.8.0-dev"
-  resolved "https://registry.yarnpkg.com/metahkg-api/-/metahkg-api-2.8.0-dev.tgz#3301ca04744ef98adf63bfe941b51e28ec0a6eb5"
-  integrity sha512-S/wOEj1RU7GZeumQDNijoVZNJ5sMwahX7ZPLFKBMn0kdlREAGwhCA3EMuiqedV5+VD9Tt4Ko++Z6xos/WElK+g==
+metahkg-api@^2.8.1-dev:
+  version "2.8.1-dev"
+  resolved "https://registry.yarnpkg.com/metahkg-api/-/metahkg-api-2.8.1-dev.tgz#be7f8c1ff0247c7d67f4ecbe98b284c224197bc1"
+  integrity sha512-FlrFDtXH8/0Cv0HZTWU2F/sGQmN2PUTRhAI2dxUvnmynHbGqbeHSG/K6ckTaorTm3+jvmKXC44n+3HUeSqgeyA==
   dependencies:
     axios "^0.27.2"
 
