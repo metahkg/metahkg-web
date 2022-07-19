@@ -89,7 +89,7 @@ function ImgComponent(props: Props) {
                     alt=""
                     className={"block"}
                     height={height}
-                    width={width}
+                    width={Number(height) > 800 ? "auto" : width}
                     style={{
                         ...(style &&
                             toJSON(

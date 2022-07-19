@@ -7,6 +7,9 @@ import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import { Box } from "@mui/material";
 import axios from "axios";
 import Loader from "./loader";
+import { regex } from "./regex";
+import SocialMediaEmbed from "../components/conversation/comment/socialMediaEmbed";
+import React from "react";
 
 export const replace = (params: { quote?: boolean }) => {
     const { quote } = params;
@@ -17,22 +20,17 @@ export const replace = (params: { quote?: boolean }) => {
                 if (domNode.name === "a") {
                     const href: string = domNode.attribs?.href;
                     if (
-                        [
-                            /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i,
-                            /https:\/\/fb\.watch\/\S+/i,
-                            /https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)/i,
-                            /https:\/\/youtu.be\/\S{11}/i,
-                        ].some((item) => href.match(item))
+                        [regex.facebook.videos, regex.youtube]
+                            .flat()
+                            .some((item) => href.match(item))
                     ) {
                         return (
-                            <div>
+                            <React.Fragment>
                                 <Player url={href} />
                                 {domToReact([node])}
-                            </div>
+                            </React.Fragment>
                         );
-                    } else if (
-                        href.match(/https:\/\/(|mobile.)twitter.com\/\S+\/status\/\S+/i)
-                    ) {
+                    } else if (regex.twitter.some((item) => href.match(item))) {
                         const url = new URL(href);
                         const tweetId = url.pathname.split("/").pop();
                         if (tweetId)
@@ -42,6 +40,23 @@ export const replace = (params: { quote?: boolean }) => {
                                     {domToReact([node])}
                                 </div>
                             );
+                    } else if (
+                        [regex.instagram, regex.facebook.posts]
+                            .flat()
+                            .some((item) => href.match(item))
+                    ) {
+                        return (
+                            <Box
+                                sx={{
+                                    "& blockquote": {
+                                        border: "0px transparent",
+                                    },
+                                }}
+                            >
+                                <SocialMediaEmbed url={href} />
+                                {domToReact([node])}
+                            </Box>
+                        );
                     }
                     // TODO: embed instagram and facebook
                     const firstChild = domNode.children?.[0] as Element;
