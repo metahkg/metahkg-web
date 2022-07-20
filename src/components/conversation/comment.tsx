@@ -70,7 +70,7 @@ export default function Comment(props: {
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
     useEffect(() => {
-        const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote
+        const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote;
         if (prevVote.current !== currentVote && currentVote) {
             prevVote.current = currentVote;
             setReFetch(true);
