@@ -120,7 +120,7 @@ export default function Profile() {
                         }}
                     >
                         <img
-                            src={`/api/profile/avatars/${requestedUser.id}`}
+                            src={`/api/users/avatars/${requestedUser.id}`}
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
