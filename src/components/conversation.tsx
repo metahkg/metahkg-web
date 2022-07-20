@@ -141,7 +141,9 @@ function Conversation(props: { id: number }) {
                     <Gallery
                         open={galleryOpen}
                         setOpen={setGalleryOpen}
-                        images={thread?.images?.map((image) => ({ src: image.image })) || []}
+                        images={
+                            thread?.images?.map((image) => ({ src: image.image })) || []
+                        }
                     />
                     <Dock btns={btns} />
                     <Share />
