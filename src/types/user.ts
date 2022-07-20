@@ -1,9 +1,6 @@
-export type userType = {
-    id: number;
-    name: string;
-    sex: userSex;
-    role: userRole;
-};
+import { User } from "metahkg-api/dist/types/user";
+
+export type userType = User;
 
 export type userSex = "M" | "F";
 
