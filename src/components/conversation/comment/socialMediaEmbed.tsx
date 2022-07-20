@@ -8,12 +8,7 @@ export default function SocialMediaEmbed(props: { url: string }) {
     const [width] = useWidth();
     const Element = [
         {
-            element: (
-                <InstagramEmbed
-                    url={url}
-                    width={width < 760 ? "100%" : "55%"}
-                />
-            ),
+            element: <InstagramEmbed url={url} width={width < 760 ? "100%" : "55%"} />,
             regex: regex.instagram,
         },
         {
