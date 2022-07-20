@@ -28,14 +28,13 @@ import {
     useEnd,
     useFinalPage,
     useGalleryOpen,
-    useImages,
     useLoading,
     usePages,
     useRerender,
     useStory,
     useThread,
     useUpdating,
-    useUserVotes,
+    useVotes,
 } from "./conversation/ConversationContext";
 import { useUpdate } from "./conversation/functions/update";
 import useFirstFetch from "./conversation/functions/firstfetch";
@@ -55,7 +54,7 @@ function Conversation(props: { id: number }) {
     const [finalPage] = useFinalPage();
     /** Current page */
     const [currentPage, setCurrentPage] = useCurrentPage();
-    const [userVotes] = useUserVotes();
+    const [votes] = useVotes();
     const [updating] = useUpdating();
     const [pages] = usePages();
     const [, setEnd] = useEnd();
@@ -64,7 +63,6 @@ function Conversation(props: { id: number }) {
     const isSmallScreen = useIsSmallScreen();
     const [story] = useStory();
     const [galleryOpen, setGalleryOpen] = useGalleryOpen();
-    const [images] = useImages();
     const [history, setHistory] = useHistory();
     const [user] = useUser();
     const cRoot = useCRoot();
@@ -92,7 +90,7 @@ function Conversation(props: { id: number }) {
 
     const onScroll = useOnScroll();
 
-    const ready = !!(thread && thread.conversation.length && (user ? userVotes : 1));
+    const ready = !!(thread && thread.conversation.length && (user ? votes : 1));
 
     useEffect(() => {
         !query.page &&
@@ -143,7 +141,7 @@ function Conversation(props: { id: number }) {
                     <Gallery
                         open={galleryOpen}
                         setOpen={setGalleryOpen}
-                        images={images}
+                        images={thread?.images?.map((image) => ({ src: image.image })) || []}
                     />
                     <Dock btns={btns} />
                     <Share />
@@ -279,7 +277,6 @@ function Conversation(props: { id: number }) {
             changePage,
             currentPage,
             galleryOpen,
-            images,
             isSmallScreen,
             loading,
             numOfPages,
@@ -292,10 +289,7 @@ function Conversation(props: { id: number }) {
             setEnd,
             setGalleryOpen,
             story,
-            thread?.category,
-            thread?.conversation,
-            thread?.pin,
-            thread?.title,
+            thread,
             update,
             updating,
         ]

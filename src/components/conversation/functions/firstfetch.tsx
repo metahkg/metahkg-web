@@ -9,8 +9,7 @@ import {
     useEnd,
     useFinalPage,
     useThread,
-    useImages,
-    useUserVotes,
+    useVotes,
     useRerender,
 } from "../ConversationContext";
 import { setDescription, setTitle } from "../../../lib/common";
@@ -25,8 +24,7 @@ export default function useFirstFetch() {
     const [menuMode] = useMenuMode();
     const [id, setId] = useId();
     const [, setEnd] = useEnd();
-    const [images, setImages] = useImages();
-    const [, setVotes] = useUserVotes();
+    const [, setVotes] = useVotes();
     const params = useParams();
     const threadId = Number(params.id);
     const navigate = useNavigate();
@@ -68,21 +66,10 @@ export default function useFirstFetch() {
                 res.data.conversation.length % 25 && setEnd(true);
             })
             .catch(onError);
-        api.threads
-            .images({ threadId })
-            .then((res) => {
-                res.data.forEach((item: { image: string }) => {
-                    images.push({
-                        src: item.image,
-                    });
-                });
-                res.data.length && setImages(images);
-            })
-            .catch(onError);
 
         if (user)
-            api.threads
-                .userVotes({ threadId })
+            api.me
+                .votes({ threadId })
                 .then((res) => {
                     setVotes(res.data);
                 })

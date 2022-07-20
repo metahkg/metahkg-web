@@ -75,7 +75,7 @@ export default function DataTable(props: DataTableProps) {
     function rename() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Renaming..." });
-        api.users
+        api.me
             .rename({ name })
             .then((res) => {
                 setSaveDisabled(false);

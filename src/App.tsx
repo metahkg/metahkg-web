@@ -11,7 +11,7 @@ import {
     useUser,
     useIsSmallScreen,
     useAlertDialog,
-    useBlockList,
+    useBlocked,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
@@ -30,11 +30,11 @@ export default function App() {
     const [settings] = useSettings();
     const [user] = useUser();
     const [alertDialog, setAlertDialog] = useAlertDialog();
-    const [, setBlockList] = useBlockList();
+    const [, setBlocked] = useBlocked();
 
     useEffect(() => {
         if (user) {
-            api.users.status().then((res) => {
+            api.me.status().then((res) => {
                 const { active } = res.data;
                 if (!active) {
                     localStorage.removeItem("token");
@@ -42,8 +42,8 @@ export default function App() {
                 }
             });
             setInterval(() => {
-                api.users.blocklist().then((res) => {
-                    setBlockList(res.data);
+                api.me.blocked().then((res) => {
+                    setBlocked(res.data);
                 });
             }, 1000 * 60 * 10);
         }

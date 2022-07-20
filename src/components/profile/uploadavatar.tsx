@@ -32,10 +32,7 @@ export default function UploadAvatar(props: {
                             onUpload && onUpload();
                             const avatar = e?.target?.files?.[0];
                             avatar &&
-                                api.users
-                                    .uploadAvatar({ avatar })
-                                    .then(onSuccess)
-                                    .catch(onError);
+                                api.me.avatar({ avatar }).then(onSuccess).catch(onError);
                         }}
                     />
                     <Button

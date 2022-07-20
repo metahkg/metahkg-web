@@ -40,10 +40,7 @@ export default function Verify() {
         setNotification({ open: true, text: "Verifying..." });
         setDisabled(true);
         api.users
-            .verify({
-                email: email,
-                code: code,
-            })
+            .verify({ email, code })
             .then((res) => {
                 localStorage.setItem("token", res.data.token);
                 const user = decodeToken(res.data.token);

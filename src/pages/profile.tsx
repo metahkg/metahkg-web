@@ -49,8 +49,8 @@ export default function Profile() {
 
     useEffect(() => {
         if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
-            api.profile
-                .userProfile({ userId })
+            api.users
+                .profile({ userId })
                 .then((res) => {
                     setRequestedUser(res.data);
                     setTitle(`${res.data.name} | Metahkg`);

@@ -4,13 +4,13 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
-import { useThreadId, useUserVotes } from "../ConversationContext";
+import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
 import { commentType } from "../../../types/conversation/comment";
 
 export default function VoteButtons(props: { comment: commentType }) {
     const threadId = useThreadId();
-    const [votes, setVotes] = useUserVotes();
+    const [votes, setVotes] = useVotes();
     const [, setNotification] = useNotification();
     const [user] = useUser();
     const [comment, setComment] = useState(props.comment);

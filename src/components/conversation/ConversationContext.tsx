@@ -13,7 +13,7 @@ const ConversationContext = createContext<{
     thread: [null | threadType, React.Dispatch<React.SetStateAction<null | threadType>>];
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
-    userVotes: [
+    votes: [
         { [id: number]: "U" | "D" } | null,
         React.Dispatch<React.SetStateAction<{ [id: number]: "U" | "D" } | null>>
     ];
@@ -25,7 +25,6 @@ const ConversationContext = createContext<{
     story: [number, React.Dispatch<React.SetStateAction<number>>];
     lastHeight: React.MutableRefObject<number>;
     galleryOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-    images: [{ src: string }[], React.Dispatch<React.SetStateAction<{ src: string }[]>>];
     editor: [editorStateType, React.Dispatch<React.SetStateAction<editorStateType>>];
     title: string | undefined;
     threadId: number;
@@ -48,7 +47,7 @@ export default function ConversationProvider(props: {
     const [currentPage, setCurrentPage] = useState(
         Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
     );
-    const [userVotes, setUserVotes] = useState<{ [id: number]: "U" | "D" } | null>(null);
+    const [votes, setVotes] = useState<{ [id: number]: "U" | "D" } | null>(null);
     const [updating, setUpdating] = useState(false);
     const [pages, setPages] = useState(1);
     const [end, setEnd] = useState(false);
@@ -57,7 +56,6 @@ export default function ConversationProvider(props: {
     const [story, setStory] = useState(0);
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
-    const [images, setImages] = useState<{ src: string }[]>([]);
     const [editor, setEditor] = useState<editorStateType>({ open: false });
     const cRoot = useRef<HTMLDivElement>(null);
     const cBottom = useRef<HTMLDivElement>(null);
@@ -67,7 +65,7 @@ export default function ConversationProvider(props: {
                 thread: [thread, setThread],
                 finalPage: [finalPage, setFinalPage],
                 currentPage: [currentPage, setCurrentPage],
-                userVotes: [userVotes, setUserVotes],
+                votes: [votes, setVotes],
                 updating: [updating, setUpdating],
                 pages: [pages, setPages],
                 end: [end, setEnd],
@@ -75,7 +73,6 @@ export default function ConversationProvider(props: {
                 reRender: [reRender, setReRender],
                 story: [story, setStory],
                 galleryOpen: [galleryOpen, setGalleryOpen],
-                images: [images, setImages],
                 lastHeight: lastHeight,
                 title: thread?.title,
                 threadId: threadId,
@@ -104,8 +101,8 @@ export function useCurrentPage() {
     return currentPage;
 }
 
-export function useUserVotes() {
-    const { userVotes: votes } = React.useContext(ConversationContext);
+export function useVotes() {
+    const { votes } = React.useContext(ConversationContext);
     return votes;
 }
 
@@ -142,11 +139,6 @@ export function useStory() {
 export function useGalleryOpen() {
     const { galleryOpen } = React.useContext(ConversationContext);
     return galleryOpen;
-}
-
-export function useImages() {
-    const { images } = React.useContext(ConversationContext);
-    return images;
 }
 
 export function useLastHeight() {

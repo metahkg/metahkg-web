@@ -30,7 +30,7 @@ const Context = createContext<{
     user: [userType | null, Dispatch<SetStateAction<userType | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
-    blockList: [User[], Dispatch<SetStateAction<User[]>>];
+    blocked: [User[], Dispatch<SetStateAction<User[]>>];
     //@ts-ignore
 }>(null);
 /**
@@ -90,8 +90,8 @@ export default function ContextProvider(props: {
         message: "",
         btns: [],
     });
-    const [blockList, setBlockList] = useState<User[]>(
-        JSON.parse(localStorage.getItem("blocklist") || "[]")
+    const [blocked, setBlocked] = useState<User[]>(
+        JSON.parse(localStorage.getItem("blocked") || "[]")
     );
 
     useEffect(() => {
@@ -113,7 +113,7 @@ export default function ContextProvider(props: {
     });
 
     useEffect(() => {
-        localStorage.setItem("blocklist", JSON.stringify(blockList));
+        localStorage.setItem("blocked", JSON.stringify(blocked));
     });
 
     function updateSize() {
@@ -141,7 +141,7 @@ export default function ContextProvider(props: {
                 user: [user, setUser],
                 reCaptchaSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
-                blockList: [blockList, setBlockList],
+                blocked: [blocked, setBlocked],
             }}
         >
             {props.children}
@@ -262,7 +262,7 @@ export function useAlertDialog() {
     return alertDialog;
 }
 
-export function useBlockList() {
-    const { blockList } = useContext(Context);
-    return blockList;
+export function useBlocked() {
+    const { blocked } = useContext(Context);
+    return blocked;
 }
