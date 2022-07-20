@@ -14,8 +14,8 @@ const ConversationContext = createContext<{
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
     votes: [
-        { [id: number]: "U" | "D" } | null,
-        React.Dispatch<React.SetStateAction<{ [id: number]: "U" | "D" } | null>>
+        { cid: number; vote: "U" | "D" }[] | null,
+        React.Dispatch<React.SetStateAction<{ cid: number; vote: "U" | "D" }[] | null>>
     ];
     updating: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     pages: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -47,7 +47,7 @@ export default function ConversationProvider(props: {
     const [currentPage, setCurrentPage] = useState(
         Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
     );
-    const [votes, setVotes] = useState<{ [id: number]: "U" | "D" } | null>(null);
+    const [votes, setVotes] = useState<{ cid: number; vote: "U" | "D" }[] | null>(null);
     const [updating, setUpdating] = useState(false);
     const [pages, setPages] = useState(1);
     const [end, setEnd] = useState(false);

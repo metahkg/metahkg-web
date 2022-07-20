@@ -67,11 +67,12 @@ export default function Comment(props: {
     const [popupOpen, setPopupOpen] = useState(false);
     const [fold, setFold] = useState(props.fold);
     const commentRef = useRef<HTMLElement>(null);
-    const prevVote = useRef(votes?.[comment.id]);
+    const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
     useEffect(() => {
-        if (prevVote.current !== votes?.[comment.id] && votes?.[comment.id]) {
-            prevVote.current = votes?.[comment.id];
+        const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote
+        if (prevVote.current !== currentVote && currentVote) {
+            prevVote.current = currentVote;
             setReFetch(true);
         }
     }, [votes?.[comment.id], prevVote, votes, comment.id]);

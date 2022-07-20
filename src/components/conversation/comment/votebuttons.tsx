@@ -15,7 +15,7 @@ export default function VoteButtons(props: { comment: commentType }) {
     const [user] = useUser();
     const [comment, setComment] = useState(props.comment);
 
-    const vote = votes?.[comment.id];
+    const vote = votes?.find((v) => v.cid === comment.id)?.vote;
     const up = comment.U || 0;
     const down = comment.D || 0;
 
@@ -29,7 +29,7 @@ export default function VoteButtons(props: { comment: commentType }) {
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
                 setComment({ ...comment, [newVote]: (comment[newVote] || 0) + 1 });
-                setVotes({ ...votes, [comment.id]: newVote });
+                votes && setVotes([...votes, { cid: comment.id, vote: newVote }]);
             })
             .catch((err) => {
                 setNotification({
