@@ -9,7 +9,7 @@ import Loader from "../../../lib/loader";
 import { IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
-import { engineName, isIOS, isSafari } from "react-device-detect";
+// import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
     src: string;
@@ -29,7 +29,7 @@ function ImgComponent(props: Props) {
     const [reRender, setReRender] = useState(false);
 
     const checkCanResize = () => {
-        if (isIOS || isSafari || engineName === "Webkit") return;
+        //if (isIOS || isSafari || engineName === "Webkit") return;
 
         const img = imgRef.current;
         if (img) {
