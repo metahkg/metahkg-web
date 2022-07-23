@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { setDescription, setTitle } from "./lib/common";
 import { Navigate, Outlet, Route, Routes as Switch, useLocation } from "react-router-dom";
 import loadable from "@loadable/component";
 import EnableMenu from "./lib/utils/enableMenu";
 import DisableMenu from "./lib/utils/disableMenu";
+import { useId } from "./components/MenuProvider";
 
 const Thread = loadable(() => import("./pages/thread"));
 
@@ -30,7 +31,12 @@ const Forbidden = loadable(() => import("./pages/forbidden"));
 
 export default function Routes() {
     const location = useLocation();
+    const [id, setId] = useId();
     const prev = React.useRef(location.pathname);
+
+    useLayoutEffect(() => {
+        if (!location.pathname.match(/^\/thread\/[1-9]\d*$/)) id && setId(0);
+    }, [id, location.pathname, setId]);
 
     useEffect(() => {
         if (location.pathname !== prev.current) {
