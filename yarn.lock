@@ -6748,10 +6748,10 @@ metahkg-api@^2.5.0-dev:
   dependencies:
     axios "^0.27.2"
 
-metahkg-css@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/metahkg-css/-/metahkg-css-1.0.7.tgz#664f993805ccbbb4e0b97a2bad0857e334324b43"
-  integrity sha512-rwvtl8C5gTTqjI2PGv8/82WzboD9hQi+xGcLFLPUzu2Lk8BFTlt046J7782ggo9bFaZe0JgIo9WWjexn3lb9tA==
+metahkg-css@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/metahkg-css/-/metahkg-css-1.0.9.tgz#d6094c6692ce37d4232b9842d99ee401c0f34e71"
+  integrity sha512-luIb2hHIhCGaBjVI49X1ynxpxhgYZrcnwZ9n8KVaOYkZEcI88wW2nmksVcvFTE9EtIlgjTk6wn7bZ243DtvkQQ==
 
 methods@~1.1.2:
   version "1.1.2"
