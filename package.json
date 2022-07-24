@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.9.3",
     "@loadable/component": "^5.15.2",
     "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.5",
+    "@mui/material": "^5.8.6",
     "@tinymce/tinymce-react": "^4.1.0",
     "@types/date-and-time": "^0.13.0",
     "@types/humanize-duration": "^3.27.1",
