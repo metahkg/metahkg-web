@@ -50,12 +50,11 @@ ENV REACT_APP_ENV $env
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/build ./build
-COPY --from=build /usr/src/app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
-COPY ./package.json ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json ./
 
-RUN if [ "${env}" != "dev" ]; then rm -rf node_modules tsconfig.json .babelrc config-overrides.js; yarn global add serve; fi;
+RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
 
 CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;
