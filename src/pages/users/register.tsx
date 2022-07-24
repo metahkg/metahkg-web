@@ -13,6 +13,7 @@ import {
     SelectChangeEvent,
     TextField,
     TextFieldProps,
+    Typography,
 } from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -20,7 +21,6 @@ import { useMenu } from "../../components/MenuProvider";
 import {
     useNotification,
     useReCaptchaSiteKey,
-    useSettings,
     useUser,
     useWidth,
 } from "../../components/ContextProvider";
@@ -82,7 +82,6 @@ export default function Register() {
         text: "",
     });
     const [menu, setMenu] = useMenu();
-    const [settings] = useSettings();
     const [user] = useUser();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
@@ -169,9 +168,9 @@ export default function Register() {
                     width: small ? "100vw" : "50vw",
                 }}
             >
-                <form className="m40" onSubmit={onSubmit}>
+                <Box component="form" onSubmit={onSubmit} className="m40">
                     {query.returnto && (
-                        <div className="flex align-center justify-flex-end">
+                        <Box className="flex align-center justify-flex-end">
                             <IconButton
                                 onClick={() => {
                                     navigate(String(query.returnto));
@@ -179,12 +178,12 @@ export default function Register() {
                             >
                                 <Close />
                             </IconButton>
-                        </div>
+                        </Box>
                     )}
-                    <div className="flex justify-center align-center">
+                    <Box className="flex justify-center align-center">
                         <MetahkgLogo svg light height={50} width={40} className="mb10" />
                         <h1 className="font-size-25 mb20 nohmargin">Register</h1>
-                    </div>
+                    </Box>
                     {alert.text && (
                         <Alert className="mb15 mt10" severity={alert.severity}>
                             {alert.text}
@@ -203,17 +202,19 @@ export default function Register() {
                         />
                     ))}
                     <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
-                    <br />
-                    <h4>
-                        <Link
-                            style={{ color: settings.secondaryColor?.main || "#f5bd1f" }}
-                            className="link"
+                    <Box className="mt15 mb15">
+                        <Typography
+                            component={Link}
                             to="/users/verify"
+                            className="link bold-force"
+                            sx={(theme) => ({
+                                color: `${theme.palette.secondary.main} !important`,
+                            })}
                         >
-                            Verify / Resend verification email?
-                        </Link>
-                    </h4>
-                    <div
+                            Verify / Resend verification email
+                        </Typography>
+                    </Box>
+                    <Box
                         className={`${
                             small
                                 ? ""
@@ -237,8 +238,8 @@ export default function Register() {
                             <HowToReg className="mr5 font-size-17-force" />
                             Register
                         </Button>
-                    </div>
-                </form>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );
