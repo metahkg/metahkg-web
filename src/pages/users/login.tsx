@@ -139,16 +139,16 @@ export default function Login() {
                         />
                     ))}
                     <Box className="mt15 mb15">
-                    <Typography
-                        component={Link}
-                        to="/users/verify"
-                        className="link bold-force"
-                        sx={(theme) => ({
-                            color: `${theme.palette.secondary.main} !important`,
-                        })}
-                    >
-                        Verify / Resend verification email
-                    </Typography>
+                        <Typography
+                            component={Link}
+                            to="/users/verify"
+                            className="link bold-force"
+                            sx={(theme) => ({
+                                color: `${theme.palette.secondary.main} !important`,
+                            })}
+                        >
+                            Verify / Resend verification email
+                        </Typography>
                     </Box>
                     <Button
                         disabled={disabled || !(name && pwd)}
