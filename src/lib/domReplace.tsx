@@ -78,7 +78,7 @@ export const replace = (params: { quote?: boolean }) => {
                             );
                         }
                     } else if (
-                        firstChild?.type === "text" &&
+                        (firstChild as unknown as Text)?.type === "text" &&
                         domNode?.attribs?.href === (firstChild as unknown as Text)?.data
                     ) {
                         return (
