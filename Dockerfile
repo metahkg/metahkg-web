@@ -17,17 +17,14 @@ ENV env $env
 
 WORKDIR /usr/src/app
 
-COPY ./package.json ./
-COPY ./yarn.lock ./
-COPY ./tsconfig.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./
 
 RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; fi;
 
 COPY ./src ./src
 COPY ./public ./public
 COPY ./scripts ./scripts
-COPY ./.babelrc ./
-COPY ./config-overrides.js ./
+COPY ./.babelrc ./config-overrides.js ./
 
 RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn build; fi;
 
@@ -57,11 +54,7 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
-COPY ./package.json ./
-COPY ./tsconfig.json ./
-COPY ./.babelrc ./
-COPY ./config-overrides.js ./
-COPY ./serve.json ./
+COPY ./package.json ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then rm -rf node_modules tsconfig.json .babelrc config-overrides.js; yarn global add serve; fi;
 

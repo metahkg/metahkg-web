@@ -4,18 +4,18 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
-import { useThreadId, useUserVotes } from "../ConversationContext";
+import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
 import { commentType } from "../../../types/conversation/comment";
 
 export default function VoteButtons(props: { comment: commentType }) {
     const threadId = useThreadId();
-    const [votes, setVotes] = useUserVotes();
+    const [votes, setVotes] = useVotes();
     const [, setNotification] = useNotification();
     const [user] = useUser();
     const [comment, setComment] = useState(props.comment);
 
-    const vote = votes?.[comment.id];
+    const vote = votes?.find((v) => v.cid === comment.id)?.vote;
     const up = comment.U || 0;
     const down = comment.D || 0;
 
@@ -29,7 +29,7 @@ export default function VoteButtons(props: { comment: commentType }) {
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
                 setComment({ ...comment, [newVote]: (comment[newVote] || 0) + 1 });
-                setVotes({ ...votes, [comment.id]: newVote });
+                votes && setVotes([...votes, { cid: comment.id, vote: newVote }]);
             })
             .catch((err) => {
                 setNotification({

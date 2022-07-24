@@ -70,7 +70,7 @@ export default function FloatingEditor() {
     function CreateComment() {
         setCreating(true);
         api.threads.comments
-            .add({
+            .create({
                 threadId,
                 comment,
                 quote: editor.quote?.id,

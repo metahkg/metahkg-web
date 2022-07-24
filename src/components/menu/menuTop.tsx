@@ -51,12 +51,10 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!menuTitle) {
             if (menuMode === "profile") {
-                api.profile
-                    .userProfile({ userId: profile, nameonly: true })
-                    .then((res) => {
-                        setMenuTitle(res.data.name);
-                        setTitle(`${res.data.name} | Metahkg`);
-                    });
+                api.users.profile({ userId: profile, nameonly: true }).then((res) => {
+                    setMenuTitle(res.data.name);
+                    setTitle(`${res.data.name} | Metahkg`);
+                });
             } else if (menuMode === "category" && (category || id)) {
                 api.category.info({ categoryId: category, threadId: id }).then((res) => {
                     setMenuTitle(res.data.name);

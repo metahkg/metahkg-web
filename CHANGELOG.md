@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.8.1
+
+- add support for facebook and instagram
+- allow images for maximum 800px height
+
+## v2.8.0
+
+- upgrade to metahkg-api v2.8.0
+
 ## v2.5.10
 
 - service worker (alpha)

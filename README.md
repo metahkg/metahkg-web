@@ -2,9 +2,9 @@
 
 This is the metahkg web app. See the [metahkg repository](https://gitlab.com/metahkg/metahkg).
 
-stable: [metahkg.org](https://metahkg.org)
+stable (master branch): [metahkg.org](https://metahkg.org)
 
-dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
+dev (dev branch): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![React](https://badges.aleen42.com/src/react.svg)](http://reactjs.org/)
 [![Typescript](https://badges.aleen42.com/src/typescript.svg)](https://www.typescriptlang.org/)
@@ -19,7 +19,6 @@ dev build (probably daily): [dev.metahkg.org](https://dev.metahkg.org)
 
 [![Telegram](https://patrolavia.github.io/telegram-badge/chat.svg)](https://t.me/+WbB7PyRovUY1ZDFl)
 [![Discord](https://img.shields.io/discord/992390401740775555)](https://discord.gg/yrf2v8KGdc)
-
 
 ## Deploying
 

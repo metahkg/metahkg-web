@@ -8,10 +8,10 @@ import {
     ThumbUp as ThumbUpIcon,
 } from "@mui/icons-material";
 import { roundup, timeToWord } from "../../lib/common";
-import { summary } from "../../types/conversation/summary";
 import { Link } from "react-router-dom";
 import { useCat, useId, useMenuMode } from "../MenuProvider";
 import { useCategories, useHistory } from "../ContextProvider";
+import { Summary } from "metahkg-api/dist/types/thread/thread";
 
 /**
  * A component that renders a thread in the menu.
@@ -19,7 +19,7 @@ import { useCategories, useHistory } from "../ContextProvider";
  * @param {() => void | undefined} props.onClick on click event handler
  */
 export default function MenuThread(props: {
-    thread: summary;
+    thread: Summary;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }) {
     const [cat] = useCat();
@@ -58,13 +58,13 @@ export default function MenuThread(props: {
                         </p>
                     </div>
                     <div className="flex align-center">
-                        {thread.vote >= 0 ? (
+                        {thread.score >= 0 ? (
                             <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         ) : (
                             <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         )}
                         <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
-                            {thread.vote}
+                            {thread.score}
                         </p>
                         <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">

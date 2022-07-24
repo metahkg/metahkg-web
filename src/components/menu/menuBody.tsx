@@ -11,7 +11,6 @@ import {
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
 import { AxiosError, AxiosResponse } from "axios";
 import { api } from "../../lib/api";
-import { summary } from "../../types/conversation/summary";
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import MenuThread from "./menuThread";
 import MenuPreload from "./menuPreload";
@@ -214,7 +213,7 @@ export default function MenuBody(props: { selected: number }) {
             <Box className="min-height-full menu-bottom flex flex-dir-column">
                 {Boolean(data.length) && (
                     <Box className="flex flex-dir-column max-width-full menu-bottom">
-                        {data.map((thread: summary, index) => (
+                        {data.map((thread: Summary, index) => (
                             <div key={index}>
                                 <MenuThread
                                     key={`${category}${id === thread.id}`}

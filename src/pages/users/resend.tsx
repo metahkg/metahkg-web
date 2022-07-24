@@ -49,10 +49,7 @@ export default function Verify() {
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
         api.users
-            .resend({
-                email: email,
-                rtoken: rtoken,
-            })
+            .resend({ email, rtoken })
             .then(() => {
                 setNotification({
                     open: true,

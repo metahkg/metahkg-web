@@ -31,7 +31,7 @@ export default function Gallery(props: {
                             (width < 1400 && 5) ||
                             6
                         }
-                        gap={4}
+                        gap={5}
                     >
                         {images.map((item) => (
                             <PhotoView src={item.src} key={item.src}>

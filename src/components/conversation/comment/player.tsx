@@ -11,18 +11,17 @@ import {
 } from "@mui/icons-material";
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
+import { regex } from "../../../lib/regex";
+import { useWidth } from "../../ContextProvider";
 
 export default function Player(props: { url: string }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
+    const [width] = useWidth();
     const player = useRef<ReactPlayer>(null);
     const { url } = props;
     const mode =
-        ([
-            /https:\/\/fb\.watch\/\S+/i,
-            /https:\/\/(www|m)\.facebook\.com\/.+\/videos\/\S+/i,
-        ].some((regexp) => url.match(regexp)) &&
-            "facebook") ||
+        (regex.facebook.videos.some((regexp) => url.match(regexp)) && "facebook") ||
         "youtube";
     const buttons = [
         {
@@ -53,7 +52,7 @@ export default function Player(props: { url: string }) {
         <div className="mb5">
             {play && (
                 <Box
-                    width={window.innerWidth < 760 ? "100%" : "65%"}
+                    width={width < 760 ? "100%" : "65%"}
                     sx={{ bgcolor: "#333", height: 30 }}
                     className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
                 >

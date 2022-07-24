@@ -1,5 +1,3 @@
-export type category = {
-    name: string;
-    id: number;
-    hidden?: boolean;
-};
+import { Category } from "metahkg-api/dist/types/category";
+
+export type category = Category;

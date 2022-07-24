@@ -1,7 +1,6 @@
 import { Refresh, Collections, Reply, Share as ShareIcon } from "@mui/icons-material";
 import { useUpdate } from "./update";
 import {
-    useImages,
     useGalleryOpen,
     useThread,
     useCRoot,
@@ -18,7 +17,6 @@ export default function useBtns() {
     const threadId = useThreadId();
     const navigate = useNavigate();
     const [user] = useUser();
-    const [images] = useImages();
     const [, setGalleryOpen] = useGalleryOpen();
     const [, setNotification] = useNotification();
     const [shareOpen, setShareOpen] = useShareOpen();
@@ -43,7 +41,7 @@ export default function useBtns() {
         {
             icon: <Collections />,
             action: () => {
-                if (images.length) setGalleryOpen(true);
+                if (thread?.images?.length) setGalleryOpen(true);
                 else setNotification({ open: true, text: "No images!" });
             },
             title: "Images",

@@ -137,8 +137,14 @@ export default function CommentTop(props: {
                             text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
                         });
                         (pinned
-                            ? api.threads.unpin({ threadId })
-                            : api.threads.pin({ threadId, commentId: comment.id })
+                            ? api.threads.comments.unpin({
+                                  threadId,
+                                  commentId: comment.id,
+                              })
+                            : api.threads.comments.pin({
+                                  threadId,
+                                  commentId: comment.id,
+                              })
                         )
                             .then(() => {
                                 setNotification({

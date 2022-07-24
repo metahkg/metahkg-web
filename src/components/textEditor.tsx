@@ -39,9 +39,9 @@ export default function TextEditor(props: {
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     skin_url:
-                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.9/dist/tinymce/skins/ui/metahkg-dark",
+                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.1.0/dist/tinymce/skins/ui/metahkg-dark",
                     content_css:
-                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.0.9/dist/tinymce/skins/content/metahkg-dark/content.min.css",
+                        "https://cdn.jsdelivr.net/npm/metahkg-css@1.1.0/dist/tinymce/skins/content/metahkg-dark/content.min.css",
                     branding: false,
                     ...(noStatusBar && { statusbar: false }),
                     setup: (editor) => {

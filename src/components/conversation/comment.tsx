@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
 import { useNotification } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
-import { useThreadId, useUserVotes } from "./ConversationContext";
+import { useThreadId, useVotes } from "./ConversationContext";
 import { commentType } from "../../types/conversation/comment";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
@@ -57,7 +57,7 @@ export default function Comment(props: {
     } = props;
     const threadId = useThreadId();
     const [comment, setComment] = useState(props.comment);
-    const [userVotes] = useUserVotes();
+    const [votes] = useVotes();
     const [, setNotification] = useNotification();
     const [ready, setReady] = useState(!fetchComment);
     const [reFetch, setReFetch] = useState(false);
@@ -67,18 +67,15 @@ export default function Comment(props: {
     const [popupOpen, setPopupOpen] = useState(false);
     const [fold, setFold] = useState(props.fold);
     const commentRef = useRef<HTMLElement>(null);
-    const prevVote = useRef(userVotes?.[comment.id]);
+    const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
     useEffect(() => {
-        if (prevVote.current !== userVotes?.[comment.id] && userVotes?.[comment.id]) {
-            prevVote.current = userVotes?.[comment.id];
+        const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote;
+        if (prevVote.current !== currentVote && currentVote) {
+            prevVote.current = currentVote;
             setReFetch(true);
         }
-    }, [userVotes?.[comment.id], prevVote, userVotes, comment.id]);
-
-    useEffect(() => {
-        setReFetch(true);
-    }, [userVotes?.[comment.id]]);
+    }, [votes?.[comment.id], prevVote, votes, comment.id]);
 
     useEffect(() => {
         commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
