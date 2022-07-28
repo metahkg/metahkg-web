@@ -32,6 +32,7 @@ import { Link } from "react-router-dom";
 import queryString from "query-string";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
+import { UserSex } from "@metahkg/api";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -102,12 +103,12 @@ export default function Register() {
         setAlert({ severity: "info", text: "Registering..." });
         setDisabled(true);
         sex &&
-            api.users
-                .register({
+            api
+                .usersRegister({
                     email,
-                    username: name,
-                    password: hash.sha256().update(pwd).digest("hex"),
-                    sex,
+                    name,
+                    pwd: hash.sha256().update(pwd).digest("hex"),
+                    sex: sex as UserSex,
                     rtoken,
                 })
                 .then(() => {

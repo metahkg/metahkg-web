@@ -69,17 +69,15 @@ export default function FloatingEditor() {
 
     function CreateComment() {
         setCreating(true);
-        api.threads.comments
-            .create({
-                threadId,
-                comment,
-                quote: editor.quote?.id,
-                rtoken,
-            })
-            .then((res: { data: { id: number } }) => {
-                setNewCommentId(res.data.id);
+        api.commentCreate(threadId, {
+            comment,
+            quote: editor.quote?.id,
+            rtoken,
+        })
+            .then((data) => {
+                setNewCommentId(data.id);
 
-                const numOfPages = roundup((res.data.id || 0) / 25);
+                const numOfPages = roundup((data.id || 0) / 25);
 
                 setEditor({ ...editor, open: false });
 
@@ -87,7 +85,7 @@ export default function FloatingEditor() {
                     changePage(numOfPages, () => {
                         setShouldUpdate(true);
                     });
-                else update({ scrollToComment: res.data.id });
+                else update({ scrollToComment: data.id });
 
                 setCreating(false);
                 clearState();

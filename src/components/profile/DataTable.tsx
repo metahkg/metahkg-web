@@ -13,18 +13,12 @@ import {
     TextField,
 } from "@mui/material";
 import { decodeToken, timeToWord_long } from "../../lib/common";
-import { api, resetApi } from "../../lib/api";
+import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
+import { User } from "@metahkg/api";
 
-export interface UserData {
-    id: number;
-    name: string;
-    count: number;
-    sex: "M" | "F";
-    role: "user" | "admin";
-    createdAt: string;
-}
+export type UserData = User & { count: number; createdAt?: Date };
 
 interface DataTableProps {
     requestedUser: UserData;
@@ -68,29 +62,31 @@ export default function DataTable(props: DataTableProps) {
         { title: "Role", content: requestedUser.role },
         {
             title: "Joined",
-            content: `${timeToWord_long(requestedUser.createdAt)} ago`,
+            content: `${
+                requestedUser.createdAt
+                    ? timeToWord_long(requestedUser.createdAt)
+                    : "unknown"
+            } ago`,
         },
     ];
 
     function rename() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Renaming..." });
-        api.me
-            .rename({ name })
-            .then((res) => {
+        api.meRename({ name })
+            .then((data) => {
                 setSaveDisabled(false);
                 setUser(null);
 
-                const { token } = res.data;
+                const { token } = data;
 
                 if (token) {
                     localStorage.setItem("token", token);
                     setClient(decodeToken(token));
-                    resetApi();
                 }
 
                 setReFetch(true);
-                setNotification({ open: true, text: res.data?.response });
+                setNotification({ open: true, text: data?.response });
             })
             .catch((err) => {
                 setSaveDisabled(false);

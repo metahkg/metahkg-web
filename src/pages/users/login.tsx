@@ -14,7 +14,7 @@ import {
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
-import { api, resetApi } from "../../lib/api";
+import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 
@@ -53,16 +53,11 @@ export default function Login() {
         e.preventDefault();
         setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
-        api.users
-            .login({
-                userNameOrEmail: name,
-                password: hash.sha256().update(pwd).digest("hex"),
-            })
-            .then((res) => {
-                localStorage.setItem("token", res.data.token);
-                const user = decodeToken(res.data.token);
+        api.usersLogin({ name, pwd: hash.sha256().update(pwd).digest("hex") })
+            .then((data) => {
+                localStorage.setItem("token", data.token);
+                const user = decodeToken(data.token);
                 setUser(user);
-                resetApi();
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
@@ -139,16 +134,16 @@ export default function Login() {
                         />
                     ))}
                     <Box className="mt15 mb15">
-                    <Typography
-                        component={Link}
-                        to="/users/verify"
-                        className="link bold-force"
-                        sx={(theme) => ({
-                            color: `${theme.palette.secondary.main} !important`,
-                        })}
-                    >
-                        Verify / Resend verification email
-                    </Typography>
+                        <Typography
+                            component={Link}
+                            to="/users/verify"
+                            className="link bold-force"
+                            sx={(theme) => ({
+                                color: `${theme.palette.secondary.main} !important`,
+                            })}
+                        >
+                            Verify / Resend verification email
+                        </Typography>
                     </Box>
                     <Button
                         disabled={disabled || !(name && pwd)}

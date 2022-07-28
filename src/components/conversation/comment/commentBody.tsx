@@ -1,14 +1,14 @@
 import "../../../css/components/conversation/comment/commentBody.css";
 import { replace } from "../../../lib/domReplace";
-import { commentType } from "../../../types/conversation/comment";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
+import { Comment } from "@metahkg/api";
 
 export default function CommentBody(props: {
-    comment: commentType;
+    comment: Comment;
     depth: number;
     noQuote?: boolean;
     maxHeight?: string | number;

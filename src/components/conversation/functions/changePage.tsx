@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../lib/api";
-import { threadType } from "../../../types/conversation/thread";
 import { useNotification } from "../../ContextProvider";
 import {
     useCurrentPage,
@@ -56,32 +55,31 @@ export default function useChangePage() {
                     : finalPage
             );
 
-            api.threads
-                .get({ threadId, page: newPage })
-                .then((res: { data: threadType }) => {
-                    if (!res.data.conversation.length)
+            api.thread(threadId, newPage)
+                .then((data) => {
+                    if (!data.conversation.length)
                         return setNotification({ open: true, text: "Page not found!" });
 
                     setThread(
                         shouldReRender
-                            ? res.data
+                            ? data
                             : {
                                   ...thread,
-                                  ...res.data,
+                                  ...data,
                                   conversation:
                                       newPage - finalPage === 1
                                           ? [
                                                 ...thread.conversation,
-                                                ...res.data.conversation,
+                                                ...data.conversation,
                                             ]
                                           : [
-                                                ...res.data.conversation,
+                                                ...data.conversation,
                                                 ...thread.conversation,
                                             ],
                               }
                     );
 
-                    res.data.conversation.length % 25 && setEnd(true);
+                    data.conversation.length % 25 && setEnd(true);
 
                     setTimeout(() => {
                         setCurrentPage(newPage);

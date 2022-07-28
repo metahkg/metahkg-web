@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../lib/api";
-import { threadType } from "../../../types/conversation/thread";
 import { useHistory, useNotification, useUser } from "../../ContextProvider";
 import { useCat, useId, useMenuMode } from "../../MenuProvider";
 import {
@@ -15,6 +14,7 @@ import {
 import { setDescription, setTitle } from "../../../lib/common";
 import queryString from "query-string";
 import { parseError } from "../../../lib/parseError";
+import { Comment } from "@metahkg/api";
 
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
@@ -42,36 +42,35 @@ export default function useFirstFetch() {
         err?.response?.status === 403 && navigate("/403", { replace: true });
     };
     useEffect(() => {
-        api.threads
-            .get({ threadId, page: finalPage })
-            .then((res: { data: threadType }) => {
-                res.data.slink && setThread(res.data);
+        api.thread(threadId, finalPage)
+            .then((data) => {
+                data.slink && setThread(data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
-                if (historyIndex && history[historyIndex].c < res.data.c) {
-                    history[historyIndex].c = res.data.c;
+                if (historyIndex && history[historyIndex].c < data.c) {
+                    history[historyIndex].c = data.c;
                     setHistory(history);
                     localStorage.setItem("history", JSON.stringify(history));
                 }
-                !cat && menuMode === "category" && setCat(res.data.category);
-                id !== res.data.id && setId(res.data.id);
-                setTitle(`${res.data.title} | Metahkg`);
+                !cat && menuMode === "category" && setCat(data.category);
+                id !== data.id && setId(data.id);
+                setTitle(`${data.title} | Metahkg`);
                 setDescription(
-                    (query.c && res.data.conversation?.[Number(query.c) - 1]?.text) ||
-                        res.data.conversation?.[0]?.text
+                    (query.c &&
+                        (data.conversation?.[Number(query.c) - 1] as Comment)?.text) ||
+                        (data.conversation?.[0] as Comment)?.text
                 );
-                if (!res.data.slink) {
-                    res.data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
-                    setThread(res.data);
+                if (!data.slink) {
+                    data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
+                    setThread(data);
                 }
-                res.data.conversation.length % 25 && setEnd(true);
+                data.conversation.length % 25 && setEnd(true);
             })
             .catch(onError);
 
         if (user)
-            api.me
-                .votes({ threadId })
-                .then((res) => {
-                    setVotes(res.data);
+            api.meVotes(threadId)
+                .then((data) => {
+                    setVotes(data);
                 })
                 .catch(onError);
 

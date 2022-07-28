@@ -4,7 +4,6 @@ import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/
 import { useNotification } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId, useVotes } from "./ConversationContext";
-import { commentType } from "../../types/conversation/comment";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
 import { api } from "../../lib/api";
@@ -16,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
+import { Comment as CommentType } from "@metahkg/api";
 
 /**
  * Comment component renders a comment
@@ -24,7 +24,7 @@ import { parseError } from "../../lib/parseError";
  * and upvote and downvote buttons
  */
 export default function Comment(props: {
-    comment: commentType;
+    comment: CommentType;
     noId?: boolean;
     inPopUp?: boolean;
     showReplies?: boolean;
@@ -62,7 +62,7 @@ export default function Comment(props: {
     const [ready, setReady] = useState(!fetchComment);
     const [reFetch, setReFetch] = useState(false);
     const [showReplies, setShowReplies] = useState(props.showReplies);
-    const [replies, setReplies] = useState<commentType[]>([]);
+    const [replies, setReplies] = useState<CommentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [fold, setFold] = useState(props.fold);
@@ -81,10 +81,9 @@ export default function Comment(props: {
         commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
         if (!ready || reFetch) {
             setReFetch(false);
-            api.threads.comments
-                .get({ threadId, commentId: comment.id })
-                .then((res) => {
-                    setComment(res.data);
+            api.comment(threadId, comment.id)
+                .then((data) => {
+                    setComment(data);
                     setReady(true);
                 })
                 .catch((err) => {
@@ -96,10 +95,9 @@ export default function Comment(props: {
         }
         if (inPopUp) {
             setLoading(true);
-            api.threads.comments
-                .replies({ threadId, commentId: comment.id })
-                .then((res) => {
-                    setReplies(res.data);
+            api.commentReplies(threadId, comment.id)
+                .then((data) => {
+                    setReplies(data);
                     setLoading(false);
                 })
                 .catch(() => {

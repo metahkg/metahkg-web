@@ -1,8 +1,8 @@
+import { Comment } from "@metahkg/api";
 import parse from "html-react-parser";
 import React from "react";
-import { commentType } from "../types/conversation/comment";
 
-export default function RenderComment(props: { comment: commentType; depth: number }) {
+export default function RenderComment(props: { comment: Comment; depth: number }) {
     const { comment, depth } = props;
     const commentJSX = parse(comment.comment);
     const content = [

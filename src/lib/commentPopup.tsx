@@ -1,14 +1,14 @@
 import React, { SetStateAction, useState } from "react";
 import { useIsSmallScreen } from "../components/ContextProvider";
 import Comment from "../components/conversation/comment";
-import { commentType } from "../types/conversation/comment";
 import { PopUp } from "./popup";
+import { Comment as CommentType } from "@metahkg/api";
 
 export default function CommentPopup(props: {
     open: boolean;
     setOpen: React.Dispatch<SetStateAction<boolean>>;
     showReplies?: boolean;
-    comment: commentType;
+    comment: CommentType;
     fetchComment?: boolean;
     openComment?: boolean;
 }) {

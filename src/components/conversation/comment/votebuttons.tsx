@@ -6,9 +6,9 @@ import { useNotification, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
-import { commentType } from "../../../types/conversation/comment";
+import { Comment, Vote } from "@metahkg/api";
 
-export default function VoteButtons(props: { comment: commentType }) {
+export default function VoteButtons(props: { comment: Comment }) {
     const threadId = useThreadId();
     const [votes, setVotes] = useVotes();
     const [, setNotification] = useNotification();
@@ -23,9 +23,8 @@ export default function VoteButtons(props: { comment: commentType }) {
      * It sends a vote to the server.
      * @param {"U" | "D"} newVote - "U" | "D"
      */
-    function sendVote(newVote: "U" | "D") {
-        api.threads.comments
-            .vote({ threadId, commentId: comment.id, vote: newVote })
+    function sendVote(newVote: Vote) {
+        api.commentVote(threadId, comment.id, { vote: newVote })
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
                 setComment({ ...comment, [newVote]: (comment[newVote] || 0) + 1 });
@@ -45,13 +44,13 @@ export default function VoteButtons(props: { comment: commentType }) {
                 className="nopadding nomargin vb-btn vb-btn-left"
                 disabled={!user || !!vote}
                 onClick={() => {
-                    sendVote("U");
+                    sendVote(Vote.U);
                 }}
             >
                 <Typography
                     className="flex"
                     sx={{
-                        color: vote === "U" ? "green" : "#aaa",
+                        color: vote === Vote.U ? "green" : "#aaa",
                     }}
                 >
                     <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
@@ -62,13 +61,13 @@ export default function VoteButtons(props: { comment: commentType }) {
                 className="nopadding nomargin vb-btn vb-btn-right"
                 disabled={!user || !!vote}
                 onClick={() => {
-                    sendVote("D");
+                    sendVote(Vote.D);
                 }}
             >
                 <Typography
                     className="flex"
                     sx={{
-                        color: vote === "D" ? "red" : "#aaa",
+                        color: vote === Vote.D ? "red" : "#aaa",
                     }}
                 >
                     <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />

@@ -1,16 +1,15 @@
 import React, { createContext, useState, useRef } from "react";
-import { threadType } from "../../types/conversation/thread";
 import queryString from "query-string";
-import { commentType } from "../../types/conversation/comment";
+import { Comment, Thread } from "@metahkg/api";
 
 interface editorStateType {
     open: boolean;
-    quote?: commentType;
+    quote?: Comment;
     edit?: string;
 }
 
 const ConversationContext = createContext<{
-    thread: [null | threadType, React.Dispatch<React.SetStateAction<null | threadType>>];
+    thread: [Thread | null, React.Dispatch<React.SetStateAction<Thread | null>>];
     finalPage: [number, React.Dispatch<React.SetStateAction<number>>];
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
     votes: [
@@ -39,7 +38,7 @@ export default function ConversationProvider(props: {
 }) {
     const query = queryString.parse(window.location.search);
     const { threadId, children } = props;
-    const [thread, setThread] = useState<threadType | null>(null);
+    const [thread, setThread] = useState<Thread | null>(null);
     const [finalPage, setFinalPage] = useState(
         Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
     );

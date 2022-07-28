@@ -8,7 +8,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
-import { api, resetApi } from "../../lib/api";
+import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 
@@ -34,13 +34,11 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, text: "Verifying..." });
         setDisabled(true);
-        api.users
-            .verify({ email, code })
-            .then((res) => {
-                localStorage.setItem("token", res.data.token);
-                const user = decodeToken(res.data.token);
+        api.usersVerify({ email, code })
+            .then((data) => {
+                localStorage.setItem("token", data.token);
+                const user = decodeToken(data.token);
                 setUser(user);
-                resetApi();
                 setNotification({
                     open: true,
                     text: `Logged in as ${user?.name}.`,

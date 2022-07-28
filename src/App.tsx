@@ -34,17 +34,15 @@ export default function App() {
 
     useEffect(() => {
         if (user) {
-            api.me.status().then((res) => {
-                const { active } = res.data;
+            api.meStatus().then((data) => {
+                const { active } = data;
                 if (!active) {
                     localStorage.removeItem("token");
                     return window.location.reload();
                 }
             });
             setInterval(() => {
-                api.me.blocked().then((res) => {
-                    setBlocked(res.data);
-                });
+                api.meBlocked().then(setBlocked);
             }, 1000 * 60 * 10);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -15,7 +15,7 @@ import { api } from "../lib/api";
 import { userType } from "../types/user";
 import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { User } from "metahkg-api/dist/types/user";
+import { User } from "@metahkg/api";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -95,9 +95,7 @@ export default function ContextProvider(props: {
     );
 
     useEffect(() => {
-        api.category.categories().then((res) => {
-            setCategories(res.data);
-        });
+        api.categories().then(setCategories);
     }, []);
 
     useEffect(() => {

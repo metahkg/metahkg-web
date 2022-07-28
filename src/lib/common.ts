@@ -23,7 +23,7 @@ export const shortEnglishHumanizer = humanizeDuration.humanizer({
     },
 });
 
-export function timeToWord(sDate: string): string {
+export function timeToWord(sDate: string | Date): string {
     const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();
@@ -37,7 +37,7 @@ export function timeToWord(sDate: string): string {
     return r;
 }
 
-export function timeToWord_long(sDate: string): string {
+export function timeToWord_long(sDate: string | Date): string {
     const startDate = new Date(sDate);
     const endDate = new Date();
     const diff = endDate.getTime() - startDate.getTime();

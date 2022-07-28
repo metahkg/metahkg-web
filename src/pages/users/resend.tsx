@@ -49,8 +49,7 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
-        api.users
-            .resend({ email, rtoken })
+        api.usersResend({ email, rtoken })
             .then(() => {
                 setNotification({
                     open: true,
