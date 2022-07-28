@@ -1,6 +1,6 @@
+import { User } from "@metahkg/api";
 import humanizeDuration from "humanize-duration";
 import jwtDecode from "jwt-decode";
-import { userType } from "../types/user";
 
 export function roundup(num: number, precision = 0): number {
     precision = Math.pow(10, precision);
@@ -108,7 +108,7 @@ export function setDescription(
 
 export const decodeToken = (token?: string) => {
     try {
-        return jwtDecode(token || "") as userType | null;
+        return jwtDecode(token || "") as User | null;
     } catch {
         return null;
     }

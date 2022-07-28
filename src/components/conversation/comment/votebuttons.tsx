@@ -24,7 +24,7 @@ export default function VoteButtons(props: { comment: Comment }) {
      * @param {"U" | "D"} newVote - "U" | "D"
      */
     function sendVote(newVote: Vote) {
-        api.commentVote(threadId, comment.id, { vote: newVote })
+        api.commentVote({ vote: newVote }, threadId, comment.id)
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
                 setComment({ ...comment, [newVote]: (comment[newVote] || 0) + 1 });
