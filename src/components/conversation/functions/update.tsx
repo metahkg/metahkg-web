@@ -59,10 +59,7 @@ export function useUpdate() {
                 }
                 if (!openNewPage) {
                     lastHeight.current = 0;
-                    const conversation = [
-                        ...thread.conversation,
-                        ...data.conversation,
-                    ];
+                    const conversation = [...thread.conversation, ...data.conversation];
                     setThread({
                         ...thread,
                         ...data,

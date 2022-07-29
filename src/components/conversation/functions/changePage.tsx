@@ -68,10 +68,7 @@ export default function useChangePage() {
                                   ...data,
                                   conversation:
                                       newPage - finalPage === 1
-                                          ? [
-                                                ...thread.conversation,
-                                                ...data.conversation,
-                                            ]
+                                          ? [...thread.conversation, ...data.conversation]
                                           : [
                                                 ...data.conversation,
                                                 ...thread.conversation,
