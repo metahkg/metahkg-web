@@ -24,12 +24,13 @@ import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timeToWord, wholePath } from "../../../lib/common";
 import MoreList from "./more";
-import { useNotification, useUser } from "../../ContextProvider";
+import { useNotification, useSettings, useUser } from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";
 import { parseError } from "../../../lib/parseError";
 import { Comment } from "@metahkg/api";
+import { filterSwearWords } from "../../../lib/filterSwear";
 
 export default function CommentTop(props: {
     comment: Comment;
@@ -44,6 +45,7 @@ export default function CommentTop(props: {
     const [, setShareOpen] = useShareOpen();
     const [story, setStory] = useStory();
     const [, setNotification] = useNotification();
+    const [settings] = useSettings()
     const threadId = useThreadId();
     const title = useTitle();
     const navigate = useNavigate();
@@ -260,7 +262,7 @@ export default function CommentTop(props: {
                             className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
                             style={{ display: "inline-block" }}
                         >
-                            {comment.text}
+                            {settings.filterSwearWords ? filterSwearWords(comment.text) : comment.text}
                         </p>
                     </Box>
                 )}

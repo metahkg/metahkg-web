@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.4.0
+
+- filter swear words option
+
 ## v2.8.1
 
 - add support for facebook and instagram

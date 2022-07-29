@@ -43,6 +43,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "metahkg-css": "1.1.0",
+    "naughty-words": "^1.2.0",
     "prettier": "^2.7.1",
     "prismjs": "^1.28.0",
     "query-string": "^7.1.1",

@@ -6,6 +6,8 @@ import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
 import { Comment } from "@metahkg/api";
+import { useSettings } from "../../ContextProvider";
+import { filterSwearWords } from "../../../lib/filterSwear";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -14,11 +16,15 @@ export default function CommentBody(props: {
     maxHeight?: string | number;
 }) {
     const { comment, depth, noQuote, maxHeight } = props;
-    const [commentJSX] = useState(
-        parse(comment.comment, { replace: replace({ quote: depth > 0 }) })
-    );
+    const [settings] = useSettings();
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
+
+    const commentJSX = parse(
+        settings.filterSwearWords ? filterSwearWords(comment.comment) : comment.comment,
+        { replace: replace({ quote: depth > 0 }) }
+    );
+
     const content = useMemo(
         () => [
             comment.quote && !noQuote && (
@@ -71,9 +77,11 @@ export default function CommentBody(props: {
         ],
         [comment.quote, commentJSX, depth, noQuote, showQuote]
     );
+
     useEffect(() => {
         Prism.highlightAll();
     });
+
     return (
         <React.Fragment key={depth}>
             {comment.quote && showQuote && (

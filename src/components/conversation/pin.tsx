@@ -3,10 +3,13 @@ import { InfoOutlined } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import CommentPopup from "../../lib/commentPopup";
+import { filterSwearWords } from "../../lib/filterSwear";
+import { useSettings } from "../ContextProvider";
 
 export default function PinnedComment(props: { comment: Comment }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
+    const [settings] = useSettings();
     return (
         <React.Fragment>
             <CommentPopup comment={comment} open={open} setOpen={setOpen} fetchComment />
@@ -23,7 +26,9 @@ export default function PinnedComment(props: { comment: Comment }) {
                         Pinned Comment #{comment.id}
                     </Typography>
                     <Typography className="metahkg-grey-force text-overflow-ellipsis overflow-hidden nowrap novmargin mr15">
-                        {comment.text}
+                        {settings.filterSwearWords
+                            ? filterSwearWords(comment.text)
+                            : comment.text}
                     </Typography>
                 </div>
             </Box>

@@ -25,6 +25,13 @@ export default function Settings(props: {
             },
             checked: settings.votebar,
         },*/
+        {
+            title: "Filter swear words",
+            action: (e) => {
+                setSettings({ ...settings, filterSwearWords: e.target.checked });
+            },
+            checked: settings.filterSwearWords,
+        },
     ];
     const colorOptions: {
         value: string;
@@ -38,7 +45,7 @@ export default function Settings(props: {
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
-            <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
+            <Box className="ml20 mr10" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
                     <div
                         key={item.title}

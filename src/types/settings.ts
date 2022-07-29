@@ -7,4 +7,5 @@ export type secondaryColor = {
 export type settings = {
     votebar?: boolean;
     secondaryColor?: secondaryColor;
+    filterSwearWords?: boolean;
 };
