@@ -1,10 +1,10 @@
+import { Comment } from "@metahkg/api";
 import { InfoOutlined } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { commentType } from "../../types/conversation/comment";
 import React, { useState } from "react";
 import CommentPopup from "../../lib/commentPopup";
 
-export default function PinnedComment(props: { comment: commentType }) {
+export default function PinnedComment(props: { comment: Comment }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
     return (

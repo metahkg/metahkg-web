@@ -44,12 +44,12 @@ export default function Verify() {
 
     if (user) <Navigate to="/" replace />;
 
-    function resend() {
+    function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, text: "Requesting resend..." });
         setDisabled(true);
-        api.users
-            .resend({ email, rtoken })
+        api.usersResend({ email, rtoken })
             .then(() => {
                 setNotification({
                     open: true,
@@ -79,7 +79,7 @@ export default function Verify() {
     }
 
     useEffect(() => {
-        if (query.email && !user) resend();
+        if (query.email && !user) onSubmit();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -89,13 +89,13 @@ export default function Verify() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <div className="m40">
-                    <div className="flex justify-center align-center">
+                <Box className="m40" component="form" onSubmit={onSubmit}>
+                    <Box className="flex justify-center align-center">
                         <MetahkgLogo svg light height={50} width={40} className="mb10" />
                         <h1 className="font-size-25 mb20 nohmargin">
                             Resend Verification Email
                         </h1>
-                    </div>
+                    </Box>
                     {alert.text && (
                         <Alert className="mb20" severity={alert.severity}>
                             {alert.text}
@@ -113,7 +113,7 @@ export default function Verify() {
                         required
                         fullWidth
                     />
-                    <div
+                    <Box
                         className={`${
                             small
                                 ? ""
@@ -133,7 +133,7 @@ export default function Verify() {
                                 small ? " mt20" : ""
                             }`}
                             color="secondary"
-                            onClick={resend}
+                            type="submit"
                             disabled={
                                 disabled ||
                                 !(email && rtoken && EmailValidator.validate(email))
@@ -142,8 +142,8 @@ export default function Verify() {
                             <SendIcon className="mr5 font-size-16-force" />
                             Resend
                         </Button>
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );

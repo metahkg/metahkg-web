@@ -9,13 +9,13 @@ import {
     useMenuMode,
 } from "../MenuProvider";
 import { useHistory, useNotification, useQuery } from "../ContextProvider";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { api } from "../../lib/api";
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import MenuThread from "./menuThread";
 import MenuPreload from "./menuPreload";
-import { Summary } from "metahkg-api/dist/types/thread/thread";
 import { parseError } from "../../lib/parseError";
+import { ThreadMeta } from "@metahkg/api";
 
 /**
  * This function renders the main content of the menu
@@ -29,7 +29,7 @@ export default function MenuBody(props: { selected: number }) {
     const [query] = useQuery();
     const [, setNotification] = useNotification();
     const [id] = useId();
-    const [data, setData] = useState<Summary[]>([]);
+    const [data, setData] = useState<ThreadMeta[]>([]);
     const [smode] = useSmode();
     const [page, setPage] = useState(1);
     const [end, setEnd] = useState(false);
@@ -63,10 +63,10 @@ export default function MenuBody(props: { selected: number }) {
             setEnd(false);
             setLoading(true);
 
-            const onSuccess = (res: AxiosResponse<Summary[]>) => {
+            const onSuccess = (data: ThreadMeta[]) => {
                 page !== 1 && setPage(1);
-                res.data.length && setData(res.data);
-                res.data.length < 25 && setEnd(true);
+                data.length && setData(data);
+                data.length < 25 && setEnd(true);
                 setLoading(false);
                 setTimeout(() => {
                     if (paperRef.current) paperRef.current.scrollTop = 0;
@@ -75,35 +75,26 @@ export default function MenuBody(props: { selected: number }) {
 
             switch (menuMode) {
                 case "category":
-                    api.menu
-                        .main({
-                            ...(category ? { categoryId: category } : { threadId: id }),
-                            sort: selected as 0 | 1,
-                        })
+                    api.menuCategory(category || `bytid${id}`, selected as 0 | 1)
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "profile":
-                    api.menu
-                        .history({ userId: profile, sort: selected as 0 | 1 })
+                    api.menuHistory(profile, selected as 0 | 1)
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "search":
-                    api.menu
-                        .search({
-                            searchQuery: encodeURIComponent(query),
-                            sort: selected as 0 | 1 | 2,
-                            mode: smode as 0 | 1,
-                        })
+                    api.menuSearch(
+                        encodeURIComponent(query),
+                        smode as 0 | 1,
+                        selected as 0 | 1 | 2
+                    )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "recall":
-                    api.menu
-                        .threads({
-                            threads: history.map((item) => item.id).slice(0, 24),
-                        })
+                    api.menuThreads(history.map((item) => item.id).slice(0, 24))
                         .then(onSuccess)
                         .catch(onError);
                     break;
@@ -123,52 +114,38 @@ export default function MenuBody(props: { selected: number }) {
         setEnd(false);
         setLoading(true);
 
-        const onSuccess = (res: AxiosResponse<Summary[]>) => {
-            setData([...data, ...res.data]);
-            res.data.length < 25 && setEnd(true);
+        const onSuccess = (data2: ThreadMeta[]) => {
+            setData([...data, ...data2]);
+            data2.length < 25 && setEnd(true);
             setPage((page) => page + 1);
             setLoading(false);
         };
 
         switch (menuMode) {
             case "category":
-                api.menu
-                    .main({
-                        ...(category ? { categoryId: category } : { threadId: id }),
-                        sort: selected as 0 | 1,
-                        page: page + 1,
-                    })
+                api.menuCategory(category || `bytid${id}`, selected as 0 | 1, page + 1)
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "profile":
-                api.menu
-                    .history({
-                        userId: profile,
-                        sort: selected as 0 | 1,
-                        page: page + 1,
-                    })
+                api.menuHistory(profile, selected as 0 | 1, page + 1)
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "search":
-                api.menu
-                    .search({
-                        searchQuery: encodeURIComponent(query),
-                        sort: selected as 0 | 1 | 2,
-                        page: page + 1,
-                        mode: smode as 0 | 1,
-                    })
+                api.menuSearch(
+                    encodeURIComponent(query),
+                    smode as 0 | 1,
+                    selected as 0 | 1 | 2,
+                    page + 1
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "recall":
-                api.menu
-                    .threads({
-                        threads: history
-                            .map((item) => item.id)
-                            .slice(page * 25, (page + 1) * 25 - 1),
-                    })
+                api.menuThreads(
+                    history.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
@@ -213,7 +190,7 @@ export default function MenuBody(props: { selected: number }) {
             <Box className="min-height-full menu-bottom flex flex-dir-column">
                 {Boolean(data.length) && (
                     <Box className="flex flex-dir-column max-width-full menu-bottom">
-                        {data.map((thread: Summary, index) => (
+                        {data.map((thread, index) => (
                             <div key={index}>
                                 <MenuThread
                                     key={`${category}${id === thread.id}`}

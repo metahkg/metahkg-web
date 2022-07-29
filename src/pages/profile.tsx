@@ -49,11 +49,10 @@ export default function Profile() {
 
     useEffect(() => {
         if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
-            api.users
-                .profile({ userId })
-                .then((res) => {
-                    setRequestedUser(res.data);
-                    setTitle(`${res.data.name} | Metahkg`);
+            api.usersProfile(userId)
+                .then((data) => {
+                    setRequestedUser(data);
+                    setTitle(`${data.name} | Metahkg`);
                 })
                 .catch((err) => {
                     setNotification({ open: true, text: parseError(err) });
@@ -120,7 +119,7 @@ export default function Profile() {
                         }}
                     >
                         <img
-                            src={`/api/users/avatars/${requestedUser.id}`}
+                            src={`/api/users/${requestedUser.id}/avatar`}
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
@@ -173,9 +172,9 @@ export default function Profile() {
                                             }}
                                             onSuccess={() => {
                                                 if (avatarRef.current)
-                                                    avatarRef.current.src = `/api/users/avatars/${
+                                                    avatarRef.current.src = `/api/users/${
                                                         requestedUser.id
-                                                    }?rand=${Math.random()}`;
+                                                    }/avatar?rand=${Math.random()}`;
                                             }}
                                             onError={(err) => {
                                                 setNotification({

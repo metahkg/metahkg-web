@@ -51,14 +51,14 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!menuTitle) {
             if (menuMode === "profile") {
-                api.users.profile({ userId: profile, nameonly: true }).then((res) => {
-                    setMenuTitle(res.data.name);
-                    setTitle(`${res.data.name} | Metahkg`);
+                api.usersProfileName(profile).then((data) => {
+                    setMenuTitle(data.name);
+                    setTitle(`${data.name} | Metahkg`);
                 });
             } else if (menuMode === "category" && (category || id)) {
-                api.category.info({ categoryId: category, threadId: id }).then((res) => {
-                    setMenuTitle(res.data.name);
-                    if (!id) setTitle(`${res.data.name} | Metahkg`);
+                api.category(category || `bytid${id}`).then((data) => {
+                    setMenuTitle(data.name);
+                    if (!id) setTitle(`${data.name} | Metahkg`);
                 });
             }
         }

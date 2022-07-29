@@ -64,12 +64,11 @@ export default function Create() {
         if (user && quote.threadId && quote.commentId) {
             setAlert({ severity: "info", text: "Fetching comment..." });
             setNotification({ open: true, text: "Fetching comment..." });
-            api.threads.comments
-                .get({ threadId: quote.threadId, commentId: quote.commentId })
-                .then((res) => {
-                    if (res.data) {
+            api.comment(quote.threadId, quote.commentId)
+                .then((data) => {
+                    if (data) {
                         setInittext(
-                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${res.data.comment}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${data.comment}</div></blockquote><p></p>`
                         );
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
@@ -104,15 +103,14 @@ export default function Create() {
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, text: "Creating thread..." });
         setDisabled(true);
-        api.threads
-            .create({
-                title: threadTitle,
-                category: catchoosed,
-                comment,
-                rtoken,
-            })
-            .then((res) => {
-                navigate(`/thread/${res.data.id}`, { replace: true });
+        api.threadCreate({
+            title: threadTitle,
+            category: catchoosed,
+            comment,
+            rtoken,
+        })
+            .then((data) => {
+                navigate(`/thread/${data.id}`, { replace: true });
                 setTimeout(() => {
                     notification.open && setNotification({ open: false, text: "" });
                 }, 100);

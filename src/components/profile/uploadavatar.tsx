@@ -2,9 +2,8 @@ import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
-import { AxiosResponse } from "axios";
 import { api } from "../../lib/api";
-import { OK } from "metahkg-api/dist/types/ok";
+import { OK } from "@metahkg/api";
 
 const Input = styled("input")({
     display: "none",
@@ -15,7 +14,7 @@ const Input = styled("input")({
  */
 export default function UploadAvatar(props: {
     onUpload?: () => void;
-    onSuccess: (res: AxiosResponse<OK>) => void;
+    onSuccess: (res: OK) => void;
     onError: (err: any) => void;
 }) {
     const { onUpload, onSuccess, onError } = props;
@@ -32,7 +31,10 @@ export default function UploadAvatar(props: {
                             onUpload && onUpload();
                             const avatar = e?.target?.files?.[0];
                             avatar &&
-                                api.me.avatar({ avatar }).then(onSuccess).catch(onError);
+                                api
+                                    .meAvatar({ fileName: "avatar", data: avatar })
+                                    .then(onSuccess)
+                                    .catch(onError);
                         }}
                     />
                     <Button

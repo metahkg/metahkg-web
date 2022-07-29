@@ -224,5 +224,60 @@ sast:
     - if: $CI_COMMIT_TAG
       when: never
 
+tagging:
+  image: node:18-alpine
+  stage: deploy
+  allow_failure: true
+  before_script:
+    - apk add git
+  script:
+    - git config --global user.name metahkg-bot
+    - git config --global user.email bot@metahkg.org
+    - tag=$(node -e "console.log(require('./package.json').version)")
+    - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
+    - git tag "$tag"
+    - git push https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git $tag
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
+
+publish:
+  image: node:latest
+  stage: deploy
+  allow_failure: true
+  script:
+    - yarn install
+    - yarn lint
+    - yarn build:module
+    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> .npmrc
+    - NPM_PACKAGE_ORIGINAL_VERSION=$(node -p "require('./package.json').version")
+    - NPM_PACKAGE_VERSION=$CI_COMMIT_TAG
+    - sed -i "s/${NPM_PACKAGE_ORIGINAL_VERSION}/${NPM_PACKAGE_VERSION}/" package.json
+    - if [ "$CI_COMMIT_TAG" = "${NPM_PACKAGE_ORIGINAL_VERSION}-dev" ]; then npm publish --tag dev; else npm publish; fi;
+  rules:
+    - if: $CI_COMMIT_TAG
+
+container_scanning:
+  stage: review
+  needs: [ "docker-build" ]
+  variables:
+    GIT_STRATEGY: fetch
+    CI_APPLICATION_REPOSITORY: "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH"
+    CI_APPLICATION_TAG: $CI_COMMIT_SHORT_SHA
+    CLAIR_OUTPUT: High
+  artifacts:
+    paths:
+      - gl-container-scanning-report.json
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+
+sast:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+
 include:
   - template: Auto-DevOps.gitlab-ci.yml

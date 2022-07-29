@@ -11,7 +11,6 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PopUp } from "../../../lib/popup";
-import { commentType } from "../../../types/conversation/comment";
 import {
     useCRoot,
     useEditor,
@@ -30,9 +29,10 @@ import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";
 import { parseError } from "../../../lib/parseError";
+import { Comment } from "@metahkg/api";
 
 export default function CommentTop(props: {
-    comment: commentType;
+    comment: Comment;
     noStory?: boolean;
     fold?: boolean;
     setFold?: React.Dispatch<React.SetStateAction<boolean | undefined>>;
@@ -137,14 +137,8 @@ export default function CommentTop(props: {
                             text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
                         });
                         (pinned
-                            ? api.threads.comments.unpin({
-                                  threadId,
-                                  commentId: comment.id,
-                              })
-                            : api.threads.comments.pin({
-                                  threadId,
-                                  commentId: comment.id,
-                              })
+                            ? api.commentUnpin(threadId, comment.id)
+                            : api.commentPin(threadId, comment.id)
                         )
                             .then(() => {
                                 setNotification({

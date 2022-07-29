@@ -11,15 +11,10 @@ import { roundup, timeToWord } from "../../lib/common";
 import { Link } from "react-router-dom";
 import { useCat, useId, useMenuMode } from "../MenuProvider";
 import { useCategories, useHistory } from "../ContextProvider";
-import { Summary } from "metahkg-api/dist/types/thread/thread";
+import { ThreadMeta } from "@metahkg/api";
 
-/**
- * A component that renders a thread in the menu.
- * @param {summary} props.thread thread info
- * @param {() => void | undefined} props.onClick on click event handler
- */
 export default function MenuThread(props: {
-    thread: Summary;
+    thread: ThreadMeta;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }) {
     const [cat] = useCat();

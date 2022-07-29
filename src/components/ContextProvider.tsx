@@ -10,12 +10,10 @@ import React, {
 import type { history } from "../types/history";
 import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
-import type { category } from "../types/category";
 import { api } from "../lib/api";
-import { userType } from "../types/user";
 import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { User } from "metahkg-api/dist/types/user";
+import { Category, User } from "@metahkg/api";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -26,8 +24,8 @@ const Context = createContext<{
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
-    categories: [category[], Dispatch<category[]>];
-    user: [userType | null, Dispatch<SetStateAction<userType | null>>];
+    categories: [Category[], Dispatch<Category[]>];
+    user: [User | null, Dispatch<SetStateAction<User | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
     blocked: [User[], Dispatch<SetStateAction<User[]>>];
@@ -57,13 +55,13 @@ export default function ContextProvider(props: {
     const [user, setUser] = useState(
         (() => {
             try {
-                return jwtDecode(localStorage.token || "") as userType | null;
+                return jwtDecode(localStorage.token || "") as User | null;
             } catch {
                 return null;
             }
         })()
     );
-    const [categories, setCategories] = useState<category[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
     );
@@ -95,9 +93,7 @@ export default function ContextProvider(props: {
     );
 
     useEffect(() => {
-        api.category.categories().then((res) => {
-            setCategories(res.data);
-        });
+        api.categories().then(setCategories);
     }, []);
 
     useEffect(() => {

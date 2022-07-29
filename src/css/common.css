@@ -291,3 +291,19 @@
 .fixed {
     position: fixed;
 }
+
+.bold {
+    font-weight: bold;
+}
+
+.bold-force {
+    font-weight: bold !important;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.italic-force {
+    font-style: italic !important;
+}

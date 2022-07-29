@@ -20,7 +20,6 @@ import PageBottom from "./conversation/pagebottom";
 import PageSelect from "./conversation/pageselect";
 import useBtns from "./conversation/functions/btns";
 import { PhotoProvider } from "react-photo-view";
-import { commentType } from "../types/conversation/comment";
 import {
     useCBottom,
     useCRoot,
@@ -42,11 +41,11 @@ import useChangePage from "./conversation/functions/changePage";
 import useOnScroll from "./conversation/functions/onScroll";
 import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
 import FloatingEditor from "./floatingEditor";
-import Comment from "./conversation/comment";
 import Gallery from "./conversation/gallery";
 import Dock from "./dock";
 import Share from "./conversation/share";
 import PinnedComment from "./conversation/pin";
+import Comment from "./conversation/comment";
 
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
@@ -223,8 +222,8 @@ function Conversation(props: { id: number }) {
                                                 {thread.conversation
                                                     .slice(index * 25, (index + 1) * 25)
                                                     .map(
-                                                        (comment: commentType) =>
-                                                            !comment?.removed &&
+                                                        (comment) =>
+                                                            !("removed" in comment) &&
                                                             (story
                                                                 ? story ===
                                                                   comment?.user.id

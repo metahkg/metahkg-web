@@ -4,7 +4,6 @@ import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import { useNotification, useUser } from "../../components/ContextProvider";
-import { resetApi } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 
 /**
@@ -28,7 +27,6 @@ export default function Logout() {
         // logout
         localStorage.removeItem("token");
         setUser(null);
-        resetApi();
 
         // go back
         navigate(decodeURIComponent(String(query.returnto || "/")), {
