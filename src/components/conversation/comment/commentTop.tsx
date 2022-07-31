@@ -45,7 +45,7 @@ export default function CommentTop(props: {
     const [, setShareOpen] = useShareOpen();
     const [story, setStory] = useStory();
     const [, setNotification] = useNotification();
-    const [settings] = useSettings()
+    const [settings] = useSettings();
     const threadId = useThreadId();
     const title = useTitle();
     const navigate = useNavigate();
@@ -262,7 +262,9 @@ export default function CommentTop(props: {
                             className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
                             style={{ display: "inline-block" }}
                         >
-                            {settings.filterSwearWords ? filterSwearWords(comment.text) : comment.text}
+                            {settings.filterSwearWords
+                                ? filterSwearWords(comment.text)
+                                : comment.text}
                         </p>
                     </Box>
                 )}
