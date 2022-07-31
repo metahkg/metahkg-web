@@ -20,10 +20,26 @@ export default function CommentBody(props: {
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
 
-    const commentJSX = parse(
-        settings.filterSwearWords ? filterSwearWords(comment.comment) : comment.comment,
-        { replace: replace({ quote: depth > 0 }) }
+    const [commentJSX, setCommentJSX] = useState(
+        parse(
+            settings.filterSwearWords
+                ? filterSwearWords(comment.comment)
+                : comment.comment,
+            { replace: replace({ quote: depth > 0 }) }
+        )
     );
+
+    useEffect(() => {
+        setCommentJSX(
+            parse(
+                settings.filterSwearWords
+                    ? filterSwearWords(comment.comment)
+                    : comment.comment,
+                { replace: replace({ quote: depth > 0 }) }
+            )
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [settings.filterSwearWords]);
 
     const content = useMemo(
         () => [
