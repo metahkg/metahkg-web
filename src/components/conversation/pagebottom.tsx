@@ -36,7 +36,7 @@ export default function PageBottom() {
     ];
     return (
         <Box
-            sx={{ marginBottom: 80 }}
+            sx={{ marginBottom: 10 }}
             className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10"
         >
             <Box className="flex">
