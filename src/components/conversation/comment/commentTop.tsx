@@ -233,7 +233,7 @@ export default function CommentTop(props: {
                     }}
                     style={{
                         color: comment.user.sex === "M" ? "#34aadc" : "red",
-                        width: "50px",
+                        minWidth: "50px",
                     }}
                 >
                     {comment.user.name}
@@ -266,7 +266,7 @@ export default function CommentTop(props: {
                         }
                     </p>
                 </Tooltip>
-                {fold && (
+                {fold && !blocked && (
                     <Box
                         onClick={() => {
                             setFold && setFold(false);
