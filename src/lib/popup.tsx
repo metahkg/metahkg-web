@@ -91,7 +91,7 @@ export function PopUp(props: {
                                     onClick={button.action}
                                     className="notexttransform font-size-18-force notextdecoration fullwidth"
                                     sx={(theme) => ({
-                                        color: `${theme.palette.secondary.main} !important`
+                                        color: `${theme.palette.secondary.main} !important`,
                                     })}
                                     color="secondary"
                                     variant="text"
