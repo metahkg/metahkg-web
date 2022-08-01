@@ -76,7 +76,9 @@ export default function Comment(props: {
 
     useEffect(() => {
         (blocked || blocked === undefined) &&
-            setBlocked(Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined);
+            setBlocked(
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+            );
     }, [blockList, blocked, comment.user.id]);
 
     useEffect(() => {
@@ -175,7 +177,7 @@ export default function Comment(props: {
                                     comment={comment}
                                     key={`${comment.U}${comment.D}`}
                                 />
-                                {!inPopUp && comment.replies?.length && (
+                                {comment.replies?.length && (
                                     <Button
                                         sx={{
                                             minWidth: "0 !important",
@@ -184,7 +186,10 @@ export default function Comment(props: {
                                         className="br5 nomargin ml10 metahkg-grey-force nopadding mt0 mb0 pl10 pr10 pt3 pb3"
                                         variant="text"
                                         onClick={() => {
-                                            setPopupOpen(true);
+                                            if (inPopUp) {
+                                                setShowReplies(!showReplies);
+                                                setIsExpanded(!showReplies);
+                                            } else setPopupOpen(true);
                                         }}
                                     >
                                         <Forum
