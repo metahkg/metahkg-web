@@ -76,7 +76,9 @@ export default function Comment(props: {
 
     useEffect(() => {
         (blocked || blocked === undefined) &&
-            setBlocked(Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined);
+            setBlocked(
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+            );
     }, [blockList, blocked, comment.user.id]);
 
     useEffect(() => {
