@@ -7,7 +7,7 @@ import {
     ManageAccounts as ManageAccountsIcon,
     Telegram as TelegramIcon,
 } from "@mui/icons-material";
-import { List, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
+import { Box, List, ListItemButton, ListItemIcon, ListItemText, Paper } from "@mui/material";
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
@@ -46,11 +46,11 @@ export default function Template() {
                 width: "70vw",
             }}
         >
-            <div className="fullwidth m50">
-                <div className="flex align-center">
+            <Box className="fullwidth m50">
+                <Box className="flex align-center">
                     <MetahkgIcon height={40} width={50} svg light />
                     <h1>Metahkg</h1>
-                </div>
+                </Box>
                 <List>
                     <ListItemButton
                         className="fullwidth text-decoration-none white"
@@ -101,7 +101,7 @@ export default function Template() {
                         </ListItemButton>
                     ))}
                 </List>
-            </div>
+            </Box>
         </Paper>
     );
 }

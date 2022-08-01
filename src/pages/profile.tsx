@@ -126,14 +126,14 @@ export default function Profile() {
                             ref={avatarRef}
                         />
                         <br />
-                        <div
-                            className="ml20 flex justify-center profile-toptextdiv"
+                        <Box
+                            className="ml20 flex justify-center profile-toptextBox"
                             style={{
                                 flexDirection: isSelf ? "column" : "row",
                             }}
                         >
                             <h1 className="font-size-30 profile-toptext">
-                                <div
+                                <Box
                                     className="overflow-hidden"
                                     style={{
                                         maxWidth: isSmallScreen
@@ -152,11 +152,11 @@ export default function Profile() {
                                     >
                                         {requestedUser.name}
                                     </span>
-                                </div>
+                                </Box>
                                 #{requestedUser.id}
                             </h1>
-                            <div
-                                className="profile-uploaddiv"
+                            <Box
+                                className="profile-uploadBox"
                                 style={{
                                     marginTop: isSelf ? 25 : 0,
                                 }}
@@ -185,8 +185,8 @@ export default function Profile() {
                                         />
                                     </Tooltip>
                                 )}
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                     </Box>
                     <Box className="flex mt20 mb10 fullwidth font justify-center">
                         <DataTable
@@ -197,7 +197,7 @@ export default function Profile() {
                         />
                     </Box>
                     {isSmallScreen && (
-                        <div className="mt20">
+                        <Box className="mt20">
                             <Link
                                 className="text-decoration-none"
                                 to={`/history/${userId}`}
@@ -210,7 +210,7 @@ export default function Profile() {
                                     View History
                                 </Button>
                             </Link>
-                        </div>
+                        </Box>
                     )}
                 </Box>
             )}

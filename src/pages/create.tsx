@@ -132,9 +132,9 @@ export default function Create() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <div style={{ width: isSmallSmallScreen ? "100vw" : "80vw" }}>
-                <div className="m20">
-                    <div className="flex align-center">
+            <Box style={{ width: isSmallSmallScreen ? "100vw" : "80vw" }}>
+                <Box className="m20">
+                    <Box className="flex align-center">
                         <MetahkgLogo
                             svg
                             height={50}
@@ -143,13 +143,13 @@ export default function Create() {
                             className="mr10 mb10"
                         />
                         <h1>Create thread</h1>
-                    </div>
+                    </Box>
                     {alert.text && (
                         <Alert className="mb15" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
-                    <div className={`mb15 ${isSmallScreen ? "" : "flex "}`}>
+                    <Box className={`mb15 ${isSmallScreen ? "" : "flex "}`}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
                             className={isSmallScreen ? "mt15" : "ml15"}
@@ -161,7 +161,7 @@ export default function Create() {
                                 setThreadTitle(e.target.value);
                             }}
                         />
-                    </div>
+                    </Box>
                     <TextEditor
                         key={Number(isSmallScreen)}
                         onChange={(v, e: any) => {
@@ -170,7 +170,7 @@ export default function Create() {
                         initText={inittext}
                         toolbarSticky
                     />
-                    <div
+                    <Box
                         className={`mt15 ${
                             isSmallSmallScreen
                                 ? ""
@@ -199,9 +199,9 @@ export default function Create() {
                             <CreateIcon className="mr5 font-size-16-force" />
                             Create
                         </Button>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     );
 }

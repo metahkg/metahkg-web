@@ -62,12 +62,12 @@ export default function SideBar() {
     }
 
     return (
-        <div>
-            <div>
+        <Box>
+            <Box>
                 <IconButton className="sidebar-menu-btn" onClick={toggleDrawer(true)}>
                     <MenuIcon className="force-white" />
                 </IconButton>
-            </div>
+            </Box>
             <Drawer
                 anchor="left"
                 open={open}
@@ -80,7 +80,7 @@ export default function SideBar() {
                 }}
             >
                 <Box className="sidebar-box max-width-full" role="presentation">
-                    <div className="fullwidth">
+                    <Box className="fullwidth">
                         <List className="fullwidth">
                             <ListItemButton
                                 onClick={onClick}
@@ -94,7 +94,7 @@ export default function SideBar() {
                                 <ListItemText>Support Ukraine</ListItemText>
                             </ListItemButton>
                         </List>
-                        <div className="ml10 mr10">
+                        <Box className="ml10 mr10">
                             <SearchBar
                                 query={query}
                                 onChange={(e) => {
@@ -109,8 +109,8 @@ export default function SideBar() {
                                     }
                                 }}
                             />
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                     <List>
                         {[
                             {
@@ -145,8 +145,8 @@ export default function SideBar() {
                     ].map(
                         (cats, index) =>
                             cats && (
-                                <div key={index}>
-                                    <div
+                                <Box key={index}>
+                                    <Box
                                         className={`m20${user && !index ? " mb10" : ""}${
                                             index ? " mt0" : ""
                                         }`}
@@ -176,8 +176,8 @@ export default function SideBar() {
                                                 </Typography>
                                             </Link>
                                         ))}
-                                    </div>
-                                </div>
+                                    </Box>
+                                </Box>
                             )
                     )}
                     <Divider />
@@ -249,6 +249,6 @@ export default function SideBar() {
                     )}
                 </Box>
             </Drawer>
-        </div>
+        </Box>
     );
 }

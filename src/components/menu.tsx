@@ -81,8 +81,8 @@ function Menu() {
             />
             {/*if search something in drawer, also show the search bar under the tab (Relevance, created, last reply*/}
             {menuMode === "search" && (
-                <div className="flex fullwidth">
-                    <div className="flex fullwidth justify-center align-center m10 menu-search">
+                <Box className="flex fullwidth">
+                    <Box className="flex fullwidth justify-center align-center m10 menu-search">
                         <SearchBar
                             query={query}
                             onChange={(e) => {
@@ -97,8 +97,8 @@ function Menu() {
                                 }
                             }}
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             )}
             {useMemo(
                 () => (

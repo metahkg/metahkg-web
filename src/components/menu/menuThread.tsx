@@ -38,8 +38,8 @@ export default function MenuThread(props: {
                     id === thread.id ? "-selected" : ""
                 }`}
             >
-                <div className="flex fullwidth align-center justify-space-between menuthread-top">
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                <Box className="flex fullwidth align-center justify-space-between menuthread-top">
+                    <Box style={{ display: "flex", alignItems: "center" }}>
                         <p
                             className="font-size-16 ml20 metahkg-grey menuthread-op"
                             style={{
@@ -51,8 +51,8 @@ export default function MenuThread(props: {
                         <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {timeToWord(thread.lastModified)}
                         </p>
-                    </div>
-                    <div className="flex align-center">
+                    </Box>
+                    <Box className="flex align-center">
                         {thread.score >= 0 ? (
                             <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
                         ) : (
@@ -69,9 +69,9 @@ export default function MenuThread(props: {
                         <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
                             {String(roundup(thread.c / 25))}
                         </p>
-                    </div>
-                </div>
-                <div className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
+                    </Box>
+                </Box>
+                <Box className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
                     <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
                         {thread.title}
                     </p>
@@ -93,7 +93,7 @@ export default function MenuThread(props: {
                             </Button>
                         </Link>
                     )}
-                </div>
+                </Box>
             </Box>
         </Link>
     );

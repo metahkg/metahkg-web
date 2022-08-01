@@ -14,7 +14,7 @@ export default function PageSelect(props: {
 }) {
     const { pages, page, onSelect, onLastClicked, onNextClicked, last, next } = props;
     return (
-        <div className="pageselect-root flex flex-dir-column">
+        <Box className="pageselect-root flex flex-dir-column">
             {last && (
                 <Box className="pageselect-top flex align-center justify-center">
                     <IconButton onClick={onLastClicked}>
@@ -49,6 +49,6 @@ export default function PageSelect(props: {
                     </IconButton>
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }

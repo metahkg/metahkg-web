@@ -47,7 +47,7 @@ export default function Settings(props: {
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
             <Box className="ml20 mr10" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
-                    <div
+                    <Box
                         key={item.title}
                         className="flex justify-space-between align-center fullwidth mt4 mb4"
                     >
@@ -57,9 +57,9 @@ export default function Settings(props: {
                             checked={item.checked}
                             onChange={item.action}
                         />
-                    </div>
+                    </Box>
                 ))}
-                <div className="flex justify-space-between align-center fullwidth mt6 mb4">
+                <Box className="flex justify-space-between align-center fullwidth mt6 mb4">
                     <p className="nomargin">Color</p>
                     <ToggleButtonGroup
                         color="secondary"
@@ -101,7 +101,7 @@ export default function Settings(props: {
                             </ToggleButton>
                         ))}
                     </ToggleButtonGroup>
-                </div>
+                </Box>
             </Box>
         </PopUp>
     );

@@ -23,6 +23,7 @@ SOFTWARE.
 */
 import React, { useEffect, useRef } from "react";
 import {
+    Box,
     ClickAwayListener,
     Grow,
     IconButton,
@@ -78,7 +79,7 @@ export default function MoreList(props: {
 
     return (
         <Stack direction="row" spacing={1}>
-            <div>
+            <Box>
                 <Tooltip arrow title="More">
                     <IconButton
                         ref={anchorRef}
@@ -142,7 +143,7 @@ export default function MoreList(props: {
                         </Grow>
                     )}
                 </Popper>
-            </div>
+            </Box>
         </Stack>
     );
 }

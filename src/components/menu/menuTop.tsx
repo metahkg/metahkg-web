@@ -65,7 +65,7 @@ export default function MenuTop(props: {
     }, [category, id, profile, setMenuTitle, menuTitle, menuMode]);
 
     return (
-        <div>
+        <Box>
             {/*title and refresh and add button*/}
             <Box
                 className="fullwidth menutop-root"
@@ -75,15 +75,15 @@ export default function MenuTop(props: {
                 }}
             >
                 {!noTitleBar && (
-                    <div
+                    <Box
                         className={`flex fullwidth align-center menutop-top justify-${
                             isSmallScreen ? "center" : "space-between"
                         }`}
                     >
                         {!isSmallScreen && (
-                            <div className="ml10 mr40">
+                            <Box className="ml10 mr40">
                                 <SideBar />
-                            </div>
+                            </Box>
                         )}
                         <Typography
                             sx={{ color: "secondary.main" }}
@@ -92,7 +92,7 @@ export default function MenuTop(props: {
                             {menuTitle || inittitle}
                         </Typography>
                         {!isSmallScreen && (
-                            <div className="flex">
+                            <Box className="flex">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
                                         <AutorenewIcon className="force-white" />
@@ -105,9 +105,9 @@ export default function MenuTop(props: {
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
-                            </div>
+                            </Box>
                         )}
-                    </div>
+                    </Box>
                 )}
                 {/*now should be latest and viral*/}
                 {Boolean(tabs.length) && (
@@ -139,6 +139,6 @@ export default function MenuTop(props: {
                 )}
             </Box>
             <Divider />
-        </div>
+        </Box>
     );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrokenImage } from "@mui/icons-material";
-import { Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 
 export default class ImageErrorBoundary extends React.Component<{
     src: string;
@@ -29,10 +29,10 @@ export default class ImageErrorBoundary extends React.Component<{
                         </a>
                     }
                 >
-                    <div className="pointer display-inline-block">
+                    <Box className="pointer display-inline-block">
                         <img src={src} alt="" className="display-none" />
                         <BrokenImage />
-                    </div>
+                    </Box>
                 </Tooltip>
             );
         }

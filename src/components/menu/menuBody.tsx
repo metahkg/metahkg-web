@@ -191,7 +191,7 @@ export default function MenuBody(props: { selected: number }) {
                 {Boolean(data.length) && (
                     <Box className="flex flex-dir-column max-width-full menu-bottom">
                         {data.map((thread, index) => (
-                            <div key={index}>
+                            <Box key={index}>
                                 <MenuThread
                                     key={`${category}${id === thread.id}`}
                                     thread={thread}
@@ -221,7 +221,7 @@ export default function MenuBody(props: { selected: number }) {
                                     }}
                                 />
                                 <Divider />
-                            </div>
+                            </Box>
                         ))}
                     </Box>
                 )}

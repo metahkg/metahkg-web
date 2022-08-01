@@ -6,7 +6,7 @@ import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
 import prettier from "prettier/standalone";
 import prettierCss from "prettier/parser-postcss";
 import Loader from "../../../lib/loader";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
@@ -50,7 +50,7 @@ function ImgComponent(props: Props) {
 
     return (
         <PhotoView src={src}>
-            <div
+            <Box
                 style={{
                     position: "relative",
                     ...(imgRef.current &&
@@ -112,7 +112,7 @@ function ImgComponent(props: Props) {
                         setReRender(!reRender);
                     }}
                 />
-            </div>
+            </Box>
         </PhotoView>
     );
 }

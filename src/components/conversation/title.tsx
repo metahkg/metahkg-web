@@ -29,8 +29,8 @@ export default function Title(props: {
                 bgcolor: "primary.main",
             }}
         >
-            <div className="flex ml10 mr20 align-center justify-space-between fullheight">
-                <div className="flex align-center mr10 overflow-hidden">
+            <Box className="flex ml10 mr20 align-center justify-space-between fullheight">
+                <Box className="flex align-center mr10 overflow-hidden">
                     {(history || category) && (
                         <Link to={history || `/category/${category}`}>
                             <IconButton className="nomargin nopadding">
@@ -48,16 +48,16 @@ export default function Title(props: {
                     >
                         {title}
                     </Typography>
-                </div>
-                <div className="flex">
+                </Box>
+                <Box className="flex">
                     {!isSmallScreen &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
                                 <IconButton onClick={btn.action}>{btn.icon}</IconButton>
                             </Tooltip>
                         ))}
-                </div>
-            </div>
+                </Box>
+            </Box>
         </Box>
     );
 }

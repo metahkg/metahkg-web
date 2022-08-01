@@ -36,13 +36,13 @@ export default function Thread() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <div style={{ width: isSmallScreen ? "100vw" : "70vw" }}>
+            <Box style={{ width: isSmallScreen ? "100vw" : "70vw" }}>
                 <ConversationProvider key={threadId} threadId={threadId}>
                     <ShareProvider>
                         <Conversation key={threadId} id={threadId} />
                     </ShareProvider>
                 </ConversationProvider>
-            </div>
+            </Box>
         </Box>
     );
 }

@@ -16,14 +16,14 @@ export default function MenuPreload() {
     return (
         <Box className="preload-root" sx={{ minHeight: totalHeight }}>
             {[...Array(amount)].map((_, index) => (
-                <div key={index}>
+                <Box key={index}>
                     <Button className="fullwidth flex align-flex-start flex-dir-column justify-center preload-btn">
                         <Skeleton
                             className="ml10"
                             height={90}
                             width={buttonWidth * 0.45}
                         />
-                        <div className="ml10 preload-spacer" />
+                        <Box className="ml10 preload-spacer" />
                         <Skeleton
                             className="ml10"
                             height={100}
@@ -31,7 +31,7 @@ export default function MenuPreload() {
                         />
                     </Button>
                     <Divider />
-                </div>
+                </Box>
             ))}
         </Box>
     );

@@ -42,11 +42,11 @@ export default function Logout() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <div className="flex fullwidth justify-center">
+            <Box className="flex fullwidth justify-center">
                 <Alert className="mt30 halfwidth" severity="info">
                     Logging you out...
                 </Alert>
-            </div>
+            </Box>
         </Box>
     );
 }

@@ -11,7 +11,7 @@ import {
     useUser,
     useIsSmallScreen,
     useAlertDialog,
-    useBlocked,
+    useBlockList,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
@@ -30,7 +30,7 @@ export default function App() {
     const [settings] = useSettings();
     const [user] = useUser();
     const [alertDialog, setAlertDialog] = useAlertDialog();
-    const [, setBlocked] = useBlocked();
+    const [, setBlocked] = useBlockList();
 
     useEffect(() => {
         if (user) {
@@ -41,6 +41,7 @@ export default function App() {
                     return window.location.reload();
                 }
             });
+            api.meBlocked().then(setBlocked);
             setInterval(() => {
                 api.meBlocked().then(setBlocked);
             }, 1000 * 60 * 10);
@@ -103,16 +104,16 @@ export default function App() {
                 sx={{ bgcolor: "primary.dark" }}
             >
                 <Router>
-                    <div className="flex">
-                        <div
+                    <Box className="flex">
+                        <Box
                             style={{
                                 width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw",
                             }}
                         >
                             <Menu />
-                        </div>
+                        </Box>
                         <Routes />
-                    </div>
+                    </Box>
                 </Router>
             </Box>
         </Theme>

@@ -1,6 +1,6 @@
 import React from "react";
 import { GitHub, Reddit, Telegram } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
 import DiscordIcon from "../../lib/icons/dicord";
 
@@ -35,11 +35,11 @@ export default function PageBottom() {
         },
     ];
     return (
-        <div
-            style={{ marginBottom: 80 }}
+        <Box
+            sx={{ marginBottom: 80 }}
             className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10"
         >
-            <div className="flex">
+            <Box className="flex">
                 {socialIcons.map((icon, index) => (
                     <a
                         key={index}
@@ -53,8 +53,8 @@ export default function PageBottom() {
                         <IconButton className="nopadding">{icon.icon}</IconButton>
                     </a>
                 ))}
-            </div>
-            <div className="mt8">
+            </Box>
+            <Box className="mt8">
                 Copyright (c) 2022 Metahkg.{" "}
                 <a
                     className="metahkg-grey-force"
@@ -65,7 +65,7 @@ export default function PageBottom() {
                     AGPL-3.0-or-later
                 </a>
                 .
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }

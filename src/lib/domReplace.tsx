@@ -35,10 +35,10 @@ export const replace = (params: { quote?: boolean }) => {
                         const tweetId = url.pathname.split("/").pop();
                         if (tweetId)
                             return (
-                                <div>
+                                <Box>
                                     <TweetEmbed tweetId={tweetId} />
                                     {domToReact([node])}
-                                </div>
+                                </Box>
                             );
                     } else if (
                         [regex.instagram, regex.facebook.posts]

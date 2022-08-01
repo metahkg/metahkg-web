@@ -13,22 +13,22 @@ export default function Dock(props: {
     const { btns } = props;
     const isSmallScreen = useIsSmallScreen();
     return (
-        <div>
+        <Box>
             {isSmallScreen && (
                 <Box
                     className="flex fullwidth dock-root"
                     sx={{ bgcolor: "primary.dark", height: 60 }}
                 >
-                    <div className="flex justify-space-between fullwidth ml20 mr20 align-center">
+                    <Box className="flex justify-space-between fullwidth ml20 mr20 align-center">
                         <SideBar />
                         {btns.map((btn, index) => (
                             <IconButton key={index} onClick={btn.action}>
                                 {btn.icon}
                             </IconButton>
                         ))}
-                    </div>
+                    </Box>
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }

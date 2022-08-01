@@ -28,13 +28,13 @@ export function Notification() {
         >
             <Box className="fullwidth pointer border-radius-8 notification-mainbox">
                 <Box className="flex fullwidth font-size-14 notification-top">
-                    <div className="ml15 flex align-center fullwidth justify-space-between">
-                        <div className="flex align-center">
+                    <Box className="ml15 flex align-center fullwidth justify-space-between">
+                        <Box className="flex align-center">
                             <Notifications className="metahkg-grey-force font-size-14-force" />
                             <p className="metahkg-grey ml10 mt6 mb6">Notification</p>
-                        </div>
+                        </Box>
                         <Close className="icon-white-onhover metahkg-grey-force font-size-16-force mr12" />
-                    </div>
+                    </Box>
                 </Box>
                 <Box className="fullwidth notification-bottom border-radius-8">
                     <p className="m15 text-overflow-ellipsis overflow-hidden font-size-15 notification-text">

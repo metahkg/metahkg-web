@@ -1,6 +1,7 @@
 import React from "react";
 import { Close } from "@mui/icons-material";
 import {
+    Box,
     Button,
     Dialog,
     DialogContent,
@@ -17,7 +18,7 @@ export function PopUp(props: {
     closeBtn?: boolean;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    buttons?: { text: string; link: string }[];
+    buttons?: { text: string; link?: string; action?: () => void }[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
@@ -69,34 +70,37 @@ export function PopUp(props: {
                 </React.Fragment>
             )}
             <DialogContent className="nopadding">
-                <div
+                <Box
                     className={`fullwidth flex flex-dir-column justify-center text-align-center ${
                         title ? "mt5" : ""
                     } ${buttons?.length ? "mb5" : ""}`}
                 >
                     {children}
-                </div>
+                </Box>
                 {!!buttons?.length && (
                     <React.Fragment>
                         <Divider />
-                        <div className="flex fullwidth">
+                        <Box className="flex fullwidth">
                             {buttons?.map((button, index) => (
-                                <Link
+                                <Button
                                     key={index}
-                                    className="notextdecoration fullwidth"
-                                    to={button.link}
+                                    {...(button.link && {
+                                        component: Link,
+                                        to: button.link,
+                                    })}
+                                    onClick={button.action}
+                                    className="notexttransform font-size-18-force notextdecoration fullwidth"
+                                    sx={(theme) => ({
+                                        color: `${theme.palette.secondary.main} !important`
+                                    })}
+                                    color="secondary"
+                                    variant="text"
+                                    fullWidth
                                 >
-                                    <Button
-                                        className="notexttransform font-size-18-force"
-                                        color="secondary"
-                                        variant="text"
-                                        fullWidth
-                                    >
-                                        {button.text}
-                                    </Button>
-                                </Link>
+                                    {button.text}
+                                </Button>
                             ))}
-                        </div>
+                        </Box>
                     </React.Fragment>
                 )}
             </DialogContent>

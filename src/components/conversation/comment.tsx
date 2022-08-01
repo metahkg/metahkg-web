@@ -1,7 +1,7 @@
 import "../../css/components/conversation/comment.css";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
-import { useNotification } from "../ContextProvider";
+import { useBlockList, useNotification } from "../ContextProvider";
 import VoteButtons from "./comment/votebuttons";
 import { useThreadId, useVotes } from "./ConversationContext";
 import CommentTop from "./comment/commentTop";
@@ -59,15 +59,25 @@ export default function Comment(props: {
     const [comment, setComment] = useState(props.comment);
     const [votes] = useVotes();
     const [, setNotification] = useNotification();
+    const [blockList] = useBlockList();
     const [ready, setReady] = useState(!fetchComment);
     const [reFetch, setReFetch] = useState(false);
     const [showReplies, setShowReplies] = useState(props.showReplies);
     const [replies, setReplies] = useState<CommentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
-    const [fold, setFold] = useState(props.fold);
+    const [fold, setFold] = useState(Boolean(props.fold));
     const commentRef = useRef<HTMLElement>(null);
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
+
+    const [blocked, setBlocked] = useState<boolean | undefined>(
+        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+    );
+
+    useEffect(() => {
+        (blocked || blocked === undefined) &&
+            setBlocked(Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined);
+    }, [blockList, blocked, comment.user.id]);
 
     useEffect(() => {
         const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote;
@@ -137,14 +147,16 @@ export default function Comment(props: {
                         maxHeight: inPopUp && !showReplies ? "90vh" : "",
                     })}
                 >
-                    <div className="ml20 mr20">
+                    <Box className="ml20 mr20">
                         <CommentTop
                             comment={comment}
                             noStory={noStory}
                             fold={fold}
                             setFold={setFold}
+                            blocked={blocked}
+                            setBlocked={setBlocked}
                         />
-                        {!fold && (
+                        {!fold && !blocked && (
                             <React.Fragment>
                                 <CommentBody
                                     maxHeight={maxHeight}
@@ -152,13 +164,13 @@ export default function Comment(props: {
                                     comment={comment}
                                     depth={0}
                                 />
-                                <div className="comment-internal-spacer" />
+                                <Box className="comment-internal-spacer" />
                             </React.Fragment>
                         )}
-                    </div>
-                    {ready && !fold && (
+                    </Box>
+                    {ready && !fold && !blocked && (
                         <Box className="flex justify-space-between align-center fullwidth">
-                            <div className="flex ml20 mr20">
+                            <Box className="flex ml20 mr20">
                                 <VoteButtons
                                     comment={comment}
                                     key={`${comment.U}${comment.D}`}
@@ -188,7 +200,7 @@ export default function Comment(props: {
                                         </p>
                                     </Button>
                                 )}
-                            </div>
+                            </Box>
                             {openComment && (
                                 <a
                                     href={`/thread/${threadId}?c=${comment.id}`}
@@ -202,7 +214,7 @@ export default function Comment(props: {
                             )}
                         </Box>
                     )}
-                    <div className="comment-spacer" />
+                    <Box className="comment-spacer" />
                 </Box>
                 {loading && (
                     <Box className="flex justify-center align-center">
@@ -242,14 +254,14 @@ export default function Comment(props: {
                                         openComment
                                     />
                                 ))}
-                                <div className="flex justify-center align-center">
+                                <Box className="flex justify-center align-center">
                                     <Typography
                                         className="mt5 mb5 font-size-18-force"
                                         color="secondary"
                                     >
                                         End
                                     </Typography>
-                                </div>
+                                </Box>
                             </React.Fragment>
                         )}
                     </Box>
@@ -261,6 +273,7 @@ export default function Comment(props: {
             comment,
             fold,
             inPopUp,
+            blocked,
             loading,
             maxHeight,
             noFullWidth,

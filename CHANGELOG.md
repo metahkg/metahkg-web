@@ -3,6 +3,7 @@
 ## v3.4.0
 
 - filter swear words option
+- block users (alpha)
 
 ## v2.8.1
 

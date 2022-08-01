@@ -8,7 +8,7 @@ import {
     Twitter,
     WhatsApp,
 } from "@mui/icons-material";
-import { IconButton, TextField, Tooltip } from "@mui/material";
+import { Box, IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
 import { useNotification, useIsSmallScreen } from "../ContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
@@ -65,7 +65,7 @@ export default function Share() {
     ];
     return (
         <PopUp open={open} setOpen={setOpen} title="Share">
-            <div className="ml10 mr10 text-align-start font-size-20">
+            <Box className="ml10 mr10 text-align-start font-size-20">
                 <TextField
                     className="mt0"
                     sx={{
@@ -77,7 +77,7 @@ export default function Share() {
                     aria-readonly
                     value={text}
                 />
-                <div className="mt5 overflow-auto nowrap">
+                <Box className="mt5 overflow-auto nowrap">
                     <Tooltip arrow title="Copy">
                         <IconButton
                             onClick={async () => {
@@ -111,8 +111,8 @@ export default function Share() {
                             </a>
                         </Tooltip>
                     ))}
-                </div>
-            </div>
+                </Box>
+            </Box>
         </PopUp>
     );
 }

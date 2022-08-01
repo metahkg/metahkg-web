@@ -49,14 +49,14 @@ export default function Player(props: { url: string }) {
         },
     ];
     return (
-        <div className="mb5">
+        <Box className="mb5">
             {play && (
                 <Box
                     width={width < 760 ? "100%" : "65%"}
                     sx={{ bgcolor: "#333", height: 30 }}
                     className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
                 >
-                    <div className="flex align-center ml10">
+                    <Box className="flex align-center ml10">
                         {
                             {
                                 youtube: <YouTubeIcon className="font-size-18-force" />,
@@ -66,8 +66,8 @@ export default function Player(props: { url: string }) {
                         <p className="novmargin ml5">
                             {{ youtube: "Youtube", facebook: "Facebook" }[mode]}
                         </p>
-                    </div>
-                    <div className="flex align-center mr5">
+                    </Box>
+                    <Box className="flex align-center mr5">
                         {buttons.map(
                             (btn) =>
                                 !btn.hidden && (
@@ -78,7 +78,7 @@ export default function Player(props: { url: string }) {
                                     </Tooltip>
                                 )
                         )}
-                    </div>
+                    </Box>
                 </Box>
             )}
             <ReactPlayer
@@ -109,6 +109,6 @@ export default function Player(props: { url: string }) {
                 }
                 playing={play}
             />
-        </div>
+        </Box>
     );
 }

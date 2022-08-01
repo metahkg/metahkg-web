@@ -21,7 +21,7 @@ export default function PinnedComment(props: { comment: Comment }) {
                 }}
             >
                 <InfoOutlined className="metahkg-grey-force ml10 mr10" />
-                <div className="overflow-hidden">
+                <Box className="overflow-hidden">
                     <Typography className="novmargin" color="secondary">
                         Pinned Comment #{comment.id}
                     </Typography>
@@ -30,7 +30,7 @@ export default function PinnedComment(props: { comment: Comment }) {
                             ? filterSwearWords(comment.text)
                             : comment.text}
                     </Typography>
-                </div>
+                </Box>
             </Box>
         </React.Fragment>
     );
