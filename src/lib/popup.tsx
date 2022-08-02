@@ -18,7 +18,7 @@ export function PopUp(props: {
     closeBtn?: boolean;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    buttons?: { text: string; link?: string; action?: () => void }[];
+    buttons?: ({ text: string; link?: string; action?: () => void } | undefined)[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
@@ -81,25 +81,28 @@ export function PopUp(props: {
                     <React.Fragment>
                         <Divider />
                         <Box className="flex fullwidth">
-                            {buttons?.map((button, index) => (
-                                <Button
-                                    key={index}
-                                    {...(button.link && {
-                                        component: Link,
-                                        to: button.link,
-                                    })}
-                                    onClick={button.action}
-                                    className="notexttransform font-size-18-force notextdecoration fullwidth"
-                                    sx={(theme) => ({
-                                        color: `${theme.palette.secondary.main} !important`,
-                                    })}
-                                    color="secondary"
-                                    variant="text"
-                                    fullWidth
-                                >
-                                    {button.text}
-                                </Button>
-                            ))}
+                            {buttons?.map(
+                                (button, index) =>
+                                    button && (
+                                        <Button
+                                            key={index}
+                                            {...(button.link && {
+                                                component: Link,
+                                                to: button.link,
+                                            })}
+                                            onClick={button.action}
+                                            className="notexttransform font-size-18-force notextdecoration fullwidth"
+                                            sx={(theme) => ({
+                                                color: `${theme.palette.secondary.main} !important`,
+                                            })}
+                                            color="secondary"
+                                            variant="text"
+                                            fullWidth
+                                        >
+                                            {button.text}
+                                        </Button>
+                                    )
+                            )}
                         </Box>
                     </React.Fragment>
                 )}

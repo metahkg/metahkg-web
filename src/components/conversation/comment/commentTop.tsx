@@ -212,7 +212,7 @@ export default function CommentTop(props: {
                 !fold ? "justify-space-between" : ""
             }`}
         >
-            <UserModal open={open} setOpen={setOpen} comment={comment} />
+            <UserModal open={open} setOpen={setOpen} user={comment.user} />
             <Box
                 className={`flex align-center ${
                     !fold ? "comment-tag-left" : "fullwidth"
