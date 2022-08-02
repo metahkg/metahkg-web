@@ -286,17 +286,19 @@ export default function CommentTop(props: {
                     </Box>
                 )}
                 {blocked && (
-                    <Button
-                        sx={{ color: "grey" }}
-                        className="ml20 font-size-15-force text-transform-none"
-                        color="error"
-                        onClick={() => {
-                            setBlocked && setBlocked(false);
-                        }}
-                        variant="outlined"
-                    >
-                        User blocked. Click to view comment.
-                    </Button>
+                    <Tooltip arrow title="Click to view comment.">
+                        <Button
+                            sx={{ color: "grey" }}
+                            className="ml20 font-size-14-force text-transform-none"
+                            color="error"
+                            onClick={() => {
+                                setBlocked && setBlocked(false);
+                            }}
+                            variant="outlined"
+                        >
+                            User blocked.
+                        </Button>
+                    </Tooltip>
                 )}
                 {!fold &&
                     !blocked &&
