@@ -286,7 +286,7 @@ export default function CommentTop(props: {
                     </Box>
                 )}
                 {blocked && (
-                    <Tooltip arrow title="Click to view comment.">
+                    <Tooltip arrow title="User blocked.">
                         <Button
                             sx={{ color: "grey" }}
                             className="ml20 font-size-14-force text-transform-none"
@@ -296,7 +296,7 @@ export default function CommentTop(props: {
                             }}
                             variant="outlined"
                         >
-                            User blocked.
+                            Click to view comment.
                         </Button>
                     </Tooltip>
                 )}
