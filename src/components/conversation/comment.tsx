@@ -188,7 +188,8 @@ export default function Comment(props: {
                                         onClick={() => {
                                             if (inPopUp) {
                                                 setShowReplies(!showReplies);
-                                                setIsExpanded(!showReplies);
+                                                setIsExpanded &&
+                                                    setIsExpanded(!showReplies);
                                             } else setPopupOpen(true);
                                         }}
                                     >
