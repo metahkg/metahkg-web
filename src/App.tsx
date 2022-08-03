@@ -85,7 +85,7 @@ export default function App() {
                     });
                 },
                 onSuccess: (registration) => {
-                    console.log("updating...")
+                    console.log("updating...");
                     registration.update();
                 },
             });
