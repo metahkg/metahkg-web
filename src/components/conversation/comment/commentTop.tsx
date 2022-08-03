@@ -213,11 +213,7 @@ export default function CommentTop(props: {
             }`}
         >
             <UserModal open={open} setOpen={setOpen} user={comment.user} />
-            <Box
-                className={`flex items-center ${
-                    !fold ? "comment-tag-left" : "w-full"
-                }`}
-            >
+            <Box className={`flex items-center ${!fold ? "comment-tag-left" : "w-full"}`}>
                 <Typography
                     className="!my-0 !text-[17px]"
                     sx={(theme) => ({

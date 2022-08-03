@@ -177,11 +177,20 @@ export default function Register() {
                         </Box>
                     )}
                     <Box className="flex justify-center items-center">
-                        <MetahkgLogo svg light height={50} width={40} className="!mb-[10px]" />
+                        <MetahkgLogo
+                            svg
+                            light
+                            height={50}
+                            width={40}
+                            className="!mb-[10px]"
+                        />
                         <h1 className="text-[25px] !mb-[20px] mx-0">Register</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="!mb-[15px] !mt-[10px]" severity={alert.severity}>
+                        <Alert
+                            className="!mb-[15px] !mt-[10px]"
+                            severity={alert.severity}
+                        >
                             {alert.text}
                         </Alert>
                     )}
@@ -212,9 +221,7 @@ export default function Register() {
                     </Box>
                     <Box
                         className={`${
-                            small
-                                ? ""
-                                : "flex w-full justify-between items-center"
+                            small ? "" : "flex w-full justify-between items-center"
                         } !mt-[15px]`}
                     >
                         <ReCAPTCHA

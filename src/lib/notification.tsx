@@ -30,7 +30,9 @@ export function Notification() {
                     <Box className="!ml-[15px] flex items-center w-full justify-between">
                         <Box className="flex items-center">
                             <Notifications className="!text-metahkg-grey !text-[14px]" />
-                            <p className="text-metahkg-grey !ml-[10px] !mt-[6px] !mb-[6px]">Notification</p>
+                            <p className="text-metahkg-grey !ml-[10px] !mt-[6px] !mb-[6px]">
+                                Notification
+                            </p>
                         </Box>
                         <Close className="hover:!text-[#fff] !text-metahkg-grey !text-[16px] !mr-[12px]" />
                     </Box>

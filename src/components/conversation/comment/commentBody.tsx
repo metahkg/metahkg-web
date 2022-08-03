@@ -115,9 +115,7 @@ export default function CommentBody(props: {
                         maxHeight,
                     }}
                 >
-                    <Box
-                        className={`!my-0 comment-body w-full !break-words text-[16px]`}
-                    >
+                    <Box className={`!my-0 comment-body w-full !break-words text-[16px]`}>
                         {content}
                     </Box>
                 </Box>

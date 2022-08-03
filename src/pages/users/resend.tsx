@@ -92,7 +92,9 @@ export default function Verify() {
                 <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light height={50} width={40} />
-                        <h1 className="text-[25px] my-0 !ml-[5px]">Resend Verification Email</h1>
+                        <h1 className="text-[25px] my-0 !ml-[5px]">
+                            Resend Verification Email
+                        </h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>

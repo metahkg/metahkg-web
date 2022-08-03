@@ -33,7 +33,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
-    
+
     useEffect(() => {
         if (query?.continue) {
             setAlert({ severity: "info", text: "Login to continue." });
@@ -48,7 +48,6 @@ export default function Login() {
     }, [menu, setMenu, user]);
 
     if (user) return <Navigate to="/" replace />;
-
 
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -105,11 +104,20 @@ export default function Login() {
                         </Link>
                     </Box>
                     <Box className="flex justify-center items-center">
-                        <MetahkgLogo height={50} width={40} svg light className="!mb-[10px]" />
+                        <MetahkgLogo
+                            height={50}
+                            width={40}
+                            svg
+                            light
+                            className="!mb-[10px]"
+                        />
                         <h1 className="text-[25px] !mb-[20px]">Login</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="!mb-[15px] !mt-[10px]" severity={alert.severity}>
+                        <Alert
+                            className="!mb-[15px] !mt-[10px]"
+                            severity={alert.severity}
+                        >
                             {alert.text}
                         </Alert>
                     )}

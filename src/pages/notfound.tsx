@@ -20,7 +20,13 @@ export default function NotFound() {
             className="flex items-center justify-center min-h-screen w-screen"
             sx={{ bgcolor: "primary.dark" }}
         >
-            <MetahkgLogo className="!mr-[10px] !mb-[20px]" svg light height={100} width={80} />
+            <MetahkgLogo
+                className="!mr-[10px] !mb-[20px]"
+                svg
+                light
+                height={100}
+                width={80}
+            />
             <h1>404 Not Found</h1>
         </Box>
     );

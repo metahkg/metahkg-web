@@ -163,9 +163,7 @@ function Conversation(props: { id: number }) {
                             }}
                         />
                     )}
-                    {loading && (
-                        <LinearProgress className="w-full" color="secondary" />
-                    )}
+                    {loading && <LinearProgress className="w-full" color="secondary" />}
                     <Title
                         category={thread?.category}
                         title={thread?.title}
