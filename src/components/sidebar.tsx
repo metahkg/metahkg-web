@@ -147,8 +147,8 @@ export default function SideBar() {
                             cats && (
                                 <Box key={index}>
                                     <Box
-                                        className={`m20${user && !index ? " !mb-[10px]" : ""}${
-                                            index ? " mt0" : ""
+                                        className={`m-[20px]${user && !index ? " !mb-[10px]" : ""}${
+                                            index ? " !mt-[0px]" : ""
                                         }`}
                                     >
                                         {cats.map((category, index) => (

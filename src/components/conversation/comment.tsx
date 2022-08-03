@@ -138,7 +138,7 @@ export default function Comment(props: {
                 )}
                 <Box
                     className={`text-left ${
-                        !inPopUp ? "mt6" : showReplies ? "" : "overflow-auto"
+                        !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
                     } w-full comment-root`}
                     sx={(theme) => ({
                         "& *::selection": {
@@ -183,7 +183,7 @@ export default function Comment(props: {
                                             minWidth: "0 !important",
                                             bgcolor: "#333 !important",
                                         }}
-                                        className="!rounded-[5px] !m-0 !ml-[10px] !text-metahkg-grey !p-0 mt0 mb0 !pl-[10px] !pr-[10px] !pt-[3px] !pb-[3px]"
+                                        className="!rounded-[5px] !m-0 !ml-[10px] !text-metahkg-grey !p-0 !mt-[0px] !mb-[0px] !pl-[10px] !pr-[10px] !pt-[3px] !pb-[3px]"
                                         variant="text"
                                         onClick={() => {
                                             if (inPopUp) {

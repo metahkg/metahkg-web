@@ -77,7 +77,7 @@ export default function Verify() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box className={small ? "w-100v" : "w-50v"}>
-                <Box className="m40" component="form" onSubmit={onSubmit}>
+                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo svg light height={50} width={40} className="!mb-[10px]" />
                         <h1 className="text-[25px] !mb-[20px] mx-0">Verify</h1>

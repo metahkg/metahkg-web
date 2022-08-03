@@ -170,7 +170,7 @@ export default function FloatingEditor() {
                     <Box
                         className={`${
                             isSmallScreen ? "" : "flex"
-                        } justify-between items-center m10`}
+                        } justify-between items-center m-[10px]`}
                     >
                         <ReCAPTCHA
                             theme="dark"

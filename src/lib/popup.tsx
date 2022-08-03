@@ -59,7 +59,7 @@ export function PopUp(props: {
                 <React.Fragment>
                     <DialogTitle
                         sx={{ minWidth: 270, bgcolor: "primary.main" }}
-                        className="pr0 pl0 flex !pt-[5px] !pb-[5px] justify-between items-center"
+                        className="!pr-[0px] !pl-[0px] flex !pt-[5px] !pb-[5px] justify-between items-center"
                     >
                         <p className="!ml-[20px] !my-0">{title}</p>
                         <IconButton className="!mr-[5px]" onClick={handleClose}>

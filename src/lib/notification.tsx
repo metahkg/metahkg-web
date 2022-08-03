@@ -30,13 +30,13 @@ export function Notification() {
                     <Box className="!ml-[15px] flex items-center w-full justify-between">
                         <Box className="flex items-center">
                             <Notifications className="!text-metahkg-grey !text-[14px]" />
-                            <p className="text-metahkg-grey !ml-[10px] mt6 mb6">Notification</p>
+                            <p className="text-metahkg-grey !ml-[10px] !mt-[6px] !mb-[6px]">Notification</p>
                         </Box>
                         <Close className="hover:!text-[#fff] !text-metahkg-grey !text-[16px] !mr-[12px]" />
                     </Box>
                 </Box>
                 <Box className="w-full rounded-[8px]">
-                    <p className="m15 text-overflow-ellipsis overflow-hidden text-[15px] leading-[19px] max-h-[38px]">
+                    <p className="m-[15px] text-overflow-ellipsis overflow-hidden text-[15px] leading-[19px] max-h-[38px]">
                         {notification.text}
                     </p>
                 </Box>

@@ -44,7 +44,7 @@ export default function PageBottom() {
                     <a
                         key={index}
                         className={`!text-metahkg-grey !no-underline${
-                            index !== socialIcons.length - 1 ? " mr7" : ""
+                            index !== socialIcons.length - 1 ? " !mr-[7px]" : ""
                         }`}
                         href={icon.link}
                         target="_blank"
@@ -54,7 +54,7 @@ export default function PageBottom() {
                     </a>
                 ))}
             </Box>
-            <Box className="mt8">
+            <Box className="!mt-[8px]">
                 Copyright (c) 2022 Metahkg.{" "}
                 <a
                     className="!text-metahkg-grey"

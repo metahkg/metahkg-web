@@ -59,7 +59,7 @@ export default function Settings(props: {
                         />
                     </Box>
                 ))}
-                <Box className="flex justify-between items-center w-full mt6 !mb-[4px]">
+                <Box className="flex justify-between items-center w-full !mt-[6px] !mb-[4px]">
                     <p className="!m-0">Color</p>
                     <ToggleButtonGroup
                         color="secondary"

@@ -67,7 +67,7 @@ export default function Share() {
         <PopUp open={open} setOpen={setOpen} title="Share">
             <Box className="!ml-[10px] !mr-[10px] text-start text-[20px]">
                 <TextField
-                    className="mt0"
+                    className="!mt-[0px]"
                     sx={{
                         minWidth: isSmallScreen ? "250px" : "500px",
                     }}

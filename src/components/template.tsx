@@ -53,7 +53,7 @@ export default function Template() {
                 width: "70vw",
             }}
         >
-            <Box className="w-full m50">
+            <Box className="w-full m-[50px]">
                 <Box className="flex items-center">
                     <MetahkgIcon height={40} width={50} svg light />
                     <h1>Metahkg</h1>
