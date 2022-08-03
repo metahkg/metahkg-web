@@ -31,6 +31,7 @@ import { parseError } from "../../../lib/parseError";
 import { Comment } from "@metahkg/api";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import UserModal from "./userModal";
+import { colors } from "../../../lib/css";
 
 export default function CommentTop(props: {
     comment: Comment;
@@ -217,19 +218,18 @@ export default function CommentTop(props: {
                 <Typography
                     className="!my-0 !text-[17px]"
                     sx={(theme) => ({
-                        color: isOp ? theme.palette.secondary.main : "#aca9a9",
+                        color: isOp ? theme.palette.secondary.main : colors.grey,
                     })}
                 >
                     #{comment.id}
                 </Typography>
                 <p
-                    className="comment-tag-userlink !my-0 !ml-[10px] text-overflow-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full"
+                    className="leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full min-w-[50px]"
                     onClick={() => {
                         setOpen(true);
                     }}
                     style={{
-                        color: comment.user.sex === "M" ? "#34aadc" : "red",
-                        minWidth: "50px",
+                        color: comment.user.sex === "M" ? colors.blue : "red",
                     }}
                 >
                     {comment.user.name}
@@ -243,9 +243,8 @@ export default function CommentTop(props: {
                 >
                     <p
                         onClick={() => {
-                            if (isMobile) {
+                            if (isMobile)
                                 setTimeMode(timeMode === "short" ? "long" : "short");
-                            }
                         }}
                         className={`!my-0 text-metahkg-grey !ml-[10px] text-[15px]${
                             isMobile ? " cursor-pointer" : ""
@@ -271,7 +270,7 @@ export default function CommentTop(props: {
                         className="cursor-pointer flex overflow-hidden"
                     >
                         <p className={"!my-0 !ml-[5px] text-metahkg-grey"}>:</p>
-                        <p className="!my-0 comment-body !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-full inline-block">
+                        <p className="!my-0 comment-body !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
                             {settings.filterSwearWords
                                 ? filterSwearWords(comment.text)
                                 : comment.text}

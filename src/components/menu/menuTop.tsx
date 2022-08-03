@@ -87,7 +87,7 @@ export default function MenuTop(props: {
                         )}
                         <Typography
                             sx={{ color: "secondary.main" }}
-                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-overflow-ellipsis overflow-hidden"
+                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-ellipsis overflow-hidden"
                         >
                             {menuTitle || inittitle}
                         </Typography>

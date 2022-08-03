@@ -72,7 +72,7 @@ export default function MenuThread(props: {
                     </Box>
                 </Box>
                 <Box className="flex w-full !mb-[10px] items-center justify-between menuthread-bottom">
-                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-overflow-ellipsis text-left menuthread-title">
+                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-ellipsis text-left menuthread-title">
                         {thread.title}
                     </p>
                     {(menuMode !== "category" || cat === 1) && (

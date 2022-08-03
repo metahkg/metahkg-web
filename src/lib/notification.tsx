@@ -38,7 +38,7 @@ export function Notification() {
                     </Box>
                 </Box>
                 <Box className="w-full rounded-[8px]">
-                    <p className="m-[15px] text-overflow-ellipsis overflow-hidden text-[15px] leading-[19px] max-h-[38px]">
+                    <p className="m-[15px] text-ellipsis overflow-hidden text-[15px] leading-[19px] max-h-[38px]">
                         {notification.text}
                     </p>
                 </Box>

@@ -39,7 +39,7 @@ export default function Title(props: {
                         </Link>
                     )}
                     <Typography
-                        className={`!my-0 !ml-[10px] overflow-hidden text-overflow-ellipsis whitespace-nowrap !text-[18px] title-text${
+                        className={`!my-0 !ml-[10px] overflow-hidden text-ellipsis whitespace-nowrap !text-[18px] title-text${
                             isSmallScreen ? " text-center" : ""
                         }`}
                         sx={{
