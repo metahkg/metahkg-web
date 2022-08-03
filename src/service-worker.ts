@@ -81,7 +81,6 @@ registerRoute(
             "na.cx",
             "gstatic.com",
             "google.com",
-            "sa.metahkg.org",
         ].some((i) => url.origin.includes(i)),
     new CacheFirst({
         cacheName: "app-external-assets",

@@ -84,6 +84,10 @@ export default function App() {
                         ],
                     });
                 },
+                onSuccess: (registration) => {
+                    console.log("updating...")
+                    registration.update();
+                },
             });
         } catch {
             console.error("Service worker registration failed");
