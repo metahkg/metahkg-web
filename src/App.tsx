@@ -98,10 +98,7 @@ export default function App() {
             <AlertDialog {...alertDialog} />
             <Notification />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box
-                className="max-h-screen h-screen"
-                sx={{ bgcolor: "primary.dark" }}
-            >
+            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
                 <Router>
                     <Box className="flex">
                         <Box
