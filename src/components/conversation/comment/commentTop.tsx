@@ -293,7 +293,7 @@ export default function CommentTop(props: {
                             }}
                             variant="outlined"
                         >
-                            Click to view comment.
+                            Click to view comment
                         </Button>
                     </Tooltip>
                 )}

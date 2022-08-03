@@ -67,7 +67,7 @@ function ImgComponent(props: Props) {
                             e.stopPropagation();
                             setSmall(!small);
                         }}
-                        className={"rounded-[10px]-force absolute"}
+                        className={"!rounded-[10px] !absolute"}
                         sx={{
                             bgcolor: "primary.main",
                             "&:hover": {
