@@ -99,7 +99,7 @@ export default function SearchBar(props: {
                         setSmode(Number(!smode));
                         setReFetch(true);
                     }}
-                    className="mr10 searchbar-chip"
+                    className="!mr-[10px] searchbar-chip"
                 />
             )}
         </Search>

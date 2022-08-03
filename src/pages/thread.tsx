@@ -31,7 +31,7 @@ export default function Thread() {
 
     return (
         <Box
-            className="min-height-fullvh flex"
+            className="min-h-screen flex"
             sx={{
                 backgroundColor: "primary.dark",
             }}

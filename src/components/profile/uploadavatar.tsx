@@ -38,11 +38,11 @@ export default function UploadAvatar(props: {
                         }}
                     />
                     <Button
-                        className="mt5 notexttransform"
+                        className="!mt-[5px] !normal-case"
                         variant="contained"
                         component="span"
                     >
-                        <FileUpload className="mr5" />
+                        <FileUpload className="!mr-[5px]" />
                         <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
                     </Button>
                 </label>

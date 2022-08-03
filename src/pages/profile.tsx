@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import "../css/pages/profile.css";
 import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
@@ -102,7 +101,7 @@ export default function Profile() {
 
     return (
         <Box
-            className="max-height-fullvh height-fullvh overflow-auto"
+            className="max-h-screen h-screen overflow-auto"
             sx={{
                 backgroundColor: "primary.dark",
                 width: isSmallScreen ? "100vw" : "70vw",
@@ -111,9 +110,9 @@ export default function Profile() {
             {!requestedUser ? (
                 <Loader position="center" />
             ) : (
-                <Box className="flex justify-center align-center flex-dir-column">
+                <Box className="flex justify-center items-center flex-col">
                     <Box
-                        className="flex justify-center align-center max-width-full mt20"
+                        className="flex justify-center items-center max-w-full !mt-[20px]"
                         sx={{
                             width: isSmallScreen ? "100vw" : "70vw",
                         }}
@@ -127,12 +126,12 @@ export default function Profile() {
                         />
                         <br />
                         <Box
-                            className="ml20 flex justify-center profile-toptextBox"
+                            className="!ml-[20px] flex justify-center h-[200px]"
                             style={{
                                 flexDirection: isSelf ? "column" : "row",
                             }}
                         >
-                            <h1 className="font-size-30 profile-toptext">
+                            <h1 className="text-[30px] self-center whitespace-nowrap leading-[37px] max-h-[37px]">
                                 <Box
                                     className="overflow-hidden"
                                     style={{
@@ -142,7 +141,7 @@ export default function Profile() {
                                     }}
                                 >
                                     <span
-                                        className="overflow-hidden text-overflow-ellipsis nowrap inline-block max-width-full"
+                                        className="overflow-hidden text-overflow-ellipsis whitespace-nowrap inline-block max-w-full"
                                         style={{
                                             color:
                                                 requestedUser.sex === "M"
@@ -156,7 +155,6 @@ export default function Profile() {
                                 #{requestedUser.id}
                             </h1>
                             <Box
-                                className="profile-uploadBox"
                                 style={{
                                     marginTop: isSelf ? 25 : 0,
                                 }}
@@ -188,7 +186,7 @@ export default function Profile() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box className="flex mt20 mb10 fullwidth font justify-center">
+                    <Box className="flex !mt-[20px] !mb-[10px] w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
                             setUser={setRequestedUser}
@@ -197,13 +195,10 @@ export default function Profile() {
                         />
                     </Box>
                     {isSmallScreen && (
-                        <Box className="mt20">
-                            <Link
-                                className="text-decoration-none"
-                                to={`/history/${userId}`}
-                            >
+                        <Box className="!mt-[20px]">
+                            <Link className="!no-underline" to={`/history/${userId}`}>
                                 <Button
-                                    className="font-size-16"
+                                    className="text-[16px]"
                                     variant="text"
                                     color="secondary"
                                 >

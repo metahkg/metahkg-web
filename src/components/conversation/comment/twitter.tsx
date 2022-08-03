@@ -11,7 +11,7 @@ export default function TweetEmbed(props: { tweetId: string }) {
             {loading && (
                 <Loader
                     position="flex-start"
-                    className="mt5 mb5"
+                    className="!mt-[5px] !mb-[5px]"
                     sxProgress={{ color: "darkgrey" }}
                     thickness={2}
                     size={50}

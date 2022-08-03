@@ -15,17 +15,17 @@ export default function PinnedComment(props: { comment: Comment }) {
             <CommentPopup comment={comment} open={open} setOpen={setOpen} fetchComment />
             <Box
                 sx={{ bgcolor: "primary.dark", height: 50 }}
-                className="flex fullwidth align-center pointer"
+                className="flex w-full items-center cursor-pointer"
                 onClick={() => {
                     setOpen(true);
                 }}
             >
-                <InfoOutlined className="metahkg-grey-force ml10 mr10" />
+                <InfoOutlined className="!text-metahkg-grey !ml-[10px] !mr-[10px]" />
                 <Box className="overflow-hidden">
-                    <Typography className="novmargin" color="secondary">
+                    <Typography className="!my-0" color="secondary">
                         Pinned Comment #{comment.id}
                     </Typography>
-                    <Typography className="metahkg-grey-force text-overflow-ellipsis overflow-hidden nowrap novmargin mr15">
+                    <Typography className="!text-metahkg-grey text-overflow-ellipsis overflow-hidden whitespace-nowrap !my-0 !mr-[15px]">
                         {settings.filterSwearWords
                             ? filterSwearWords(comment.text)
                             : comment.text}

@@ -26,7 +26,7 @@ export default function Player(props: { url: string }) {
     const buttons = [
         {
             title: "Full Screen (press ESC/F11 to exit)",
-            icon: <Fullscreen className="font-size-18-force" />,
+            icon: <Fullscreen className="!text-[18px]" />,
             onClick: () => {
                 const Player = findDOMNode(player.current);
                 Player instanceof Element && screenfull.request(Player);
@@ -34,7 +34,7 @@ export default function Player(props: { url: string }) {
         },
         {
             title: "Picture in Picture",
-            icon: <PictureInPictureAlt className="font-size-16-force" />,
+            icon: <PictureInPictureAlt className="!text-[16px]" />,
             onClick: () => {
                 setPip(!pip);
             },
@@ -42,32 +42,32 @@ export default function Player(props: { url: string }) {
         },
         {
             title: "Close",
-            icon: <Close className="font-size-16-force" />,
+            icon: <Close className="!text-[16px]" />,
             onClick: () => {
                 setPlay(false);
             },
         },
     ];
     return (
-        <Box className="mb5">
+        <Box className="!mb-[5px]">
             {play && (
                 <Box
                     width={width < 760 ? "100%" : "65%"}
                     sx={{ bgcolor: "#333", height: 30 }}
-                    className="metahkg-grey-force font-size-15-force flex justify-space-between align-center"
+                    className="!text-metahkg-grey !text-[15px] flex justify-between items-center"
                 >
-                    <Box className="flex align-center ml10">
+                    <Box className="flex items-center !ml-[10px]">
                         {
                             {
-                                youtube: <YouTubeIcon className="font-size-18-force" />,
-                                facebook: <Facebook className="font-size-18-force" />,
+                                youtube: <YouTubeIcon className="!text-[18px]" />,
+                                facebook: <Facebook className="!text-[18px]" />,
                             }[mode]
                         }
-                        <p className="novmargin ml5">
+                        <p className="!my-0 !ml-[5px]">
                             {{ youtube: "Youtube", facebook: "Facebook" }[mode]}
                         </p>
                     </Box>
-                    <Box className="flex align-center mr5">
+                    <Box className="flex items-center !mr-[5px]">
                         {buttons.map(
                             (btn) =>
                                 !btn.hidden && (
@@ -104,7 +104,7 @@ export default function Player(props: { url: string }) {
                                 alt=""
                             />
                         ),
-                        facebook: <PlayCircleOutline className="font-size-50-force" />,
+                        facebook: <PlayCircleOutline className="!text-[50px]" />,
                     }[mode]
                 }
                 playing={play}

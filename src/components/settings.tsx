@@ -45,13 +45,13 @@ export default function Settings(props: {
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
-            <Box className="ml20 mr10" sx={{ bgcolor: "primary.main" }}>
+            <Box className="!ml-[20px] !mr-[10px]" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
                     <Box
                         key={item.title}
-                        className="flex justify-space-between align-center fullwidth mt4 mb4"
+                        className="flex justify-between items-center w-full !mt-[4px] !mb-[4px]"
                     >
-                        <p className="nomargin">{item.title}</p>
+                        <p className="!m-0">{item.title}</p>
                         <IOSSwitch
                             color="secondary"
                             checked={item.checked}
@@ -59,8 +59,8 @@ export default function Settings(props: {
                         />
                     </Box>
                 ))}
-                <Box className="flex justify-space-between align-center fullwidth mt6 mb4">
-                    <p className="nomargin">Color</p>
+                <Box className="flex justify-between items-center w-full mt6 !mb-[4px]">
+                    <p className="!m-0">Color</p>
                     <ToggleButtonGroup
                         color="secondary"
                         value={

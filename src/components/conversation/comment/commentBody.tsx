@@ -47,12 +47,12 @@ export default function CommentBody(props: {
                 <blockquote
                     key={0}
                     style={{ border: "none" }}
-                    className={`flex fullwidth${depth !== 0 ? " novmargin" : ""}`}
+                    className={`flex w-full${depth !== 0 ? " !my-0" : ""}`}
                 >
                     <Box
                         className={`${
-                            showQuote ? "pointer " : ""
-                        }comment-body-quote-div nopadding metahkg-grey ml0`}
+                            showQuote ? "cursor-pointer " : ""
+                        }comment-body-quote-div !p-0 text-metahkg-grey ml0`}
                         sx={(theme) => ({
                             width: 15,
                             "&:hover": {
@@ -66,7 +66,7 @@ export default function CommentBody(props: {
                         }}
                     />
                     {showQuote ? (
-                        <div className="comment-body fullwidth">
+                        <div className="comment-body w-full">
                             <CommentBody comment={comment.quote} depth={depth + 1} />
                         </div>
                     ) : (
@@ -79,7 +79,7 @@ export default function CommentBody(props: {
                                     background: "rgba(255, 255, 255, 0.1)",
                                 },
                             }}
-                            className="metahkg-grey-force notexttransform pt3 pb3 pl5 pr5"
+                            className="!text-metahkg-grey !normal-case !pt-[3px] !pb-[3px] !pl-[5px] !pr-[5px]"
                             onClick={() => {
                                 setShowQuote(true);
                             }}
@@ -116,7 +116,7 @@ export default function CommentBody(props: {
                     }}
                 >
                     <Box
-                        className={`novmargin comment-body fullwidth break-word-force font-size-16`}
+                        className={`!my-0 comment-body w-full !break-words text-[16px]`}
                     >
                         {content}
                     </Box>

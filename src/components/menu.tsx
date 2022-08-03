@@ -39,8 +39,8 @@ function Menu() {
 
     return (
         <Box
-            className={`max-width-full min-height-fullvh flex-dir-column ${
-                menu ? "flex" : "display-none"
+            className={`max-w-full min-h-screen flex-col ${
+                menu ? "flex" : "hidden"
             } menu-root`}
         >
             {/*show when screen is not wide enough*/}
@@ -81,8 +81,8 @@ function Menu() {
             />
             {/*if search something in drawer, also show the search bar under the tab (Relevance, created, last reply*/}
             {menuMode === "search" && (
-                <Box className="flex fullwidth">
-                    <Box className="flex fullwidth justify-center align-center m10 menu-search">
+                <Box className="flex w-full">
+                    <Box className="flex w-full justify-center items-center m10 menu-search">
                         <SearchBar
                             query={query}
                             onChange={(e) => {

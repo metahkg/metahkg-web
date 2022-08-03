@@ -122,7 +122,7 @@ export default function Comment(props: {
     return useMemo(
         () => (
             <Box
-                className={`${noFullWidth ? "" : "fullwidth"} ${className || ""}`}
+                className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
                 sx={sx}
                 ref={commentRef}
                 id={noId ? undefined : `c${comment.id}`}
@@ -137,9 +137,9 @@ export default function Comment(props: {
                     />
                 )}
                 <Box
-                    className={`text-align-left ${
+                    className={`text-left ${
                         !inPopUp ? "mt6" : showReplies ? "" : "overflow-auto"
-                    } fullwidth comment-root`}
+                    } w-full comment-root`}
                     sx={(theme) => ({
                         "& *::selection": {
                             background: theme.palette.secondary.main,
@@ -149,7 +149,7 @@ export default function Comment(props: {
                         maxHeight: inPopUp && !showReplies ? "90vh" : "",
                     })}
                 >
-                    <Box className="ml20 mr20">
+                    <Box className="!ml-[20px] !mr-[20px]">
                         <CommentTop
                             comment={comment}
                             noStory={noStory}
@@ -171,8 +171,8 @@ export default function Comment(props: {
                         )}
                     </Box>
                     {ready && !fold && !blocked && (
-                        <Box className="flex justify-space-between align-center fullwidth">
-                            <Box className="flex ml20 mr20">
+                        <Box className="flex justify-between items-center w-full">
+                            <Box className="flex !ml-[20px] !mr-[20px]">
                                 <VoteButtons
                                     comment={comment}
                                     key={`${comment.U}${comment.D}`}
@@ -183,7 +183,7 @@ export default function Comment(props: {
                                             minWidth: "0 !important",
                                             bgcolor: "#333 !important",
                                         }}
-                                        className="br5 nomargin ml10 metahkg-grey-force nopadding mt0 mb0 pl10 pr10 pt3 pb3"
+                                        className="!rounded-[5px] !m-0 !ml-[10px] !text-metahkg-grey !p-0 mt0 mb0 !pl-[10px] !pr-[10px] !pt-[3px] !pb-[3px]"
                                         variant="text"
                                         onClick={() => {
                                             if (inPopUp) {
@@ -199,9 +199,9 @@ export default function Comment(props: {
                                                     color: "white",
                                                 },
                                             }}
-                                            className="font-size-14-force"
+                                            className="!text-[14px]"
                                         />
-                                        <p className="ml5 novmargin metahkg-grey">
+                                        <p className="!ml-[5px] !my-0 text-metahkg-grey">
                                             {comment.replies?.length}
                                         </p>
                                     </Button>
@@ -212,7 +212,7 @@ export default function Comment(props: {
                                     href={`/thread/${threadId}?c=${comment.id}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="flex metahkg-grey-force mr10 notextdecoration"
+                                    className="flex !text-metahkg-grey !mr-[10px] !no-underline"
                                 >
                                     <EscalatorOutlined />
                                     Open Comment
@@ -223,10 +223,10 @@ export default function Comment(props: {
                     <Box className="comment-spacer" />
                 </Box>
                 {loading && (
-                    <Box className="flex justify-center align-center">
+                    <Box className="flex justify-center items-center">
                         <CircularProgress
                             size={30}
-                            className="mt10 mb5"
+                            className="!mt-[10px] !mb-[5px]"
                             color={"secondary"}
                         />
                     </Box>
@@ -234,13 +234,13 @@ export default function Comment(props: {
                 {!!replies.length && (
                     <Box>
                         <Box
-                            className="flex align-center justify-center text-align-center pointer"
+                            className="flex items-center justify-center text-center cursor-pointer"
                             onClick={() => {
                                 setShowReplies(!showReplies);
                                 setIsExpanded && setIsExpanded(!showReplies);
                             }}
                         >
-                            <Typography className="mt5 mb5" color="secondary">
+                            <Typography className="!mt-[5px] !mb-[5px]" color="secondary">
                                 {showReplies ? "Hide" : "Show"} Replies
                             </Typography>
                             {showReplies ? (
@@ -260,9 +260,9 @@ export default function Comment(props: {
                                         openComment
                                     />
                                 ))}
-                                <Box className="flex justify-center align-center">
+                                <Box className="flex justify-center items-center">
                                     <Typography
-                                        className="mt5 mb5 font-size-18-force"
+                                        className="!mt-[5px] !mb-[5px] !text-[18px]"
                                         color="secondary"
                                     >
                                         End

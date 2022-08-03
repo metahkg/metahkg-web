@@ -29,18 +29,18 @@ export default function Title(props: {
                 bgcolor: "primary.main",
             }}
         >
-            <Box className="flex ml10 mr20 align-center justify-space-between fullheight">
-                <Box className="flex align-center mr10 overflow-hidden">
+            <Box className="flex !ml-[10px] !mr-[20px] items-center justify-between h-full">
+                <Box className="flex items-center !mr-[10px] overflow-hidden">
                     {(history || category) && (
                         <Link to={history || `/category/${category}`}>
-                            <IconButton className="nomargin nopadding">
+                            <IconButton className="!m-0 !p-0">
                                 <ArrowBackIcon color="secondary" />
                             </IconButton>
                         </Link>
                     )}
                     <Typography
-                        className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
-                            isSmallScreen ? " text-align-center" : ""
+                        className={`!my-0 !ml-[10px] overflow-hidden text-overflow-ellipsis whitespace-nowrap !text-[18px] title-text${
+                            isSmallScreen ? " text-center" : ""
                         }`}
                         sx={{
                             color: "secondary.main",

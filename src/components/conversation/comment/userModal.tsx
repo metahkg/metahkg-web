@@ -49,7 +49,7 @@ export default function UserModal(props: {
                 } : undefined,
             ]}
         >
-            <p className="text-align-center mt5 mb5 font-size-20">
+            <p className="text-center !mt-[5px] !mb-[5px] text-[20px]">
                 {commentUser.name}
                 <br />#{commentUser.id}
             </p>

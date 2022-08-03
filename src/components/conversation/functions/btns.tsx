@@ -60,7 +60,7 @@ export default function useBtns() {
             title: "Reply",
         },
         {
-            icon: <ShareIcon className="font-size-19-force" />,
+            icon: <ShareIcon className="!text-[19px]" />,
             action: () => {
                 if (thread && thread.title && thread.slink) {
                     !shareOpen && setShareOpen(true);

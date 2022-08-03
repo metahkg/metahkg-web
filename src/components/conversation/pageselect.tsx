@@ -14,16 +14,16 @@ export default function PageSelect(props: {
 }) {
     const { pages, page, onSelect, onLastClicked, onNextClicked, last, next } = props;
     return (
-        <Box className="pageselect-root flex flex-dir-column">
+        <Box className="pageselect-root flex flex-col">
             {last && (
-                <Box className="pageselect-top flex align-center justify-center">
+                <Box className="pageselect-top flex items-center justify-center">
                     <IconButton onClick={onLastClicked}>
                         <ArrowDropUp />
                     </IconButton>
                 </Box>
             )}
             <Box
-                className="pageselect-box flex justify-center align-center"
+                className="pageselect-box flex justify-center items-center"
                 sx={{ borderRadius: last || next ? "0" : "50%" }}
             >
                 <Select
@@ -32,7 +32,7 @@ export default function PageSelect(props: {
                     onChange={onSelect}
                     color="secondary"
                     variant="standard"
-                    className="pageselect-select nopadding flex align-center justify-center"
+                    className="pageselect-select !p-0 flex items-center justify-center"
                     disableUnderline
                 >
                     {[...Array(pages)].map((_p, index) => (
@@ -43,7 +43,7 @@ export default function PageSelect(props: {
                 </Select>
             </Box>
             {next && (
-                <Box className="pageselect-bottom flex align-center justify-center">
+                <Box className="pageselect-bottom flex items-center justify-center">
                     <IconButton onClick={onNextClicked}>
                         <ArrowDropDown />
                     </IconButton>

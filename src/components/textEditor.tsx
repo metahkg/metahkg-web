@@ -33,7 +33,6 @@ export default function TextEditor(props: {
     return (
         <Box sx={sx} className={className}>
             <Editor
-                key={Number(isSmallScreen)}
                 onEditorChange={onChange}
                 initialValue={initText}
                 init={{

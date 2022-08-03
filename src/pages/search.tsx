@@ -67,7 +67,7 @@ export default function Search() {
 
     return (
         <Box
-            className="flex min-height-fullvh"
+            className="flex min-h-screen"
             sx={{
                 bgcolor: "primary.dark",
             }}

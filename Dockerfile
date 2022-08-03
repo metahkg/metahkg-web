@@ -15,9 +15,11 @@ ENV REACT_APP_version $REACT_APP_version
 ARG env
 ENV env $env
 
+ENV REACT_APP_ENV $env
+
 WORKDIR /usr/src/app
 
-COPY ./package.json ./yarn.lock ./tsconfig.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
 RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; fi;
 
@@ -53,7 +55,7 @@ COPY --from=build /usr/src/app/build ./build
 
 COPY ./scripts ./scripts
 
-COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json  ./postcss.config.js ./tailwind.config.js ./
 
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
 

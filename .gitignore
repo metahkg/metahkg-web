@@ -22,16 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-uploads/
-
-# vscode
-.vscode/
-
-# internal
-deploy.sh
 .lh/
-package-lock.json
-internal/
 
 .idea
 .eslintcache

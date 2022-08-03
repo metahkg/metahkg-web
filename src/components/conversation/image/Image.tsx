@@ -51,15 +51,14 @@ function ImgComponent(props: Props) {
     return (
         <PhotoView src={src}>
             <Box
-                style={{
-                    position: "relative",
-                    ...(imgRef.current &&
-                        cRoot.current &&
-                        // TODO: should not hard code
-                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
-                            display: "inline-block",
-                        }),
-                }}
+                className={`relative ${
+                    imgRef.current &&
+                    cRoot.current &&
+                    // TODO: should not hard code
+                    imgRef.current.clientWidth < cRoot.current.clientWidth - 40
+                        ? "inline-block"
+                        : ""
+                }`}
             >
                 {!disableResize && (
                     <IconButton
@@ -68,9 +67,8 @@ function ImgComponent(props: Props) {
                             e.stopPropagation();
                             setSmall(!small);
                         }}
-                        className={"border-radius-10-force"}
+                        className={"rounded-[10px]-force absolute"}
                         sx={{
-                            position: "absolute",
                             bgcolor: "primary.main",
                             "&:hover": {
                                 bgcolor: "primary.dark",
@@ -133,7 +131,7 @@ export default function Image(props: Props) {
                     <a href={src} target="_blank" rel="noreferrer">
                         <Loader
                             position="flex-start"
-                            className="mt5 mb5"
+                            className="!mt-[5px] !mb-[5px]"
                             sxProgress={{ color: "darkgrey" }}
                             thickness={2}
                             size={50}

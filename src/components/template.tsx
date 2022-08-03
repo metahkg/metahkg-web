@@ -47,20 +47,20 @@ export default function Template() {
     const [user] = useUser();
     return (
         <Paper
-            className="overflow-auto justify-center flex max-height-fullvh"
+            className="overflow-auto justify-center flex max-h-screen"
             sx={{
                 bgcolor: "primary.dark",
                 width: "70vw",
             }}
         >
-            <Box className="fullwidth m50">
-                <Box className="flex align-center">
+            <Box className="w-full m50">
+                <Box className="flex items-center">
                     <MetahkgIcon height={40} width={50} svg light />
                     <h1>Metahkg</h1>
                 </Box>
                 <List>
                     <ListItemButton
-                        className="fullwidth text-decoration-none white"
+                        className="w-full !no-underline text-white"
                         component={"a"}
                         href="https://war.ukraine.ua/support-ukraine/"
                     >
@@ -71,7 +71,7 @@ export default function Template() {
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
-                        className="notextdecoration white fullwidth"
+                        className="!no-underline text-white w-full"
                         to={`/${
                             user ? "users/logout" : "users/login"
                         }?returnto=${encodeURIComponent(wholePath())}`}
@@ -87,7 +87,7 @@ export default function Template() {
                         <ListItemButton
                             component={Link}
                             to={`/profile/${user?.id}`}
-                            className="fullwidth text-decoration-none white"
+                            className="w-full !no-underline text-white"
                         >
                             <ListItemIcon>
                                 <ManageAccountsIcon />
@@ -101,7 +101,7 @@ export default function Template() {
                             key={index}
                             component={Link}
                             to={link.link}
-                            className="fullwidth text-decoration-none white"
+                            className="w-full !no-underline text-white"
                         >
                             <ListItemIcon>{link.icon}</ListItemIcon>
                             <ListItemText>{link.title}</ListItemText>

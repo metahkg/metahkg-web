@@ -15,11 +15,11 @@ export default function PageTop(props: {
     const { pages, page, onChange, last, next, onLastClicked, onNextClicked, id } = props;
     return (
         <Box
-            className="flex justify-space-between align-center ml30 mr30 pagetop-root"
+            className="flex justify-between items-center !ml-[30px] !mr-[30px] pagetop-root"
             id={String(id)}
         >
             <Typography
-                className={last ? "pointer" : "user-select-none transparent"}
+                className={last ? "cursor-pointer" : "!select-none text-transparent"}
                 sx={last ? { color: "secondary.main" } : {}}
                 onClick={last ? onLastClicked : () => {}}
             >
@@ -39,7 +39,7 @@ export default function PageTop(props: {
                 ))}
             </Select>
             <Typography
-                className={next ? "pointer" : "user-select-none transparent"}
+                className={next ? "cursor-pointer" : "!select-none text-transparent"}
                 sx={next ? { color: "secondary.main" } : {}}
                 onClick={next ? onNextClicked : () => {}}
             >

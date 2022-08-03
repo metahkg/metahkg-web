@@ -27,64 +27,64 @@ export default function MenuThread(props: {
 
     return (
         <Link
-            className="fullwidth text-decoration-none"
+            className="w-full !no-underline"
             to={`/thread/${thread.id}?${
                 commentId && id !== thread.id ? `c=${commentId}` : "page=1"
             }`}
             onClick={onClick}
         >
             <Box
-                className={`flex fullwidth flex-dir-column user-select-none menuthread-root${
+                className={`flex w-full flex-col !select-none menuthread-root${
                     id === thread.id ? "-selected" : ""
                 }`}
             >
-                <Box className="flex fullwidth align-center justify-space-between menuthread-top">
+                <Box className="flex w-full items-center justify-between menuthread-top">
                     <Box style={{ display: "flex", alignItems: "center" }}>
                         <p
-                            className="font-size-16 ml20 metahkg-grey menuthread-op"
+                            className="text-[16px] !ml-[20px] text-metahkg-grey menuthread-op"
                             style={{
                                 color: thread.op.sex === "M" ? "#0277bd" : "red",
                             }}
                         >
                             {thread.op.name}
                         </p>
-                        <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <p className="!ml-[5px] !m-0 text-metahkg-grey text-[13px] menuthread-toptext">
                             {timeToWord(thread.lastModified)}
                         </p>
                     </Box>
-                    <Box className="flex align-center">
+                    <Box className="flex items-center">
                         {thread.score >= 0 ? (
-                            <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                            <ThumbUpIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
                         ) : (
-                            <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                            <ThumbDownIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
                         )}
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <p className="!m-0 text-metahkg-grey text-[13px] menuthread-toptext">
                             {thread.score}
                         </p>
-                        <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
+                        <p className="!m-0 text-metahkg-grey text-[13px] menuthread-toptext">
                             {thread.c}
                         </p>
-                        <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
+                        <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px] menuthread-toptext">
                             {String(roundup(thread.c / 25))}
                         </p>
                     </Box>
                 </Box>
-                <Box className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
-                    <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
+                <Box className="flex w-full !mb-[10px] items-center justify-between menuthread-bottom">
+                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-overflow-ellipsis text-left menuthread-title">
                         {thread.title}
                     </p>
                     {(menuMode !== "category" || cat === 1) && (
                         <Link
-                            className="mr10 text-decoration-none"
+                            className="!mr-[10px] !no-underline"
                             to={`/category/${thread.category}`}
                         >
                             <Button
                                 variant="contained"
-                                className="nomargin nopadding text-transform-none menuthread-catbtn"
+                                className="!m-0 !p-0 !normal-case menuthread-catbtn"
                             >
-                                <p className="nomargin font-size-12 menuthread-catname">
+                                <p className="!m-0 text-[12px] menuthread-catname">
                                     {
                                         categories.find((i) => i.id === thread.category)
                                             ?.name

@@ -65,9 +65,9 @@ export default function CommentTop(props: {
             (story ? story === comment.user.id : 1) &&
                 !noStory && {
                     icon: story ? (
-                        <VisibilityOff className="metahkg-grey-force font-size-19-force" />
+                        <VisibilityOff className="!text-metahkg-grey !text-[19px]" />
                     ) : (
-                        <Visibility className="metahkg-grey-force font-size-19-force" />
+                        <Visibility className="!text-metahkg-grey !text-[19px]" />
                     ),
                     title: story ? "Quit story mode" : "Story mode",
                     action: () => {
@@ -92,7 +92,7 @@ export default function CommentTop(props: {
                     },
                 },
             {
-                icon: <ReplyIcon className="metahkg-grey-force font-size-21-force mb1" />,
+                icon: <ReplyIcon className="!text-metahkg-grey !text-[21px] !mb-[1px]" />,
                 title: "Quote",
                 action: () => {
                     if (user) setEditor({ open: true, quote: comment });
@@ -115,7 +115,7 @@ export default function CommentTop(props: {
     }[] = useMemo(
         () => [
             {
-                icon: <ShareIcon className="metahkg-grey-force font-size-19-force" />,
+                icon: <ShareIcon className="!text-metahkg-grey !text-[19px]" />,
                 title: "Share",
                 action: () => {
                     setShareLink(
@@ -183,14 +183,14 @@ export default function CommentTop(props: {
                 return undefined;
             })(),
             {
-                icon: <FeedIcon className="font-size-19-force" />,
+                icon: <FeedIcon className="!text-[19px]" />,
                 title: "Create thread",
                 action: () => {
                     navigate(`/create?quote=${threadId}.${comment.id}`);
                 },
             },
             {
-                icon: <Edit className="font-size-19-force" />,
+                icon: <Edit className="!text-[19px]" />,
                 title: "Edit comment",
                 action: () => {
                     if (user) setEditor({ open: true, edit: comment.comment });
@@ -208,18 +208,18 @@ export default function CommentTop(props: {
 
     return (
         <Box
-            className={`flex align-center font-size-17 pt10 ${
-                !fold ? "justify-space-between" : ""
+            className={`flex items-center text-[17px] !pt-[10px] ${
+                !fold ? "justify-between" : ""
             }`}
         >
             <UserModal open={open} setOpen={setOpen} user={comment.user} />
             <Box
-                className={`flex align-center ${
-                    !fold ? "comment-tag-left" : "fullwidth"
+                className={`flex items-center ${
+                    !fold ? "comment-tag-left" : "w-full"
                 }`}
             >
                 <Typography
-                    className="novmargin font-size-17-force"
+                    className="!my-0 !text-[17px]"
                     sx={(theme) => ({
                         color: isOp ? theme.palette.secondary.main : "#aca9a9",
                     })}
@@ -227,7 +227,7 @@ export default function CommentTop(props: {
                     #{comment.id}
                 </Typography>
                 <p
-                    className="comment-tag-userlink novmargin ml10 text-overflow-ellipsis nowrap pointer overflow-hidden max-width-full"
+                    className="comment-tag-userlink !my-0 !ml-[10px] text-overflow-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full"
                     onClick={() => {
                         setOpen(true);
                     }}
@@ -251,8 +251,8 @@ export default function CommentTop(props: {
                                 setTimeMode(timeMode === "short" ? "long" : "short");
                             }
                         }}
-                        className={`novmargin metahkg-grey ml10 font-size-15${
-                            isMobile ? " pointer" : ""
+                        className={`!my-0 text-metahkg-grey !ml-[10px] text-[15px]${
+                            isMobile ? " cursor-pointer" : ""
                         }`}
                     >
                         {
@@ -272,13 +272,10 @@ export default function CommentTop(props: {
                             setFold && setFold(false);
                         }}
                         sx={{ flexGrow: 1 }}
-                        className="pointer flex overflow-hidden"
+                        className="cursor-pointer flex overflow-hidden"
                     >
-                        <p className={"novmargin ml5 metahkg-grey"}>:</p>
-                        <p
-                            className="novmargin comment-body break-word-force ml10 nowrap overflow-hidden text-overflow-ellipsis max-width-full"
-                            style={{ display: "inline-block" }}
-                        >
+                        <p className={"!my-0 !ml-[5px] text-metahkg-grey"}>:</p>
+                        <p className="!my-0 comment-body !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-full inline-block">
                             {settings.filterSwearWords
                                 ? filterSwearWords(comment.text)
                                 : comment.text}
@@ -289,7 +286,7 @@ export default function CommentTop(props: {
                     <Tooltip arrow title="User blocked.">
                         <Button
                             sx={{ color: "grey" }}
-                            className="ml20 font-size-14-force text-transform-none"
+                            className="!ml-[20px] !text-[14px] !normal-case"
                             color="error"
                             onClick={() => {
                                 setBlocked && setBlocked(false);
@@ -307,7 +304,7 @@ export default function CommentTop(props: {
                             button && (
                                 <Tooltip key={index} title={button.title} arrow>
                                     <IconButton
-                                        className="ml10 nopadding"
+                                        className="!ml-[10px] !p-0"
                                         onClick={button.action}
                                     >
                                         {button.icon}
@@ -317,11 +314,11 @@ export default function CommentTop(props: {
                     )}
             </Box>
             {!fold && !blocked && (
-                <Box className="flex align-center">
+                <Box className="flex items-center">
                     {rightBtns.map((button, index) => (
                         <Tooltip key={index} title={button.title} arrow>
                             <IconButton
-                                className="ml10 nopadding"
+                                className="!ml-[10px] !p-0"
                                 onClick={button.action}
                             >
                                 {button.icon}

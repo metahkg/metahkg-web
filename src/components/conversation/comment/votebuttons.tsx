@@ -41,7 +41,7 @@ export default function VoteButtons(props: { comment: Comment }) {
     return (
         <ButtonGroup variant="text" className="vb-btn-group">
             <Button
-                className="nopadding nomargin vb-btn vb-btn-left"
+                className="!p-0 !m-0 vb-btn vb-btn-left"
                 disabled={!user || !!vote}
                 onClick={() => {
                     sendVote(Vote.U);
@@ -53,12 +53,12 @@ export default function VoteButtons(props: { comment: Comment }) {
                         color: vote === Vote.U ? "green" : "#aaa",
                     }}
                 >
-                    <ArrowDropUp className={!vote ? "icon-white-onhover" : ""} />
+                    <ArrowDropUp className={!vote ? "hover:!text-[#fff]" : ""} />
                     {up}
                 </Typography>
             </Button>
             <Button
-                className="nopadding nomargin vb-btn vb-btn-right"
+                className="!p-0 !m-0 vb-btn vb-btn-right"
                 disabled={!user || !!vote}
                 onClick={() => {
                     sendVote(Vote.D);
@@ -70,7 +70,7 @@ export default function VoteButtons(props: { comment: Comment }) {
                         color: vote === Vote.D ? "red" : "#aaa",
                     }}
                 >
-                    <ArrowDropDown className={!vote ? "icon-white-onhover" : ""} />
+                    <ArrowDropDown className={!vote ? "hover:!text-[#fff]" : ""} />
                     {down}
                 </Typography>
             </Button>

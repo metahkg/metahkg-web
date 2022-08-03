@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.5.0
+
+- migrate to tailwindcss
+
 ## v3.4.0
 
 - filter swear words option

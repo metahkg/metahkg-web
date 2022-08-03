@@ -16,10 +16,10 @@ export default function Dock(props: {
         <Box>
             {isSmallScreen && (
                 <Box
-                    className="flex fullwidth dock-root"
+                    className="flex w-full dock-root"
                     sx={{ bgcolor: "primary.dark", height: 60 }}
                 >
-                    <Box className="flex justify-space-between fullwidth ml20 mr20 align-center">
+                    <Box className="flex justify-between w-full !ml-[20px] !mr-[20px] items-center">
                         <SideBar />
                         {btns.map((btn, index) => (
                             <IconButton key={index} onClick={btn.action}>

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import "./css/common.css";
 import "./css/App.css";
-import Theme from "./lib/theme";
+import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
@@ -51,9 +50,9 @@ export default function App() {
 
     useEffect(() => {
         try {
-            console.log("registering service worker");
-
             if (process.env.REACT_APP_ENV === "dev") return unregister();
+
+            console.log("registering service worker");
 
             register({
                 onUpdate: (registration) => {
@@ -100,7 +99,7 @@ export default function App() {
             <Notification />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
             <Box
-                className="max-height-fullvh height-fullvh"
+                className="max-h-screen h-screen"
                 sx={{ bgcolor: "primary.dark" }}
             >
                 <Router>

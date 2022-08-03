@@ -171,14 +171,14 @@ export default function MenuBody(props: { selected: number }) {
 
     if (menuMode === "search" && !query)
         return (
-            <Typography className={"text-align-center mt10"} color={"secondary"}>
+            <Typography className={"text-center !mt-[10px]"} color={"secondary"}>
                 Please enter a query.
             </Typography>
         );
 
     return (
         <Paper
-            className="nobgimage noshadow overflow-auto"
+            className="!bg-none !shadow-none overflow-auto"
             style={{
                 maxHeight: `calc(100vh - ${
                     { search: 151, recall: 51, category: 91, profile: 91 }[menuMode]
@@ -187,9 +187,9 @@ export default function MenuBody(props: { selected: number }) {
             onScroll={onScroll}
             ref={paperRef}
         >
-            <Box className="min-height-full menu-bottom flex flex-dir-column">
+            <Box className="min-h-full menu-bottom flex flex-col">
                 {Boolean(data.length) && (
-                    <Box className="flex flex-dir-column max-width-full menu-bottom">
+                    <Box className="flex flex-col max-w-full menu-bottom">
                         {data.map((thread, index) => (
                             <Box key={index}>
                                 <MenuThread
@@ -228,7 +228,7 @@ export default function MenuBody(props: { selected: number }) {
                 {loading && <MenuPreload />}
                 {end && (
                     <Typography
-                        className="mt10 mb40 text-align-center font-size-20-force"
+                        className="!mt-[10px] !mb-[40px] text-center !text-[20px]"
                         sx={{
                             color: "secondary.main",
                         }}

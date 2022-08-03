@@ -1,4 +1,3 @@
-import "../css/pages/create.css";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
@@ -127,32 +126,32 @@ export default function Create() {
 
     return (
         <Box
-            className="flex fullwidth min-height-fullvh justify-center max-width-full"
+            className="flex w-full min-h-screen justify-center max-w-full"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
-            <Box style={{ width: isSmallSmallScreen ? "100vw" : "80vw" }}>
-                <Box className="m20">
-                    <Box className="flex align-center">
+            <Box className={isSmallScreen ? "w-100v" : "w-80v"}>
+                <Box className="m-[20px]">
+                    <Box className="flex items-center">
                         <MetahkgLogo
                             svg
                             height={50}
                             width={40}
                             light
-                            className="mr10 mb10"
+                            className="!mr-[10px] !mb-[10px]"
                         />
                         <h1>Create thread</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="mb15" severity={alert.severity}>
+                        <Alert className="!mb-[15px]" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
-                    <Box className={`mb15 ${isSmallScreen ? "" : "flex "}`}>
+                    <Box className={`mb-[15px] ${isSmallScreen ? "" : "flex "}`}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
-                            className={isSmallScreen ? "mt15" : "ml15"}
+                            className={isSmallScreen ? "!mt-[15px]" : "!ml-[15px]"}
                             variant="filled"
                             color="secondary"
                             fullWidth
@@ -163,7 +162,6 @@ export default function Create() {
                         />
                     </Box>
                     <TextEditor
-                        key={Number(isSmallScreen)}
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
@@ -171,10 +169,10 @@ export default function Create() {
                         toolbarSticky
                     />
                     <Box
-                        className={`mt15 ${
+                        className={`mt-[15px] ${
                             isSmallSmallScreen
                                 ? ""
-                                : "flex fullwidth justify-space-between align-center"
+                                : "flex w-full justify-between items-center"
                         }`}
                     >
                         <ReCAPTCHA
@@ -190,13 +188,13 @@ export default function Create() {
                                 !(comment && threadTitle && rtoken && catchoosed)
                             }
                             className={`${
-                                isSmallSmallScreen ? "mt15 " : ""
-                            }font-size-16-force create-btn novpadding notexttransform`}
+                                isSmallSmallScreen ? "!mt-[15px] " : ""
+                            }!text-[16px] !h-[40px] !py-0 !normal-case`}
                             onClick={create}
                             variant="contained"
                             color="secondary"
                         >
-                            <CreateIcon className="mr5 font-size-16-force" />
+                            <CreateIcon className="!mr-[5px] !text-[16px]" />
                             Create
                         </Button>
                     </Box>

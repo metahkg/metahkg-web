@@ -8,6 +8,7 @@ import {
     IconButton,
     Snackbar,
 } from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
@@ -103,8 +104,9 @@ export default function FloatingEditor() {
     return (
         <Snackbar
             sx={{ zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important` }}
-            className="border-radius-20"
+            className="rounded-[20px]"
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
+            onClose={handleClose}
             open={editor.open}
             key={editor?.quote?.id || editor.edit || 0}
         >
@@ -116,29 +118,27 @@ export default function FloatingEditor() {
                     bgcolor: "primary.dark",
                     overflow: "auto",
                 }}
-                className="border-radius-15"
+                className="rounded-[15px]"
             >
-                <DialogTitle className="flex justify-space-between align-center nopadding">
-                    <p className="ml20 mt10 mb10">{editor.quote ? "Reply" : "Comment"}</p>
+                <DialogTitle className="flex justify-between items-center !p-0">
+                    <p className="!ml-[20px] !mt-[10px] !mb-[10px]">
+                        {editor.quote ? "Reply" : "Comment"}
+                    </p>
                     <Box className="flex">
-                        <p
-                            className="novmargin pointer mr10 metahkg-yellow"
+                        <IconButton
+                            className="!my-0 cursor-pointer !mr-[10px] metahkg-yellow"
                             onClick={() => {
                                 setFold(!fold);
                             }}
                         >
-                            {fold ? "Expand" : "Fold"}
-                        </p>
-                        <IconButton className="mr5" onClick={handleClose}>
-                            <Close className="font-size-18-force" />
+                            {fold ? <ExpandMore /> : <ExpandLess />}
+                        </IconButton>
+                        <IconButton className="!mr-[5px]" onClick={handleClose}>
+                            <Close className="!text-[18px]" />
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                <Box
-                    className={`border-radius-20 flex flex-dir-column ${
-                        fold ? "display-none" : ""
-                    }`}
-                >
+                <Box className={`rounded-[20px] flex flex-col ${fold ? "hidden" : ""}`}>
                     {editor.quote && (
                         <Comment
                             comment={editor.quote}
@@ -148,7 +148,7 @@ export default function FloatingEditor() {
                             noStory
                             noQuote
                             noFullWidth
-                            className="mb10 ml10 mr10"
+                            className="!mb-[10px] !ml-[10px] !mr-[10px]"
                             sx={{ "& > div": { borderRadius: 2 } }}
                             maxHeight={200}
                         />
@@ -165,12 +165,12 @@ export default function FloatingEditor() {
                         noMenuBar
                         noStatusBar
                         toolbarBottom
-                        className="ml10 mr10"
+                        className="!ml-[10px] !mr-[10px]"
                     />
                     <Box
                         className={`${
                             isSmallScreen ? "" : "flex"
-                        } justify-space-between align-center m10`}
+                        } justify-between items-center m10`}
                     >
                         <ReCAPTCHA
                             theme="dark"
@@ -182,7 +182,7 @@ export default function FloatingEditor() {
                         {creating ? (
                             <CircularProgress
                                 color="secondary"
-                                className={isSmallScreen ? "mt10" : ""}
+                                className={isSmallScreen ? "!mt-[10px]" : ""}
                                 disableShrink
                             />
                         ) : (
@@ -191,9 +191,9 @@ export default function FloatingEditor() {
                                 color="secondary"
                                 onClick={CreateComment}
                                 disabled={!rtoken || !comment}
-                                className={isSmallScreen ? "mt10" : ""}
+                                className={isSmallScreen ? "!mt-[10px]" : ""}
                             >
-                                <CommentIcon className="mr5" />
+                                <CommentIcon className="!mr-[5px]" />
                                 Comment
                             </Button>
                         )}

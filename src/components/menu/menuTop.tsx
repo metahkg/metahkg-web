@@ -68,7 +68,7 @@ export default function MenuTop(props: {
         <Box>
             {/*title and refresh and add button*/}
             <Box
-                className="fullwidth menutop-root"
+                className="w-full menutop-root"
                 sx={{
                     bgcolor: "primary.main",
                     height: menuMode === "recall" || noTitleBar ? 50 : 90,
@@ -76,18 +76,18 @@ export default function MenuTop(props: {
             >
                 {!noTitleBar && (
                     <Box
-                        className={`flex fullwidth align-center menutop-top justify-${
-                            isSmallScreen ? "center" : "space-between"
+                        className={`flex w-full items-center menutop-top justify-${
+                            isSmallScreen ? "center" : "between"
                         }`}
                     >
                         {!isSmallScreen && (
-                            <Box className="ml10 mr40">
+                            <Box className="!ml-[10px] !mr-[40px]">
                                 <SideBar />
                             </Box>
                         )}
                         <Typography
                             sx={{ color: "secondary.main" }}
-                            className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
+                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-overflow-ellipsis overflow-hidden"
                         >
                             {menuTitle || inittitle}
                         </Typography>
@@ -95,13 +95,13 @@ export default function MenuTop(props: {
                             <Box className="flex">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
-                                        <AutorenewIcon className="force-white" />
+                                        <AutorenewIcon className="!text-white" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Create thread" arrow>
                                     <Link className="flex" to="/create">
-                                        <IconButton className="mr10">
-                                            <AddIcon className="force-white" />
+                                        <IconButton className="!mr-[10px]">
+                                            <AddIcon className="!text-white" />
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
@@ -113,10 +113,10 @@ export default function MenuTop(props: {
                 {Boolean(tabs.length) && (
                     <Box
                         sx={{ height: noTitleBar ? 50 : 40 }}
-                        className="flex fullwidth align-flex-end"
+                        className="flex w-full items-end"
                     >
                         <Tabs
-                            className="fullwidth"
+                            className="w-full"
                             value={props.selected}
                             textColor="secondary"
                             indicatorColor="secondary"
@@ -128,7 +128,7 @@ export default function MenuTop(props: {
                             {tabs.map((tab, index) => (
                                 <Tab
                                     key={index}
-                                    className="font-size-15-force notexttransform"
+                                    className="!text-[15px] !normal-case"
                                     value={index}
                                     label={tab}
                                     disableRipple

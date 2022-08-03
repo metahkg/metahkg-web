@@ -28,7 +28,7 @@ export default function ChooseCat(props: {
     return (
         <Box>
             {categories.length && (
-                <FormControl className="create-choosecat-form">
+                <FormControl className="!min-w-[200px]">
                     <InputLabel color="secondary">Category</InputLabel>
                     <Select
                         color="secondary"

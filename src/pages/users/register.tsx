@@ -1,4 +1,3 @@
-import "../../css/pages/users/register.css";
 import React, { useLayoutEffect, useState } from "react";
 import hash from "hash.js";
 import {
@@ -33,6 +32,7 @@ import queryString from "query-string";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { UserSex } from "@metahkg/api";
+import { css } from "../../lib/css";
 
 declare const grecaptcha: { reset: () => void };
 
@@ -52,7 +52,7 @@ function SexSelect(props: {
         setSex(e.target.value ? "M" : "F");
     };
     return (
-        <FormControl className="register-sex-form">
+        <FormControl className="!min-w-[200px]">
             <InputLabel color="secondary">Gender</InputLabel>
             <Select
                 color="secondary"
@@ -158,20 +158,15 @@ export default function Register() {
 
     return (
         <Box
-            className="register-root flex fullwidth fullheight justify-center align-center"
+            className="min-h-screen flex w-full h-full justify-center items-center"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
-            <Box
-                className="register-main-box"
-                sx={{
-                    width: small ? "100vw" : "50vw",
-                }}
-            >
-                <Box component="form" onSubmit={onSubmit} className="m40">
+            <Box className={`min-h-50v ${small ? "w-100v" : "w-50v"}`}>
+                <Box component="form" onSubmit={onSubmit} className="m-[40px]">
                     {query.returnto && (
-                        <Box className="flex align-center justify-flex-end">
+                        <Box className="flex items-center justify-end">
                             <IconButton
                                 onClick={() => {
                                     navigate(String(query.returnto));
@@ -181,18 +176,18 @@ export default function Register() {
                             </IconButton>
                         </Box>
                     )}
-                    <Box className="flex justify-center align-center">
-                        <MetahkgLogo svg light height={50} width={40} className="mb10" />
-                        <h1 className="font-size-25 mb20 nohmargin">Register</h1>
+                    <Box className="flex justify-center items-center">
+                        <MetahkgLogo svg light height={50} width={40} className="!mb-[10px]" />
+                        <h1 className="text-[25px] !mb-[20px] mx-0">Register</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="mb15 mt10" severity={alert.severity}>
+                        <Alert className="!mb-[15px] !mt-[10px]" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
                     {inputs.map((props, index) => (
                         <TextField
-                            className="mb15"
+                            className="!mb-[15px]"
                             key={index}
                             {...props}
                             color="secondary"
@@ -203,11 +198,11 @@ export default function Register() {
                         />
                     ))}
                     <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
-                    <Box className="mt15 mb15">
+                    <Box className="!mt-[15px] !mb-[15px]">
                         <Typography
                             component={Link}
                             to="/users/verify"
-                            className="link bold-force"
+                            className={`${css.link} !font-bold`}
                             sx={(theme) => ({
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
@@ -219,8 +214,8 @@ export default function Register() {
                         className={`${
                             small
                                 ? ""
-                                : "flex fullwidth justify-space-between align-center"
-                        } mt15`}
+                                : "flex w-full justify-between items-center"
+                        } !mt-[15px]`}
                     >
                         <ReCAPTCHA
                             theme="dark"
@@ -232,11 +227,11 @@ export default function Register() {
                         <Button
                             disabled={disabled || !rtoken}
                             type="submit"
-                            className="font-size-16-force text-transform-none register-btn"
+                            className="!text-[16px] !normal-case h-[40px]"
                             color="secondary"
                             variant="contained"
                         >
-                            <HowToReg className="mr5 font-size-17-force" />
+                            <HowToReg className="!mr-[5px] !text-[17px]" />
                             Register
                         </Button>
                     </Box>

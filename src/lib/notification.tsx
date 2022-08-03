@@ -1,4 +1,3 @@
-import "../css/lib/notification.css";
 import React from "react";
 import { Close, Notifications } from "@mui/icons-material";
 import { Box, Snackbar } from "@mui/material";
@@ -12,7 +11,7 @@ export function Notification() {
     const open = notification.open;
     return (
         <Snackbar
-            className="border-radius-8 notification-root"
+            className="rounded-[8px] w-[300px]"
             sx={{
                 bgcolor: "primary.main",
             }}
@@ -26,18 +25,18 @@ export function Notification() {
                 setNotification({ ...notification, open: false });
             }}
         >
-            <Box className="fullwidth pointer border-radius-8 notification-mainbox">
-                <Box className="flex fullwidth font-size-14 notification-top">
-                    <Box className="ml15 flex align-center fullwidth justify-space-between">
-                        <Box className="flex align-center">
-                            <Notifications className="metahkg-grey-force font-size-14-force" />
-                            <p className="metahkg-grey ml10 mt6 mb6">Notification</p>
+            <Box className="w-full cursor-pointer rounded-[8px] bg-[#444]">
+                <Box className="flex w-full text-[14px] bg-[#333] rounded-tl-[8px] rounded-tr-[8px]">
+                    <Box className="!ml-[15px] flex items-center w-full justify-between">
+                        <Box className="flex items-center">
+                            <Notifications className="!text-metahkg-grey !text-[14px]" />
+                            <p className="text-metahkg-grey !ml-[10px] mt6 mb6">Notification</p>
                         </Box>
-                        <Close className="icon-white-onhover metahkg-grey-force font-size-16-force mr12" />
+                        <Close className="hover:!text-[#fff] !text-metahkg-grey !text-[16px] !mr-[12px]" />
                     </Box>
                 </Box>
-                <Box className="fullwidth notification-bottom border-radius-8">
-                    <p className="m15 text-overflow-ellipsis overflow-hidden font-size-15 notification-text">
+                <Box className="w-full rounded-[8px]">
+                    <p className="m15 text-overflow-ellipsis overflow-hidden text-[15px] leading-[19px] max-h-[38px]">
                         {notification.text}
                     </p>
                 </Box>

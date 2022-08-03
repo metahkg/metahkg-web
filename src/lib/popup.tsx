@@ -59,28 +59,28 @@ export function PopUp(props: {
                 <React.Fragment>
                     <DialogTitle
                         sx={{ minWidth: 270, bgcolor: "primary.main" }}
-                        className="pr0 pl0 flex pt5 pb5 justify-space-between align-center"
+                        className="pr0 pl0 flex !pt-[5px] !pb-[5px] justify-between items-center"
                     >
-                        <p className="ml20 novmargin">{title}</p>
-                        <IconButton className="mr5" onClick={handleClose}>
-                            <Close className="font-size-18-force" />
+                        <p className="!ml-[20px] !my-0">{title}</p>
+                        <IconButton className="!mr-[5px]" onClick={handleClose}>
+                            <Close className="!text-[18px]" />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                 </React.Fragment>
             )}
-            <DialogContent className="nopadding">
+            <DialogContent className="!p-0">
                 <Box
-                    className={`fullwidth flex flex-dir-column justify-center text-align-center ${
-                        title ? "mt5" : ""
-                    } ${buttons?.length ? "mb5" : ""}`}
+                    className={`w-full flex flex-col justify-center text-center ${
+                        title ? "!mt-[5px]" : ""
+                    } ${buttons?.length ? "!mb-[5px]" : ""}`}
                 >
                     {children}
                 </Box>
                 {!!buttons?.length && (
                     <React.Fragment>
                         <Divider />
-                        <Box className="flex fullwidth">
+                        <Box className="flex w-full">
                             {buttons?.map(
                                 (button, index) =>
                                     button && (
@@ -91,7 +91,7 @@ export function PopUp(props: {
                                                 to: button.link,
                                             })}
                                             onClick={button.action}
-                                            className="notexttransform font-size-18-force notextdecoration fullwidth"
+                                            className="!normal-case !text-[18px] !no-underline w-full"
                                             sx={(theme) => ({
                                                 color: `${theme.palette.secondary.main} !important`,
                                             })}

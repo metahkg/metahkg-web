@@ -127,7 +127,7 @@ function Conversation(props: { id: number }) {
     return useMemo(
         () => (
             <Box
-                className="min-height-fullvh conversation-root"
+                className="min-h-screen conversation-root"
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
@@ -164,7 +164,7 @@ function Conversation(props: { id: number }) {
                         />
                     )}
                     {loading && (
-                        <LinearProgress className="fullwidth" color="secondary" />
+                        <LinearProgress className="w-full" color="secondary" />
                     )}
                     <Title
                         category={thread?.category}
@@ -175,13 +175,13 @@ function Conversation(props: { id: number }) {
                     <Paper
                         ref={cRoot}
                         key={Number(reRender)}
-                        className={`overflow-auto nobgimage noshadow conversation-paper${
+                        className={`overflow-auto !bg-none !shadow-none conversation-paper${
                             thread?.pin ? "-pin" : ""
                         }${loading ? "-loading" : ""}`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}
                     >
-                        <Box className="fullwidth max-height-full max-width-full">
+                        <Box className="w-full max-height-full max-w-full">
                             {ready &&
                                 [...Array(pages)].map((p, index) => {
                                     const page =
@@ -246,7 +246,7 @@ function Conversation(props: { id: number }) {
                         </Box>
                         <Box
                             ref={cBottom}
-                            className="flex justify-center align-center conversation-bottom"
+                            className="flex justify-center items-center conversation-bottom"
                             sx={{
                                 bgcolor: "primary.dark",
                             }}

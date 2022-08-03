@@ -1,4 +1,3 @@
-import "../../css/pages/users/login.css";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import hash from "hash.js";
@@ -17,6 +16,7 @@ import { Login as LoginIcon } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
+import { css } from "../../lib/css";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -32,6 +32,8 @@ export default function Login() {
     });
     const navigate = useNavigate();
 
+    const query = queryString.parse(window.location.search);
+    
     useEffect(() => {
         if (query?.continue) {
             setAlert({ severity: "info", text: "Login to continue." });
@@ -47,7 +49,6 @@ export default function Login() {
 
     if (user) return <Navigate to="/" replace />;
 
-    const query = queryString.parse(window.location.search);
 
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -78,27 +79,24 @@ export default function Login() {
 
     return (
         <Box
-            className="flex align-center justify-center fullwidth min-height-fullvh"
+            className="flex items-center justify-center w-full min-h-screen"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
             <Box
-                className="login-main-box"
-                sx={{
-                    width: isSmallScreen ? "100vw" : "50vw",
-                }}
+                className={`min-h-50v ${isSmallScreen ? "w-100v" : "w-50v"}`}
                 component="form"
                 onSubmit={onSubmit}
             >
-                <Box className="ml50 mr50">
-                    <Box className="flex fullwidth justify-flex-end">
+                <Box className="mx-[50px]">
+                    <Box className="flex w-full justify-end">
                         <Link
-                            className="notextdecoration"
+                            className="!no-underline"
                             to={`/users/register${window.location.search}`}
                         >
                             <Button
-                                className="flex notexttransform font-size-18-force"
+                                className="flex !normal-case !text-[18px]"
                                 color="secondary"
                                 variant="text"
                             >
@@ -106,12 +104,12 @@ export default function Login() {
                             </Button>
                         </Link>
                     </Box>
-                    <Box className="flex justify-center align-center">
-                        <MetahkgLogo height={50} width={40} svg light className="mb10" />
-                        <h1 className="font-size-25 mb20">Login</h1>
+                    <Box className="flex justify-center items-center">
+                        <MetahkgLogo height={50} width={40} svg light className="!mb-[10px]" />
+                        <h1 className="text-[25px] !mb-[20px]">Login</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="mb15 mt10" severity={alert.severity}>
+                        <Alert className="!mb-[15px] !mt-[10px]" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
@@ -121,7 +119,7 @@ export default function Login() {
                     ].map((item, index) => (
                         <TextField
                             key={index}
-                            className={!index ? "mb15" : ""}
+                            className={!index ? "!mb-[15px]" : ""}
                             color="secondary"
                             type={item.type}
                             label={item.label}
@@ -133,11 +131,11 @@ export default function Login() {
                             fullWidth
                         />
                     ))}
-                    <Box className="mt15 mb15">
+                    <Box className="my-[15px]">
                         <Typography
                             component={Link}
                             to="/users/verify"
-                            className="link bold-force"
+                            className={`${css.link} !font-bold`}
                             sx={(theme) => ({
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
@@ -147,12 +145,12 @@ export default function Login() {
                     </Box>
                     <Button
                         disabled={disabled || !(name && pwd)}
-                        className="font-size-16-force notexttransform login-btn"
+                        className="!text-[16px] !normal-case h-[40px]"
                         color="secondary"
                         variant="contained"
                         type="submit"
                     >
-                        <LoginIcon className="mr5 font-size-16-force" />
+                        <LoginIcon className="!mr-[5px] !text-[16px]" />
                         Login
                     </Button>
                 </Box>

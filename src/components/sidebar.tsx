@@ -65,7 +65,7 @@ export default function SideBar() {
         <Box>
             <Box>
                 <IconButton className="sidebar-menu-btn" onClick={toggleDrawer(true)}>
-                    <MenuIcon className="force-white" />
+                    <MenuIcon className="!text-white" />
                 </IconButton>
             </Box>
             <Drawer
@@ -79,14 +79,14 @@ export default function SideBar() {
                     },
                 }}
             >
-                <Box className="sidebar-box max-width-full" role="presentation">
-                    <Box className="fullwidth">
-                        <List className="fullwidth">
+                <Box className="sidebar-box max-w-full" role="presentation">
+                    <Box className="w-full">
+                        <List className="w-full">
                             <ListItemButton
                                 onClick={onClick}
                                 component={"a"}
                                 href="https://war.ukraine.ua/support-ukraine/"
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                             >
                                 <ListItemIcon>
                                     <MetahkgLogo height={24} width={30} ua />
@@ -94,7 +94,7 @@ export default function SideBar() {
                                 <ListItemText>Support Ukraine</ListItemText>
                             </ListItemButton>
                         </List>
-                        <Box className="ml10 mr10">
+                        <Box className="!ml-[10px] !mr-[10px]">
                             <SearchBar
                                 query={query}
                                 onChange={(e) => {
@@ -131,7 +131,7 @@ export default function SideBar() {
                                 component={Link}
                                 onClick={onClick}
                                 to={item.link}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
                                 <ListItemText>{item.title}</ListItemText>
@@ -147,7 +147,7 @@ export default function SideBar() {
                             cats && (
                                 <Box key={index}>
                                     <Box
-                                        className={`m20${user && !index ? " mb10" : ""}${
+                                        className={`m20${user && !index ? " !mb-[10px]" : ""}${
                                             index ? " mt0" : ""
                                         }`}
                                     >
@@ -155,10 +155,10 @@ export default function SideBar() {
                                             <Link
                                                 key={index}
                                                 to={`/category/${category.id}`}
-                                                className="notextdecoration"
+                                                className="!no-underline"
                                             >
                                                 <Typography
-                                                    className="font-size-16-force text-align-left halfwidth sidebar-catlink"
+                                                    className="!text-[16px] text-left w-1/2 sidebar-catlink"
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&
@@ -198,7 +198,7 @@ export default function SideBar() {
                                 component={"a"}
                                 key={index}
                                 onClick={onClick}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                                 href={item.link}
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -211,7 +211,7 @@ export default function SideBar() {
                         {user && (
                             <ListItemButton
                                 component={Link}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                                 to={`/profile/${user?.id}`}
                                 onClick={onClick}
                             >
@@ -234,7 +234,7 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     {process.env.REACT_APP_version && (
-                        <p className="ml5">
+                        <p className="!ml-[5px]">
                             Metahkg Web{" "}
                             {process.env.REACT_APP_build && (
                                 <a

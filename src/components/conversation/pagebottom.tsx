@@ -7,15 +7,15 @@ import DiscordIcon from "../../lib/icons/dicord";
 export default function PageBottom() {
     const socialIcons = [
         {
-            icon: <GitlabIcon className="metahkg-grey-force" height={16} width={16} />,
+            icon: <GitlabIcon className="!text-metahkg-grey" height={16} width={16} />,
             link: "https://gitlab.com/metahkg",
         },
         {
-            icon: <GitHub className="font-size-17-force metahkg-grey-force" />,
+            icon: <GitHub className="!text-[17px] !text-metahkg-grey" />,
             link: "https://github.com/metahkg",
         },
         {
-            icon: <Telegram className="font-size-17-force metahkg-grey-force" />,
+            icon: <Telegram className="!text-[17px] !text-metahkg-grey" />,
             link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
         {
@@ -23,41 +23,41 @@ export default function PageBottom() {
                 <DiscordIcon
                     height={17}
                     width={17}
-                    className="font-size-17-force metahkg-grey-force"
+                    className="!text-[17px] !text-metahkg-grey"
                     color={"#aca9a9"}
                 />
             ),
             link: "https://discord.gg/yrf2v8KGdc",
         },
         {
-            icon: <Reddit className="font-size-17-force metahkg-grey-force" />,
+            icon: <Reddit className="!text-[17px] !text-metahkg-grey" />,
             link: "https://reddit.com/r/metahkg",
         },
     ];
     return (
         <Box
             sx={{ marginBottom: 10 }}
-            className="font-size-14 metahkg-grey-force text-align-center flex flex-dir-column justify-center align-center max-width-full max-height-full mt10"
+            className="text-[14px] !text-metahkg-grey text-center flex flex-col justify-center items-center max-w-full max-height-full !mt-[10px]"
         >
             <Box className="flex">
                 {socialIcons.map((icon, index) => (
                     <a
                         key={index}
-                        className={`metahkg-grey-force notextdecoration${
+                        className={`!text-metahkg-grey !no-underline${
                             index !== socialIcons.length - 1 ? " mr7" : ""
                         }`}
                         href={icon.link}
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <IconButton className="nopadding">{icon.icon}</IconButton>
+                        <IconButton className="!p-0">{icon.icon}</IconButton>
                     </a>
                 ))}
             </Box>
             <Box className="mt8">
                 Copyright (c) 2022 Metahkg.{" "}
                 <a
-                    className="metahkg-grey-force"
+                    className="!text-metahkg-grey"
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"
