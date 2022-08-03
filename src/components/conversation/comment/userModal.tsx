@@ -14,7 +14,7 @@ export default function UserModal(props: {
     const [blockList, setBlockList] = useBlockList();
     const [, setNotification] = useNotification();
     const blocked = Boolean(blockList.find((i) => i.id === commentUser.id));
-    const [user] = useUser()
+    const [user] = useUser();
 
     return (
         <PopUp
@@ -23,30 +23,32 @@ export default function UserModal(props: {
             title="User information"
             buttons={[
                 { text: "View Profile", link: `/profile/${commentUser.id}` },
-                user ? {
-                    text: blocked ? "Unblock" : "Block",
-                    action: () => {
-                        (blocked
-                            ? api.meUnblock({ id: commentUser.id })
-                            : api.meBlock({ id: commentUser.id })
-                        )
-                            .then(() => {
-                                setNotification({
-                                    open: true,
-                                    text: `${blocked ? "Unblocked" : "Blocked"} ${
-                                        commentUser.name
-                                    }`,
-                                });
-                                api.meBlocked().then(setBlockList);
-                            })
-                            .catch((err) => {
-                                setNotification({
-                                    open: true,
-                                    text: parseError(err),
-                                });
-                            });
-                    },
-                } : undefined,
+                user
+                    ? {
+                          text: blocked ? "Unblock" : "Block",
+                          action: () => {
+                              (blocked
+                                  ? api.meUnblock({ id: commentUser.id })
+                                  : api.meBlock({ id: commentUser.id })
+                              )
+                                  .then(() => {
+                                      setNotification({
+                                          open: true,
+                                          text: `${blocked ? "Unblocked" : "Blocked"} ${
+                                              commentUser.name
+                                          }`,
+                                      });
+                                      api.meBlocked().then(setBlockList);
+                                  })
+                                  .catch((err) => {
+                                      setNotification({
+                                          open: true,
+                                          text: parseError(err),
+                                      });
+                                  });
+                          },
+                      }
+                    : undefined,
             ]}
         >
             <p className="text-center !mt-[5px] !mb-[5px] text-[20px]">
