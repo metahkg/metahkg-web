@@ -14,9 +14,11 @@ export default function PageSelect(props: {
 }) {
     const { pages, page, onSelect, onLastClicked, onNextClicked, last, next } = props;
     return (
-        <Box className="pageselect-root flex flex-col">
+        <Box
+            className="absolute bottom-[60px] right-[40px] z-20 flex flex-col"
+        >
             {last && (
-                <Box className="pageselect-top flex items-center justify-center">
+                <Box className="h-[40px] w-[50px] rounded-t-1/2 bg-[#333] flex items-center justify-center">
                     <IconButton onClick={onLastClicked}>
                         <ArrowDropUp />
                     </IconButton>
@@ -34,6 +36,7 @@ export default function PageSelect(props: {
                     variant="standard"
                     className="pageselect-select !p-0 flex items-center justify-center"
                     disableUnderline
+                    sx={{ borderRadius: last || next ? "0" : "50%" }}
                 >
                     {[...Array(pages)].map((_p, index) => (
                         <MenuItem key={index} value={index + 1}>

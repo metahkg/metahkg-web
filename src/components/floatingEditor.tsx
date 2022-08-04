@@ -106,7 +106,6 @@ export default function FloatingEditor() {
             sx={{ zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important` }}
             className="rounded-[20px]"
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
-            onClose={handleClose}
             open={editor.open}
             key={editor?.quote?.id || editor.edit || 0}
         >
