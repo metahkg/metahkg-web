@@ -56,7 +56,7 @@ export default function App() {
 
             register({
                 onUpdate: async (registration) => {
-                    registration.waiting?.postMessage("skipWaiting");
+                    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                     window.location.reload();
                 },
                 onSuccess: (registration) => {
@@ -75,7 +75,7 @@ export default function App() {
                         registration.addEventListener("updatefound", () => {
                             console.log("update found");
                             console.log("service worker skip waiting");
-                            registration.waiting?.postMessage("skipWaiting");
+                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                             window.location.reload();
                         });
 
