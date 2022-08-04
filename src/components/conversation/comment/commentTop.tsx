@@ -224,7 +224,7 @@ export default function CommentTop(props: {
                     #{comment.id}
                 </Typography>
                 <p
-                    className="leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full min-w-[50px]"
+                    className="leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full min-w-[50px] hover:underline"
                     onClick={() => {
                         setOpen(true);
                     }}
