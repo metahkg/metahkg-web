@@ -143,7 +143,7 @@ export function unregister() {
     }
 }
 
-export async function skipWaiting () {
+export async function skipWaiting() {
     if ("serviceWorker" in navigator) {
         await navigator.serviceWorker.ready
             .then((registration) => {
