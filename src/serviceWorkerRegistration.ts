@@ -142,3 +142,15 @@ export function unregister() {
             });
     }
 }
+
+export async function skipWaiting() {
+    if ("serviceWorker" in navigator) {
+        await navigator.serviceWorker.ready
+            .then((registration) => {
+                registration.waiting?.postMessage("skipWaiting");
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+    }
+}

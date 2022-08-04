@@ -17,7 +17,7 @@ import { api } from "./lib/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
-import { register, unregister } from "./serviceWorkerRegistration";
+import { register, unregister, skipWaiting } from "./serviceWorkerRegistration";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -55,38 +55,14 @@ export default function App() {
             console.log("registering service worker");
 
             register({
-                onUpdate: (registration) => {
-                    setAlertDialog({
-                        ...alertDialog,
-                        title: "New version available",
-                        message: "Click to update",
-                        btns: [
-                            {
-                                text: "Update",
-                                action: () => {
-                                    if (registration.waiting) {
-                                        registration.waiting.postMessage({
-                                            type: "SKIP_WAITING",
-                                        });
-                                        window.location.reload();
-                                    }
-                                },
-                            },
-                            {
-                                text: "Cancel",
-                                action: () => {
-                                    setAlertDialog({
-                                        ...alertDialog,
-                                        open: false,
-                                    });
-                                },
-                            },
-                        ],
-                    });
+                onUpdate: async (registration) => {
+                    await skipWaiting();
+                    window.location.reload();
                 },
                 onSuccess: (registration) => {
-                    console.log("updating...")
+                    console.log("updating...");
                     registration.update();
+                    setInterval(registration.update, 1000 * 60 * 10);
                 },
             });
         } catch {
