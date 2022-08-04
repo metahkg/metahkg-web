@@ -17,7 +17,7 @@ import { api } from "./lib/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
-import { register, unregister, skipWaiting } from "./serviceWorkerRegistration";
+import { register, unregister } from "./serviceWorkerRegistration";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -28,7 +28,7 @@ export default function App() {
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
     const [user] = useUser();
-    const [alertDialog, setAlertDialog] = useAlertDialog();
+    const [alertDialog] = useAlertDialog();
     const [, setBlocked] = useBlockList();
 
     useEffect(() => {
@@ -56,19 +56,38 @@ export default function App() {
 
             register({
                 onUpdate: async (registration) => {
-                    await skipWaiting();
+                    registration.waiting?.postMessage("skipWaiting");
                     window.location.reload();
                 },
-                onSuccess: (registration) => {
-                    console.log("updating...");
-                    registration.update();
-                    setInterval(registration.update, 1000 * 60 * 10);
+                onSuccess: async (registration) => {
+                    console.log("service worker registered");
                 },
             });
+
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.ready
+                    .then(async (registration) => {
+                        console.log("updating service worker");
+
+                        await registration.update();
+
+                        registration.addEventListener("updatefound", () => {
+                            console.log("update found");
+                            console.log("service worker skip waiting");
+                            registration.waiting?.postMessage("skipWaiting");
+                            window.location.reload();
+                        });
+
+                        setInterval(registration.update, 1000 * 60 * 10);
+                    })
+                    .catch((error) => {
+                        console.error(error.message);
+                    });
+            }
         } catch {
             console.error("Service worker registration failed");
         }
-    }, [alertDialog, setAlertDialog]);
+    }, []);
 
     return (
         <Theme
