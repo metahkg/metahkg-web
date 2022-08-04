@@ -236,14 +236,15 @@ export default function SideBar() {
                     {process.env.REACT_APP_version && (
                         <p className="!ml-[5px]">
                             Metahkg Web{" "}
-                            {process.env.REACT_APP_build && (
+                            {(process.env.REACT_APP_build && (
                                 <a
                                     style={{ display: "inline" }}
                                     href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
                                 >
                                     {process.env.REACT_APP_build}
                                 </a>
-                            )}{" "}
+                            )) ||
+                                process.env.REACT_APP_date}{" "}
                             (v{process.env.REACT_APP_version})
                         </p>
                     )}
