@@ -17,7 +17,8 @@ export default function PageSelect(props: {
         <Box className="absolute bottom-[60px] right-[40px] z-20 flex flex-col">
             {last && (
                 <Box className="h-[40px] w-[50px] rounded-t-1/2 bg-[#333] flex items-center justify-center">
-           `1         <IconButton onClick={onLastClicked}>
+                    `1{" "}
+                    <IconButton onClick={onLastClicked}>
                         <ArrowDropUp />
                     </IconButton>
                 </Box>
