@@ -51,12 +51,12 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!menuTitle) {
             if (menuMode === "profile") {
-                api.usersProfileName(profile).then((data) => {
+                api.userName(profile).then((data) => {
                     setMenuTitle(data.name);
                     setTitle(`${data.name} | Metahkg`);
                 });
-            } else if (menuMode === "category" && (category || id)) {
-                api.category(category || `bytid${id}`).then((data) => {
+            } else if (menuMode === "category" && category) {
+                api.category(category).then((data) => {
                     setMenuTitle(data.name);
                     if (!id) setTitle(`${data.name} | Metahkg`);
                 });

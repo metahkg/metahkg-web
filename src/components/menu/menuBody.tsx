@@ -56,7 +56,7 @@ export default function MenuBody(props: { selected: number }) {
     useEffect(() => {
         if (
             (reFetch || (!loading && !data.length)) &&
-            { category: category || id, profile, search: query, recall: true }[menuMode]
+            { category: category, profile, search: query, recall: true }[menuMode]
         ) {
             data.length && setData([]);
             setReFetch(false);
@@ -75,26 +75,37 @@ export default function MenuBody(props: { selected: number }) {
 
             switch (menuMode) {
                 case "category":
-                    api.menuCategory(category || `bytid${id}`, selected as 0 | 1)
+                    api.categoryThreads(
+                        category,
+                        { 0: "latest", 1: "viral" }[selected] as "latest" | "viral"
+                    )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "profile":
-                    api.menuHistory(profile, selected as 0 | 1)
+                    api.userThreads(
+                        profile,
+                        { 0: "created", 1: "lastcomment" }[selected] as
+                            | "created"
+                            | "lastcomment"
+                    )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "search":
-                    api.menuSearch(
+                    api.threadsSearch(
                         encodeURIComponent(query),
-                        smode as 0 | 1,
-                        selected as 0 | 1 | 2
+                        { 0: "title", 1: "op" }[smode] as "title" | "op",
+                        { 0: "relevance", 1: "created", 2: "lastcomment" }[selected] as
+                            | "relevance"
+                            | "created"
+                            | "lastcomment"
                     )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "recall":
-                    api.menuThreads(history.map((item) => item.id).slice(0, 24))
+                    api.threads(history.map((item) => item.id).slice(0, 24))
                         .then(onSuccess)
                         .catch(onError);
                     break;
@@ -123,27 +134,40 @@ export default function MenuBody(props: { selected: number }) {
 
         switch (menuMode) {
             case "category":
-                api.menuCategory(category || `bytid${id}`, selected as 0 | 1, page + 1)
+                api.categoryThreads(
+                    category,
+                    { 0: "latest", 1: "viral" }[selected] as "latest" | "viral",
+                    page + 1
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "profile":
-                api.menuHistory(profile, selected as 0 | 1, page + 1)
+                api.userThreads(
+                    profile,
+                    { 0: "created", 1: "lastcomment" }[selected] as
+                        | "created"
+                        | "lastcomment",
+                    page + 1
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "search":
-                api.menuSearch(
+                api.threadsSearch(
                     encodeURIComponent(query),
-                    smode as 0 | 1,
-                    selected as 0 | 1 | 2,
+                    { 0: "title", 1: "op" }[smode] as "title" | "op",
+                    { 0: "relevance", 1: "created", 2: "lastcomment" }[selected] as
+                        | "relevance"
+                        | "created"
+                        | "lastcomment",
                     page + 1
                 )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "recall":
-                api.menuThreads(
+                api.threads(
                     history.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
                 )
                     .then(onSuccess)

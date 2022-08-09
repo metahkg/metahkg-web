@@ -48,7 +48,7 @@ export default function Profile() {
 
     useEffect(() => {
         if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
-            api.usersProfile(userId)
+            api.userProfile(userId)
                 .then((data) => {
                     setRequestedUser(data);
                     setTitle(`${data.name} | Metahkg`);
@@ -118,7 +118,7 @@ export default function Profile() {
                         }}
                     >
                         <img
-                            src={`/api/users/${requestedUser.id}/avatar`}
+                            src={`/api/user/${requestedUser.id}/avatar`}
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}

@@ -22,8 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.lh/
+/.lh/
+/.idea/
 
-.idea
-.eslintcache
-.husky
+/.eslintcache

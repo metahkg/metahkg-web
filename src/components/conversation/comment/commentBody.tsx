@@ -52,7 +52,7 @@ export default function CommentBody(props: {
                     <Box
                         className={`${
                             showQuote ? "cursor-pointer " : ""
-                        }comment-body-quote-div !p-0 text-metahkg-grey !ml-[0px]`}
+                        }border-solid border-[0px] border-l-[2px] border-l-[#646262] !p-0 text-metahkg-grey !ml-[0px]`}
                         sx={(theme) => ({
                             width: 15,
                             "&:hover": {

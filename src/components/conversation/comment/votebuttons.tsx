@@ -1,4 +1,3 @@
-import "../../../css/components/conversation/comment/votebuttons.css";
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
@@ -21,14 +20,14 @@ export default function VoteButtons(props: { comment: Comment }) {
 
     /**
      * It sends a vote to the server.
-     * @param {"U" | "D"} newVote - "U" | "D"
+     * @param {Vote} vote - "U" | "D"
      */
-    function sendVote(newVote: Vote) {
-        api.commentVote({ vote: newVote }, threadId, comment.id)
+    function sendVote(vote: Vote) {
+        api.commentVote({ vote }, threadId, comment.id)
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
-                setComment({ ...comment, [newVote]: (comment[newVote] || 0) + 1 });
-                votes && setVotes([...votes, { cid: comment.id, vote: newVote }]);
+                setComment({ ...comment, [vote]: (comment[vote] || 0) + 1 });
+                votes && setVotes([...votes, { cid: comment.id, vote }]);
             })
             .catch((err) => {
                 setNotification({
@@ -39,18 +38,18 @@ export default function VoteButtons(props: { comment: Comment }) {
     }
 
     return (
-        <ButtonGroup variant="text" className="vb-btn-group">
+        <ButtonGroup variant="text" className="!rounded-[4px] !bg-[#333]">
             <Button
-                className="!p-0 !m-0 vb-btn vb-btn-left"
+                className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0"
                 disabled={!user || !!vote}
                 onClick={() => {
-                    sendVote(Vote.U);
+                    sendVote("U");
                 }}
             >
                 <Typography
                     className="flex"
                     sx={{
-                        color: vote === Vote.U ? "green" : "#aaa",
+                        color: vote === "D" ? "green" : "#aaa",
                     }}
                 >
                     <ArrowDropUp className={!vote ? "hover:!text-[#fff]" : ""} />
@@ -58,16 +57,16 @@ export default function VoteButtons(props: { comment: Comment }) {
                 </Typography>
             </Button>
             <Button
-                className="!p-0 !m-0 vb-btn vb-btn-right"
+                className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0"
                 disabled={!user || !!vote}
                 onClick={() => {
-                    sendVote(Vote.D);
+                    sendVote("D");
                 }}
             >
                 <Typography
                     className="flex"
                     sx={{
-                        color: vote === Vote.D ? "red" : "#aaa",
+                        color: vote === "D" ? "red" : "#aaa",
                     }}
                 >
                     <ArrowDropDown className={!vote ? "hover:!text-[#fff]" : ""} />
