@@ -1,4 +1,3 @@
-import "../../css/components/menu/top.css";
 import React, { MouseEventHandler, useEffect } from "react";
 import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
@@ -68,7 +67,7 @@ export default function MenuTop(props: {
         <Box>
             {/*title and refresh and add button*/}
             <Box
-                className="w-full menutop-root"
+                className="w-full"
                 sx={{
                     bgcolor: "primary.main",
                     height: menuMode === "recall" || noTitleBar ? 50 : 90,
@@ -76,7 +75,7 @@ export default function MenuTop(props: {
             >
                 {!noTitleBar && (
                     <Box
-                        className={`flex w-full items-center menutop-top justify-${
+                        className={`flex w-full items-center h-[50px] justify-${
                             isSmallScreen ? "center" : "between"
                         }`}
                     >

@@ -1,4 +1,3 @@
-import "../css/components/dock.css";
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import SideBar from "./sidebar";
@@ -16,7 +15,7 @@ export default function Dock(props: {
         <Box>
             {isSmallScreen && (
                 <Box
-                    className="flex w-full dock-root"
+                    className="flex w-full fixed bottom-0 right-0 z-[100]"
                     sx={{ bgcolor: "primary.dark", height: 60 }}
                 >
                     <Box className="flex justify-between w-full !ml-[20px] !mr-[20px] items-center">

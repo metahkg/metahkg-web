@@ -79,6 +79,11 @@ export default function App() {
                         });
 
                         setInterval(registration.update, 1000 * 60 * 10);
+
+                        if (registration.waiting) {
+                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+                            window.location.reload();
+                        }
                     })
                     .catch((error) => {
                         console.error(error.message);
@@ -101,9 +106,10 @@ export default function App() {
                 <Router>
                     <Box className="flex">
                         <Box
-                            style={{
-                                width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw",
-                            }}
+                            className={
+                                (!menu && "hidden") ||
+                                (isSmallScreen ? "w-100v" : "w-30v")
+                            }
                         >
                             <Menu />
                         </Box>

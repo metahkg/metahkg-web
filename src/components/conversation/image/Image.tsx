@@ -28,6 +28,10 @@ function ImgComponent(props: Props) {
     const imgRef = useRef<HTMLImageElement>(null);
     const [reRender, setReRender] = useState(false);
 
+    const smallMaxH = 250;
+    const smallMaxW = 250;
+    const maxW = 800;
+
     const checkCanResize = () => {
         //if (isIOS || isSafari || engineName === "Webkit") return;
 
@@ -35,8 +39,8 @@ function ImgComponent(props: Props) {
         if (img) {
             const { width, height } = img;
             if (
-                (width < 200 && height < 200) ||
-                (!small && width <= 200 && height <= 200)
+                (width < smallMaxW && height < smallMaxH) ||
+                (!small && width <= smallMaxW && height <= smallMaxH)
             )
                 setDisableResize(true);
         }
@@ -87,20 +91,29 @@ function ImgComponent(props: Props) {
                     alt=""
                     className={"block"}
                     height={height}
-                    width={Number(height) > 800 ? "auto" : width}
+                    width={Number(height) > maxW ? "auto" : width}
                     style={{
                         ...(style &&
-                            toJSON(
-                                prettier
-                                    .format(style, {
-                                        parser: "css",
-                                        plugins: [prettierCss],
-                                    })
-                                    .replaceAll("\n", "")
-                            ).attributes),
+                            Object.fromEntries(
+                                Object.entries(
+                                    toJSON(
+                                        prettier
+                                            .format(style, {
+                                                parser: "css",
+                                                plugins: [prettierCss],
+                                            })
+                                            .replaceAll("\n", "")
+                                    ).attributes
+                                ).map(([k, v]) => [
+                                    k.replace(/-[a-z]/g, (match) => {
+                                        return match[1].toUpperCase();
+                                    }),
+                                    v,
+                                ])
+                            )),
                         ...(small && {
-                            maxWidth: 200,
-                            maxHeight: 200,
+                            maxWidth: smallMaxW,
+                            maxHeight: smallMaxH,
                         }),
                     }}
                     loading="lazy"
@@ -128,13 +141,13 @@ export default function Image(props: Props) {
         >
             <Suspense
                 fallback={
-                    <a href={src} target="_blank" rel="noreferrer">
+                    <a href={src} target="_blank" rel="noreferrer" className="inline-block">
                         <Loader
                             position="flex-start"
-                            className="!mt-[5px] !mb-[5px]"
+                            className="!m-[5px]"
                             sxProgress={{ color: "darkgrey" }}
                             thickness={2}
-                            size={50}
+                            size={45}
                         />
                     </a>
                 }

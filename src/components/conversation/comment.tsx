@@ -1,4 +1,3 @@
-import "../../css/components/conversation/comment.css";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
 import { useBlockList, useNotification } from "../ContextProvider";
@@ -166,7 +165,7 @@ export default function Comment(props: {
                                     comment={comment}
                                     depth={0}
                                 />
-                                <Box className="comment-internal-spacer" />
+                                <Box className="h-[2px]" />
                             </React.Fragment>
                         )}
                     </Box>
@@ -220,7 +219,7 @@ export default function Comment(props: {
                             )}
                         </Box>
                     )}
-                    <Box className="comment-spacer" />
+                    <Box className="h-[15px]" />
                 </Box>
                 {loading && (
                     <Box className="flex justify-center items-center">

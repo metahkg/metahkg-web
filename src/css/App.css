@@ -17,8 +17,7 @@
 }
 
 body {
-    font-family: "Segoe UI", "Open Sans", Helvetica Neue, Helvetica, Arial,
-        Microsoft JhengHei, sans-serif;
+    font-family: "IBM Plex Sans", Arial, sans-serif;
 }
 
 a,
@@ -42,4 +41,8 @@ q {
 
 .TextField-without-border-radius fieldset {
     border-radius: 0;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

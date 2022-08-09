@@ -1,4 +1,3 @@
-import "../css/components/sidebar.css";
 import React, { useState } from "react";
 import {
     Box,
@@ -23,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import SearchBar from "./searchbar";
+import SearchBar from "./searchBar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
 import { wholePath } from "../lib/common";
 import { useCat, useMenuMode } from "./MenuProvider";
@@ -64,7 +63,7 @@ export default function SideBar() {
     return (
         <Box>
             <Box>
-                <IconButton className="sidebar-menu-btn" onClick={toggleDrawer(true)}>
+                <IconButton className="h-[40px] w-[40px]" onClick={toggleDrawer(true)}>
                     <MenuIcon className="!text-white" />
                 </IconButton>
             </Box>
@@ -79,7 +78,7 @@ export default function SideBar() {
                     },
                 }}
             >
-                <Box className="sidebar-box max-w-full" role="presentation">
+                <Box className="w-[250px] max-w-full" role="presentation">
                     <Box className="w-full">
                         <List className="w-full">
                             <ListItemButton
@@ -158,7 +157,7 @@ export default function SideBar() {
                                                 className="!no-underline"
                                             >
                                                 <Typography
-                                                    className="!text-[16px] text-left w-1/2 sidebar-catlink"
+                                                    className="!text-[16px] text-left w-1/2 inline-block leading-[35px] hover:!text-[#fbc308]"
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&

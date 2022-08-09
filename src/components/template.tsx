@@ -55,7 +55,7 @@ export default function Template() {
         >
             <Box className="w-full m-[50px]">
                 <Box className="flex items-center">
-                    <MetahkgIcon height={40} width={50} svg light />
+                    <MetahkgIcon height={50} width={50} svg light />
                     <h1>Metahkg</h1>
                 </Box>
                 <List>

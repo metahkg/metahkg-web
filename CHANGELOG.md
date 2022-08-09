@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.0
+
+- use IBM Plex Sans as font
+
 ## v3.5.0
 
 - migrate to tailwindcss

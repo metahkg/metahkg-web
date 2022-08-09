@@ -1,4 +1,3 @@
-import "../../css/components/conversation/title.css";
 import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
@@ -24,7 +23,7 @@ export default function Title(props: {
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box
-            className="title-root"
+            className="h-[46px] border-solid border-0 border-b-[1px] border-[#3b3b3b]"
             sx={{
                 bgcolor: "primary.main",
             }}
@@ -39,8 +38,8 @@ export default function Title(props: {
                         </Link>
                     )}
                     <Typography
-                        className={`!my-0 !ml-[10px] overflow-hidden text-ellipsis whitespace-nowrap !text-[18px] title-text${
-                            isSmallScreen ? " text-center" : ""
+                        className={`!my-0 !ml-[10px] overflow-hidden text-ellipsis whitespace-nowrap !text-[18px] leading-[24px] max-h-[24px] ${
+                            isSmallScreen ? "text-center" : ""
                         }`}
                         sx={{
                             color: "secondary.main",

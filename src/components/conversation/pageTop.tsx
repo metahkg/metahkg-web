@@ -1,4 +1,3 @@
-import "../../css/components/conversation/pagetop.css";
 import React from "react";
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 
@@ -15,7 +14,7 @@ export default function PageTop(props: {
     const { pages, page, onChange, last, next, onLastClicked, onNextClicked, id } = props;
     return (
         <Box
-            className="flex justify-between items-center !ml-[30px] !mr-[30px] pagetop-root"
+            className="flex justify-between items-center !ml-[30px] !mr-[30px] h-[68px]"
             id={String(id)}
         >
             <Typography

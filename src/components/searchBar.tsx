@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-import "../css/components/searchbar.css";
 import React, { KeyboardEventHandler } from "react";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
@@ -99,7 +98,12 @@ export default function SearchBar(props: {
                         setSmode(Number(!smode));
                         setReFetch(true);
                     }}
-                    className="!mr-[10px] searchbar-chip"
+                    sx={{
+                        "& span": {
+                            overflow: "visible !important",
+                        },
+                    }}
+                    className="!mr-[10px] !h-[24px] !min-w-[45px]"
                 />
             )}
         </Search>

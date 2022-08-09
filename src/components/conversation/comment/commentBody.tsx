@@ -1,4 +1,5 @@
 import "../../../css/components/conversation/comment/commentBody.css";
+import "prismjs/themes/prism-tomorrow.min.css";
 import { replace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";

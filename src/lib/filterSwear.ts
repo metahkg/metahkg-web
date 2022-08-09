@@ -4,7 +4,7 @@ import enSwearWords from "naughty-words/en.json";
 export function filterSwearWords(text: string) {
     return enSwearWords
         .sort((a, b) => b.length - a.length)
-        .map((i) => new RegExp(` ${i}`, "gi"))
+        .map((i) => new RegExp(`(?<![a-z|A-Z])${i}`, "gi"))
         .reduce(
             (prev, curr) => {
                 return prev.replaceAll(curr, " *");

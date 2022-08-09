@@ -1,4 +1,3 @@
-import "../css/components/conversation.css";
 import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect, useMemo } from "react";
 import {
@@ -13,11 +12,11 @@ import queryString from "query-string";
 import Title from "./conversation/title";
 import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
-import PageTop from "./conversation/pagetop";
+import PageTop from "./conversation/pageTop";
 import VisibilitySensor from "react-visibility-sensor";
 import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
-import PageBottom from "./conversation/pagebottom";
-import PageSelect from "./conversation/pageselect";
+import PageBottom from "./conversation/pageBottom";
+import PageSelect from "./conversation/pageSelect";
 import useBtns from "./conversation/functions/btns";
 import { PhotoProvider } from "react-photo-view";
 import {
@@ -173,9 +172,15 @@ function Conversation(props: { id: number }) {
                     <Paper
                         ref={cRoot}
                         key={Number(reRender)}
-                        className={`overflow-auto !bg-none !shadow-none conversation-paper${
-                            thread?.pin ? "-pin" : ""
-                        }${loading ? "-loading" : ""}`}
+                        className={`overflow-auto !bg-none !shadow-none ${
+                            (thread?.pin &&
+                                (loading
+                                    ? "max-h-[calc(100vh-101px)]"
+                                    : "max-h-[calc(100vh-97px)]")) ||
+                            (loading
+                                ? "max-h-[calc(100vh-51px)]"
+                                : "max-h-[calc(100vh-47px)]")
+                        }`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}
                     >
@@ -244,7 +249,7 @@ function Conversation(props: { id: number }) {
                         </Box>
                         <Box
                             ref={cBottom}
-                            className="flex justify-center items-center conversation-bottom"
+                            className="flex justify-center items-center h-[90px]"
                             sx={{
                                 bgcolor: "primary.dark",
                             }}

@@ -1,11 +1,11 @@
 import {
-    Visibility,
-    VisibilityOff,
+    Visibility as VisibilityIcon,
+    VisibilityOff as VisibilityOffIcon,
     Reply as ReplyIcon,
     Share as ShareIcon,
     Feed as FeedIcon,
-    Edit,
-    PushPin,
+    Edit as EditIcon,
+    PushPin as PushPinIcon,
 } from "@mui/icons-material";
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -66,9 +66,9 @@ export default function CommentTop(props: {
             (story ? story === comment.user.id : 1) &&
                 !noStory && {
                     icon: story ? (
-                        <VisibilityOff className="!text-metahkg-grey !text-[19px]" />
+                        <VisibilityOffIcon className="!text-metahkg-grey !text-[19px]" />
                     ) : (
-                        <Visibility className="!text-metahkg-grey !text-[19px]" />
+                        <VisibilityIcon className="!text-metahkg-grey !text-[19px]" />
                     ),
                     title: story ? "Quit story mode" : "Story mode",
                     action: () => {
@@ -155,7 +155,7 @@ export default function CommentTop(props: {
                         });
                     };
                     return {
-                        icon: <PushPin />,
+                        icon: <PushPinIcon />,
                         title: `${pinned ? "Unpin" : "Pin"} Comment`,
                         action: () => {
                             setNotification({
@@ -191,7 +191,7 @@ export default function CommentTop(props: {
                 },
             },
             {
-                icon: <Edit className="!text-[19px]" />,
+                icon: <EditIcon className="!text-[19px]" />,
                 title: "Edit comment",
                 action: () => {
                     if (user) setEditor({ open: true, edit: comment.comment });
@@ -214,7 +214,11 @@ export default function CommentTop(props: {
             }`}
         >
             <UserModal open={open} setOpen={setOpen} user={comment.user} />
-            <Box className={`flex items-center ${!fold ? "comment-tag-left" : "w-full"}`}>
+            <Box
+                className={`flex items-center ${
+                    !fold ? "max-w-[calc(100%-75px)]" : "w-full"
+                }`}
+            >
                 <Typography
                     className="!my-0 !text-[17px]"
                     sx={(theme) => ({
@@ -224,7 +228,9 @@ export default function CommentTop(props: {
                     #{comment.id}
                 </Typography>
                 <p
-                    className="leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full min-w-[50px] hover:underline"
+                    className={`leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
+                        comment.user.name.length > 5 || fold ? "min-w-[50px]" : ""
+                    } hover:underline`}
                     onClick={() => {
                         setOpen(true);
                     }}
@@ -246,7 +252,7 @@ export default function CommentTop(props: {
                             if (isMobile)
                                 setTimeMode(timeMode === "short" ? "long" : "short");
                         }}
-                        className={`!my-0 text-metahkg-grey !ml-[10px] text-[15px]${
+                        className={`!my-0 text-metahkg-grey !ml-[7px] text-[15px]${
                             isMobile ? " cursor-pointer" : ""
                         }`}
                     >

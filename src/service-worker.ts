@@ -59,7 +59,8 @@ registerRoute(
 registerRoute(
     // Add in any other file extensions or routing criteria as needed.
     ({ url }) =>
-        url.origin === self.location.origin && url.pathname.startsWith("/static"),
+        url.origin === self.location.origin &&
+        ["/static", "/images", "/favicon.ico"].some((path) => url.pathname.startsWith(path)),
     // Customize this strategy as needed, e.g., by changing to CacheFirst.
     new StaleWhileRevalidate({
         cacheName: "app-static",
@@ -76,6 +77,7 @@ registerRoute(
         [
             "cdn.jsdeliv.net",
             "cdnjs.cloudflare.com",
+            "fonts.googleapis.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_API_URL || "i.metahkg.org",
             "na.cx",

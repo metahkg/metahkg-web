@@ -28,12 +28,8 @@ export default function Theme(props: {
         },
         typography: {
             fontFamily: [
-                "Segoe UI",
-                "Open Sans",
-                "Helvetica Neue",
-                "Helvetica",
+                "IBM Plex Sans",
                 "Arial",
-                "Microsoft JhengHei",
                 "sans-serif",
             ].join(","),
         },

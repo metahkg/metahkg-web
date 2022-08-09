@@ -1,5 +1,4 @@
 import React from "react";
-import "../../css/components/menu/thread.css";
 import { Box, Button } from "@mui/material";
 import {
     Article as ArticleIcon,
@@ -34,45 +33,45 @@ export default function MenuThread(props: {
             onClick={onClick}
         >
             <Box
-                className={`flex w-full flex-col !select-none menuthread-root${
-                    id === thread.id ? "-selected" : ""
+                className={`flex w-full flex-col !select-none ${
+                    id === thread.id ? "bg-[#292929]" : "hover:bg-[#232323]"
                 }`}
             >
-                <Box className="flex w-full items-center justify-between menuthread-top">
+                <Box className="flex w-full items-center justify-between h-[35px]">
                     <Box style={{ display: "flex", alignItems: "center" }}>
                         <p
-                            className="text-[16px] !ml-[20px] text-metahkg-grey menuthread-op"
+                            className="text-[16px] !ml-[20px] text-metahkg-grey"
                             style={{
                                 color: thread.op.sex === "M" ? "#0277bd" : "red",
                             }}
                         >
                             {thread.op.name}
                         </p>
-                        <p className="!ml-[5px] !m-0 text-metahkg-grey text-[13px] menuthread-toptext">
+                        <p className="!ml-[5px] !m-0 text-metahkg-grey text-[13px]">
                             {timeToWord(thread.lastModified)}
                         </p>
                     </Box>
                     <Box className="flex items-center">
                         {thread.score >= 0 ? (
-                            <ThumbUpIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
+                            <ThumbUpIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
                         ) : (
-                            <ThumbDownIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
+                            <ThumbDownIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
                         )}
-                        <p className="!m-0 text-metahkg-grey text-[13px] menuthread-toptext">
+                        <p className="!m-0 text-metahkg-grey text-[13px]">
                             {thread.score}
                         </p>
-                        <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
-                        <p className="!m-0 text-metahkg-grey text-[13px] menuthread-toptext">
+                        <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                        <p className="!m-0 text-metahkg-grey text-[13px]">
                             {thread.c}
                         </p>
-                        <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] menuthread-icons" />
-                        <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px] menuthread-toptext">
+                        <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                        <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px]">
                             {String(roundup(thread.c / 25))}
                         </p>
                     </Box>
                 </Box>
-                <Box className="flex w-full !mb-[10px] items-center justify-between menuthread-bottom">
-                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-ellipsis text-left menuthread-title">
+                <Box className="flex w-full !mb-[10px] items-center justify-between">
+                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-ellipsis text-left leading-[20px] max-h-[60px] mr-[30px]">
                         {thread.title}
                     </p>
                     {(menuMode !== "category" || cat === 1) && (
@@ -82,9 +81,9 @@ export default function MenuThread(props: {
                         >
                             <Button
                                 variant="contained"
-                                className="!m-0 !p-0 !normal-case menuthread-catbtn"
+                                className="!m-0 !p-0 !normal-case !rounded-[15px] !bg-[#333] hover:!bg-[#444]"
                             >
-                                <p className="!m-0 text-[12px] menuthread-catname">
+                                <p className="!m-0 text-[12px]">
                                     {
                                         categories.find((i) => i.id === thread.category)
                                             ?.name
