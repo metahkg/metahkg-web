@@ -170,7 +170,7 @@ export default function Profile() {
                                             }}
                                             onSuccess={() => {
                                                 if (avatarRef.current)
-                                                    avatarRef.current.src = `/api/users/${
+                                                    avatarRef.current.src = `/api/user/${
                                                         requestedUser.id
                                                     }/avatar?rand=${Math.random()}`;
                                             }}
