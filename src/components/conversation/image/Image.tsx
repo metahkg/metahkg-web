@@ -141,7 +141,12 @@ export default function Image(props: Props) {
         >
             <Suspense
                 fallback={
-                    <a href={src} target="_blank" rel="noreferrer" className="inline-block">
+                    <a
+                        href={src}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-block"
+                    >
                         <Loader
                             position="flex-start"
                             className="!m-[5px]"

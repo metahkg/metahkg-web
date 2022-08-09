@@ -60,7 +60,9 @@ registerRoute(
     // Add in any other file extensions or routing criteria as needed.
     ({ url }) =>
         url.origin === self.location.origin &&
-        ["/static", "/images", "/favicon.ico"].some((path) => url.pathname.startsWith(path)),
+        ["/static", "/images", "/favicon.ico"].some((path) =>
+            url.pathname.startsWith(path)
+        ),
     // Customize this strategy as needed, e.g., by changing to CacheFirst.
     new StaleWhileRevalidate({
         cacheName: "app-static",

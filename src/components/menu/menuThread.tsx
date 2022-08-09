@@ -61,9 +61,7 @@ export default function MenuThread(props: {
                             {thread.score}
                         </p>
                         <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
-                        <p className="!m-0 text-metahkg-grey text-[13px]">
-                            {thread.c}
-                        </p>
+                        <p className="!m-0 text-metahkg-grey text-[13px]">{thread.c}</p>
                         <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
                         <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px]">
                             {String(roundup(thread.c / 25))}
