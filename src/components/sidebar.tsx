@@ -157,7 +157,7 @@ export default function SideBar() {
                                                 className="!no-underline"
                                             >
                                                 <Typography
-                                                    className="!text-[16px] text-left w-1/2 inline-block leading-[35px] hover:!text-[#fbc308]"
+                                                    className="!text-[16px] text-left w-1/2 inline-block !leading-[35px] hover:!text-[#fbc308]"
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&
