@@ -49,7 +49,7 @@ export default function VoteButtons(props: { comment: Comment }) {
                 <Typography
                     className="flex"
                     sx={{
-                        color: vote === "D" ? "green" : "#aaa",
+                        color: vote === "U" ? "green" : "#aaa",
                     }}
                 >
                     <ArrowDropUp className={!vote ? "hover:!text-[#fff]" : ""} />

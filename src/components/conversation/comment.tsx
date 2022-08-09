@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
 import { useBlockList, useNotification } from "../ContextProvider";
-import VoteButtons from "./comment/votebuttons";
+import VoteButtons from "./comment/voteButtons";
 import { useThreadId, useVotes } from "./ConversationContext";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
