@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import "./css/App.css";
+import "@fontsource/ibm-plex-sans"
 import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
-import { useMenu } from "./components/MenuProvider";
+import MenuProvider, { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import {
+import ContextProvider, {
     useSettings,
     useSettingsOpen,
     useUser,
@@ -22,7 +23,7 @@ import { register, unregister } from "./serviceWorkerRegistration";
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
 
-export default function App() {
+function App() {
     const [menu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
@@ -118,5 +119,16 @@ export default function App() {
                 </Router>
             </Box>
         </Theme>
+    );
+}
+
+export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
+    const { reCaptchaSiteKey } = props;
+    return (
+        <ContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
+            <MenuProvider>
+                <App />
+            </MenuProvider>
+        </ContextProvider>
     );
 }

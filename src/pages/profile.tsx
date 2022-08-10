@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import { Box, Button, Slider, Stack, Tooltip } from "@mui/material";
+import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useReFetch,
@@ -22,8 +22,7 @@ import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import { parseError } from "../lib/parseError";
 import Loader from "../lib/loader";
-import { PopUp } from "../lib/popup";
-import AvatarEditor from "react-avatar-editor";
+import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
 
 export default function Profile() {
     const params = useParams();
@@ -41,20 +40,8 @@ export default function Profile() {
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [avatarFileOriginal, setAvatarFileOriginal] = useState<File | null>(null);
     const [editorOpen, setEditorOpen] = useState(false);
-    const [avatarProps, setAvatarProps] = useState({
-        scale: 1,
-        rotate: 0,
-    });
-
-    const resetAvatarProps = () => {
-        setAvatarProps({
-            scale: 1,
-            rotate: 0,
-        });
-    };
 
     const avatarRef = useRef<HTMLImageElement>(null);
-    const editorRef = useRef<AvatarEditor>(null);
     const navigate = useNavigate();
 
     const userId = Number(params.id);
@@ -127,137 +114,19 @@ export default function Profile() {
             ) : (
                 <Box className="flex justify-center items-center flex-col">
                     {avatarFileOriginal && (
-                        <PopUp
+                        <AvatarEditorPopUp
                             open={editorOpen}
                             setOpen={setEditorOpen}
-                            title={"Edit avatar"}
-                            buttons={[
-                                {
-                                    text: "Cancel",
-                                    action: () => {
-                                        setEditorOpen(false);
-                                        resetAvatarProps();
-                                    },
-                                },
-                                {
-                                    text: "Confirm",
-                                    action: () => {
-                                        if (avatarFile) {
-                                            setNotification({
-                                                open: true,
-                                                text: "Uploading avatar...",
-                                            });
-                                            api.meAvatar({
-                                                data: avatarFile,
-                                                fileName: "avatar",
-                                            })
-                                                .then(() => {
-                                                    setNotification({
-                                                        open: true,
-                                                        text: "Avatar updated.",
-                                                    });
-                                                    if (avatarRef.current)
-                                                        avatarRef.current.src = `/api/user/${
-                                                            requestedUser.id
-                                                        }/avatar?rand=${Math.random()}`;
-                                                    setEditorOpen(false);
-                                                    resetAvatarProps();
-                                                })
-                                                .catch((err) => {
-                                                    setNotification({
-                                                        open: true,
-                                                        text: parseError(err),
-                                                    });
-                                                    setEditorOpen(false);
-                                                    resetAvatarProps();
-                                                });
-                                        }
-                                    },
-                                },
-                            ]}
-                            onClose={resetAvatarProps}
-                        >
-                            <AvatarEditor
-                                ref={editorRef}
-                                image={avatarFileOriginal}
-                                width={200}
-                                height={200}
-                                border={50}
-                                borderRadius={100}
-                                color={[33, 33, 33, 0.6]} // RGBA
-                                scale={avatarProps.scale}
-                                rotate={avatarProps.rotate}
-                                onImageChange={() => {
-                                    const canvas = editorRef.current?.getImage();
-                                    if (canvas) {
-                                        const dataUrl = canvas.toDataURL();
-                                        fetch(dataUrl)
-                                            .then((res) => res.blob())
-                                            .then(async (blob) => {
-                                                setAvatarFile(
-                                                    new File([blob], "avatar.png", {
-                                                        type: "image/png",
-                                                    })
-                                                );
-                                            });
-                                    }
-                                }}
-                            />
-                            <Stack
-                                spacing={2}
-                                direction="row"
-                                sx={{ mx: 2 }}
-                                alignItems="center"
-                            >
-                                <p>Zoom</p>
-                                <Slider
-                                    min={1}
-                                    max={3}
-                                    step={0.05}
-                                    value={avatarProps.scale}
-                                    color="secondary"
-                                    sx={{
-                                        "& span": {
-                                            color: "unset",
-                                        },
-                                    }}
-                                    onChange={(_e, value) => {
-                                        if (typeof value === "number")
-                                            setAvatarProps({
-                                                ...avatarProps,
-                                                scale: value,
-                                            });
-                                    }}
-                                />
-                            </Stack>
-                            <Stack
-                                spacing={2}
-                                direction="row"
-                                sx={{ mx: 2 }}
-                                alignItems="center"
-                            >
-                                <p>Rotate</p>
-                                <Slider
-                                    min={0}
-                                    max={360}
-                                    step={3}
-                                    value={avatarProps.rotate}
-                                    color="secondary"
-                                    sx={{
-                                        "& span": {
-                                            color: "unset",
-                                        },
-                                    }}
-                                    onChange={(_e, value) => {
-                                        if (typeof value === "number")
-                                            setAvatarProps({
-                                                ...avatarProps,
-                                                rotate: value,
-                                            });
-                                    }}
-                                />
-                            </Stack>
-                        </PopUp>
+                            avatar={avatarFile}
+                            setAvatar={setAvatarFile}
+                            avatarOriginal={avatarFileOriginal}
+                            onSuccess={() => {
+                                if (avatarRef.current)
+                                        avatarRef.current.src = `/api/user/${
+                                            requestedUser.id
+                                        }/avatar?rand=${Math.random()}`;
+                            }}
+                        />
                     )}
                     <Box
                         className={`flex justify-center items-center max-w-full !mt-[20px] ${

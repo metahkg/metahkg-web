@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./css/index.css";
-import MetahkgWebApp from "./main";
+import MetahkgWebApp from "./App";
 
 const root = document.getElementById("root");
 if (root) {
