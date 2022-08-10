@@ -37,7 +37,7 @@ export function PopUp(props: {
         sx,
         className,
         closeBtn,
-        onClose
+        onClose,
     } = props;
     const handleClose = () => {
         setOpen(false);
