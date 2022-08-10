@@ -2,8 +2,6 @@ import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
-import { api } from "../../lib/api";
-import { OK } from "@metahkg/api";
 
 const Input = styled("input")({
     display: "none",
@@ -13,40 +11,31 @@ const Input = styled("input")({
  * @returns A form with a file input.
  */
 export default function UploadAvatar(props: {
-    onUpload?: () => void;
-    onSuccess: (res: OK) => void;
-    onError: (err: any) => void;
+    onChange?: (file: File) => void;
 }) {
-    const { onUpload, onSuccess, onError } = props;
+    const { onChange } = props;
     return (
-        <Box>
-            <form name="avatar" id="avatar" encType="multipart/form-data">
-                <label htmlFor="contained-button-file">
-                    <Input
-                        accept="image/*"
-                        id="contained-button-file"
-                        type="file"
-                        name="avatar"
-                        onChange={(e) => {
-                            onUpload && onUpload();
-                            const avatar = e?.target?.files?.[0];
-                            avatar &&
-                                api
-                                    .meAvatar({ fileName: "avatar", data: avatar })
-                                    .then(onSuccess)
-                                    .catch(onError);
-                        }}
-                    />
-                    <Button
-                        className="!mt-[5px] !normal-case"
-                        variant="contained"
-                        component="span"
-                    >
-                        <FileUpload className="!mr-[5px]" />
-                        <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
-                    </Button>
-                </label>
-            </form>
+        <Box component="form" encType="multipart/form-data">
+            <label htmlFor="contained-button-file">
+                <Input
+                    accept="image/*"
+                    id="contained-button-file"
+                    type="file"
+                    name="avatar"
+                    onChange={(e) => {
+                        const avatar = e?.target?.files?.[0];
+                        if (avatar) onChange?.(avatar);
+                    }}
+                />
+                <Button
+                    className="!mt-[5px] !normal-case"
+                    variant="contained"
+                    component="span"
+                >
+                    <FileUpload className="!mr-[5px]" />
+                    <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
+                </Button>
+            </label>
         </Box>
     );
 }

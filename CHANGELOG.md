@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.3
+
+- avatar editor
+
 ## v4.0.0
 
 - use IBM Plex Sans as font

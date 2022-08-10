@@ -24,6 +24,7 @@ export function PopUp(props: {
     fullWidth?: boolean;
     sx?: SxProps<Theme>;
     className?: string;
+    onClose?: () => void;
 }) {
     const {
         title,
@@ -36,9 +37,11 @@ export function PopUp(props: {
         sx,
         className,
         closeBtn,
+        onClose
     } = props;
     const handleClose = () => {
         setOpen(false);
+        onClose?.();
     };
     return (
         <Dialog
