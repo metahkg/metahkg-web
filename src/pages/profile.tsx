@@ -107,7 +107,6 @@ export default function Profile() {
             }`}
             sx={{
                 backgroundColor: "primary.dark",
-                width: isSmallScreen ? "100vw" : "70vw",
             }}
         >
             {!requestedUser ? (
@@ -123,9 +122,9 @@ export default function Profile() {
                             avatarOriginal={avatarFileOriginal}
                             onSuccess={() => {
                                 if (avatarRef.current)
-                                        avatarRef.current.src = `/api/user/${
-                                            requestedUser.id
-                                        }/avatar?rand=${Math.random()}`;
+                                    avatarRef.current.src = `/api/user/${
+                                        requestedUser.id
+                                    }/avatar?rand=${Math.random()}`;
                             }}
                         />
                     )}

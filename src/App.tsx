@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./css/App.css";
-import "@fontsource/ibm-plex-sans"
+import "@fontsource/ibm-plex-sans";
 import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuProvider, { useMenu } from "./components/MenuProvider";

@@ -162,7 +162,6 @@ export default function Create() {
                         />
                     </Box>
                     <TextEditor
-                        key={Number(isSmallScreen)}
                         onChange={(v, e: any) => {
                             setComment(e.getContent());
                         }}
