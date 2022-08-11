@@ -230,7 +230,9 @@ export default function CommentTop(props: {
                 </Typography>
                 <p
                     className={`leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
-                        comment.user.name.length > 5 || fold || blocked ? "min-w-[50px]" : ""
+                        comment.user.name.length > 5 || fold || blocked
+                            ? "min-w-[50px]"
+                            : ""
                     } hover:underline`}
                     onClick={() => {
                         setOpen(true);
