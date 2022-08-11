@@ -65,10 +65,11 @@ export default function CommentTop(props: {
         () => [
             (story ? story === comment.user.id : 1) &&
                 !noStory && {
-                    icon: story ? (
-                        <VisibilityOffIcon className="!text-metahkg-grey !text-[19px]" />
-                    ) : (
-                        <VisibilityIcon className="!text-metahkg-grey !text-[19px]" />
+                    icon: React.createElement(
+                        story ? VisibilityOffIcon : VisibilityIcon,
+                        {
+                            className: "!text-metahkg-grey !text-[19px]",
+                        }
                     ),
                     title: story ? "Quit story mode" : "Story mode",
                     action: () => {
@@ -229,7 +230,7 @@ export default function CommentTop(props: {
                 </Typography>
                 <p
                     className={`leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
-                        comment.user.name.length > 5 || fold ? "min-w-[50px]" : ""
+                        comment.user.name.length > 5 || fold || blocked ? "min-w-[50px]" : ""
                     } hover:underline`}
                     onClick={() => {
                         setOpen(true);
@@ -284,9 +285,8 @@ export default function CommentTop(props: {
                     </Box>
                 )}
                 {blocked && (
-                    <Tooltip arrow title="User blocked.">
+                    <Tooltip arrow title="user blocked">
                         <Button
-                            sx={{ color: "grey" }}
                             className="!ml-[20px] !text-[14px] !normal-case"
                             color="error"
                             onClick={() => {
@@ -294,7 +294,7 @@ export default function CommentTop(props: {
                             }}
                             variant="outlined"
                         >
-                            Click to view comment
+                            click to view comment
                         </Button>
                     </Tooltip>
                 )}
