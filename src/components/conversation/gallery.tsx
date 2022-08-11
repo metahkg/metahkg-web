@@ -18,7 +18,7 @@ export default function Gallery(props: {
     const [loading, setLoading] = useState(true);
     return (
         <PopUp title="Images" open={open} setOpen={setOpen} fullScreen>
-            <Box sx={{ bgcolor: "primary.main" }} className="ml10 mr10">
+            <Box sx={{ bgcolor: "primary.main" }} className="!ml-[10px] !mr-[10px]">
                 <PhotoProvider>
                     {loading && <Loader position="center" />}
                     <ImageList
@@ -35,7 +35,7 @@ export default function Gallery(props: {
                     >
                         {images.map((item) => (
                             <PhotoView src={item.src} key={item.src}>
-                                <ImageListItem className="pointer" key={item.src}>
+                                <ImageListItem className="cursor-pointer" key={item.src}>
                                     <img
                                         src={`${resizeBase}?src=${encodeURIComponent(
                                             item.src

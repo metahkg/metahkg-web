@@ -1,5 +1,4 @@
 import React from "react";
-import "../../css/components/menu/thread.css";
 import { Box, Button } from "@mui/material";
 import {
     Article as ArticleIcon,
@@ -27,64 +26,62 @@ export default function MenuThread(props: {
 
     return (
         <Link
-            className="fullwidth text-decoration-none"
+            className="w-full !no-underline"
             to={`/thread/${thread.id}?${
                 commentId && id !== thread.id ? `c=${commentId}` : "page=1"
             }`}
             onClick={onClick}
         >
             <Box
-                className={`flex fullwidth flex-dir-column user-select-none menuthread-root${
-                    id === thread.id ? "-selected" : ""
+                className={`flex w-full flex-col !select-none ${
+                    id === thread.id ? "bg-[#292929]" : "hover:bg-[#232323]"
                 }`}
             >
-                <div className="flex fullwidth align-center justify-space-between menuthread-top">
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                <Box className="flex w-full items-center justify-between h-[35px]">
+                    <Box style={{ display: "flex", alignItems: "center" }}>
                         <p
-                            className="font-size-16 ml20 metahkg-grey menuthread-op"
+                            className="text-[16px] !ml-[20px] text-metahkg-grey"
                             style={{
                                 color: thread.op.sex === "M" ? "#0277bd" : "red",
                             }}
                         >
                             {thread.op.name}
                         </p>
-                        <p className="ml5 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <p className="!ml-[5px] !m-0 text-metahkg-grey text-[13px]">
                             {timeToWord(thread.lastModified)}
                         </p>
-                    </div>
-                    <div className="flex align-center">
+                    </Box>
+                    <Box className="flex items-center">
                         {thread.score >= 0 ? (
-                            <ThumbUpIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                            <ThumbUpIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
                         ) : (
-                            <ThumbDownIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
+                            <ThumbDownIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
                         )}
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <p className="!m-0 text-metahkg-grey text-[13px]">
                             {thread.score}
                         </p>
-                        <CommentIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="nomargin metahkg-grey font-size-13 menuthread-toptext">
-                            {thread.c}
-                        </p>
-                        <ArticleIcon className="metahkg-grey ml5 font-size-13-force menuthread-icons" />
-                        <p className="mr10 nomargin metahkg-grey font-size-13 menuthread-toptext">
+                        <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                        <p className="!m-0 text-metahkg-grey text-[13px]">{thread.c}</p>
+                        <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                        <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px]">
                             {String(roundup(thread.c / 25))}
                         </p>
-                    </div>
-                </div>
-                <div className="flex fullwidth mb10 align-center justify-space-between menuthread-bottom">
-                    <p className="ml20 nomargin font-size-16 overflow-hidden text-overflow-ellipsis text-align-left menuthread-title">
+                    </Box>
+                </Box>
+                <Box className="flex w-full !mb-[10px] items-center justify-between">
+                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-ellipsis text-left leading-[20px] max-h-[60px] mr-[30px]">
                         {thread.title}
                     </p>
                     {(menuMode !== "category" || cat === 1) && (
                         <Link
-                            className="mr10 text-decoration-none"
+                            className="!mr-[10px] !no-underline"
                             to={`/category/${thread.category}`}
                         >
                             <Button
                                 variant="contained"
-                                className="nomargin nopadding text-transform-none menuthread-catbtn"
+                                className="!m-0 !p-0 !normal-case !rounded-[15px] !bg-[#333] hover:!bg-[#444]"
                             >
-                                <p className="nomargin font-size-12 menuthread-catname">
+                                <p className="!m-0 text-[12px]">
                                     {
                                         categories.find((i) => i.id === thread.category)
                                             ?.name
@@ -93,7 +90,7 @@ export default function MenuThread(props: {
                             </Button>
                         </Link>
                     )}
-                </div>
+                </Box>
             </Box>
         </Link>
     );

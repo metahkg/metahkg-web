@@ -1,4 +1,3 @@
-import "../css/components/conversation.css";
 import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect, useMemo } from "react";
 import {
@@ -13,11 +12,11 @@ import queryString from "query-string";
 import Title from "./conversation/title";
 import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
-import PageTop from "./conversation/pagetop";
+import PageTop from "./conversation/pageTop";
 import VisibilitySensor from "react-visibility-sensor";
 import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
-import PageBottom from "./conversation/pagebottom";
-import PageSelect from "./conversation/pageselect";
+import PageBottom from "./conversation/pageBottom";
+import PageSelect from "./conversation/pageSelect";
 import useBtns from "./conversation/functions/btns";
 import { PhotoProvider } from "react-photo-view";
 import {
@@ -127,7 +126,7 @@ function Conversation(props: { id: number }) {
     return useMemo(
         () => (
             <Box
-                className="min-height-fullvh conversation-root"
+                className="min-h-screen conversation-root"
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
@@ -163,9 +162,7 @@ function Conversation(props: { id: number }) {
                             }}
                         />
                     )}
-                    {loading && (
-                        <LinearProgress className="fullwidth" color="secondary" />
-                    )}
+                    {loading && <LinearProgress className="w-full" color="secondary" />}
                     <Title
                         category={thread?.category}
                         title={thread?.title}
@@ -175,13 +172,19 @@ function Conversation(props: { id: number }) {
                     <Paper
                         ref={cRoot}
                         key={Number(reRender)}
-                        className={`overflow-auto nobgimage noshadow conversation-paper${
-                            thread?.pin ? "-pin" : ""
-                        }${loading ? "-loading" : ""}`}
+                        className={`overflow-auto !bg-none !shadow-none ${
+                            (thread?.pin &&
+                                (loading
+                                    ? "max-h-[calc(100vh-101px)]"
+                                    : "max-h-[calc(100vh-97px)]")) ||
+                            (loading
+                                ? "max-h-[calc(100vh-51px)]"
+                                : "max-h-[calc(100vh-47px)]")
+                        }`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}
                     >
-                        <Box className="fullwidth max-height-full max-width-full">
+                        <Box className="w-full max-height-full max-w-full">
                             {ready &&
                                 [...Array(pages)].map((p, index) => {
                                     const page =
@@ -246,7 +249,7 @@ function Conversation(props: { id: number }) {
                         </Box>
                         <Box
                             ref={cBottom}
-                            className="flex justify-center align-center conversation-bottom"
+                            className="flex justify-center items-center h-[90px]"
                             sx={{
                                 bgcolor: "primary.dark",
                             }}

@@ -1,4 +1,3 @@
-import "../../css/components/menu/preload.css";
 import React from "react";
 import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
@@ -14,24 +13,24 @@ export default function MenuPreload() {
     const amount = roundup(totalHeight / 72);
     const buttonWidth = isSmallScreen ? width : 0.3 * width;
     return (
-        <Box className="preload-root" sx={{ minHeight: totalHeight }}>
+        <Box className="bg-[#1e1e1e]" sx={{ minHeight: totalHeight }}>
             {[...Array(amount)].map((_, index) => (
-                <div key={index}>
-                    <Button className="fullwidth flex align-flex-start flex-dir-column justify-center preload-btn">
+                <Box key={index}>
+                    <Button className="w-full flex !items-start flex-col justify-center h-[72px]">
                         <Skeleton
-                            className="ml10"
+                            className="!ml-[10px]"
                             height={90}
                             width={buttonWidth * 0.45}
                         />
-                        <div className="ml10 preload-spacer" />
+                        <Box className="!ml-[10px] h-[10px]" />
                         <Skeleton
-                            className="ml10"
+                            className="!ml-[10px]"
                             height={100}
                             width={buttonWidth * 0.8}
                         />
                     </Button>
                     <Divider />
-                </div>
+                </Box>
             ))}
         </Box>
     );

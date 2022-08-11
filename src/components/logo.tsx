@@ -1,5 +1,5 @@
-import "../css/components/logo.css";
 import React from "react";
+import { css } from "../lib/css";
 
 /**
  * @description Metahkg logo, in different formats
@@ -19,7 +19,7 @@ export default function MetahkgLogo(props: {
     const { light, dark, ua, text, filled, svg, height, width, sx, className } = props;
     return (
         <img
-            className={svg && light ? `svgwhite ${className}` : className}
+            className={`${svg && light ? css.svgwhite : ""} ${className || ""}`}
             style={sx}
             src={
                 (svg && "/images/logo.svg") ||

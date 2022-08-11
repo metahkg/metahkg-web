@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
-import { useReFetch } from "../MenuProvider";
+import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,
     Button,
@@ -34,6 +34,7 @@ export default function DataTable(props: DataTableProps) {
     const [name, setName] = useState(requestedUser.name);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [, setClient] = useUser();
+    const [, setMenuTitle] = useMenuTitle();
 
     const items = [
         {
@@ -86,7 +87,8 @@ export default function DataTable(props: DataTableProps) {
                 }
 
                 setReFetch(true);
-                setNotification({ open: true, text: data?.response });
+                setMenuTitle("");
+                setNotification({ open: true, text: `Name changed to ${name}.` });
             })
             .catch((err) => {
                 setSaveDisabled(false);
@@ -99,11 +101,11 @@ export default function DataTable(props: DataTableProps) {
 
     return (
         <Box
-            className="ml50 mr50 fullwidth"
+            className="!ml-[50px] !mr-[50px] w-full"
             style={{ maxWidth: isSmallScreen ? "100%" : "70%" }}
         >
-            <TableContainer className="fullwidth" component={Paper}>
-                <Table className="fullwidth" aria-label="simple table">
+            <TableContainer className="w-full" component={Paper}>
+                <Table className="w-full" aria-label="simple table">
                     <TableBody>
                         {items.map((item) => (
                             <TableRow
@@ -112,14 +114,14 @@ export default function DataTable(props: DataTableProps) {
                                 <TableCell
                                     component="th"
                                     scope="row"
-                                    className="font-size-16-force"
+                                    className="!text-[16px]"
                                 >
                                     {item.title}
                                 </TableCell>
                                 <TableCell
                                     component="th"
                                     scope="row"
-                                    className="font-size-16-force"
+                                    className="!text-[16px]"
                                 >
                                     {item.content}
                                 </TableCell>
@@ -130,7 +132,7 @@ export default function DataTable(props: DataTableProps) {
             </TableContainer>
             {isSelf && (
                 <Button
-                    className="mt20 mb10"
+                    className="!mt-[20px] !mb-[10px]"
                     variant="contained"
                     disabled={saveDisabled || name === requestedUser.name}
                     color="secondary"

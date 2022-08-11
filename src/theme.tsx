@@ -27,15 +27,7 @@ export default function Theme(props: {
             secondary: props.secondary,
         },
         typography: {
-            fontFamily: [
-                "Segoe UI",
-                "Open Sans",
-                "Helvetica Neue",
-                "Helvetica",
-                "Arial",
-                "Microsoft JhengHei",
-                "sans-serif",
-            ].join(","),
+            fontFamily: ["IBM Plex Sans", "Arial", "sans-serif"].join(","),
         },
     });
     return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;

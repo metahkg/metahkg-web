@@ -85,19 +85,19 @@ export default function Verify() {
 
     return (
         <Box
-            className="flex align-center justify-center min-height-fullvh fullwidth"
+            className="flex items-center justify-center min-h-screen w-full"
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m40" component="form" onSubmit={onSubmit}>
-                    <Box className="flex justify-center align-center">
-                        <MetahkgLogo svg light height={50} width={40} className="mb10" />
-                        <h1 className="font-size-25 mb20 nohmargin">
+                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                    <Box className="flex justify-center items-center !mb-[20px]">
+                        <MetahkgLogo svg light height={50} width={40} />
+                        <h1 className="text-[25px] my-0 !ml-[5px]">
                             Resend Verification Email
                         </h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="mb20" severity={alert.severity}>
+                        <Alert className="!mb-[20px]" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
@@ -115,10 +115,8 @@ export default function Verify() {
                     />
                     <Box
                         className={`${
-                            small
-                                ? ""
-                                : "flex fullwidth align-center justify-space-between"
-                        } mt20`}
+                            small ? "" : "flex w-full items-center justify-between"
+                        } !mt-[20px]`}
                     >
                         <ReCAPTCHA
                             theme="dark"
@@ -129,8 +127,8 @@ export default function Verify() {
                         />
                         <Button
                             variant="contained"
-                            className={`font-size-16-force notexttransform${
-                                small ? " mt20" : ""
+                            className={`!text-[16px] !normal-case${
+                                small ? " !mt-[20px]" : ""
                             }`}
                             color="secondary"
                             type="submit"
@@ -139,7 +137,7 @@ export default function Verify() {
                                 !(email && rtoken && EmailValidator.validate(email))
                             }
                         >
-                            <SendIcon className="mr5 font-size-16-force" />
+                            <SendIcon className="!mr-[5px] !text-[16px]" />
                             Resend
                         </Button>
                     </Box>

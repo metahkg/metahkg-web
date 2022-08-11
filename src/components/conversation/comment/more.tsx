@@ -23,6 +23,7 @@ SOFTWARE.
 */
 import React, { useEffect, useRef } from "react";
 import {
+    Box,
     ClickAwayListener,
     Grow,
     IconButton,
@@ -78,17 +79,17 @@ export default function MoreList(props: {
 
     return (
         <Stack direction="row" spacing={1}>
-            <div>
+            <Box>
                 <Tooltip arrow title="More">
                     <IconButton
                         ref={anchorRef}
-                        className="nopadding ml10"
+                        className="!p-0 !ml-[10px]"
                         aria-controls={open ? "composition-menu" : undefined}
                         aria-expanded={open ? "true" : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
                     >
-                        <MoreHoriz className="metahkg-grey-force font-size-19-force mb2" />
+                        <MoreHoriz className="!text-metahkg-grey !text-[19px] !mb-[2px]" />
                     </IconButton>
                 </Tooltip>
                 <Popper
@@ -142,7 +143,7 @@ export default function MoreList(props: {
                         </Grow>
                     )}
                 </Popper>
-            </div>
+            </Box>
         </Stack>
     );
 }

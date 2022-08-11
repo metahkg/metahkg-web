@@ -1,8 +1,7 @@
-import "../../css/components/conversation/comment.css";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
-import { useNotification } from "../ContextProvider";
-import VoteButtons from "./comment/votebuttons";
+import { useBlockList, useNotification } from "../ContextProvider";
+import VoteButtons from "./comment/voteButtons";
 import { useThreadId, useVotes } from "./ConversationContext";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
@@ -59,15 +58,27 @@ export default function Comment(props: {
     const [comment, setComment] = useState(props.comment);
     const [votes] = useVotes();
     const [, setNotification] = useNotification();
+    const [blockList] = useBlockList();
     const [ready, setReady] = useState(!fetchComment);
     const [reFetch, setReFetch] = useState(false);
     const [showReplies, setShowReplies] = useState(props.showReplies);
     const [replies, setReplies] = useState<CommentType[]>([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
-    const [fold, setFold] = useState(props.fold);
+    const [fold, setFold] = useState(Boolean(props.fold));
     const commentRef = useRef<HTMLElement>(null);
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
+
+    const [blocked, setBlocked] = useState<boolean | undefined>(
+        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+    );
+
+    useEffect(() => {
+        (blocked || blocked === undefined) &&
+            setBlocked(
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+            );
+    }, [blockList, blocked, comment.user.id]);
 
     useEffect(() => {
         const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote;
@@ -110,7 +121,7 @@ export default function Comment(props: {
     return useMemo(
         () => (
             <Box
-                className={`${noFullWidth ? "" : "fullwidth"} ${className || ""}`}
+                className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
                 sx={sx}
                 ref={commentRef}
                 id={noId ? undefined : `c${comment.id}`}
@@ -125,9 +136,9 @@ export default function Comment(props: {
                     />
                 )}
                 <Box
-                    className={`text-align-left ${
-                        !inPopUp ? "mt6" : showReplies ? "" : "overflow-auto"
-                    } fullwidth comment-root`}
+                    className={`text-left ${
+                        !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
+                    } w-full comment-root`}
                     sx={(theme) => ({
                         "& *::selection": {
                             background: theme.palette.secondary.main,
@@ -137,14 +148,16 @@ export default function Comment(props: {
                         maxHeight: inPopUp && !showReplies ? "90vh" : "",
                     })}
                 >
-                    <div className="ml20 mr20">
+                    <Box className="!ml-[20px] !mr-[20px]">
                         <CommentTop
                             comment={comment}
                             noStory={noStory}
                             fold={fold}
                             setFold={setFold}
+                            blocked={blocked}
+                            setBlocked={setBlocked}
                         />
-                        {!fold && (
+                        {!fold && !blocked && (
                             <React.Fragment>
                                 <CommentBody
                                     maxHeight={maxHeight}
@@ -152,27 +165,31 @@ export default function Comment(props: {
                                     comment={comment}
                                     depth={0}
                                 />
-                                <div className="comment-internal-spacer" />
+                                <Box className="h-[2px]" />
                             </React.Fragment>
                         )}
-                    </div>
-                    {ready && !fold && (
-                        <Box className="flex justify-space-between align-center fullwidth">
-                            <div className="flex ml20 mr20">
+                    </Box>
+                    {ready && !fold && !blocked && (
+                        <Box className="flex justify-between items-center w-full">
+                            <Box className="flex !ml-[20px] !mr-[20px]">
                                 <VoteButtons
                                     comment={comment}
                                     key={`${comment.U}${comment.D}`}
                                 />
-                                {!inPopUp && comment.replies?.length && (
+                                {comment.replies?.length && (
                                     <Button
                                         sx={{
                                             minWidth: "0 !important",
                                             bgcolor: "#333 !important",
                                         }}
-                                        className="br5 nomargin ml10 metahkg-grey-force nopadding mt0 mb0 pl10 pr10 pt3 pb3"
+                                        className="!rounded-[5px] !m-0 !ml-[10px] !text-metahkg-grey !p-0 !mt-[0px] !mb-[0px] !pl-[10px] !pr-[10px] !pt-[3px] !pb-[3px]"
                                         variant="text"
                                         onClick={() => {
-                                            setPopupOpen(true);
+                                            if (inPopUp) {
+                                                setShowReplies(!showReplies);
+                                                setIsExpanded &&
+                                                    setIsExpanded(!showReplies);
+                                            } else setPopupOpen(true);
                                         }}
                                     >
                                         <Forum
@@ -181,20 +198,20 @@ export default function Comment(props: {
                                                     color: "white",
                                                 },
                                             }}
-                                            className="font-size-14-force"
+                                            className="!text-[14px]"
                                         />
-                                        <p className="ml5 novmargin metahkg-grey">
+                                        <p className="!ml-[5px] !my-0 text-metahkg-grey">
                                             {comment.replies?.length}
                                         </p>
                                     </Button>
                                 )}
-                            </div>
+                            </Box>
                             {openComment && (
                                 <a
                                     href={`/thread/${threadId}?c=${comment.id}`}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="flex metahkg-grey-force mr10 notextdecoration"
+                                    className="flex !text-metahkg-grey !mr-[10px] !no-underline"
                                 >
                                     <EscalatorOutlined />
                                     Open Comment
@@ -202,13 +219,13 @@ export default function Comment(props: {
                             )}
                         </Box>
                     )}
-                    <div className="comment-spacer" />
+                    <Box className="h-[15px]" />
                 </Box>
                 {loading && (
-                    <Box className="flex justify-center align-center">
+                    <Box className="flex justify-center items-center">
                         <CircularProgress
                             size={30}
-                            className="mt10 mb5"
+                            className="!mt-[10px] !mb-[5px]"
                             color={"secondary"}
                         />
                     </Box>
@@ -216,13 +233,13 @@ export default function Comment(props: {
                 {!!replies.length && (
                     <Box>
                         <Box
-                            className="flex align-center justify-center text-align-center pointer"
+                            className="flex items-center justify-center text-center cursor-pointer"
                             onClick={() => {
                                 setShowReplies(!showReplies);
                                 setIsExpanded && setIsExpanded(!showReplies);
                             }}
                         >
-                            <Typography className="mt5 mb5" color="secondary">
+                            <Typography className="!mt-[5px] !mb-[5px]" color="secondary">
                                 {showReplies ? "Hide" : "Show"} Replies
                             </Typography>
                             {showReplies ? (
@@ -242,14 +259,14 @@ export default function Comment(props: {
                                         openComment
                                     />
                                 ))}
-                                <div className="flex justify-center align-center">
+                                <Box className="flex justify-center items-center">
                                     <Typography
-                                        className="mt5 mb5 font-size-18-force"
+                                        className="!mt-[5px] !mb-[5px] !text-[18px]"
                                         color="secondary"
                                     >
                                         End
                                     </Typography>
-                                </div>
+                                </Box>
                             </React.Fragment>
                         )}
                     </Box>
@@ -261,6 +278,7 @@ export default function Comment(props: {
             comment,
             fold,
             inPopUp,
+            blocked,
             loading,
             maxHeight,
             noFullWidth,

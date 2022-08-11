@@ -1,4 +1,3 @@
-import "../../css/components/conversation/title.css";
 import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
@@ -24,23 +23,23 @@ export default function Title(props: {
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box
-            className="title-root"
+            className="h-[46px] border-solid border-0 border-b-[1px] border-[#3b3b3b]"
             sx={{
                 bgcolor: "primary.main",
             }}
         >
-            <div className="flex ml10 mr20 align-center justify-space-between fullheight">
-                <div className="flex align-center mr10 overflow-hidden">
+            <Box className="flex !ml-[10px] !mr-[20px] items-center justify-between h-full">
+                <Box className="flex items-center !mr-[10px] overflow-hidden">
                     {(history || category) && (
                         <Link to={history || `/category/${category}`}>
-                            <IconButton className="nomargin nopadding">
+                            <IconButton className="!m-0 !p-0">
                                 <ArrowBackIcon color="secondary" />
                             </IconButton>
                         </Link>
                     )}
                     <Typography
-                        className={`novmargin ml10 overflow-hidden text-overflow-ellipsis nowrap font-size-18-force title-text${
-                            isSmallScreen ? " text-align-center" : ""
+                        className={`!my-0 !ml-[10px] overflow-hidden text-ellipsis whitespace-nowrap !text-[18px] leading-[24px] max-h-[24px] ${
+                            isSmallScreen ? "text-center" : ""
                         }`}
                         sx={{
                             color: "secondary.main",
@@ -48,16 +47,16 @@ export default function Title(props: {
                     >
                         {title}
                     </Typography>
-                </div>
-                <div className="flex">
+                </Box>
+                <Box className="flex">
                     {!isSmallScreen &&
                         btns.map((btn, index) => (
                             <Tooltip key={index} arrow title={btn.title}>
                                 <IconButton onClick={btn.action}>{btn.icon}</IconButton>
                             </Tooltip>
                         ))}
-                </div>
-            </div>
+                </Box>
+            </Box>
         </Box>
     );
 }

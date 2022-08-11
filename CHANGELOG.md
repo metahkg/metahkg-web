@@ -1,5 +1,22 @@
 # Changelog
 
+## v4.0.3
+
+- avatar editor
+
+## v4.0.0
+
+- use IBM Plex Sans as font
+
+## v3.5.0
+
+- migrate to tailwindcss
+
+## v3.4.0
+
+- filter swear words option
+- block users (alpha)
+
 ## v2.8.1
 
 - add support for facebook and instagram

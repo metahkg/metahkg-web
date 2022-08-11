@@ -25,7 +25,8 @@ export default function AlertDialog(props: AlertDialogProps) {
     };
     return (
         <Dialog
-            color={"primary"}
+            color="primary"
+            className="!bg-none rounded-[20px]"
             open={open}
             fullWidth
             onClose={closeDialog}

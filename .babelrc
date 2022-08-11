@@ -4,23 +4,41 @@
       "prismjs",
       {
         "languages": [
-          "javascript",
           "typescript",
           "tsx",
+          "javascript",
           "jsx",
-          "go",
-          "json",
-          "css",
-          "html",
           "python",
-          "php",
-          "ruby",
-          "java",
+          "bash",
+          "json",
+          "html",
+          "xml",
+          "svg",
+          "yaml",
+          "css",
+          "sass",
+          "md",
+          "mongodb",
+          "sql",
           "c",
+          "cpp",
           "csharp",
-          "cpp"
+          "java",
+          "scala",
+          "kotlin",
+          "swift",
+          "go",
+          "rust",
+          "ruby",
+          "php"
         ],
-        "plugins": ["line-numbers", "show-language"],
+        "plugins": [
+          "line-numbers",
+          "show-language",
+          "toolbar",
+          "copy-to-clipboard",
+          "inline-color"
+        ],
         "css": true
       }
     ]

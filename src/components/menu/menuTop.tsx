@@ -1,4 +1,3 @@
-import "../../css/components/menu/top.css";
 import React, { MouseEventHandler, useEffect } from "react";
 import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
@@ -51,12 +50,12 @@ export default function MenuTop(props: {
     useEffect(() => {
         if (!menuTitle) {
             if (menuMode === "profile") {
-                api.usersProfileName(profile).then((data) => {
+                api.userName(profile).then((data) => {
                     setMenuTitle(data.name);
                     setTitle(`${data.name} | Metahkg`);
                 });
-            } else if (menuMode === "category" && (category || id)) {
-                api.category(category || `bytid${id}`).then((data) => {
+            } else if (menuMode === "category" && category) {
+                api.category(category).then((data) => {
                     setMenuTitle(data.name);
                     if (!id) setTitle(`${data.name} | Metahkg`);
                 });
@@ -65,58 +64,58 @@ export default function MenuTop(props: {
     }, [category, id, profile, setMenuTitle, menuTitle, menuMode]);
 
     return (
-        <div>
+        <Box>
             {/*title and refresh and add button*/}
             <Box
-                className="fullwidth menutop-root"
+                className="w-full"
                 sx={{
                     bgcolor: "primary.main",
                     height: menuMode === "recall" || noTitleBar ? 50 : 90,
                 }}
             >
                 {!noTitleBar && (
-                    <div
-                        className={`flex fullwidth align-center menutop-top justify-${
-                            isSmallScreen ? "center" : "space-between"
+                    <Box
+                        className={`flex w-full items-center h-[50px] justify-${
+                            isSmallScreen ? "center" : "between"
                         }`}
                     >
                         {!isSmallScreen && (
-                            <div className="ml10 mr40">
+                            <Box className="!ml-[10px] !mr-[40px]">
                                 <SideBar />
-                            </div>
+                            </Box>
                         )}
                         <Typography
                             sx={{ color: "secondary.main" }}
-                            className="novmargin font-size-18-force user-select-none text-align-center nowrap text-overflow-ellipsis overflow-hidden"
+                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-ellipsis overflow-hidden"
                         >
                             {menuTitle || inittitle}
                         </Typography>
                         {!isSmallScreen && (
-                            <div className="flex">
+                            <Box className="flex">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
-                                        <AutorenewIcon className="force-white" />
+                                        <AutorenewIcon className="!text-white" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Create thread" arrow>
                                     <Link className="flex" to="/create">
-                                        <IconButton className="mr10">
-                                            <AddIcon className="force-white" />
+                                        <IconButton className="!mr-[10px]">
+                                            <AddIcon className="!text-white" />
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
-                            </div>
+                            </Box>
                         )}
-                    </div>
+                    </Box>
                 )}
                 {/*now should be latest and viral*/}
                 {Boolean(tabs.length) && (
                     <Box
                         sx={{ height: noTitleBar ? 50 : 40 }}
-                        className="flex fullwidth align-flex-end"
+                        className="flex w-full items-end"
                     >
                         <Tabs
-                            className="fullwidth"
+                            className="w-full"
                             value={props.selected}
                             textColor="secondary"
                             indicatorColor="secondary"
@@ -128,7 +127,7 @@ export default function MenuTop(props: {
                             {tabs.map((tab, index) => (
                                 <Tab
                                     key={index}
-                                    className="font-size-15-force notexttransform"
+                                    className="!text-[15px] !normal-case"
                                     value={index}
                                     label={tab}
                                     disableRipple
@@ -139,6 +138,6 @@ export default function MenuTop(props: {
                 )}
             </Box>
             <Divider />
-        </div>
+        </Box>
     );
 }

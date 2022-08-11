@@ -41,12 +41,8 @@ export default function UploadImage(props: {
                                 .catch(onError);
                         }}
                     />
-                    <Button
-                        className="notexttransform"
-                        variant="contained"
-                        component="span"
-                    >
-                        <FileUpload className="mr5" />
+                    <Button className="!normal-case" variant="contained" component="span">
+                        <FileUpload className="!mr-[5px]" />
                         <Typography sx={{ color: "secondary.main" }}>
                             Upload Image
                         </Typography>

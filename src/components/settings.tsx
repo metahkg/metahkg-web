@@ -25,6 +25,13 @@ export default function Settings(props: {
             },
             checked: settings.votebar,
         },*/
+        {
+            title: "Filter swear words",
+            action: (e) => {
+                setSettings({ ...settings, filterSwearWords: e.target.checked });
+            },
+            checked: settings.filterSwearWords,
+        },
     ];
     const colorOptions: {
         value: string;
@@ -38,22 +45,22 @@ export default function Settings(props: {
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
-            <Box className="fullwidth ml20 mr10" sx={{ bgcolor: "primary.main" }}>
+            <Box className="!ml-[20px] !mr-[10px]" sx={{ bgcolor: "primary.main" }}>
                 {settingItems.map((item) => (
-                    <div
+                    <Box
                         key={item.title}
-                        className="flex justify-space-between align-center fullwidth mt4 mb4"
+                        className="flex justify-between items-center w-full !mt-[4px] !mb-[4px]"
                     >
-                        <p className="nomargin">{item.title}</p>
+                        <p className="!m-0">{item.title}</p>
                         <IOSSwitch
                             color="secondary"
                             checked={item.checked}
                             onChange={item.action}
                         />
-                    </div>
+                    </Box>
                 ))}
-                <div className="flex justify-space-between align-center fullwidth mt6 mb4">
-                    <p className="nomargin">Color</p>
+                <Box className="flex justify-between items-center w-full !mt-[6px] !mb-[4px]">
+                    <p className="!m-0">Color</p>
                     <ToggleButtonGroup
                         color="secondary"
                         value={
@@ -94,7 +101,7 @@ export default function Settings(props: {
                             </ToggleButton>
                         ))}
                     </ToggleButtonGroup>
-                </div>
+                </Box>
             </Box>
         </PopUp>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Box,
     FormControl,
     InputLabel,
     MenuItem,
@@ -25,9 +26,9 @@ export default function ChooseCat(props: {
     };
     const categories = useCategories();
     return (
-        <div>
+        <Box>
             {categories.length && (
-                <FormControl className="create-choosecat-form">
+                <FormControl className="!min-w-[200px]">
                     <InputLabel color="secondary">Category</InputLabel>
                     <Select
                         color="secondary"
@@ -41,6 +42,6 @@ export default function ChooseCat(props: {
                     </Select>
                 </FormControl>
             )}
-        </div>
+        </Box>
     );
 }

@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { useState } from "react";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import Loader from "../../../lib/loader";
@@ -6,11 +7,11 @@ export default function TweetEmbed(props: { tweetId: string }) {
     const { tweetId } = props;
     const [loading, setLoading] = useState(true);
     return (
-        <div>
+        <Box>
             {loading && (
                 <Loader
                     position="flex-start"
-                    className="mt5 mb5"
+                    className="!mt-[5px] !mb-[5px]"
                     sxProgress={{ color: "darkgrey" }}
                     thickness={2}
                     size={50}
@@ -25,6 +26,6 @@ export default function TweetEmbed(props: { tweetId: string }) {
                     setLoading(false);
                 }}
             />
-        </div>
+        </Box>
     );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { BrokenImage } from "@mui/icons-material";
-import { Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
+import { css } from "../../../lib/css";
 
 export default class ImageErrorBoundary extends React.Component<{
     src: string;
@@ -20,7 +21,7 @@ export default class ImageErrorBoundary extends React.Component<{
                     arrow
                     title={
                         <a
-                            className="link white-force"
+                            className={`${css.link} !text-white`}
                             href={src}
                             target="_blank"
                             rel="noreferrer"
@@ -29,10 +30,10 @@ export default class ImageErrorBoundary extends React.Component<{
                         </a>
                     }
                 >
-                    <div className="pointer display-inline-block">
-                        <img src={src} alt="" className="display-none" />
+                    <Box className="cursor-pointer inline-block">
+                        <img src={src} alt="" className="hidden" />
                         <BrokenImage />
-                    </div>
+                    </Box>
                 </Tooltip>
             );
         }

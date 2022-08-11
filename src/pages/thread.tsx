@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import { useParams, Navigate } from "react-router-dom";
 import { useId, useMenu } from "../components/MenuProvider";
 import { useIsSmallScreen } from "../components/ContextProvider";
-import isInteger from "is-sn-integer";
 import { ShareProvider } from "../components/conversation/ShareProvider";
 import ConversationProvider from "../components/conversation/ConversationContext";
 
@@ -27,22 +26,22 @@ export default function Thread() {
         id !== threadId && setId(threadId);
     }, [menu, isSmallScreen, params.id, setMenu, setId, threadId, id]);
 
-    if (!isInteger(params.id)) return <Navigate to="/404" replace />;
+    if (!Number.isInteger(threadId)) return <Navigate to="/404" replace />;
 
     return (
         <Box
-            className="min-height-fullvh flex"
+            className="min-h-screen flex"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
-            <div style={{ width: isSmallScreen ? "100vw" : "70vw" }}>
+            <Box style={{ width: isSmallScreen ? "100vw" : "70vw" }}>
                 <ConversationProvider key={threadId} threadId={threadId}>
                     <ShareProvider>
                         <Conversation key={threadId} id={threadId} />
                     </ShareProvider>
                 </ConversationProvider>
-            </div>
+            </Box>
         </Box>
     );
 }

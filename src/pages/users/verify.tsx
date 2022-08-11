@@ -11,6 +11,7 @@ import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
+import { css } from "../../lib/css";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -72,17 +73,23 @@ export default function Verify() {
 
     return (
         <Box
-            className="flex align-center justify-center min-height-fullvh fullwidth"
+            className="flex items-center justify-center min-h-screen w-full"
             sx={{ bgcolor: "primary.dark" }}
         >
-            <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m40" component="form" onSubmit={onSubmit}>
-                    <Box className="flex justify-center align-center">
-                        <MetahkgLogo svg light height={50} width={40} className="mb10" />
-                        <h1 className="font-size-25 mb20 nohmargin">Verify</h1>
+            <Box className={small ? "w-100v" : "w-50v"}>
+                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                    <Box className="flex justify-center items-center">
+                        <MetahkgLogo
+                            svg
+                            light
+                            height={50}
+                            width={40}
+                            className="!mb-[10px]"
+                        />
+                        <h1 className="text-[25px] !mb-[20px] mx-0">Verify</h1>
                     </Box>
                     {alert.text && (
-                        <Alert className="mb20" severity={alert.severity}>
+                        <Alert className="!mb-[20px]" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
@@ -104,7 +111,7 @@ export default function Verify() {
                             label={item.label}
                             value={item.value}
                             type={item.type}
-                            className={!index ? "mb15" : ""}
+                            className={!index ? "!mb-[15px]" : ""}
                             onChange={(e) => {
                                 item.set(e.target.value);
                             }}
@@ -114,13 +121,13 @@ export default function Verify() {
                             fullWidth
                         />
                     ))}
-                    <Box className="mt15 mb15">
+                    <Box className="my-[15px]">
                         <Typography
                             component={Link}
                             sx={(theme) => ({
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
-                            className="link bold-force"
+                            className={`${css.link} !font-bold`}
                             to="/users/resend"
                         >
                             Resend verification email
@@ -128,14 +135,14 @@ export default function Verify() {
                     </Box>
                     <Button
                         variant="contained"
-                        className="font-size-16-force notexttransform"
+                        className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
                         disabled={
                             disabled || !(email && code && EmailValidator.validate(email))
                         }
                     >
-                        <HowToReg className="mr5" />
+                        <HowToReg className="!mr-[5px]" />
                         Verify
                     </Button>
                 </Box>

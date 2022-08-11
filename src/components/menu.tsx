@@ -1,9 +1,8 @@
-import "../css/components/menu.css";
 import React, { memo, useCallback, useMemo } from "react";
 import { Box } from "@mui/material";
 import { useReFetch, useMenu, useSelected, useSmode, useMenuMode } from "./MenuProvider";
 import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
-import SearchBar from "./searchbar";
+import SearchBar from "./searchBar";
 import { useNavigate } from "react-router-dom";
 import loadable from "@loadable/component";
 import { Add, Autorenew, Settings } from "@mui/icons-material";
@@ -39,9 +38,9 @@ function Menu() {
 
     return (
         <Box
-            className={`max-width-full min-height-fullvh flex-dir-column ${
-                menu ? "flex" : "display-none"
-            } menu-root`}
+            className={`max-w-full min-h-screen flex-col ${
+                menu ? "flex" : "hidden"
+            } bg-[#1e1e1e]`}
         >
             {/*show when screen is not wide enough*/}
             <Dock
@@ -81,8 +80,8 @@ function Menu() {
             />
             {/*if search something in drawer, also show the search bar under the tab (Relevance, created, last reply*/}
             {menuMode === "search" && (
-                <div className="flex fullwidth">
-                    <div className="flex fullwidth justify-center align-center m10 menu-search">
+                <Box className="flex w-full">
+                    <Box className="flex w-full justify-center items-center m-[10px] h-[39px]">
                         <SearchBar
                             query={query}
                             onChange={(e) => {
@@ -97,8 +96,8 @@ function Menu() {
                                 }
                             }}
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Box>
             )}
             {useMemo(
                 () => (

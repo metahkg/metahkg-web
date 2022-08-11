@@ -9,15 +9,20 @@ ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
 
+ARG REACT_APP_date
+ENV REACT_APP_date $REACT_APP_date
+
 ARG REACT_APP_version
 ENV REACT_APP_version $REACT_APP_version
 
 ARG env
 ENV env $env
 
+ENV REACT_APP_ENV $env
+
 WORKDIR /usr/src/app
 
-COPY ./package.json ./yarn.lock ./tsconfig.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
 RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; fi;
 
@@ -39,6 +44,9 @@ ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
 
+ARG REACT_APP_date
+ENV REACT_APP_date $REACT_APP_date
+
 ARG REACT_APP_version
 ENV REACT_APP_version $REACT_APP_version
 
@@ -54,7 +62,7 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
-COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json ./
+COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json  ./postcss.config.js ./tailwind.config.js ./
 
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
 

@@ -1,4 +1,3 @@
-import "../css/components/sidebar.css";
 import React, { useState } from "react";
 import {
     Box,
@@ -23,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import SearchBar from "./searchbar";
+import SearchBar from "./searchBar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
 import { wholePath } from "../lib/common";
 import { useCat, useMenuMode } from "./MenuProvider";
@@ -62,12 +61,12 @@ export default function SideBar() {
     }
 
     return (
-        <div>
-            <div>
-                <IconButton className="sidebar-menu-btn" onClick={toggleDrawer(true)}>
-                    <MenuIcon className="force-white" />
+        <Box>
+            <Box>
+                <IconButton className="h-[40px] w-[40px]" onClick={toggleDrawer(true)}>
+                    <MenuIcon className="!text-white" />
                 </IconButton>
-            </div>
+            </Box>
             <Drawer
                 anchor="left"
                 open={open}
@@ -79,14 +78,14 @@ export default function SideBar() {
                     },
                 }}
             >
-                <Box className="sidebar-box max-width-full" role="presentation">
-                    <div className="fullwidth">
-                        <List className="fullwidth">
+                <Box className="w-[250px] max-w-full" role="presentation">
+                    <Box className="w-full">
+                        <List className="w-full">
                             <ListItemButton
                                 onClick={onClick}
                                 component={"a"}
                                 href="https://war.ukraine.ua/support-ukraine/"
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                             >
                                 <ListItemIcon>
                                     <MetahkgLogo height={24} width={30} ua />
@@ -94,7 +93,7 @@ export default function SideBar() {
                                 <ListItemText>Support Ukraine</ListItemText>
                             </ListItemButton>
                         </List>
-                        <div className="ml10 mr10">
+                        <Box className="!ml-[10px] !mr-[10px]">
                             <SearchBar
                                 query={query}
                                 onChange={(e) => {
@@ -109,8 +108,8 @@ export default function SideBar() {
                                     }
                                 }}
                             />
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                     <List>
                         {[
                             {
@@ -131,7 +130,7 @@ export default function SideBar() {
                                 component={Link}
                                 onClick={onClick}
                                 to={item.link}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
                                 <ListItemText>{item.title}</ListItemText>
@@ -145,20 +144,20 @@ export default function SideBar() {
                     ].map(
                         (cats, index) =>
                             cats && (
-                                <div key={index}>
-                                    <div
-                                        className={`m20${user && !index ? " mb10" : ""}${
-                                            index ? " mt0" : ""
-                                        }`}
+                                <Box key={index}>
+                                    <Box
+                                        className={`m-[20px]${
+                                            user && !index ? " !mb-[10px]" : ""
+                                        }${index ? " !mt-[0px]" : ""}`}
                                     >
                                         {cats.map((category, index) => (
                                             <Link
                                                 key={index}
                                                 to={`/category/${category.id}`}
-                                                className="notextdecoration"
+                                                className="!no-underline"
                                             >
                                                 <Typography
-                                                    className="font-size-16-force text-align-left halfwidth sidebar-catlink"
+                                                    className="!text-[16px] text-left w-1/2 inline-block !leading-[35px] hover:!text-[#fbc308]"
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&
@@ -176,8 +175,8 @@ export default function SideBar() {
                                                 </Typography>
                                             </Link>
                                         ))}
-                                    </div>
-                                </div>
+                                    </Box>
+                                </Box>
                             )
                     )}
                     <Divider />
@@ -198,7 +197,7 @@ export default function SideBar() {
                                 component={"a"}
                                 key={index}
                                 onClick={onClick}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                                 href={item.link}
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -211,7 +210,7 @@ export default function SideBar() {
                         {user && (
                             <ListItemButton
                                 component={Link}
-                                className="text-decoration-none white"
+                                className="!no-underline text-white"
                                 to={`/profile/${user?.id}`}
                                 onClick={onClick}
                             >
@@ -234,21 +233,22 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     {process.env.REACT_APP_version && (
-                        <p className="ml5">
+                        <p className="!ml-[5px]">
                             Metahkg Web{" "}
-                            {process.env.REACT_APP_build && (
+                            {(process.env.REACT_APP_build && (
                                 <a
                                     style={{ display: "inline" }}
                                     href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
                                 >
                                     {process.env.REACT_APP_build}
                                 </a>
-                            )}{" "}
+                            )) ||
+                                process.env.REACT_APP_date}{" "}
                             (v{process.env.REACT_APP_version})
                         </p>
                     )}
                 </Box>
             </Drawer>
-        </div>
+        </Box>
     );
 }

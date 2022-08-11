@@ -59,7 +59,10 @@ registerRoute(
 registerRoute(
     // Add in any other file extensions or routing criteria as needed.
     ({ url }) =>
-        url.origin === self.location.origin && url.pathname.startsWith("/static"),
+        url.origin === self.location.origin &&
+        ["/static", "/images", "/favicon.ico"].some((path) =>
+            url.pathname.startsWith(path)
+        ),
     // Customize this strategy as needed, e.g., by changing to CacheFirst.
     new StaleWhileRevalidate({
         cacheName: "app-static",
@@ -76,12 +79,12 @@ registerRoute(
         [
             "cdn.jsdeliv.net",
             "cdnjs.cloudflare.com",
+            "fonts.googleapis.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_API_URL || "i.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",
-            "sa.metahkg.org",
         ].some((i) => url.origin.includes(i)),
     new CacheFirst({
         cacheName: "app-external-assets",
@@ -114,7 +117,7 @@ self.addEventListener("message", (event) => {
         self.skipWaiting();
     }
     if (event.data && event.data.type === "CHECK_VERSION") {
-        const build = process.env.REACT_APP_build || "1";
+        const build = process.env.REACT_APP_build || process.env.REACT_APP_date || "1";
         self.clients.matchAll({ includeUncontrolled: true, type: "window" }).then((all) =>
             all.map((client) =>
                 client.postMessage({

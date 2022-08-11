@@ -6,7 +6,7 @@ import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
 import prettier from "prettier/standalone";
 import prettierCss from "prettier/parser-postcss";
 import Loader from "../../../lib/loader";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
@@ -28,6 +28,10 @@ function ImgComponent(props: Props) {
     const imgRef = useRef<HTMLImageElement>(null);
     const [reRender, setReRender] = useState(false);
 
+    const smallMaxH = 250;
+    const smallMaxW = 250;
+    const maxW = 800;
+
     const checkCanResize = () => {
         //if (isIOS || isSafari || engineName === "Webkit") return;
 
@@ -35,8 +39,8 @@ function ImgComponent(props: Props) {
         if (img) {
             const { width, height } = img;
             if (
-                (width < 200 && height < 200) ||
-                (!small && width <= 200 && height <= 200)
+                (width < smallMaxW && height < smallMaxH) ||
+                (!small && width <= smallMaxW && height <= smallMaxH)
             )
                 setDisableResize(true);
         }
@@ -50,16 +54,15 @@ function ImgComponent(props: Props) {
 
     return (
         <PhotoView src={src}>
-            <div
-                style={{
-                    position: "relative",
-                    ...(imgRef.current &&
-                        cRoot.current &&
-                        // TODO: should not hard code
-                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40 && {
-                            display: "inline-block",
-                        }),
-                }}
+            <Box
+                className={`relative ${
+                    imgRef.current &&
+                    cRoot.current &&
+                    // TODO: should not hard code
+                    imgRef.current.clientWidth < cRoot.current.clientWidth - 40
+                        ? "inline-block"
+                        : ""
+                }`}
             >
                 {!disableResize && (
                     <IconButton
@@ -68,9 +71,8 @@ function ImgComponent(props: Props) {
                             e.stopPropagation();
                             setSmall(!small);
                         }}
-                        className={"border-radius-10-force"}
+                        className={"!rounded-[10px] !absolute"}
                         sx={{
-                            position: "absolute",
                             bgcolor: "primary.main",
                             "&:hover": {
                                 bgcolor: "primary.dark",
@@ -89,20 +91,29 @@ function ImgComponent(props: Props) {
                     alt=""
                     className={"block"}
                     height={height}
-                    width={Number(height) > 800 ? "auto" : width}
+                    width={Number(height) > maxW ? "auto" : width}
                     style={{
                         ...(style &&
-                            toJSON(
-                                prettier
-                                    .format(style, {
-                                        parser: "css",
-                                        plugins: [prettierCss],
-                                    })
-                                    .replaceAll("\n", "")
-                            ).attributes),
+                            Object.fromEntries(
+                                Object.entries(
+                                    toJSON(
+                                        prettier
+                                            .format(style, {
+                                                parser: "css",
+                                                plugins: [prettierCss],
+                                            })
+                                            .replaceAll("\n", "")
+                                    ).attributes
+                                ).map(([k, v]) => [
+                                    k.replace(/-[a-z]/g, (match) => {
+                                        return match[1].toUpperCase();
+                                    }),
+                                    v,
+                                ])
+                            )),
                         ...(small && {
-                            maxWidth: 200,
-                            maxHeight: 200,
+                            maxWidth: smallMaxW,
+                            maxHeight: smallMaxH,
                         }),
                     }}
                     loading="lazy"
@@ -112,7 +123,7 @@ function ImgComponent(props: Props) {
                         setReRender(!reRender);
                     }}
                 />
-            </div>
+            </Box>
         </PhotoView>
     );
 }
@@ -130,13 +141,18 @@ export default function Image(props: Props) {
         >
             <Suspense
                 fallback={
-                    <a href={src} target="_blank" rel="noreferrer">
+                    <a
+                        href={src}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-block"
+                    >
                         <Loader
                             position="flex-start"
-                            className="mt5 mb5"
+                            className="!m-[5px]"
                             sxProgress={{ color: "darkgrey" }}
                             thickness={2}
-                            size={50}
+                            size={45}
                         />
                     </a>
                 }

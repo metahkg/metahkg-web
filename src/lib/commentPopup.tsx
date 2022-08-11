@@ -21,8 +21,8 @@ export default function CommentPopup(props: {
             setOpen={setOpen}
             fullWidth
             closeBtn={isExpanded}
-            className={`${isExpanded ? "height-fullvh" : ""} novmargin noshadow ${
-                isSmallScreen ? "nohmargin fullwidth-force" : ""
+            className={`${isExpanded ? "h-screen" : ""} !my-0 !shadow-none ${
+                isSmallScreen ? "!mx-0 !w-full" : ""
             }`}
             sx={{
                 maxHeight: "none !important",

@@ -35,10 +35,10 @@ export const replace = (params: { quote?: boolean }) => {
                         const tweetId = url.pathname.split("/").pop();
                         if (tweetId)
                             return (
-                                <div>
+                                <Box>
                                     <TweetEmbed tweetId={tweetId} />
                                     {domToReact([node])}
-                                </div>
+                                </Box>
                             );
                     } else if (
                         [regex.instagram, regex.facebook.posts]
@@ -92,7 +92,7 @@ export const replace = (params: { quote?: boolean }) => {
                                         maxWidth: `${quote ? 400 : 450}px !important`,
                                     },
                                     [`& .Title${quote ? ", & .Description" : ""}`]: {
-                                        whiteSpace: "nowrap",
+                                        whiteSpace: "whitespace-nowrap",
                                         textOverflow: "ellipsis",
                                         overflow: "hidden",
                                     },
@@ -108,7 +108,7 @@ export const replace = (params: { quote?: boolean }) => {
                                     height={quote ? 200 : 280}
                                     imageHeight={250}
                                     width={"100%"}
-                                    className="mt5 mb5 LinkPreview"
+                                    className="!mt-[5px] !mb-[5px] LinkPreview"
                                     borderColor="#555"
                                     backgroundColor="#333"
                                     primaryTextColor="white"
@@ -123,7 +123,7 @@ export const replace = (params: { quote?: boolean }) => {
                                     customLoader={
                                         <Loader
                                             position="flex-start"
-                                            className="mt5 mb5"
+                                            className="!mt-[5px] !mb-[5px]"
                                             sxProgress={{ color: "darkgrey" }}
                                             thickness={2}
                                             size={50}

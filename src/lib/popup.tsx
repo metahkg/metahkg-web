@@ -1,6 +1,7 @@
 import React from "react";
 import { Close } from "@mui/icons-material";
 import {
+    Box,
     Button,
     Dialog,
     DialogContent,
@@ -17,12 +18,13 @@ export function PopUp(props: {
     closeBtn?: boolean;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    buttons?: { text: string; link: string }[];
+    buttons?: ({ text: string; link?: string; action?: () => void } | undefined)[];
     children: JSX.Element | JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
     sx?: SxProps<Theme>;
     className?: string;
+    onClose?: () => void;
 }) {
     const {
         title,
@@ -35,9 +37,11 @@ export function PopUp(props: {
         sx,
         className,
         closeBtn,
+        onClose,
     } = props;
     const handleClose = () => {
         setOpen(false);
+        onClose?.();
     };
     return (
         <Dialog
@@ -58,45 +62,51 @@ export function PopUp(props: {
                 <React.Fragment>
                     <DialogTitle
                         sx={{ minWidth: 270, bgcolor: "primary.main" }}
-                        className="pr0 pl0 flex pt5 pb5 justify-space-between align-center"
+                        className="!pr-[0px] !pl-[0px] flex !pt-[5px] !pb-[5px] justify-between items-center"
                     >
-                        <p className="ml20 novmargin">{title}</p>
-                        <IconButton className="mr5" onClick={handleClose}>
-                            <Close className="font-size-18-force" />
+                        <p className="!ml-[20px] !my-0">{title}</p>
+                        <IconButton className="!mr-[5px]" onClick={handleClose}>
+                            <Close className="!text-[18px]" />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
                 </React.Fragment>
             )}
-            <DialogContent className="nopadding">
-                <div
-                    className={`fullwidth flex flex-dir-column justify-center text-align-center ${
-                        title ? "mt5" : ""
-                    } ${buttons?.length ? "mb5" : ""}`}
+            <DialogContent className="!p-0">
+                <Box
+                    className={`w-full flex flex-col justify-center text-center ${
+                        title ? "!mt-[5px]" : ""
+                    } ${buttons?.length ? "!mb-[5px]" : ""}`}
                 >
                     {children}
-                </div>
+                </Box>
                 {!!buttons?.length && (
                     <React.Fragment>
                         <Divider />
-                        <div className="flex fullwidth">
-                            {buttons?.map((button, index) => (
-                                <Link
-                                    key={index}
-                                    className="notextdecoration fullwidth"
-                                    to={button.link}
-                                >
-                                    <Button
-                                        className="notexttransform font-size-18-force"
-                                        color="secondary"
-                                        variant="text"
-                                        fullWidth
-                                    >
-                                        {button.text}
-                                    </Button>
-                                </Link>
-                            ))}
-                        </div>
+                        <Box className="flex w-full">
+                            {buttons?.map(
+                                (button, index) =>
+                                    button && (
+                                        <Button
+                                            key={index}
+                                            {...(button.link && {
+                                                component: Link,
+                                                to: button.link,
+                                            })}
+                                            onClick={button.action}
+                                            className="!normal-case !text-[18px] !no-underline w-full"
+                                            sx={(theme) => ({
+                                                color: `${theme.palette.secondary.main} !important`,
+                                            })}
+                                            color="secondary"
+                                            variant="text"
+                                            fullWidth
+                                        >
+                                            {button.text}
+                                        </Button>
+                                    )
+                            )}
+                        </Box>
                     </React.Fragment>
                 )}
             </DialogContent>

@@ -56,7 +56,7 @@ export default function MenuBody(props: { selected: number }) {
     useEffect(() => {
         if (
             (reFetch || (!loading && !data.length)) &&
-            { category: category || id, profile, search: query, recall: true }[menuMode]
+            { category: category, profile, search: query, recall: true }[menuMode]
         ) {
             data.length && setData([]);
             setReFetch(false);
@@ -75,26 +75,37 @@ export default function MenuBody(props: { selected: number }) {
 
             switch (menuMode) {
                 case "category":
-                    api.menuCategory(category || `bytid${id}`, selected as 0 | 1)
+                    api.categoryThreads(
+                        category,
+                        { 0: "latest", 1: "viral" }[selected] as "latest" | "viral"
+                    )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "profile":
-                    api.menuHistory(profile, selected as 0 | 1)
+                    api.userThreads(
+                        profile,
+                        { 0: "created", 1: "lastcomment" }[selected] as
+                            | "created"
+                            | "lastcomment"
+                    )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "search":
-                    api.menuSearch(
+                    api.threadsSearch(
                         encodeURIComponent(query),
-                        smode as 0 | 1,
-                        selected as 0 | 1 | 2
+                        { 0: "title", 1: "op" }[smode] as "title" | "op",
+                        { 0: "relevance", 1: "created", 2: "lastcomment" }[selected] as
+                            | "relevance"
+                            | "created"
+                            | "lastcomment"
                     )
                         .then(onSuccess)
                         .catch(onError);
                     break;
                 case "recall":
-                    api.menuThreads(history.map((item) => item.id).slice(0, 24))
+                    api.threads(history.map((item) => item.id).slice(0, 24))
                         .then(onSuccess)
                         .catch(onError);
                     break;
@@ -123,27 +134,40 @@ export default function MenuBody(props: { selected: number }) {
 
         switch (menuMode) {
             case "category":
-                api.menuCategory(category || `bytid${id}`, selected as 0 | 1, page + 1)
+                api.categoryThreads(
+                    category,
+                    { 0: "latest", 1: "viral" }[selected] as "latest" | "viral",
+                    page + 1
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "profile":
-                api.menuHistory(profile, selected as 0 | 1, page + 1)
+                api.userThreads(
+                    profile,
+                    { 0: "created", 1: "lastcomment" }[selected] as
+                        | "created"
+                        | "lastcomment",
+                    page + 1
+                )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "search":
-                api.menuSearch(
+                api.threadsSearch(
                     encodeURIComponent(query),
-                    smode as 0 | 1,
-                    selected as 0 | 1 | 2,
+                    { 0: "title", 1: "op" }[smode] as "title" | "op",
+                    { 0: "relevance", 1: "created", 2: "lastcomment" }[selected] as
+                        | "relevance"
+                        | "created"
+                        | "lastcomment",
                     page + 1
                 )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "recall":
-                api.menuThreads(
+                api.threads(
                     history.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
                 )
                     .then(onSuccess)
@@ -171,14 +195,14 @@ export default function MenuBody(props: { selected: number }) {
 
     if (menuMode === "search" && !query)
         return (
-            <Typography className={"text-align-center mt10"} color={"secondary"}>
+            <Typography className={"text-center !mt-[10px]"} color={"secondary"}>
                 Please enter a query.
             </Typography>
         );
 
     return (
         <Paper
-            className="nobgimage noshadow overflow-auto"
+            className="!bg-none !shadow-none overflow-auto"
             style={{
                 maxHeight: `calc(100vh - ${
                     { search: 151, recall: 51, category: 91, profile: 91 }[menuMode]
@@ -187,11 +211,11 @@ export default function MenuBody(props: { selected: number }) {
             onScroll={onScroll}
             ref={paperRef}
         >
-            <Box className="min-height-full menu-bottom flex flex-dir-column">
+            <Box className="min-h-full bg-[#1e1e1e] flex flex-col">
                 {Boolean(data.length) && (
-                    <Box className="flex flex-dir-column max-width-full menu-bottom">
+                    <Box className="flex flex-col max-w-full bg-[#1e1e1e]">
                         {data.map((thread, index) => (
-                            <div key={index}>
+                            <Box key={index}>
                                 <MenuThread
                                     key={`${category}${id === thread.id}`}
                                     thread={thread}
@@ -221,14 +245,14 @@ export default function MenuBody(props: { selected: number }) {
                                     }}
                                 />
                                 <Divider />
-                            </div>
+                            </Box>
                         ))}
                     </Box>
                 )}
                 {loading && <MenuPreload />}
                 {end && (
                     <Typography
-                        className="mt10 mb40 text-align-center font-size-20-force"
+                        className="!mt-[10px] !mb-[40px] text-center !text-[20px]"
                         sx={{
                             color: "secondary.main",
                         }}

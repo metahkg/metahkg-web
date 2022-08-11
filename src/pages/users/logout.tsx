@@ -37,16 +37,16 @@ export default function Logout() {
 
     return (
         <Box
-            className="min-height-fullvh justify-center width-fullvw"
+            className="min-h-screen justify-center w-screen"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
-            <div className="flex fullwidth justify-center">
-                <Alert className="mt30 halfwidth" severity="info">
+            <Box className="flex w-full justify-center">
+                <Alert className="!mt-[30px] w-1/2" severity="info">
                     Logging you out...
                 </Alert>
-            </div>
+            </Box>
         </Box>
     );
 }

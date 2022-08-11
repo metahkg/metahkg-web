@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import "../css/pages/profile.css";
 import { Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
@@ -21,13 +20,10 @@ import {
 } from "../components/ContextProvider";
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
-import isInteger from "is-sn-integer";
 import { parseError } from "../lib/parseError";
 import Loader from "../lib/loader";
+import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
 
-/**
- * This function renders the profile page
- */
 export default function Profile() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
@@ -41,6 +37,10 @@ export default function Profile() {
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
     const [user] = useUser();
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+    const [avatarFileOriginal, setAvatarFileOriginal] = useState<File | null>(null);
+    const [editorOpen, setEditorOpen] = useState(false);
+
     const avatarRef = useRef<HTMLImageElement>(null);
     const navigate = useNavigate();
 
@@ -48,8 +48,8 @@ export default function Profile() {
     const isSelf = userId === user?.id;
 
     useEffect(() => {
-        if (isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
-            api.usersProfile(userId)
+        if (Number.isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
+            api.userProfile(userId)
                 .then((data) => {
                     setRequestedUser(data);
                     setTitle(`${data.name} | Metahkg`);
@@ -102,7 +102,9 @@ export default function Profile() {
 
     return (
         <Box
-            className="max-height-fullvh height-fullvh overflow-auto"
+            className={`max-h-screen h-screen overflow-auto ${
+                isSmallScreen ? "w-100v" : "w-70v"
+            }`}
             sx={{
                 backgroundColor: "primary.dark",
                 width: isSmallScreen ? "100vw" : "70vw",
@@ -111,84 +113,75 @@ export default function Profile() {
             {!requestedUser ? (
                 <Loader position="center" />
             ) : (
-                <Box className="flex justify-center align-center flex-dir-column">
+                <Box className="flex justify-center items-center flex-col">
+                    {avatarFileOriginal && (
+                        <AvatarEditorPopUp
+                            open={editorOpen}
+                            setOpen={setEditorOpen}
+                            avatar={avatarFile}
+                            setAvatar={setAvatarFile}
+                            avatarOriginal={avatarFileOriginal}
+                            onSuccess={() => {
+                                if (avatarRef.current)
+                                        avatarRef.current.src = `/api/user/${
+                                            requestedUser.id
+                                        }/avatar?rand=${Math.random()}`;
+                            }}
+                        />
+                    )}
                     <Box
-                        className="flex justify-center align-center max-width-full mt20"
-                        sx={{
-                            width: isSmallScreen ? "100vw" : "70vw",
-                        }}
+                        className={`flex justify-center items-center max-w-full !mt-[20px] ${
+                            isSmallScreen ? "w-100v" : "w-70v"
+                        }`}
                     >
                         <img
-                            src={`/api/users/${requestedUser.id}/avatar`}
+                            src={`/api/user/${requestedUser.id}/avatar`}
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
                             ref={avatarRef}
                         />
                         <br />
-                        <div
-                            className="ml20 flex justify-center profile-toptextdiv"
-                            style={{
-                                flexDirection: isSelf ? "column" : "row",
-                            }}
+                        <Box
+                            className={`!ml-[20px] flex justify-center h-[200px] ${
+                                isSelf ? "flex-col" : ""
+                            }`}
                         >
-                            <h1 className="font-size-30 profile-toptext">
-                                <div
-                                    className="overflow-hidden"
-                                    style={{
-                                        maxWidth: isSmallScreen
-                                            ? "calc(100vw - 250px)"
-                                            : "calc(70vw - 350px)",
-                                    }}
+                            <h1 className="text-[30px] self-center whitespace-nowrap leading-[37px] max-h-[37px]">
+                                <Box
+                                    className={`overflow-hidden ${
+                                        isSmallScreen
+                                            ? "max-w-[calc(100vw-250px)]"
+                                            : "max-w-[calc(70vw-350px)]"
+                                    }`}
                                 >
                                     <span
-                                        className="overflow-hidden text-overflow-ellipsis nowrap inline-block max-width-full"
-                                        style={{
-                                            color:
-                                                requestedUser.sex === "M"
-                                                    ? "#34aadc"
-                                                    : "red",
-                                        }}
+                                        className={`overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full ${
+                                            requestedUser.sex === "M"
+                                                ? "text-[#34aadc]"
+                                                : "text-[red]"
+                                        }`}
                                     >
                                         {requestedUser.name}
                                     </span>
-                                </div>
+                                </Box>
                                 #{requestedUser.id}
                             </h1>
-                            <div
-                                className="profile-uploaddiv"
-                                style={{
-                                    marginTop: isSelf ? 25 : 0,
-                                }}
-                            >
+                            <Box className={isSelf ? "mt-[25px]" : ""}>
                                 {isSelf && (
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
-                                            onUpload={() => {
-                                                setNotification({
-                                                    open: true,
-                                                    text: "Uploading...",
-                                                });
-                                            }}
-                                            onSuccess={() => {
-                                                if (avatarRef.current)
-                                                    avatarRef.current.src = `/api/users/${
-                                                        requestedUser.id
-                                                    }/avatar?rand=${Math.random()}`;
-                                            }}
-                                            onError={(err) => {
-                                                setNotification({
-                                                    open: true,
-                                                    text: parseError(err),
-                                                });
+                                            onChange={(image) => {
+                                                setAvatarFileOriginal(image);
+                                                setEditorOpen(true);
                                             }}
                                         />
                                     </Tooltip>
                                 )}
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                     </Box>
-                    <Box className="flex mt20 mb10 fullwidth font justify-center">
+                    <Box className="flex !mt-[20px] !mb-[10px] w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
                             setUser={setRequestedUser}
@@ -197,20 +190,17 @@ export default function Profile() {
                         />
                     </Box>
                     {isSmallScreen && (
-                        <div className="mt20">
-                            <Link
-                                className="text-decoration-none"
-                                to={`/history/${userId}`}
-                            >
+                        <Box className="!mt-[20px]">
+                            <Link className="!no-underline" to={`/history/${userId}`}>
                                 <Button
-                                    className="font-size-16"
+                                    className="text-[16px]"
                                     variant="text"
                                     color="secondary"
                                 >
                                     View History
                                 </Button>
                             </Link>
-                        </div>
+                        </Box>
                     )}
                 </Box>
             )}

@@ -1,4 +1,3 @@
-import "../css/components/dock.css";
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import SideBar from "./sidebar";
@@ -13,22 +12,22 @@ export default function Dock(props: {
     const { btns } = props;
     const isSmallScreen = useIsSmallScreen();
     return (
-        <div>
+        <Box>
             {isSmallScreen && (
                 <Box
-                    className="flex fullwidth dock-root"
+                    className="flex w-full fixed bottom-0 right-0 z-[100]"
                     sx={{ bgcolor: "primary.dark", height: 60 }}
                 >
-                    <div className="flex justify-space-between fullwidth ml20 mr20 align-center">
+                    <Box className="flex justify-between w-full !ml-[20px] !mr-[20px] items-center">
                         <SideBar />
                         {btns.map((btn, index) => (
                             <IconButton key={index} onClick={btn.action}>
                                 {btn.icon}
                             </IconButton>
                         ))}
-                    </div>
+                    </Box>
                 </Box>
             )}
-        </div>
+        </Box>
     );
 }

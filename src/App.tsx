@@ -1,17 +1,17 @@
 import { useEffect } from "react";
-import "./css/common.css";
 import "./css/App.css";
-import Theme from "./lib/theme";
+import "@fontsource/ibm-plex-sans"
+import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
-import { useMenu } from "./components/MenuProvider";
+import MenuProvider, { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import {
+import ContextProvider, {
     useSettings,
     useSettingsOpen,
     useUser,
     useIsSmallScreen,
     useAlertDialog,
-    useBlocked,
+    useBlockList,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
@@ -23,14 +23,14 @@ import { register, unregister } from "./serviceWorkerRegistration";
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
 
-export default function App() {
+function App() {
     const [menu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
     const [user] = useUser();
-    const [alertDialog, setAlertDialog] = useAlertDialog();
-    const [, setBlocked] = useBlocked();
+    const [alertDialog] = useAlertDialog();
+    const [, setBlocked] = useBlockList();
 
     useEffect(() => {
         if (user) {
@@ -41,6 +41,7 @@ export default function App() {
                     return window.location.reload();
                 }
             });
+            api.meBlocked().then(setBlocked);
             setInterval(() => {
                 api.meBlocked().then(setBlocked);
             }, 1000 * 60 * 10);
@@ -50,18 +51,17 @@ export default function App() {
 
     useEffect(() => {
         try {
-            console.log("registering service worker");
-
             if (process.env.REACT_APP_ENV === "dev") return unregister();
+
+            console.log("registering service worker");
 
             register({
                 onUpdate: async (registration) => {
                     registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                     window.location.reload();
                 },
-                onSuccess: (registration) => {
-                    console.log("updating...");
-                    registration.update();
+                onSuccess: async (registration) => {
+                    console.log("service worker registered");
                 },
             });
 
@@ -80,6 +80,11 @@ export default function App() {
                         });
 
                         setInterval(registration.update, 1000 * 60 * 10);
+
+                        if (registration.waiting) {
+                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+                            window.location.reload();
+                        }
                     })
                     .catch((error) => {
                         console.error(error.message);
@@ -88,7 +93,7 @@ export default function App() {
         } catch {
             console.error("Service worker registration failed");
         }
-    }, [alertDialog, setAlertDialog]);
+    }, []);
 
     return (
         <Theme
@@ -98,23 +103,32 @@ export default function App() {
             <AlertDialog {...alertDialog} />
             <Notification />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box
-                className="max-height-fullvh height-fullvh"
-                sx={{ bgcolor: "primary.dark" }}
-            >
+            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
                 <Router>
-                    <div className="flex">
-                        <div
-                            style={{
-                                width: !menu ? 0 : isSmallScreen ? "100vw" : "30vw",
-                            }}
+                    <Box className="flex">
+                        <Box
+                            className={
+                                (!menu && "hidden") ||
+                                (isSmallScreen ? "w-100v" : "w-30v")
+                            }
                         >
                             <Menu />
-                        </div>
+                        </Box>
                         <Routes />
-                    </div>
+                    </Box>
                 </Router>
             </Box>
         </Theme>
+    );
+}
+
+export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
+    const { reCaptchaSiteKey } = props;
+    return (
+        <ContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
+            <MenuProvider>
+                <App />
+            </MenuProvider>
+        </ContextProvider>
     );
 }
