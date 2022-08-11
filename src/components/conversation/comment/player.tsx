@@ -15,7 +15,7 @@ import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
 import { useWidth } from "../../ContextProvider";
 
-export default function Player(props: { url: string, style?: React.CSSProperties }) {
+export default function Player(props: { url: string; style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
     const [width] = useWidth();
