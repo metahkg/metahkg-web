@@ -1627,10 +1627,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^4.0.0-5-dev":
-  version "4.0.0-5-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.0.0-5-dev.tgz#c0958184391ad4e1b4fdea59be2e4c521ab98228"
-  integrity sha512-GIOyWlU6tKr4d3L5W5Tc0oQe3PShd1NBpKoxFFxnXiPW8uUmH2maSPhZPMiV7jDAtnXBLF+fe1q8uyot0Umi/w==
+"@metahkg/api@^4.0.0-6-dev":
+  version "4.0.0-6-dev"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.0.0-6-dev.tgz#6f9729cb7bbb330073e871b3c6f64e750e08cf0e"
+  integrity sha512-3wQ9ao+0kizqCpaMebXc07siqUW/Uv8psfDkv/HWEm11gZHhrEropg9lnfBRykbe4GZKvtUzyHazadEIJxVTcA==
   dependencies:
     axios "^0.27.2"
 
@@ -6693,13 +6693,6 @@ merge2@^1.3.0, merge2@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
-
-metahkg-api@^3.3.1-dev:
-  version "3.3.1-dev"
-  resolved "https://registry.yarnpkg.com/metahkg-api/-/metahkg-api-3.3.1-dev.tgz#e61ec15625aff398081f20f989a02e6306491eb7"
-  integrity sha512-LakjdOwDdH5bRDH2TkRxqcrmE4eRN7zRitoLlncv63EOn9nkOnFZn7HCNmNuSO4gKryeaghieYfrJCijggVitw==
-  dependencies:
-    axios "^0.27.2"
 
 methods@~1.1.2:
   version "1.1.2"
