@@ -69,7 +69,7 @@ registerRoute(
         plugins: [
             // Ensure that once this runtime cache reaches a maximum size the
             // least-recently used files are removed.
-            new ExpirationPlugin({ maxEntries: 100 }),
+            new ExpirationPlugin({ maxEntries: 200 }),
         ],
     })
 );
@@ -79,14 +79,16 @@ registerRoute(
         [
             "cdn.jsdeliv.net",
             "cdnjs.cloudflare.com",
-            "fonts.googleapis.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_API_URL || "i.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",
+            "youtube.com",
+            "ytimg.com",
+            "googlevideo.com",
         ].some((i) => url.origin.includes(i)),
-    new CacheFirst({
+    new StaleWhileRevalidate({
         cacheName: "app-external-assets",
         plugins: [
             new CacheableResponsePlugin({
@@ -98,14 +100,28 @@ registerRoute(
 );
 
 registerRoute(
-    ({ url }) => url.pathname.startsWith("/api"),
+    ({ url }) => url.pathname.match(/^\/api\/user\/[1-9]\d*\/avatar\S*$/),
+    new CacheFirst({
+        cacheName: "app-api-avatar",
+        plugins: [
+            new CacheableResponsePlugin({
+                statuses: [200],
+            }),
+            new ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 30 }),
+        ],
+    })
+);
+
+registerRoute(
+    ({ url }) =>
+        url.pathname.startsWith("/api") &&
+        !url.pathname.match(/^\/api\/user\/[1-9]\d*\/avatar\S*$/),
     new NetworkFirst({
         cacheName: "app-api",
         plugins: [
             new CacheableResponsePlugin({
                 statuses: [200],
             }),
-            new ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 30 }),
         ],
     })
 );

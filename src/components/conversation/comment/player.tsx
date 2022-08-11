@@ -1,6 +1,7 @@
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { useRef, useState } from "react";
-import ReactPlayer from "react-player";
+import React, { useRef, useState } from "react";
+import YoutubePlayer from "react-player/youtube";
+import FacebookPlayer from "react-player/facebook";
 import {
     Close,
     Facebook,
@@ -14,21 +15,28 @@ import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
 import { useWidth } from "../../ContextProvider";
 
-export default function Player(props: { url: string }) {
+export default function Player(props: { url: string, style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
     const [width] = useWidth();
-    const player = useRef<ReactPlayer>(null);
-    const { url } = props;
+    const YoutubePlayerRef = useRef<YoutubePlayer>(null);
+    const FacebookPlayerRef = useRef<FacebookPlayer>(null);
+
+    const { url, style } = props;
+
     const mode =
         (regex.facebook.videos.some((regexp) => url.match(regexp)) && "facebook") ||
         "youtube";
+
     const buttons = [
         {
             title: "Full Screen (press ESC/F11 to exit)",
             icon: <Fullscreen className="!text-[18px]" />,
             onClick: () => {
-                const Player = findDOMNode(player.current);
+                const Player = findDOMNode(
+                    { youtube: YoutubePlayerRef, facebook: FacebookPlayerRef }[mode]
+                        .current
+                );
                 Player instanceof Element && screenfull.request(Player);
             },
         },
@@ -38,7 +46,9 @@ export default function Player(props: { url: string }) {
             onClick: () => {
                 setPip(!pip);
             },
-            hidden: !ReactPlayer.canEnablePIP(url),
+            hidden: !{ youtube: YoutubePlayer, facebook: FacebookPlayer }[
+                mode
+            ].canEnablePIP(url),
         },
         {
             title: "Close",
@@ -48,8 +58,24 @@ export default function Player(props: { url: string }) {
             },
         },
     ];
+
+    const commonProps = {
+        width: window.innerWidth < 760 ? "100%" : "65%",
+        height: "auto",
+        className: "aspect-video",
+        stopOnUnmount: false,
+        pip,
+        url,
+        controls: true,
+        light: !play,
+        onClickPreview: () => {
+            setPlay(true);
+        },
+        playing: play,
+    };
+
     return (
-        <Box className="!mb-[5px]">
+        <Box className="!mb-[5px]" style={style}>
             {play && (
                 <Box
                     width={width < 760 ? "100%" : "65%"}
@@ -81,34 +107,31 @@ export default function Player(props: { url: string }) {
                     </Box>
                 </Box>
             )}
-            <ReactPlayer
-                ref={player}
-                width={window.innerWidth < 760 ? "100%" : "65%"}
-                height="auto"
-                style={{ aspectRatio: "16/9" }}
-                stopOnUnmount={false}
-                pip={pip}
-                url={url}
-                controls
-                light={!play}
-                onClickPreview={() => {
-                    setPlay(true);
-                }}
-                playIcon={
-                    {
-                        youtube: (
-                            <img
-                                width={80}
-                                height={50}
-                                src="/images/youtube/youtube.png"
-                                alt=""
-                            />
-                        ),
-                        facebook: <PlayCircleOutline className="!text-[50px]" />,
-                    }[mode]
-                }
-                playing={play}
-            />
+            {
+                {
+                    youtube: (
+                        <YoutubePlayer
+                            ref={YoutubePlayerRef}
+                            {...commonProps}
+                            playIcon={
+                                <img
+                                    width={80}
+                                    height={50}
+                                    src="/images/youtube/youtube.png"
+                                    alt=""
+                                />
+                            }
+                        />
+                    ),
+                    facebook: (
+                        <FacebookPlayer
+                            ref={FacebookPlayerRef}
+                            {...commonProps}
+                            playIcon={<PlayCircleOutline className="!text-[50px]" />}
+                        />
+                    ),
+                }[mode]
+            }
         </Box>
     );
 }

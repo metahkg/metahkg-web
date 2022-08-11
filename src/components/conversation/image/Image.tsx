@@ -2,13 +2,11 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useImage } from "react-image";
 import ImageErrorBoundary from "./ImageErrorBoundary";
 import { PhotoView } from "react-photo-view";
-import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
-import prettier from "prettier/standalone";
-import prettierCss from "prettier/parser-postcss";
 import Loader from "../../../lib/loader";
 import { Box, IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
+import cssToReact from "../../../lib/cssToReact";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
@@ -93,24 +91,7 @@ function ImgComponent(props: Props) {
                     height={height}
                     width={Number(height) > maxW ? "auto" : width}
                     style={{
-                        ...(style &&
-                            Object.fromEntries(
-                                Object.entries(
-                                    toJSON(
-                                        prettier
-                                            .format(style, {
-                                                parser: "css",
-                                                plugins: [prettierCss],
-                                            })
-                                            .replaceAll("\n", "")
-                                    ).attributes
-                                ).map(([k, v]) => [
-                                    k.replace(/-[a-z]/g, (match) => {
-                                        return match[1].toUpperCase();
-                                    }),
-                                    v,
-                                ])
-                            )),
+                        ...(style && cssToReact(style)),
                         ...(small && {
                             maxWidth: smallMaxW,
                             maxHeight: smallMaxH,
