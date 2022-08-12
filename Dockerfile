@@ -35,6 +35,10 @@ RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn build; fi;
 
 FROM node:18-alpine
 
+RUN adduser user -D
+WORKDIR /home/user
+USER user
+
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
@@ -55,9 +59,8 @@ ENV env $env
 
 ENV REACT_APP_ENV $env
 
-WORKDIR /usr/src/app
-
 COPY --from=build /usr/src/app/build ./build
+COPY --from=build /usr/src/app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
