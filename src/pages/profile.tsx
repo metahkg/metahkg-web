@@ -172,6 +172,7 @@ export default function Profile() {
                                         <UploadAvatar
                                             onChange={(image) => {
                                                 setAvatarFileOriginal(image);
+                                                setAvatarFile(image);
                                                 setEditorOpen(true);
                                             }}
                                         />
