@@ -100,22 +100,7 @@ registerRoute(
 );
 
 registerRoute(
-    ({ url }) => url.pathname.match(/^\/api\/user\/[1-9]\d*\/avatar\S*$/),
-    new CacheFirst({
-        cacheName: "app-api-avatar",
-        plugins: [
-            new CacheableResponsePlugin({
-                statuses: [200],
-            }),
-            new ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 30 }),
-        ],
-    })
-);
-
-registerRoute(
-    ({ url }) =>
-        url.pathname.startsWith("/api") &&
-        !url.pathname.match(/^\/api\/user\/[1-9]\d*\/avatar\S*$/),
+    ({ url }) => url.pathname.startsWith("/api"),
     new NetworkFirst({
         cacheName: "app-api",
         plugins: [
