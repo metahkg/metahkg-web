@@ -1627,10 +1627,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^4.0.0-6-dev":
-  version "4.0.0-6-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.0.0-6-dev.tgz#6f9729cb7bbb330073e871b3c6f64e750e08cf0e"
-  integrity sha512-3wQ9ao+0kizqCpaMebXc07siqUW/Uv8psfDkv/HWEm11gZHhrEropg9lnfBRykbe4GZKvtUzyHazadEIJxVTcA==
+"@metahkg/api@^4.0.0-7-dev":
+  version "4.0.0-7-dev"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.0.0-7-dev.tgz#575360a458dad456e4c241b8b3870b10b76d8879"
+  integrity sha512-HnUWAxtlCDalQvNRRY1UZuMS8NeLhqM7xCV8/MzWZxZLd9xzC57hUMattjBtI+3OjY41MPitCMwnENh0i2P7Sg==
   dependencies:
     axios "^0.27.2"
 
@@ -5402,7 +5402,7 @@ humanize-duration@^3.27.2:
   resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.27.2.tgz#4b4e565bec098d22c9a54344e16156d1c649f160"
   integrity sha512-A15OmA3FLFRnehvF4ZMocsxTZYvHq4ze7L+AgR1DeHw0xC9vMd4euInY83uqGU9/XXKNnVIEeKc1R8G8nKqtzg==
 
-husky@^8.0.1:
+husky@^8.0.0:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.1.tgz#511cb3e57de3e3190514ae49ed50f6bc3f50b3e9"
   integrity sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==
