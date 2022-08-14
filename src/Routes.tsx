@@ -14,6 +14,7 @@ const Search = loadable(() => import("./pages/search"));
 const Profile = loadable(() => import("./pages/profile"));
 const History = loadable(() => import("./pages/history"));
 const Recall = loadable(() => import("./pages/recall"));
+const Starred = loadable(() => import("./pages/starred"));
 
 // threads
 const Create = loadable(() => import("./pages/create"));
@@ -78,6 +79,14 @@ export default function Routes() {
                 element={
                     <EnableMenu>
                         <Recall />
+                    </EnableMenu>
+                }
+            />
+            <Route
+                path="/starred"
+                element={
+                    <EnableMenu>
+                        <Starred />
                     </EnableMenu>
                 }
             />

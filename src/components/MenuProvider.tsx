@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 
-type menuMode = "category" | "search" | "profile" | "recall";
+type menuMode = "category" | "search" | "profile" | "recall" | "starred";
 
 const MenuContext = createContext<{
     category: [number, React.Dispatch<React.SetStateAction<number>>];

@@ -19,6 +19,7 @@ import {
     Menu as MenuIcon,
     Settings as SettingsIcon,
     Telegram as TelegramIcon,
+    Star as StarIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -116,6 +117,11 @@ export default function SideBar() {
                                 title: "Recall",
                                 link: "/recall",
                                 icon: <AccessTimeFilled />,
+                            },
+                            {
+                                title: "Starred",
+                                link: "/starred",
+                                icon: <StarIcon />,
                             },
                             {
                                 title: user ? "Logout" : "Login / Register",

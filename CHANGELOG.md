@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.2.0
+
+- star threads
+
 ## v4.0.3
 
 - avatar editor

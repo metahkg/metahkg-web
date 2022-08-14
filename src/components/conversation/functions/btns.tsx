@@ -1,4 +1,10 @@
-import { Refresh, Collections, Reply, Share as ShareIcon } from "@mui/icons-material";
+import {
+    Refresh,
+    Collections,
+    Reply,
+    Share as ShareIcon,
+    Star,
+} from "@mui/icons-material";
 import { useUpdate } from "./update";
 import {
     useGalleryOpen,
@@ -9,8 +15,10 @@ import {
     useCurrentPage,
 } from "../ConversationContext";
 import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
-import { useNotification, useUser } from "../../ContextProvider";
+import { useNotification, useStarList, useUser } from "../../ContextProvider";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../../lib/api";
+import { parseError } from "../../../lib/parseError";
 
 export default function useBtns() {
     const update = useUpdate();
@@ -25,7 +33,9 @@ export default function useBtns() {
     const [thread] = useThread();
     const [, setEditor] = useEditor();
     const [currentPage] = useCurrentPage();
+    const [starList, setStarList] = useStarList();
     const croot = useCRoot();
+    const starred = Boolean(starList.find((i) => i.id === threadId));
 
     const btns = [
         {
@@ -37,6 +47,33 @@ export default function useBtns() {
                 if (croot.current) croot.current.scrollTop = newscrollTop;
             },
             title: "Refresh",
+        },
+        user && {
+            icon: (
+                <Star
+                    {...(starred && {
+                        color: "secondary",
+                    })}
+                />
+            ),
+            action: () => {
+                setNotification({
+                    open: true,
+                    text: `${starred ? "Unstarring" : "Starring"} thread...`,
+                });
+                (starred ? api.threadUnstar(threadId) : api.threadStar(threadId))
+                    .then(() => {
+                        setNotification({
+                            open: true,
+                            text: `Thread ${starred ? "un" : ""}starred.`,
+                        });
+                        api.meStarred().then(setStarList);
+                    })
+                    .catch((err) => {
+                        setNotification({ open: true, text: parseError(err) });
+                    });
+            },
+            title: starred ? "Unstar" : "Star",
         },
         {
             icon: <Collections />,
@@ -74,7 +111,11 @@ export default function useBtns() {
             },
             title: "Share",
         },
-    ];
+    ].filter((x) => x) as {
+        icon: React.ReactElement;
+        action: () => void;
+        title: string;
+    }[];
 
     return btns;
 }

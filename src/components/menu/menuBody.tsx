@@ -8,7 +8,7 @@ import {
     useSmode,
     useMenuMode,
 } from "../MenuProvider";
-import { useHistory, useNotification, useQuery } from "../ContextProvider";
+import { useHistory, useNotification, useQuery, useStarList } from "../ContextProvider";
 import { AxiosError } from "axios";
 import { api } from "../../lib/api";
 import { Box, Divider, Paper, Typography } from "@mui/material";
@@ -35,6 +35,7 @@ export default function MenuBody(props: { selected: number }) {
     const [end, setEnd] = useState(false);
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useHistory();
+    const [starList] = useStarList();
     const [reFetch, setReFetch] = useReFetch();
     const paperRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +57,9 @@ export default function MenuBody(props: { selected: number }) {
     useEffect(() => {
         if (
             (reFetch || (!loading && !data.length)) &&
-            { category: category, profile, search: query, recall: true }[menuMode]
+            { category: category, profile, search: query, recall: true, starred: true }[
+                menuMode
+            ]
         ) {
             data.length && setData([]);
             setReFetch(false);
@@ -109,6 +112,10 @@ export default function MenuBody(props: { selected: number }) {
                         .then(onSuccess)
                         .catch(onError);
                     break;
+                case "starred":
+                    api.threads(starList.map((item) => item.id).slice(0, 24))
+                        .then(onSuccess)
+                        .catch(onError);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,6 +180,12 @@ export default function MenuBody(props: { selected: number }) {
                     .then(onSuccess)
                     .catch(onError);
                 break;
+            case "starred":
+                api.threads(
+                    starList.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
+                )
+                    .then(onSuccess)
+                    .catch(onError);
         }
     }
 
@@ -205,7 +218,9 @@ export default function MenuBody(props: { selected: number }) {
             className="!bg-none !shadow-none overflow-auto"
             style={{
                 maxHeight: `calc(100vh - ${
-                    { search: 151, recall: 51, category: 91, profile: 91 }[menuMode]
+                    { search: 151, recall: 51, category: 91, profile: 91, starred: 51 }[
+                        menuMode
+                    ]
                 }px)`,
             }}
             onScroll={onScroll}

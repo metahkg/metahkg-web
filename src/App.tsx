@@ -11,7 +11,6 @@ import ContextProvider, {
     useUser,
     useIsSmallScreen,
     useAlertDialog,
-    useBlockList,
 } from "./components/ContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
@@ -30,7 +29,6 @@ function App() {
     const [settings] = useSettings();
     const [user] = useUser();
     const [alertDialog] = useAlertDialog();
-    const [, setBlocked] = useBlockList();
 
     useEffect(() => {
         if (user) {
@@ -41,10 +39,6 @@ function App() {
                     return window.location.reload();
                 }
             });
-            api.meBlocked().then(setBlocked);
-            setInterval(() => {
-                api.meBlocked().then(setBlocked);
-            }, 1000 * 60 * 10);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -13,7 +13,7 @@ import type { settings } from "../types/settings";
 import { api } from "../lib/api";
 import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User } from "@metahkg/api";
+import { BlockedUser, Category, User, Star } from "@metahkg/api";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -29,6 +29,7 @@ const Context = createContext<{
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
+    starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     //@ts-ignore
 }>(null);
 /**
@@ -91,9 +92,24 @@ export default function ContextProvider(props: {
     const [blockList, setBlockList] = useState<BlockedUser[]>(
         JSON.parse(localStorage.getItem("blocklist") || "[]")
     );
+    const [starList, setStarList] = useState<Star[]>(
+        JSON.parse(localStorage.getItem("starlist") || "[]")
+    );
 
     useEffect(() => {
         api.categories().then(setCategories);
+        if (user) {
+            api.meBlocked().then(setBlockList);
+            setInterval(() => {
+                api.meBlocked().then(setBlockList);
+            }, 1000 * 60 * 10);
+
+            api.meStarred().then(setStarList);
+            setInterval(() => {
+                api.meStarred().then(setStarList);
+            }, 1000 * 60 * 10);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -138,6 +154,7 @@ export default function ContextProvider(props: {
                 reCaptchaSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
+                starList: [starList, setStarList],
             }}
         >
             {props.children}
@@ -261,4 +278,9 @@ export function useAlertDialog() {
 export function useBlockList() {
     const { blockList } = useContext(Context);
     return blockList;
+}
+
+export function useStarList() {
+    const { starList } = useContext(Context);
+    return starList;
 }
