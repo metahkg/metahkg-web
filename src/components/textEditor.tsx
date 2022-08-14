@@ -202,7 +202,7 @@ export default function TextEditor(props: {
                         return data.url;
                     },
                 }}
-                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.1.0/tinymce.min.js"
+                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.1.2/tinymce.min.js"
             />
         </Box>
     );

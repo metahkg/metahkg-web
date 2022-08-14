@@ -7,8 +7,9 @@ import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
 import { Comment } from "@metahkg/api";
-import { useSettings } from "../../ContextProvider";
+import { useBlockList, useSettings } from "../../ContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
+import BlockedBtn from "./blockedBtn";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -20,6 +21,18 @@ export default function CommentBody(props: {
     const [settings] = useSettings();
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
+    const [blockList] = useBlockList();
+    const [blocked, setBlocked] = useState<boolean | undefined>(
+        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+    );
+
+    useEffect(() => {
+        if (blocked || blocked === undefined)
+            setBlocked(
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+            );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [blockList]);
 
     const [commentJSX, setCommentJSX] = useState(
         parse(
@@ -90,9 +103,30 @@ export default function CommentBody(props: {
                     )}
                 </blockquote>
             ),
-            <React.Fragment key={1}>{commentJSX}</React.Fragment>,
+            <React.Fragment key={1}>
+                {blocked && depth !== 0 ? (
+                    <BlockedBtn
+                        className="!my-[10px]"
+                        userName={comment.user.name}
+                        setBlocked={setBlocked}
+                        reason={blockList.find((x) => x.id === comment.user.id)?.reason}
+                    />
+                ) : (
+                    commentJSX
+                )}
+            </React.Fragment>,
         ],
-        [comment.quote, commentJSX, depth, noQuote, showQuote]
+        [
+            blockList,
+            blocked,
+            comment.quote,
+            comment.user.id,
+            comment.user.name,
+            commentJSX,
+            depth,
+            noQuote,
+            showQuote,
+        ]
     );
 
     useEffect(() => {

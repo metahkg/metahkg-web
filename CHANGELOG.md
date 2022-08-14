@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.2.0
+
+- star threads
+- also hide comments of blocked users in quotes
+- add reason to block
+
 ## v4.0.3
 
 - avatar editor

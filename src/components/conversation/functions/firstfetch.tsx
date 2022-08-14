@@ -68,7 +68,7 @@ export default function useFirstFetch() {
             .catch(onError);
 
         if (user)
-            api.meVotes(threadId)
+            api.meVotesThread(threadId)
                 .then((data) => {
                     setVotes(data);
                 })

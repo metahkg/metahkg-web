@@ -13,7 +13,7 @@ import { ExpirationPlugin } from "workbox-expiration";
 import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate, CacheFirst, NetworkFirst } from "workbox-strategies";
+import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -69,7 +69,7 @@ registerRoute(
         plugins: [
             // Ensure that once this runtime cache reaches a maximum size the
             // least-recently used files are removed.
-            new ExpirationPlugin({ maxEntries: 100 }),
+            new ExpirationPlugin({ maxEntries: 200 }),
         ],
     })
 );
@@ -79,14 +79,16 @@ registerRoute(
         [
             "cdn.jsdeliv.net",
             "cdnjs.cloudflare.com",
-            "fonts.googleapis.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_API_URL || "i.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",
+            "youtube.com",
+            "ytimg.com",
+            "googlevideo.com",
         ].some((i) => url.origin.includes(i)),
-    new CacheFirst({
+    new StaleWhileRevalidate({
         cacheName: "app-external-assets",
         plugins: [
             new CacheableResponsePlugin({
@@ -105,7 +107,6 @@ registerRoute(
             new CacheableResponsePlugin({
                 statuses: [200],
             }),
-            new ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 30 }),
         ],
     })
 );

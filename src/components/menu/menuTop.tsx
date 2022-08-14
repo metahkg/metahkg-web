@@ -36,6 +36,7 @@ export default function MenuTop(props: {
         profile: "User Profile",
         category: "Metahkg",
         recall: "Recall",
+        starred: "Starred",
     }[menuMode];
     const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = {
@@ -43,6 +44,7 @@ export default function MenuTop(props: {
         profile: ["Created", "Last Reply"],
         category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
         recall: [],
+        starred: [],
     }[menuMode];
 
     const noTitleBar = isSmallScreen && menuMode === "category";
@@ -70,13 +72,14 @@ export default function MenuTop(props: {
                 className="w-full"
                 sx={{
                     bgcolor: "primary.main",
-                    height: menuMode === "recall" || noTitleBar ? 50 : 90,
+                    height:
+                        ["recall", "starred"].includes(menuMode) || noTitleBar ? 50 : 90,
                 }}
             >
                 {!noTitleBar && (
                     <Box
-                        className={`flex w-full items-center h-[50px] justify-${
-                            isSmallScreen ? "center" : "between"
+                        className={`flex w-full items-center h-[50px] ${
+                            isSmallScreen ? "justify-center" : "justify-between"
                         }`}
                     >
                         {!isSmallScreen && (

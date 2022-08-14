@@ -1,15 +1,19 @@
 import { DOMNode, domToReact } from "html-react-parser";
 import { Element, Text } from "domhandler/lib/node";
-import Img from "../components/conversation/image/Image";
-import Player from "../components/conversation/comment/player";
-import TweetEmbed from "../components/conversation/comment/twitter";
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import { Box } from "@mui/material";
 import axios from "axios";
 import Loader from "./loader";
 import { regex } from "./regex";
-import SocialMediaEmbed from "../components/conversation/comment/socialMediaEmbed";
 import React from "react";
+import loadable from "@loadable/component";
+
+const Img = loadable(() => import("../components/conversation/image/Image"));
+const Player = loadable(() => import("../components/conversation/comment/player"));
+const TweetEmbed = loadable(() => import("../components/conversation/comment/twitter"));
+const SocialMediaEmbed = loadable(
+    () => import("../components/conversation/comment/socialMediaEmbed")
+);
 
 export const replace = (params: { quote?: boolean }) => {
     const { quote } = params;

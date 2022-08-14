@@ -35,6 +35,9 @@ RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn build; fi;
 
 FROM node:18-alpine
 
+RUN adduser user -D
+WORKDIR /home/user
+
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
@@ -55,8 +58,6 @@ ENV env $env
 
 ENV REACT_APP_ENV $env
 
-WORKDIR /usr/src/app
-
 COPY --from=build /usr/src/app/build ./build
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
@@ -65,5 +66,9 @@ COPY ./scripts ./scripts
 COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json  ./postcss.config.js ./tailwind.config.js ./
 
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
+
+RUN chown user:user -R build
+
+USER user
 
 CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;
