@@ -118,7 +118,7 @@ export default function SideBar() {
                                 link: "/recall",
                                 icon: <AccessTimeFilled />,
                             },
-                            {
+                            user && {
                                 title: "Starred",
                                 link: "/starred",
                                 icon: <StarIcon />,
@@ -130,18 +130,21 @@ export default function SideBar() {
                                 }?returnto=${encodeURIComponent(wholePath())}`,
                                 icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
                             },
-                        ].map((item, index) => (
-                            <ListItemButton
-                                key={index}
-                                component={Link}
-                                onClick={onClick}
-                                to={item.link}
-                                className="!no-underline text-white"
-                            >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText>{item.title}</ListItemText>
-                            </ListItemButton>
-                        ))}
+                        ].map(
+                            (item, index) =>
+                                item && (
+                                    <ListItemButton
+                                        key={index}
+                                        component={Link}
+                                        onClick={onClick}
+                                        to={item.link}
+                                        className="!no-underline text-white"
+                                    >
+                                        <ListItemIcon>{item.icon}</ListItemIcon>
+                                        <ListItemText>{item.title}</ListItemText>
+                                    </ListItemButton>
+                                )
+                        )}
                     </List>
                     <Divider />
                     {[
