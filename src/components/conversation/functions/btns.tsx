@@ -67,6 +67,11 @@ export default function useBtns() {
                             open: true,
                             text: `Thread ${starred ? "un" : ""}starred.`,
                         });
+                        setStarList(
+                            starred
+                                ? starList.filter((i) => i.id !== threadId)
+                                : [...starList, { id: threadId, date: new Date() }]
+                        );
                         api.meStarred().then(setStarList);
                     })
                     .catch((err) => {

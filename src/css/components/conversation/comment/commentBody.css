@@ -34,7 +34,7 @@
     margin-left: 15px;
 }
 
-.comment-body > blockquote *:not(span) {
+.comment-body > blockquote *:not(span, button) {
     color: #aca9a9;
 }
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn lint
+npx eslint --cache --fix src 
+npx prettier --check src
 echo "running npx tsc..."
 npx tsc

@@ -7,7 +7,7 @@ import {
     Edit as EditIcon,
     PushPin as PushPinIcon,
 } from "@mui/icons-material";
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -23,7 +23,12 @@ import dateAndTime from "date-and-time";
 import { isMobile } from "react-device-detect";
 import { timeToWord, wholePath } from "../../../lib/common";
 import MoreList from "./more";
-import { useNotification, useSettings, useUser } from "../../ContextProvider";
+import {
+    useBlockList,
+    useNotification,
+    useSettings,
+    useUser,
+} from "../../ContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";
@@ -32,6 +37,7 @@ import { Comment } from "@metahkg/api";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import UserModal from "./userModal";
 import { colors } from "../../../lib/css";
+import BlockedBtn from "./blockedBtn";
 
 export default function CommentTop(props: {
     comment: Comment;
@@ -55,6 +61,7 @@ export default function CommentTop(props: {
     const [thread, setThread] = useThread();
     const [user] = useUser();
     const [, setEditor] = useEditor();
+    const [blockList] = useBlockList();
     const cRoot = useCRoot();
 
     const { comment, noStory, fold, setFold, blocked, setBlocked } = props;
@@ -287,18 +294,12 @@ export default function CommentTop(props: {
                     </Box>
                 )}
                 {blocked && (
-                    <Tooltip arrow title="user blocked">
-                        <Button
-                            className="!ml-[20px] !text-[14px] !normal-case"
-                            color="error"
-                            onClick={() => {
-                                setBlocked && setBlocked(false);
-                            }}
-                            variant="outlined"
-                        >
-                            click to view comment
-                        </Button>
-                    </Tooltip>
+                    <BlockedBtn
+                        className="!ml-[20px]"
+                        userName={comment.user.name}
+                        reason={blockList.find((x) => x.id === comment.user.id)?.reason}
+                        setBlocked={setBlocked}
+                    />
                 )}
                 {!fold &&
                     !blocked &&

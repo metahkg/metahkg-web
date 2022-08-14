@@ -1627,10 +1627,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^4.2.0-dev":
-  version "4.2.0-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.2.0-dev.tgz#1393c35bacee24825402d16bf2b9bd2a4f48c673"
-  integrity sha512-/xurP4278bogrydxU3A6h8wEvdQ9KRHAmGtNA4+Q09liOU8SMF3H9k0LFNSn+6yLxNgIWSi7b2lDzI7BCqATag==
+"@metahkg/api@^4.2.0-1-dev":
+  version "4.2.0-1-dev"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.2.0-1-dev.tgz#20734504f658026b8a1e5209371bf1d1b94657af"
+  integrity sha512-oJLoht6TYoWfz0YWtN3etZocUe7+YJx6VstqEerUC51p/nFofscT3Mh9+SR+BxZiU2cge6w+KDXjS4IxVzNo8w==
   dependencies:
     axios "^0.27.2"
 

@@ -1,5 +1,6 @@
 import { User } from "@metahkg/api";
-import React from "react";
+import { Box, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { PopUp } from "../../../lib/popup";
@@ -15,6 +16,8 @@ export default function UserModal(props: {
     const [, setNotification] = useNotification();
     const blocked = Boolean(blockList.find((i) => i.id === commentUser.id));
     const [user] = useUser();
+    const [blockModalOpen, setBlockModalOpen] = useState(false);
+    const [reason, setReason] = useState("");
 
     return (
         <PopUp
@@ -27,17 +30,18 @@ export default function UserModal(props: {
                     ? {
                           text: blocked ? "Unblock" : "Block",
                           action: () => {
-                              (blocked
-                                  ? api.userUnblock({ id: commentUser.id })
-                                  : api.userBlock({ id: commentUser.id })
-                              )
+                              if (!blocked) return setBlockModalOpen(true);
+
+                              setNotification({ open: true, text: "Unblocking user..." });
+                              api.userUnblock(commentUser.id)
                                   .then(() => {
                                       setNotification({
                                           open: true,
-                                          text: `${blocked ? "Unblocked" : "Blocked"} ${
-                                              commentUser.name
-                                          }`,
+                                          text: `Unblocked ${commentUser.name}`,
                                       });
+                                      setBlockList(
+                                          blockList.filter((i) => i.id !== commentUser.id)
+                                      );
                                       api.meBlocked().then(setBlockList);
                                   })
                                   .catch((err) => {
@@ -51,6 +55,52 @@ export default function UserModal(props: {
                     : undefined,
             ]}
         >
+            <PopUp
+                open={blockModalOpen}
+                setOpen={setBlockModalOpen}
+                title="Block user"
+                buttons={[
+                    { text: "Cancel", action: () => setBlockModalOpen(false) },
+                    {
+                        text: "Block",
+                        action: () => {
+                            setNotification({ open: true, text: "Blocking user..." });
+                            api.userBlock(commentUser.id, { reason })
+                                .then(() => {
+                                    setNotification({
+                                        open: true,
+                                        text: `Blocked ${commentUser.name}`,
+                                    });
+                                    setBlockList([
+                                        ...blockList,
+                                        { ...commentUser, date: new Date(), reason },
+                                    ]);
+                                    api.meBlocked().then(setBlockList);
+                                    setBlockModalOpen(false);
+                                })
+                                .catch((err) => {
+                                    setNotification({
+                                        open: true,
+                                        text: parseError(err),
+                                    });
+                                });
+                        },
+                    },
+                ]}
+            >
+                <Box className="mx-[10px] mb-[10px]">
+                    <p className="text-center my-2 text-[20px]">{commentUser.name}</p>
+                    <p className="text-center my-2 text-[20px]">#{commentUser.id}</p>
+                    <TextField
+                        onChange={(e) => setReason(e.target.value)}
+                        label="Reason to block (optional)"
+                        variant="outlined"
+                        fullWidth
+                        color="secondary"
+                        helperText="This can help you to find out why you blocked this user"
+                    />
+                </Box>
+            </PopUp>
             <p className="text-center !mt-[5px] !mb-[5px] text-[20px]">
                 {commentUser.name}
                 <br />#{commentUser.id}

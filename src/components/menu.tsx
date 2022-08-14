@@ -109,7 +109,9 @@ function Menu() {
                         }}
                         containerStyle={{ flex: 1 }}
                         slideCount={
-                            { category: 2, profile: 2, search: 3, recall: 1, starred: 1 }[menuMode]
+                            { category: 2, profile: 2, search: 3, recall: 1, starred: 1 }[
+                                menuMode
+                            ]
                         }
                         slideRenderer={slideRenderer}
                         enableMouseEvents={true}
