@@ -98,6 +98,9 @@ export default function ContextProvider(props: {
 
     useEffect(() => {
         api.categories().then(setCategories);
+    }, []);
+
+    useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
             setInterval(() => {
@@ -109,8 +112,7 @@ export default function ContextProvider(props: {
                 api.meStarred().then(setStarList);
             }, 1000 * 60 * 10);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         localStorage.setItem("history", JSON.stringify(history));
@@ -127,6 +129,10 @@ export default function ContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("blocklist", JSON.stringify(blockList));
     }, [blockList]);
+
+    useEffect(() => {
+        localStorage.setItem("starlist", JSON.stringify(starList));
+    }, [starList]);
 
     function updateSize() {
         setWidth(window.innerWidth);
