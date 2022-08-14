@@ -13,7 +13,7 @@ import type { settings } from "../types/settings";
 import { api } from "../lib/api";
 import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { Category, User } from "@metahkg/api";
+import { BlockedUser, Category, User } from "@metahkg/api";
 
 const Context = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -28,7 +28,7 @@ const Context = createContext<{
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
-    blockList: [User[], Dispatch<SetStateAction<User[]>>];
+    blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     //@ts-ignore
 }>(null);
 /**
@@ -88,7 +88,7 @@ export default function ContextProvider(props: {
         message: "",
         btns: [],
     });
-    const [blockList, setBlockList] = useState<User[]>(
+    const [blockList, setBlockList] = useState<BlockedUser[]>(
         JSON.parse(localStorage.getItem("blocklist") || "[]")
     );
 

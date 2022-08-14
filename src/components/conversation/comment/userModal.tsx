@@ -28,8 +28,8 @@ export default function UserModal(props: {
                           text: blocked ? "Unblock" : "Block",
                           action: () => {
                               (blocked
-                                  ? api.meUnblock({ id: commentUser.id })
-                                  : api.meBlock({ id: commentUser.id })
+                                  ? api.userUnblock({ id: commentUser.id })
+                                  : api.userBlock({ id: commentUser.id })
                               )
                                   .then(() => {
                                       setNotification({
