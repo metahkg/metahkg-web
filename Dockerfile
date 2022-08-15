@@ -3,8 +3,8 @@ FROM node:18-alpine AS build
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
-ARG REACT_APP_IMAGES_API_URL
-ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
+ARG REACT_APP_IMAGES_DOMAIN
+ENV REACT_APP_IMAGES_DOMAIN $REACT_APP_IMAGES_DOMAIN
 
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
@@ -41,8 +41,8 @@ WORKDIR /home/user
 ARG REACT_APP_recaptchasitekey
 ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
 
-ARG REACT_APP_IMAGES_API_URL
-ENV REACT_APP_IMAGES_API_URL $REACT_APP_IMAGES_API_URL
+ARG REACT_APP_IMAGES_DOMAIN
+ENV REACT_APP_IMAGES_DOMAIN $REACT_APP_IMAGES_DOMAIN
 
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
@@ -73,7 +73,7 @@ USER user
 
 CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; \
     then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; \
-    if [ "${REACT_APP_IMAGES_API_URL}" != "" ]; \
-    then sed -i "s/{IMAGES_API_URL}/${REACT_APP_IMAGES_API_URL}/g" build/static/js/*.js*; fi; \
+    if [ "${REACT_APP_IMAGES_DOMAIN}" != "" ]; \
+    then sed -i "s/{IMAGES_DOMAIN}/${REACT_APP_IMAGES_DOMAIN}/g" build/static/js/*.js*; fi; \
     export PORT=${port}; \
     if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;
