@@ -150,7 +150,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                         <StreamPlayer
                             ref={StreamPlayerRef}
                             {...commonProps}
-                            playIcon={<PlayCircleOutline className="!text-[50px]" />}
+                            playIcon={<PlayArrow className="!text-[50px]" />}
                         />
                     ),
                 }[mode]
