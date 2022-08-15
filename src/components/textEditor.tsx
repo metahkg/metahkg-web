@@ -10,22 +10,24 @@ export default function TextEditor(props: {
     initText?: string;
     className?: string;
     sx?: SxProps<Theme>;
-    autoresize?: boolean;
+    autoResize?: boolean;
     toolbarBottom?: boolean;
     toolbarSticky?: boolean;
     noMenuBar?: boolean;
     noStatusBar?: boolean;
+    minHeight?: number;
 }) {
     const {
         onChange,
         initText,
         className,
         sx,
-        autoresize,
+        autoResize: autoresize,
         toolbarBottom,
         toolbarSticky,
         noMenuBar,
         noStatusBar,
+        minHeight,
     } = props;
 
     const isSmallScreen = useIsSmallScreen();
@@ -37,6 +39,7 @@ export default function TextEditor(props: {
                 initialValue={initText}
                 init={{
                     height: isSmallScreen ? 310 : 350,
+                    ...(minHeight && { min_height: minHeight }),
                     skin_url:
                         "https://cdn.jsdelivr.net/npm/metahkg-css@1.1.0/dist/tinymce/skins/ui/metahkg-dark",
                     content_css:

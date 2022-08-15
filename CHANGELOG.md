@@ -5,6 +5,8 @@
 - star threads
 - also hide comments of blocked users in quotes
 - add reason to block
+- add streamable support
+- create thread auto resize
 
 ## v4.0.3
 

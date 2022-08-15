@@ -2,11 +2,13 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import React, { useRef, useState } from "react";
 import YoutubePlayer from "react-player/youtube";
 import FacebookPlayer from "react-player/facebook";
+import StreamPlayer from "react-player/streamable";
 import {
     Close,
     Facebook,
     Fullscreen,
     PictureInPictureAlt,
+    PlayArrow,
     PlayCircleOutline,
     YouTube as YouTubeIcon,
 } from "@mui/icons-material";
@@ -21,12 +23,14 @@ export default function Player(props: { url: string; style?: React.CSSProperties
     const [width] = useWidth();
     const YoutubePlayerRef = useRef<YoutubePlayer>(null);
     const FacebookPlayerRef = useRef<FacebookPlayer>(null);
+    const StreamPlayerRef = useRef<StreamPlayer>(null);
 
     const { url, style } = props;
 
     const mode =
         (regex.facebook.videos.some((regexp) => url.match(regexp)) && "facebook") ||
-        "youtube";
+        (regex.youtube.some((regexp) => url.match(regexp)) && "youtube") ||
+        "streamable";
 
     const buttons = [
         {
@@ -34,8 +38,11 @@ export default function Player(props: { url: string; style?: React.CSSProperties
             icon: <Fullscreen className="!text-[18px]" />,
             onClick: () => {
                 const Player = findDOMNode(
-                    { youtube: YoutubePlayerRef, facebook: FacebookPlayerRef }[mode]
-                        .current
+                    {
+                        youtube: YoutubePlayerRef,
+                        facebook: FacebookPlayerRef,
+                        streamable: StreamPlayerRef,
+                    }[mode].current
                 );
                 Player instanceof Element && screenfull.request(Player);
             },
@@ -46,9 +53,11 @@ export default function Player(props: { url: string; style?: React.CSSProperties
             onClick: () => {
                 setPip(!pip);
             },
-            hidden: !{ youtube: YoutubePlayer, facebook: FacebookPlayer }[
-                mode
-            ].canEnablePIP(url),
+            hidden: !{
+                youtube: YoutubePlayer,
+                facebook: FacebookPlayer,
+                streamable: StreamPlayer,
+            }[mode].canEnablePIP(url),
         },
         {
             title: "Close",
@@ -87,10 +96,17 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                             {
                                 youtube: <YouTubeIcon className="!text-[18px]" />,
                                 facebook: <Facebook className="!text-[18px]" />,
+                                streamable: <PlayArrow className="!text-[18px]" />,
                             }[mode]
                         }
                         <p className="!my-0 !ml-[5px]">
-                            {{ youtube: "Youtube", facebook: "Facebook" }[mode]}
+                            {
+                                {
+                                    youtube: "Youtube",
+                                    facebook: "Facebook",
+                                    streamable: "Streamable",
+                                }[mode]
+                            }
                         </p>
                     </Box>
                     <Box className="flex items-center !mr-[5px]">
@@ -126,6 +142,13 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                     facebook: (
                         <FacebookPlayer
                             ref={FacebookPlayerRef}
+                            {...commonProps}
+                            playIcon={<PlayCircleOutline className="!text-[50px]" />}
+                        />
+                    ),
+                    streamable: (
+                        <StreamPlayer
+                            ref={StreamPlayerRef}
                             {...commonProps}
                             playIcon={<PlayCircleOutline className="!text-[50px]" />}
                         />

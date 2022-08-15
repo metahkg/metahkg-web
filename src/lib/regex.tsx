@@ -12,4 +12,5 @@ export const regex = {
         /^https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)$/i,
         /^https:\/\/youtu.be\/\S{11}$/i,
     ],
+    streamable: [/^https:\/\/streamable\.com\/[a-z|\d]{6}$/],
 };
