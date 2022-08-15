@@ -7,6 +7,7 @@ import { Box, IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
 import cssToReact from "../../../lib/cssToReact";
+import { imagesApi } from "../../../lib/common";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
 
 function ImgComponent(props: Props) {
     const { height, style, width } = props;
-    const { src } = useImage({ srcList: props.src });
+    const { src } = useImage({ srcList: `${imagesApi}/${props.src}` });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
     const cRoot = useCRoot();

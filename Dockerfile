@@ -71,4 +71,9 @@ RUN chown user:user -R build
 
 USER user
 
-CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; export PORT=${port}; if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;
+CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; \
+    then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; \
+    if [ "${REACT_APP_IMAGES_API_URL}" != "" ]; \
+    then sed -i "s/{IMAGES_API_URL}/${REACT_APP_IMAGES_API_URL}/g" build/static/js/*.js*; fi; \
+    export PORT=${port}; \
+    if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;

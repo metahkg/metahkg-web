@@ -1,6 +1,7 @@
 import { Box, ImageList, ImageListItem } from "@mui/material";
 import React, { useState } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import { imagesApi } from "../../lib/common";
 import Loader from "../../lib/loader";
 import { PopUp } from "../../lib/popup";
 import { useWidth } from "../ContextProvider";
@@ -11,9 +12,6 @@ export default function Gallery(props: {
     images: { src: string }[];
 }) {
     const { open, setOpen, images } = props;
-    const resizeBase = `${
-        process.env.REACT_APP_IMAGES_API_URL || "https://i.metahkg.org"
-    }/resize`;
     const [width] = useWidth();
     const [loading, setLoading] = useState(true);
     return (
@@ -33,25 +31,23 @@ export default function Gallery(props: {
                         }
                         gap={5}
                     >
-                        {images.map((item) => (
-                            <PhotoView src={item.src} key={item.src}>
-                                <ImageListItem className="cursor-pointer" key={item.src}>
-                                    <img
-                                        src={`${resizeBase}?src=${encodeURIComponent(
-                                            item.src
-                                        )}&height=300&width=300&fit=cover`}
-                                        srcSet={`${resizeBase}?src=${encodeURIComponent(
-                                            item.src
-                                        )}&height=300&width=300&fit=cover 2x`}
-                                        alt=""
-                                        loading="lazy"
-                                        onLoad={() => {
-                                            loading && setLoading(false);
-                                        }}
-                                    />
-                                </ImageListItem>
-                            </PhotoView>
-                        ))}
+                        {images.map((item) => {
+                            const src = `${imagesApi}/${item.src}`;
+                            return (
+                                <PhotoView src={src} key={src}>
+                                    <ImageListItem className="cursor-pointer" key={src}>
+                                        <img
+                                            src={`${imagesApi}/300x300/${item.src}`}
+                                            alt=""
+                                            loading="lazy"
+                                            onLoad={() => {
+                                                loading && setLoading(false);
+                                            }}
+                                        />
+                                    </ImageListItem>
+                                </PhotoView>
+                            );
+                        })}
                     </ImageList>
                 </PhotoProvider>
             </Box>
