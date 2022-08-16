@@ -103,21 +103,22 @@ export default function FloatingEditor() {
 
     return (
         <Snackbar
-            sx={{ zIndex: 1000, top: `${thread?.pin ? "110" : "60"}px !important` }}
-            className="rounded-[20px]"
+            className={`rounded-[20px] !z-[1000] ${
+                thread?.pin ? "!top-[110px]" : "!top-[60px]"
+            }`}
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
             key={editor?.quote?.id || editor.edit || 0}
         >
             <Box
                 sx={{
-                    maxWidth: isSmallScreen ? "100vw" : "70vw",
-                    width: isSmallScreen ? "100vw" : "50vw",
-                    maxHeight: isSmallScreen ? "50vh" : "70vh",
                     bgcolor: "primary.dark",
-                    overflow: "auto",
                 }}
-                className="rounded-[15px]"
+                className={`rounded-[15px] overflow-auto ${
+                    isSmallScreen
+                        ? "!max-w-100v w-100v max-h-50v"
+                        : "max-w-70v w-50v max-h-70v"
+                }`}
             >
                 <DialogTitle className="flex justify-between items-center !p-0">
                     <p className="!ml-[20px] !mt-[10px] !mb-[10px]">
@@ -160,7 +161,7 @@ export default function FloatingEditor() {
                             editor.edit &&
                             /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
                         }
-                        autoresize
+                        autoResize
                         noMenuBar
                         noStatusBar
                         toolbarBottom

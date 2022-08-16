@@ -2,6 +2,10 @@ import { User } from "@metahkg/api";
 import humanizeDuration from "humanize-duration";
 import jwtDecode from "jwt-decode";
 
+export const imagesApi = `https://${
+    process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"
+}`;
+
 export function roundup(num: number, precision = 0): number {
     precision = Math.pow(10, precision);
     return Math.ceil(num * precision) / precision;

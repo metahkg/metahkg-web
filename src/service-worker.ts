@@ -80,7 +80,7 @@ registerRoute(
             "cdn.jsdeliv.net",
             "cdnjs.cloudflare.com",
             "static.cloudflareinsights.com",
-            process.env.REACT_APP_IMAGES_API_URL || "i.metahkg.org",
+            process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",

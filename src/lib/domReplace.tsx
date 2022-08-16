@@ -24,7 +24,7 @@ export const replace = (params: { quote?: boolean }) => {
                 if (domNode.name === "a") {
                     const href: string = domNode.attribs?.href;
                     if (
-                        [regex.facebook.videos, regex.youtube]
+                        [regex.facebook.videos, regex.youtube, regex.streamable]
                             .flat()
                             .some((item) => href.match(item))
                     ) {
