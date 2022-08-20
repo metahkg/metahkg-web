@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.3.0
+
+- add emotions feature
+
 ## v4.2.0
 
 - star threads

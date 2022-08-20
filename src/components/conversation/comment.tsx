@@ -1,27 +1,44 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Box, Button, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
+import { Box, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
 import { useBlockList, useNotification } from "../ContextProvider";
-import VoteButtons from "./comment/voteButtons";
 import { useThreadId, useVotes } from "./ConversationContext";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";
 import { api } from "../../lib/api";
-import {
-    EscalatorOutlined,
-    Forum,
-    KeyboardArrowDown,
-    KeyboardArrowUp,
-} from "@mui/icons-material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
 import { Comment as CommentType } from "@metahkg/api";
+import CommentBottom from "./comment/commentBottom";
 
-/**
- * Comment component renders a comment
- * which includes a title (Tag)
- * the comment body
- * and upvote and downvote buttons
- */
+const CommentContext = createContext<{
+    comment: [CommentType, React.Dispatch<React.SetStateAction<CommentType>>];
+    reFetch: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    showReplies: [
+        boolean | undefined,
+        React.Dispatch<React.SetStateAction<boolean | undefined>>
+    ];
+    replies: [CommentType[], React.Dispatch<React.SetStateAction<CommentType[]>>];
+    popupOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    fold: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+    blocked: [
+        boolean | undefined,
+        React.Dispatch<React.SetStateAction<boolean | undefined>>
+    ];
+    commentRef: React.RefObject<HTMLElement>;
+    inPopUp?: boolean;
+    openComment?: boolean;
+    setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
+    // @ts-ignore
+}>({});
+
 export default function Comment(props: {
     comment: CommentType;
     noId?: boolean;
@@ -120,179 +137,196 @@ export default function Comment(props: {
 
     return useMemo(
         () => (
-            <Box
-                className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
-                sx={sx}
-                ref={commentRef}
-                id={noId ? undefined : `c${comment.id}`}
+            <CommentContext.Provider
+                value={{
+                    comment: [comment, setComment],
+                    reFetch: [reFetch, setReFetch],
+                    showReplies: [showReplies, setShowReplies],
+                    replies: [replies, setReplies],
+                    popupOpen: [popupOpen, setPopupOpen],
+                    fold: [fold, setFold],
+                    blocked: [blocked, setBlocked],
+                    openComment,
+                    inPopUp,
+                    commentRef,
+                }}
             >
-                {comment.replies?.length && (
-                    <CommentPopup
-                        comment={comment}
-                        showReplies
-                        open={popupOpen}
-                        setOpen={setPopupOpen}
-                        openComment
-                    />
-                )}
                 <Box
-                    className={`text-left ${
-                        !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
-                    } w-full comment-root`}
-                    sx={(theme) => ({
-                        "& *::selection": {
-                            background: theme.palette.secondary.main,
-                            color: "black",
-                        },
-                        bgcolor: "primary.main",
-                        maxHeight: inPopUp && !showReplies ? "90vh" : "",
-                    })}
+                    className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
+                    sx={sx}
+                    ref={commentRef}
+                    id={noId ? undefined : `c${comment.id}`}
                 >
-                    <Box className="!ml-[20px] !mr-[20px]">
-                        <CommentTop
+                    {comment.replies?.length && (
+                        <CommentPopup
                             comment={comment}
-                            noStory={noStory}
-                            fold={fold}
-                            setFold={setFold}
-                            blocked={blocked}
-                            setBlocked={setBlocked}
+                            showReplies
+                            open={popupOpen}
+                            setOpen={setPopupOpen}
+                            openComment
                         />
-                        {!fold && !blocked && (
-                            <React.Fragment>
-                                <CommentBody
-                                    maxHeight={maxHeight}
-                                    noQuote={noQuote}
-                                    comment={comment}
-                                    depth={0}
-                                />
-                                <Box className="h-[2px]" />
-                            </React.Fragment>
-                        )}
+                    )}
+                    <Box
+                        className={`text-left ${
+                            !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
+                        } w-full comment-root`}
+                        sx={(theme) => ({
+                            "& *::selection": {
+                                background: theme.palette.secondary.main,
+                                color: "black",
+                            },
+                            bgcolor: "primary.main",
+                            maxHeight: inPopUp && !showReplies ? "90vh" : "",
+                        })}
+                    >
+                        <Box className="!ml-[20px] !mr-[20px]">
+                            <CommentTop comment={comment} noStory={noStory} />
+                            {!fold && !blocked && (
+                                <React.Fragment>
+                                    <CommentBody
+                                        maxHeight={maxHeight}
+                                        noQuote={noQuote}
+                                        comment={comment}
+                                        depth={0}
+                                    />
+                                    <Box className="h-[2px]" />
+                                </React.Fragment>
+                            )}
+                        </Box>
+                        {ready && !fold && !blocked && <CommentBottom />}
+                        <Box className="h-[15px]" />
                     </Box>
-                    {ready && !fold && !blocked && (
-                        <Box className="flex justify-between items-center w-full">
-                            <Box className="flex !ml-[20px] !mr-[20px]">
-                                <VoteButtons
-                                    comment={comment}
-                                    key={`${comment.U}${comment.D}`}
-                                />
-                                {comment.replies?.length && (
-                                    <Button
-                                        sx={{
-                                            minWidth: "0 !important",
-                                            bgcolor: "#333 !important",
-                                        }}
-                                        className="!rounded-[5px] !m-0 !ml-[10px] !text-metahkg-grey !p-0 !mt-[0px] !mb-[0px] !pl-[10px] !pr-[10px] !pt-[3px] !pb-[3px]"
-                                        variant="text"
-                                        onClick={() => {
-                                            if (inPopUp) {
-                                                setShowReplies(!showReplies);
-                                                setIsExpanded &&
-                                                    setIsExpanded(!showReplies);
-                                            } else setPopupOpen(true);
-                                        }}
-                                    >
-                                        <Forum
-                                            sx={{
-                                                "&:hover": {
-                                                    color: "white",
-                                                },
-                                            }}
-                                            className="!text-[14px]"
-                                        />
-                                        <p className="!ml-[5px] !my-0 text-metahkg-grey">
-                                            {comment.replies?.length}
-                                        </p>
-                                    </Button>
+                    {loading && (
+                        <Box className="flex justify-center items-center">
+                            <CircularProgress
+                                size={30}
+                                className="!mt-[10px] !mb-[5px]"
+                                color={"secondary"}
+                            />
+                        </Box>
+                    )}
+                    {!!replies.length && (
+                        <Box>
+                            <Box
+                                className="flex items-center justify-center text-center cursor-pointer"
+                                onClick={() => {
+                                    setShowReplies(!showReplies);
+                                    setIsExpanded?.(!showReplies);
+                                }}
+                            >
+                                <Typography
+                                    className="!mt-[5px] !mb-[5px]"
+                                    color="secondary"
+                                >
+                                    {showReplies ? "Hide" : "Show"} Replies
+                                </Typography>
+                                {showReplies ? (
+                                    <KeyboardArrowUp color="secondary" />
+                                ) : (
+                                    <KeyboardArrowDown color="secondary" />
                                 )}
                             </Box>
-                            {openComment && (
-                                <a
-                                    href={`/thread/${threadId}?c=${comment.id}`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex !text-metahkg-grey !mr-[10px] !no-underline"
-                                >
-                                    <EscalatorOutlined />
-                                    Open Comment
-                                </a>
+                            {showReplies && (
+                                <React.Fragment>
+                                    {replies.map((comment) => (
+                                        <Comment
+                                            comment={comment}
+                                            noId
+                                            noQuote
+                                            noStory
+                                            openComment
+                                        />
+                                    ))}
+                                    <Box className="flex justify-center items-center">
+                                        <Typography
+                                            className="!mt-[5px] !mb-[5px] !text-[18px]"
+                                            color="secondary"
+                                        >
+                                            End
+                                        </Typography>
+                                    </Box>
+                                </React.Fragment>
                             )}
                         </Box>
                     )}
-                    <Box className="h-[15px]" />
                 </Box>
-                {loading && (
-                    <Box className="flex justify-center items-center">
-                        <CircularProgress
-                            size={30}
-                            className="!mt-[10px] !mb-[5px]"
-                            color={"secondary"}
-                        />
-                    </Box>
-                )}
-                {!!replies.length && (
-                    <Box>
-                        <Box
-                            className="flex items-center justify-center text-center cursor-pointer"
-                            onClick={() => {
-                                setShowReplies(!showReplies);
-                                setIsExpanded && setIsExpanded(!showReplies);
-                            }}
-                        >
-                            <Typography className="!mt-[5px] !mb-[5px]" color="secondary">
-                                {showReplies ? "Hide" : "Show"} Replies
-                            </Typography>
-                            {showReplies ? (
-                                <KeyboardArrowUp color="secondary" />
-                            ) : (
-                                <KeyboardArrowDown color="secondary" />
-                            )}
-                        </Box>
-                        {showReplies && (
-                            <React.Fragment>
-                                {replies.map((comment) => (
-                                    <Comment
-                                        comment={comment}
-                                        noId
-                                        noQuote
-                                        noStory
-                                        openComment
-                                    />
-                                ))}
-                                <Box className="flex justify-center items-center">
-                                    <Typography
-                                        className="!mt-[5px] !mb-[5px] !text-[18px]"
-                                        color="secondary"
-                                    >
-                                        End
-                                    </Typography>
-                                </Box>
-                            </React.Fragment>
-                        )}
-                    </Box>
-                )}
-            </Box>
+            </CommentContext.Provider>
         ),
         [
-            className,
             comment,
-            fold,
-            inPopUp,
-            blocked,
-            loading,
-            maxHeight,
-            noFullWidth,
-            noId,
-            noQuote,
-            noStory,
-            openComment,
-            popupOpen,
-            ready,
-            replies,
-            setIsExpanded,
+            reFetch,
             showReplies,
+            replies,
+            popupOpen,
+            fold,
+            noFullWidth,
+            className,
             sx,
-            threadId,
+            noId,
+            inPopUp,
+            noStory,
+            blocked,
+            maxHeight,
+            noQuote,
+            ready,
+            setIsExpanded,
+            openComment,
+            loading,
         ]
     );
+}
+
+export function useComment() {
+    const { comment } = useContext(CommentContext);
+    return comment;
+}
+
+export function useReFetch() {
+    const { reFetch } = useContext(CommentContext);
+    return reFetch;
+}
+
+export function useShowReplies() {
+    const { showReplies } = useContext(CommentContext);
+    return showReplies;
+}
+
+export function useReplies() {
+    const { replies } = useContext(CommentContext);
+    return replies;
+}
+
+export function usePopupOpen() {
+    const { popupOpen } = useContext(CommentContext);
+    return popupOpen;
+}
+
+export function useFold() {
+    const { fold } = useContext(CommentContext);
+    return fold;
+}
+
+export function useBlocked() {
+    const { blocked } = useContext(CommentContext);
+    return blocked;
+}
+
+export function useCommentRef() {
+    const { commentRef } = useContext(CommentContext);
+    return commentRef;
+}
+
+export function useInPopUp() {
+    const { inPopUp } = useContext(CommentContext);
+    return inPopUp;
+}
+
+export function useSetIsExpanded() {
+    const { setIsExpanded } = useContext(CommentContext);
+    return setIsExpanded;
+}
+
+export function useOpenComment() {
+    const { openComment } = useContext(CommentContext);
+    return openComment;
 }

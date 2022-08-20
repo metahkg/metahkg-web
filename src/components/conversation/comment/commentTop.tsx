@@ -38,15 +38,9 @@ import { filterSwearWords } from "../../../lib/filterSwear";
 import UserModal from "./userModal";
 import { colors } from "../../../lib/css";
 import BlockedBtn from "./blockedBtn";
+import { useBlocked, useFold } from "../comment";
 
-export default function CommentTop(props: {
-    comment: Comment;
-    noStory?: boolean;
-    fold?: boolean;
-    setFold?: React.Dispatch<React.SetStateAction<boolean>>;
-    blocked?: boolean;
-    setBlocked?: React.Dispatch<React.SetStateAction<boolean | undefined>>;
-}) {
+export default function CommentTop(props: { comment: Comment; noStory?: boolean }) {
     const [open, setOpen] = useState(false);
     const [timeMode, setTimeMode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
@@ -62,9 +56,12 @@ export default function CommentTop(props: {
     const [user] = useUser();
     const [, setEditor] = useEditor();
     const [blockList] = useBlockList();
+    const [fold, setFold] = useFold();
+    const [blocked, setBlocked] = useBlocked();
+
     const cRoot = useCRoot();
 
-    const { comment, noStory, fold, setFold, blocked, setBlocked } = props;
+    const { comment, noStory } = props;
 
     const isOp = thread && thread.op.id === comment.user.id;
 

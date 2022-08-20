@@ -1627,10 +1627,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^4.2.0-1-dev":
-  version "4.2.0-1-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.2.0-1-dev.tgz#20734504f658026b8a1e5209371bf1d1b94657af"
-  integrity sha512-oJLoht6TYoWfz0YWtN3etZocUe7+YJx6VstqEerUC51p/nFofscT3Mh9+SR+BxZiU2cge6w+KDXjS4IxVzNo8w==
+"@metahkg/api@^4.3.0-dev":
+  version "4.3.0-dev"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-4.3.0-dev.tgz#3dd57b9f3eb7d9ddf28afe97e3af827e8bf6fe2e"
+  integrity sha512-P20eaECAgrEz+JJEnqSCz0c1nwNPi4mdmjC7MjIAmqZOb80ba1EmfVy22GfgWr/8RxpNrIea4ny9zUQkm9yZpQ==
   dependencies:
     axios "^0.27.2"
 
@@ -4238,6 +4238,11 @@ emittery@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.8.1.tgz#bb23cc86d03b30aa75a7f734819dee2e1ba70860"
   integrity sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==
+
+emoji-picker-react@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-3.6.1.tgz#dc066f4d6bd407bfd7aebb18d8a0ef8171584b07"
+  integrity sha512-bJNvpdf3wO+1z4V/GKZC159zSAgUjLP8gdgGzvi/sFjy11Zpi/O9a8/G2rpQwy+QBePnmvS1F+MqcNVJvilEGA==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
