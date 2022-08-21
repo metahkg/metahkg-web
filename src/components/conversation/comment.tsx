@@ -34,7 +34,6 @@ const CommentContext = createContext<{
     ];
     commentRef: React.RefObject<HTMLElement>;
     inPopUp?: boolean;
-    openComment?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     // @ts-ignore
 }>({});
@@ -48,7 +47,6 @@ export default function Comment(props: {
     noQuote?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     fold?: boolean;
-    openComment?: boolean;
     blocked?: boolean;
     noStory?: boolean;
     scrollIntoView?: boolean;
@@ -65,7 +63,6 @@ export default function Comment(props: {
         noQuote,
         setIsExpanded,
         noStory,
-        openComment,
         sx,
         className,
         maxHeight,
@@ -146,7 +143,6 @@ export default function Comment(props: {
                     popupOpen: [popupOpen, setPopupOpen],
                     fold: [fold, setFold],
                     blocked: [blocked, setBlocked],
-                    openComment,
                     inPopUp,
                     commentRef,
                 }}
@@ -163,7 +159,6 @@ export default function Comment(props: {
                             showReplies
                             open={popupOpen}
                             setOpen={setPopupOpen}
-                            openComment
                         />
                     )}
                     <Box
@@ -234,7 +229,6 @@ export default function Comment(props: {
                                             noId
                                             noQuote
                                             noStory
-                                            openComment
                                         />
                                     ))}
                                     <Box className="flex justify-center items-center">
@@ -270,7 +264,6 @@ export default function Comment(props: {
             noQuote,
             ready,
             setIsExpanded,
-            openComment,
             loading,
         ]
     );
@@ -324,9 +317,4 @@ export function useInPopUp() {
 export function useSetIsExpanded() {
     const { setIsExpanded } = useContext(CommentContext);
     return setIsExpanded;
-}
-
-export function useOpenComment() {
-    const { openComment } = useContext(CommentContext);
-    return openComment;
 }

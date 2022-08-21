@@ -77,7 +77,7 @@ registerRoute(
 registerRoute(
     ({ url }) =>
         [
-            "cdn.jsdeliv.net",
+            "cdn.jsdelivr.net",
             "cdnjs.cloudflare.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org",

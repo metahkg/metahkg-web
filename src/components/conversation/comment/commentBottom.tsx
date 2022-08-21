@@ -1,16 +1,6 @@
 import React, { useRef, useState } from "react";
-import { AddReaction, EscalatorOutlined, Forum, MoreHoriz } from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    MenuList,
-    Paper,
-    Popover,
-} from "@mui/material";
+import { AddReaction, Forum } from "@mui/icons-material";
+import { Box, Button, IconButton, Popover } from "@mui/material";
 import EmojiPicker from "emoji-picker-react";
 import VoteButtons from "./voteButtons";
 import { api } from "../../../lib/api";
@@ -23,26 +13,23 @@ import {
     useSetIsExpanded,
     useShowReplies,
     usePopupOpen,
-    useOpenComment,
     useComment,
     useReFetch,
 } from "../comment";
+import EmotionList from "./emotionList";
 
 export default function CommentBottom() {
     const [emojiOpen, setEmojiOpen] = useState(false);
-    const [openAdditional, setOpenAdditional] = useState(false);
     const threadId = useThreadId();
     const [, setNotification] = useNotification();
     const inPopUp = useInPopUp();
     const [showReplies, setShowReplies] = useShowReplies();
     const setIsExpanded = useSetIsExpanded();
     const [, setPopupOpen] = usePopupOpen();
-    const openComment = useOpenComment();
     const [comment, setComment] = useComment();
     const [, setReFetch] = useReFetch();
     const [user] = useUser();
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
-    const moreBtnRef = useRef<HTMLButtonElement>(null);
 
     const choosed = user && comment.emotions?.find((i) => i.user === user.id)?.emotion;
 
@@ -53,7 +40,7 @@ export default function CommentBottom() {
             open: true,
             text: "Setting emotion...",
         });
-        api.commentEmotion(threadId, comment.id, {
+        api.commentEmotionSet(threadId, comment.id, {
             emotion,
         })
             .then(() => {
@@ -99,7 +86,7 @@ export default function CommentBottom() {
         });
     };
 
-    const emotions = comment.emotions
+    let emotions = comment.emotions
         ?.reduce((prev, curr) => {
             if (!prev.includes(curr.emotion)) prev.push(curr.emotion);
             return prev;
@@ -110,13 +97,22 @@ export default function CommentBottom() {
         }))
         .sort((a, b) => b.count - a.count);
 
+    const userEmotionIndex = emotions?.findIndex((i) => i.emotion === choosed);
+
+    if (userEmotionIndex && emotions && userEmotionIndex > 2)
+        emotions = [
+            ...emotions.slice(0, 2),
+            emotions[userEmotionIndex],
+            ...emotions.slice(2).filter((i) => i.emotion !== choosed),
+        ];
+
     return (
         <Box className="flex justify-between items-center w-full">
             <Box className="flex !ml-[20px] !mr-[20px]">
                 <VoteButtons comment={comment} key={`${comment.U}${comment.D}`} />
                 {comment.replies?.length && (
                     <Button
-                        className={`${css.smallBtn} !bg-[#333]`}
+                        className={`${css.smallBtn} !ml-[10px] !bg-[#333]`}
                         variant="text"
                         onClick={() => {
                             if (inPopUp) {
@@ -140,7 +136,7 @@ export default function CommentBottom() {
                 )}
             </Box>
             <Box className="flex items-center">
-                {emotions && (
+                {emotions && Boolean(emotions?.length) && (
                     <React.Fragment>
                         <Box className="flex items-center">
                             {emotions.slice(0, 3).map((item, index) => {
@@ -162,63 +158,7 @@ export default function CommentBottom() {
                                 );
                             })}
                         </Box>
-                        {emotions.length > 3 && (
-                            <Box>
-                                <IconButton
-                                    onClick={() => {
-                                        setOpenAdditional(true);
-                                    }}
-                                    ref={moreBtnRef}
-                                    className="!mx-[5px]"
-                                >
-                                    <MoreHoriz />
-                                </IconButton>
-                                <Popover
-                                    open={openAdditional}
-                                    onClose={() => {
-                                        setOpenAdditional(false);
-                                    }}
-                                    anchorEl={moreBtnRef.current}
-                                    anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "right",
-                                    }}
-                                >
-                                    <Paper>
-                                        <MenuList>
-                                            {emotions.slice(3).map((emotion, index) => {
-                                                const isChoosed =
-                                                    choosed === emotion.emotion;
-                                                return (
-                                                    <MenuItem
-                                                        key={index}
-                                                        onClick={() => {
-                                                            setOpenAdditional(false);
-                                                            setPopupOpen(false);
-                                                            isChoosed
-                                                                ? deleteEmotion()
-                                                                : setEmotion(
-                                                                      emotion.emotion
-                                                                  );
-                                                        }}
-                                                        {...(isChoosed && {
-                                                            color: "secondary",
-                                                        })}
-                                                    >
-                                                        <ListItemIcon>
-                                                            {emotion.emotion}
-                                                        </ListItemIcon>
-                                                        <ListItemText>
-                                                            {emotion.count}
-                                                        </ListItemText>
-                                                    </MenuItem>
-                                                );
-                                            })}
-                                        </MenuList>
-                                    </Paper>
-                                </Popover>
-                            </Box>
-                        )}
+                        <EmotionList emotions={emotions} />
                     </React.Fragment>
                 )}
                 {user && (
@@ -250,17 +190,6 @@ export default function CommentBottom() {
                             />
                         </Popover>
                     </React.Fragment>
-                )}
-                {openComment && (
-                    <a
-                        href={`/thread/${threadId}?c=${comment.id}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex !text-metahkg-grey !mr-[10px] !no-underline"
-                    >
-                        <EscalatorOutlined />
-                        Open Comment
-                    </a>
                 )}
             </Box>
         </Box>

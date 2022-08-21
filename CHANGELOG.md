@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.4.0
+
+- add emotions list (opened by clicked the more button)
+- show users who expressed the emotion after clicking it in emotions list
+
 ## v4.3.0
 
 - add emotions feature
