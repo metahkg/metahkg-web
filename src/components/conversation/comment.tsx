@@ -224,12 +224,7 @@ export default function Comment(props: {
                             {showReplies && (
                                 <React.Fragment>
                                     {replies.map((comment) => (
-                                        <Comment
-                                            comment={comment}
-                                            noId
-                                            noQuote
-                                            noStory
-                                        />
+                                        <Comment comment={comment} noId noQuote noStory />
                                     ))}
                                     <Box className="flex justify-center items-center">
                                         <Typography
