@@ -64,9 +64,7 @@ export default function DataTable(props: DataTableProps) {
         {
             title: "Joined",
             content: `${
-                reqUser.createdAt
-                    ? timeToWord_long(reqUser.createdAt)
-                    : "unknown"
+                reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
             } ago`,
         },
     ];
