@@ -168,8 +168,8 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                 text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
                             });
                             (pinned
-                                ? api.commentUnpin(threadId, comment.id)
-                                : api.commentPin(threadId, comment.id)
+                                ? api.threadUnpin(threadId)
+                                : api.threadPin(threadId, { cid: comment.id })
                             )
                                 .then(() => {
                                     setNotification({
