@@ -147,70 +147,67 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
     const moreList: (
         | { icon: JSX.Element; title: string; action: () => void }
         | undefined
-    )[] = useMemo(
-        () => [
-            (() => {
-                const clientIsOp = thread && user?.id === thread.op.id;
-                const pinned = thread?.pin?.id === comment.id;
-                if (clientIsOp || (user?.role === "admin" && pinned)) {
-                    const onError = (err: AxiosError<any>) => {
+    )[] = [
+        (() => {
+            const clientIsOp = thread && user?.id === thread.op.id;
+            const pinned = thread?.pin?.id === comment.id;
+            if (clientIsOp || (user?.role === "admin" && pinned)) {
+                const onError = (err: AxiosError<any>) => {
+                    setNotification({
+                        open: true,
+                        text: parseError(err),
+                    });
+                };
+                return {
+                    icon: <PushPinIcon />,
+                    title: `${pinned ? "Unpin" : "Pin"} Comment`,
+                    action: () => {
                         setNotification({
                             open: true,
-                            text: parseError(err),
+                            text: `${pinned ? "Unpinn" : "Pinn"}ing Comment...`,
                         });
-                    };
-                    return {
-                        icon: <PushPinIcon />,
-                        title: `${pinned ? "Unpin" : "Pin"} Comment`,
-                        action: () => {
-                            setNotification({
-                                open: true,
-                                text: `${pinned ? "Unpin" : "Pin"}ing Comment...`,
-                            });
-                            (pinned
-                                ? api.threadUnpin(threadId)
-                                : api.threadPin(threadId, { cid: comment.id })
-                            )
-                                .then(() => {
-                                    setNotification({
-                                        open: true,
-                                        text: `Comment ${pinned ? "un" : ""}pinned!`,
-                                    });
-                                    setThread((thread) => {
-                                        if (!pinned && thread) thread.pin = comment;
-                                        else if (thread) delete thread.pin;
-                                        return thread;
-                                    });
-                                })
-                                .catch(onError);
-                        },
-                    };
-                }
-                return undefined;
-            })(),
-            {
-                icon: <FeedIcon className="!text-[19px]" />,
-                title: "Create thread",
-                action: () => {
-                    navigate(`/create?quote=${threadId}.${comment.id}`);
-                },
+                        (pinned
+                            ? api.threadUnpin(threadId)
+                            : api.threadPin(threadId, { cid: comment.id })
+                        )
+                            .then(() => {
+                                setNotification({
+                                    open: true,
+                                    text: `Comment ${pinned ? "un" : ""}pinned!`,
+                                });
+                                setThread((thread) => {
+                                    if (!pinned && thread) thread.pin = comment;
+                                    else if (thread) delete thread.pin;
+                                    return thread;
+                                });
+                            })
+                            .catch(onError);
+                    },
+                };
+            }
+            return undefined;
+        })(),
+        {
+            icon: <FeedIcon className="!text-[19px]" />,
+            title: "Create thread",
+            action: () => {
+                navigate(`/create?quote=${threadId}.${comment.id}`);
             },
-            {
-                icon: <EditIcon className="!text-[19px]" />,
-                title: "Edit comment",
-                action: () => {
-                    if (user) setEditor({ open: true, edit: comment.comment });
-                    else
-                        navigate(
-                            `/users/login?continue=true&returnto=${encodeURIComponent(
-                                `${wholePath()}?c=${comment.id}`
-                            )}`
-                        );
-                },
+        },
+        {
+            icon: <EditIcon className="!text-[19px]" />,
+            title: "Edit comment",
+            action: () => {
+                if (user) setEditor({ open: true, edit: comment.comment });
+                else
+                    navigate(
+                        `/users/login?continue=true&returnto=${encodeURIComponent(
+                            `${wholePath()}?c=${comment.id}`
+                        )}`
+                    );
             },
-        ],
-        [comment, navigate, setEditor, setNotification, setThread, thread, threadId, user]
-    );
+        },
+    ];
 
     return (
         <Box
