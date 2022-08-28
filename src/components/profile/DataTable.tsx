@@ -21,17 +21,17 @@ import { User } from "@metahkg/api";
 export type UserData = User & { count: number; createdAt?: Date };
 
 interface DataTableProps {
-    requestedUser: UserData;
+    reqUser: UserData;
     setUser: React.Dispatch<React.SetStateAction<null | UserData>>;
     isSelf: boolean;
 }
 
 export default function DataTable(props: DataTableProps) {
-    const { requestedUser, setUser, isSelf } = props;
+    const { reqUser, setUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
     const [, setNotification] = useNotification();
-    const [name, setName] = useState(requestedUser.name);
+    const [name, setName] = useState(reqUser.name);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [, setClient] = useUser();
     const [, setMenuTitle] = useMenuTitle();
@@ -49,23 +49,23 @@ export default function DataTable(props: DataTableProps) {
                     }}
                 />
             ) : (
-                requestedUser.name
+                reqUser.name
             ),
         },
         {
             title: "Threads",
-            content: requestedUser.count,
+            content: reqUser.count,
         },
         {
             title: "Gender",
-            content: { M: "male", F: "female" }[requestedUser.sex] || "",
+            content: { M: "male", F: "female" }[reqUser.sex] || "",
         },
-        { title: "Role", content: requestedUser.role },
+        { title: "Role", content: reqUser.role },
         {
             title: "Joined",
             content: `${
-                requestedUser.createdAt
-                    ? timeToWord_long(requestedUser.createdAt)
+                reqUser.createdAt
+                    ? timeToWord_long(reqUser.createdAt)
                     : "unknown"
             } ago`,
         },
@@ -74,7 +74,7 @@ export default function DataTable(props: DataTableProps) {
     function rename() {
         setSaveDisabled(true);
         setNotification({ open: true, text: "Renaming..." });
-        api.meRename({ name })
+        api.userEdit(reqUser.id, { name })
             .then((data) => {
                 setSaveDisabled(false);
                 setUser(null);
@@ -134,7 +134,7 @@ export default function DataTable(props: DataTableProps) {
                 <Button
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
-                    disabled={saveDisabled || name === requestedUser.name}
+                    disabled={saveDisabled || name === reqUser.name}
                     color="secondary"
                     onClick={rename}
                 >

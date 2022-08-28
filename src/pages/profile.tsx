@@ -185,7 +185,7 @@ export default function Profile() {
                         <DataTable
                             isSelf={isSelf}
                             setUser={setRequestedUser}
-                            requestedUser={requestedUser}
+                            reqUser={requestedUser}
                             key={requestedUser.id}
                         />
                     </Box>

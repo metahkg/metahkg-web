@@ -46,8 +46,8 @@ export default function useFirstFetch() {
             .then((data) => {
                 data.slink && setThread(data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
-                if (historyIndex && history[historyIndex].c < data.c) {
-                    history[historyIndex].c = data.c;
+                if (historyIndex && history[historyIndex].c < data.count) {
+                    history[historyIndex].c = data.count;
                     setHistory(history);
                     localStorage.setItem("history", JSON.stringify(history));
                 }
