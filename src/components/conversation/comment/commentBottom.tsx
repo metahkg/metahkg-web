@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { AddReaction, Forum } from "@mui/icons-material";
 import { Box, Button, IconButton, Popover } from "@mui/material";
-import EmojiPicker from "emoji-picker-react";
+import data from "@emoji-mart/data";
 import VoteButtons from "./voteButtons";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -17,6 +17,9 @@ import {
     useReFetch,
 } from "../comment";
 import EmotionList from "./emotionList";
+import loadable from "@loadable/component";
+
+const EmojiMart = loadable(() => import("../../../lib/emoji-mart/react"));
 
 export default function CommentBottom() {
     const [emojiOpen, setEmojiOpen] = useState(false);
@@ -179,15 +182,19 @@ export default function CommentBottom() {
                             }}
                             anchorOrigin={{
                                 vertical: "bottom",
-                                horizontal: "right",
+                                horizontal: "left",
                             }}
                             anchorEl={emotionBtnRef.current}
                         >
-                            <EmojiPicker
-                                onEmojiClick={(_event, emotion) => {
-                                    setEmotion(emotion.emoji);
-                                }}
-                            />
+                            <Box className="w-[352px] bg-transparent">
+                                <EmojiMart
+                                    onEmojiSelect={(emoji) => {
+                                        setEmotion(emoji.native);
+                                    }}
+                                    data={data}
+                                    theme={"dark"}
+                                />
+                            </Box>
                         </Popover>
                     </React.Fragment>
                 )}
