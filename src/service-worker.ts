@@ -69,7 +69,7 @@ registerRoute(
         plugins: [
             // Ensure that once this runtime cache reaches a maximum size the
             // least-recently used files are removed.
-            new ExpirationPlugin({ maxEntries: 200 }),
+            new ExpirationPlugin({ maxEntries: 500 }),
         ],
     })
 );
@@ -81,6 +81,7 @@ registerRoute(
             "cdnjs.cloudflare.com",
             "static.cloudflareinsights.com",
             process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org",
+            "rlp.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",

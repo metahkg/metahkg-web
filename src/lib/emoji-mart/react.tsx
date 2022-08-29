@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Picker, PickerOptions } from "emoji-mart";
+import data from "@emoji-mart/data";
 
 export default function EmojiMart(props: PickerOptions) {
     const ref = useRef<HTMLDivElement>(null);
@@ -10,7 +11,7 @@ export default function EmojiMart(props: PickerOptions) {
     }
 
     useEffect(() => {
-        instance.current = new Picker({ ...props, ref });
+        instance.current = new Picker({ ...props, data, ref });
 
         return () => {
             instance.current = null;

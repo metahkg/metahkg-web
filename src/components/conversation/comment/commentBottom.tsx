@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { AddReaction, Forum } from "@mui/icons-material";
 import { Box, Button, IconButton, Popover } from "@mui/material";
-import data from "@emoji-mart/data";
 import VoteButtons from "./voteButtons";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -191,7 +190,6 @@ export default function CommentBottom() {
                                     onEmojiSelect={(emoji) => {
                                         setEmotion(emoji.native);
                                     }}
-                                    data={data}
                                     theme={"dark"}
                                 />
                             </Box>
