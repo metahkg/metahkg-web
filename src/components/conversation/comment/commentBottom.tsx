@@ -185,7 +185,7 @@ export default function CommentBottom() {
                             }}
                             anchorEl={emotionBtnRef.current}
                         >
-                            <Box className="w-[352px] bg-transparent">
+                            <Box className="w-[352px] h-[435px] bg-transparent">
                                 <EmojiMart
                                     onEmojiSelect={(emoji) => {
                                         setEmotion(emoji.native);
