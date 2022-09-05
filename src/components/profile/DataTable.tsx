@@ -39,6 +39,8 @@ export default function DataTable(props: DataTableProps) {
     const [, setClient] = useUser();
     const [, setMenuTitle] = useMenuTitle();
 
+    const nameValid = /^\S{1,15}$/.test(name);
+
     const items = [
         {
             title: "Name",
@@ -52,9 +54,11 @@ export default function DataTable(props: DataTableProps) {
                     }}
                     helperText={
                         name !== reqUser.name &&
-                        !/^\S{1,15}$/.test(name) &&
+                        !nameValid &&
                         "Username must be 1 to 15 characters without spaces."
                     }
+                    error={name !== reqUser.name && !nameValid}
+                    inputProps={{ pattern: "S{1, 15}" }}
                 />
             ) : (
                 reqUser.name
@@ -160,7 +164,7 @@ export default function DataTable(props: DataTableProps) {
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
                     disabled={
-                        saveDisabled || name === reqUser.name || sex !== reqUser.sex
+                        saveDisabled || (name === reqUser.name && sex === reqUser.sex) || !nameValid
                     }
                     color="secondary"
                     onClick={updateUserInfo}
