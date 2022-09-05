@@ -37,6 +37,7 @@ export default function UserModal(props: {
                                   .then(() => {
                                       setNotification({
                                           open: true,
+                                          severity: "success",
                                           text: `Unblocked ${commentUser.name}`,
                                       });
                                       setBlockList(
@@ -47,6 +48,7 @@ export default function UserModal(props: {
                                   .catch((err) => {
                                       setNotification({
                                           open: true,
+                                          severity: "error",
                                           text: parseError(err),
                                       });
                                   });
@@ -69,6 +71,7 @@ export default function UserModal(props: {
                                 .then(() => {
                                     setNotification({
                                         open: true,
+                                        severity: "success",
                                         text: `Blocked ${commentUser.name}`,
                                     });
                                     setBlockList([
@@ -81,6 +84,7 @@ export default function UserModal(props: {
                                 .catch((err) => {
                                     setNotification({
                                         open: true,
+                                        severity: "error",
                                         text: parseError(err),
                                     });
                                 });

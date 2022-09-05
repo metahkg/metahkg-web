@@ -32,7 +32,7 @@ export default function Logout() {
         navigate(decodeURIComponent(String(query.returnto || "/")), {
             replace: true,
         });
-        setNotification({ open: true, text: "Logged out." });
+        setNotification({ open: true, severity: "info", text: "Logged out." });
     }, [navigate, query.returnto, setNotification, setUser]);
 
     return (

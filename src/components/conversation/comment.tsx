@@ -98,9 +98,11 @@ export default function Comment(props: {
         const currentVote = votes?.find((vote) => vote.cid === comment.id)?.vote;
         if (prevVote.current !== currentVote && currentVote) {
             prevVote.current = currentVote;
-            setReFetch(true);
+            api.commentVotes(threadId, comment.id).then((data) =>
+                setComment((comment) => ({ ...comment, ...data }))
+            );
         }
-    }, [votes?.[comment.id], prevVote, votes, comment.id]);
+    }, [prevVote, votes, comment.id, threadId]);
 
     useEffect(() => {
         commentRef.current && scrollIntoView && commentRef.current.scrollIntoView();
@@ -114,6 +116,7 @@ export default function Comment(props: {
                 .catch((err) => {
                     setNotification({
                         open: true,
+                        severity: "error",
                         text: parseError(err),
                     });
                 });

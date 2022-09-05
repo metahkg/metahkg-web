@@ -118,12 +118,13 @@ export default function Register() {
                     });
                     setNotification({
                         open: true,
+                        severity: "info",
                         text: "Please click the link sent to your email address.",
                     });
                 })
                 .catch((err) => {
                     setAlert({ severity: "error", text: parseError(err) });
-                    setNotification({ open: true, text: parseError(err) });
+                    setNotification({ open: true, severity: "error", text: parseError(err) });
                     setRtoken("");
                     setDisabled(false);
                     grecaptcha.reset();

@@ -155,6 +155,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 const onError = (err: AxiosError<any>) => {
                     setNotification({
                         open: true,
+                        severity: "error",
                         text: parseError(err),
                     });
                 };
@@ -164,6 +165,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     action: () => {
                         setNotification({
                             open: true,
+                            severity: "info",
                             text: `${pinned ? "Unpinn" : "Pinn"}ing Comment...`,
                         });
                         (pinned
@@ -173,6 +175,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             .then(() => {
                                 setNotification({
                                     open: true,
+                                    severity: "success",
                                     text: `Comment ${pinned ? "un" : ""}pinned!`,
                                 });
                                 setThread((thread) => {

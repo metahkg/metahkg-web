@@ -47,7 +47,7 @@ export default function Verify() {
     function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
         setAlert({ severity: "info", text: "Requesting resend..." });
-        setNotification({ open: true, text: "Requesting resend..." });
+        setNotification({ open: true, severity: "info", text: "Requesting resend..." });
         setDisabled(true);
         api.usersResend({ email, rtoken })
             .then(() => {
@@ -70,6 +70,7 @@ export default function Verify() {
                 });
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
                 grecaptcha.reset();

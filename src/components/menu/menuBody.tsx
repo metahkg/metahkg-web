@@ -47,6 +47,7 @@ export default function MenuBody(props: { selected: number }) {
     function onError(err: AxiosError<any>) {
         setNotification({
             open: true,
+            severity: "error",
             text: parseError(err),
         });
         err?.response?.status === 404 && navigate("/404", { replace: true });

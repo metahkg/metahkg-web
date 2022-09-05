@@ -48,6 +48,7 @@ export default function AvatarEditorPopUp(props: {
                         if (avatar) {
                             setNotification({
                                 open: true,
+                                severity: "info",
                                 text: "Uploading avatar...",
                             });
                             api.meAvatar({
@@ -57,6 +58,7 @@ export default function AvatarEditorPopUp(props: {
                                 .then(() => {
                                     setNotification({
                                         open: true,
+                                        severity: "success",
                                         text: "Avatar updated.",
                                     });
                                     onSuccess();
@@ -66,6 +68,7 @@ export default function AvatarEditorPopUp(props: {
                                 .catch((err) => {
                                     setNotification({
                                         open: true,
+                                        severity: "error",
                                         text: parseError(err),
                                     });
                                     setOpen(false);

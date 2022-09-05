@@ -13,7 +13,6 @@ import {
     useShowReplies,
     usePopupOpen,
     useComment,
-    useReFetch,
 } from "../comment";
 import EmotionList from "./emotionList";
 import loadable from "@loadable/component";
@@ -29,7 +28,6 @@ export default function CommentBottom() {
     const setIsExpanded = useSetIsExpanded();
     const [, setPopupOpen] = usePopupOpen();
     const [comment, setComment] = useComment();
-    const [, setReFetch] = useReFetch();
     const [user] = useUser();
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -40,6 +38,7 @@ export default function CommentBottom() {
         setEmojiOpen(false);
         setNotification({
             open: true,
+            severity: "info",
             text: "Setting emotion...",
         });
         api.commentEmotionSet(threadId, comment.id, {
@@ -48,6 +47,7 @@ export default function CommentBottom() {
             .then(() => {
                 setNotification({
                     open: true,
+                    severity: "success",
                     text: "Emotion set!",
                 });
                 user &&
@@ -60,11 +60,17 @@ export default function CommentBottom() {
                               ]
                             : [{ user: user?.id, emotion }],
                     });
-                setReFetch(true);
+                api.commentEmotions(threadId, comment.id).then((data) => {
+                    setComment({
+                        ...comment,
+                        emotions: data,
+                    });
+                });
             })
             .catch((err) =>
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 })
             );
@@ -75,6 +81,7 @@ export default function CommentBottom() {
         api.commentEmotionDelete(threadId, comment.id).then(() => {
             setNotification({
                 open: true,
+                severity: "success",
                 text: "Emotion deleted.",
             });
             user &&
@@ -84,7 +91,12 @@ export default function CommentBottom() {
                         ? comment.emotions.filter((i) => i.user !== user.id)
                         : [],
                 });
-            setReFetch(true);
+            api.commentEmotions(threadId, comment.id).then((data) => {
+                setComment({
+                    ...comment,
+                    emotions: data,
+                });
+            });
         });
     };
 
