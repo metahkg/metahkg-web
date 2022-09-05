@@ -55,7 +55,11 @@ export default function Profile() {
                     setTitle(`${data.name} | Metahkg`);
                 })
                 .catch((err) => {
-                    setNotification({ open: true, severity: "error", text: parseError(err) });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });

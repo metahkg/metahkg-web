@@ -90,7 +90,12 @@ export default function useBtns() {
             icon: <Collections />,
             action: () => {
                 if (thread?.images?.length) setGalleryOpen(true);
-                else setNotification({ open: true, severity: "error", text: "No images!" });
+                else
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: "No images!",
+                    });
             },
             title: "Images",
         },
