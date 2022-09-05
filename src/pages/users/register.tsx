@@ -124,7 +124,11 @@ export default function Register() {
                 })
                 .catch((err) => {
                     setAlert({ severity: "error", text: parseError(err) });
-                    setNotification({ open: true, severity: "error", text: parseError(err) });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                     setRtoken("");
                     setDisabled(false);
                     grecaptcha.reset();
