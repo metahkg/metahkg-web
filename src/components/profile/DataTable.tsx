@@ -159,7 +159,9 @@ export default function DataTable(props: DataTableProps) {
                 <Button
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
-                    disabled={saveDisabled || name === reqUser.name || sex !== reqUser.sex}
+                    disabled={
+                        saveDisabled || name === reqUser.name || sex !== reqUser.sex
+                    }
                     color="secondary"
                     onClick={updateUserInfo}
                 >
