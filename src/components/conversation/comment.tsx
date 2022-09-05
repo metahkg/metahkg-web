@@ -148,6 +148,7 @@ export default function Comment(props: {
                     blocked: [blocked, setBlocked],
                     inPopUp,
                     commentRef,
+                    setIsExpanded
                 }}
             >
                 <Box
