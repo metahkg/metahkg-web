@@ -59,12 +59,14 @@ export default function useBtns() {
             action: () => {
                 setNotification({
                     open: true,
+                    severity: "info",
                     text: `${starred ? "Unstarring" : "Starring"} thread...`,
                 });
                 (starred ? api.threadUnstar(threadId) : api.threadStar(threadId))
                     .then(() => {
                         setNotification({
                             open: true,
+                            severity: "success",
                             text: `Thread ${starred ? "un" : ""}starred.`,
                         });
                         setStarList(
@@ -75,7 +77,11 @@ export default function useBtns() {
                         api.meStarred().then(setStarList);
                     })
                     .catch((err) => {
-                        setNotification({ open: true, text: parseError(err) });
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(err),
+                        });
                     });
             },
             title: starred ? "Unstar" : "Star",
@@ -84,7 +90,7 @@ export default function useBtns() {
             icon: <Collections />,
             action: () => {
                 if (thread?.images?.length) setGalleryOpen(true);
-                else setNotification({ open: true, text: "No images!" });
+                else setNotification({ open: true, severity: "error", text: "No images!" });
             },
             title: "Images",
         },

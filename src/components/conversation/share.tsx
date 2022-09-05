@@ -84,6 +84,7 @@ export default function Share() {
                                 await navigator.clipboard.writeText(text);
                                 setNotification({
                                     open: true,
+                                    severity: "success",
                                     text: "Copied to Clipboard!",
                                 });
                             }}
@@ -97,6 +98,7 @@ export default function Share() {
                                 await navigator.clipboard.writeText(link);
                                 setNotification({
                                     open: true,
+                                    severity: "success",
                                     text: "Link copied to Clipboard!",
                                 });
                             }}

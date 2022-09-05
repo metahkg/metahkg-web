@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 
 export function parseError(err: AxiosError<any> | any): string {
+    console.log(err);
     try {
         if (typeof err.response?.data?.error === "string") return err.response.data.error;
         if (typeof err.error === "string") return err.error;

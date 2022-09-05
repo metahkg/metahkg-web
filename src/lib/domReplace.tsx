@@ -83,7 +83,10 @@ export const replace = (params: { quote?: boolean }) => {
                         }
                     } else if (
                         (firstChild as unknown as Text)?.type === "text" &&
-                        domNode?.attribs?.href === (firstChild as unknown as Text)?.data
+                        [
+                            domNode?.attribs?.href,
+                            decodeURIComponent(domNode?.attribs?.href),
+                        ].some((i) => i === (firstChild as unknown as Text)?.data)
                     ) {
                         return (
                             <Box

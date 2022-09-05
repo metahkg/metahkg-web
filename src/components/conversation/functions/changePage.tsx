@@ -58,7 +58,11 @@ export default function useChangePage() {
             api.thread(threadId, newPage)
                 .then((data) => {
                     if (!data.conversation.length)
-                        return setNotification({ open: true, text: "Page not found!" });
+                        return setNotification({
+                            open: true,
+                            severity: "error",
+                            text: "Page not found!",
+                        });
 
                     setThread(
                         shouldReRender
@@ -95,6 +99,7 @@ export default function useChangePage() {
                 .catch((err) => {
                     setNotification({
                         open: true,
+                        severity: "error",
                         text: parseError(err),
                     });
                 });

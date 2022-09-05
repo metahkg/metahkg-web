@@ -62,7 +62,11 @@ export default function Create() {
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
             setAlert({ severity: "info", text: "Fetching comment..." });
-            setNotification({ open: true, text: "Fetching comment..." });
+            setNotification({
+                open: true,
+                severity: "info",
+                text: "Fetching comment...",
+            });
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
                     if (data) {
@@ -76,14 +80,18 @@ export default function Create() {
                         }, 500);
                     } else {
                         setAlert({ severity: "error", text: "Comment not found!" });
-                        setNotification({ open: true, text: "Comment not found!" });
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: "Comment not found!",
+                        });
                     }
                 })
                 .catch(() => {
                     const text =
                         "Unable to fetch comment. This comment would not be a quote.";
                     setAlert({ severity: "warning", text });
-                    setNotification({ open: true, text });
+                    setNotification({ open: true, severity: "warning", text });
                 });
         }
     }, [notification.open, quote.commentId, quote.threadId, setNotification, user]);
@@ -100,7 +108,7 @@ export default function Create() {
 
     function create() {
         setAlert({ severity: "info", text: "Creating thread..." });
-        setNotification({ open: true, text: "Creating thread..." });
+        setNotification({ open: true, severity: "info", text: "Creating thread..." });
         setDisabled(true);
         api.threadCreate({
             title: threadTitle,
@@ -117,7 +125,7 @@ export default function Create() {
             .catch((err) => {
                 const text = parseError(err);
                 setAlert({ severity: "error", text });
-                setNotification({ open: true, text });
+                setNotification({ open: true, severity: "error", text });
                 setDisabled(false);
                 setRtoken("");
                 grecaptcha.reset();

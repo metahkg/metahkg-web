@@ -32,6 +32,7 @@ export default function VoteButtons(props: { comment: Comment }) {
             .catch((err) => {
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
             });

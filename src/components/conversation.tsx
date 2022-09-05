@@ -119,7 +119,7 @@ function Conversation(props: { id: number }) {
         setLoading,
     ]);
 
-    const numOfPages = roundup((thread?.c || 0) / 25);
+    const numOfPages = roundup((thread?.count || 0) / 25);
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
 

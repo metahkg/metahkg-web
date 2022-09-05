@@ -37,7 +37,11 @@ export default function Login() {
     useEffect(() => {
         if (query?.continue) {
             setAlert({ severity: "info", text: "Login to continue." });
-            setNotification({ open: true, text: "Login in to continue." });
+            setNotification({
+                open: true,
+                severity: "info",
+                text: "Login in to continue.",
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -61,7 +65,11 @@ export default function Login() {
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
-                setNotification({ open: true, text: `Logged in as ${user?.name}.` });
+                setNotification({
+                    open: true,
+                    severity: "info",
+                    text: `Logged in as ${user?.name}.`,
+                });
             })
             .catch((err) => {
                 setAlert({
@@ -70,6 +78,7 @@ export default function Login() {
                 });
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
                 setDisabled(false);

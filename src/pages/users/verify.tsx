@@ -33,7 +33,7 @@ export default function Verify() {
     function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
         setAlert({ severity: "info", text: "Verifying..." });
-        setNotification({ open: true, text: "Verifying..." });
+        setNotification({ open: true, severity: "info", text: "Verifying..." });
         setDisabled(true);
         api.usersVerify({ email, code })
             .then((data) => {
@@ -42,6 +42,7 @@ export default function Verify() {
                 setUser(user);
                 setNotification({
                     open: true,
+                    severity: "info",
                     text: `Logged in as ${user?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
@@ -54,6 +55,7 @@ export default function Verify() {
                 });
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
             });

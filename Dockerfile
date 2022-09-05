@@ -24,7 +24,7 @@ WORKDIR /usr/src/app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
-RUN if [ "${env}" = "dev" ]; then yarn install; else yarn install --production; fi;
+RUN if [ "${env}" != "dev" ]; then yarn install --production; fi;
 
 COPY ./src ./src
 COPY ./public ./public
@@ -59,7 +59,6 @@ ENV env $env
 ENV REACT_APP_ENV $env
 
 COPY --from=build /usr/src/app/build ./build
-COPY --from=build /usr/src/app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
@@ -67,13 +66,10 @@ COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js
 
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
 
-RUN chown user:user -R build
+RUN chown user:user -Rf build
 
 USER user
 
-CMD if [ "${REACT_APP_recaptchasitekey}" != "" ]; \
-    then sed -i "s/{RECAPTCHA_SITE_KEY}/${REACT_APP_recaptchasitekey}/g" build/static/js/*.js*; fi; \
-    if [ "${REACT_APP_IMAGES_DOMAIN}" != "" ]; \
-    then sed -i "s/{IMAGES_DOMAIN}/${REACT_APP_IMAGES_DOMAIN}/g" build/static/js/*.js*; fi; \
-    export PORT=${port}; \
-    if [ "${env}" = "dev" ]; then yarn start:react; else (yarn start -l ${port} || yarn start); fi;
+COPY ./docker-start.sh ./
+
+CMD sh docker-start.sh

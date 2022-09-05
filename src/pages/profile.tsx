@@ -27,7 +27,7 @@ import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
 export default function Profile() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
-    const [requestedUser, setRequestedUser] = useState<UserData | null>(null);
+    const [reqUser, setReqUser] = useState<UserData | null>(null);
     const [menu, setMenu] = useMenu();
     const [menuMode, setMenuMode] = useMenuMode();
     const isSmallScreen = useIsSmallScreen();
@@ -48,19 +48,19 @@ export default function Profile() {
     const isSelf = userId === user?.id;
 
     useEffect(() => {
-        if (Number.isInteger(userId) && (!requestedUser || requestedUser.id !== userId)) {
+        if (Number.isInteger(userId) && (!reqUser || reqUser.id !== userId)) {
             api.userProfile(userId)
                 .then((data) => {
-                    setRequestedUser(data);
+                    setReqUser(data);
                     setTitle(`${data.name} | Metahkg`);
                 })
                 .catch((err) => {
-                    setNotification({ open: true, text: parseError(err) });
+                    setNotification({ open: true, severity: "error", text: parseError(err) });
                     err?.response?.status === 404 && navigate("/404", { replace: true });
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
         }
-    }, [navigate, params.id, requestedUser, setNotification, userId]);
+    }, [navigate, params.id, reqUser, setNotification, userId]);
 
     useLayoutEffect(() => {
         /**
@@ -109,7 +109,7 @@ export default function Profile() {
                 backgroundColor: "primary.dark",
             }}
         >
-            {!requestedUser ? (
+            {!reqUser ? (
                 <Loader position="center" />
             ) : (
                 <Box className="flex justify-center items-center flex-col">
@@ -123,7 +123,7 @@ export default function Profile() {
                             onSuccess={() => {
                                 if (avatarRef.current)
                                     avatarRef.current.src = `/api/user/${
-                                        requestedUser.id
+                                        reqUser.id
                                     }/avatar?rand=${Math.random()}`;
                             }}
                         />
@@ -134,7 +134,7 @@ export default function Profile() {
                         }`}
                     >
                         <img
-                            src={`/api/user/${requestedUser.id}/avatar`}
+                            src={`/api/user/${reqUser.id}/avatar`}
                             alt="User avatar"
                             height={isSmallScreen ? 150 : 200}
                             width={isSmallScreen ? 150 : 200}
@@ -156,15 +156,15 @@ export default function Profile() {
                                 >
                                     <span
                                         className={`overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full ${
-                                            requestedUser.sex === "M"
+                                            reqUser.sex === "M"
                                                 ? "text-[#34aadc]"
                                                 : "text-[red]"
                                         }`}
                                     >
-                                        {requestedUser.name}
+                                        {reqUser.name}
                                     </span>
                                 </Box>
-                                #{requestedUser.id}
+                                #{reqUser.id}
                             </h1>
                             <Box className={isSelf ? "mt-[25px]" : ""}>
                                 {isSelf && (
@@ -184,9 +184,9 @@ export default function Profile() {
                     <Box className="flex !mt-[20px] !mb-[10px] w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
-                            setUser={setRequestedUser}
-                            requestedUser={requestedUser}
-                            key={requestedUser.id}
+                            setUser={setReqUser}
+                            reqUser={reqUser}
+                            key={reqUser.id}
                         />
                     </Box>
                     {isSmallScreen && (

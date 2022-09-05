@@ -47,6 +47,7 @@ export default function MenuBody(props: { selected: number }) {
     function onError(err: AxiosError<any>) {
         setNotification({
             open: true,
+            severity: "error",
             text: parseError(err),
         });
         err?.response?.status === 404 && navigate("/404", { replace: true });
@@ -241,7 +242,7 @@ export default function MenuBody(props: { selected: number }) {
                                         if (index === -1) {
                                             history.unshift({
                                                 id: thread.id,
-                                                c: thread.c,
+                                                c: thread.count,
                                                 cid: 1,
                                             });
                                             setHistory(history);
@@ -249,8 +250,8 @@ export default function MenuBody(props: { selected: number }) {
                                                 "history",
                                                 JSON.stringify(history)
                                             );
-                                        } else if (history[index].cid < thread.c) {
-                                            history[index].c = thread.c;
+                                        } else if (history[index].cid < thread.count) {
+                                            history[index].c = thread.count;
                                             setHistory(history);
                                             localStorage.setItem(
                                                 "history",

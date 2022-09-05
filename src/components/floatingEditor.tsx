@@ -94,6 +94,7 @@ export default function FloatingEditor() {
             .catch((err) => {
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
                 setCreating(false);

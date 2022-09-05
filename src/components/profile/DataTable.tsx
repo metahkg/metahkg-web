@@ -4,7 +4,9 @@ import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,
     Button,
+    MenuItem,
     Paper,
+    Select,
     Table,
     TableBody,
     TableCell,
@@ -16,22 +18,23 @@ import { decodeToken, timeToWord_long } from "../../lib/common";
 import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
-import { User } from "@metahkg/api";
+import { User, UserSex } from "@metahkg/api";
 
 export type UserData = User & { count: number; createdAt?: Date };
 
 interface DataTableProps {
-    requestedUser: UserData;
+    reqUser: UserData;
     setUser: React.Dispatch<React.SetStateAction<null | UserData>>;
     isSelf: boolean;
 }
 
 export default function DataTable(props: DataTableProps) {
-    const { requestedUser, setUser, isSelf } = props;
+    const { reqUser, setUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
     const [, setNotification] = useNotification();
-    const [name, setName] = useState(requestedUser.name);
+    const [name, setName] = useState(reqUser.name);
+    const [sex, setSex] = useState<UserSex>(reqUser.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [, setClient] = useUser();
     const [, setMenuTitle] = useMenuTitle();
@@ -47,34 +50,51 @@ export default function DataTable(props: DataTableProps) {
                     onChange={(e) => {
                         setName(e.target.value);
                     }}
+                    helperText={
+                        name !== reqUser.name &&
+                        !/^\S{1,15}$/.test(name) &&
+                        "Username must be 1 to 15 characters without spaces."
+                    }
                 />
             ) : (
-                requestedUser.name
+                reqUser.name
             ),
         },
         {
             title: "Threads",
-            content: requestedUser.count,
+            content: reqUser.count,
         },
         {
             title: "Gender",
-            content: { M: "male", F: "female" }[requestedUser.sex] || "",
+            content: isSelf ? (
+                <Select
+                    variant="standard"
+                    value={sex}
+                    onChange={(e) => {
+                        const newValue = e.target.value;
+                        if (newValue === "M" || newValue === "F") setSex(newValue);
+                    }}
+                >
+                    <MenuItem value="M">Male</MenuItem>
+                    <MenuItem value="F">Female</MenuItem>
+                </Select>
+            ) : (
+                { M: "male", F: "female" }[reqUser.sex] || ""
+            ),
         },
-        { title: "Role", content: requestedUser.role },
+        { title: "Role", content: reqUser.role },
         {
             title: "Joined",
             content: `${
-                requestedUser.createdAt
-                    ? timeToWord_long(requestedUser.createdAt)
-                    : "unknown"
+                reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
             } ago`,
         },
     ];
 
-    function rename() {
+    function updateUserInfo() {
         setSaveDisabled(true);
-        setNotification({ open: true, text: "Renaming..." });
-        api.meRename({ name })
+        setNotification({ open: true, severity: "info", text: "Updating user info..." });
+        api.userEdit(reqUser.id, { name, sex })
             .then((data) => {
                 setSaveDisabled(false);
                 setUser(null);
@@ -88,12 +108,17 @@ export default function DataTable(props: DataTableProps) {
 
                 setReFetch(true);
                 setMenuTitle("");
-                setNotification({ open: true, text: `Name changed to ${name}.` });
+                setNotification({
+                    open: true,
+                    severity: "success",
+                    text: `Successfully updated.`,
+                });
             })
             .catch((err) => {
                 setSaveDisabled(false);
                 setNotification({
                     open: true,
+                    severity: "error",
                     text: parseError(err),
                 });
             });
@@ -134,9 +159,9 @@ export default function DataTable(props: DataTableProps) {
                 <Button
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
-                    disabled={saveDisabled || name === requestedUser.name}
+                    disabled={saveDisabled || name === reqUser.name || sex !== reqUser.sex}
                     color="secondary"
-                    onClick={rename}
+                    onClick={updateUserInfo}
                 >
                     <Save />
                     Save
