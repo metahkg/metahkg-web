@@ -164,7 +164,9 @@ export default function DataTable(props: DataTableProps) {
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
                     disabled={
-                        saveDisabled || (name === reqUser.name && sex === reqUser.sex) || !nameValid
+                        saveDisabled ||
+                        (name === reqUser.name && sex === reqUser.sex) ||
+                        !nameValid
                     }
                     color="secondary"
                     onClick={updateUserInfo}
