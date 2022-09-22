@@ -74,7 +74,7 @@ export default function Comment(props: {
         maxHeight,
         noFullWidth,
         inReplies: inReply,
-        inThread
+        inThread,
     } = props;
     const threadId = useThreadId();
     const [comment, setComment] = useState(props.comment);
@@ -160,7 +160,7 @@ export default function Comment(props: {
                     commentRef,
                     setIsExpanded,
                     inREplies: inReply,
-                    inThread
+                    inThread,
                 }}
             >
                 <Box
@@ -286,7 +286,13 @@ export default function Comment(props: {
                             {showReplies && (
                                 <React.Fragment>
                                     {replies.map((comment) => (
-                                        <Comment comment={comment} noId noQuote noStory inReplies />
+                                        <Comment
+                                            comment={comment}
+                                            noId
+                                            noQuote
+                                            noStory
+                                            inReplies
+                                        />
                                     ))}
                                     <Box className="flex justify-center items-center">
                                         <Typography
@@ -303,7 +309,29 @@ export default function Comment(props: {
                 </Box>
             </CommentContext.Provider>
         ),
-        [comment, reFetch, showReplies, replies, popupOpen, fold, blocked, editing, inPopUp, setIsExpanded, inReply, inThread, noFullWidth, className, sx, noId, noStory, maxHeight, noQuote, ready, loading]
+        [
+            comment,
+            reFetch,
+            showReplies,
+            replies,
+            popupOpen,
+            fold,
+            blocked,
+            editing,
+            inPopUp,
+            setIsExpanded,
+            inReply,
+            inThread,
+            noFullWidth,
+            className,
+            sx,
+            noId,
+            noStory,
+            maxHeight,
+            noQuote,
+            ready,
+            loading,
+        ]
     );
 }
 
@@ -357,12 +385,12 @@ export function useInPopUp() {
     return inPopUp;
 }
 
-export function useInReply () {
+export function useInReply() {
     const { inREplies: inReply } = useContext(CommentContext);
     return inReply;
 }
 
-export function useInThread () {
+export function useInThread() {
     const { inThread } = useContext(CommentContext);
     return inThread;
 }

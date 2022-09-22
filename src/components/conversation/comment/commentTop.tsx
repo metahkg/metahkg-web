@@ -116,17 +116,29 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             );
                     },
                 },
-                user?.role === "admin" && inThread && {
-                    icon: (
-                        <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
-                    ),
-                    title: "Edit (Admin)",
-                    action: () => {
-                        setEditing((editing) => !editing);
+                user?.role === "admin" &&
+                    inThread && {
+                        icon: (
+                            <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
+                        ),
+                        title: "Edit (Admin)",
+                        action: () => {
+                            setEditing((editing) => !editing);
+                        },
                     },
-                },
             ].filter((x) => x),
-        [story, comment, noStory, user, inThread, cRoot, setStory, setEditor, navigate, setEditing]
+        [
+            story,
+            comment,
+            noStory,
+            user,
+            inThread,
+            cRoot,
+            setStory,
+            setEditor,
+            navigate,
+            setEditing,
+        ]
     );
 
     const rightBtns: {
