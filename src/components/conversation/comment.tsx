@@ -17,6 +17,7 @@ import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
 import { Comment as CommentType } from "@metahkg/api";
 import CommentBottom from "./comment/commentBottom";
+import CommentEdit from "./comment/commentEdit";
 
 const CommentContext = createContext<{
     comment: [CommentType, React.Dispatch<React.SetStateAction<CommentType>>];
@@ -32,8 +33,11 @@ const CommentContext = createContext<{
         boolean | undefined,
         React.Dispatch<React.SetStateAction<boolean | undefined>>
     ];
+    editing: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     commentRef: React.RefObject<HTMLElement>;
     inPopUp?: boolean;
+    inREplies?: boolean;
+    inThread?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     // @ts-ignore
 }>({});
@@ -42,6 +46,8 @@ export default function Comment(props: {
     comment: CommentType;
     noId?: boolean;
     inPopUp?: boolean;
+    inReplies?: boolean;
+    inThread?: boolean;
     showReplies?: boolean;
     fetchComment?: boolean;
     noQuote?: boolean;
@@ -67,6 +73,8 @@ export default function Comment(props: {
         className,
         maxHeight,
         noFullWidth,
+        inReplies: inReply,
+        inThread
     } = props;
     const threadId = useThreadId();
     const [comment, setComment] = useState(props.comment);
@@ -80,6 +88,7 @@ export default function Comment(props: {
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [fold, setFold] = useState(Boolean(props.fold));
+    const [editing, setEditing] = useState(false);
     const commentRef = useRef<HTMLElement>(null);
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
@@ -146,9 +155,12 @@ export default function Comment(props: {
                     popupOpen: [popupOpen, setPopupOpen],
                     fold: [fold, setFold],
                     blocked: [blocked, setBlocked],
+                    editing: [editing, setEditing],
                     inPopUp,
                     commentRef,
                     setIsExpanded,
+                    inREplies: inReply,
+                    inThread
                 }}
             >
                 <Box
@@ -182,12 +194,16 @@ export default function Comment(props: {
                             <CommentTop comment={comment} noStory={noStory} />
                             {!fold && !blocked && (
                                 <React.Fragment>
-                                    <CommentBody
-                                        maxHeight={maxHeight}
-                                        noQuote={noQuote}
-                                        comment={comment}
-                                        depth={0}
-                                    />
+                                    {editing ? (
+                                        <CommentEdit />
+                                    ) : (
+                                        <CommentBody
+                                            maxHeight={maxHeight}
+                                            noQuote={noQuote}
+                                            comment={comment}
+                                            depth={0}
+                                        />
+                                    )}
                                     <Box className="h-[2px]" />
                                 </React.Fragment>
                             )}
@@ -195,6 +211,48 @@ export default function Comment(props: {
                         {ready && !fold && !blocked && <CommentBottom />}
                         <Box className="h-[15px]" />
                     </Box>
+                    {inThread && (
+                        <React.Fragment>
+                            {comment.admin?.replies?.map((reply) => {
+                                return (
+                                    <p className="mx-[10px] my-[8px]">
+                                        <Typography
+                                            className="inline"
+                                            sx={{ color: "secondary.main" }}
+                                        >{`Admin ${reply.admin.name} #${
+                                            reply.admin.id
+                                        } replied on ${
+                                            reply.date
+                                                ? new Date(reply.date)
+                                                      .toISOString()
+                                                      .split("T")[0]
+                                                : "unknown"
+                                        }: `}</Typography>
+                                        {reply.reply}
+                                    </p>
+                                );
+                            })}
+                            {comment.admin?.edits?.map((edit) => {
+                                return (
+                                    <p className="mx-[10px] my-[8px]">
+                                        <Typography
+                                            className="inline"
+                                            sx={{ color: "secondary.main" }}
+                                        >{`Admin ${edit.admin.name} #${
+                                            edit.admin.id
+                                        } editted on ${
+                                            edit.date
+                                                ? new Date(edit.date)
+                                                      .toISOString()
+                                                      .split("T")[0]
+                                                : "unknown"
+                                        }: `}</Typography>
+                                        {edit.reason}
+                                    </p>
+                                );
+                            })}
+                        </React.Fragment>
+                    )}
                     {loading && (
                         <Box className="flex justify-center items-center">
                             <CircularProgress
@@ -228,7 +286,7 @@ export default function Comment(props: {
                             {showReplies && (
                                 <React.Fragment>
                                     {replies.map((comment) => (
-                                        <Comment comment={comment} noId noQuote noStory />
+                                        <Comment comment={comment} noId noQuote noStory inReplies />
                                     ))}
                                     <Box className="flex justify-center items-center">
                                         <Typography
@@ -245,26 +303,7 @@ export default function Comment(props: {
                 </Box>
             </CommentContext.Provider>
         ),
-        [
-            comment,
-            reFetch,
-            showReplies,
-            replies,
-            popupOpen,
-            fold,
-            noFullWidth,
-            className,
-            sx,
-            noId,
-            inPopUp,
-            noStory,
-            blocked,
-            maxHeight,
-            noQuote,
-            ready,
-            setIsExpanded,
-            loading,
-        ]
+        [comment, reFetch, showReplies, replies, popupOpen, fold, blocked, editing, inPopUp, setIsExpanded, inReply, inThread, noFullWidth, className, sx, noId, noStory, maxHeight, noQuote, ready, loading]
     );
 }
 
@@ -303,6 +342,11 @@ export function useBlocked() {
     return blocked;
 }
 
+export function useEditing() {
+    const { editing } = useContext(CommentContext);
+    return editing;
+}
+
 export function useCommentRef() {
     const { commentRef } = useContext(CommentContext);
     return commentRef;
@@ -311,6 +355,16 @@ export function useCommentRef() {
 export function useInPopUp() {
     const { inPopUp } = useContext(CommentContext);
     return inPopUp;
+}
+
+export function useInReply () {
+    const { inREplies: inReply } = useContext(CommentContext);
+    return inReply;
+}
+
+export function useInThread () {
+    const { inThread } = useContext(CommentContext);
+    return inThread;
 }
 
 export function useSetIsExpanded() {

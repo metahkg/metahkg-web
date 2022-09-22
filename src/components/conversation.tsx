@@ -233,6 +233,7 @@ function Conversation(props: { id: number }) {
                                                                 : 1) && (
                                                                 <Comment
                                                                     key={comment.id}
+                                                                    inThread
                                                                     comment={comment}
                                                                     scrollIntoView={
                                                                         Number(
