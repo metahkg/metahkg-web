@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import { Box, Button, Tooltip } from "@mui/material";
+import { Avatar, Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useReFetch,
@@ -37,8 +37,10 @@ export default function Profile() {
     const [back, setBack] = useBack();
     const [, setNotification] = useNotification();
     const [user] = useUser();
-    const [avatarFile, setAvatarFile] = useState<File | null>(null);
-    const [avatarFileOriginal, setAvatarFileOriginal] = useState<File | null>(null);
+    const [uploadedAvatar, setUploadedAvatar] = useState<File | null>(null);
+    const [uploadedAvatarOriginal, setUploadedAvatarOriginal] = useState<File | null>(
+        null
+    );
     const [editorOpen, setEditorOpen] = useState(false);
 
     const avatarRef = useRef<HTMLImageElement>(null);
@@ -117,16 +119,16 @@ export default function Profile() {
                 <Loader position="center" />
             ) : (
                 <Box className="flex justify-center items-center flex-col">
-                    {avatarFileOriginal && (
+                    {uploadedAvatarOriginal && (
                         <AvatarEditorPopUp
                             open={editorOpen}
                             setOpen={setEditorOpen}
-                            avatar={avatarFile}
-                            setAvatar={setAvatarFile}
-                            avatarOriginal={avatarFileOriginal}
+                            avatar={uploadedAvatar}
+                            setAvatar={setUploadedAvatar}
+                            avatarOriginal={uploadedAvatarOriginal}
                             onSuccess={() => {
                                 if (avatarRef.current)
-                                    avatarRef.current.src = `/api/user/${
+                                    avatarRef.current.src = `/api/users/${
                                         reqUser.id
                                     }/avatar?rand=${Math.random()}`;
                             }}
@@ -137,20 +139,21 @@ export default function Profile() {
                             isSmallScreen ? "w-100v" : "w-70v"
                         }`}
                     >
-                        <img
+                        <Avatar
                             src={`/api/users/${reqUser.id}/avatar`}
-                            alt="User avatar"
-                            height={isSmallScreen ? 150 : 200}
-                            width={isSmallScreen ? 150 : 200}
+                            alt={reqUser.name}
+                            sx={{
+                                height: 150,
+                                width: 150,
+                            }}
                             ref={avatarRef}
                         />
-                        <br />
                         <Box
                             className={`!ml-[20px] flex justify-center h-[200px] ${
                                 isSelf ? "flex-col" : ""
                             }`}
                         >
-                            <h1 className="text-[30px] self-center whitespace-nowrap leading-[37px] max-h-[37px]">
+                            <h1 className="text-[30px] self-center whitespace-nowrap leading-[37px] max-h-[37px] mt-0">
                                 <Box
                                     className={`overflow-hidden ${
                                         isSmallScreen
@@ -175,8 +178,8 @@ export default function Profile() {
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
                                             onChange={(image) => {
-                                                setAvatarFileOriginal(image);
-                                                setAvatarFile(image);
+                                                setUploadedAvatarOriginal(image);
+                                                setUploadedAvatar(image);
                                                 setEditorOpen(true);
                                             }}
                                         />
