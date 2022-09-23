@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.0
+
+- rounded comments
+
 ## v4.4.0
 
 - add emotions list (opened by clicked the more button)

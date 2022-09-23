@@ -98,20 +98,6 @@ export default function Login() {
                 onSubmit={onSubmit}
             >
                 <Box className="mx-[50px]">
-                    <Box className="flex w-full justify-end">
-                        <Link
-                            className="!no-underline"
-                            to={`/users/register${window.location.search}`}
-                        >
-                            <Button
-                                className="flex !normal-case !text-[18px]"
-                                color="secondary"
-                                variant="text"
-                            >
-                                <strong>Register</strong>
-                            </Button>
-                        </Link>
-                    </Box>
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             height={50}
@@ -160,16 +146,30 @@ export default function Login() {
                             Verify / Resend verification email
                         </Typography>
                     </Box>
-                    <Button
-                        disabled={disabled || !(name && pwd)}
-                        className="!text-[16px] !normal-case h-[40px]"
-                        color="secondary"
-                        variant="contained"
-                        type="submit"
-                    >
-                        <LoginIcon className="!mr-[5px] !text-[16px]" />
-                        Login
-                    </Button>
+                    <Box className="flex justify-between">
+                        <Button
+                            className="flex !text-[18px] !no-underline !normal-case"
+                            color="secondary"
+                            variant="text"
+                            component={Link}
+                            sx={(theme) => ({
+                                color: `${theme.palette.secondary.main} !important`,
+                            })}
+                            to={`/users/register${window.location.search}`}
+                        >
+                            Register
+                        </Button>
+                        <Button
+                            disabled={disabled || !(name && pwd)}
+                            className="!text-[16px] !normal-case h-[40px]"
+                            color="secondary"
+                            variant="contained"
+                            type="submit"
+                        >
+                            <LoginIcon className="!mr-[5px] !text-[16px]" />
+                            Login
+                        </Button>
+                    </Box>
                 </Box>
             </Box>
         </Box>

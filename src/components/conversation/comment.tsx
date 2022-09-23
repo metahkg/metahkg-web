@@ -163,149 +163,154 @@ export default function Comment(props: {
                     inThread,
                 }}
             >
-                <Box
-                    className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
-                    sx={sx}
-                    ref={commentRef}
-                    id={noId ? undefined : `c${comment.id}`}
-                >
-                    {comment.replies?.length && (
-                        <CommentPopup
-                            comment={comment}
-                            showReplies
-                            open={popupOpen}
-                            setOpen={setPopupOpen}
-                        />
-                    )}
+                <Box className="flex flex-col">
                     <Box
-                        className={`text-left ${
-                            !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
-                        } w-full comment-root`}
-                        sx={(theme) => ({
-                            "& *::selection": {
-                                background: theme.palette.secondary.main,
-                                color: "black",
-                            },
-                            bgcolor: "primary.main",
-                            maxHeight: inPopUp && !showReplies ? "90vh" : "",
-                        })}
+                        className={`${
+                            noFullWidth ? "" : "w-[calc(100%-8px)]"
+                        } mx-[4px] ${className || ""}`}
+                        sx={sx}
+                        ref={commentRef}
+                        id={noId ? undefined : `c${comment.id}`}
                     >
-                        <Box className="!ml-[20px] !mr-[20px]">
-                            <CommentTop comment={comment} noStory={noStory} />
-                            {!fold && !blocked && (
-                                <React.Fragment>
-                                    {editing ? (
-                                        <CommentEdit />
-                                    ) : (
-                                        <CommentBody
-                                            maxHeight={maxHeight}
-                                            noQuote={noQuote}
-                                            comment={comment}
-                                            depth={0}
-                                        />
-                                    )}
-                                    <Box className="h-[2px]" />
-                                </React.Fragment>
-                            )}
-                        </Box>
-                        {ready && !fold && !blocked && <CommentBottom />}
-                        <Box className="h-[15px]" />
-                    </Box>
-                    {inThread && (
-                        <React.Fragment>
-                            {comment.admin?.replies?.map((reply) => {
-                                return (
-                                    <p className="mx-[10px] my-[8px]">
-                                        <Typography
-                                            className="inline"
-                                            sx={{ color: "secondary.main" }}
-                                        >{`Admin ${reply.admin.name} #${
-                                            reply.admin.id
-                                        } replied on ${
-                                            reply.date
-                                                ? new Date(reply.date)
-                                                      .toISOString()
-                                                      .split("T")[0]
-                                                : "unknown"
-                                        }: `}</Typography>
-                                        {reply.reply}
-                                    </p>
-                                );
-                            })}
-                            {comment.admin?.edits?.map((edit) => {
-                                return (
-                                    <p className="mx-[10px] my-[8px]">
-                                        <Typography
-                                            className="inline"
-                                            sx={{ color: "secondary.main" }}
-                                        >{`Admin ${edit.admin.name} #${
-                                            edit.admin.id
-                                        } editted on ${
-                                            edit.date
-                                                ? new Date(edit.date)
-                                                      .toISOString()
-                                                      .split("T")[0]
-                                                : "unknown"
-                                        }: `}</Typography>
-                                        {edit.reason}
-                                    </p>
-                                );
-                            })}
-                        </React.Fragment>
-                    )}
-                    {loading && (
-                        <Box className="flex justify-center items-center">
-                            <CircularProgress
-                                size={30}
-                                className="!mt-[10px] !mb-[5px]"
-                                color={"secondary"}
+                        {comment.replies?.length && (
+                            <CommentPopup
+                                comment={comment}
+                                showReplies
+                                open={popupOpen}
+                                setOpen={setPopupOpen}
                             />
-                        </Box>
-                    )}
-                    {!!replies.length && (
-                        <Box>
-                            <Box
-                                className="flex items-center justify-center text-center cursor-pointer"
-                                onClick={() => {
-                                    setShowReplies(!showReplies);
-                                    setIsExpanded?.(!showReplies);
-                                }}
-                            >
-                                <Typography
-                                    className="!mt-[5px] !mb-[5px]"
-                                    color="secondary"
-                                >
-                                    {showReplies ? "Hide" : "Show"} Replies
-                                </Typography>
-                                {showReplies ? (
-                                    <KeyboardArrowUp color="secondary" />
-                                ) : (
-                                    <KeyboardArrowDown color="secondary" />
+                        )}
+                        <Box
+                            className={`text-left !my-[4px] ${
+                                showReplies ? "" : "overflow-auto"
+                            } w-full rounded-[8px]`}
+                            sx={(theme) => ({
+                                "& *::selection": {
+                                    background: theme.palette.secondary.main,
+                                    color: "black",
+                                },
+                                bgcolor: "primary.main",
+                                maxHeight: inPopUp && !showReplies ? "90vh" : "",
+                            })}
+                        >
+                            <Box className="!mx-[20px]">
+                                <CommentTop comment={comment} noStory={noStory} />
+                                {!fold && !blocked && (
+                                    <React.Fragment>
+                                        {editing ? (
+                                            <CommentEdit />
+                                        ) : (
+                                            <CommentBody
+                                                maxHeight={maxHeight}
+                                                noQuote={noQuote}
+                                                comment={comment}
+                                                depth={0}
+                                            />
+                                        )}
+                                        <Box className="h-[2px]" />
+                                    </React.Fragment>
                                 )}
                             </Box>
-                            {showReplies && (
-                                <React.Fragment>
-                                    {replies.map((comment) => (
-                                        <Comment
-                                            comment={comment}
-                                            noId
-                                            noQuote
-                                            noStory
-                                            inReplies
-                                        />
-                                    ))}
-                                    <Box className="flex justify-center items-center">
-                                        <Typography
-                                            className="!mt-[5px] !mb-[5px] !text-[18px]"
-                                            color="secondary"
-                                        >
-                                            End
-                                        </Typography>
-                                    </Box>
-                                </React.Fragment>
-                            )}
+                            {ready && !fold && !blocked && <CommentBottom />}
+                            <Box className="h-[15px]" />
                         </Box>
-                    )}
+
+                        {inThread && (
+                            <React.Fragment>
+                                {comment.admin?.replies?.map((reply) => {
+                                    return (
+                                        <p className="mx-[10px] my-[8px]">
+                                            <Typography
+                                                className="inline"
+                                                sx={{ color: "secondary.main" }}
+                                            >{`Admin ${reply.admin.name} #${
+                                                reply.admin.id
+                                            } replied on ${
+                                                reply.date
+                                                    ? new Date(reply.date)
+                                                          .toISOString()
+                                                          .split("T")[0]
+                                                    : "unknown"
+                                            }: `}</Typography>
+                                            {reply.reply}
+                                        </p>
+                                    );
+                                })}
+                                {comment.admin?.edits?.map((edit) => {
+                                    return (
+                                        <p className="mx-[10px] my-[8px]">
+                                            <Typography
+                                                className="inline"
+                                                sx={{ color: "secondary.main" }}
+                                            >{`Admin ${edit.admin.name} #${
+                                                edit.admin.id
+                                            } editted on ${
+                                                edit.date
+                                                    ? new Date(edit.date)
+                                                          .toISOString()
+                                                          .split("T")[0]
+                                                    : "unknown"
+                                            }: `}</Typography>
+                                            {edit.reason}
+                                        </p>
+                                    );
+                                })}
+                            </React.Fragment>
+                        )}
+                        {loading && (
+                            <Box className="flex justify-center items-center">
+                                <CircularProgress
+                                    size={30}
+                                    className="!mt-[10px] !mb-[5px]"
+                                    color={"secondary"}
+                                />
+                            </Box>
+                        )}
+                        {!!replies.length && (
+                            <Box>
+                                <Box
+                                    className="flex items-center justify-center text-center cursor-pointer"
+                                    onClick={() => {
+                                        setShowReplies(!showReplies);
+                                        setIsExpanded?.(!showReplies);
+                                    }}
+                                >
+                                    <Typography
+                                        className="!mt-[5px] !mb-[5px]"
+                                        color="secondary"
+                                    >
+                                        {showReplies ? "Hide" : "Show"} Replies
+                                    </Typography>
+                                    {showReplies ? (
+                                        <KeyboardArrowUp color="secondary" />
+                                    ) : (
+                                        <KeyboardArrowDown color="secondary" />
+                                    )}
+                                </Box>
+                                {showReplies && (
+                                    <React.Fragment>
+                                        {replies.map((comment) => (
+                                            <Comment
+                                                comment={comment}
+                                                noId
+                                                noQuote
+                                                noStory
+                                                inReplies
+                                            />
+                                        ))}
+                                        <Box className="flex justify-center items-center">
+                                            <Typography
+                                                className="!mt-[5px] !mb-[5px] !text-[18px]"
+                                                color="secondary"
+                                            >
+                                                End
+                                            </Typography>
+                                        </Box>
+                                    </React.Fragment>
+                                )}
+                            </Box>
+                        )}
+                    </Box>
                 </Box>
             </CommentContext.Provider>
         ),
