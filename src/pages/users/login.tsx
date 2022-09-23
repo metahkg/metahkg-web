@@ -40,7 +40,7 @@ export default function Login() {
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Login in to continue.",
+                text: "Login to continue.",
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
