@@ -165,9 +165,9 @@ export default function Comment(props: {
             >
                 <Box className="flex flex-col">
                     <Box
-                        className={`${
-                            noFullWidth ? "" : "w-[calc(100%-8px)]"
-                        } mx-[4px] ${className || ""}`}
+                        className={`${noFullWidth ? "" : "w-[calc(100%-8px)]"} mx-[4px] ${
+                            className || ""
+                        }`}
                         sx={sx}
                         ref={commentRef}
                         id={noId ? undefined : `c${comment.id}`}
