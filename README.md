@@ -41,14 +41,14 @@ Since v2.4.0, metahkg-web can be used as a module.
 ### Install
 
 ```bash
-yarn add metahkg-web
+yarn add @metahkg/web
 ```
 
 ### Usage
 
 ```tsx
 import React from "react";
-import MetahkgWebApp from "metahkg-web";
+import MetahkgWebApp from "@metahkg/web";
 
 export default function App() {
     return <MetahkgWebApp reCaptchaSiteKey={"<your-recaptcha-site-key>"} />;
