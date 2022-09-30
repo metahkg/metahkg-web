@@ -38,7 +38,7 @@ import { filterSwearWords } from "../../../lib/filterSwear";
 import UserModal from "./userModal";
 import { colors } from "../../../lib/css";
 import BlockedBtn from "./blockedBtn";
-import { useBlocked, useFold } from "../comment";
+import { useBlocked, useEditing, useFold, useInThread } from "../comment";
 
 export default function CommentTop(props: { comment: Comment; noStory?: boolean }) {
     const [open, setOpen] = useState(false);
@@ -58,6 +58,8 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
     const [blockList] = useBlockList();
     const [fold, setFold] = useFold();
     const [blocked, setBlocked] = useBlocked();
+    const [, setEditing] = useEditing();
+    const inThread = useInThread();
 
     const cRoot = useCRoot();
 
@@ -66,52 +68,77 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
     const isOp = thread && thread.op.id === comment.user.id;
 
     const leftBtns = useMemo(
-        () => [
-            (story ? story === comment.user.id : 1) &&
-                !noStory && {
-                    icon: React.createElement(
-                        story ? VisibilityOffIcon : VisibilityIcon,
-                        {
-                            className: "!text-metahkg-grey !text-[19px]",
-                        }
+        () =>
+            [
+                (story ? story === comment.user.id : 1) &&
+                    !noStory && {
+                        icon: React.createElement(
+                            story ? VisibilityOffIcon : VisibilityIcon,
+                            {
+                                className: "!text-metahkg-grey !text-[19px]",
+                            }
+                        ),
+                        title: story ? "Quit story mode" : "Story mode",
+                        action: () => {
+                            const commentEle = document.getElementById(`c${comment.id}`);
+                            if (cRoot.current && commentEle) {
+                                const beforeHeight =
+                                    commentEle?.offsetTop - 47 - cRoot.current?.scrollTop;
+                                setStory(story ? 0 : comment.user.id);
+                                setTimeout(() => {
+                                    const commentEle = document.getElementById(
+                                        `c${comment.id}`
+                                    );
+                                    if (cRoot.current && commentEle) {
+                                        const afterHeight =
+                                            commentEle?.offsetTop -
+                                            47 -
+                                            cRoot.current?.scrollTop;
+                                        cRoot.current.scrollTop +=
+                                            afterHeight - beforeHeight;
+                                    }
+                                });
+                            }
+                        },
+                    },
+                {
+                    icon: (
+                        <ReplyIcon className="!text-metahkg-grey !text-[21px] !mb-[1px]" />
                     ),
-                    title: story ? "Quit story mode" : "Story mode",
+                    title: "Quote",
                     action: () => {
-                        const commentEle = document.getElementById(`c${comment.id}`);
-                        if (cRoot.current && commentEle) {
-                            const beforeHeight =
-                                commentEle?.offsetTop - 47 - cRoot.current?.scrollTop;
-                            setStory(story ? 0 : comment.user.id);
-                            setTimeout(() => {
-                                const commentEle = document.getElementById(
-                                    `c${comment.id}`
-                                );
-                                if (cRoot.current && commentEle) {
-                                    const afterHeight =
-                                        commentEle?.offsetTop -
-                                        47 -
-                                        cRoot.current?.scrollTop;
-                                    cRoot.current.scrollTop += afterHeight - beforeHeight;
-                                }
-                            });
-                        }
+                        if (user) setEditor({ open: true, quote: comment });
+                        else
+                            navigate(
+                                `/users/login?continue=true&returnto=${encodeURIComponent(
+                                    `${wholePath()}?c=${comment.id}`
+                                )}`
+                            );
                     },
                 },
-            {
-                icon: <ReplyIcon className="!text-metahkg-grey !text-[21px] !mb-[1px]" />,
-                title: "Quote",
-                action: () => {
-                    if (user) setEditor({ open: true, quote: comment });
-                    else
-                        navigate(
-                            `/users/login?continue=true&returnto=${encodeURIComponent(
-                                `${wholePath()}?c=${comment.id}`
-                            )}`
-                        );
-                },
-            },
-        ],
-        [story, comment, noStory, cRoot, setStory, user, setEditor, navigate]
+                user?.role === "admin" &&
+                    inThread && {
+                        icon: (
+                            <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
+                        ),
+                        title: "Edit (Admin)",
+                        action: () => {
+                            setEditing((editing) => !editing);
+                        },
+                    },
+            ].filter((x) => x),
+        [
+            story,
+            comment,
+            noStory,
+            user,
+            inThread,
+            cRoot,
+            setStory,
+            setEditor,
+            navigate,
+            setEditing,
+        ]
     );
 
     const rightBtns: {

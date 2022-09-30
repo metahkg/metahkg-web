@@ -4,7 +4,7 @@ import AvatarEditor from "react-avatar-editor";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { PopUp } from "../../lib/popup";
-import { useNotification } from "../ContextProvider";
+import { useNotification, useUser } from "../ContextProvider";
 
 export default function AvatarEditorPopUp(props: {
     open: boolean;
@@ -20,6 +20,7 @@ export default function AvatarEditorPopUp(props: {
         rotate: 0,
     });
     const [, setNotification] = useNotification();
+    const [user] = useUser();
     const editorRef = useRef<AvatarEditor>(null);
 
     const resetAvatarProps = () => {
@@ -45,13 +46,13 @@ export default function AvatarEditorPopUp(props: {
                 {
                     text: "Confirm",
                     action: () => {
-                        if (avatar) {
+                        if (avatar && user) {
                             setNotification({
                                 open: true,
                                 severity: "info",
                                 text: "Uploading avatar...",
                             });
-                            api.meAvatar({
+                            api.userUploadAvatar(user?.id, {
                                 data: avatar,
                                 fileName: "avatar",
                             })

@@ -17,6 +17,7 @@ import CommentPopup from "../../lib/commentPopup";
 import { parseError } from "../../lib/parseError";
 import { Comment as CommentType } from "@metahkg/api";
 import CommentBottom from "./comment/commentBottom";
+import CommentEdit from "./comment/commentEdit";
 
 const CommentContext = createContext<{
     comment: [CommentType, React.Dispatch<React.SetStateAction<CommentType>>];
@@ -32,8 +33,11 @@ const CommentContext = createContext<{
         boolean | undefined,
         React.Dispatch<React.SetStateAction<boolean | undefined>>
     ];
+    editing: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     commentRef: React.RefObject<HTMLElement>;
     inPopUp?: boolean;
+    inREplies?: boolean;
+    inThread?: boolean;
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     // @ts-ignore
 }>({});
@@ -42,6 +46,8 @@ export default function Comment(props: {
     comment: CommentType;
     noId?: boolean;
     inPopUp?: boolean;
+    inReplies?: boolean;
+    inThread?: boolean;
     showReplies?: boolean;
     fetchComment?: boolean;
     noQuote?: boolean;
@@ -67,6 +73,8 @@ export default function Comment(props: {
         className,
         maxHeight,
         noFullWidth,
+        inReplies: inReply,
+        inThread,
     } = props;
     const threadId = useThreadId();
     const [comment, setComment] = useState(props.comment);
@@ -80,6 +88,7 @@ export default function Comment(props: {
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [fold, setFold] = useState(Boolean(props.fold));
+    const [editing, setEditing] = useState(false);
     const commentRef = useRef<HTMLElement>(null);
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
@@ -146,101 +155,162 @@ export default function Comment(props: {
                     popupOpen: [popupOpen, setPopupOpen],
                     fold: [fold, setFold],
                     blocked: [blocked, setBlocked],
+                    editing: [editing, setEditing],
                     inPopUp,
                     commentRef,
+                    setIsExpanded,
+                    inREplies: inReply,
+                    inThread,
                 }}
             >
-                <Box
-                    className={`${noFullWidth ? "" : "w-full"} ${className || ""}`}
-                    sx={sx}
-                    ref={commentRef}
-                    id={noId ? undefined : `c${comment.id}`}
-                >
-                    {comment.replies?.length && (
-                        <CommentPopup
-                            comment={comment}
-                            showReplies
-                            open={popupOpen}
-                            setOpen={setPopupOpen}
-                        />
-                    )}
+                <Box className="flex flex-col">
                     <Box
-                        className={`text-left ${
-                            !inPopUp ? "!mt-[6px]" : showReplies ? "" : "overflow-auto"
-                        } w-full comment-root`}
-                        sx={(theme) => ({
-                            "& *::selection": {
-                                background: theme.palette.secondary.main,
-                                color: "black",
-                            },
-                            bgcolor: "primary.main",
-                            maxHeight: inPopUp && !showReplies ? "90vh" : "",
-                        })}
+                        className={`${noFullWidth ? "" : "w-[calc(100%-8px)]"} mx-[4px] ${
+                            className || ""
+                        }`}
+                        sx={sx}
+                        ref={commentRef}
+                        id={noId ? undefined : `c${comment.id}`}
                     >
-                        <Box className="!ml-[20px] !mr-[20px]">
-                            <CommentTop comment={comment} noStory={noStory} />
-                            {!fold && !blocked && (
-                                <React.Fragment>
-                                    <CommentBody
-                                        maxHeight={maxHeight}
-                                        noQuote={noQuote}
-                                        comment={comment}
-                                        depth={0}
-                                    />
-                                    <Box className="h-[2px]" />
-                                </React.Fragment>
-                            )}
-                        </Box>
-                        {ready && !fold && !blocked && <CommentBottom />}
-                        <Box className="h-[15px]" />
-                    </Box>
-                    {loading && (
-                        <Box className="flex justify-center items-center">
-                            <CircularProgress
-                                size={30}
-                                className="!mt-[10px] !mb-[5px]"
-                                color={"secondary"}
+                        {comment.replies?.length && (
+                            <CommentPopup
+                                comment={comment}
+                                showReplies
+                                open={popupOpen}
+                                setOpen={setPopupOpen}
                             />
-                        </Box>
-                    )}
-                    {!!replies.length && (
-                        <Box>
-                            <Box
-                                className="flex items-center justify-center text-center cursor-pointer"
-                                onClick={() => {
-                                    setShowReplies(!showReplies);
-                                    setIsExpanded?.(!showReplies);
-                                }}
-                            >
-                                <Typography
-                                    className="!mt-[5px] !mb-[5px]"
-                                    color="secondary"
-                                >
-                                    {showReplies ? "Hide" : "Show"} Replies
-                                </Typography>
-                                {showReplies ? (
-                                    <KeyboardArrowUp color="secondary" />
-                                ) : (
-                                    <KeyboardArrowDown color="secondary" />
+                        )}
+                        <Box
+                            className={`text-left !my-[4px] ${
+                                showReplies ? "" : "overflow-auto"
+                            } w-full rounded-[8px]`}
+                            sx={(theme) => ({
+                                "& *::selection": {
+                                    background: theme.palette.secondary.main,
+                                    color: "black",
+                                },
+                                bgcolor: "primary.main",
+                                maxHeight: inPopUp && !showReplies ? "90vh" : "",
+                            })}
+                        >
+                            <Box className="!mx-[20px]">
+                                <CommentTop comment={comment} noStory={noStory} />
+                                {!fold && !blocked && (
+                                    <React.Fragment>
+                                        {editing ? (
+                                            <CommentEdit />
+                                        ) : (
+                                            <CommentBody
+                                                maxHeight={maxHeight}
+                                                noQuote={noQuote}
+                                                comment={comment}
+                                                depth={0}
+                                            />
+                                        )}
+                                        <Box className="h-[2px]" />
+                                    </React.Fragment>
                                 )}
                             </Box>
-                            {showReplies && (
-                                <React.Fragment>
-                                    {replies.map((comment) => (
-                                        <Comment comment={comment} noId noQuote noStory />
-                                    ))}
-                                    <Box className="flex justify-center items-center">
-                                        <Typography
-                                            className="!mt-[5px] !mb-[5px] !text-[18px]"
-                                            color="secondary"
-                                        >
-                                            End
-                                        </Typography>
-                                    </Box>
-                                </React.Fragment>
-                            )}
+                            {ready && !fold && !blocked && <CommentBottom />}
+                            <Box className="h-[15px]" />
                         </Box>
-                    )}
+
+                        {inThread && (
+                            <React.Fragment>
+                                {comment.admin?.replies?.map((reply) => {
+                                    return (
+                                        <p className="mx-[10px] my-[8px]">
+                                            <Typography
+                                                className="inline"
+                                                sx={{ color: "secondary.main" }}
+                                            >{`Admin ${reply.admin.name} #${
+                                                reply.admin.id
+                                            } replied on ${
+                                                reply.date
+                                                    ? new Date(reply.date)
+                                                          .toISOString()
+                                                          .split("T")[0]
+                                                    : "unknown"
+                                            }: `}</Typography>
+                                            {reply.reply}
+                                        </p>
+                                    );
+                                })}
+                                {comment.admin?.edits?.map((edit) => {
+                                    return (
+                                        <p className="mx-[10px] my-[8px]">
+                                            <Typography
+                                                className="inline"
+                                                sx={{ color: "secondary.main" }}
+                                            >{`Admin ${edit.admin.name} #${
+                                                edit.admin.id
+                                            } editted on ${
+                                                edit.date
+                                                    ? new Date(edit.date)
+                                                          .toISOString()
+                                                          .split("T")[0]
+                                                    : "unknown"
+                                            }: `}</Typography>
+                                            {edit.reason}
+                                        </p>
+                                    );
+                                })}
+                            </React.Fragment>
+                        )}
+                        {loading && (
+                            <Box className="flex justify-center items-center">
+                                <CircularProgress
+                                    size={30}
+                                    className="!mt-[10px] !mb-[5px]"
+                                    color={"secondary"}
+                                />
+                            </Box>
+                        )}
+                        {!!replies.length && (
+                            <Box>
+                                <Box
+                                    className="flex items-center justify-center text-center cursor-pointer"
+                                    onClick={() => {
+                                        setShowReplies(!showReplies);
+                                        setIsExpanded?.(!showReplies);
+                                    }}
+                                >
+                                    <Typography
+                                        className="!mt-[5px] !mb-[5px]"
+                                        color="secondary"
+                                    >
+                                        {showReplies ? "Hide" : "Show"} Replies
+                                    </Typography>
+                                    {showReplies ? (
+                                        <KeyboardArrowUp color="secondary" />
+                                    ) : (
+                                        <KeyboardArrowDown color="secondary" />
+                                    )}
+                                </Box>
+                                {showReplies && (
+                                    <React.Fragment>
+                                        {replies.map((comment) => (
+                                            <Comment
+                                                comment={comment}
+                                                noId
+                                                noQuote
+                                                noStory
+                                                inReplies
+                                            />
+                                        ))}
+                                        <Box className="flex justify-center items-center">
+                                            <Typography
+                                                className="!mt-[5px] !mb-[5px] !text-[18px]"
+                                                color="secondary"
+                                            >
+                                                End
+                                            </Typography>
+                                        </Box>
+                                    </React.Fragment>
+                                )}
+                            </Box>
+                        )}
+                    </Box>
                 </Box>
             </CommentContext.Provider>
         ),
@@ -251,17 +321,20 @@ export default function Comment(props: {
             replies,
             popupOpen,
             fold,
+            blocked,
+            editing,
+            inPopUp,
+            setIsExpanded,
+            inReply,
+            inThread,
             noFullWidth,
             className,
             sx,
             noId,
-            inPopUp,
             noStory,
-            blocked,
             maxHeight,
             noQuote,
             ready,
-            setIsExpanded,
             loading,
         ]
     );
@@ -302,6 +375,11 @@ export function useBlocked() {
     return blocked;
 }
 
+export function useEditing() {
+    const { editing } = useContext(CommentContext);
+    return editing;
+}
+
 export function useCommentRef() {
     const { commentRef } = useContext(CommentContext);
     return commentRef;
@@ -310,6 +388,16 @@ export function useCommentRef() {
 export function useInPopUp() {
     const { inPopUp } = useContext(CommentContext);
     return inPopUp;
+}
+
+export function useInReply() {
+    const { inREplies: inReply } = useContext(CommentContext);
+    return inReply;
+}
+
+export function useInThread() {
+    const { inThread } = useContext(CommentContext);
+    return inThread;
 }
 
 export function useSetIsExpanded() {
