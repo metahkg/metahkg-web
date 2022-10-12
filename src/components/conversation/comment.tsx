@@ -244,7 +244,7 @@ export default function Comment(props: {
                                                 sx={{ color: "secondary.main" }}
                                             >{`Admin ${edit.admin.name} #${
                                                 edit.admin.id
-                                            } editted on ${
+                                            } edited on ${
                                                 edit.date
                                                     ? new Date(edit.date)
                                                           .toISOString()
