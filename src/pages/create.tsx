@@ -94,7 +94,7 @@ export default function Create() {
                     setNotification({ open: true, severity: "warning", text });
                 });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!user)
