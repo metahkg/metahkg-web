@@ -118,7 +118,7 @@ export default function Register() {
                     });
                     setNotification({
                         open: true,
-                        severity: "info",
+                        severity: "success",
                         text: "Please click the link sent to your email address.",
                     });
                 })
