@@ -6,8 +6,9 @@ import {
     Feed as FeedIcon,
     Edit as EditIcon,
     PushPin as PushPinIcon,
+    Delete,
 } from "@mui/icons-material";
-import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -24,6 +25,7 @@ import { isMobile } from "react-device-detect";
 import { timeToWord, wholePath } from "../../../lib/common";
 import MoreList from "./more";
 import {
+    useAlertDialog,
     useBlockList,
     useNotification,
     useSettings,
@@ -59,6 +61,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
     const [fold, setFold] = useFold();
     const [blocked, setBlocked] = useBlocked();
     const [, setEditing] = useEditing();
+    const [alertDialog, setAlertDialog] = useAlertDialog();
     const inThread = useInThread();
 
     const cRoot = useCRoot();
@@ -105,7 +108,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     icon: (
                         <ReplyIcon className="!text-metahkg-grey !text-[21px] !mb-[1px]" />
                     ),
-                    title: "Quote",
+                    title: "Reply",
                     action: () => {
                         if (user) setEditor({ open: true, quote: comment });
                         else
@@ -126,6 +129,78 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             setEditing((editing) => !editing);
                         },
                     },
+                user?.role === "admin" &&
+                    inThread && {
+                        icon: (
+                            <Delete className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
+                        ),
+                        title: "Delete (admin)",
+                        action: () => {
+                            setAlertDialog({
+                                ...alertDialog,
+                                open: true,
+                                title: "Are you sure you want to delete this comment?",
+                                body: (state, setState) => (
+                                    <TextField
+                                        color="secondary"
+                                        label="Reason"
+                                        required
+                                        variant="outlined"
+                                        className="!my-[5px]"
+                                        onChange={(e) => {
+                                            setState({
+                                                ...state,
+                                                reason: e.target.value,
+                                            });
+                                        }}
+                                    />
+                                ),
+                                btns: (state, setState) => [
+                                    {
+                                        text: "Cancel",
+                                        action: (_state, _setState, closeDialog) => {
+                                            closeDialog();
+                                        },
+                                    },
+                                    {
+                                        text: "Confirm",
+                                        disabled: !state.reason,
+                                        action: (state, setState, closeDialog) => {
+                                            api.commentDelete(threadId, comment.id, {
+                                                reason: state.reason,
+                                            })
+                                                .then(() => {
+                                                    closeDialog();
+                                                    if (thread)
+                                                        setThread({
+                                                            ...thread,
+                                                            conversation:
+                                                                thread.conversation.filter(
+                                                                    (v) =>
+                                                                        v.id !==
+                                                                        comment.id
+                                                                ),
+                                                        });
+                                                    setNotification({
+                                                        open: true,
+                                                        severity: "success",
+                                                        text: "Comment deleted.",
+                                                    });
+                                                })
+                                                .catch((err) => {
+                                                    closeDialog();
+                                                    setNotification({
+                                                        open: true,
+                                                        severity: "error",
+                                                        text: parseError(err),
+                                                    });
+                                                });
+                                        },
+                                    },
+                                ],
+                            });
+                        },
+                    },
             ].filter((x) => x),
         [
             story,
@@ -138,6 +213,12 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
             setEditor,
             navigate,
             setEditing,
+            setAlertDialog,
+            alertDialog,
+            threadId,
+            thread,
+            setThread,
+            setNotification,
         ]
     );
 
@@ -226,7 +307,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
         },
         {
             icon: <EditIcon className="!text-[19px]" />,
-            title: "Edit comment",
+            title: "Edit (in new comment)",
             action: () => {
                 if (user) setEditor({ open: true, edit: comment.comment });
                 else

@@ -33,6 +33,7 @@ const CommentContext = createContext<{
         boolean | undefined,
         React.Dispatch<React.SetStateAction<boolean | undefined>>
     ];
+    /** admin edit mode */
     editing: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     commentRef: React.RefObject<HTMLElement>;
     inPopUp?: boolean;
