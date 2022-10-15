@@ -94,7 +94,8 @@ export default function Create() {
                     setNotification({ open: true, severity: "warning", text });
                 });
         }
-    }, [notification.open, quote.commentId, quote.threadId, setNotification, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (!user)
         return (
