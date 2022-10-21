@@ -14,6 +14,7 @@ import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
+import type { RemoteNotification } from "./types/notification";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -132,3 +133,37 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+const DOMAIN = self.location.origin;
+
+self.addEventListener("push", (event) => {
+    if (!event.data) return;
+    const data: RemoteNotification = event.data.json();
+    const promiseChain = self.registration
+        .showNotification(data.title, data.option)
+        .then(() => {
+            console.log("push success");
+        })
+        .catch(() => {
+            console.log("push fail");
+        });
+    event.waitUntil(promiseChain);
+});
+
+self.addEventListener("notificationclick", function (event) {
+    if (event.action) {
+        console.log(`Action clicked: '${event.action}'`);
+    } else {
+        console.log("Notification Click.");
+    }
+
+    const promiseChain = self.clients.openWindow(DOMAIN);
+    event.waitUntil(promiseChain);
+});
+
+self.addEventListener("notificationclose", function (event) {
+    console.log("Notification Close.");
+
+    const promiseChain = self.clients.openWindow(DOMAIN);
+    event.waitUntil(promiseChain);
+});
