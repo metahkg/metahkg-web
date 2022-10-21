@@ -191,7 +191,7 @@ export default function Profile() {
                     <Box className="flex !mt-[20px] !mb-[10px] w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
-                            setUser={setReqUser}
+                            setReqUser={setReqUser}
                             reqUser={reqUser}
                             key={reqUser.id}
                         />

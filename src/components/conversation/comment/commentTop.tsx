@@ -124,7 +124,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                         icon: (
                             <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
                         ),
-                        title: "Edit (Admin)",
+                        title: "Edit (admin)",
                         action: () => {
                             setEditing((editing) => !editing);
                         },

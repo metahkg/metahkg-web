@@ -24,19 +24,19 @@ export type UserData = User & { count: number; createdAt?: Date };
 
 interface DataTableProps {
     reqUser: UserData;
-    setUser: React.Dispatch<React.SetStateAction<null | UserData>>;
+    setReqUser: React.Dispatch<React.SetStateAction<null | UserData>>;
     isSelf: boolean;
 }
 
 export default function DataTable(props: DataTableProps) {
-    const { reqUser, setUser, isSelf } = props;
+    const { reqUser, setReqUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
     const [, setNotification] = useNotification();
     const [name, setName] = useState(reqUser.name);
     const [sex, setSex] = useState<UserSex>(reqUser.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
-    const [, setClient] = useUser();
+    const [, setUser] = useUser();
     const [, setMenuTitle] = useMenuTitle();
 
     const nameValid = /^\S{1,15}$/.test(name);
@@ -101,13 +101,13 @@ export default function DataTable(props: DataTableProps) {
         api.userEdit(reqUser.id, { name, sex })
             .then((data) => {
                 setSaveDisabled(false);
-                setUser(null);
+                setReqUser(null);
 
                 const { token } = data;
 
                 if (token) {
                     localStorage.setItem("token", token);
-                    setClient(decodeToken(token));
+                    setUser(decodeToken(token));
                 }
 
                 setReFetch(true);
