@@ -44,14 +44,16 @@ export default function AlertDialog(props: AlertDialogProps) {
     const [state, setState] = useState<{ [key: string]: any }>({});
     const closeDialog = () => {
         setOpen(false);
-        setAlertDialog({
-            open: false,
-            setOpen: (x) => {
-                setAlertDialog({ ...alertDialog, open: x });
-            },
-            title: "",
-            message: "",
-            btns: () => [],
+        setTimeout(() => {
+            setAlertDialog({
+                open: false,
+                setOpen: (x) => {
+                    setAlertDialog({ ...alertDialog, open: x });
+                },
+                title: "",
+                message: "",
+                btns: () => [],
+            });
         });
         setState({});
         onClose?.(state, setState);
