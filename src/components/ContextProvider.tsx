@@ -87,7 +87,7 @@ export default function ContextProvider(props: {
         },
         title: "",
         message: "",
-        btns: [],
+        btns: () => [],
     });
     const [blockList, setBlockList] = useState<BlockedUser[]>(
         JSON.parse(localStorage.getItem("blocklist") || "[]")

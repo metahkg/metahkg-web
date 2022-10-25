@@ -6,23 +6,61 @@ import {
     DialogContentText,
     DialogTitle,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { useAlertDialog } from "../components/ContextProvider";
 
 export interface AlertDialogProps {
     open: boolean;
     setOpen: (x: boolean) => void;
     title: string;
-    message: string;
-    btns: { text: string; action: () => void }[];
-    onClose?: () => void;
+    message?: string;
+    body?: (
+        state: { [key: string]: any },
+        setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
+        closeDialog: () => void
+    ) => React.ReactNode;
+    btns: (
+        state: { [key: string]: any },
+        setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
+        closeDialog: () => void
+    ) => {
+        text: string;
+        action: (
+            state: { [key: string]: any },
+            setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
+            closeDialog: () => void
+        ) => void;
+        disabled?: boolean;
+    }[];
+    onClose?: (
+        state: { [key: string]: any },
+        setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>
+    ) => void;
 }
 
 export default function AlertDialog(props: AlertDialogProps) {
-    const { open, setOpen, title, message, btns, onClose } = props;
+    const { open, setOpen, title, message, onClose, body } = props;
+    const [alertDialog, setAlertDialog] = useAlertDialog();
+    const [state, setState] = useState<{ [key: string]: any }>({});
     const closeDialog = () => {
         setOpen(false);
-        onClose && onClose();
+        setTimeout(() => {
+            setAlertDialog({
+                open: false,
+                setOpen: (x) => {
+                    setAlertDialog({ ...alertDialog, open: x });
+                },
+                title: "",
+                message: "",
+                btns: () => [],
+            });
+        });
+        setState({});
+        onClose?.(state, setState);
     };
+
+    const btns = props.btns(state, setState, closeDialog);
+
     return (
         <Dialog
             color="primary"
@@ -36,16 +74,18 @@ export default function AlertDialog(props: AlertDialogProps) {
         >
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
-                <DialogContentText>{message}</DialogContentText>
+                {message && <DialogContentText>{message}</DialogContentText>}
+                {body?.(state, setState, closeDialog)}
                 <DialogActions>
                     {btns?.length ? (
                         btns.map((btn) => (
                             <Button
                                 color={"secondary"}
                                 onClick={() => {
-                                    btn.action();
+                                    btn.action(state, setState, closeDialog);
                                     closeDialog();
                                 }}
+                                disabled={btn.disabled}
                             >
                                 {btn.text}
                             </Button>

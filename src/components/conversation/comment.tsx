@@ -33,6 +33,7 @@ const CommentContext = createContext<{
         boolean | undefined,
         React.Dispatch<React.SetStateAction<boolean | undefined>>
     ];
+    /** admin edit mode */
     editing: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     commentRef: React.RefObject<HTMLElement>;
     inPopUp?: boolean;
@@ -244,7 +245,7 @@ export default function Comment(props: {
                                                 sx={{ color: "secondary.main" }}
                                             >{`Admin ${edit.admin.name} #${
                                                 edit.admin.id
-                                            } editted on ${
+                                            } edited on ${
                                                 edit.date
                                                     ? new Date(edit.date)
                                                           .toISOString()
