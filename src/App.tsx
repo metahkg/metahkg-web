@@ -14,7 +14,7 @@ import AppContextProvider, {
     useSession,
     useNotification,
 } from "./components/AppContextProvider";
-import { Notification } from "./lib/notification";
+import { Notification as SnackBar } from "./lib/notification";
 import { api } from "./lib/api";
 import { ErrorDto } from "@metahkg/api";
 import Routes from "./Routes";
@@ -102,13 +102,18 @@ function App() {
         }
     }, []);
 
+    useEffect(() => {
+        console.log("request permission");
+        Notification.requestPermission((status) => console.log(status));
+    }, []);
+
     return (
         <Theme
             primary={{ main: "#222" }}
             secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
             <AlertDialog {...alertDialog} />
-            <Notification />
+            <SnackBar />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
             <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
                 <Router>
