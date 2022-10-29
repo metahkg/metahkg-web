@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
-import { useHeight, useIsSmallScreen, useWidth } from "../ContextProvider";
+import { useHeight, useIsSmallScreen, useWidth } from "../AppContextProvider";
 import { useMenuMode } from "../MenuProvider";
 /* A component that is used to preload the menu. */
 export default function MenuPreload() {

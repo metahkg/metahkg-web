@@ -5,19 +5,23 @@ import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuProvider, { useMenu } from "./components/MenuProvider";
 import { Box } from "@mui/material";
-import ContextProvider, {
+import AppContextProvider, {
     useSettings,
     useSettingsOpen,
     useUser,
     useIsSmallScreen,
     useAlertDialog,
-} from "./components/ContextProvider";
+    useSession,
+    useNotification,
+} from "./components/AppContextProvider";
 import { Notification } from "./lib/notification";
 import { api } from "./lib/api";
+import { ErrorDto } from "@metahkg/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
 import { register, unregister } from "./serviceWorkerRegistration";
+import { parseError } from "./lib/parseError";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -29,16 +33,25 @@ function App() {
     const [settings] = useSettings();
     const [user] = useUser();
     const [alertDialog] = useAlertDialog();
+    const [session, setSession] = useSession();
+    const [, setNotification] = useNotification();
 
     useEffect(() => {
-        if (user) {
-            api.meStatus().then((data) => {
-                const { active } = data;
-                if (!active) {
-                    localStorage.removeItem("token");
-                    return window.location.reload();
-                }
-            });
+        if (user && !session) {
+            api.meSession()
+                .then(setSession)
+                .catch((data: ErrorDto) => {
+                    if (data.statusCode === 401) {
+                        localStorage.removeItem("token");
+                        return window.location.reload();
+                    } else {
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(data),
+                        });
+                    }
+                });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -119,10 +132,10 @@ function App() {
 export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
     const { reCaptchaSiteKey } = props;
     return (
-        <ContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
+        <AppContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
             <MenuProvider>
                 <App />
             </MenuProvider>
-        </ContextProvider>
+        </AppContextProvider>
     );
 }

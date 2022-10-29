@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { PopUp } from "../lib/popup";
-import { useSettings } from "./ContextProvider";
+import { useSettings } from "./AppContextProvider";
 import { IOSSwitch } from "../lib/switch";
 import { secondaryColorDark, secondaryColorMain } from "../types/settings";
 

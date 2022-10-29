@@ -9,7 +9,7 @@ import {
 import { roundup, timeToWord } from "../../lib/common";
 import { Link } from "react-router-dom";
 import { useCat, useId, useMenuMode } from "../MenuProvider";
-import { useCategories, useHistory } from "../ContextProvider";
+import { useCategories, useHistory } from "../AppContextProvider";
 import { ThreadMeta } from "@metahkg/api";
 
 export default function MenuThread(props: {

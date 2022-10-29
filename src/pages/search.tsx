@@ -8,7 +8,7 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useIsSmallScreen, useQuery } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen, useQuery } from "../components/AppContextProvider";
 import { setTitle } from "../lib/common";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";

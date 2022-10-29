@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useIsSmallScreen, useNotification, useUser } from "../ContextProvider";
+import { useIsSmallScreen, useNotification, useUser } from "../AppContextProvider";
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,

@@ -5,7 +5,7 @@ import TextEditor from "../../textEditor";
 import { useState } from "react";
 import { api } from "../../../lib/api";
 import { useThreadId } from "../ConversationContext";
-import { useNotification } from "../../ContextProvider";
+import { useNotification } from "../../AppContextProvider";
 import { parseError } from "../../../lib/parseError";
 
 export default function CommentEdit() {

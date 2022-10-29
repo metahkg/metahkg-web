@@ -7,7 +7,7 @@ import {
     DialogTitle,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useAlertDialog } from "../components/ContextProvider";
+import { useAlertDialog } from "../components/AppContextProvider";
 
 export interface AlertDialogProps {
     open: boolean;

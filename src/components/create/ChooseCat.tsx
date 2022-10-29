@@ -7,7 +7,7 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import { useCategories } from "../ContextProvider";
+import { useCategories } from "../AppContextProvider";
 
 /**
  * It takes in a category number and a setter function for the category number, and returns a form

@@ -15,7 +15,7 @@ import {
     useCurrentPage,
 } from "../ConversationContext";
 import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
-import { useNotification, useStarList, useUser } from "../../ContextProvider";
+import { useNotification, useStarList, useUser } from "../../AppContextProvider";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";

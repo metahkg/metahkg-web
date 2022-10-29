@@ -8,7 +8,7 @@ import {
     useSmode,
     useMenuMode,
 } from "../MenuProvider";
-import { useHistory, useNotification, useQuery, useStarList } from "../ContextProvider";
+import { useHistory, useNotification, useQuery, useStarList } from "../AppContextProvider";
 import { AxiosError } from "axios";
 import { api } from "../../lib/api";
 import { Box, Divider, Paper, Typography } from "@mui/material";

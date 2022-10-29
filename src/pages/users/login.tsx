@@ -1,5 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Alert, Box, Button, TextField, Typography } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
+    TextField,
+    Typography,
+} from "@mui/material";
 import hash from "hash.js";
 import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +18,7 @@ import {
     useNotification,
     useIsSmallScreen,
     useUser,
-} from "../../components/ContextProvider";
+} from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
@@ -23,13 +32,14 @@ export default function Login() {
     const [, setNotification] = useNotification();
     const isSmallScreen = useIsSmallScreen();
     const [name, setName] = useState("");
-    const [pwd, setPwd] = useState("");
+    const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
     const [user, setUser] = useUser();
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
+    const [sameIp, setSameIp] = useState(false);
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -57,7 +67,11 @@ export default function Login() {
         e.preventDefault();
         setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
-        api.usersLogin({ name, pwd: hash.sha256().update(pwd).digest("hex") })
+        api.usersLogin({
+            name,
+            password: hash.sha256().update(password).digest("hex"),
+            sameIp,
+        })
             .then((data) => {
                 localStorage.setItem("token", data.token);
                 const user = decodeToken(data.token);
@@ -118,7 +132,7 @@ export default function Login() {
                     )}
                     {[
                         { label: "Username / Email", type: "text", set: setName },
-                        { label: "Password", type: "password", set: setPwd },
+                        { label: "Password", type: "password", set: setPassword },
                     ].map((item, index) => (
                         <TextField
                             key={index}
@@ -134,6 +148,20 @@ export default function Login() {
                             fullWidth
                         />
                     ))}
+                    <FormGroup className="my-[15px]">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    color="secondary"
+                                    onChange={(e) => {
+                                        setSameIp(e.target.checked);
+                                    }}
+                                    checked={sameIp}
+                                />
+                            }
+                            label="Restrict session to same ip"
+                        />
+                    </FormGroup>
                     <Box className="my-[15px]">
                         <Typography
                             component={Link}
@@ -160,7 +188,7 @@ export default function Login() {
                             Register
                         </Button>
                         <Button
-                            disabled={disabled || !(name && pwd)}
+                            disabled={disabled || !(name && password)}
                             className="!text-[16px] !normal-case h-[40px]"
                             color="secondary"
                             variant="contained"

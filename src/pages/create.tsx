@@ -12,7 +12,7 @@ import {
     useReCaptchaSiteKey,
     useUser,
     useWidth,
-} from "../components/ContextProvider";
+} from "../components/AppContextProvider";
 import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
 import MetahkgLogo from "../components/logo";

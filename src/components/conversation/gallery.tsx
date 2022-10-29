@@ -4,7 +4,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import { imagesApi } from "../../lib/common";
 import Loader from "../../lib/loader";
 import { PopUp } from "../../lib/popup";
-import { useWidth } from "../ContextProvider";
+import { useWidth } from "../AppContextProvider";
 
 export default function Gallery(props: {
     open: boolean;

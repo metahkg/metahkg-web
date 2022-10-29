@@ -1,4 +1,4 @@
-import { useHistory } from "../../ContextProvider";
+import { useHistory } from "../../AppContextProvider";
 import { useEnd, useThread, useThreadId, useUpdating } from "../ConversationContext";
 import { useUpdate } from "./update";
 

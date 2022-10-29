@@ -24,7 +24,7 @@ import {
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar";
-import { useCategories, useQuery, useSettingsOpen, useUser } from "./ContextProvider";
+import { useCategories, useQuery, useSettingsOpen, useUser } from "./AppContextProvider";
 import { wholePath } from "../lib/common";
 import { useCat, useMenuMode } from "./MenuProvider";
 import MetahkgLogo from "./logo";

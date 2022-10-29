@@ -3,7 +3,7 @@ import { Alert, Box } from "@mui/material";
 import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
-import { useNotification, useUser } from "../../components/ContextProvider";
+import { useNotification, useUser } from "../../components/AppContextProvider";
 import { setTitle } from "../../lib/common";
 
 /**

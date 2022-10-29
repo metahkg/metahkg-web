@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { PopUp } from "../../../lib/popup";
-import { useBlockList, useNotification, useUser } from "../../ContextProvider";
+import { useBlockList, useNotification, useUser } from "../../AppContextProvider";
 
 export default function UserModal(props: {
     open: boolean;

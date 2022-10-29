@@ -8,7 +8,7 @@ import {
     useMenuTitle,
     useMenuMode,
 } from "../components/MenuProvider";
-import { useBack, useIsSmallScreen } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/AppContextProvider";
 
 /**
  * Only for small screens

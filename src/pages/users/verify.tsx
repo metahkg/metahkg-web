@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
-import { useNotification, useUser, useWidth } from "../../components/ContextProvider";
+import { useNotification, useUser, useWidth } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";

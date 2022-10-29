@@ -24,7 +24,7 @@ import {
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
-} from "./ContextProvider";
+} from "./AppContextProvider";
 import useChangePage from "./conversation/functions/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";

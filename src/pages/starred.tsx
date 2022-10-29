@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
-import { useBack, useIsSmallScreen } from "../components/ContextProvider";
+import { useBack, useIsSmallScreen } from "../components/AppContextProvider";
 import {
     useReFetch,
     useMenu,

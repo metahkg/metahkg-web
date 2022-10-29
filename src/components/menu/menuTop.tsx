@@ -4,7 +4,7 @@ import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/m
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar";
 import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
-import { useIsSmallScreen } from "../ContextProvider";
+import { useIsSmallScreen } from "../AppContextProvider";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 

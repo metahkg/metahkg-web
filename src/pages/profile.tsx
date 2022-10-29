@@ -17,7 +17,7 @@ import {
     useNotification,
     useUser,
     useIsSmallScreen,
-} from "../components/ContextProvider";
+} from "../components/AppContextProvider";
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import { parseError } from "../lib/parseError";
