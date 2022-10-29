@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.4.0
+
+- send a logout request to server to revoke the session upon logout
+
 ## v5.3.0
 
 - add option to restrict session to same ip

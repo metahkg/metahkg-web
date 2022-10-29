@@ -159,7 +159,7 @@ export default function Login() {
                                     checked={sameIp}
                                 />
                             }
-                            label="Restrict session to same ip"
+                            label="Restrict session to same ip address"
                         />
                     </FormGroup>
                     <Box className="my-[15px]">

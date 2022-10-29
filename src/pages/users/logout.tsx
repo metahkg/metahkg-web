@@ -5,6 +5,8 @@ import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import { useNotification, useUser } from "../../components/AppContextProvider";
 import { setTitle } from "../../lib/common";
+import { api } from "../../lib/api";
+import { parseError } from "../../lib/parseError";
 
 /**
  * Renders an alert while logging out.
@@ -24,15 +26,21 @@ export default function Logout() {
     }, [menu, setMenu]);
 
     useEffect(() => {
-        // logout
-        localStorage.removeItem("token");
-        setUser(null);
+        api.meLogout()
+            .then(() => {
+                // logout
+                localStorage.removeItem("token");
+                setUser(null);
+                setNotification({ open: true, severity: "info", text: "Logged out." });
+            })
+            .catch((err) => {
+                setNotification({ open: true, severity: "error", text: parseError(err) });
+            });
 
         // go back
         navigate(decodeURIComponent(String(query.returnto || "/")), {
             replace: true,
         });
-        setNotification({ open: true, severity: "info", text: "Logged out." });
     }, [navigate, query.returnto, setNotification, setUser]);
 
     return (
