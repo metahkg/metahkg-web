@@ -93,7 +93,11 @@ h4,
 h5,
 h6,
 span,
-q {
+q,
+li,
+ul,
+ol,
+blockquote {
     color: white;
 }
 
