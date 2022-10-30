@@ -26,21 +26,39 @@ export default function Logout() {
     }, [menu, setMenu]);
 
     useEffect(() => {
-        api.meLogout()
-            .then(() => {
-                // logout
-                localStorage.removeItem("token");
-                setUser(null);
-                setNotification({ open: true, severity: "info", text: "Logged out." });
-            })
-            .catch((err) => {
-                setNotification({ open: true, severity: "error", text: parseError(err) });
-            });
+        (async () => {
+            await api
+                .meLogout()
+                .then(() => {
+                    // logout
+                    localStorage.removeItem("token");
+                    setUser(null);
+                    setNotification({
+                        open: true,
+                        severity: "info",
+                        text: "Logged out.",
+                    });
+                    if ("serviceWorker" in navigator) {
+                        navigator.serviceWorker.ready.then(async (registration) => {
+                            const subscription =
+                                await registration.pushManager.getSubscription();
+                            subscription?.unsubscribe();
+                        });
+                    }
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                });
 
-        // go back
-        navigate(decodeURIComponent(String(query.returnto || "/")), {
-            replace: true,
-        });
+            // go back
+            navigate(decodeURIComponent(String(query.returnto || "/")), {
+                replace: true,
+            });
+        })();
     }, [navigate, query.returnto, setNotification, setUser]);
 
     return (

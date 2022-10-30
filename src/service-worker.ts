@@ -14,7 +14,7 @@ import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
-import type { RemoteNotification } from "./types/notification";
+import { Notification } from "@metahkg/api";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -136,11 +136,22 @@ self.addEventListener("message", (event) => {
 
 const DOMAIN = self.location.origin;
 
+self.addEventListener("activate", async () => {
+    // This will be called only once when the service worker is activated.
+    try {
+    } catch (err) {
+        console.log("Error", err);
+    }
+});
+
 self.addEventListener("push", (event) => {
     if (!event.data) return;
-    const data: RemoteNotification = event.data.json();
+    const data: Notification = event.data.json();
     const promiseChain = self.registration
-        .showNotification(data.title, data.option)
+        .showNotification(data.title || "New notification", {
+            ...data.options,
+            icon: `${DOMAIN}/favicon.ico`,
+        })
         .then(() => {
             console.log("push success");
         })
@@ -151,19 +162,28 @@ self.addEventListener("push", (event) => {
 });
 
 self.addEventListener("notificationclick", function (event) {
+    event.preventDefault();
+
     if (event.action) {
         console.log(`Action clicked: '${event.action}'`);
     } else {
         console.log("Notification Click.");
+        console.log(event.notification, event?.notification?.data)
     }
 
-    const promiseChain = self.clients.openWindow(DOMAIN);
+    const data = event?.notification?.data;
+    console.log(data?.url);
+    const promiseChain = self.clients.openWindow(
+        data?.url || DOMAIN
+    );
+    // TODO: send read to server
     event.waitUntil(promiseChain);
 });
 
 self.addEventListener("notificationclose", function (event) {
     console.log("Notification Close.");
 
-    const promiseChain = self.clients.openWindow(DOMAIN);
-    event.waitUntil(promiseChain);
+    // TODO: send read to server
+    // const promiseChain = self.clients.openWindow(DOMAIN);
+    // event.waitUntil(promiseChain);
 });

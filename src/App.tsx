@@ -67,7 +67,7 @@ function App() {
                     registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                     window.location.reload();
                 },
-                onSuccess: async (registration) => {
+                onSuccess: async (_registration) => {
                     console.log("service worker registered");
                 },
             });
@@ -103,9 +103,35 @@ function App() {
     }, []);
 
     useEffect(() => {
-        console.log("request permission");
-        Notification.requestPermission((status) => console.log(status));
-    }, []);
+        if (user) {
+            console.log("request notification permission");
+            Notification.requestPermission().then((status) => {
+                console.log("notification permission", status);
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker.ready.then(async (registration) => {
+                        if (await registration.pushManager.getSubscription()) return;
+                        console.log("subscribe");
+                        const subscription = await registration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: process.env.VAPID_PUBLIC_KEY,
+                        });
+                        const auth = subscription.toJSON().keys?.auth;
+                        const p256dh = subscription.toJSON().keys?.p256dh;
+
+                        if (auth && p256dh) {
+                            await api.meNotificationsSubscribe({
+                                endpoint: subscription.endpoint,
+                                keys: {
+                                    auth,
+                                    p256dh,
+                                },
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }, [user]);
 
     return (
         <Theme
