@@ -168,14 +168,12 @@ self.addEventListener("notificationclick", function (event) {
         console.log(`Action clicked: '${event.action}'`);
     } else {
         console.log("Notification Click.");
-        console.log(event.notification, event?.notification?.data)
+        console.log(event.notification, event?.notification?.data);
     }
 
     const data = event?.notification?.data;
     console.log(data?.url);
-    const promiseChain = self.clients.openWindow(
-        data?.url || DOMAIN
-    );
+    const promiseChain = self.clients.openWindow(data?.url || DOMAIN);
     // TODO: send read to server
     event.waitUntil(promiseChain);
 });
