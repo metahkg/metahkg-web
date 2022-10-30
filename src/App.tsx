@@ -22,6 +22,7 @@ import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
 import { register, unregister } from "./serviceWorkerRegistration";
 import { parseError } from "./lib/parseError";
+import { checkNotificationPromise } from "./lib/checkNotificationPromise";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -103,9 +104,14 @@ function App() {
     }, []);
 
     useEffect(() => {
+        // some browsers (like ios safari does not support Notification)
+        // some code from https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
+        if (!("Notification" in window)) {
+            return console.log("This browser does not support notifications.");
+        }
         if (user) {
             console.log("request notification permission");
-            Notification.requestPermission().then((status) => {
+            function handlePermission(status: NotificationPermission) {
                 console.log("notification permission", status);
                 if ("serviceWorker" in navigator) {
                     navigator.serviceWorker.ready.then(async (registration) => {
@@ -129,7 +135,15 @@ function App() {
                         }
                     });
                 }
-            });
+            }
+            // check notification promise for compatibility
+            if (checkNotificationPromise()) {
+                Notification.requestPermission()
+                    .then(handlePermission)
+                    .catch(console.log);
+            } else {
+                Notification.requestPermission(handlePermission);
+            }
         }
     }, [user]);
 
