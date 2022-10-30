@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.5.0
+
+- implement push notification frontend
+
 ## v5.4.0
 
 - send a logout request to server to revoke the session upon logout
