@@ -42,7 +42,7 @@ export default function Profile() {
         null
     );
     const [editorOpen, setEditorOpen] = useState(false);
-    const [avatarSrc, setAvatarSrc] = useState(`/api/users/${reqUser?.id}/avatar`);
+    const [avatarSrc, setAvatarSrc] = useState("");
 
     const navigate = useNavigate();
 
@@ -55,6 +55,7 @@ export default function Profile() {
                 .then((data) => {
                     setReqUser(data);
                     setTitle(`${data.name} | Metahkg`);
+                    setAvatarSrc(`/api/users/${data?.id}/avatar`);
                 })
                 .catch((err) => {
                     setNotification({
