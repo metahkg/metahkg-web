@@ -1,6 +1,6 @@
 import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useIsSmallScreen } from "./ContextProvider";
+import { useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
@@ -45,6 +45,7 @@ export default function TextEditor(props: {
                     content_css:
                         "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/content/metahkg-dark/content.min.css",
                     branding: false,
+                    promotion: false,
                     ...(noStatusBar && { statusbar: false }),
                     setup: (editor) => {
                         editor.ui.registry.addButton("uploadimage", {
@@ -205,7 +206,7 @@ export default function TextEditor(props: {
                         return data.url;
                     },
                 }}
-                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.1.2/tinymce.min.js"
+                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.2.0/tinymce.min.js"
             />
         </Box>
     );

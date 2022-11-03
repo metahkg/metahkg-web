@@ -30,7 +30,7 @@ import {
     useNotification,
     useSettings,
     useUser,
-} from "../../ContextProvider";
+} from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";

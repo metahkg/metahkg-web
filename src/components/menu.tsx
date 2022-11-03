@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { Box } from "@mui/material";
 import { useReFetch, useMenu, useSelected, useSmode, useMenuMode } from "./MenuProvider";
-import { useBack, useQuery, useSettingsOpen } from "./ContextProvider";
+import { useBack, useQuery, useSettingsOpen } from "./AppContextProvider";
 import SearchBar from "./searchBar";
 import { useNavigate } from "react-router-dom";
 import loadable from "@loadable/component";

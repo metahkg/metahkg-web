@@ -61,15 +61,15 @@ export function wholePath() {
     return window.location.href.replace(window.location.origin, "");
 }
 
-export function checkPwd(pwd: string): boolean {
-    if (pwd.length < 8) return false;
+export function checkPassword(password: string): boolean {
+    if (password.length < 8) return false;
 
     const lower = "abcdefghijklmnopqrstuvwxyz";
     const upper = lower.toUpperCase();
     const numbers = "1234567890";
     for (const i of [lower, upper, numbers]) {
         let contain = false;
-        for (const p of pwd) {
+        for (const p of password) {
             if (i.includes(p)) {
                 contain = true;
                 break;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import SideBar from "./sidebar";
-import { useIsSmallScreen } from "./ContextProvider";
+import { useIsSmallScreen } from "./AppContextProvider";
 
 /**
  * mobile dock

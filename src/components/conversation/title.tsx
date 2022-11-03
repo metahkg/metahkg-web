@@ -2,7 +2,7 @@ import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useBack, useIsSmallScreen } from "../ContextProvider";
+import { useBack, useIsSmallScreen } from "../AppContextProvider";
 
 /**
  * It's a component that renders the title of the thread.

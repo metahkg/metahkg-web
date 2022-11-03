@@ -14,7 +14,7 @@ import { roundup } from "../lib/common";
 import { useNavigate } from "react-router-dom";
 import PageTop from "./conversation/pageTop";
 import VisibilitySensor from "react-visibility-sensor";
-import { useHistory, useIsSmallScreen, useUser } from "./ContextProvider";
+import { useHistory, useIsSmallScreen, useUser } from "./AppContextProvider";
 import PageBottom from "./conversation/pageBottom";
 import PageSelect from "./conversation/pageSelect";
 import useBtns from "./conversation/functions/btns";

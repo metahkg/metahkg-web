@@ -4,7 +4,7 @@ import AvatarEditor from "react-avatar-editor";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { PopUp } from "../../lib/popup";
-import { useNotification, useUser } from "../ContextProvider";
+import { useNotification, useUser } from "../AppContextProvider";
 
 export default function AvatarEditorPopUp(props: {
     open: boolean;
@@ -52,7 +52,7 @@ export default function AvatarEditorPopUp(props: {
                                 severity: "info",
                                 text: "Uploading avatar...",
                             });
-                            api.userUploadAvatar(user?.id, {
+                            api.userAvatarUpload(user?.id, {
                                 data: avatar,
                                 fileName: "avatar",
                             })

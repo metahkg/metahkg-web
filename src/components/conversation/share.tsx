@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 import { Box, IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
-import { useNotification, useIsSmallScreen } from "../ContextProvider";
+import { useNotification, useIsSmallScreen } from "../AppContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 
 /**

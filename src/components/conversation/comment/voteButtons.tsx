@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, ButtonGroup, Typography } from "@mui/material";
-import { useNotification, useUser } from "../../ContextProvider";
+import { useNotification, useUser } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";

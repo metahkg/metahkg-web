@@ -7,7 +7,7 @@ import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
 import { Comment } from "@metahkg/api";
-import { useBlockList, useSettings } from "../../ContextProvider";
+import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
 

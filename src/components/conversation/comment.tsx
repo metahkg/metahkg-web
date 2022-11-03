@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import { Box, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
-import { useBlockList, useNotification } from "../ContextProvider";
+import { useBlockList, useNotification } from "../AppContextProvider";
 import { useThreadId, useVotes } from "./ConversationContext";
 import CommentTop from "./comment/commentTop";
 import CommentBody from "./comment/commentBody";

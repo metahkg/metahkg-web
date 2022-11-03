@@ -22,7 +22,7 @@ import {
     useReCaptchaSiteKey,
     useUser,
     useWidth,
-} from "../../components/ContextProvider";
+} from "../../components/AppContextProvider";
 import { setTitle } from "../../lib/common";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -74,7 +74,7 @@ export default function Register() {
     const [, setNotification] = useNotification();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [pwd, setPwd] = useState("");
+    const [password, setPassword] = useState("");
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
     const [disabled, setDisabled] = useState(false);
     const [rtoken, setRtoken] = useState("");
@@ -107,7 +107,7 @@ export default function Register() {
                 .usersRegister({
                     email,
                     name,
-                    pwd: hash.sha256().update(pwd).digest("hex"),
+                    password: hash.sha256().update(password).digest("hex"),
                     sex: sex as UserSex,
                     rtoken,
                 })
@@ -155,7 +155,7 @@ export default function Register() {
         },
         {
             label: "Password",
-            onChange: (e) => setPwd(e.target.value),
+            onChange: (e) => setPassword(e.target.value),
             type: "password",
             inputProps: { pattern: ".{8,}" },
         },

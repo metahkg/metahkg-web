@@ -2,7 +2,11 @@ import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Template from "../components/template";
-import { useBack, useCategories, useIsSmallScreen } from "../components/ContextProvider";
+import {
+    useBack,
+    useCategories,
+    useIsSmallScreen,
+} from "../components/AppContextProvider";
 import {
     useCat,
     useReFetch,

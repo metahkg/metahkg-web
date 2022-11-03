@@ -3,8 +3,10 @@ import { Alert, Box } from "@mui/material";
 import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
-import { useNotification, useUser } from "../../components/ContextProvider";
+import { useNotification, useUser } from "../../components/AppContextProvider";
 import { setTitle } from "../../lib/common";
+import { api } from "../../lib/api";
+import { parseError } from "../../lib/parseError";
 
 /**
  * Renders an alert while logging out.
@@ -24,15 +26,39 @@ export default function Logout() {
     }, [menu, setMenu]);
 
     useEffect(() => {
-        // logout
-        localStorage.removeItem("token");
-        setUser(null);
+        (async () => {
+            await api
+                .meLogout()
+                .then(() => {
+                    // logout
+                    localStorage.removeItem("token");
+                    setUser(null);
+                    setNotification({
+                        open: true,
+                        severity: "info",
+                        text: "Logged out.",
+                    });
+                    if ("serviceWorker" in navigator) {
+                        navigator.serviceWorker.ready.then(async (registration) => {
+                            const subscription =
+                                await registration.pushManager.getSubscription();
+                            subscription?.unsubscribe();
+                        });
+                    }
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                });
 
-        // go back
-        navigate(decodeURIComponent(String(query.returnto || "/")), {
-            replace: true,
-        });
-        setNotification({ open: true, severity: "info", text: "Logged out." });
+            // go back
+            navigate(decodeURIComponent(String(query.returnto || "/")), {
+                replace: true,
+            });
+        })();
     }, [navigate, query.returnto, setNotification, setUser]);
 
     return (

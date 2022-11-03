@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import CommentPopup from "../../lib/commentPopup";
 import { filterSwearWords } from "../../lib/filterSwear";
-import { useSettings } from "../ContextProvider";
+import { useSettings } from "../AppContextProvider";
 
 export default function PinnedComment(props: { comment: Comment }) {
     const { comment } = props;

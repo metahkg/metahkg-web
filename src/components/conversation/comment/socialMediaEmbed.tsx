@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { FacebookEmbed, InstagramEmbed, TwitterEmbed } from "react-social-media-embed";
 import { regex } from "../../../lib/regex";
-import { useWidth } from "../../ContextProvider";
+import { useWidth } from "../../AppContextProvider";
 
 export default function SocialMediaEmbed(props: { url: string }) {
     const { url } = props;

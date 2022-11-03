@@ -5,7 +5,7 @@ import {
     useReCaptchaSiteKey,
     useUser,
     useWidth,
-} from "../../components/ContextProvider";
+} from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";

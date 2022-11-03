@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, Snackbar } from "@mui/material";
-import { useNotification } from "../components/ContextProvider";
+import { useNotification } from "../components/AppContextProvider";
 
 export function Notification() {
     const [notification, setNotification] = useNotification();

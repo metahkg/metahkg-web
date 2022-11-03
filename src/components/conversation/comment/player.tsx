@@ -15,7 +15,7 @@ import {
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
-import { useWidth } from "../../ContextProvider";
+import { useWidth } from "../../AppContextProvider";
 
 export default function Player(props: { url: string; style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../lib/api";
-import { useNotification } from "../../ContextProvider";
+import { useNotification } from "../../AppContextProvider";
 import {
     useCurrentPage,
     useEnd,

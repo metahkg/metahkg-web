@@ -6,7 +6,7 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { css } from "../../../lib/css";
 import { useThreadId } from "../ConversationContext";
-import { useNotification, useUser } from "../../ContextProvider";
+import { useNotification, useUser } from "../../AppContextProvider";
 import {
     useInPopUp,
     useSetIsExpanded,

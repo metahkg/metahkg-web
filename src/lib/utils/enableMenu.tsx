@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { useIsSmallScreen } from "../../components/ContextProvider";
+import { useIsSmallScreen } from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
 export default function EnableMenu(props: {

@@ -19,7 +19,7 @@ import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
-import { useUser } from "./ContextProvider";
+import { useUser } from "./AppContextProvider";
 
 /**
  * just a template for large screens if there's no content

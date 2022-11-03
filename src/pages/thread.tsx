@@ -3,7 +3,7 @@ import Conversation from "../components/conversation";
 import { Box } from "@mui/material";
 import { useParams, Navigate } from "react-router-dom";
 import { useId, useMenu } from "../components/MenuProvider";
-import { useIsSmallScreen } from "../components/ContextProvider";
+import { useIsSmallScreen } from "../components/AppContextProvider";
 import { ShareProvider } from "../components/conversation/ShareProvider";
 import ConversationProvider from "../components/conversation/ConversationContext";
 
