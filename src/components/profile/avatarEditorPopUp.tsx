@@ -52,7 +52,7 @@ export default function AvatarEditorPopUp(props: {
                                 severity: "info",
                                 text: "Uploading avatar...",
                             });
-                            api.userUploadAvatar(user?.id, {
+                            api.userAvatarUpload(user?.id, {
                                 data: avatar,
                                 fileName: "avatar",
                             })

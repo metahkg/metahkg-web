@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Avatar, Box, Button, Tooltip } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
@@ -42,8 +42,8 @@ export default function Profile() {
         null
     );
     const [editorOpen, setEditorOpen] = useState(false);
+    const [avatarSrc, setAvatarSrc] = useState(`/api/users/${reqUser?.id}/avatar`);
 
-    const avatarRef = useRef<HTMLImageElement>(null);
     const navigate = useNavigate();
 
     const userId = Number(params.id);
@@ -127,10 +127,11 @@ export default function Profile() {
                             setAvatar={setUploadedAvatar}
                             avatarOriginal={uploadedAvatarOriginal}
                             onSuccess={() => {
-                                if (avatarRef.current)
-                                    avatarRef.current.src = `/api/users/${
+                                setAvatarSrc(
+                                    `/api/users/${
                                         reqUser.id
-                                    }/avatar?rand=${Math.random()}`;
+                                    }/avatar?rand=${Math.random()}`
+                                );
                             }}
                         />
                     )}
@@ -140,13 +141,12 @@ export default function Profile() {
                         }`}
                     >
                         <Avatar
-                            src={`/api/users/${reqUser.id}/avatar`}
+                            src={avatarSrc}
                             alt={reqUser.name}
                             sx={{
                                 height: 150,
                                 width: 150,
                             }}
-                            ref={avatarRef}
                         />
                         <Box
                             className={`!ml-[20px] flex justify-center h-[200px] ${
