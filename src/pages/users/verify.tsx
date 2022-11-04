@@ -1,5 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Alert, Box, Button, TextField, Typography } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { useNotification, useUser, useWidth } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
@@ -26,6 +35,7 @@ export default function Verify() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [user, setUser] = useUser();
+    const [sameIp, setSameIp] = useState(false);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
@@ -35,7 +45,7 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
         setDisabled(true);
-        api.usersVerify({ email, code })
+        api.usersVerify({ email, code, sameIp })
             .then((data) => {
                 localStorage.setItem("token", data.token);
                 const user = decodeToken(data.token);
@@ -123,6 +133,20 @@ export default function Verify() {
                             fullWidth
                         />
                     ))}
+                    <FormGroup className="my-[15px]">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    color="secondary"
+                                    onChange={(e) => {
+                                        setSameIp(e.target.checked);
+                                    }}
+                                    checked={sameIp}
+                                />
+                            }
+                            label="Restrict session to same ip address"
+                        />
+                    </FormGroup>
                     <Box className="my-[15px]">
                         <Typography
                             component={Link}

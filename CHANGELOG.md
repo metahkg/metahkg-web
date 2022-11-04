@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.7.0
+
+- verify: support restrict to same ip
+
 ## v5.5.0
 
 - implement push notification frontend

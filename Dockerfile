@@ -72,10 +72,10 @@ COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js
 
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
 
-RUN chown user:user -Rf build
+RUN chown user:user -Rf build node_modules
 
 USER user
 
-COPY ./docker-start.sh ./
+COPY ./start.sh ./
 
-CMD sh docker-start.sh
+CMD sh start.sh
