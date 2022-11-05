@@ -18,7 +18,7 @@ dev (dev branch): [dev.metahkg.org](https://dev.metahkg.org)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=metahkg/metahkg-web&utm_campaign=Badge_Grade)
 
 [![Telegram](https://patrolavia.github.io/telegram-badge/chat.svg)](https://t.me/+WbB7PyRovUY1ZDFl)
-[![Discord](https://img.shields.io/discord/992390401740775555)](https://discord.gg/yrf2v8KGdc)
+[![Discord](https://badges.aleen42.com/src/discord.svg)](https://discord.gg/yrf2v8KGdc)
 
 ## Deploying
 
