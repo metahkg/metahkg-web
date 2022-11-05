@@ -1,12 +1,10 @@
 import { DOMNode, domToReact } from "html-react-parser";
 import { Element, Text } from "domhandler/lib/node";
-import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import { Box } from "@mui/material";
-import axios from "axios";
-import Loader from "./loader";
 import { regex } from "./regex";
 import React from "react";
 import loadable from "@loadable/component";
+import { ReactLinkPreview } from "./ReactLInkPreview";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
@@ -89,56 +87,7 @@ export const replace = (params: { quote?: boolean }) => {
                         ].some((i) => i === (firstChild as unknown as Text)?.data)
                     ) {
                         return (
-                            <Box
-                                sx={{
-                                    "& .Container, & .Container *:hover, & .LowerContainer, & .LowerContainer:hover, & .LinkPreview, & .LinkPreview:hover, & .LinkPreview *, & .LinkPreview *:hover":
-                                        {
-                                            backgroundColor: "#333 !important",
-                                        },
-                                    "& .Container": {
-                                        maxWidth: `${quote ? 400 : 450}px !important`,
-                                    },
-                                    [`& .Title${quote ? ", & .Description" : ""}`]: {
-                                        whiteSpace: "whitespace-nowrap",
-                                        textOverflow: "ellipsis",
-                                        overflow: "hidden",
-                                    },
-                                    ...(quote && {
-                                        "& .Description": {
-                                            display: "inline-block",
-                                        },
-                                    }),
-                                }}
-                            >
-                                <LinkPreview
-                                    url={href}
-                                    height={quote ? 200 : 280}
-                                    imageHeight={250}
-                                    width={"100%"}
-                                    className="!mt-[5px] !mb-[5px] LinkPreview"
-                                    borderColor="#555"
-                                    backgroundColor="#333"
-                                    primaryTextColor="white"
-                                    secondaryTextColor="#aca9a9"
-                                    descriptionLength={60}
-                                    fetcher={async (url: string) => {
-                                        const { data } = await axios.get(
-                                            `https://rlp.metahkg.org/v2?url=${url}`
-                                        );
-                                        return data.metadata;
-                                    }}
-                                    customLoader={
-                                        <Loader
-                                            position="flex-start"
-                                            className="!mt-[5px] !mb-[5px]"
-                                            sxProgress={{ color: "darkgrey" }}
-                                            thickness={2}
-                                            size={50}
-                                        />
-                                    }
-                                />
-                                {domToReact([node])}
-                            </Box>
+                            <ReactLinkPreview quote={quote} url={href} node={node} />
                         );
                     }
                 }
