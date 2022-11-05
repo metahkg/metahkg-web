@@ -27,7 +27,7 @@ WORKDIR /usr/src/app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
-RUN if [ "${env}" != "dev" ]; then yarn install --production; fi;
+RUN if [ "${env}" != "dev" ]; then yarn install; fi;
 
 COPY ./src ./src
 COPY ./public ./public
