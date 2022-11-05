@@ -86,9 +86,7 @@ export const replace = (params: { quote?: boolean }) => {
                             decodeURIComponent(domNode?.attribs?.href),
                         ].some((i) => i === (firstChild as unknown as Text)?.data)
                     ) {
-                        return (
-                            <ReactLinkPreview quote={quote} url={href} node={node} />
-                        );
+                        return <ReactLinkPreview quote={quote} url={href} node={node} />;
                     }
                 }
                 if (domNode.name === "img" && domNode.attribs?.src) {
