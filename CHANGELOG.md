@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.7.1
+
+- fix: link preview: return the original component if link preview doesn't work
+
 ## v5.7.0
 
 - verify: support restrict to same ip
