@@ -61,6 +61,13 @@ function App() {
                 .catch((data: ErrorDto) => {
                     if (data.statusCode === 401) {
                         localStorage.removeItem("token");
+                        if ("serviceWorker" in navigator) {
+                            navigator.serviceWorker.ready.then(async (registration) => {
+                                const subscription =
+                                    await registration.pushManager.getSubscription();
+                                subscription?.unsubscribe();
+                            });
+                        }
                         return window.location.reload();
                     } else {
                         setNotification({
