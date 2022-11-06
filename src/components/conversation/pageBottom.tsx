@@ -55,7 +55,7 @@ export default function PageBottom() {
                 ))}
             </Box>
             <Box className="!mt-[8px]">
-                Copyright (c) 2022 Metahkg.{" "}
+                Copyright (c) 2022 Metahkg Contributors.{" "}
                 <a
                     className="!text-metahkg-grey"
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
