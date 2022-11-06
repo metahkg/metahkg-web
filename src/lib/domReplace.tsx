@@ -24,7 +24,7 @@ export const replace = (params: { quote?: boolean }) => {
                     if (
                         [regex.facebook.videos, regex.youtube, regex.streamable]
                             .flat()
-                            .some((item) => href.match(item))
+                            .some((r) => r.test(href))
                     ) {
                         return (
                             <React.Fragment>
@@ -32,7 +32,7 @@ export const replace = (params: { quote?: boolean }) => {
                                 {domToReact([node])}
                             </React.Fragment>
                         );
-                    } else if (regex.twitter.some((item) => href.match(item))) {
+                    } else if (regex.twitter.some((r) => r.test(href))) {
                         const url = new URL(href);
                         const tweetId = url.pathname.split("/").pop();
                         if (tweetId)
@@ -45,7 +45,7 @@ export const replace = (params: { quote?: boolean }) => {
                     } else if (
                         [regex.instagram, regex.facebook.posts]
                             .flat()
-                            .some((item) => href.match(item))
+                            .some((r) => r.test(href))
                     ) {
                         return (
                             <Box

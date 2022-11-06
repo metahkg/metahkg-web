@@ -36,7 +36,7 @@ export default function Routes() {
     const prev = React.useRef(location.pathname);
 
     useLayoutEffect(() => {
-        if (!location.pathname.match(/^\/thread\/[1-9]\d*$/)) id && setId(0);
+        if (!/^\/thread\/[1-9]\d*$/.test(location.pathname)) id && setId(0);
     }, [id, location.pathname, setId]);
 
     useEffect(() => {

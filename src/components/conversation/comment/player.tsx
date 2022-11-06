@@ -28,8 +28,8 @@ export default function Player(props: { url: string; style?: React.CSSProperties
     const { url, style } = props;
 
     const mode =
-        (regex.facebook.videos.some((regexp) => url.match(regexp)) && "facebook") ||
-        (regex.youtube.some((regexp) => url.match(regexp)) && "youtube") ||
+        (regex.facebook.videos.some((regexp) => regexp.test(url)) && "facebook") ||
+        (regex.youtube.some((regexp) => regexp.test(url)) && "youtube") ||
         "streamable";
 
     const buttons = [

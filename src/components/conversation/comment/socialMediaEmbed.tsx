@@ -31,7 +31,7 @@ export default function SocialMediaEmbed(props: { url: string }) {
             ),
             regex: regex.twitter,
         },
-    ].find((item) => item.regex.some((regex) => url.match(regex)))?.element;
+    ].find((item) => item.regex.some((regex) => regex.test(url)))?.element;
 
     if (!Element) return null;
 
