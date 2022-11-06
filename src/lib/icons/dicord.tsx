@@ -59,7 +59,7 @@ export default function DiscordIcon(props: {
                         (white && "#ffffff") || (black && "#000000") || color || "#5865F2"
                     }
                     fillRule="nonzero"
-                 />
+                />
             </g>
         </svg>
     );
