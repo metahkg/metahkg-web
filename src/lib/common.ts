@@ -90,14 +90,14 @@ export function allEqual(arr: any[]) {
     return true;
 }
 
-export function setTitle(title: string = "Metahkg") {
+export function setTitle(title = "Metahkg") {
     document.title = title;
     document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
     document.querySelector(`meta[name="twitter:title"]`)?.setAttribute("content", title);
 }
 
 export function setDescription(
-    description: string = "Metahkg is a free and open source lihkg-style forum."
+    description = "Metahkg is a free and open source lihkg-style forum."
 ) {
     document
         .querySelector(`meta[name="description"]`)
