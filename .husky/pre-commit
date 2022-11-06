@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npx eslint --cache --fix src
-echo "running npx tsc..."
-npx tsc
+echo "running yarn test..."
+yarn test
