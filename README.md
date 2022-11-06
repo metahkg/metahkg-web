@@ -13,8 +13,8 @@ dev (dev branch): [dev.metahkg.org](https://dev.metahkg.org)
 [![Github](https://badges.aleen42.com/src/github.svg)](https://github.com/metahkg/metahkg-web)
 [![License](https://img.shields.io/gitlab/license/metahkg/metahkg-web)](https://gitlab.com/metahkg/metahkg-web/-/tree/master/LICENSE.md)
 
-[![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
-[![DeepSource](https://deepsource.io/gh/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gl/metahkg/metahkg-web.svg/?label=active+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gl/metahkg/metahkg-web.svg/?label=resolved+issues&show_trend=true&token=oM1NNBO8D9mefjjcuiCmPQoS)](https://deepsource.io/gh/metahkg/metahkg-web/?ref=repository-badge)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0c0ee09f0cca4d6fa17d3b4f4465faf8)](https://www.codacy.com/gl/metahkg/metahkg-web/dashboard?utm_source=gitlab.com&utm_medium=referral&utm_content=metahkg/metahkg-web&utm_campaign=Badge_Grade)
 
 [![Telegram](https://patrolavia.github.io/telegram-badge/chat.svg)](https://t.me/+WbB7PyRovUY1ZDFl)
