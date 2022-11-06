@@ -42,7 +42,7 @@ export default function VoteButtons(props: { comment: Comment }) {
         <ButtonGroup variant="text" className="!rounded-[4px] !bg-[#333]">
             <Button
                 className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0"
-                disabled={!user || !!vote}
+                disabled={!user || Boolean(vote)}
                 onClick={() => {
                     sendVote("U");
                 }}
@@ -59,7 +59,7 @@ export default function VoteButtons(props: { comment: Comment }) {
             </Button>
             <Button
                 className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0"
-                disabled={!user || !!vote}
+                disabled={!user || Boolean(vote)}
                 onClick={() => {
                     sendVote("D");
                 }}

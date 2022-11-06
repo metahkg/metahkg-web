@@ -80,7 +80,7 @@ export function PopUp(props: {
                 >
                     {children}
                 </Box>
-                {!!buttons?.length && (
+                {Boolean(buttons?.length) && (
                     <React.Fragment>
                         <Divider />
                         <Box className="flex w-full">

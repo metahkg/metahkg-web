@@ -88,7 +88,7 @@ function Conversation(props: { id: number }) {
 
     const onScroll = useOnScroll();
 
-    const ready = !!(thread && thread.conversation.length && (user ? votes : 1));
+    const ready = Boolean(thread && thread.conversation.length && (user ? votes : 1));
 
     useEffect(() => {
         !query.page &&
