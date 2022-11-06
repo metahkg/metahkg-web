@@ -114,7 +114,7 @@ function Menu() {
                             ]
                         }
                         slideRenderer={slideRenderer}
-                        enableMouseEvents={true}
+                        enableMouseEvents
                     />
                 ),
                 [menuMode, selected, setSelected, slideRenderer]
