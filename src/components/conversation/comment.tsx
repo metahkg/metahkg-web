@@ -267,7 +267,7 @@ export default function Comment(props: {
                                 />
                             </Box>
                         )}
-                        {!!replies.length && (
+                        {Boolean(replies.length) && (
                             <Box>
                                 <Box
                                     className="flex items-center justify-center text-center cursor-pointer"

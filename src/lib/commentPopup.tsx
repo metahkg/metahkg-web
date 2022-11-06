@@ -12,7 +12,7 @@ export default function CommentPopup(props: {
     fetchComment?: boolean;
 }) {
     const { open, setOpen, comment, showReplies, fetchComment } = props;
-    const [isExpanded, setIsExpanded] = useState(!!showReplies);
+    const [isExpanded, setIsExpanded] = useState(Boolean(showReplies));
     const isSmallScreen = useIsSmallScreen();
     return (
         <PopUp
