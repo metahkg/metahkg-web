@@ -56,7 +56,7 @@ function App() {
 
     useEffect(() => {
         if (user && !session) {
-            api.meSession()
+            api.meSessionCurrent()
                 .then(setSession)
                 .catch((data: ErrorDto) => {
                     if (data.statusCode === 401) {
