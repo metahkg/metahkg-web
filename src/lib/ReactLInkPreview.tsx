@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LinkPreview } from "@dhaiwat10/react-link-preview";
+import { LinkPreview } from "@metahkg/react-link-preview";
 import { Box } from "@mui/material";
 import axios from "axios";
 import { DOMNode, domToReact } from "html-react-parser";
@@ -61,7 +61,7 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 fetcher={async (url: string) => {
                     try {
                         const { data } = await axios.get(
-                            `https://rlp.metahkg.org/v2?url=${url}`
+                            `https://${process.env.REACT_APP_RLP_PROXY_DOMAIN || "rlp.metahkg.org"}/v2?url=${url}`
                         );
                         const { metadata } = data;
                         if (!metadata.title || !metadata.image || !metadata.description) {
@@ -82,6 +82,8 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                         size={50}
                     />
                 }
+                showPlaceholderIfNoImage
+                imageProxy={`https://${process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"}`}
             />
             {domToReact([node])}
         </Box>

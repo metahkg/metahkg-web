@@ -1197,13 +1197,6 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@dhaiwat10/react-link-preview@^1.14.2":
-  version "1.14.2"
-  resolved "https://registry.yarnpkg.com/@dhaiwat10/react-link-preview/-/react-link-preview-1.14.2.tgz#feccde9de29ffb64b15f8b68c25d016a52d0e32c"
-  integrity sha512-3xrlcPwGN7la36D5K98fzPXKZPkP+KbSQ8L1XN09rEzcxo/SKujGJfhGhoniFTcVcfHfDOFUtx1afuwxGzniLg==
-  dependencies:
-    react-loading-skeleton "^3.1.0"
-
 "@emoji-mart/data@^1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.0.7.tgz#aea3281f11fcff8620a3205197aa7b77330912d9"
@@ -1683,6 +1676,13 @@
   integrity sha512-d9uUcg6kSXVNweW4PosU20ZY9AY+XFQPvoN+wjJ0KPrPAEYRq4ihiOu16wkPqy7qYpZ+OUaMTUpSKKvztE4pBA==
   dependencies:
     axios "^1.1.2"
+
+"@metahkg/react-link-preview@^1.14.0-1":
+  version "1.14.0-1"
+  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.14.0-1.tgz#98468672fe35190c43c25e0f747b5096427a9bfa"
+  integrity sha512-olFwnpi/yhzCkUhuTyqXG9cee+5UPc72YzAmIPa105FA0Y/pQl6pTren4udppUAij8dT7U9hk+QBaPms1+WdJA==
+  dependencies:
+    react-loading-skeleton "^3.1.0"
 
 "@mui/base@5.0.0-alpha.105":
   version "5.0.0-alpha.105"
