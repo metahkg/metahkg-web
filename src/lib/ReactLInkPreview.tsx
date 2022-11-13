@@ -44,7 +44,7 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 fetcher={async (url: string) => {
                     try {
                         const { data } = await axios.get(
-                            `https://rlp.metahkg.org/v2?url=${url}`
+                            `https://rlp.metahkg.org/v2?url=${encodeURIComponent(url)}`
                         );
                         const { metadata } = data;
                         if (!metadata.title || !metadata.image || !metadata.description) {
