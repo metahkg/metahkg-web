@@ -61,7 +61,10 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 fetcher={async (url: string) => {
                     try {
                         const { data } = await axios.get(
-                            `https://${process.env.REACT_APP_RLP_PROXY_DOMAIN || "rlp.metahkg.org"}/v2?url=${encodeURIComponent(url)}`
+                            `https://${
+                                process.env.REACT_APP_RLP_PROXY_DOMAIN ||
+                                "rlp.metahkg.org"
+                            }/v2?url=${encodeURIComponent(url)}`
                         );
                         const { metadata } = data;
                         if (!metadata.title || !metadata.image || !metadata.description) {
@@ -83,7 +86,9 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                     />
                 }
                 showPlaceholderIfNoImage
-                imageProxy={`https://${process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"}`}
+                imageProxy={`https://${
+                    process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"
+                }`}
             />
             {domToReact([node])}
         </Box>
