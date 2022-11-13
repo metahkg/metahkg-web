@@ -20,7 +20,7 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import { DOMNode, domToReact } from "html-react-parser";
 import React, { useState } from "react";
-import Loader from "./loader";
+import Loader from "../../../lib/loader";
 
 export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DOMNode }) {
     const { quote, url, node } = props;
@@ -61,7 +61,7 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 fetcher={async (url: string) => {
                     try {
                         const { data } = await axios.get(
-                            `https://${process.env.REACT_APP_RLP_PROXY_DOMAIN || "rlp.metahkg.org"}/v2?url=${url}`
+                            `https://${process.env.REACT_APP_RLP_PROXY_DOMAIN || "rlp.metahkg.org"}/v2?url=${encodeURIComponent(url)}`
                         );
                         const { metadata } = data;
                         if (!metadata.title || !metadata.image || !metadata.description) {
