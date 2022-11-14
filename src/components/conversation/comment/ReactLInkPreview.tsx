@@ -60,13 +60,14 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 secondaryTextColor="#aca9a9"
                 descriptionLength={60}
                 fetcher={async (url: string) => {
-                    console.log(url)
+                    console.log(url);
                     try {
                         const client = new RLPCLient(
                             `https://${
                                 process.env.REACT_APP_RLP_PROXY_DOMAIN ||
                                 "rlp.metahkg.org"
-                            }`, axios.create()
+                            }`,
+                            axios.create()
                         );
                         const data = await client.getMetadata(encodeURIComponent(url));
                         const { metadata } = data;
