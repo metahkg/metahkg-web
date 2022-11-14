@@ -1677,12 +1677,20 @@
   dependencies:
     axios "^1.1.2"
 
-"@metahkg/react-link-preview@^1.14.1":
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.14.1.tgz#4087763fb6cd9217a7fac854ffb26063aae04902"
-  integrity sha512-CPIREMolY4BNtow5PXXCSZ0/x1a6hZdXIBET+ChaAQzUo2HZieINLcJ0jkJMa88o+IEGZX52cH+UNGi9EKL59Q==
+"@metahkg/react-link-preview@1.15.6":
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.15.6.tgz#0de19b934d65c56c3f555280569b0bac0005d841"
+  integrity sha512-wggl9SyEjbF1vrxPa1/SZaJRRfBX4gPSwLH5U8MLVl4nNDkluaVsyqvFuq6KxsSeVLJw+TnajS6Ekv2438YjwQ==
   dependencies:
+    "@metahkg/rlp-proxy-rewrite-api" "^1.0.0"
     react-loading-skeleton "^3.1.0"
+
+"@metahkg/rlp-proxy-rewrite-api@^1.0.0", "@metahkg/rlp-proxy-rewrite-api@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@metahkg/rlp-proxy-rewrite-api/-/rlp-proxy-rewrite-api-1.0.2.tgz#eb1a2f1fe921057fdf8dd17618d74379c324ca01"
+  integrity sha512-TbVdvFVoA9L3noeojruYJ+LPL5Snt6BAJkXZYrsMdCk1EmV4ABZqu/Jo1UmqNADOom+IkhusewWlZMH1WkIbxQ==
+  dependencies:
+    axios "^1.1.2"
 
 "@mui/base@5.0.0-alpha.105":
   version "5.0.0-alpha.105"

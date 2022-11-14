@@ -17,10 +17,11 @@
 
 import { LinkPreview } from "@metahkg/react-link-preview";
 import { Box } from "@mui/material";
-import axios from "axios";
 import { DOMNode, domToReact } from "html-react-parser";
 import React, { useState } from "react";
 import Loader from "../../../lib/loader";
+import { Client as RLPCLient } from "@metahkg/rlp-proxy-rewrite-api";
+import axios from "axios";
 
 export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DOMNode }) {
     const { quote, url, node } = props;
@@ -59,19 +60,22 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 secondaryTextColor="#aca9a9"
                 descriptionLength={60}
                 fetcher={async (url: string) => {
+                    console.log(url)
                     try {
-                        const { data } = await axios.get(
+                        const client = new RLPCLient(
                             `https://${
                                 process.env.REACT_APP_RLP_PROXY_DOMAIN ||
                                 "rlp.metahkg.org"
-                            }/v2?url=${encodeURIComponent(url)}`
+                            }`, axios.create()
                         );
+                        const data = await client.getMetadata(encodeURIComponent(url));
                         const { metadata } = data;
-                        if (!metadata.title || !metadata.image || !metadata.description) {
+                        if (!metadata?.title || !metadata?.hostname) {
                             setSuccess(false);
                         }
                         return metadata;
-                    } catch {
+                    } catch (err) {
+                        console.log(err);
                         setSuccess(false);
                         return null;
                     }
