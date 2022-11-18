@@ -27,7 +27,7 @@ export const regex = {
     },
     youtube: [
         /^https:\/\/(www|m)\.youtube\.com\/watch\?v=\S{11}(|&\S+)$/i,
-        /^https:\/\/youtu.be\/\S{11}$/i,
+        /^https:\/\/youtu.be\/\S{11}(\?t=\d{1,30})?$/i,
     ],
-    streamable: [/^https:\/\/streamable\.com\/[a-z|\d]{6}$/],
+    streamable: [/^https:\/\/streamable\.com\/[a-z|\d]{6}$/i],
 };
