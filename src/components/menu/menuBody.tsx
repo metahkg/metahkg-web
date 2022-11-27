@@ -72,6 +72,7 @@ export default function MenuBody(props: { selected: number }) {
             severity: "error",
             text: parseError(err),
         });
+        setLoading(false);
         err?.response?.status === 404 && navigate("/404", { replace: true });
         err?.response?.status === 403 && navigate("/403", { replace: true });
     }
