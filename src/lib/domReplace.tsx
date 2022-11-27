@@ -1,10 +1,27 @@
+/*
+ Copyright (C) 2022-present Metahkg Contributors
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { DOMNode, domToReact } from "html-react-parser";
 import { Element, Text } from "domhandler/lib/node";
 import { Box } from "@mui/material";
 import { regex } from "./regex";
 import React from "react";
 import loadable from "@loadable/component";
-import { ReactLinkPreview } from "./ReactLInkPreview";
+import { ReactLinkPreview } from "../components/conversation/comment/ReactLInkPreview";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
@@ -24,7 +41,7 @@ export const replace = (params: { quote?: boolean }) => {
                     if (
                         [regex.facebook.videos, regex.youtube, regex.streamable]
                             .flat()
-                            .some((item) => href.match(item))
+                            .some((r) => r.test(href))
                     ) {
                         return (
                             <React.Fragment>
@@ -32,7 +49,7 @@ export const replace = (params: { quote?: boolean }) => {
                                 {domToReact([node])}
                             </React.Fragment>
                         );
-                    } else if (regex.twitter.some((item) => href.match(item))) {
+                    } else if (regex.twitter.some((r) => r.test(href))) {
                         const url = new URL(href);
                         const tweetId = url.pathname.split("/").pop();
                         if (tweetId)
@@ -45,7 +62,7 @@ export const replace = (params: { quote?: boolean }) => {
                     } else if (
                         [regex.instagram, regex.facebook.posts]
                             .flat()
-                            .some((item) => href.match(item))
+                            .some((r) => r.test(href))
                     ) {
                         return (
                             <Box

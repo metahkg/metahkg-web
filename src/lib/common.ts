@@ -1,3 +1,20 @@
+/*
+ Copyright (C) 2022-present Metahkg Contributors
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import { User } from "@metahkg/api";
 import humanizeDuration from "humanize-duration";
 import jwtDecode from "jwt-decode";
@@ -90,14 +107,14 @@ export function allEqual(arr: any[]) {
     return true;
 }
 
-export function setTitle(title: string = "Metahkg") {
+export function setTitle(title = "Metahkg") {
     document.title = title;
     document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
     document.querySelector(`meta[name="twitter:title"]`)?.setAttribute("content", title);
 }
 
 export function setDescription(
-    description: string = "Metahkg is a free and open source lihkg-style forum."
+    description = "Metahkg is a free and open source lihkg-style forum."
 ) {
     document
         .querySelector(`meta[name="description"]`)

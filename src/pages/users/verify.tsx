@@ -1,5 +1,31 @@
+/*
+ Copyright (C) 2022-present Metahkg Contributors
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Alert, Box, Button, TextField, Typography } from "@mui/material";
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormGroup,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { useNotification, useUser, useWidth } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
@@ -26,6 +52,7 @@ export default function Verify() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [user, setUser] = useUser();
+    const [sameIp, setSameIp] = useState(false);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
@@ -35,7 +62,7 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
         setDisabled(true);
-        api.usersVerify({ email, code })
+        api.usersVerify({ email, code, sameIp })
             .then((data) => {
                 localStorage.setItem("token", data.token);
                 const user = decodeToken(data.token);
@@ -123,6 +150,20 @@ export default function Verify() {
                             fullWidth
                         />
                     ))}
+                    <FormGroup className="my-[15px]">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    color="secondary"
+                                    onChange={(e) => {
+                                        setSameIp(e.target.checked);
+                                    }}
+                                    checked={sameIp}
+                                />
+                            }
+                            label="Restrict session to same ip address"
+                        />
+                    </FormGroup>
                     <Box className="my-[15px]">
                         <Typography
                             component={Link}

@@ -1,5 +1,19 @@
 # Changelog
 
+## v5.7.3
+
+- use image proxy with `react-link preview`
+- move csp to `index.html`
+- custom `rlp-proxy` domain (`REACT_APP_RLP_PROXY_DOMAIN`)
+
+## v5.7.1
+
+- fix: link preview: return the original component if link preview doesn't work
+
+## v5.7.0
+
+- verify: support restrict to same ip
+
 ## v5.5.0
 
 - implement push notification frontend
