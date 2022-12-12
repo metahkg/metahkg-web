@@ -122,8 +122,8 @@ export default function FloatingEditor() {
     return (
         <Snackbar
             className={`rounded-[20px] !z-[1000] ${
-                thread?.pin ? "!top-[110px]" : "!top-[60px]"
-            }`}
+                isSmallScreen ? "!right-[8px] !left-[8px]" : ""
+            }  ${thread?.pin ? "!top-[110px]" : "!top-[60px]"}`}
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
             key={editor?.quote?.id || editor.edit || 0}
@@ -134,7 +134,7 @@ export default function FloatingEditor() {
                 }}
                 className={`rounded-[15px] overflow-auto ${
                     isSmallScreen
-                        ? "!max-w-100v w-100v max-h-50v"
+                        ? "!max-w-[calc(100vw-16px)] w-[calc(100vw-16px)] max-h-50v"
                         : "max-w-70v w-50v max-h-70v"
                 }`}
             >
@@ -183,7 +183,7 @@ export default function FloatingEditor() {
                         noMenuBar
                         noStatusBar
                         toolbarBottom
-                        className="!ml-[10px] !mr-[10px]"
+                        className="!mx-[10px] max-w-[calc(100%-20px)]"
                     />
                     <Box
                         className={`${
