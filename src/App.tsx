@@ -40,6 +40,7 @@ import AlertDialog from "./lib/alertDialog";
 import { register, unregister } from "./serviceWorkerRegistration";
 import { parseError } from "./lib/parseError";
 import { checkNotificationPromise } from "./lib/checkNotificationPromise";
+import ErrorBoundary from "./ErrorBoundary";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -180,19 +181,21 @@ function App() {
             <SnackBar />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
             <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
-                <Router>
-                    <Box className="flex">
-                        <Box
-                            className={
-                                (!menu && "hidden") ||
-                                (isSmallScreen ? "w-100v" : "w-30v")
-                            }
-                        >
-                            <Menu />
+                <ErrorBoundary>
+                    <Router>
+                        <Box className="flex">
+                            <Box
+                                className={
+                                    (!menu && "hidden") ||
+                                    (isSmallScreen ? "w-100v" : "w-30v")
+                                }
+                            >
+                                <Menu />
+                            </Box>
+                            <Routes />
                         </Box>
-                        <Routes />
-                    </Box>
-                </Router>
+                    </Router>
+                </ErrorBoundary>
             </Box>
         </Theme>
     );
@@ -201,10 +204,14 @@ function App() {
 export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
     const { reCaptchaSiteKey } = props;
     return (
-        <AppContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
-            <MenuProvider>
-                <App />
-            </MenuProvider>
-        </AppContextProvider>
+        <ErrorBoundary>
+            <AppContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
+                <MenuProvider>
+                    <ErrorBoundary>
+                        <App />
+                    </ErrorBoundary>
+                </MenuProvider>
+            </AppContextProvider>
+        </ErrorBoundary>
     );
 }

@@ -114,7 +114,8 @@ q,
 li,
 ul,
 ol,
-blockquote {
+blockquote,
+pre {
     color: white;
 }
 
