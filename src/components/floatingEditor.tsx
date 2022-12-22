@@ -204,7 +204,7 @@ export default function FloatingEditor() {
                             <CircularProgress
                                 color="secondary"
                                 disableShrink
-                                className="my-5"
+                                className="my-[5px]"
                             />
                         ) : (
                             <Button
