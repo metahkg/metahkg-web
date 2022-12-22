@@ -67,7 +67,7 @@ export default function Verify() {
         if (!rtoken) {
             setDisabled(false);
             return;
-        };
+        }
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
         api.usersResend({ email, rtoken })

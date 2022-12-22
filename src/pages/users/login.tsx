@@ -98,7 +98,7 @@ export default function Login() {
             name,
             password: hash.sha256().update(password).digest("hex"),
             sameIp,
-            rtoken
+            rtoken,
         })
             .then((data) => {
                 localStorage.setItem("token", data.token);
