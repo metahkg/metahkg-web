@@ -127,10 +127,7 @@ export default function Create() {
         e?.preventDefault();
         setDisabled(true);
         const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) {
-            setDisabled(false);
-            return;
-        }
+        if (!rtoken) return;
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
         api.threadCreate({

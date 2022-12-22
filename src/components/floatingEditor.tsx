@@ -85,12 +85,9 @@ export default function FloatingEditor() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        setCreating(true);
         const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) {
-            setCreating(false);
-            return;
-        }
+        if (!rtoken) return;
+        setCreating(true);
         api.commentCreate(threadId, {
             comment,
             quote: editor.quote?.id,

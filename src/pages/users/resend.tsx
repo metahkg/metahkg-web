@@ -62,12 +62,9 @@ export default function Verify() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        setDisabled(true);
         const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) {
-            setDisabled(false);
-            return;
-        }
+        if (!rtoken) return;
+        setDisabled(true);
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
         api.usersResend({ email, rtoken })

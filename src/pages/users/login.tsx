@@ -88,12 +88,9 @@ export default function Login() {
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
         setAlert({ severity: "info", text: "Logging in..." });
-        setDisabled(true);
         const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) {
-            setDisabled(false);
-            return;
-        }
+        if (!rtoken) return;
+        setDisabled(true);
         api.usersLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
