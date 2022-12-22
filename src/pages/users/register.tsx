@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import hash from "hash.js";
 import {
     Alert,
@@ -50,8 +50,7 @@ import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
-
-declare const grecaptcha: { reset: () => void };
+import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 
 /**
  * Sex selector
@@ -69,7 +68,7 @@ function SexSelect(props: {
         setSex(e.target.value ? "M" : "F");
     };
     return (
-        <FormControl className="!min-w-[200px]">
+        <FormControl required className="!min-w-[200px]">
             <InputLabel color="secondary">Gender</InputLabel>
             <Select
                 color="secondary"
@@ -77,7 +76,6 @@ function SexSelect(props: {
                 value={sex}
                 label="Gender"
                 onChange={onChange}
-                required
             >
                 <MenuItem value={1}>Male</MenuItem>
                 <MenuItem value={0}>Female</MenuItem>
@@ -94,13 +92,13 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
     const [disabled, setDisabled] = useState(false);
-    const [rtoken, setRtoken] = useState("");
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
     const [menu, setMenu] = useMenu();
     const [user] = useUser();
+    const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     const query = queryString.parse(window.location.search);
@@ -115,41 +113,43 @@ export default function Register() {
 
     if (user) <Navigate to="/" replace />;
 
-    function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setAlert({ severity: "info", text: "Registering..." });
+    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
         setDisabled(true);
-        sex &&
-            api
-                .usersRegister({
-                    email,
-                    name,
-                    password: hash.sha256().update(password).digest("hex"),
-                    sex: sex as UserSex,
-                    rtoken,
-                })
-                .then(() => {
-                    setAlert({
-                        severity: "success",
-                        text: "A link has been sent to your email address. Please click the link to verify.",
-                    });
-                    setNotification({
-                        open: true,
-                        severity: "success",
-                        text: "Please click the link sent to your email address.",
-                    });
-                })
-                .catch((err) => {
-                    setAlert({ severity: "error", text: parseError(err) });
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                    setRtoken("");
-                    setDisabled(false);
-                    grecaptcha.reset();
+        const rtoken = await reCaptchaRef.current?.executeAsync();
+        if (!rtoken) {
+            setDisabled(false);
+            return;
+        }
+        setAlert({ severity: "info", text: "Registering..." });
+        api.usersRegister({
+            email,
+            name,
+            password: hash.sha256().update(password).digest("hex"),
+            sex: sex as UserSex,
+            rtoken,
+        })
+            .then(() => {
+                setAlert({
+                    severity: "success",
+                    text: "A link has been sent to your email address. Please click the link to verify.",
                 });
+                setNotification({
+                    open: true,
+                    severity: "success",
+                    text: "Please click the link sent to your email address.",
+                });
+            })
+            .catch((err) => {
+                setAlert({ severity: "error", text: parseError(err) });
+                setNotification({
+                    open: true,
+                    severity: "error",
+                    text: parseError(err),
+                });
+                setDisabled(false);
+                reCaptchaRef.current?.reset();
+            });
     }
 
     const inputs: TextFieldProps[] = [
@@ -241,20 +241,15 @@ export default function Register() {
                             Verify / Resend verification email
                         </Typography>
                     </Box>
-                    <Box
-                        className={`${
-                            small ? "" : "flex w-full justify-between items-center"
-                        } !mt-[15px]`}
-                    >
+                    <Box className="!mt-[15px]">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
-                            onChange={(token) => {
-                                setRtoken(token || "");
-                            }}
+                            size="invisible"
+                            ref={reCaptchaRef}
                         />
                         <Button
-                            disabled={disabled || !rtoken}
+                            disabled={disabled}
                             type="submit"
                             className="!text-[16px] !normal-case h-[40px]"
                             color="secondary"
@@ -263,6 +258,7 @@ export default function Register() {
                             <HowToReg className="!mr-[5px] !text-[17px]" />
                             Register
                         </Button>
+                        <ReCaptchaNotice />
                     </Box>
                 </Box>
             </Box>

@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
@@ -35,6 +35,7 @@ import {
     useNotification,
     useIsSmallScreen,
     useUser,
+    useReCaptchaSiteKey,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -43,6 +44,8 @@ import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
+import ReCAPTCHA from "react-google-recaptcha";
+import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -57,6 +60,8 @@ export default function Login() {
         text: "",
     });
     const [sameIp, setSameIp] = useState(false);
+    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const reCaptchaSiteKey = useReCaptchaSiteKey();
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -80,14 +85,20 @@ export default function Login() {
 
     if (user) return <Navigate to="/" replace />;
 
-    function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
         setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
+        const rtoken = await reCaptchaRef.current?.executeAsync();
+        if (!rtoken) {
+            setDisabled(false);
+            return;
+        }
         api.usersLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
             sameIp,
+            rtoken
         })
             .then((data) => {
                 localStorage.setItem("token", data.token);
@@ -113,6 +124,7 @@ export default function Login() {
                     text: parseError(err),
                 });
                 setDisabled(false);
+                reCaptchaRef.current?.reset();
             });
     }
 
@@ -191,6 +203,12 @@ export default function Login() {
                             Verify / Resend verification email
                         </Typography>
                     </Box>
+                    <ReCAPTCHA
+                        theme="dark"
+                        sitekey={reCaptchaSiteKey}
+                        size="invisible"
+                        ref={reCaptchaRef}
+                    />
                     <Box className="flex justify-between">
                         <Button
                             className="flex !text-[18px] !no-underline !normal-case"
@@ -215,6 +233,7 @@ export default function Login() {
                             Login
                         </Button>
                     </Box>
+                    <ReCaptchaNotice />
                 </Box>
             </Box>
         </Box>

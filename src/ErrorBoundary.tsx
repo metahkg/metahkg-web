@@ -112,7 +112,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     </div>
                 );
             } catch (error) {
-                return <div>{JSON.stringify(this.state)}</div>;
+                return (
+                    <div style={{ height: "100vh" }}>{JSON.stringify(this.state)}</div>
+                );
             }
         }
 

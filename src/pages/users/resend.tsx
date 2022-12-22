@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import {
     useNotification,
@@ -34,8 +34,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-
-declare const grecaptcha: { reset: () => void };
+import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -48,8 +47,8 @@ export default function Verify() {
     const [disabled, setDisabled] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
-    const [rtoken, setRtoken] = useState("");
     const [user] = useUser();
+    const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     const small = width / 2 - 100 <= 450;
@@ -61,11 +60,16 @@ export default function Verify() {
 
     if (user) <Navigate to="/" replace />;
 
-    function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
+        setDisabled(true);
+        const rtoken = await reCaptchaRef.current?.executeAsync();
+        if (!rtoken) {
+            setDisabled(false);
+            return;
+        };
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
-        setDisabled(true);
         api.usersResend({ email, rtoken })
             .then(() => {
                 setNotification({
@@ -76,8 +80,7 @@ export default function Verify() {
                     severity: "success",
                     text: "Verification email sent.",
                 });
-                grecaptcha.reset();
-                setRtoken("");
+                reCaptchaRef.current?.reset();
                 setDisabled(false);
             })
             .catch((err) => {
@@ -90,8 +93,7 @@ export default function Verify() {
                     severity: "error",
                     text: parseError(err),
                 });
-                grecaptcha.reset();
-                setRtoken("");
+                reCaptchaRef.current?.reset();
                 setDisabled(false);
             });
     }
@@ -131,17 +133,12 @@ export default function Verify() {
                         required
                         fullWidth
                     />
-                    <Box
-                        className={`${
-                            small ? "" : "flex w-full items-center justify-between"
-                        } !mt-[20px]`}
-                    >
+                    <Box className="!mt-[20px]">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
-                            onChange={(token) => {
-                                setRtoken(token || "");
-                            }}
+                            size="invisible"
+                            ref={reCaptchaRef}
                         />
                         <Button
                             variant="contained"
@@ -151,13 +148,13 @@ export default function Verify() {
                             color="secondary"
                             type="submit"
                             disabled={
-                                disabled ||
-                                !(email && rtoken && EmailValidator.validate(email))
+                                disabled || !(email && EmailValidator.validate(email))
                             }
                         >
                             <SendIcon className="!mr-[5px] !text-[16px]" />
                             Resend
                         </Button>
+                        <ReCaptchaNotice />
                     </Box>
                 </Box>
             </Box>

@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
@@ -36,8 +36,7 @@ import MetahkgLogo from "../components/logo";
 import { api } from "../lib/api";
 import ChooseCat from "../components/create/ChooseCat";
 import { parseError } from "../lib/parseError";
-
-declare const grecaptcha: { reset: () => void };
+import ReCaptchaNotice from "../lib/reCaptchaNotice";
 
 /**
  * Page for creating a new thread
@@ -51,7 +50,6 @@ export default function Create() {
     const [cat] = useCat();
     const [notification, setNotification] = useNotification();
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
-    const [rtoken, setRtoken] = useState(""); //recaptcha token
     const [threadTitle, setThreadTitle] = useState(""); //this will be the post title
     const [comment, setComment] = useState(""); //initial comment (#1)
     const [disabled, setDisabled] = useState(false);
@@ -59,6 +57,7 @@ export default function Create() {
         severity: "info",
         text: "",
     });
+    const reCaptchaRef = useRef<ReCAPTCHA>(null);
 
     const quote = {
         threadId: Number(String(query.quote).split(".")[0]),
@@ -124,10 +123,16 @@ export default function Create() {
             />
         );
 
-    function create() {
+    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
+        setDisabled(true);
+        const rtoken = await reCaptchaRef.current?.executeAsync();
+        if (!rtoken) {
+            setDisabled(false);
+            return;
+        };
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
-        setDisabled(true);
         api.threadCreate({
             title: threadTitle,
             category: catchoosed,
@@ -145,8 +150,7 @@ export default function Create() {
                 setAlert({ severity: "error", text });
                 setNotification({ open: true, severity: "error", text });
                 setDisabled(false);
-                setRtoken("");
-                grecaptcha.reset();
+                reCaptchaRef.current?.reset();
             });
     }
 
@@ -158,7 +162,7 @@ export default function Create() {
             }}
         >
             <Box className={isSmallScreen ? "w-100v" : "w-80v"}>
-                <Box className="m-[20px]">
+                <Box className="m-[20px]" component="form" onSubmit={onSubmit}>
                     <Box className="flex items-center">
                         <MetahkgLogo
                             svg
@@ -197,34 +201,30 @@ export default function Create() {
                         minHeight={isSmallScreen ? 310 : 350}
                     />
                     <Box
-                        className={`mt-[15px] ${
-                            isSmallSmallScreen
-                                ? ""
-                                : "flex w-full justify-between items-center"
-                        }`}
+                        className="mt-[15px]"
                     >
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
-                            onChange={(token) => {
-                                setRtoken(token || "");
-                            }}
+                            size="invisible"
+                            ref={reCaptchaRef}
                         />
                         <Button
                             disabled={
                                 disabled ||
-                                !(comment && threadTitle && rtoken && catchoosed)
+                                !(comment && threadTitle && catchoosed)
                             }
                             className={`${
                                 isSmallSmallScreen ? "!mt-[15px] " : ""
                             }!text-[16px] !h-[40px] !py-0 !normal-case`}
-                            onClick={create}
                             variant="contained"
                             color="secondary"
+                            type="submit"
                         >
                             <CreateIcon className="!mr-[5px] !text-[16px]" />
                             Create
                         </Button>
+                        <ReCaptchaNotice />
                     </Box>
                 </Box>
             </Box>
