@@ -130,7 +130,7 @@ export default function Create() {
         if (!rtoken) {
             setDisabled(false);
             return;
-        };
+        }
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
         api.threadCreate({
@@ -200,9 +200,7 @@ export default function Create() {
                         autoResize
                         minHeight={isSmallScreen ? 310 : 350}
                     />
-                    <Box
-                        className="mt-[15px]"
-                    >
+                    <Box className="mt-[15px]">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
@@ -210,10 +208,7 @@ export default function Create() {
                             ref={reCaptchaRef}
                         />
                         <Button
-                            disabled={
-                                disabled ||
-                                !(comment && threadTitle && catchoosed)
-                            }
+                            disabled={disabled || !(comment && threadTitle && catchoosed)}
                             className={`${
                                 isSmallSmallScreen ? "!mt-[15px] " : ""
                             }!text-[16px] !h-[40px] !py-0 !normal-case`}
