@@ -159,7 +159,8 @@ export default function Register() {
                 setName(e.target.value);
             },
             type: "text",
-            inputProps: { pattern: "S{1, 15}" },
+            inputProps: { pattern: "\\S{1,15}" },
+            helperText: "Username must be composed of 1-15 characters without spaces"
         },
         {
             label: "Email",
@@ -175,6 +176,7 @@ export default function Register() {
             onChange: (e) => setPassword(e.target.value),
             type: "password",
             inputProps: { pattern: ".{8,}" },
+            helperText: "Password must be at least 8 characters long"
         },
     ];
 
