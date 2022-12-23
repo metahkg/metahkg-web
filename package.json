@@ -41,7 +41,7 @@
     "postcss": "^8.4.18",
     "prettier": "^2.7.1",
     "prismjs": "^1.29.0",
-    "query-string": "^7.1.1",
+    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-avatar-editor": "^13.0.0",
