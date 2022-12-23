@@ -113,7 +113,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                 );
             } catch (error) {
                 return (
-                    <div style={{ height: "100vh", overflow: "auto" }}>{JSON.stringify(this.state)}</div>
+                    <div style={{ height: "100vh", overflow: "auto" }}>
+                        {JSON.stringify(this.state)}
+                    </div>
                 );
             }
         }
