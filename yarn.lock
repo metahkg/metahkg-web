@@ -1670,10 +1670,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^5.8.0-dev":
-  version "5.8.0-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-5.8.0-dev.tgz#ab96280434283e485ea93f11edba3f09078044ea"
-  integrity sha512-hCiceS4W/PnECHQZBQ8P/3apM2EqIx7AW71zA+6tUM5n7DJ60yc5zJXkV4sRu9v5/kkodbzz8SXiSsYSCCfM5A==
+"@metahkg/api@^5.9.0-dev":
+  version "5.9.0-dev"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-5.9.0-dev.tgz#9908f18fb96da144582446fbc5398138fe66bb70"
+  integrity sha512-EppIb43sVtJ1AZVKDu/WPfcu/8nSWnwuEcVHg3x64I/ASnkX5VPvWvCiLlEX5LSv9zFSHzTrHafb6B+tPe2M2g==
   dependencies:
     axios "^1.1.2"
 

@@ -199,6 +199,17 @@ export default function Login() {
                         >
                             Verify / Resend verification email
                         </Typography>
+                        <div className="h-[15px]" />
+                        <Typography
+                            component={Link}
+                            to="/users/forgot"
+                            className={`${css.link} !font-bold`}
+                            sx={(theme) => ({
+                                color: `${theme.palette.secondary.main} !important`,
+                            })}
+                        >
+                            Forgot password?
+                        </Typography>
                     </Box>
                     <ReCAPTCHA
                         theme="dark"

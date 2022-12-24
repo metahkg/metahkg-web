@@ -36,7 +36,7 @@ import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 
-export default function Resend() {
+export default function Forgot() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -54,7 +54,7 @@ export default function Resend() {
     const small = width / 2 - 100 <= 450;
 
     useLayoutEffect(() => {
-        setTitle("Resend Verification Email | Metahkg");
+        setTitle("Forgot password | Metahkg");
         menu && setMenu(false);
     }, [menu, setMenu, user]);
 
@@ -65,17 +65,17 @@ export default function Resend() {
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
         setDisabled(true);
-        setAlert({ severity: "info", text: "Requesting resend..." });
-        setNotification({ open: true, severity: "info", text: "Requesting resend..." });
-        api.usersResend({ email, rtoken })
+        setAlert({ severity: "info", text: "Requesting reset password..." });
+        setNotification({ open: true, severity: "info", text: "Requesting reset password..." });
+        api.usersForgot({ email, rtoken })
             .then(() => {
                 setNotification({
                     open: true,
-                    text: `Verification email sent.`,
+                    text: `Reset password email sent.`,
                 });
                 setAlert({
                     severity: "success",
-                    text: "Verification email sent.",
+                    text: "Reset password email sent. Please click the link to reset your password.",
                 });
                 reCaptchaRef.current?.reset();
                 setDisabled(false);
@@ -100,6 +100,8 @@ export default function Resend() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    if (user) return <Navigate to="/" replace />;
+
     return (
         <Box
             className="flex items-center justify-center min-h-screen w-full"
@@ -110,7 +112,7 @@ export default function Resend() {
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">
-                            Resend Verification Email
+                            Forgot password
                         </h1>
                     </Box>
                     {alert.text && (
@@ -149,7 +151,7 @@ export default function Resend() {
                             }
                         >
                             <SendIcon className="!mr-[5px] !text-[16px]" />
-                            Resend
+                            Reset
                         </Button>
                         <ReCaptchaNotice />
                     </Box>

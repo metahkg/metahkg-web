@@ -39,6 +39,8 @@ const Create = loadable(() => import("./pages/create"));
 // users
 const Verify = loadable(() => import("./pages/users/verify"));
 const Resend = loadable(() => import("./pages/users/resend"));
+const Forgot = loadable(() => import("./pages/users/forgot"));
+const Reset = loadable(() => import("./pages/users/reset"));
 const Register = loadable(() => import("./pages/users/register"));
 const Login = loadable(() => import("./pages/users/login"));
 const Logout = loadable(() => import("./pages/users/logout"));
@@ -143,6 +145,8 @@ export default function Routes() {
                 <Route path="register" element={<Register />} />
                 <Route path="verify" element={<Verify />} />
                 <Route path="resend" element={<Resend />} />
+                <Route path="forgot" element={<Forgot />} />
+                <Route path="reset" element={<Reset />} />
                 <Route path="login" element={<Login />} />
                 <Route path="logout" element={<Logout />} />
             </Route>

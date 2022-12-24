@@ -172,8 +172,8 @@ export default function Register() {
             label: "Password",
             onChange: (e) => setPassword(e.target.value),
             type: "password",
-            inputProps: { pattern: ".{8,}" },
-            helperText: "Password must be at least 8 characters long",
+            inputProps: { pattern: "\\S{8,}" },
+            helperText: "Password must be at least 8 characters long, without spaces.",
         },
     ];
 
