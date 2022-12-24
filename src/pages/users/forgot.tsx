@@ -66,7 +66,11 @@ export default function Forgot() {
         if (!rtoken) return;
         setDisabled(true);
         setAlert({ severity: "info", text: "Requesting reset password..." });
-        setNotification({ open: true, severity: "info", text: "Requesting reset password..." });
+        setNotification({
+            open: true,
+            severity: "info",
+            text: "Requesting reset password...",
+        });
         api.usersForgot({ email, rtoken })
             .then(() => {
                 setNotification({
@@ -111,9 +115,7 @@ export default function Forgot() {
                 <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light height={50} width={40} />
-                        <h1 className="text-[25px] my-0 !ml-[5px]">
-                            Forgot password
-                        </h1>
+                        <h1 className="text-[25px] my-0 !ml-[5px]">Forgot password</h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>
