@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
@@ -24,7 +24,6 @@ import {
     FormControlLabel,
     FormGroup,
     TextField,
-    Typography,
 } from "@mui/material";
 import {
     useNotification,
@@ -35,18 +34,18 @@ import {
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
-import { HowToReg } from "@mui/icons-material";
+import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import hash from "hash.js";
 
-export default function Verify() {
+export default function Reset() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -58,6 +57,7 @@ export default function Verify() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
+    const [password, setPassword] = useState("");
     const [user, setUser] = useUser();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
@@ -70,10 +70,16 @@ export default function Verify() {
         e?.preventDefault();
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
-        setAlert({ severity: "info", text: "Verifying..." });
-        setNotification({ open: true, severity: "info", text: "Verifying..." });
+        setAlert({ severity: "info", text: "Reseting..." });
+        setNotification({ open: true, severity: "info", text: "Reseting..." });
         setDisabled(true);
-        api.usersVerify({ email, code, rtoken, sameIp })
+        api.usersReset({
+            email,
+            code,
+            password: hash.sha256().update(password).digest("hex"),
+            rtoken,
+            sameIp,
+        })
             .then((data) => {
                 localStorage.setItem("token", data.token);
                 const user = decodeToken(data.token);
@@ -96,18 +102,14 @@ export default function Verify() {
                     severity: "error",
                     text: parseError(err),
                 });
+                reCaptchaRef.current?.reset();
             });
     }
 
     useLayoutEffect(() => {
-        setTitle("Verify | Metahkg");
+        setTitle("Reset password | Metahkg");
         menu && setMenu(false);
     }, [menu, setMenu, user]);
-
-    useEffect(() => {
-        if (query.code && query.email && !user) onSubmit();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     if (user) return <Navigate to="/" replace />;
 
@@ -126,7 +128,7 @@ export default function Verify() {
                             width={40}
                             className="!mb-[10px]"
                         />
-                        <h1 className="text-[25px] !mb-[20px] mx-0">Verify</h1>
+                        <h1 className="text-[25px] !mb-[20px] mx-0">Reset password</h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>
@@ -146,12 +148,21 @@ export default function Verify() {
                             set: setCode,
                             type: "password",
                         },
+                        {
+                            label: "New password",
+                            value: password,
+                            set: setPassword,
+                            type: "password",
+                            pattern: "\\S{8,}",
+                            helperText:
+                                "Password must be at least 8 characters long, without spaces.",
+                        },
                     ].map((item, index) => (
                         <TextField
                             label={item.label}
                             value={item.value}
                             type={item.type}
-                            className={!index ? "!mb-[15px]" : ""}
+                            className={index ? "!mt-[15px]" : ""}
                             onChange={(e) => {
                                 item.set(e.target.value);
                             }}
@@ -159,6 +170,10 @@ export default function Verify() {
                             color="secondary"
                             required
                             fullWidth
+                            helperText={item.helperText}
+                            inputProps={{
+                                ...(item.pattern && { pattern: item.pattern }),
+                            }}
                         />
                     ))}
                     <FormGroup className="my-[15px]">
@@ -175,18 +190,6 @@ export default function Verify() {
                             label="Restrict session to same ip address"
                         />
                     </FormGroup>
-                    <Box className="my-[15px]">
-                        <Typography
-                            component={Link}
-                            sx={(theme) => ({
-                                color: `${theme.palette.secondary.main} !important`,
-                            })}
-                            className={`${css.link} !font-bold`}
-                            to="/users/resend"
-                        >
-                            Resend verification email
-                        </Typography>
-                    </Box>
                     <ReCAPTCHA
                         theme="dark"
                         sitekey={reCaptchaSiteKey}
@@ -202,8 +205,8 @@ export default function Verify() {
                             disabled || !(email && code && EmailValidator.validate(email))
                         }
                     >
-                        <HowToReg className="!mr-[5px]" />
-                        Verify
+                        <LockOpen className="!mr-[5px]" />
+                        Reset
                     </Button>
                     <ReCaptchaNotice />
                 </Box>

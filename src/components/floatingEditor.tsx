@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
 import {
     Box,
@@ -45,14 +45,12 @@ import {
 import useChangePage from "./conversation/functions/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
-
-declare const grecaptcha: { reset: () => void };
+import ReCaptchaNotice from "../lib/reCaptchaNotice";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
-    const [rtoken, setRtoken] = useState<string>("");
     const [creating, setCreating] = useState(false);
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
@@ -63,6 +61,7 @@ export default function FloatingEditor() {
     const [finalPage] = useFinalPage();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
+    const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
     useEffect(() => {
@@ -75,7 +74,6 @@ export default function FloatingEditor() {
 
     function clearState() {
         setComment("");
-        setRtoken("");
         setCreating(false);
         setFold(false);
     }
@@ -85,7 +83,10 @@ export default function FloatingEditor() {
         clearState();
     };
 
-    function CreateComment() {
+    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
+        e?.preventDefault();
+        const rtoken = await reCaptchaRef.current?.executeAsync();
+        if (!rtoken) return;
         setCreating(true);
         api.commentCreate(threadId, {
             comment,
@@ -115,7 +116,7 @@ export default function FloatingEditor() {
                     text: parseError(err),
                 });
                 setCreating(false);
-                grecaptcha.reset();
+                reCaptchaRef.current?.reset();
             });
     }
 
@@ -156,7 +157,11 @@ export default function FloatingEditor() {
                         </IconButton>
                     </Box>
                 </DialogTitle>
-                <Box className={`rounded-[20px] flex flex-col ${fold ? "hidden" : ""}`}>
+                <Box
+                    component="form"
+                    className={`rounded-[20px] flex flex-col ${fold ? "hidden" : ""}`}
+                    onSubmit={onSubmit}
+                >
                     {editor.quote && (
                         <Comment
                             comment={editor.quote}
@@ -185,36 +190,33 @@ export default function FloatingEditor() {
                         toolbarBottom
                         className="!mx-[10px] max-w-[calc(100%-20px)]"
                     />
-                    <Box
-                        className={`${
-                            isSmallScreen ? "" : "flex"
-                        } justify-between items-center m-[10px]`}
-                    >
+                    <Box className="m-[10px]">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
-                            onChange={(token) => {
-                                setRtoken(token || "");
-                            }}
+                            size="invisible"
+                            ref={reCaptchaRef}
                         />
                         {creating ? (
                             <CircularProgress
                                 color="secondary"
-                                className={isSmallScreen ? "!mt-[10px]" : ""}
                                 disableShrink
+                                className="my-[5px]"
                             />
                         ) : (
                             <Button
                                 variant="contained"
                                 color="secondary"
-                                onClick={CreateComment}
-                                disabled={!rtoken || !comment}
-                                className={isSmallScreen ? "!mt-[10px]" : ""}
+                                type="submit"
+                                disabled={!comment}
                             >
                                 <CommentIcon className="!mr-[5px]" />
                                 Comment
                             </Button>
                         )}
+                        <ReCaptchaNotice
+                            className={creating ? "my-0" : "mt-[10px] mb-0"}
+                        />
                     </Box>
                 </Box>
             </Box>

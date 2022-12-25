@@ -31,4 +31,4 @@ axios.interceptors.response.use((response) => {
     return response;
 });
 
-export const api = new Client("/api", axios);
+export const api = new Client(process.env.REACT_APP_BACKEND || "/api", axios);

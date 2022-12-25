@@ -223,7 +223,7 @@ export default function TextEditor(props: {
                         return data.url;
                     },
                 }}
-                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.2.0/tinymce.min.js"
+                tinymceScriptSrc="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.3.1/tinymce.min.js"
             />
         </Box>
     );

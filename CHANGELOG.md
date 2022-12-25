@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.8.0
+
+- *WARNING*: Please change your recaptcha type to v2 invisible at [recaptcha admin panel](https://www.google.com/recaptcha/admin) before upgrading to this version
+- implement [epic &23](https://gitlab.com/groups/metahkg/-/epics/23) switch to recaptcha v2 invisible
+- require recaptcha for login
+
 ## v5.7.3
 
 - use image proxy with `react-link preview`

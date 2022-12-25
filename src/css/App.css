@@ -114,7 +114,8 @@ q,
 li,
 ul,
 ol,
-blockquote {
+blockquote,
+pre {
     color: white;
 }
 
@@ -124,4 +125,8 @@ blockquote {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.grecaptcha-badge {
+    visibility: hidden;
 }
