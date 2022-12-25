@@ -139,9 +139,7 @@ export default function Resend() {
                         />
                         <Button
                             variant="contained"
-                            className={`!text-[16px] !normal-case${
-                                small ? " !mt-[20px]" : ""
-                            }`}
+                            className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
                             disabled={
