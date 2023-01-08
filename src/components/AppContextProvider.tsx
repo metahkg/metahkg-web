@@ -83,7 +83,7 @@ export default function AppContextProvider(props: {
     );
     const [session, setSession] = useState<Session | null>(JSON.parse(localStorage.getItem("session") || "null") || null);
     const [user, setUser] = useState(loadUser(session?.token));
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<Category[]>(JSON.parse(localStorage.getItem("categories") || "[]"));
     const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
     );
@@ -156,6 +156,10 @@ export default function AppContextProvider(props: {
             setUser(loadUser(session.token));
         }
     }, [session]);
+
+    useEffect(() => {
+        localStorage.setItem("categories", JSON.stringify(categories));
+    }, [categories]);
 
     useEffect(() => {
         localStorage.setItem("blocklist", JSON.stringify(blockList));
