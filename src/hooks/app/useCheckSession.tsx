@@ -15,12 +15,16 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ErrorDto} from "@metahkg/api";
-import {useEffect} from "react";
-import {useNotification, useSession, useUser} from "../../components/AppContextProvider";
+import { ErrorDto } from "@metahkg/api";
+import { useEffect } from "react";
+import {
+    useNotification,
+    useSession,
+    useUser,
+} from "../../components/AppContextProvider";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
-import {useLogout} from "../useLogout";
+import { useLogout } from "../useLogout";
 
 export function useCheckSession() {
     const [user] = useUser();
@@ -29,33 +33,36 @@ export function useCheckSession() {
     const logout = useLogout();
     useEffect(() => {
         if (user && session) {
-            api.authSessionCurrent()
-                .catch(async (data?: ErrorDto) => {
-                    if (data?.statusCode === 401) {
-                        await api.authSessionsRefresh(session.id, {
+            api.authSessionCurrent().catch(async (data?: ErrorDto) => {
+                if (data?.statusCode === 401) {
+                    await api
+                        .authSessionsRefresh(session.id, {
                             userId: user.id,
-                            refreshToken: session.refreshToken
-                        }).then(({token, refreshToken}) => {
-                            setSession({...session, token, refreshToken});
-                        }).catch(async (data?: ErrorDto) => {
+                            refreshToken: session.refreshToken,
+                        })
+                        .then(({ token, refreshToken }) => {
+                            setSession({ ...session, token, refreshToken });
+                        })
+                        .catch(async (data?: ErrorDto) => {
                             if ([401, 403, 404].includes(data?.statusCode || 0)) {
                                 logout();
                             } else {
                                 setNotification({
                                     open: true,
                                     severity: "error",
-                                    text: "Failed to refresh session: " + parseError(data),
+                                    text:
+                                        "Failed to refresh session: " + parseError(data),
                                 });
                             }
                         });
-                    } else {
-                        setNotification({
-                            open: true,
-                            severity: "error",
-                            text: parseError(data),
-                        });
-                    }
-                });
+                } else {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(data),
+                    });
+                }
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

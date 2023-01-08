@@ -35,8 +35,8 @@ import { timeToWord_long } from "../../lib/common";
 import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
-import {User, UserSex} from "@metahkg/api";
-import {Session} from "../../types/session";
+import { User, UserSex } from "@metahkg/api";
+import { Session } from "../../types/session";
 
 export type UserData = User & { count: number; createdAt?: Date };
 
@@ -124,7 +124,7 @@ export default function DataTable(props: DataTableProps) {
                 const { token } = data;
 
                 if (token) {
-                    setSession({...session, token} as Session);
+                    setSession({ ...session, token } as Session);
                 }
 
                 setReFetch(true);

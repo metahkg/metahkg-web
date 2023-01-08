@@ -15,8 +15,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {useEffect} from "react";
-import {register, unregister} from "../../serviceWorkerRegistration";
+import { useEffect } from "react";
+import { register, unregister } from "../../serviceWorkerRegistration";
 
 export function useRegisterServiceWorker() {
     useEffect(() => {
@@ -27,7 +27,7 @@ export function useRegisterServiceWorker() {
 
             register({
                 onUpdate: async (registration) => {
-                    registration.waiting?.postMessage({type: "SKIP_WAITING"});
+                    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                     window.location.reload();
                 },
                 onSuccess: async (_registration) => {
@@ -45,14 +45,14 @@ export function useRegisterServiceWorker() {
                         registration.addEventListener("updatefound", () => {
                             console.log("update found");
                             console.log("service worker skip waiting");
-                            registration.waiting?.postMessage({type: "SKIP_WAITING"});
+                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                             window.location.reload();
                         });
 
                         setInterval(registration.update, 1000 * 60 * 10);
 
                         if (registration.waiting) {
-                            registration.waiting?.postMessage({type: "SKIP_WAITING"});
+                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
                             window.location.reload();
                         }
                     })

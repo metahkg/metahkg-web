@@ -22,7 +22,9 @@ import Axios from "axios";
 const axios = Axios.create();
 
 axios.interceptors.request.use((config) => {
-    const token = (JSON.parse(localStorage.getItem("session") || "null") as Session | null)?.token;
+    const token = (
+        JSON.parse(localStorage.getItem("session") || "null") as Session | null
+    )?.token;
     if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
     return config;
 });

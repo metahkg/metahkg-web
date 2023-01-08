@@ -16,7 +16,12 @@
  */
 
 import { useHistory } from "../../components/AppContextProvider";
-import { useEnd, useThread, useThreadId, useUpdating } from "../../components/conversation/ConversationContext";
+import {
+    useEnd,
+    useThread,
+    useThreadId,
+    useUpdating,
+} from "../../components/conversation/ConversationContext";
 import { useUpdate } from "./update";
 
 export default function useOnScroll() {

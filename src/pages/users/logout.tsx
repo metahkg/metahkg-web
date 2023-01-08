@@ -24,7 +24,7 @@ import { useNotification, useSession } from "../../components/AppContextProvider
 import { setTitle } from "../../lib/common";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
-import {useLogout} from "../../hooks/useLogout";
+import { useLogout } from "../../hooks/useLogout";
 
 /**
  * Renders an alert while logging out.

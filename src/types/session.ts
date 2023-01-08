@@ -1,4 +1,4 @@
-import {Session as APISession} from "@metahkg/api";
+import { Session as APISession } from "@metahkg/api";
 
 export type Session = APISession & {
     /** jwt token, unhashed */
@@ -7,4 +7,4 @@ export type Session = APISession & {
     refreshToken: string;
     /** sha256 hash of ip */
     ip: string;
-}
+};

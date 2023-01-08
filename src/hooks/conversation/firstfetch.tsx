@@ -19,7 +19,11 @@ import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
-import { useHistory, useNotification, useUser } from "../../components/AppContextProvider";
+import {
+    useHistory,
+    useNotification,
+    useUser,
+} from "../../components/AppContextProvider";
 import { useCat, useId, useMenuMode } from "../../components/MenuProvider";
 import {
     useEnd,
