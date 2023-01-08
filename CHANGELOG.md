@@ -1,5 +1,13 @@
 # Changelog
 
+## v6.0.0
+
+- migrate to api v6.0
+- use `useSession` hook to manage login status (src/components/AppContextProvider.tsx)
+- refresh session when authSessionCurrent gives 401 error (src/hooks/app/useCheckSession.tsx)
+- no longer uses `localStorage.token` in favor of `localStorage.session` json (src/components/AppContextProvider.tsx)
+- remove the response interceptor (src/lib/api.ts)
+
 ## v5.9.0
 
 - forgot / reset password

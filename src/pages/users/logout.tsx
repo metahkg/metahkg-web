@@ -20,10 +20,11 @@ import { Alert, Box } from "@mui/material";
 import { useMenu } from "../../components/MenuProvider";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
-import { useNotification, useUser } from "../../components/AppContextProvider";
+import { useNotification, useSession } from "../../components/AppContextProvider";
 import { setTitle } from "../../lib/common";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
+import {useLogout} from "../../hooks/useLogout";
 
 /**
  * Renders an alert while logging out.
@@ -32,8 +33,9 @@ import { parseError } from "../../lib/parseError";
 export default function Logout() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
-    const [, setUser] = useUser();
+    const [, setSession] = useSession();
     const navigate = useNavigate();
+    const logout = useLogout();
     const query = queryString.parse(window.location.search);
 
     useLayoutEffect(() => {
@@ -45,23 +47,15 @@ export default function Logout() {
     useEffect(() => {
         (async () => {
             await api
-                .meLogout()
+                .authLogout()
                 .then(() => {
                     // logout
-                    localStorage.removeItem("token");
-                    setUser(null);
+                    logout();
                     setNotification({
                         open: true,
                         severity: "info",
                         text: "Logged out.",
                     });
-                    if ("serviceWorker" in navigator) {
-                        navigator.serviceWorker.ready.then(async (registration) => {
-                            const subscription =
-                                await registration.pushManager.getSubscription();
-                            subscription?.unsubscribe();
-                        });
-                    }
                 })
                 .catch((err) => {
                     setNotification({
@@ -76,7 +70,7 @@ export default function Logout() {
                 replace: true,
             });
         })();
-    }, [navigate, query.returnto, setNotification, setUser]);
+    }, [logout, navigate, query.returnto, setNotification, setSession]);
 
     return (
         <Box

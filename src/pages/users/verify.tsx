@@ -28,7 +28,7 @@ import {
 } from "@mui/material";
 import {
     useNotification,
-    useReCaptchaSiteKey,
+    useReCaptchaSiteKey, useSession,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -58,7 +58,8 @@ export default function Verify() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
-    const [user, setUser] = useUser();
+    const [user] = useUser();
+    const [session, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -73,15 +74,13 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
         setDisabled(true);
-        api.usersVerify({ email, code, rtoken, sameIp })
+        api.authVerify({ email, code, rtoken, sameIp })
             .then((data) => {
-                localStorage.setItem("token", data.token);
-                const user = decodeToken(data.token);
-                setUser(user);
+                setSession(data);
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${user?.name}.`,
+                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })

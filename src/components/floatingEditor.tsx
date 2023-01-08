@@ -35,14 +35,14 @@ import {
     useThread,
     useThreadId,
 } from "./conversation/ConversationContext";
-import { useUpdate } from "./conversation/functions/update";
+import { useUpdate } from "../hooks/conversation/update";
 import TextEditor from "./textEditor";
 import {
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
 } from "./AppContextProvider";
-import useChangePage from "./conversation/functions/changePage";
+import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";

@@ -36,6 +36,7 @@ import {
     useIsSmallScreen,
     useUser,
     useReCaptchaSiteKey,
+    useSession,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -54,7 +55,8 @@ export default function Login() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(false);
-    const [user, setUser] = useUser();
+    const [user] = useUser();
+    const [, setSession] = useSession();
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
@@ -91,23 +93,21 @@ export default function Login() {
         if (!rtoken) return;
         setAlert({ severity: "info", text: "Logging in..." });
         setDisabled(true);
-        api.usersLogin({
+        api.authLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
             sameIp,
             rtoken,
         })
             .then((data) => {
-                localStorage.setItem("token", data.token);
-                const user = decodeToken(data.token);
-                setUser(user);
+                setSession(data);
                 navigate(decodeURIComponent(String(query.returnto || "/")), {
                     replace: true,
                 });
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${user?.name}.`,
+                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
                 });
             })
             .catch((err) => {

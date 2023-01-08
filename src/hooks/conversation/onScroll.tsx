@@ -15,8 +15,8 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useHistory } from "../../AppContextProvider";
-import { useEnd, useThread, useThreadId, useUpdating } from "../ConversationContext";
+import { useHistory } from "../../components/AppContextProvider";
+import { useEnd, useThread, useThreadId, useUpdating } from "../../components/conversation/ConversationContext";
 import { useUpdate } from "./update";
 
 export default function useOnScroll() {

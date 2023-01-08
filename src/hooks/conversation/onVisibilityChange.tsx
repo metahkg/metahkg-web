@@ -21,7 +21,7 @@ import {
     useCurrentPage,
     useLastHeight,
     useThread,
-} from "../ConversationContext";
+} from "../../components/conversation/ConversationContext";
 import queryString from "query-string";
 
 export default function useOnVisibilityChange() {

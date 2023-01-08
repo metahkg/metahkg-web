@@ -16,8 +16,8 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../lib/api";
-import { useNotification } from "../../AppContextProvider";
+import { api } from "../../lib/api";
+import { useNotification } from "../../components/AppContextProvider";
 import {
     useCurrentPage,
     useEnd,
@@ -27,9 +27,9 @@ import {
     usePages,
     useThread,
     useThreadId,
-} from "../ConversationContext";
-import { roundup } from "../../../lib/common";
-import { parseError } from "../../../lib/parseError";
+} from "../../components/conversation/ConversationContext";
+import { roundup } from "../../lib/common";
+import { parseError } from "../../lib/parseError";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();

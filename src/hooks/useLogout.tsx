@@ -15,16 +15,18 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client } from "@metahkg/api";
-import { Session } from "../types/session";
-import Axios from "axios";
+import {useSession} from "../components/AppContextProvider";
 
-const axios = Axios.create();
-
-axios.interceptors.request.use((config) => {
-    const token = (JSON.parse(localStorage.getItem("session") || "null") as Session | null)?.token;
-    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-});
-
-export const api = new Client(process.env.REACT_APP_BACKEND || "/api", axios);
+export function useLogout() {
+    const [, setSession] = useSession();
+    return function () {
+        setSession(null);
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.ready.then(async (registration) => {
+                const subscription =
+                    await registration.pushManager.getSubscription();
+                subscription?.unsubscribe();
+            });
+        }
+    }
+}

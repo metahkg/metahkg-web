@@ -24,13 +24,14 @@ import React, {
     useRef,
     useState,
 } from "react";
-import type { history } from "../types/history";
-import type { notification } from "../types/notification";
-import type { settings } from "../types/settings";
-import { api } from "../lib/api";
+import type {history} from "../types/history";
+import type {notification} from "../types/notification";
+import type {settings} from "../types/settings";
+import {api} from "../lib/api";
 import jwtDecode from "jwt-decode";
-import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User, Star, Session } from "@metahkg/api";
+import {AlertDialogProps} from "../lib/alertDialog";
+import {BlockedUser, Category, User, Star} from "@metahkg/api";
+import {Session} from "../types/session";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -50,6 +51,15 @@ export const AppContext = createContext<{
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     //@ts-ignore
 }>(null);
+
+export function loadUser(token?: string) {
+    try {
+        return jwtDecode(token || "") as User | null;
+    } catch {
+        return null;
+    }
+}
+
 /**
  * Holds global application values.
  * @param props - { children: JSX.Element }
@@ -63,24 +73,16 @@ export default function AppContextProvider(props: {
     const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
-    const [notification, setNotification] = useState({ open: false, text: "" });
+    const [notification, setNotification] = useState({open: false, text: ""});
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<settings>(
         JSON.parse(
             localStorage.getItem("settings") ||
-                JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
+            JSON.stringify({secondaryColor: {main: "#f5bd1f", dark: "#ffc100"}})
         )
     );
-    const [user, setUser] = useState(
-        (() => {
-            try {
-                return jwtDecode(localStorage.token || "") as User | null;
-            } catch {
-                return null;
-            }
-        })()
-    );
-    const [session, setSession] = useState<Session | null>(null);
+    const [session, setSession] = useState<Session | null>(JSON.parse(localStorage.getItem("session") || "null") || null);
+    const [user, setUser] = useState(loadUser(session?.token));
     const [categories, setCategories] = useState<Category[]>([]);
     const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
@@ -88,7 +90,7 @@ export default function AppContextProvider(props: {
     /** migrate from old */
     if (parsedHistory.length && !parsedHistory[0].id) {
         for (let i = 0; i < parsedHistory.length; i++) {
-            parsedHistory.push({ id: Number(parsedHistory.shift()), cid: 1, c: 1 });
+            parsedHistory.push({id: Number(parsedHistory.shift()), cid: 1, c: 1});
         }
         localStorage.setItem("history", JSON.stringify(parsedHistory));
     }
@@ -96,13 +98,13 @@ export default function AppContextProvider(props: {
     const listeningResize = useRef(false);
     const [reCaptchaSiteKey] = useState(
         props.reCaptchaSiteKey ||
-            process.env.REACT_APP_recaptchasitekey ||
-            "{RECAPTCHA_SITE_KEY}"
+        process.env.REACT_APP_recaptchasitekey ||
+        "{RECAPTCHA_SITE_KEY}"
     );
     const [alertDialog, setAlertDialog] = useState<AlertDialogProps>({
         open: false,
         setOpen: (x) => {
-            setAlertDialog({ ...alertDialog, open: x });
+            setAlertDialog({...alertDialog, open: x});
         },
         title: "",
         message: "",
@@ -144,6 +146,16 @@ export default function AppContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("settings", JSON.stringify(settings));
     }, [settings]);
+
+    useEffect(() => {
+        if (!session) {
+            localStorage.removeItem("session");
+            setUser(null);
+        } else {
+            localStorage.setItem("session", JSON.stringify(session));
+            setUser(loadUser(session.token));
+        }
+    }, [session]);
 
     useEffect(() => {
         localStorage.setItem("blocklist", JSON.stringify(blockList));
@@ -193,7 +205,7 @@ export default function AppContextProvider(props: {
  * @returns The history object and a setter function.
  */
 export function useBack() {
-    const { back } = useContext(AppContext);
+    const {back} = useContext(AppContext);
     return back;
 }
 
@@ -210,7 +222,7 @@ export function useBack() {
  * @returns The width of the window and a setter for the width of the window.
  */
 export function useWidth() {
-    const { width } = useContext(AppContext);
+    const {width} = useContext(AppContext);
     return width;
 }
 
@@ -220,7 +232,7 @@ export function useWidth() {
  * setter function for the query.
  */
 export function useQuery() {
-    const { query } = useContext(AppContext);
+    const {query} = useContext(AppContext);
     return query;
 }
 
@@ -234,7 +246,7 @@ export function useQuery() {
  * @returns The height of the window and a setter for the height of the window.
  */
 export function useHeight() {
-    const { height } = useContext(AppContext);
+    const {height} = useContext(AppContext);
     return height;
 }
 
@@ -245,7 +257,7 @@ export function useHeight() {
  * value is a function that can be used to update the state of the notification.
  */
 export function useNotification() {
-    const { notification } = useContext(AppContext);
+    const {notification} = useContext(AppContext);
     return notification;
 }
 
@@ -254,7 +266,7 @@ export function useNotification() {
  * @returns The boolean value of the settingsOpen state and a function to set the state.
  */
 export function useSettingsOpen() {
-    const { settingsOpen } = useContext(AppContext);
+    const {settingsOpen} = useContext(AppContext);
     return settingsOpen;
 }
 
@@ -263,7 +275,7 @@ export function useSettingsOpen() {
  * @returns A tuple of the settings object and a setter function.
  */
 export function useSettings() {
-    const { settings } = useContext(AppContext);
+    const {settings} = useContext(AppContext);
     return settings;
 }
 
@@ -272,46 +284,46 @@ export function useSettings() {
  * @returns The history array and a setter function.
  */
 export function useHistory() {
-    const { history } = useContext(AppContext);
+    const {history} = useContext(AppContext);
     return history;
 }
 
 export function useCategories() {
-    const { categories } = useContext(AppContext);
+    const {categories} = useContext(AppContext);
     return categories[0];
 }
 
 export function useUser() {
-    const { user } = useContext(AppContext);
+    const {user} = useContext(AppContext);
     return user;
 }
 
 export function useIsSmallScreen() {
-    const { width } = useContext(AppContext);
+    const {width} = useContext(AppContext);
     return width[0] < 760;
 }
 
 export function useReCaptchaSiteKey() {
-    const { reCaptchaSiteKey } = useContext(AppContext);
+    const {reCaptchaSiteKey} = useContext(AppContext);
     return reCaptchaSiteKey;
 }
 
 export function useAlertDialog() {
-    const { alertDialog } = useContext(AppContext);
+    const {alertDialog} = useContext(AppContext);
     return alertDialog;
 }
 
 export function useBlockList() {
-    const { blockList } = useContext(AppContext);
+    const {blockList} = useContext(AppContext);
     return blockList;
 }
 
 export function useStarList() {
-    const { starList } = useContext(AppContext);
+    const {starList} = useContext(AppContext);
     return starList;
 }
 
 export function useSession() {
-    const { session } = useContext(AppContext);
+    const {session} = useContext(AppContext);
     return session;
 }

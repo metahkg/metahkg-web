@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import {
     useNotification,
-    useReCaptchaSiteKey,
+    useReCaptchaSiteKey, useSession,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -39,7 +39,7 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import {decodeToken, setTitle} from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
@@ -58,7 +58,8 @@ export default function Reset() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [password, setPassword] = useState("");
-    const [user, setUser] = useUser();
+    const [user] = useUser();
+    const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -73,7 +74,7 @@ export default function Reset() {
         setAlert({ severity: "info", text: "Reseting..." });
         setNotification({ open: true, severity: "info", text: "Reseting..." });
         setDisabled(true);
-        api.usersReset({
+        api.authReset({
             email,
             code,
             password: hash.sha256().update(password).digest("hex"),
@@ -81,13 +82,11 @@ export default function Reset() {
             sameIp,
         })
             .then((data) => {
-                localStorage.setItem("token", data.token);
-                const user = decodeToken(data.token);
-                setUser(user);
+                setSession(data);
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${user?.name}.`,
+                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })

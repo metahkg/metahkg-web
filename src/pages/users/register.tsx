@@ -119,7 +119,7 @@ export default function Register() {
         if (!rtoken) return;
         setDisabled(true);
         setAlert({ severity: "info", text: "Registering..." });
-        api.usersRegister({
+        api.authRegister({
             email,
             name,
             password: hash.sha256().update(password).digest("hex"),
