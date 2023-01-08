@@ -59,7 +59,7 @@ export default function Verify() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [user] = useUser();
-    const [session, setSession] = useSession();
+    const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
