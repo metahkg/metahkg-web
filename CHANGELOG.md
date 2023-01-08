@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.9.0
+
+- forgot / reset password
+
 ## v5.8.0
 
 - *WARNING*: Please change your recaptcha type to v2 invisible at [recaptcha admin panel](https://www.google.com/recaptcha/admin) before upgrading to this version
