@@ -1677,10 +1677,10 @@
   dependencies:
     axios "^1.1.2"
 
-"@metahkg/react-link-preview@1.15.6":
-  version "1.15.6"
-  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.15.6.tgz#0de19b934d65c56c3f555280569b0bac0005d841"
-  integrity sha512-wggl9SyEjbF1vrxPa1/SZaJRRfBX4gPSwLH5U8MLVl4nNDkluaVsyqvFuq6KxsSeVLJw+TnajS6Ekv2438YjwQ==
+"@metahkg/react-link-preview@1.15.7-1":
+  version "1.15.7-1"
+  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.15.7-1.tgz#84754f14e2765cab3feb14c3c22e49bbf9c3fd25"
+  integrity sha512-F1ErNOgDIg+yjSiohOODr7s2hLiyBZnkE9wcQVOZ6FYVLgBYcrsazKtIRk3pmUqAt8KPThHHI/on11vnxtUMiw==
   dependencies:
     "@metahkg/rlp-proxy-rewrite-api" "^1.0.0"
     react-loading-skeleton "^3.1.0"
