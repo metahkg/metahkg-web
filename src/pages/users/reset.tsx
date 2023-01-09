@@ -29,13 +29,12 @@ import {
     useNotification,
     useReCaptchaSiteKey,
     useSession,
-    useUser,
     useWidth,
 } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
@@ -59,7 +58,6 @@ export default function Reset() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [password, setPassword] = useState("");
-    const [user] = useUser();
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
@@ -109,9 +107,7 @@ export default function Reset() {
     useLayoutEffect(() => {
         setTitle("Reset password | Metahkg");
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
-
-    if (user) return <Navigate to="/" replace />;
+    }, [menu, setMenu]);
 
     return (
         <Box
