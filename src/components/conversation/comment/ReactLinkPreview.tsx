@@ -58,6 +58,7 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 backgroundColor="#333"
                 primaryTextColor="white"
                 secondaryTextColor="#aca9a9"
+                titleLength={50}
                 descriptionLength={60}
                 fetcher={async (url: string) => {
                     try {
