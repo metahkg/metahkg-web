@@ -18,7 +18,7 @@
     "@emotion/styled": "^11.10.5",
     "@fontsource/ibm-plex-sans": "^4.5.13",
     "@loadable/component": "^5.15.2",
-    "@metahkg/api": "^6.0.0-dev",
+    "@metahkg/api": "^6.1.0-dev",
     "@metahkg/react-link-preview": "1.15.6",
     "@metahkg/rlp-proxy-rewrite-api": "^1.0.2",
     "@mui/icons-material": "^5.10.9",
