@@ -27,7 +27,8 @@ import {
 } from "@mui/material";
 import {
     useNotification,
-    useReCaptchaSiteKey, useSession,
+    useReCaptchaSiteKey,
+    useSession,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -39,7 +40,7 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import {decodeToken, setTitle} from "../../lib/common";
+import { decodeToken, setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";

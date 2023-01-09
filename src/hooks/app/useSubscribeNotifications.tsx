@@ -16,7 +16,7 @@
  */
 
 import { useEffect } from "react";
-import {useUser} from "../../components/AppContextProvider";
+import { useUser } from "../../components/AppContextProvider";
 import { api } from "../../lib/api";
 import { checkNotificationPromise } from "../../lib/checkNotificationPromise";
 

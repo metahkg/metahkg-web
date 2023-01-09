@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {useSession} from "../components/AppContextProvider";
+import { useSession } from "../components/AppContextProvider";
 
 export function useLogout() {
     const [, setSession] = useSession();
@@ -23,10 +23,9 @@ export function useLogout() {
         setSession(null);
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.ready.then(async (registration) => {
-                const subscription =
-                    await registration.pushManager.getSubscription();
+                const subscription = await registration.pushManager.getSubscription();
                 subscription?.unsubscribe();
             });
         }
-    }
+    };
 }

@@ -18,23 +18,23 @@
 import "./css/App.css";
 import "@fontsource/ibm-plex-sans";
 import Theme from "./theme";
-import {BrowserRouter as Router} from "react-router-dom";
-import MenuProvider, {useMenu} from "./components/MenuProvider";
-import {Box} from "@mui/material";
+import { BrowserRouter as Router } from "react-router-dom";
+import MenuProvider, { useMenu } from "./components/MenuProvider";
+import { Box } from "@mui/material";
 import AppContextProvider, {
     useSettings,
     useSettingsOpen,
     useIsSmallScreen,
     useAlertDialog,
 } from "./components/AppContextProvider";
-import {Notification as SnackBar} from "./lib/notification";
+import { Notification as SnackBar } from "./lib/notification";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
 import ErrorBoundary from "./ErrorBoundary";
-import {useCheckSession} from "./hooks/app/useCheckSession";
-import {useRegisterServiceWorker} from "./hooks/app/useRegisterServiceWorker";
-import {useSubscribeNotifications} from "./hooks/app/useSubscribeNotifications";
+import { useCheckSession } from "./hooks/app/useCheckSession";
+import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
+import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -53,13 +53,13 @@ function App() {
 
     return (
         <Theme
-            primary={{main: "#222"}}
-            secondary={settings.secondaryColor || {main: "#f5bd1f", dark: "#ffc100"}}
+            primary={{ main: "#222" }}
+            secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
             <AlertDialog {...alertDialog} />
-            <SnackBar/>
-            <Settings open={settingsOpen} setOpen={setSettingsOpen}/>
-            <Box className="max-h-screen h-screen" sx={{bgcolor: "primary.dark"}}>
+            <SnackBar />
+            <Settings open={settingsOpen} setOpen={setSettingsOpen} />
+            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
                 <ErrorBoundary>
                     <Router>
                         <Box className="flex">
@@ -69,9 +69,9 @@ function App() {
                                     (isSmallScreen ? "w-100v" : "w-30v")
                                 }
                             >
-                                <Menu/>
+                                <Menu />
                             </Box>
-                            <Routes/>
+                            <Routes />
                         </Box>
                     </Router>
                 </ErrorBoundary>
@@ -81,13 +81,13 @@ function App() {
 }
 
 export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
-    const {reCaptchaSiteKey} = props;
+    const { reCaptchaSiteKey } = props;
     return (
         <ErrorBoundary>
             <AppContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
                 <MenuProvider>
                     <ErrorBoundary>
-                        <App/>
+                        <App />
                     </ErrorBoundary>
                 </MenuProvider>
             </AppContextProvider>

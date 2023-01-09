@@ -15,12 +15,16 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ErrorDto} from "@metahkg/api";
-import {useEffect} from "react";
-import {useNotification, useSession, useUser} from "../../components/AppContextProvider";
+import { ErrorDto } from "@metahkg/api";
+import { useEffect } from "react";
+import {
+    useNotification,
+    useSession,
+    useUser,
+} from "../../components/AppContextProvider";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
-import {useLogout} from "../useLogout";
+import { useLogout } from "../useLogout";
 
 export function useCheckSession() {
     const [user] = useUser();
@@ -43,18 +47,19 @@ export function useCheckSession() {
                                 setNotification({
                                     open: true,
                                     severity: "error",
-                                    text: "Failed to refresh session: " + parseError(data),
+                                    text:
+                                        "Failed to refresh session: " + parseError(data),
                                 });
                             }
                         });
-                    } else {
-                        setNotification({
-                            open: true,
-                            severity: "error",
-                            text: parseError(data),
-                        });
-                    }
-                });
+                } else {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(data),
+                    });
+                }
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
