@@ -17,8 +17,9 @@ stages:
 
 lint:
   stage: lint
-  image: node:18
+  image: node:18-alpine
   before_script:
+    - apk add git
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
     - git config user.email bot@metahkg.org
@@ -89,7 +90,7 @@ tagging:
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
 
 publish:
-  image: node:latest
+  image: node:18-alpine
   stage: deploy
   allow_failure: true
   script:
