@@ -41,11 +41,12 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import { loadUser } from "../../lib/jwt";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -81,7 +82,7 @@ export default function Verify() {
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
+                    text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })

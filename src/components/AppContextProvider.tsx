@@ -28,10 +28,10 @@ import type { history } from "../types/history";
 import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import { api } from "../lib/api";
-import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
 import { BlockedUser, Category, User, Star } from "@metahkg/api";
 import { Session } from "../types/session";
+import { loadUser } from "../lib/jwt";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -43,22 +43,15 @@ export const AppContext = createContext<{
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<Category[]>];
+    serverPublicKey: [string, Dispatch<SetStateAction<string>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
-    //@ts-ignore
+    // @ts-ignore
 }>(null);
-
-export function loadUser(token?: string) {
-    try {
-        return jwtDecode(token || "") as User | null;
-    } catch {
-        return null;
-    }
-}
 
 /**
  * Holds global application values.
@@ -80,6 +73,9 @@ export default function AppContextProvider(props: {
             localStorage.getItem("settings") ||
                 JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
         )
+    );
+    const [serverPublicKey, setServerPublicKey] = useState<string>(
+        localStorage.getItem("serverPublicKey") || ""
     );
     const [session, setSession] = useState<Session | null>(
         JSON.parse(localStorage.getItem("session") || "null") || null
@@ -126,6 +122,10 @@ export default function AppContextProvider(props: {
     }, []);
 
     useEffect(() => {
+        api.serverPublicKey().then(setServerPublicKey);
+    }, []);
+
+    useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
             setInterval(() => {
@@ -152,6 +152,10 @@ export default function AppContextProvider(props: {
     }, [settings]);
 
     useEffect(() => {
+        localStorage.setItem("serverPublicKey", serverPublicKey);
+    }, [serverPublicKey]);
+
+    useEffect(() => {
         if (!session) {
             localStorage.removeItem("session");
             setUser(null);
@@ -159,7 +163,7 @@ export default function AppContextProvider(props: {
             localStorage.setItem("session", JSON.stringify(session));
             setUser(loadUser(session.token));
         }
-    }, [session]);
+    }, [session, serverPublicKey]);
 
     useEffect(() => {
         localStorage.setItem("categories", JSON.stringify(categories));
@@ -195,6 +199,7 @@ export default function AppContextProvider(props: {
                 settings: [settings, setSettings],
                 history: [history, setHistory],
                 categories: [categories, setCategories],
+                serverPublicKey: [serverPublicKey, setServerPublicKey],
                 user: [user, setUser],
                 session: [session, setSession],
                 reCaptchaSiteKey,
@@ -334,4 +339,9 @@ export function useStarList() {
 export function useSession() {
     const { session } = useContext(AppContext);
     return session;
+}
+
+export function useServerPublicKey() {
+    const { serverPublicKey } = useContext(AppContext);
+    return serverPublicKey;
 }

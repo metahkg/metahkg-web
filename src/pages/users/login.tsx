@@ -42,11 +42,12 @@ import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
 import { Login as LoginIcon } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import { loadUser } from "../../lib/jwt";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -107,7 +108,7 @@ export default function Login() {
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
+                    text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
             })
             .catch((err) => {

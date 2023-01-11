@@ -39,11 +39,12 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
+import { loadUser } from "../../lib/jwt";
 
 export default function Reset() {
     const [menu, setMenu] = useMenu();
@@ -85,7 +86,7 @@ export default function Reset() {
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${decodeToken(data.token)?.name}.`,
+                    text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })
