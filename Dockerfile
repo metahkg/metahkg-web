@@ -45,14 +45,15 @@ WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
-RUN if [ "${env}" != "dev" ]; then yarn install; fi;
+RUN yarn install
 
 COPY ./src ./src
 COPY ./public ./public
 COPY ./scripts ./scripts
 COPY ./.babelrc ./config-overrides.js ./
 
-RUN if [ "${env}" = "dev" ]; then mkdir -p build; else yarn build; fi;
+RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules/*; fi;
+RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js postcss.config.js tailwind.config.js; fi;
 
 FROM node:18-alpine
 
@@ -84,15 +85,17 @@ ENV env $env
 
 ENV REACT_APP_ENV $env
 
-COPY --from=build /app/build ./build
+COPY --from=build /app/build* ./build
+COPY --from=build /app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
-COPY ./package.json ./yarn.lock ./tsconfig.json ./.babelrc ./config-overrides.js ./serve.json  ./postcss.config.js ./tailwind.config.js ./start.sh ./
+COPY --from=build /app/package.json /app/yarn.lock* /app/tsconfig.json* /app/.babelrc* /app/config-overrides.js* /app/postcss.config.js* /app/tailwind.config.js*  ./
+COPY ./serve.json ./start.sh ./
 
-RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js; yarn global add serve; else yarn install; fi;
+RUN if [ "${env}" != "dev" ]; then yarn global add serve; fi;
 
-RUN mkdir -p node_modules && chown node:node -Rf /app
+RUN chown node:node -Rf /app
 
 USER node
 
