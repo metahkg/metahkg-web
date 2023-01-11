@@ -16,7 +16,7 @@
  */
 
 import React from "react";
-import { toJSON } from "@wc-yat/csstojson/dist/toJSON";
+import { toJSON } from "@metahkg/csstojson/dist/toJSON";
 import { format } from "prettier/standalone";
 import prettierCss from "prettier/parser-postcss";
 
