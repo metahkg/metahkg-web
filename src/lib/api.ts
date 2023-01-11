@@ -17,7 +17,7 @@
 
 import { Client } from "@metahkg/api";
 import { Session } from "../types/session";
-import Axios from "axios";
+import Axios, { AxiosHeaders } from "axios";
 
 const axios = Axios.create();
 
@@ -25,7 +25,12 @@ axios.interceptors.request.use((config) => {
     const token = (
         JSON.parse(localStorage.getItem("session") || "null") as Session | null
     )?.token;
-    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+        if (config.headers instanceof AxiosHeaders) {
+            // see https://github.com/axios/axios/pull/5224
+            config.headers = config.headers.concat({ Authorization: `Bearer ${token}` });
+        }
+    }
     return config;
 });
 
