@@ -33,35 +33,40 @@ export function useCheckSession() {
     const logout = useLogout();
     useEffect(() => {
         if (user && session) {
-            api.authSessionCurrent().catch(async (data?: ErrorDto) => {
-                if (data?.statusCode === 401) {
-                    await api
-                        .authSessionsRefresh(session.id, {
-                            refreshToken: session.refreshToken,
-                        })
-                        .then(({ token, refreshToken }) => {
-                            setSession({ ...session, token, refreshToken });
-                        })
-                        .catch(async (data?: ErrorDto) => {
-                            if ([401, 403, 404].includes(data?.statusCode || 0)) {
-                                logout();
-                            } else {
-                                setNotification({
-                                    open: true,
-                                    severity: "error",
-                                    text:
-                                        "Failed to refresh session: " + parseError(data),
-                                });
-                            }
+            api.authSessionCurrent()
+                .then((data) => {
+                    setSession({ ...session, ...data });
+                })
+                .catch(async (data?: ErrorDto) => {
+                    if (data?.statusCode === 401) {
+                        await api
+                            .authSessionsRefresh(session.id, {
+                                refreshToken: session.refreshToken,
+                            })
+                            .then(({ token, refreshToken }) => {
+                                setSession({ ...session, token, refreshToken });
+                            })
+                            .catch(async (data?: ErrorDto) => {
+                                if ([401, 403, 404].includes(data?.statusCode || 0)) {
+                                    logout();
+                                } else {
+                                    setNotification({
+                                        open: true,
+                                        severity: "error",
+                                        text:
+                                            "Failed to refresh session: " +
+                                            parseError(data),
+                                    });
+                                }
+                            });
+                    } else {
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(data),
                         });
-                } else {
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(data),
-                    });
-                }
-            });
+                    }
+                });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
