@@ -82,14 +82,12 @@ export default function Create() {
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
                     if (data) {
-                        setInittext(
-                          /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0">
+                        setInittext(/*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0">
                                         <div style="margin-left: 15px">
                                             ${data.comment}
                                         </div>
                                     </blockquote>
-                                    <p></p>`
-                        );
+                                    <p></p>`);
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
                             if (notification.open)
