@@ -40,7 +40,7 @@ export function useCheckSession() {
                 .catch(async (data?: ErrorDto) => {
                     if (data?.statusCode === 401) {
                         await api
-                            .authSessionsRefresh(session.id, {
+                            .authSessionRefresh(session.id, {
                                 refreshToken: session.refreshToken,
                             })
                             .then(({ token, refreshToken }) => {
