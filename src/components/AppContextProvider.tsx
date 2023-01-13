@@ -128,16 +128,19 @@ export default function AppContextProvider(props: {
     useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
-            setInterval(() => {
-                api.meBlocked().then(setBlockList);
-            }, 1000 * 60 * 10);
-
             api.meStarred().then(setStarList);
-            setInterval(() => {
-                api.meStarred().then(setStarList);
-            }, 1000 * 60 * 10);
         }
-    }, [user]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.id]);
+
+    useEffect(() => {
+        setInterval(() => {
+            api.meBlocked().then(setBlockList);
+        }, 1000 * 60 * 10);
+        setInterval(() => {
+            api.meStarred().then(setStarList);
+        }, 1000 * 60 * 10);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem("history", JSON.stringify(history));
@@ -161,9 +164,14 @@ export default function AppContextProvider(props: {
             setUser(null);
         } else {
             localStorage.setItem("session", JSON.stringify(session));
+        }
+    }, [session]);
+
+    useEffect(() => {
+        if (session?.token) {
             setUser(loadUser(session.token));
         }
-    }, [session, serverPublicKey]);
+    }, [session?.token]);
 
     useEffect(() => {
         localStorage.setItem("categories", JSON.stringify(categories));
