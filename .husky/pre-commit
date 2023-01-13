@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 fileList=$(git diff --diff-filter=d --cached --name-only | grep src/ | tr '\n' ' ' | xargs)
-lintFileList=$(echo $fileList | tr ' ' '\n' | grep -E '\.(ts|js)$' | tr '\n' ' ' | xargs)
+lintFileList=$(echo $fileList | tr ' ' '\n' | grep -E '\.(ts|tsx|js)$' | tr '\n' ' ' | xargs)
 
 # test for errors
 if [ "$fileList" != "" ];
