@@ -143,7 +143,7 @@ function Conversation(props: { id: number }) {
     return useMemo(
         () => (
             <Box
-                className="min-h-screen conversation-root flex flex-col relative"
+                className="min-h-screen flex flex-col relative"
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
