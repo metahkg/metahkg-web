@@ -49,7 +49,7 @@ export default function Category() {
     const isSmallScreen = useIsSmallScreen();
     const [, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
-    const categories = useCategories();
+    const [categories] = useCategories();
 
     useLayoutEffect(() => {
         const categoryName = categories.find((i) => i.id === category)?.name;

@@ -37,7 +37,7 @@ export default function MenuThread(props: {
     const [id] = useId();
     const [history] = useHistory();
     const [menuMode] = useMenuMode();
-    const categories = useCategories();
+    const [categories] = useCategories();
     const { thread, onClick } = props;
     const commentId = history.find((i) => i.id === thread.id)?.cid;
 

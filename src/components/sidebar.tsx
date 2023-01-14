@@ -58,7 +58,7 @@ export default function SideBar() {
     const [menuMode] = useMenuMode();
     const [, setSettingsOpen] = useSettingsOpen();
     const [user] = useUser();
-    const categories = useCategories();
+    const [categories] = useCategories();
 
     const navigate = useNavigate();
 

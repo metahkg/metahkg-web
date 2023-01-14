@@ -42,7 +42,7 @@ export const AppContext = createContext<{
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
-    categories: [Category[], Dispatch<Category[]>];
+    categories: [Category[], Dispatch<SetStateAction<Category[]>>];
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
@@ -311,7 +311,7 @@ export function useHistory() {
 
 export function useCategories() {
     const { categories } = useContext(AppContext);
-    return categories[0];
+    return categories;
 }
 
 export function useUser() {
