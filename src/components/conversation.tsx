@@ -143,7 +143,7 @@ function Conversation(props: { id: number }) {
     return useMemo(
         () => (
             <Box
-                className="min-h-screen conversation-root"
+                className="min-h-screen conversation-root flex flex-col relative"
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
@@ -179,7 +179,12 @@ function Conversation(props: { id: number }) {
                             }}
                         />
                     )}
-                    {loading && <LinearProgress className="w-full" color="secondary" />}
+                    {loading && (
+                        <LinearProgress
+                            className="w-full !absolute !top-0 !right-0"
+                            color="secondary"
+                        />
+                    )}
                     <Title
                         category={thread?.category}
                         title={thread?.title}
@@ -190,13 +195,8 @@ function Conversation(props: { id: number }) {
                         ref={cRoot}
                         key={Number(reRender)}
                         className={`overflow-auto !bg-none !shadow-none ${
-                            (thread?.pin &&
-                                (loading
-                                    ? "max-h-[calc(100vh-101px)]"
-                                    : "max-h-[calc(100vh-97px)]")) ||
-                            (loading
-                                ? "max-h-[calc(100vh-51px)]"
-                                : "max-h-[calc(100vh-47px)]")
+                            (thread?.pin && "max-h-[calc(100vh-97px)]") ||
+                            "max-h-[calc(100vh-47px)]"
                         }`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}
