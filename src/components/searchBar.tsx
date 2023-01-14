@@ -118,6 +118,9 @@ export default function SearchBar(props: {
                         "& span": {
                             overflow: "visible !important",
                         },
+                        "& .MuiTouchRipple-root": {
+                            display: "none",
+                        },
                     }}
                     className="!mr-[10px] !h-[24px] !min-w-[45px]"
                 />
