@@ -91,7 +91,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY ./scripts ./scripts
 
 COPY --from=build /app/package.json /app/yarn.lock* /app/tsconfig.json* /app/.babelrc* /app/config-overrides.js* /app/postcss.config.js* /app/tailwind.config.js*  ./
-COPY ./serve.json ./start.sh ./
+COPY ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then yarn global add serve; fi;
 
@@ -99,4 +99,4 @@ RUN chown node:node -Rf /app
 
 USER node
 
-CMD sh start.sh
+CMD yarn start

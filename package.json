@@ -86,7 +86,7 @@
     "@svgr/webpack": "^6.5.1"
   },
   "scripts": {
-    "start": "./start.sh",
+    "start": "./scripts/start.sh",
     "start:react": ". ./scripts/prebuild.sh; npx react-app-rewired start",
     "build": ". ./scripts/prebuild.sh; npx react-app-rewired build",
     "build:module": ". ./scripts/prebuild.sh; tsc src/App.tsx --outDir ./dist --declaration --sourceMap --jsx react-jsx --target es2017 --module esnext --lib dom,dom.iterable,esnext --moduleResolution node --esModuleInterop --skipLibCheck --removeComments --resolveJsonModule && cp -r src/css dist",
