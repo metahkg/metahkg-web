@@ -70,7 +70,7 @@ export function PopUp(props: {
                     bgcolor: "primary.main",
                     ...sx,
                 },
-                className: className,
+                className: `!rounded-[10px] ${className}`,
             }}
             fullWidth={fullWidth}
             onClose={handleClose}
