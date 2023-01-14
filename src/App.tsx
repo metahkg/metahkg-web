@@ -35,6 +35,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import { useCheckSession } from "./hooks/app/useCheckSession";
 import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
 import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
+import SidePanel from "./components/sidePanel";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -63,6 +64,7 @@ function App() {
                 <ErrorBoundary>
                     <Router>
                         <Box className="flex">
+                            {!isSmallScreen && <SidePanel />}
                             <Box
                                 className={
                                     (!menu && "hidden") ||

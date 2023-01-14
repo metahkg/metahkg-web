@@ -15,16 +15,27 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Box } from "@mui/material";
 import React, { useLayoutEffect } from "react";
+import { useIsSmallScreen } from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
 export default function DisableMenu(props: { children: React.ReactNode }) {
     const { children } = props;
     const [menu, setMenu] = useMenu();
+    const isSmallScreen = useIsSmallScreen();
 
     useLayoutEffect(() => {
         menu && setMenu(false);
     }, [menu, setMenu]);
 
-    return <React.Fragment>{children}</React.Fragment>;
+    return (
+        <Box
+            className={`max-h-screen h-screen ${
+                isSmallScreen ? "w-100v" : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
+            } overflow-scroll`}
+        >
+            {children}
+        </Box>
+    );
 }

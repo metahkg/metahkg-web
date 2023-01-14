@@ -64,10 +64,9 @@ export default function Template() {
     const [user] = useUser();
     return (
         <Paper
-            className="overflow-auto justify-center flex max-h-screen"
+            className="overflow-auto justify-center flex h-screen w-full"
             sx={{
                 bgcolor: "primary.dark",
-                width: "70vw",
             }}
         >
             <Box className="w-full m-[50px]">

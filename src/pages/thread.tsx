@@ -52,7 +52,7 @@ export default function Thread() {
                 backgroundColor: "primary.dark",
             }}
         >
-            <Box style={{ width: isSmallScreen ? "100vw" : "70vw" }}>
+            <Box className="w-full">
                 <ConversationProvider key={threadId} threadId={threadId}>
                     <ShareProvider>
                         <Conversation key={threadId} id={threadId} />

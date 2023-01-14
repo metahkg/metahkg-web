@@ -16,6 +16,7 @@
  */
 
 import React, { useLayoutEffect } from "react";
+import { Box } from "@mui/material";
 import { useIsSmallScreen } from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
@@ -32,5 +33,19 @@ export default function EnableMenu(props: {
         if (menu && noSmallScreen && isSmallScreen) setMenu(false);
     }, [isSmallScreen, menu, noSmallScreen, setMenu]);
 
-    return <React.Fragment>{children}</React.Fragment>;
+    return (
+        <Box
+            className={`max-h-screen h-screen ${
+                menu
+                    ? isSmallScreen
+                        ? "w-0"
+                        : "w-[calc(70vw-50px)] max-w-[calc(70vw-50px)]"
+                    : isSmallScreen
+                    ? "w-100v"
+                    : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
+            } overflow-scroll`}
+        >
+            {children}
+        </Box>
+    );
 }
