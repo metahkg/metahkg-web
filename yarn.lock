@@ -1678,10 +1678,10 @@
   resolved "https://registry.yarnpkg.com/@metahkg/csstojson/-/csstojson-3.0.1.tgz#c22d60f4bea465a0f5f0e85a4c2e29782c24a63a"
   integrity sha512-Kb///+FDYfOehXwvtJRwJbw6pyJzpqDpKxzaJWhVvMQuX9Uf2tQus+zro1sWJ1mEbREgWtonxvwAb0TjhcyFwQ==
 
-"@metahkg/react-link-preview@^1.15.8":
-  version "1.15.12"
-  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.15.12.tgz#8cc41a6c5b6d3b6b654ee6a9bff52bcfd693ad27"
-  integrity sha512-9+JpUfZKMkUI8b62eqoZOq1z6J/4xj2IeKOuwHtUFJUOq2NBs886Ylzfo/QE8ZNK22OiYVXWgycgN+InLFutnQ==
+"@metahkg/react-link-preview@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@metahkg/react-link-preview/-/react-link-preview-1.16.0.tgz#644d421a9f4a4254e620e7545adbdeae487c06bf"
+  integrity sha512-dzs3JCV1opSctmc4DYhO5Jy+xgIGrZ1IhtDjqLX3+ZGr/76uSmdqDuxryV+fpVpkUIxWTd6lMQiRY61GcbJDYQ==
   dependencies:
     "@metahkg/rlp-proxy-rewrite-api" "^5.9.0"
     react-loading-skeleton "^3.1.0"
