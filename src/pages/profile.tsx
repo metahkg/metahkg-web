@@ -72,7 +72,11 @@ export default function Profile() {
                 .then((data) => {
                     setReqUser(data);
                     setTitle(`${data.name} | Metahkg`);
-                    setAvatarSrc(`/api/users/${data?.id}/avatar`);
+                    setAvatarSrc(
+                        `${process.env.REACT_APP_BACKEND || "/api"}/users/${
+                            data.id
+                        }/avatar`
+                    );
                 })
                 .catch((err) => {
                     setNotification({
@@ -126,9 +130,7 @@ export default function Profile() {
 
     return (
         <Box
-            className={`max-h-screen h-screen overflow-auto ${
-                isSmallScreen ? "w-100v" : "w-70v"
-            }`}
+            className="max-h-screen h-screen overflow-auto w-full"
             sx={{
                 backgroundColor: "primary.dark",
             }}
@@ -146,7 +148,7 @@ export default function Profile() {
                             avatarOriginal={uploadedAvatarOriginal}
                             onSuccess={() => {
                                 setAvatarSrc(
-                                    `/api/users/${
+                                    `${process.env.REACT_APP_BACKEND || "/api"}/users/${
                                         reqUser.id
                                     }/avatar?rand=${Math.random()}`
                                 );
@@ -154,9 +156,9 @@ export default function Profile() {
                         />
                     )}
                     <Box
-                        className={`flex justify-center items-center max-w-full !mt-[20px] ${
-                            isSmallScreen ? "w-100v" : "w-70v"
-                        }`}
+                        className={
+                            "flex justify-center items-center max-w-full !mt-[20px] w-full"
+                        }
                     >
                         <Avatar
                             src={avatarSrc}
@@ -175,8 +177,8 @@ export default function Profile() {
                                 <Box
                                     className={`overflow-hidden ${
                                         isSmallScreen
-                                            ? "max-w-[calc(100vw-250px)]"
-                                            : "max-w-[calc(70vw-350px)]"
+                                            ? "max-w-[calc(100vw-50px-250px)]"
+                                            : "max-w-[calc(70vw-50px-350px)]"
                                     }`}
                                 >
                                     <span
