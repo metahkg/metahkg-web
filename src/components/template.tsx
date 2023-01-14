@@ -89,7 +89,7 @@ export default function Template() {
                     <ListItemButton
                         component={Link}
                         className="!no-underline text-white w-full"
-                        to={`/${
+                        href={`/${
                             user ? "users/logout" : "users/login"
                         }?returnto=${encodeURIComponent(wholePath())}`}
                     >
@@ -103,7 +103,7 @@ export default function Template() {
                     {user && (
                         <ListItemButton
                             component={Link}
-                            to={`/profile/${user?.id}`}
+                            href={`/profile/${user?.id}`}
                             className="w-full !no-underline text-white"
                         >
                             <ListItemIcon>
@@ -117,7 +117,7 @@ export default function Template() {
                         <ListItemButton
                             key={index}
                             component={Link}
-                            to={link.link}
+                            href={link.link}
                             className="w-full !no-underline text-white"
                         >
                             <ListItemIcon>{link.icon}</ListItemIcon>
