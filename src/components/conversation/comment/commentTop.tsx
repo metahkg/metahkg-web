@@ -408,7 +408,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                         className="cursor-pointer flex overflow-hidden"
                     >
                         <p className={"!my-0 !ml-[5px] text-metahkg-grey"}>:</p>
-                        <p className="!my-0 comment-body !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
+                        <p className="!my-0 !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
                             {settings.filterSwearWords
                                 ? filterSwearWords(comment.text)
                                 : comment.text}

@@ -97,9 +97,9 @@ export default function CommentBody(props: {
                         }}
                     />
                     {showQuote ? (
-                        <div className="comment-body w-full">
+                        <Box className="w-full">
                             <CommentBody comment={comment.quote} depth={depth + 1} />
-                        </div>
+                        </Box>
                     ) : (
                         <Button
                             variant="outlined"
