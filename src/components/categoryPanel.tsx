@@ -29,7 +29,9 @@ export function CategoryPanel(props: {
     }, [] as string[]);
 
     const pinned = categories.filter((category) => category.pinned);
-    const others = categories.filter((category) => !category.tags?.length);
+    const others = categories.filter(
+        (category) => !category.tags?.length && !category.pinned
+    );
 
     const toggleDrawer = useCallback(
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
