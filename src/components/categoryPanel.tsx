@@ -60,7 +60,7 @@ export function CategoryPanel(props: {
                     className={`${
                         currentCategory === category.id
                             ? "text-metahkg-yellow"
-                            : "text-white"
+                            : "text-metahkg-grey"
                     } hover:text-metahkg-yellow`}
                 >
                     {category.name}
@@ -91,7 +91,7 @@ export function CategoryPanel(props: {
                     {pinned.map(CategoryEle)}
                     {tags.map((tag) => (
                         <Box key={tag}>
-                            <h4 className="text-metahkg-grey">{tag}</h4>
+                            <h4>{tag}</h4>
                             {categories
                                 .filter((category) => category.tags?.includes(tag))
                                 .map(CategoryEle)}
@@ -99,7 +99,7 @@ export function CategoryPanel(props: {
                     ))}
                     {Boolean(others.length) && (
                         <Box>
-                            <h4 className="text-metahkg-grey">Others</h4>
+                            <h4>Others</h4>
                             {others.map(CategoryEle)}
                         </Box>
                     )}
