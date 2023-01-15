@@ -179,7 +179,7 @@ export default function Register() {
 
     return (
         <Box
-            className="min-h-screen flex w-full h-full justify-center items-center"
+            className="min-h-screen flex w-full justify-center items-center"
             sx={{
                 backgroundColor: "primary.dark",
             }}
