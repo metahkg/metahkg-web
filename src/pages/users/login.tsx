@@ -138,7 +138,7 @@ export default function Login() {
                 component="form"
                 onSubmit={onSubmit}
             >
-                <Box className="mx-[50px]">
+                <Box className="m-[50px]">
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             height={50}

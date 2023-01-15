@@ -185,7 +185,7 @@ export default function Register() {
             }}
         >
             <Box className={`min-h-50v ${small ? "w-100v" : "w-50v"}`}>
-                <Box component="form" onSubmit={onSubmit} className="m-[40px]">
+                <Box component="form" onSubmit={onSubmit} className="m-[50px]">
                     {query.returnto && (
                         <Box className="flex items-center justify-end">
                             <IconButton
