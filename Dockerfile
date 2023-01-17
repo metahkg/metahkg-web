@@ -45,6 +45,10 @@ WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
+RUN chown -Rf node:node /app
+
+USER node
+
 RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY ./src ./src
@@ -95,7 +99,7 @@ COPY ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then yarn global add serve --network-timeout 1000000; fi;
 
-RUN chown node:node -Rf /app
+RUN chown node:node /app
 
 USER node
 
