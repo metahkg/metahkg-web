@@ -104,7 +104,7 @@ export default function TextEditor(props: {
                                         formData.append("file", file);
                                         axios
                                             .post(
-                                                `https://${process.env.REACT_APP_IMAGES_DOMAIN}/upload`,
+                                                `${imagesApi}/upload`,
                                                 formData,
                                                 {
                                                     headers: {
@@ -221,7 +221,7 @@ export default function TextEditor(props: {
                         const formData = new FormData();
                         formData.append("file", blobInfo.blob());
                         const { data } = await axios.post(
-                            `https://${process.env.REACT_APP_IMAGES_DOMAIN}/upload`,
+                            `${imagesApi}/upload`,
                             formData,
                             {
                                 headers: {
