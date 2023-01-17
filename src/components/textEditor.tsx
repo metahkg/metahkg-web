@@ -22,7 +22,7 @@ import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
 import { useSession } from "./AppContextProvider";
-import { imagesApi } from "../lib/common"
+import { imagesApi } from "../lib/common";
 
 export default function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
@@ -103,17 +103,12 @@ export default function TextEditor(props: {
                                         const formData = new FormData();
                                         formData.append("file", file);
                                         axios
-                                            .post(
-                                                `${imagesApi}/upload`,
-                                                formData,
-                                                {
-                                                    headers: {
-                                                        "Content-Type":
-                                                            "multipart/form-data",
-                                                        Authorization: `Bearer ${session?.token}`,
-                                                    },
-                                                }
-                                            )
+                                            .post(`${imagesApi}/upload`, formData, {
+                                                headers: {
+                                                    "Content-Type": "multipart/form-data",
+                                                    Authorization: `Bearer ${session?.token}`,
+                                                },
+                                            })
                                             .then((res) => {
                                                 editor.windowManager.close();
                                                 editor.insertContent(
