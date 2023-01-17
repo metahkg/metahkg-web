@@ -45,7 +45,7 @@ WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./tsconfig.json ./postcss.config.js ./tailwind.config.js ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY ./src ./src
 COPY ./public ./public
@@ -93,7 +93,7 @@ COPY ./scripts ./scripts
 COPY --from=build /app/package.json /app/yarn.lock* /app/tsconfig.json* /app/.babelrc* /app/config-overrides.js* /app/postcss.config.js* /app/tailwind.config.js*  ./
 COPY ./serve.json ./
 
-RUN if [ "${env}" != "dev" ]; then yarn global add serve; fi;
+RUN if [ "${env}" != "dev" ]; then yarn global add serve --network-timeout 1000000; fi;
 
 RUN chown node:node -Rf /app
 
