@@ -99,7 +99,7 @@ COPY ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then yarn global add serve --network-timeout 1000000; fi;
 
-RUN chown node:node /app
+RUN chown -f node:node /app /app/build/**/*
 
 USER node
 
