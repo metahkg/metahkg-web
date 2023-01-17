@@ -22,6 +22,7 @@ import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
 import { useSession } from "./AppContextProvider";
+import { imagesApi } from "../lib/common"
 
 export default function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
