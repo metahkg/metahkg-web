@@ -16,7 +16,7 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../lib/api";
+import { api } from "../../lib/api";
 import {
     useCurrentPage,
     useEnd,
@@ -26,7 +26,7 @@ import {
     useThread,
     useThreadId,
     useUpdating,
-} from "../ConversationContext";
+} from "../../components/conversation/ConversationContext";
 
 export function useUpdate() {
     const [, setUpdating] = useUpdating();

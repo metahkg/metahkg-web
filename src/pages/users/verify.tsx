@@ -29,6 +29,7 @@ import {
 import {
     useNotification,
     useReCaptchaSiteKey,
+    useSession,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -40,11 +41,12 @@ import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import { loadUser } from "../../lib/jwt";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -58,7 +60,8 @@ export default function Verify() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
-    const [user, setUser] = useUser();
+    const [user] = useUser();
+    const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -73,15 +76,13 @@ export default function Verify() {
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
         setDisabled(true);
-        api.usersVerify({ email, code, rtoken, sameIp })
+        api.authVerify({ email, code, rtoken, sameIp })
             .then((data) => {
-                localStorage.setItem("token", data.token);
-                const user = decodeToken(data.token);
-                setUser(user);
+                setSession(data);
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${user?.name}.`,
+                    text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })

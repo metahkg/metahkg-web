@@ -23,7 +23,7 @@ import {
     Feed as FeedIcon,
     Edit as EditIcon,
     PushPin as PushPinIcon,
-    Delete,
+    Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -123,7 +123,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     },
                 {
                     icon: (
-                        <ReplyIcon className="!text-metahkg-grey !text-[21px] !mb-[1px]" />
+                        <ReplyIcon className="!text-metahkg-grey !text-[19px] !mb-[1px]" />
                     ),
                     title: "Reply",
                     action: () => {
@@ -149,7 +149,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 user?.role === "admin" &&
                     inThread && {
                         icon: (
-                            <Delete className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
+                            <DeleteIcon className="!text-metahkg-grey !text-[17px] !mb-[1px]" />
                         ),
                         title: "Delete (admin)",
                         action: () => {
@@ -172,7 +172,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                         }}
                                     />
                                 ),
-                                btns: (state, setState) => [
+                                btns: (state, _setState) => [
                                     {
                                         text: "Cancel",
                                         action: (_state, _setState, closeDialog) => {
@@ -182,7 +182,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                     {
                                         text: "Confirm",
                                         disabled: !state.reason,
-                                        action: (state, setState, closeDialog) => {
+                                        action: (state, _setState, closeDialog) => {
                                             api.commentDelete(threadId, comment.id, {
                                                 reason: state.reason,
                                             })
@@ -339,18 +339,18 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
 
     return (
         <Box
-            className={`flex items-center text-[17px] !pt-[10px] ${
+            className={`flex items-end text-[17px] !pt-[10px] ${
                 !fold ? "justify-between" : ""
             }`}
         >
             <UserModal open={open} setOpen={setOpen} user={comment.user} />
             <Box
-                className={`flex items-center ${
+                className={`flex items-end ${
                     !fold ? "max-w-[calc(100%-75px)]" : "w-full"
                 }`}
             >
                 <Typography
-                    className="!my-0 !text-[17px]"
+                    className="!my-0 !text-[14px]"
                     sx={(theme) => ({
                         color: isOp ? theme.palette.secondary.main : colors.grey,
                     })}
@@ -358,7 +358,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     #{comment.id}
                 </Typography>
                 <p
-                    className={`leading-[22px] max-h-[22px] !my-0 !ml-[10px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
+                    className={`text-[18px] leading-[22px] max-h-[22px] !my-0 !ml-[7px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
                         comment.user.name.length > 5 || fold || blocked
                             ? "min-w-[50px]"
                             : ""
@@ -384,7 +384,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             if (isMobile)
                                 setTimeMode(timeMode === "short" ? "long" : "short");
                         }}
-                        className={`!my-0 text-metahkg-grey !ml-[7px] text-[15px]${
+                        className={`!my-0 text-metahkg-grey !ml-[7px] !mr-[5px] text-[14px]${
                             isMobile ? " cursor-pointer" : ""
                         }`}
                     >
@@ -408,7 +408,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                         className="cursor-pointer flex overflow-hidden"
                     >
                         <p className={"!my-0 !ml-[5px] text-metahkg-grey"}>:</p>
-                        <p className="!my-0 comment-body !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
+                        <p className="!my-0 !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
                             {settings.filterSwearWords
                                 ? filterSwearWords(comment.text)
                                 : comment.text}

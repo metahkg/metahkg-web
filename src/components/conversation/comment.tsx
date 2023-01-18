@@ -225,7 +225,6 @@ export default function Comment(props: {
                                                 depth={0}
                                             />
                                         )}
-                                        <Box className="h-[2px]" />
                                     </React.Fragment>
                                 )}
                             </Box>

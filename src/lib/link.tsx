@@ -18,22 +18,34 @@
 import React from "react";
 import { Link as InternalLink } from "react-router-dom";
 export function Link(props: {
-    to: string;
+    href?: string;
     children: JSX.Element | JSX.Element[];
     className?: string;
     style?: React.StyleHTMLAttributes<HTMLElement>;
+    target?: "_blank" | "_self" | "_parent" | "_top";
+    rel?: string;
 }) {
-    const { to, children, className, style } = props;
+    const { href, children, className, style, target, rel } = props;
     return (
         <React.Fragment>
-            {to.startsWith("/") ? (
-                <InternalLink to={to} className={className} style={style}>
-                    {children}
-                </InternalLink>
+            {href ? (
+                href.startsWith("/") ? (
+                    <InternalLink to={href} className={className} style={style}>
+                        {children}
+                    </InternalLink>
+                ) : (
+                    <a
+                        href={href}
+                        className={className}
+                        style={style}
+                        target={target}
+                        rel={rel || "noreferrer"}
+                    >
+                        {children}
+                    </a>
+                )
             ) : (
-                <a href={to} className={className} style={style}>
-                    {children}
-                </a>
+                children
             )}
         </React.Fragment>
     );

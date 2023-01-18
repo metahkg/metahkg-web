@@ -41,7 +41,7 @@ export default function ChooseCat(props: {
     const changeHandler = (e: SelectChangeEvent<number>) => {
         setCat(Number(e.target.value));
     };
-    const categories = useCategories();
+    const [categories] = useCategories();
     return (
         <Box>
             {categories.length && (

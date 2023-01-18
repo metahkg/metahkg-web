@@ -97,9 +97,9 @@ export default function CommentBody(props: {
                         }}
                     />
                     {showQuote ? (
-                        <div className="comment-body w-full">
+                        <Box className="w-full">
                             <CommentBody comment={comment.quote} depth={depth + 1} />
-                        </div>
+                        </Box>
                     ) : (
                         <Button
                             variant="outlined"
@@ -167,7 +167,9 @@ export default function CommentBody(props: {
                         maxHeight,
                     }}
                 >
-                    <Box className={`!my-0 comment-body w-full !break-words text-[16px]`}>
+                    <Box
+                        className={`!my-0 comment-body max-w-full overflow-hidden w-full !break-words text-[16px]`}
+                    >
                         {content}
                     </Box>
                 </Box>

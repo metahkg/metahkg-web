@@ -28,22 +28,23 @@ import {
 import {
     useNotification,
     useReCaptchaSiteKey,
-    useUser,
+    useSession,
     useWidth,
 } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
 import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
-import { decodeToken, setTitle } from "../../lib/common";
+import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
+import { loadUser } from "../../lib/jwt";
 
 export default function Reset() {
     const [menu, setMenu] = useMenu();
@@ -58,7 +59,7 @@ export default function Reset() {
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [password, setPassword] = useState("");
-    const [user, setUser] = useUser();
+    const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -73,7 +74,7 @@ export default function Reset() {
         setAlert({ severity: "info", text: "Reseting..." });
         setNotification({ open: true, severity: "info", text: "Reseting..." });
         setDisabled(true);
-        api.usersReset({
+        api.authReset({
             email,
             code,
             password: hash.sha256().update(password).digest("hex"),
@@ -81,13 +82,11 @@ export default function Reset() {
             sameIp,
         })
             .then((data) => {
-                localStorage.setItem("token", data.token);
-                const user = decodeToken(data.token);
-                setUser(user);
+                setSession(data);
                 setNotification({
                     open: true,
                     severity: "info",
-                    text: `Logged in as ${user?.name}.`,
+                    text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })
@@ -109,9 +108,7 @@ export default function Reset() {
     useLayoutEffect(() => {
         setTitle("Reset password | Metahkg");
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
-
-    if (user) return <Navigate to="/" replace />;
+    }, [menu, setMenu]);
 
     return (
         <Box

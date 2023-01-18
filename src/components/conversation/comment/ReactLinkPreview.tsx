@@ -54,13 +54,13 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 imageHeight={250}
                 width={"100%"}
                 className="!mt-[5px] !mb-[5px] LinkPreview"
-                borderColor="#555"
+                borderColor="#333"
                 backgroundColor="#333"
                 primaryTextColor="white"
                 secondaryTextColor="#aca9a9"
+                titleLength={50}
                 descriptionLength={60}
                 fetcher={async (url: string) => {
-                    console.log(url);
                     try {
                         const client = new RLPCLient(
                             `https://${

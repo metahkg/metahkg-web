@@ -28,7 +28,6 @@ import {
     useNotification,
     useReCaptchaSiteKey,
     useUser,
-    useWidth,
 } from "../components/AppContextProvider";
 import { setTitle, wholePath } from "../lib/common";
 import { severity } from "../types/severity";
@@ -46,7 +45,6 @@ export default function Create() {
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
-    const [width] = useWidth();
     const [cat] = useCat();
     const [notification, setNotification] = useNotification();
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
@@ -68,8 +66,6 @@ export default function Create() {
     const [user] = useUser();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
-    const isSmallSmallScreen = width * 0.8 - 40 <= 450;
-
     useLayoutEffect(() => {
         setTitle("Create thread | Metahkg");
         menu && setMenu(false);
@@ -86,9 +82,12 @@ export default function Create() {
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
                     if (data) {
-                        setInittext(
-                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${data.comment}</div></blockquote><p></p>`
-                        );
+                        setInittext(/*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0">
+                                        <div style="margin-left: 15px">
+                                            ${data.comment}
+                                        </div>
+                                    </blockquote>
+                                    <p></p>`);
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
                             if (notification.open)
@@ -189,7 +188,7 @@ export default function Create() {
                         />
                     </Box>
                     <TextEditor
-                        onChange={(v, e: any) => {
+                        onChange={(_v, e: any) => {
                             setComment(e.getContent());
                         }}
                         initText={inittext}
@@ -206,9 +205,7 @@ export default function Create() {
                         />
                         <Button
                             disabled={disabled || !(comment && threadTitle && catchoosed)}
-                            className={`${
-                                isSmallSmallScreen ? "!mt-[15px] " : ""
-                            }!text-[16px] !h-[40px] !py-0 !normal-case`}
+                            className={"text-[16px] !h-[40px] !py-0 !normal-case"}
                             variant="contained"
                             color="secondary"
                             type="submit"

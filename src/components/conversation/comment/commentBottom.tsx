@@ -23,7 +23,7 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { css } from "../../../lib/css";
 import { useThreadId } from "../ConversationContext";
-import { useNotification, useUser } from "../../AppContextProvider";
+import { useIsSmallScreen, useNotification, useUser } from "../../AppContextProvider";
 import {
     useInPopUp,
     useSetIsExpanded,
@@ -47,6 +47,7 @@ export default function CommentBottom() {
     const [comment, setComment] = useComment();
     const [user] = useUser();
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
+    const isSmallScreen = useIsSmallScreen();
 
     const choosed = user && comment.emotions?.find((i) => i.user === user.id)?.emotion;
 
@@ -170,24 +171,26 @@ export default function CommentBottom() {
                 {emotions && Boolean(emotions?.length) && (
                     <React.Fragment>
                         <Box className="flex items-center">
-                            {emotions.slice(0, 3).map((item, index) => {
-                                const isChoosed = choosed === item.emotion;
-                                return (
-                                    <Button
-                                        className={`${css.smallBtn} !mx-[5px]`}
-                                        key={index}
-                                        onClick={() => {
-                                            isChoosed
-                                                ? deleteEmotion()
-                                                : setEmotion(item.emotion);
-                                        }}
-                                        color="secondary"
-                                        variant={isChoosed ? "outlined" : "text"}
-                                    >
-                                        {item.emotion} {item.count}
-                                    </Button>
-                                );
-                            })}
+                            {emotions
+                                .slice(0, isSmallScreen ? 1 : 3)
+                                .map((item, index) => {
+                                    const isChoosed = choosed === item.emotion;
+                                    return (
+                                        <Button
+                                            className={`${css.smallBtn} !mx-[5px]`}
+                                            key={index}
+                                            onClick={() => {
+                                                isChoosed
+                                                    ? deleteEmotion()
+                                                    : setEmotion(item.emotion);
+                                            }}
+                                            color="secondary"
+                                            variant={isChoosed ? "outlined" : "text"}
+                                        >
+                                            {item.emotion} {item.count}
+                                        </Button>
+                                    );
+                                })}
                         </Box>
                         <EmotionList emotions={emotions} />
                     </React.Fragment>

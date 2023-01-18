@@ -119,7 +119,7 @@ export default function Register() {
         if (!rtoken) return;
         setDisabled(true);
         setAlert({ severity: "info", text: "Registering..." });
-        api.usersRegister({
+        api.authRegister({
             email,
             name,
             password: hash.sha256().update(password).digest("hex"),
@@ -179,13 +179,13 @@ export default function Register() {
 
     return (
         <Box
-            className="min-h-screen flex w-full h-full justify-center items-center"
+            className="min-h-screen flex w-full justify-center items-center"
             sx={{
                 backgroundColor: "primary.dark",
             }}
         >
             <Box className={`min-h-50v ${small ? "w-100v" : "w-50v"}`}>
-                <Box component="form" onSubmit={onSubmit} className="m-[40px]">
+                <Box component="form" onSubmit={onSubmit} className="m-[50px]">
                     {query.returnto && (
                         <Box className="flex items-center justify-end">
                             <IconButton

@@ -34,7 +34,7 @@ import VisibilitySensor from "react-visibility-sensor";
 import { useHistory, useIsSmallScreen, useUser } from "./AppContextProvider";
 import PageBottom from "./conversation/pageBottom";
 import PageSelect from "./conversation/pageSelect";
-import useBtns from "./conversation/functions/btns";
+import useBtns from "../hooks/conversation/btns";
 import { PhotoProvider } from "react-photo-view";
 import {
     useCBottom,
@@ -51,11 +51,11 @@ import {
     useUpdating,
     useVotes,
 } from "./conversation/ConversationContext";
-import { useUpdate } from "./conversation/functions/update";
-import useFirstFetch from "./conversation/functions/firstfetch";
-import useChangePage from "./conversation/functions/changePage";
-import useOnScroll from "./conversation/functions/onScroll";
-import useOnVisibilityChange from "./conversation/functions/onVisibilityChange";
+import { useUpdate } from "../hooks/conversation/update";
+import useFirstFetch from "../hooks/conversation/firstfetch";
+import useChangePage from "../hooks/conversation/changePage";
+import useOnScroll from "../hooks/conversation/onScroll";
+import useOnVisibilityChange from "../hooks/conversation/onVisibilityChange";
 import FloatingEditor from "./floatingEditor";
 import Gallery from "./conversation/gallery";
 import Dock from "./dock";
@@ -143,7 +143,7 @@ function Conversation(props: { id: number }) {
     return useMemo(
         () => (
             <Box
-                className="min-h-screen conversation-root"
+                className="min-h-screen flex flex-col relative"
                 sx={(theme) => ({
                     "& *::selection": {
                         background: theme.palette.secondary.main,
@@ -179,7 +179,12 @@ function Conversation(props: { id: number }) {
                             }}
                         />
                     )}
-                    {loading && <LinearProgress className="w-full" color="secondary" />}
+                    {loading && (
+                        <LinearProgress
+                            className="w-full !absolute !top-0 !right-0"
+                            color="secondary"
+                        />
+                    )}
                     <Title
                         category={thread?.category}
                         title={thread?.title}
@@ -190,13 +195,8 @@ function Conversation(props: { id: number }) {
                         ref={cRoot}
                         key={Number(reRender)}
                         className={`overflow-auto !bg-none !shadow-none ${
-                            (thread?.pin &&
-                                (loading
-                                    ? "max-h-[calc(100vh-101px)]"
-                                    : "max-h-[calc(100vh-97px)]")) ||
-                            (loading
-                                ? "max-h-[calc(100vh-51px)]"
-                                : "max-h-[calc(100vh-47px)]")
+                            (thread?.pin && "max-h-[calc(100vh-97px)]") ||
+                            "max-h-[calc(100vh-47px)]"
                         }`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}

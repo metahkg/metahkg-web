@@ -43,12 +43,16 @@ docker-build:
     - docker:dind
   before_script:
     - apk add nodejs-current
+    - docker pull tonistiigi/binfmt:latest
+    - docker run --privileged --rm tonistiigi/binfmt --uninstall qemu-*
+    - docker run --privileged --rm tonistiigi/binfmt --install all
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - version=$(node -e 'console.log(require("./package.json").version)')
     - major=$(node -e "console.log('${version}'.split('.')[0])")
     - minor=$(node -e "console.log('${version}'.split('.').slice(0, 2).join('.'))")
-    - docker build --pull
+    - docker buildx create --use
+    - docker buildx build --push --pull --platform linux/amd64,linux/arm64
       --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA
       --build-arg REACT_APP_version=$version
       --build-arg REACT_APP_IMAGES_DOMAIN='{IMAGES_DOMAIN}'
@@ -59,11 +63,6 @@ docker-build:
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$version"
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$major"
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$minor" .
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$version"
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$major"
-    - docker push "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$minor"
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -88,6 +87,8 @@ tagging:
     - if: $CI_COMMIT_TAG
       when: never
     - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
+      changes:
+        - package.json
 
 publish:
   image: node:18-alpine
@@ -142,6 +143,10 @@ code_quality:
      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
      - if: $CI_COMMIT_TAG
      - if: $CI_COMMIT_BRANCH
+
+build:
+  stage: build
+  retry: 2
 
 include:
   - template: Auto-DevOps.gitlab-ci.yml

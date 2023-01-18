@@ -71,7 +71,7 @@ export default function Forgot() {
             severity: "info",
             text: "Requesting reset password...",
         });
-        api.usersForgot({ email, rtoken })
+        api.authForgot({ email, rtoken })
             .then(() => {
                 setNotification({
                     open: true,

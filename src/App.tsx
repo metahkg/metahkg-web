@@ -15,7 +15,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect } from "react";
 import "./css/App.css";
 import "@fontsource/ibm-plex-sans";
 import Theme from "./theme";
@@ -25,22 +24,18 @@ import { Box } from "@mui/material";
 import AppContextProvider, {
     useSettings,
     useSettingsOpen,
-    useUser,
     useIsSmallScreen,
     useAlertDialog,
-    useSession,
-    useNotification,
 } from "./components/AppContextProvider";
 import { Notification as SnackBar } from "./lib/notification";
-import { api } from "./lib/api";
-import { ErrorDto } from "@metahkg/api";
 import Routes from "./Routes";
 import loadable from "@loadable/component";
 import AlertDialog from "./lib/alertDialog";
-import { register, unregister } from "./serviceWorkerRegistration";
-import { parseError } from "./lib/parseError";
-import { checkNotificationPromise } from "./lib/checkNotificationPromise";
 import ErrorBoundary from "./ErrorBoundary";
+import { useCheckSession } from "./hooks/app/useCheckSession";
+import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
+import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
+import SidePanel from "./components/sidePanel";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -50,127 +45,12 @@ function App() {
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
-    const [user] = useUser();
     const [alertDialog] = useAlertDialog();
-    const [session, setSession] = useSession();
-    const [, setNotification] = useNotification();
 
-    useEffect(() => {
-        if (user && !session) {
-            api.meSessionCurrent()
-                .then(setSession)
-                .catch((data: ErrorDto) => {
-                    if (data.statusCode === 401) {
-                        localStorage.removeItem("token");
-                        if ("serviceWorker" in navigator) {
-                            navigator.serviceWorker.ready.then(async (registration) => {
-                                const subscription =
-                                    await registration.pushManager.getSubscription();
-                                subscription?.unsubscribe();
-                            });
-                        }
-                        return window.location.reload();
-                    } else {
-                        setNotification({
-                            open: true,
-                            severity: "error",
-                            text: parseError(data),
-                        });
-                    }
-                });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        try {
-            if (process.env.REACT_APP_ENV === "dev") return unregister();
-
-            console.log("registering service worker");
-
-            register({
-                onUpdate: async (registration) => {
-                    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                    window.location.reload();
-                },
-                onSuccess: async (_registration) => {
-                    console.log("service worker registered");
-                },
-            });
-
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.ready
-                    .then(async (registration) => {
-                        console.log("updating service worker");
-
-                        await registration.update();
-
-                        registration.addEventListener("updatefound", () => {
-                            console.log("update found");
-                            console.log("service worker skip waiting");
-                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                            window.location.reload();
-                        });
-
-                        setInterval(registration.update, 1000 * 60 * 10);
-
-                        if (registration.waiting) {
-                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                            window.location.reload();
-                        }
-                    })
-                    .catch((error) => {
-                        console.error(error.message);
-                    });
-            }
-        } catch {
-            console.error("Service worker registration failed");
-        }
-    }, []);
-
-    useEffect(() => {
-        // some browsers (like ios safari does not support Notification)
-        // some code from https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
-        if (!("Notification" in window)) {
-            return console.log("This browser does not support notifications.");
-        }
-        if (user) {
-            console.log("request notification permission");
-            function handlePermission(status: NotificationPermission) {
-                console.log("notification permission", status);
-                if ("serviceWorker" in navigator) {
-                    navigator.serviceWorker.ready.then(async (registration) => {
-                        if (await registration.pushManager.getSubscription()) return;
-                        console.log("subscribe");
-                        const subscription = await registration.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC_KEY,
-                        });
-                        const auth = subscription.toJSON().keys?.auth;
-                        const p256dh = subscription.toJSON().keys?.p256dh;
-
-                        if (auth && p256dh) {
-                            await api.meNotificationsSubscribe({
-                                endpoint: subscription.endpoint,
-                                keys: {
-                                    auth,
-                                    p256dh,
-                                },
-                            });
-                        }
-                    });
-                }
-            }
-            // check notification promise for compatibility
-            if (checkNotificationPromise()) {
-                Notification.requestPermission()
-                    .then(handlePermission)
-                    .catch(console.log);
-            } else {
-                Notification.requestPermission(handlePermission);
-            }
-        }
-    }, [user]);
+    // useEffect hooks
+    useCheckSession();
+    useRegisterServiceWorker();
+    useSubscribeNotifications();
 
     return (
         <Theme
@@ -184,6 +64,7 @@ function App() {
                 <ErrorBoundary>
                     <Router>
                         <Box className="flex">
+                            {!isSmallScreen && <SidePanel />}
                             <Box
                                 className={
                                     (!menu && "hidden") ||

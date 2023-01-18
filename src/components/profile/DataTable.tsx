@@ -16,7 +16,7 @@
  */
 
 import React, { useState } from "react";
-import { useIsSmallScreen, useNotification, useUser } from "../AppContextProvider";
+import { useIsSmallScreen, useNotification, useSession } from "../AppContextProvider";
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,
@@ -31,11 +31,12 @@ import {
     TableRow,
     TextField,
 } from "@mui/material";
-import { decodeToken, timeToWord_long } from "../../lib/common";
+import { timeToWord_long } from "../../lib/common";
 import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
 import { User, UserSex } from "@metahkg/api";
+import { Session } from "../../types/session";
 
 export type UserData = User & { count: number; createdAt?: Date };
 
@@ -53,7 +54,7 @@ export default function DataTable(props: DataTableProps) {
     const [name, setName] = useState(reqUser.name);
     const [sex, setSex] = useState<UserSex>(reqUser.sex);
     const [saveDisabled, setSaveDisabled] = useState(false);
-    const [, setUser] = useUser();
+    const [session, setSession] = useSession();
     const [, setMenuTitle] = useMenuTitle();
 
     const nameValid = /^\S{1,15}$/.test(name);
@@ -123,8 +124,7 @@ export default function DataTable(props: DataTableProps) {
                 const { token } = data;
 
                 if (token) {
-                    localStorage.setItem("token", token);
-                    setUser(decodeToken(token));
+                    setSession({ ...session, token } as Session);
                 }
 
                 setReFetch(true);

@@ -28,9 +28,10 @@ import type { history } from "../types/history";
 import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import { api } from "../lib/api";
-import jwtDecode from "jwt-decode";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User, Star, Session } from "@metahkg/api";
+import { BlockedUser, Category, User, Star } from "@metahkg/api";
+import { Session } from "../types/session";
+import { loadUser } from "../lib/jwt";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -41,15 +42,17 @@ export const AppContext = createContext<{
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
     history: [history, Dispatch<SetStateAction<history>>];
-    categories: [Category[], Dispatch<Category[]>];
+    categories: [Category[], Dispatch<SetStateAction<Category[]>>];
+    serverPublicKey: [string, Dispatch<SetStateAction<string>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
-    //@ts-ignore
+    // @ts-ignore
 }>(null);
+
 /**
  * Holds global application values.
  * @param props - { children: JSX.Element }
@@ -71,17 +74,16 @@ export default function AppContextProvider(props: {
                 JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
         )
     );
-    const [user, setUser] = useState(
-        (() => {
-            try {
-                return jwtDecode(localStorage.token || "") as User | null;
-            } catch {
-                return null;
-            }
-        })()
+    const [serverPublicKey, setServerPublicKey] = useState<string>(
+        localStorage.getItem("serverPublicKey") || ""
     );
-    const [session, setSession] = useState<Session | null>(null);
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [session, setSession] = useState<Session | null>(
+        JSON.parse(localStorage.getItem("session") || "null") || null
+    );
+    const [user, setUser] = useState(loadUser(session?.token));
+    const [categories, setCategories] = useState<Category[]>(
+        JSON.parse(localStorage.getItem("categories") || "[]")
+    );
     const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
         localStorage.getItem("history") || "[]"
     );
@@ -120,18 +122,25 @@ export default function AppContextProvider(props: {
     }, []);
 
     useEffect(() => {
+        api.serverPublicKey().then(setServerPublicKey);
+    }, []);
+
+    useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
-            setInterval(() => {
-                api.meBlocked().then(setBlockList);
-            }, 1000 * 60 * 10);
-
             api.meStarred().then(setStarList);
-            setInterval(() => {
-                api.meStarred().then(setStarList);
-            }, 1000 * 60 * 10);
         }
-    }, [user]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.id]);
+
+    useEffect(() => {
+        setInterval(() => {
+            api.meBlocked().then(setBlockList);
+        }, 1000 * 60 * 10);
+        setInterval(() => {
+            api.meStarred().then(setStarList);
+        }, 1000 * 60 * 10);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem("history", JSON.stringify(history));
@@ -144,6 +153,29 @@ export default function AppContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("settings", JSON.stringify(settings));
     }, [settings]);
+
+    useEffect(() => {
+        localStorage.setItem("serverPublicKey", serverPublicKey);
+    }, [serverPublicKey]);
+
+    useEffect(() => {
+        if (!session) {
+            localStorage.removeItem("session");
+            setUser(null);
+        } else {
+            localStorage.setItem("session", JSON.stringify(session));
+        }
+    }, [session]);
+
+    useEffect(() => {
+        if (session?.token) {
+            setUser(loadUser(session.token));
+        }
+    }, [session?.token]);
+
+    useEffect(() => {
+        localStorage.setItem("categories", JSON.stringify(categories));
+    }, [categories]);
 
     useEffect(() => {
         localStorage.setItem("blocklist", JSON.stringify(blockList));
@@ -175,6 +207,7 @@ export default function AppContextProvider(props: {
                 settings: [settings, setSettings],
                 history: [history, setHistory],
                 categories: [categories, setCategories],
+                serverPublicKey: [serverPublicKey, setServerPublicKey],
                 user: [user, setUser],
                 session: [session, setSession],
                 reCaptchaSiteKey,
@@ -278,7 +311,7 @@ export function useHistory() {
 
 export function useCategories() {
     const { categories } = useContext(AppContext);
-    return categories[0];
+    return categories;
 }
 
 export function useUser() {
@@ -314,4 +347,9 @@ export function useStarList() {
 export function useSession() {
     const { session } = useContext(AppContext);
     return session;
+}
+
+export function useServerPublicKey() {
+    const { serverPublicKey } = useContext(AppContext);
+    return serverPublicKey;
 }

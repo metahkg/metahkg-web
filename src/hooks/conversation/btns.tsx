@@ -30,12 +30,20 @@ import {
     useEditor,
     useThreadId,
     useCurrentPage,
-} from "../ConversationContext";
-import { useShareOpen, useShareLink, useShareTitle } from "../ShareProvider";
-import { useNotification, useStarList, useUser } from "../../AppContextProvider";
+} from "../../components/conversation/ConversationContext";
+import {
+    useShareOpen,
+    useShareLink,
+    useShareTitle,
+} from "../../components/conversation/ShareProvider";
+import {
+    useNotification,
+    useStarList,
+    useUser,
+} from "../../components/AppContextProvider";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../lib/api";
-import { parseError } from "../../../lib/parseError";
+import { api } from "../../lib/api";
+import { parseError } from "../../lib/parseError";
 
 export default function useBtns() {
     const update = useUpdate();

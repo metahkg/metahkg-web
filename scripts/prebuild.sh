@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [ -z "$REACT_APP_version" ];
 then export REACT_APP_version=$(node -e "console.log(require('./package.json').version)");
 fi;

@@ -16,10 +16,8 @@
  */
 
 import React, { MouseEventHandler, useEffect } from "react";
-import { Add as AddIcon, Autorenew as AutorenewIcon } from "@mui/icons-material";
+import { Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import SideBar from "../sidebar";
 import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
 import { useIsSmallScreen } from "../AppContextProvider";
 import { api } from "../../lib/api";
@@ -94,16 +92,7 @@ export default function MenuTop(props: {
                 }}
             >
                 {!noTitleBar && (
-                    <Box
-                        className={`flex w-full items-center h-[50px] ${
-                            isSmallScreen ? "justify-center" : "justify-between"
-                        }`}
-                    >
-                        {!isSmallScreen && (
-                            <Box className="!ml-[10px] !mr-[40px]">
-                                <SideBar />
-                            </Box>
-                        )}
+                    <Box className="flex relative w-full justify-center items-center h-[50px]">
                         <Typography
                             sx={{ color: "secondary.main" }}
                             className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-ellipsis overflow-hidden"
@@ -111,18 +100,11 @@ export default function MenuTop(props: {
                             {menuTitle || inittitle}
                         </Typography>
                         {!isSmallScreen && (
-                            <Box className="flex">
+                            <Box className="flex absolute right-[10px]">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
                                         <AutorenewIcon className="!text-white" />
                                     </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Create thread" arrow>
-                                    <Link className="flex" to="/create">
-                                        <IconButton className="!mr-[10px]">
-                                            <AddIcon className="!text-white" />
-                                        </IconButton>
-                                    </Link>
                                 </Tooltip>
                             </Box>
                         )}

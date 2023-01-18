@@ -37,7 +37,11 @@ interface Props {
 
 function ImgComponent(props: Props) {
     const { height, style, width } = props;
-    const { src } = useImage({ srcList: `${imagesApi}/${props.src}` });
+    const { src } = useImage({
+        srcList: props.src.startsWith(imagesApi)
+            ? props.src
+            : `${imagesApi}/${props.src}`,
+    });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
     const cRoot = useCRoot();

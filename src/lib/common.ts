@@ -15,9 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { User } from "@metahkg/api";
 import humanizeDuration from "humanize-duration";
-import jwtDecode from "jwt-decode";
 
 export const imagesApi = `https://${
     process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"
@@ -126,11 +124,3 @@ export function setDescription(
         .querySelector(`meta[name="twitter:description"]`)
         ?.setAttribute("content", description);
 }
-
-export const decodeToken = (token?: string) => {
-    try {
-        return jwtDecode(token || "") as User | null;
-    } catch {
-        return null;
-    }
-};

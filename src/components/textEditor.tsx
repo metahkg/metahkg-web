@@ -21,6 +21,8 @@ import { useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
+import { useSession } from "./AppContextProvider";
+import { imagesApi } from "../lib/common";
 
 export default function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
@@ -48,6 +50,7 @@ export default function TextEditor(props: {
     } = props;
 
     const isSmallScreen = useIsSmallScreen();
+    const [session] = useSession();
 
     return (
         <Box sx={sx} className={className}>
@@ -98,11 +101,12 @@ export default function TextEditor(props: {
                                             },
                                         });
                                         const formData = new FormData();
-                                        formData.append("image", file);
+                                        formData.append("file", file);
                                         axios
-                                            .post("https://api.na.cx/upload", formData, {
+                                            .post(`${imagesApi}/upload`, formData, {
                                                 headers: {
                                                     "Content-Type": "multipart/form-data",
+                                                    Authorization: `Bearer ${session?.token}`,
                                                 },
                                             })
                                             .then((res) => {
@@ -205,18 +209,19 @@ export default function TextEditor(props: {
                     autosave_ask_before_unload: true,
                     autosave_interval: "10s",
                     autosave_prefix: "{path}{query}-{id}-",
-                    autosave_restore_when_empty: false,
+                    autosave_restore_when_empty: true,
                     autosave_retention: "2m",
                     image_advtab: true,
                     images_upload_handler: async (blobInfo, _progress) => {
                         const formData = new FormData();
-                        formData.append("image", blobInfo.blob());
+                        formData.append("file", blobInfo.blob());
                         const { data } = await axios.post(
-                            "https://api.na.cx/upload",
+                            `${imagesApi}/upload`,
                             formData,
                             {
                                 headers: {
                                     "Content-Type": "multipart/form-data",
+                                    Authorization: `Bearer ${session?.token}`,
                                 },
                             }
                         );

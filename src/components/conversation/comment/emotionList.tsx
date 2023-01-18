@@ -128,7 +128,9 @@ export default function EmotionList(props: {
                                     <ListItemIcon>
                                         <Avatar
                                             alt={user.name}
-                                            src={`/api/users/${user.id}/avatar`}
+                                            src={`${
+                                                process.env.REACT_APP_BACKEND || "/api"
+                                            }/users/${user.id}/avatar`}
                                             className="!h-[25px] !w-[25px] mr-[5px]"
                                         />
                                     </ListItemIcon>

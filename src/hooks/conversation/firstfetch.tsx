@@ -18,19 +18,23 @@
 import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { api } from "../../../lib/api";
-import { useHistory, useNotification, useUser } from "../../AppContextProvider";
-import { useCat, useId, useMenuMode } from "../../MenuProvider";
+import { api } from "../../lib/api";
+import {
+    useHistory,
+    useNotification,
+    useUser,
+} from "../../components/AppContextProvider";
+import { useCat, useId, useMenuMode } from "../../components/MenuProvider";
 import {
     useEnd,
     useFinalPage,
     useThread,
     useVotes,
     useRerender,
-} from "../ConversationContext";
-import { setDescription, setTitle } from "../../../lib/common";
+} from "../../components/conversation/ConversationContext";
+import { setDescription, setTitle } from "../../lib/common";
 import queryString from "query-string";
-import { parseError } from "../../../lib/parseError";
+import { parseError } from "../../lib/parseError";
 import { Comment } from "@metahkg/api";
 
 export default function useFirstFetch() {

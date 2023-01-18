@@ -21,7 +21,7 @@ import { Box } from "@mui/material";
 import { regex } from "./regex";
 import React from "react";
 import loadable from "@loadable/component";
-import { ReactLinkPreview } from "../components/conversation/comment/ReactLInkPreview";
+import { ReactLinkPreview } from "../components/conversation/comment/ReactLinkPreview";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
