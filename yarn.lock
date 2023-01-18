@@ -1666,10 +1666,10 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^6.3.2-dev":
-  version "6.3.2-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-6.3.2-dev.tgz#7dd9222a540caeda09b739abea567e6f60457b4d"
-  integrity sha512-mjij5n+9KUecC4xfWDX/er68MHrE7d/aN1lylkA9wVUWvD4T3VWhKRgA/HwrxeaFdPbYxMLAThSLGrAniIMMvw==
+"@metahkg/api@^6.3.2":
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-6.3.2.tgz#b5575af4d6ccee649b5e773119ca89a4b2d900d2"
+  integrity sha512-GmWkQoxNdSCY7/WawIMe2C+37gRdtZnzd9y9tcFntmQ9deSmoa7I1kAQW1yIPW07m/bhi4t78pVIvYqwJ2oLXQ==
   dependencies:
     axios "^1.1.2"
 
