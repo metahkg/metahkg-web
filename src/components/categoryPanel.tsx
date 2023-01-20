@@ -15,6 +15,10 @@ export function CategoryPanel(props: {
     let [categories] = useCategories();
     const [currentCategory] = useCat();
 
+    categories.sort((a, b) => a.id - b.id);
+
+    const hidden = categories.filter((category) => category.hidden);
+
     if (!user) {
         categories = categories.filter((category) => !category.hidden);
     }
@@ -28,10 +32,13 @@ export function CategoryPanel(props: {
         return prev;
     }, [] as string[]);
 
-    const pinned = categories.filter((category) => category.pinned);
-    const others = categories.filter(
-        (category) => !category.tags?.length && !category.pinned
-    );
+    // hidden categories shall not be pinned
+    const pinned = categories.filter((category) => category.pinned && !category.hidden);
+    const others = categories
+        .filter(
+            (category) => !category.tags?.length && !category.pinned && !category.hidden
+        )
+        .concat(hidden.filter((category) => !category.tags?.length));
 
     const toggleDrawer = useCallback(
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -93,7 +100,15 @@ export function CategoryPanel(props: {
                         <Box key={tag}>
                             <h4>{tag}</h4>
                             {categories
-                                .filter((category) => category.tags?.includes(tag))
+                                .filter(
+                                    (category) =>
+                                        category.tags?.includes(tag) && !category.hidden
+                                )
+                                .concat(
+                                    hidden.filter((category) =>
+                                        category.tags?.includes(tag)
+                                    )
+                                )
                                 .map(CategoryEle)}
                         </Box>
                     ))}
