@@ -76,6 +76,7 @@
     "@types/react-swipeable-views-utils": "^0.13.4",
     "eslint": "^8.27.0",
     "eslint-config-react-app": "^7.0.1",
+    "generate-license-file": "^2.0.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "react-scripts": "^5.0.1",

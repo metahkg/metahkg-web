@@ -1,11 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-fileList=$(git diff --diff-filter=d --cached --name-only | grep src/ | tr '\n' ' ' | xargs)
+fileList=$(git diff --diff-filter=d --cached --name-only | tr '\n' ' ' | xargs)
+testFileList=$(echo $fileList | grep -E 'src/|package.json' | xargs)
 lintFileList=$(echo $fileList | tr ' ' '\n' | grep -E '\.(ts|tsx|js)$' | tr '\n' ' ' | xargs)
 
 # test for errors
-if [ "$fileList" != "" ];
+if [ "$testFileList" != "" ];
 then
 yarn test;
 fi;
@@ -16,4 +17,11 @@ then
 yarn eslint --fix $lintFileList || echo "WARNING: eslint failed to run";
 yarn prettier --write $lintFileList || echo "WARNING: prettier failed to run";
 git add $lintFileList;
+fi;
+
+# licenses
+if [ "$(echo $fileList | grep package.json | xargs)" != "" ];
+then
+yarn generate-license-file --input package.json --output public/third-party-licenses.txt --overwrite
+git add public/third-party-licenses.txt
 fi;
