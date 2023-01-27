@@ -69,7 +69,9 @@ export default function CommentEdit() {
                 toolbarBottom
                 noMenuBar
                 noStatusBar
+                lengthLimit={50000}
                 autoResize
+                noAutoSave
             />
             <Box className="my-[10px] flex justify-between items-center">
                 <TextField

@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
@@ -35,6 +35,8 @@ export default function TextEditor(props: {
     noMenuBar?: boolean;
     noStatusBar?: boolean;
     minHeight?: number;
+    lengthLimit?: number;
+    noAutoSave?: boolean;
 }) {
     const {
         onChange,
@@ -47,15 +49,34 @@ export default function TextEditor(props: {
         noMenuBar,
         noStatusBar,
         minHeight,
+        lengthLimit,
+        noAutoSave,
     } = props;
 
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
 
+    const onEditorChange = useCallback(
+        (a: string, editor: import("tinymce/tinymce").Editor) => {
+            if (lengthLimit) {
+                if (a.length > lengthLimit) {
+                    a = a.substring(0, lengthLimit);
+                    editor.setContent(a);
+                    editor.windowManager.alert(
+                        "Content exceeded length limit. Automatically truncated."
+                    );
+                    return;
+                }
+            }
+            onChange?.(a, editor);
+        },
+        [onChange, lengthLimit]
+    );
+
     return (
         <Box sx={sx} className={className}>
             <Editor
-                onEditorChange={onChange}
+                onEditorChange={onEditorChange}
                 initialValue={initText}
                 init={{
                     height: isSmallScreen ? 310 : 350,
@@ -163,7 +184,9 @@ export default function TextEditor(props: {
                         : "file edit view insert format tools table",
                     plugins: `${
                         autoresize ? "autoresize" : ""
-                    } preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons`,
+                    } preview importcss searchreplace autolink ${
+                        noAutoSave ? "" : "autosave"
+                    } save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons`,
                     toolbar:
                         "undo redo | bold italic underline strikethrough | emoticons | uploadimage image template link codesample | fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap | fullscreen preview save print | insertfile media anchor | ltr rtl",
                     toolbar_sticky: toolbarSticky,
