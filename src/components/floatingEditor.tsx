@@ -46,6 +46,7 @@ import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -99,6 +100,7 @@ export default function FloatingEditor() {
                 const numOfPages = roundup((data.id || 0) / 25);
 
                 setEditor({ ...editor, open: false });
+                clearTinymceDraft(window.location.pathname);
 
                 if (numOfPages !== finalPage)
                     changePage(numOfPages, () => {

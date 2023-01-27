@@ -230,10 +230,10 @@ export default function TextEditor(props: {
                         { text: "PHP", value: "php" },
                     ],
                     autosave_ask_before_unload: true,
-                    autosave_interval: "10s",
-                    autosave_prefix: "{path}{query}-{id}-",
+                    autosave_interval: "5s",
+                    autosave_prefix: "tinymce-autosave-{path}-",
                     autosave_restore_when_empty: true,
-                    autosave_retention: "2m",
+                    autosave_retention: "30m",
                     image_advtab: true,
                     images_upload_handler: async (blobInfo, _progress) => {
                         const formData = new FormData();
