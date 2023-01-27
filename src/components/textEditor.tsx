@@ -199,6 +199,8 @@ export default function TextEditor(props: {
                             content: `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
                         },
                     ],
+                    browser_spellcheck: true,
+                    contextmenu: false,
                     codesample_global_prismjs: true,
                     codesample_languages: [
                         { text: "TypeScript", value: "typescript" },
