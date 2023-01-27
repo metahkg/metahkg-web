@@ -36,6 +36,7 @@ import { api } from "../lib/api";
 import ChooseCat from "../components/create/ChooseCat";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 
 /**
  * Page for creating a new thread
@@ -136,6 +137,7 @@ export default function Create() {
             rtoken,
         })
             .then((data) => {
+                clearTinymceDraft(window.location.pathname);
                 navigate(`/thread/${data.id}`, { replace: true });
                 setTimeout(() => {
                     notification.open && setNotification({ open: false, text: "" });
