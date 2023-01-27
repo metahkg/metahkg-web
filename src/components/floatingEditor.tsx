@@ -188,6 +188,7 @@ export default function FloatingEditor() {
                         noMenuBar
                         noStatusBar
                         toolbarBottom
+                        lengthLimit={50000}
                         className="!mx-[10px] max-w-[calc(100%-20px)]"
                     />
                     <Box className="m-[10px]">

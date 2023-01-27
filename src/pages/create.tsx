@@ -194,6 +194,7 @@ export default function Create() {
                         initText={inittext}
                         toolbarSticky
                         autoResize
+                        lengthLimit={50000}
                         minHeight={isSmallScreen ? 310 : 350}
                     />
                     <Box className="mt-[15px]">
