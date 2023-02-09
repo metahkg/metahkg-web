@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Category } from "@metahkg/api";
-import { Box, Drawer } from "@mui/material";
+import { Box, Drawer, Typography } from "@mui/material";
 import { useCategories, useUser } from "./AppContextProvider";
 import { useCat } from "./MenuProvider";
 import { Link } from "react-router-dom";
@@ -60,18 +60,20 @@ export function CategoryPanel(props: {
                 key={category.id}
                 component={Link}
                 to={`/category/${category.id}`}
-                className="no-underline"
+                className="no-underline !text-inherit"
                 onClick={toggleDrawer(false)}
             >
-                <h5
+                <Typography
+                    gutterBottom
+                    variant="body2"
                     className={`${
                         currentCategory === category.id
                             ? "text-metahkg-yellow"
-                            : "text-white"
-                    } hover:text-metahkg-yellow`}
+                            : "text-inherit"
+                    } hover:text-metahkg-yellow !my-4`}
                 >
                     {category.name}
-                </h5>
+                </Typography>
             </Box>
         ),
         [currentCategory, toggleDrawer]
@@ -89,21 +91,27 @@ export function CategoryPanel(props: {
             open={open}
             onClose={toggleDrawer(false)}
         >
-            <Box className="ml-[15px] w-[200px] max-w-full" role="presentation">
-                <Box className="flex items-end my-[20px]">
+            <Box className="ml-4 w-[200px] max-w-full" role="presentation">
+                <Box className="flex items-end my-5">
                     <MetahkgLogo svg light height={30} width={30} />
-                    <h3 className="ml-[5px] my-0">Categories</h3>
+                    <Typography variant="h6" component="h1" className="ml-1">
+                        Categories
+                    </Typography>
                 </Box>
                 <React.Fragment>
                     {Boolean(pinned.length) && (
                         <Box>
-                            <p className="text-metahkg-grey">Pinned</p>$
+                            <Typography className="text-metahkg-grey" gutterBottom>
+                                Pinned
+                            </Typography>
                             {pinned.map(CategoryEle)}
                         </Box>
                     )}
                     {tags.map((tag) => (
                         <Box key={tag}>
-                            <p className="text-metahkg-grey">{tag}</p>
+                            <Typography gutterBottom className="text-metahkg-grey">
+                                {tag}
+                            </Typography>
                             {categories
                                 .filter(
                                     (category) =>
@@ -119,7 +127,9 @@ export function CategoryPanel(props: {
                     ))}
                     {Boolean(others.length) && (
                         <Box>
-                            <p className="text-metahkg-grey">Others</p>
+                            <Typography gutterBottom className="text-metahkg-grey">
+                                Others
+                            </Typography>
                             {others.map(CategoryEle)}
                         </Box>
                     )}

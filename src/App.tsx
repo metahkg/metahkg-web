@@ -16,11 +16,11 @@
  */
 
 import "./css/App.css";
-import "@fontsource/ibm-plex-sans";
+import "@fontsource/roboto";
 import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuProvider, { useMenu } from "./components/MenuProvider";
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import AppContextProvider, {
     useSettings,
     useSettingsOpen,
@@ -57,6 +57,7 @@ function App() {
             primary={{ main: "#222" }}
             secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
+            <CssBaseline />
             <AlertDialog {...alertDialog} />
             <SnackBar />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />

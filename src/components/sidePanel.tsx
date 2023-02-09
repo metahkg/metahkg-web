@@ -143,11 +143,16 @@ export default function SidePanel() {
                 <AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
                 <CategoryPanel open={categoryOpen} setOpen={setCategoryOpen} />
                 {buttons.map((button, index) => (
-                    <Link href={button.link} target="_blank" key={index}>
+                    <Link
+                        href={button.link}
+                        className="text-inherit"
+                        target={button.link?.startsWith("/") ? undefined : "_blank"}
+                        key={index}
+                    >
                         <Tooltip arrow title={button.title}>
                             <IconButton
                                 onClick={button.onClick}
-                                className="no-underline !text-white !mt-[10px] h-[40px] w-[40px]"
+                                className="no-underline !mt-[10px] h-[40px] w-[40px]"
                             >
                                 {button.icon}
                             </IconButton>

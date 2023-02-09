@@ -38,7 +38,7 @@ import {
     Telegram as TelegramIcon,
     Star as StarIcon,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link } from "../lib/link";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./searchBar";
 import { useCategories, useQuery, useSettingsOpen, useUser } from "./AppContextProvider";
@@ -82,7 +82,7 @@ export default function SideBar() {
         <Box>
             <Box>
                 <IconButton className="h-[40px] w-[40px]" onClick={toggleDrawer(true)}>
-                    <MenuIcon className="!text-white" />
+                    <MenuIcon />
                 </IconButton>
             </Box>
             <Drawer
@@ -98,12 +98,12 @@ export default function SideBar() {
             >
                 <Box className="w-[250px] max-w-full" role="presentation">
                     <Box className="w-full">
-                        <List className="w-full">
+                        <List className="w-full !text-inherit">
                             <ListItemButton
                                 onClick={onClick}
                                 component={"a"}
                                 href="https://war.ukraine.ua/support-ukraine/"
-                                className="!no-underline text-white"
+                                className="!no-underline"
                             >
                                 <ListItemIcon>
                                     <MetahkgLogo height={24} width={30} ua />
@@ -154,8 +154,8 @@ export default function SideBar() {
                                         key={index}
                                         component={Link}
                                         onClick={onClick}
-                                        to={item.link}
-                                        className="!no-underline text-white"
+                                        href={item.link}
+                                        className="!no-underline !text-inherit"
                                     >
                                         <ListItemIcon>{item.icon}</ListItemIcon>
                                         <ListItemText>{item.title}</ListItemText>
@@ -223,7 +223,7 @@ export default function SideBar() {
                                 component={"a"}
                                 key={index}
                                 onClick={onClick}
-                                className="!no-underline text-white"
+                                className="!no-underline text-inherit"
                                 href={item.link}
                             >
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -236,7 +236,7 @@ export default function SideBar() {
                         {user && (
                             <ListItemButton
                                 component={Link}
-                                className="!no-underline text-white"
+                                className="!no-underline text-inherit"
                                 to={`/profile/${user?.id}`}
                                 onClick={onClick}
                             >
@@ -259,19 +259,19 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     {process.env.REACT_APP_version && (
-                        <p className="!ml-[5px]">
+                        <Typography gutterBottom className="!ml-[5px]">
                             Metahkg Web{" "}
                             {(process.env.REACT_APP_build && (
-                                <a
-                                    style={{ display: "inline" }}
+                                <Link
+                                    className="inline"
                                     href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
                                 >
                                     {process.env.REACT_APP_build}
-                                </a>
+                                </Link>
                             )) ||
                                 process.env.REACT_APP_date}{" "}
                             (v{process.env.REACT_APP_version})
-                        </p>
+                        </Typography>
                     )}
                 </Box>
             </Drawer>

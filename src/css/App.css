@@ -92,7 +92,7 @@ body {
 }
 
 body {
-    font-family: "IBM Plex Sans", Arial, sans-serif;
+    font-family: "Roboto", Arial, sans-serif;
 }
 
 a,
@@ -100,23 +100,6 @@ a:visited,
 a:hover,
 a:active {
     color: #3498db;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-span,
-q,
-li,
-ul,
-ol,
-blockquote,
-pre {
-    color: white;
 }
 
 .TextField-without-border-radius fieldset {

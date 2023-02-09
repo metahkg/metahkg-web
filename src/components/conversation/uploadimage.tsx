@@ -15,11 +15,12 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import axios, { AxiosResponse } from "axios";
 import { FileUpload } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 
 const Input = styled("input")({
     display: "none",
@@ -35,6 +36,7 @@ export default function UploadImage(props: {
     onError: (err: any) => void;
 }) {
     const { className, onUpload, onSuccess, onError } = props;
+    const [uploading, setUploading] = useState(false);
     return (
         <Box className={className}>
             <form name="image" encType="multipart/form-data">
@@ -48,6 +50,7 @@ export default function UploadImage(props: {
                             onUpload && onUpload();
                             const formData = new FormData();
                             formData.append("image", e.target.files?.[0] || "");
+                            setUploading(true);
                             axios
                                 .post("https://api.na.cx/upload", formData, {
                                     headers: {
@@ -56,14 +59,22 @@ export default function UploadImage(props: {
                                 })
                                 .then(onSuccess)
                                 .catch(onError);
+                            setUploading(false);
                         }}
                     />
-                    <Button className="!normal-case" variant="contained" component="span">
-                        <FileUpload className="!mr-[5px]" />
+                    <LoadingButton
+                        loading={uploading}
+                        disabled={uploading}
+                        className="!normal-case"
+                        variant="contained"
+                        component="span"
+                        startIcon={<FileUpload />}
+                        loadingPosition="start"
+                    >
                         <Typography sx={{ color: "secondary.main" }}>
                             Upload Image
                         </Typography>
-                    </Button>
+                    </LoadingButton>
                 </label>
             </form>
         </Box>

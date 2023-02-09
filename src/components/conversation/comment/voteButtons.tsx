@@ -17,12 +17,13 @@
 
 import React, { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
 import { Comment, Vote } from "@metahkg/api";
+import { LoadingButton } from "@mui/lab";
 
 export default function VoteButtons(props: { comment: Comment }) {
     const threadId = useThreadId();
@@ -30,6 +31,7 @@ export default function VoteButtons(props: { comment: Comment }) {
     const [, setNotification] = useNotification();
     const [user] = useUser();
     const [comment, setComment] = useState(props.comment);
+    const [voting, setVoting] = useState("");
 
     const vote = votes?.find((v) => v.cid === comment.id)?.vote;
     const up = comment.U || 0;
@@ -39,8 +41,10 @@ export default function VoteButtons(props: { comment: Comment }) {
      * It sends a vote to the server.
      * @param {Vote} vote - "U" | "D"
      */
-    function sendVote(vote: Vote) {
-        api.commentVote({ vote }, threadId, comment.id)
+    async function sendVote(vote: Vote) {
+        setVoting(vote);
+        await api
+            .commentVote({ vote }, threadId, comment.id)
             .then(() => {
                 // for the refetch effect to work, we need to fetch the comment again
                 setComment({ ...comment, [vote]: (comment[vote] || 0) + 1 });
@@ -53,44 +57,51 @@ export default function VoteButtons(props: { comment: Comment }) {
                     text: parseError(err),
                 });
             });
+        setVoting("");
     }
 
     return (
         <ButtonGroup variant="text" className="!rounded-[4px] !bg-[#333]">
-            <Button
-                className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0"
-                disabled={!user || Boolean(vote)}
+            <LoadingButton
+                className="!p-0 !m-0 !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0 [&>span]:!mr-1 [&>span]:!ml-0"
+                disabled={!user || Boolean(vote) || Boolean(voting)}
                 onClick={() => {
                     sendVote("U");
                 }}
+                startIcon={
+                    <ArrowDropUp
+                        className={vote === "U" ? "text-[green]" : "text-[#aaa]"}
+                    />
+                }
+                loading={voting === "U"}
+                loadingPosition="start"
             >
                 <Typography
-                    className="flex"
-                    sx={{
-                        color: vote === "U" ? "green" : "#aaa",
-                    }}
+                    className={`flex ${vote === "U" ? "text-[green]" : "text-[#aaa]"}`}
                 >
-                    <ArrowDropUp className={!vote ? "hover:!text-[#fff]" : ""} />
                     {up}
                 </Typography>
-            </Button>
-            <Button
-                className="!p-0 !m-0 !block !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0"
-                disabled={!user || Boolean(vote)}
+            </LoadingButton>
+            <LoadingButton
+                className="!p-0 !m-0 !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0 [&>span]:!mr-1 [&>span]:!ml-0"
+                disabled={!user || Boolean(vote) || Boolean(voting)}
                 onClick={() => {
                     sendVote("D");
                 }}
+                startIcon={
+                    <ArrowDropDown
+                        className={vote === "D" ? "text-[red]" : "text-[#aaa]"}
+                    />
+                }
+                loading={voting === "D"}
+                loadingPosition="start"
             >
                 <Typography
-                    className="flex"
-                    sx={{
-                        color: vote === "D" ? "red" : "#aaa",
-                    }}
+                    className={`flex ${vote === "D" ? "text-[red]" : "text-[#aaa]"}`}
                 >
-                    <ArrowDropDown className={!vote ? "hover:!text-[#fff]" : ""} />
                     {down}
                 </Typography>
-            </Button>
+            </LoadingButton>
         </ButtonGroup>
     );
 }

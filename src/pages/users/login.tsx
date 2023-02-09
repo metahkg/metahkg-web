@@ -48,6 +48,7 @@ import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
+import { LoadingButton } from "@mui/lab";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -55,7 +56,7 @@ export default function Login() {
     const isSmallScreen = useIsSmallScreen();
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [user] = useUser();
     const [, setSession] = useSession();
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
@@ -93,7 +94,7 @@ export default function Login() {
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
         setAlert({ severity: "info", text: "Logging in..." });
-        setDisabled(true);
+        setLoading(true);
         api.authLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
@@ -121,7 +122,7 @@ export default function Login() {
                     severity: "error",
                     text: parseError(err),
                 });
-                setDisabled(false);
+                setLoading(false);
                 reCaptchaRef.current?.reset();
             });
     }
@@ -231,16 +232,18 @@ export default function Login() {
                         >
                             Register
                         </Button>
-                        <Button
-                            disabled={disabled || !(name && password)}
+                        <LoadingButton
+                            disabled={loading || !(name && password)}
+                            loading={loading}
+                            loadingPosition="start"
+                            startIcon={<LoginIcon className="!text-[16px]" />}
                             className="!text-[16px] !normal-case h-[40px]"
                             color="secondary"
                             variant="contained"
                             type="submit"
                         >
-                            <LoginIcon className="!mr-[5px] !text-[16px]" />
                             Login
-                        </Button>
+                        </LoadingButton>
                     </Box>
                     <ReCaptchaNotice />
                 </Box>

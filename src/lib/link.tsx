@@ -17,32 +17,31 @@
 
 import React from "react";
 import { Link as InternalLink } from "react-router-dom";
-export function Link(props: {
-    href?: string;
-    children: JSX.Element | JSX.Element[];
-    className?: string;
-    style?: React.StyleHTMLAttributes<HTMLElement>;
-    target?: "_blank" | "_self" | "_parent" | "_top";
-    rel?: string;
-}) {
-    const { href, children, className, style, target, rel } = props;
+import { Link as MuiLink } from "@mui/material";
+
+export function Link(
+    props: React.DetailedHTMLProps<
+        React.AnchorHTMLAttributes<HTMLAnchorElement>,
+        HTMLAnchorElement
+    > & {
+        ref?: React.RefObject<HTMLAnchorElement>;
+        to?: string;
+        href?: string;
+        children: React.ReactNode;
+    }
+) {
+    const { href, to, children } = props;
     return (
         <React.Fragment>
             {href ? (
                 href.startsWith("/") ? (
-                    <InternalLink to={href} className={className} style={style}>
+                    <InternalLink to={href || to || ""} {...props}>
                         {children}
                     </InternalLink>
                 ) : (
-                    <a
-                        href={href}
-                        className={className}
-                        style={style}
-                        target={target}
-                        rel={rel || "noreferrer"}
-                    >
+                    <MuiLink {...props} href={href || to}>
                         {children}
-                    </a>
+                    </MuiLink>
                 )
             ) : (
                 children

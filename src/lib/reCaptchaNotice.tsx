@@ -1,18 +1,26 @@
 import React from "react";
+import { Typography } from "@mui/material";
+import { Link } from "./link";
 
 export default function ReCaptchaNotice(props: { className?: string }) {
     const { className } = props;
     return (
-        <p className={`text-[12px] text-metahkg-grey ${className}`}>
+        <Typography
+            variant="body2"
+            className={`text-metahkg-grey !text-xs !mt-2 ${className}`}
+        >
             Metahkg is protected by reCAPTCHA. The Google{" "}
-            <a className="inline" href="https://policies.google.com/privacy">
+            <Link
+                className="inline !text-link"
+                href="https://policies.google.com/privacy"
+            >
                 Privacy Policy
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a className="inline" href="https://policies.google.com/terms">
+            <Link className="inline !text-link" href="https://policies.google.com/terms">
                 Terms of Service
-            </a>{" "}
+            </Link>{" "}
             apply.
-        </p>
+        </Typography>
     );
 }

@@ -16,7 +16,7 @@
  */
 
 import React, { useLayoutEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
@@ -44,7 +44,7 @@ export default function Forbidden() {
                 height={100}
                 width={80}
             />
-            <h1>403 Forbidden</h1>
+            <Typography variant="h3">403 Forbidden</Typography>
         </Box>
     );
 }

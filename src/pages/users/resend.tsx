@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Alert, Box, Button, TextField } from "@mui/material";
+import { Alert, Box, TextField } from "@mui/material";
 import {
     useNotification,
     useReCaptchaSiteKey,
@@ -35,6 +35,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import { LoadingButton } from "@mui/lab";
 
 export default function Resend() {
     const [menu, setMenu] = useMenu();
@@ -44,7 +45,7 @@ export default function Resend() {
         severity: "info",
         text: "",
     });
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [user] = useUser();
@@ -64,7 +65,7 @@ export default function Resend() {
         e?.preventDefault();
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
-        setDisabled(true);
+        setLoading(true);
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
         api.authResend({ email, rtoken })
@@ -78,7 +79,7 @@ export default function Resend() {
                     text: "Verification email sent.",
                 });
                 reCaptchaRef.current?.reset();
-                setDisabled(false);
+                setLoading(false);
             })
             .catch((err) => {
                 setAlert({
@@ -91,7 +92,7 @@ export default function Resend() {
                     text: parseError(err),
                 });
                 reCaptchaRef.current?.reset();
-                setDisabled(false);
+                setLoading(false);
             });
     }
 
@@ -137,18 +138,20 @@ export default function Resend() {
                             size="invisible"
                             ref={reCaptchaRef}
                         />
-                        <Button
+                        <LoadingButton
                             variant="contained"
                             className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
                             disabled={
-                                disabled || !(email && EmailValidator.validate(email))
+                                loading || !(email && EmailValidator.validate(email))
                             }
+                            loading={loading}
+                            loadingPosition="start"
+                            startIcon={<SendIcon className="!text-[16px]" />}
                         >
-                            <SendIcon className="!mr-[5px] !text-[16px]" />
                             Resend
-                        </Button>
+                        </LoadingButton>
                         <ReCaptchaNotice />
                     </Box>
                 </Box>

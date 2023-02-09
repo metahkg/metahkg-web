@@ -17,14 +17,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    CircularProgress,
-    DialogTitle,
-    IconButton,
-    Snackbar,
-} from "@mui/material";
+import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
@@ -47,6 +40,7 @@ import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
+import { LoadingButton } from "@mui/lab";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -142,9 +136,9 @@ export default function FloatingEditor() {
                 }`}
             >
                 <DialogTitle className="flex justify-between items-center !p-0">
-                    <p className="!ml-[20px] !mt-[10px] !mb-[10px]">
+                    <Typography variant="h5" className="!ml-[20px] !my-[10px]">
                         {editor.quote ? "Reply" : "Comment"}
-                    </p>
+                    </Typography>
                     <Box className="flex">
                         <IconButton
                             className="!my-0 cursor-pointer !mr-[10px] metahkg-yellow"
@@ -200,26 +194,18 @@ export default function FloatingEditor() {
                             size="invisible"
                             ref={reCaptchaRef}
                         />
-                        {creating ? (
-                            <CircularProgress
-                                color="secondary"
-                                disableShrink
-                                className="my-[5px]"
-                            />
-                        ) : (
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                type="submit"
-                                disabled={!comment}
-                            >
-                                <CommentIcon className="!mr-[5px]" />
-                                Comment
-                            </Button>
-                        )}
-                        <ReCaptchaNotice
-                            className={creating ? "my-0" : "mt-[10px] mb-0"}
-                        />
+                        <LoadingButton
+                            variant="contained"
+                            color="secondary"
+                            type="submit"
+                            loading={creating}
+                            loadingPosition="start"
+                            disabled={!comment || creating}
+                            startIcon={<CommentIcon />}
+                        >
+                            Comment
+                        </LoadingButton>
+                        <ReCaptchaNotice className="!mt-[10px]" />
                     </Box>
                 </Box>
             </Box>
