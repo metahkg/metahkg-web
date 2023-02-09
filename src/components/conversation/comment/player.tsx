@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import YoutubePlayer from "react-player/youtube";
 import FacebookPlayer from "react-player/facebook";
@@ -116,15 +116,9 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                                 streamable: <PlayArrow className="!text-[18px]" />,
                             }[mode]
                         }
-                        <p className="!my-0 !ml-[5px]">
-                            {
-                                {
-                                    youtube: "Youtube",
-                                    facebook: "Facebook",
-                                    streamable: "Streamable",
-                                }[mode]
-                            }
-                        </p>
+                        <Typography className="!my-0 !ml-[5px]">
+                            {mode[0].toUpperCase() + mode.slice(1)}
+                        </Typography>
                     </Box>
                     <Box className="flex items-center !mr-[5px]">
                         {buttons.map(

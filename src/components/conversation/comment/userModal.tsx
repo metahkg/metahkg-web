@@ -16,7 +16,7 @@
  */
 
 import { User } from "@metahkg/api";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -109,9 +109,13 @@ export default function UserModal(props: {
                     },
                 ]}
             >
-                <Box className="mx-[10px] mb-[10px]">
-                    <p className="text-center my-2 text-[20px]">{commentUser.name}</p>
-                    <p className="text-center my-2 text-[20px]">#{commentUser.id}</p>
+                <Box className="mx-2 mb-2">
+                    <Typography className="text-center !my-2 !text-xl">
+                        {commentUser.name}
+                    </Typography>
+                    <Typography className="text-center !my-2 !text-xl">
+                        #{commentUser.id}
+                    </Typography>
                     <TextField
                         onChange={(e) => setReason(e.target.value)}
                         label="Reason to block (optional)"
@@ -122,10 +126,10 @@ export default function UserModal(props: {
                     />
                 </Box>
             </PopUp>
-            <p className="text-center !mt-[5px] !mb-[5px] text-[20px]">
+            <Typography className="text-center !my-1 !text-xl">
                 {commentUser.name}
                 <br />#{commentUser.id}
-            </p>
+            </Typography>
         </PopUp>
     );
 }

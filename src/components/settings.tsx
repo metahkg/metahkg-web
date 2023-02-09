@@ -16,7 +16,7 @@
  */
 
 import React from "react";
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { PopUp } from "../lib/popup";
 import { useSettings } from "./AppContextProvider";
 import { IOSSwitch } from "../lib/switch";
@@ -68,7 +68,7 @@ export default function Settings(props: {
                         key={item.title}
                         className="flex justify-between items-center w-full !mt-[4px] !mb-[4px]"
                     >
-                        <p className="!m-0">{item.title}</p>
+                        <Typography>{item.title}</Typography>
                         <IOSSwitch
                             color="secondary"
                             checked={item.checked}
@@ -77,7 +77,7 @@ export default function Settings(props: {
                     </Box>
                 ))}
                 <Box className="flex justify-between items-center w-full !mt-[6px] !mb-[4px]">
-                    <p className="!m-0">Color</p>
+                    <Typography>Color</Typography>
                     <ToggleButtonGroup
                         color="secondary"
                         value={

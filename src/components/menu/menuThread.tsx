@@ -16,7 +16,7 @@
  */
 
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import {
     Article as ArticleIcon,
     Comment as CommentIcon,
@@ -43,7 +43,7 @@ export default function MenuThread(props: {
 
     return (
         <Link
-            className="w-full !no-underline"
+            className="w-full !no-underline !text-inherit"
             to={`/thread/${thread.id}?${
                 commentId && id !== thread.id ? `c=${commentId}` : "page=1"
             }`}
@@ -54,58 +54,71 @@ export default function MenuThread(props: {
                     id === thread.id ? "bg-[#292929]" : "hover:bg-[#232323]"
                 }`}
             >
-                <Box className="flex w-full items-center justify-between h-[35px]">
+                <Box className="flex w-full items-center justify-between h-9">
                     <Box style={{ display: "flex", alignItems: "center" }}>
-                        <p
-                            className="text-[16px] !ml-[20px] text-metahkg-grey"
-                            style={{
-                                color: thread.op.sex === "M" ? "#0277bd" : "red",
-                            }}
+                        <Typography
+                            variant="subtitle1"
+                            component="p"
+                            className={`!ml-5 text-metahkg-grey ${
+                                thread.op.sex === "M" ? "text-[#0277bd]" : "text-[red]"
+                            }`}
                         >
                             {thread.op.name}
-                        </p>
-                        <p className="!ml-[5px] !m-0 text-metahkg-grey text-[13px]">
+                        </Typography>
+                        <Typography variant="body2" className="!ml-1 text-metahkg-grey">
                             {timeToWord(thread.lastModified)}
-                        </p>
+                        </Typography>
                     </Box>
                     <Box className="flex items-center">
                         {thread.score >= 0 ? (
-                            <ThumbUpIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                            <ThumbUpIcon
+                                fontSize="inherit"
+                                className="text-metahkg-grey mx-1 text-xs"
+                            />
                         ) : (
-                            <ThumbDownIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
+                            <ThumbDownIcon
+                                fontSize="inherit"
+                                className="text-metahkg-grey mx-1 text-xs"
+                            />
                         )}
-                        <p className="!m-0 text-metahkg-grey text-[13px]">
+                        <Typography variant="body2" className="text-metahkg-grey">
                             {thread.score}
-                        </p>
-                        <CommentIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
-                        <p className="!m-0 text-metahkg-grey text-[13px]">
+                        </Typography>
+                        <CommentIcon
+                            fontSize="inherit"
+                            className="text-metahkg-grey mx-1 text-xs"
+                        />
+                        <Typography variant="body2" className="text-metahkg-grey">
                             {thread.count}
-                        </p>
-                        <ArticleIcon className="text-metahkg-grey !ml-[5px] !text-[13px] mr-[2px]" />
-                        <p className="!mr-[10px] !m-0 text-metahkg-grey text-[13px]">
+                        </Typography>
+                        <ArticleIcon
+                            fontSize="inherit"
+                            className="text-metahkg-grey mx-1 text-xs"
+                        />
+                        <Typography variant="body2" className="!mr-2 text-metahkg-grey">
                             {String(roundup(thread.count / 25))}
-                        </p>
+                        </Typography>
                     </Box>
                 </Box>
-                <Box className="flex w-full !mb-[10px] items-center justify-between">
-                    <p className="!ml-[20px] !m-0 text-[16px] overflow-hidden text-ellipsis text-left leading-[20px] max-h-[60px] mr-[30px]">
+                <Box className="flex w-full mb-2 items-center justify-between">
+                    <Typography className="!ml-5 !mr-7 overflow-hidden text-ellipsis text-left !leading-5 max-h-[60px]">
                         {thread.title}
-                    </p>
+                    </Typography>
                     {(menuMode !== "category" || cat === 1) && (
                         <Link
-                            className="!mr-[10px] !no-underline"
+                            className="!mr-[10px] !no-underline !text-inherit"
                             to={`/category/${thread.category}`}
                         >
                             <Button
                                 variant="contained"
-                                className="!m-0 !p-0 !normal-case !rounded-[15px] !bg-[#333] hover:!bg-[#444]"
+                                className="!m-0 !p-[3px] !normal-case !rounded-2xl !bg-[#333] hover:!bg-[#444]"
                             >
-                                <p className="!m-0 text-[12px]">
+                                <Typography variant="body2" className="!mx-1">
                                     {
                                         categories.find((i) => i.id === thread.category)
                                             ?.name
                                     }
-                                </p>
+                                </Typography>
                             </Button>
                         </Link>
                     )}

@@ -31,6 +31,7 @@ import {
     ListItemIcon,
     ListItemText,
     Paper,
+    Typography,
 } from "@mui/material";
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
@@ -70,14 +71,16 @@ export default function Template() {
             }}
         >
             <Box className="w-full m-[50px]">
-                <Box className="flex items-center">
+                <Box className="flex items-center my-5">
                     <MetahkgIcon height={50} width={50} svg light />
-                    <h1>Metahkg</h1>
+                    <Typography variant="h4" component="h1" className="!ml-1">
+                        Metahkg
+                    </Typography>
                 </Box>
                 <List>
                     <ListItemButton
-                        className="w-full !no-underline text-white"
-                        component={"a"}
+                        className="w-full !no-underline !text-inherit"
+                        component={Link}
                         href="https://war.ukraine.ua/support-ukraine/"
                     >
                         <ListItemIcon>
@@ -87,7 +90,7 @@ export default function Template() {
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
-                        className="!no-underline text-white w-full"
+                        className="!no-underline !text-inherit w-full"
                         href={`/${
                             user ? "users/logout" : "users/login"
                         }?returnto=${encodeURIComponent(wholePath())}`}
@@ -103,7 +106,7 @@ export default function Template() {
                         <ListItemButton
                             component={Link}
                             href={`/profile/${user?.id}`}
-                            className="w-full !no-underline text-white"
+                            className="w-full !no-underline !text-inherit"
                         >
                             <ListItemIcon>
                                 <ManageAccountsIcon />
@@ -117,7 +120,7 @@ export default function Template() {
                             key={index}
                             component={Link}
                             href={link.link}
-                            className="w-full !no-underline text-white"
+                            className="w-full !no-underline !text-inherit"
                         >
                             <ListItemIcon>{link.icon}</ListItemIcon>
                             <ListItemText>{link.title}</ListItemText>

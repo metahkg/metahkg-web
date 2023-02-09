@@ -44,7 +44,7 @@ export default function Theme(props: {
             secondary: props.secondary,
         },
         typography: {
-            fontFamily: ["IBM Plex Sans", "Arial", "sans-serif"].join(","),
+            fontFamily: ["Roboto", "Arial", "sans-serif"].join(","),
         },
     });
     return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;

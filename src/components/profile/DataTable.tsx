@@ -20,7 +20,6 @@ import { useIsSmallScreen, useNotification, useSession } from "../AppContextProv
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,
-    Button,
     MenuItem,
     Paper,
     Select,
@@ -37,6 +36,7 @@ import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
 import { User, UserSex } from "@metahkg/api";
 import { Session } from "../../types/session";
+import { LoadingButton } from "@mui/lab";
 
 export type UserData = User & { count: number; createdAt?: Date };
 
@@ -53,7 +53,7 @@ export default function DataTable(props: DataTableProps) {
     const [, setNotification] = useNotification();
     const [name, setName] = useState(reqUser.name);
     const [sex, setSex] = useState<UserSex>(reqUser.sex);
-    const [saveDisabled, setSaveDisabled] = useState(false);
+    const [saving, setSaveDisabled] = useState(false);
     const [session, setSession] = useSession();
     const [, setMenuTitle] = useMenuTitle();
 
@@ -146,10 +146,7 @@ export default function DataTable(props: DataTableProps) {
     }
 
     return (
-        <Box
-            className="!ml-[50px] !mr-[50px] w-full"
-            style={{ maxWidth: isSmallScreen ? "100%" : "70%" }}
-        >
+        <Box className="w-full" style={{ maxWidth: isSmallScreen ? "100%" : "80%" }}>
             <TableContainer className="w-full" component={Paper}>
                 <Table className="w-full" aria-label="simple table">
                     <TableBody>
@@ -177,20 +174,22 @@ export default function DataTable(props: DataTableProps) {
                 </Table>
             </TableContainer>
             {isSelf && (
-                <Button
+                <LoadingButton
                     className="!mt-[20px] !mb-[10px]"
                     variant="contained"
                     disabled={
-                        saveDisabled ||
+                        saving ||
                         (name === reqUser.name && sex === reqUser.sex) ||
                         !nameValid
                     }
                     color="secondary"
                     onClick={updateUserInfo}
+                    loading={saving}
+                    startIcon={<Save />}
+                    loadingPosition="start"
                 >
-                    <Save />
                     Save
-                </Button>
+                </LoadingButton>
             )}
         </Box>
     );

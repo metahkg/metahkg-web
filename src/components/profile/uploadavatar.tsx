@@ -16,19 +16,23 @@
  */
 
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 
 const Input = styled("input")({
     display: "none",
 });
+
 /**
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
 export default function UploadAvatar(props: { onChange?: (file: File) => void }) {
     const { onChange } = props;
+    const [uploading, setUploading] = React.useState(false);
+
     return (
         <Box component="form" encType="multipart/form-data">
             <label htmlFor="contained-button-file">
@@ -37,19 +41,25 @@ export default function UploadAvatar(props: { onChange?: (file: File) => void })
                     id="contained-button-file"
                     type="file"
                     name="avatar"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                         const avatar = e?.target?.files?.[0];
-                        if (avatar) onChange?.(avatar);
+                        if (avatar) {
+                            setUploading(true);
+                            await onChange?.(avatar);
+                            setUploading(false);
+                        }
                     }}
                 />
-                <Button
+                <LoadingButton
                     className="!mt-[5px] !normal-case"
                     variant="contained"
                     component="span"
+                    loading={uploading}
+                    startIcon={<FileUpload />}
+                    loadingPosition="start"
                 >
-                    <FileUpload className="!mr-[5px]" />
                     <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
-                </Button>
+                </LoadingButton>
             </label>
         </Box>
     );

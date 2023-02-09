@@ -55,7 +55,7 @@ import { parseError } from "../../../lib/parseError";
 import { Comment } from "@metahkg/api";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import UserModal from "./userModal";
-import { colors } from "../../../lib/css";
+import { colors, css } from "../../../lib/css";
 import BlockedBtn from "./blockedBtn";
 import { useBlocked, useEditing, useFold, useInThread } from "../comment";
 
@@ -338,40 +338,38 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
     ];
 
     return (
-        <Box
-            className={`flex items-end text-[17px] !pt-[10px] ${
-                !fold ? "justify-between" : ""
-            }`}
-        >
+        <Box className={`flex items-end text-lg !pt-2 ${!fold ? "justify-between" : ""}`}>
             <UserModal open={open} setOpen={setOpen} user={comment.user} />
             <Box
-                className={`flex items-end ${
+                className={`flex items-center ${
                     !fold ? "max-w-[calc(100%-75px)]" : "w-full"
                 }`}
             >
                 <Typography
-                    className="!my-0 !text-[14px]"
                     sx={(theme) => ({
                         color: isOp ? theme.palette.secondary.main : colors.grey,
                     })}
+                    className="!leading-7"
+                    variant="body2"
                 >
                     #{comment.id}
                 </Typography>
-                <p
-                    className={`text-[18px] leading-[22px] max-h-[22px] !my-0 !ml-[7px] text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
+                <Typography
+                    variant="subtitle1"
+                    className={`!ml-2 !text-[17px] !leading-7 max-h-7 text-ellipsis whitespace-nowrap cursor-pointer overflow-hidden max-w-full ${
                         comment.user.name.length > 5 || fold || blocked
                             ? "min-w-[50px]"
                             : ""
-                    } hover:underline`}
+                    } hover:underline ${
+                        comment.user.sex === "M" ? css.colors.blue : "text-[red]"
+                    }`}
                     onClick={() => {
                         setOpen(true);
                     }}
-                    style={{
-                        color: comment.user.sex === "M" ? colors.blue : "red",
-                    }}
+                    component="p"
                 >
                     {comment.user.name}
-                </p>
+                </Typography>
                 <Tooltip
                     title={dateAndTime.format(
                         new Date(comment.createdAt),
@@ -379,12 +377,13 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     )}
                     arrow
                 >
-                    <p
+                    <Typography
+                        variant="body2"
                         onClick={() => {
                             if (isMobile)
                                 setTimeMode(timeMode === "short" ? "long" : "short");
                         }}
-                        className={`!my-0 text-metahkg-grey !ml-[7px] !mr-[5px] text-[14px]${
+                        className={`text-metahkg-grey !leading-7 !ml-2 !mr-1${
                             isMobile ? " cursor-pointer" : ""
                         }`}
                     >
@@ -397,7 +396,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                 ),
                             }[timeMode]
                         }
-                    </p>
+                    </Typography>
                 </Tooltip>
                 {fold && !blocked && (
                     <Box
@@ -407,17 +406,17 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                         sx={{ flexGrow: 1 }}
                         className="cursor-pointer flex overflow-hidden"
                     >
-                        <p className={"!my-0 !ml-[5px] text-metahkg-grey"}>:</p>
-                        <p className="!my-0 !break-words !ml-[10px] whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
+                        <Typography className={"!ml-1 text-metahkg-grey"}>:</Typography>
+                        <Typography className="!break-words !ml-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-full inline-block">
                             {settings.filterSwearWords
                                 ? filterSwearWords(comment.text)
                                 : comment.text}
-                        </p>
+                        </Typography>
                     </Box>
                 )}
                 {blocked && (
                     <BlockedBtn
-                        className="!ml-[20px]"
+                        className="!ml-5"
                         userName={comment.user.name}
                         reason={blockList.find((x) => x.id === comment.user.id)?.reason}
                         setBlocked={setBlocked}
@@ -430,7 +429,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             button && (
                                 <Tooltip key={index} title={button.title} arrow>
                                     <IconButton
-                                        className="!ml-[10px] !p-0"
+                                        className="!ml-2 !p-0"
                                         onClick={button.action}
                                     >
                                         {button.icon}
@@ -443,10 +442,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 <Box className="flex items-center">
                     {rightBtns.map((button, index) => (
                         <Tooltip key={index} title={button.title} arrow>
-                            <IconButton
-                                className="!ml-[10px] !p-0"
-                                onClick={button.action}
-                            >
+                            <IconButton className="!ml-2 !p-0" onClick={button.action}>
                                 {button.icon}
                             </IconButton>
                         </Tooltip>

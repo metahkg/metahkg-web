@@ -17,14 +17,7 @@
 
 import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect, useMemo } from "react";
-import {
-    Box,
-    Button,
-    CircularProgress,
-    LinearProgress,
-    Paper,
-    SelectChangeEvent,
-} from "@mui/material";
+import { Box, LinearProgress, Paper, SelectChangeEvent } from "@mui/material";
 import queryString from "query-string";
 import Title from "./conversation/title";
 import { roundup } from "../lib/common";
@@ -62,6 +55,8 @@ import Dock from "./dock";
 import Share from "./conversation/share";
 import PinnedComment from "./conversation/pin";
 import Comment from "./conversation/comment";
+import { LoadingButton } from "@mui/lab";
+import { Refresh } from "@mui/icons-material";
 
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
@@ -272,20 +267,19 @@ function Conversation(props: { id: number }) {
                                 bgcolor: "primary.dark",
                             }}
                         >
-                            {!updating ? (
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={() => {
-                                        setEnd(false);
-                                        update();
-                                    }}
-                                >
-                                    Update
-                                </Button>
-                            ) : (
-                                <CircularProgress disableShrink color="secondary" />
-                            )}
+                            <LoadingButton
+                                variant="outlined"
+                                color="secondary"
+                                loading={updating}
+                                onClick={() => {
+                                    setEnd(false);
+                                    update();
+                                }}
+                                startIcon={<Refresh />}
+                                loadingPosition="start"
+                            >
+                                Update
+                            </LoadingButton>
                         </Box>
                         <PageBottom />
                     </Paper>

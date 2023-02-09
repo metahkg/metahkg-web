@@ -28,6 +28,7 @@ import {
     ListItemText,
     Avatar,
     Divider,
+    Typography,
 } from "@mui/material";
 import { useComment, usePopupOpen } from "../comment";
 import { User } from "@metahkg/api";
@@ -114,7 +115,7 @@ export default function EmotionList(props: {
                         <IconButton onClick={handleUsersClose}>
                             <ArrowBack />
                         </IconButton>
-                        <p className="my-0 ml-[5px]">{emotion}</p>
+                        <Typography className="ml-[5px]">{emotion}</Typography>
                     </Box>
                     <Divider />
                     <MenuList>
