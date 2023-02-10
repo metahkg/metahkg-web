@@ -37,7 +37,7 @@ import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
-import { useUser } from "./AppContextProvider";
+import { useDarkMode, useUser } from "./AppContextProvider";
 
 /**
  * just a template for large screens if there's no content
@@ -62,7 +62,10 @@ export default function Template() {
             link: "https://gitlab.com/metahkg/metahkg",
         },
     ];
+
     const [user] = useUser();
+    const darkMode = useDarkMode();
+
     return (
         <Paper
             className="overflow-auto justify-center flex h-screen w-full"
@@ -70,9 +73,9 @@ export default function Template() {
                 bgcolor: "primary.dark",
             }}
         >
-            <Box className="w-full m-[50px]">
+            <Box className="w-full m-10">
                 <Box className="flex items-center my-5">
-                    <MetahkgIcon height={50} width={50} svg light />
+                    <MetahkgIcon height={50} width={50} svg light={darkMode} />
                     <Typography variant="h4" component="h1" className="!ml-1">
                         Metahkg
                     </Typography>

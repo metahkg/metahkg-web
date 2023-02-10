@@ -37,12 +37,12 @@ export default function PinnedComment(props: { comment: Comment }) {
                     setOpen(true);
                 }}
             >
-                <InfoOutlined className="!text-metahkg-grey !ml-[10px] !mr-[10px]" />
+                <InfoOutlined className="!text-metahkg-grey !mx-2" />
                 <Box className="overflow-hidden">
                     <Typography className="!my-0" color="secondary">
                         Pinned Comment #{comment.id}
                     </Typography>
-                    <Typography className="!text-metahkg-grey text-ellipsis overflow-hidden whitespace-nowrap !my-0 !mr-[15px]">
+                    <Typography className="!text-metahkg-grey text-ellipsis overflow-hidden whitespace-nowrap !mr-4">
                         {settings.filterSwearWords
                             ? filterSwearWords(comment.text)
                             : comment.text}

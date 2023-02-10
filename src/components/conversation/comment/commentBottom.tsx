@@ -23,7 +23,12 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { css } from "../../../lib/css";
 import { useThreadId } from "../ConversationContext";
-import { useIsSmallScreen, useNotification, useUser } from "../../AppContextProvider";
+import {
+    useDarkMode,
+    useIsSmallScreen,
+    useNotification,
+    useUser,
+} from "../../AppContextProvider";
 import {
     useInPopUp,
     useSetIsExpanded,
@@ -48,6 +53,7 @@ export default function CommentBottom() {
     const [user] = useUser();
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
     const isSmallScreen = useIsSmallScreen();
+    const darkMode = useDarkMode();
 
     const choosed = user && comment.emotions?.find((i) => i.user === user.id)?.emotion;
 
@@ -144,7 +150,7 @@ export default function CommentBottom() {
                 <VoteButtons comment={comment} key={`${comment.U}${comment.D}`} />
                 {comment.replies?.length && (
                     <Button
-                        className={`${css.smallBtn} !ml-2 !bg-[#333]`}
+                        className={`${css.smallBtn} !ml-2 bg-[#f6f6f6] dark:!bg-[#333]`}
                         variant="text"
                         onClick={() => {
                             if (inPopUp) {
@@ -222,7 +228,7 @@ export default function CommentBottom() {
                                     onEmojiSelect={(emoji) => {
                                         setEmotion(emoji.native);
                                     }}
-                                    theme={"dark"}
+                                    theme={darkMode ? "dark" : "light"}
                                 />
                             </Box>
                         </Popover>

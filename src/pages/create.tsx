@@ -24,6 +24,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useCat, useMenu } from "../components/MenuProvider";
 import {
+    useDarkMode,
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
@@ -57,6 +58,7 @@ export default function Create() {
         severity: "info",
         text: "",
     });
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
 
     const quote = {
@@ -167,7 +169,7 @@ export default function Create() {
                             svg
                             height={50}
                             width={40}
-                            light
+                            light={darkMode}
                             className="!mr-2 !mb-2"
                         />
                         <Typography variant="h4">Create thread</Typography>

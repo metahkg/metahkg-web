@@ -34,6 +34,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
+    useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
     useUser,
@@ -99,6 +100,7 @@ export default function Register() {
     });
     const [menu, setMenu] = useMenu();
     const [user] = useUser();
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
@@ -203,7 +205,7 @@ export default function Register() {
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
-                            light
+                            light={darkMode}
                             height={50}
                             width={40}
                             className="!mb-[10px]"

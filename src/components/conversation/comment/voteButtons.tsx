@@ -61,9 +61,13 @@ export default function VoteButtons(props: { comment: Comment }) {
     }
 
     return (
-        <ButtonGroup variant="text" className="!rounded-[4px] !bg-[#333]">
+        <ButtonGroup
+            variant="text"
+            sx={{ bgcolor: "primary.dark" }}
+            className="!rounded-[4px] dark:!bg-[#333]"
+        >
             <LoadingButton
-                className="!p-0 !m-0 !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0 [&>span]:!mr-1 [&>span]:!ml-0"
+                className="!p-0 !m-0 !py-[2px] !min-w-0 !pl-[5.5px] !pr-[6px] !rounded-r-0 [&>span]:!mr-1 [&>span]:!ml-0 !border-none"
                 disabled={!user || Boolean(vote) || Boolean(voting)}
                 onClick={() => {
                     sendVote("U");
@@ -83,7 +87,7 @@ export default function VoteButtons(props: { comment: Comment }) {
                 </Typography>
             </LoadingButton>
             <LoadingButton
-                className="!p-0 !m-0 !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0 [&>span]:!mr-1 [&>span]:!ml-0"
+                className="!p-0 !m-0 !py-[2px] !min-w-0 !pr-[10px] !rounded-l-0 [&>span]:!mr-1 [&>span]:!ml-0 !border-none"
                 disabled={!user || Boolean(vote) || Boolean(voting)}
                 onClick={() => {
                     sendVote("D");

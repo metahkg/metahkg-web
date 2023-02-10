@@ -32,12 +32,13 @@ import {
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
-import { useWidth } from "../../AppContextProvider";
+import { useDarkMode, useWidth } from "../../AppContextProvider";
 
 export default function Player(props: { url: string; style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
     const [width] = useWidth();
+    const darkMode = useDarkMode();
     const YoutubePlayerRef = useRef<YoutubePlayer>(null);
     const FacebookPlayerRef = useRef<FacebookPlayer>(null);
     const StreamPlayerRef = useRef<StreamPlayer>(null);
@@ -105,7 +106,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
             {play && (
                 <Box
                     width={width < 760 ? "100%" : "65%"}
-                    sx={{ bgcolor: "#333", height: 30 }}
+                    sx={{ bgcolor: darkMode ? "#333" : "#eeeeee", height: 30 }}
                     className="!text-metahkg-grey !text-[15px] flex justify-between items-center"
                 >
                     <Box className="flex items-center !ml-[10px]">

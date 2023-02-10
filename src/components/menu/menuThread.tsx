@@ -51,7 +51,9 @@ export default function MenuThread(props: {
         >
             <Box
                 className={`flex w-full flex-col !select-none ${
-                    id === thread.id ? "bg-[#292929]" : "hover:bg-[#232323]"
+                    id === thread.id
+                        ? "bg-[#f6f6f6] dark:bg-[#292929]"
+                        : "hover:bg-[#f3f3f3] dark:hover:bg-[#232323]"
                 }`}
             >
                 <Box className="flex w-full items-center justify-between h-9">
@@ -111,9 +113,12 @@ export default function MenuThread(props: {
                         >
                             <Button
                                 variant="contained"
-                                className="!m-0 !p-[3px] !normal-case !rounded-2xl !bg-[#333] hover:!bg-[#444]"
+                                className="!m-0 !p-[3px] !normal-case !rounded-2xl !bg-[#f3f3f3] hover:!bg-[#f6f6f6] dark:!bg-[#333] dark:hover:!bg-[#444]"
                             >
-                                <Typography variant="body2" className="!mx-1">
+                                <Typography
+                                    variant="body2"
+                                    className="!mx-1 !whitespace-nowrap"
+                                >
                                     {
                                         categories.find((i) => i.id === thread.category)
                                             ?.name

@@ -33,7 +33,7 @@ export default function Gallery(props: {
     const [loading, setLoading] = useState(true);
     return (
         <PopUp title="Images" open={open} setOpen={setOpen} fullScreen>
-            <Box sx={{ bgcolor: "primary.main" }} className="!ml-[10px] !mr-[10px]">
+            <Box sx={{ bgcolor: "primary.main" }} className="!mx-2">
                 <PhotoProvider>
                     {loading && <Loader position="center" />}
                     <ImageList

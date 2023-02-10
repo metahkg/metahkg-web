@@ -1,21 +1,28 @@
 import React from "react";
 import { GitHub, Reddit, Telegram } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
 import DiscordIcon from "../../lib/icons/dicord";
+import { Link } from "../../lib/link";
 
 export default function PageBottom() {
     const socialIcons = [
         {
-            icon: <GitlabIcon className="!text-metahkg-grey" height={16} width={16} />,
+            icon: (
+                <GitlabIcon
+                    className="text-inherit-size text-inherit"
+                    height={16}
+                    width={16}
+                />
+            ),
             link: "https://gitlab.com/metahkg",
         },
         {
-            icon: <GitHub className="!text-[17px] !text-metahkg-grey" />,
+            icon: <GitHub fontSize="inherit" className="!text-inherit" />,
             link: "https://github.com/metahkg",
         },
         {
-            icon: <Telegram className="!text-[17px] !text-metahkg-grey" />,
+            icon: <Telegram fontSize="inherit" className="!text-inherit" />,
             link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
         {
@@ -23,49 +30,48 @@ export default function PageBottom() {
                 <DiscordIcon
                     height={17}
                     width={17}
-                    className="!text-[17px] !text-metahkg-grey"
-                    color={"#aca9a9"}
+                    className="text-inherit-size"
+                    color="#aca9a9"
                 />
             ),
             link: "https://discord.gg/yrf2v8KGdc",
         },
         {
-            icon: <Reddit className="!text-[17px] !text-metahkg-grey" />,
+            icon: <Reddit fontSize="inherit" className="!text-inherit" />,
             link: "https://reddit.com/r/metahkg",
         },
     ];
     return (
-        <Box
-            sx={{ marginBottom: 10 }}
-            className="text-[14px] !text-metahkg-grey text-center flex flex-col justify-center items-center max-w-full max-height-full !mt-[10px]"
-        >
-            <Box className="flex">
+        <Box className="mt-2 mb-[80px] !text-metahkg-grey text-center grid grid-cols-1 gap-2 justify-center items-center max-w-full max-height-full">
+            <Box className="flex justify-center items-center text-[17px]">
                 {socialIcons.map((icon, index) => (
-                    <a
+                    <Link
                         key={index}
-                        className={`!text-metahkg-grey !no-underline${
-                            index !== socialIcons.length - 1 ? " !mr-[7px]" : ""
+                        className={`!text-inherit !text-inherit-size !no-underline${
+                            index !== socialIcons.length - 1 ? " !mr-2" : ""
                         }`}
                         href={icon.link}
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <IconButton className="!p-0">{icon.icon}</IconButton>
-                    </a>
+                        <IconButton className="!p-0 !text-inherit-size !text-inherit">
+                            {icon.icon}
+                        </IconButton>
+                    </Link>
                 ))}
             </Box>
-            <Box className="!mt-[8px]">
+            <Typography className="!text-sm">
                 Copyright (c) 2022-present Metahkg Contributors.{" "}
-                <a
-                    className="!text-metahkg-grey"
+                <Link
+                    className="!text-inherit"
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"
                 >
                     AGPL-3.0-or-later
-                </a>
+                </Link>
                 .
-            </Box>
+            </Typography>
         </Box>
     );
 }

@@ -35,11 +35,12 @@ declare module "@mui/material/styles" {
 export default function Theme(props: {
     primary?: PaletteColorOptions;
     secondary?: PaletteColorOptions;
+    mode?: "dark" | "light";
     children: JSX.Element | JSX.Element[];
 }) {
     const theme = createTheme({
         palette: {
-            mode: "dark",
+            mode: props.mode || "dark",
             primary: props.primary,
             secondary: props.secondary,
         },

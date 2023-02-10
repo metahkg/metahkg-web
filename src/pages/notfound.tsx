@@ -20,12 +20,14 @@ import { Box, Typography } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
+import { useDarkMode } from "../components/AppContextProvider";
 
 /**
  * 404 page
  */
 export default function NotFound() {
     const [menu, setMenu] = useMenu();
+    const darkMode = useDarkMode();
 
     useLayoutEffect(() => {
         setTitle("404 Not Found | Metahkg");
@@ -40,7 +42,7 @@ export default function NotFound() {
             <MetahkgLogo
                 className="!mr-[10px] !mb-[20px]"
                 svg
-                light
+                light={darkMode}
                 height={100}
                 width={80}
             />
