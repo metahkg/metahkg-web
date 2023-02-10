@@ -35,7 +35,7 @@ export default function EnableMenu(props: {
 
     return (
         <Box
-            className={`max-h-screen h-screen ${
+            className={`${
                 menu
                     ? isSmallScreen
                         ? "w-0"
@@ -43,7 +43,7 @@ export default function EnableMenu(props: {
                     : isSmallScreen
                     ? "w-100v"
                     : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
-            } overflow-scroll`}
+            } overflow-auto`}
         >
             {children}
         </Box>
