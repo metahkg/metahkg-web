@@ -30,7 +30,10 @@ export default function MenuPreload() {
     const amount = roundup(totalHeight / 72);
     const buttonWidth = isSmallScreen ? width : 0.3 * width;
     return (
-        <Box className="bg-[#1e1e1e]" sx={{ minHeight: totalHeight }}>
+        <Box
+            className="dark:!bg-[#1e1e1e]"
+            sx={{ minHeight: totalHeight, bgcolor: "primary.main" }}
+        >
             {[...Array(amount)].map((_, index) => (
                 <Box key={index}>
                     <Button className="w-full flex !items-start flex-col justify-center h-[72px]">

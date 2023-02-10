@@ -63,7 +63,7 @@ export default function CommentEdit() {
     };
 
     return (
-        <Box className="my-[10px]">
+        <Box className="my-2">
             <TextEditor
                 initText={comment.comment}
                 onChange={setEdited}
@@ -74,9 +74,9 @@ export default function CommentEdit() {
                 autoResize
                 noAutoSave
             />
-            <Box className="my-[10px] flex justify-between items-center">
+            <Box className="my-2 flex justify-between items-center">
                 <TextField
-                    className="!mr-[20px]"
+                    className="!mr-5"
                     color="secondary"
                     variant="outlined"
                     fullWidth

@@ -37,6 +37,7 @@ import {
     useUser,
     useReCaptchaSiteKey,
     useSession,
+    useDarkMode,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -64,6 +65,7 @@ export default function Login() {
         text: "",
     });
     const [sameIp, setSameIp] = useState(false);
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const navigate = useNavigate();
@@ -145,7 +147,7 @@ export default function Login() {
                             height={50}
                             width={40}
                             svg
-                            light
+                            light={darkMode}
                             className="!mb-[10px]"
                         />
                         <h1 className="text-[25px] !mb-[20px]">Login</h1>

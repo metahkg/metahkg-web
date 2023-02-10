@@ -9,8 +9,8 @@ export function AboutDialog(props: {
     const { open, setOpen } = props;
     return (
         <PopUp title="About Metahkg" closeBtn open={open} setOpen={setOpen} fullWidth>
-            <Box className="mb-[15px] flex flex-col">
-                <Typography variant="body1" gutterBottom className="!mt-[15px]">
+            <Box className="mb-4 flex flex-col">
+                <Typography variant="body1" gutterBottom className="!mt-4">
                     Metahkg is a free and open source lihkg-style forum.
                 </Typography>
                 <Typography variant="h5" gutterBottom>

@@ -242,7 +242,10 @@ export default function MenuBody(props: { selected: number }) {
             onScroll={onScroll}
             ref={paperRef}
         >
-            <Box className="min-h-full flex flex-col bg-[#1e1e1e]">
+            <Box
+                className="min-h-full flex flex-col dark:!bg-[#1e1e1e]"
+                sx={{ bgcolor: "primary.main" }}
+            >
                 {Boolean(data.length) && (
                     <Box className="flex flex-col max-w-full">
                         {data.map((thread, index) => (

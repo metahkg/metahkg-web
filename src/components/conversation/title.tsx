@@ -40,7 +40,7 @@ export default function Title(props: {
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box
-            className="h-[46px] border-solid border-0 border-b-[1px] border-[#3b3b3b]"
+            className="h-[46px] border-solid border-0 border-b-[1px] border-[#f3f3f3] dark:border-[#3b3b3b]"
             sx={{
                 bgcolor: "primary.main",
             }}

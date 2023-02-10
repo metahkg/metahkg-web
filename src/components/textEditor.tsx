@@ -17,7 +17,7 @@
 
 import React, { useCallback } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useIsSmallScreen } from "./AppContextProvider";
+import { useDarkMode, useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
@@ -55,6 +55,7 @@ export default function TextEditor(props: {
 
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
+    const darkMode = useDarkMode();
 
     const onEditorChange = useCallback(
         (a: string, editor: import("tinymce/tinymce").Editor) => {
@@ -81,10 +82,14 @@ export default function TextEditor(props: {
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     ...(minHeight && { min_height: minHeight }),
-                    skin_url:
-                        "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/ui/metahkg-dark",
-                    content_css:
-                        "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/content/metahkg-dark/content.min.css",
+                    ...(darkMode
+                        ? {
+                              skin_url:
+                                  "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/ui/metahkg-dark",
+                              content_css:
+                                  "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/content/metahkg-dark/content.min.css",
+                          }
+                        : { skin: "oxide" }),
                     branding: false,
                     promotion: false,
                     ...(noStatusBar && { statusbar: false }),

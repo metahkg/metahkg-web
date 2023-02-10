@@ -118,8 +118,8 @@ export default function FloatingEditor() {
 
     return (
         <Snackbar
-            className={`rounded-[20px] !z-[1000] ${
-                isSmallScreen ? "!right-[8px] !left-[8px]" : ""
+            className={`rounded-2xl !z-[1000] ${
+                isSmallScreen ? "!right-2 !left-2" : ""
             }  ${thread?.pin ? "!top-[110px]" : "!top-[60px]"}`}
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
@@ -129,33 +129,35 @@ export default function FloatingEditor() {
                 sx={{
                     bgcolor: "primary.dark",
                 }}
-                className={`rounded-[15px] overflow-auto ${
+                className={`rounded-2xl shadow overflow-auto ${
                     isSmallScreen
                         ? "!max-w-[calc(100vw-16px)] w-[calc(100vw-16px)] max-h-50v"
                         : "max-w-70v w-50v max-h-70v"
                 }`}
             >
                 <DialogTitle className="flex justify-between items-center !p-0">
-                    <Typography variant="h5" className="!ml-[20px] !my-[10px]">
+                    <Typography variant="h5" className="!ml-5 !my-2">
                         {editor.quote ? "Reply" : "Comment"}
                     </Typography>
-                    <Box className="flex">
+                    <Box className="flex mr-1">
                         <IconButton
-                            className="!my-0 cursor-pointer !mr-[10px] metahkg-yellow"
+                            className="!my-0 !mr-2 cursor-pointer"
                             onClick={() => {
                                 setFold(!fold);
                             }}
                         >
                             {fold ? <ExpandMore /> : <ExpandLess />}
                         </IconButton>
-                        <IconButton className="!mr-[5px]" onClick={handleClose}>
-                            <Close className="!text-[18px]" />
+                        <IconButton onClick={handleClose}>
+                            <Close className="!text-lg" />
                         </IconButton>
                     </Box>
                 </DialogTitle>
                 <Box
                     component="form"
-                    className={`rounded-[20px] flex flex-col ${fold ? "hidden" : ""}`}
+                    className={`mx-2 rounded-5 flex flex-col justify-center ${
+                        fold ? "hidden" : ""
+                    }`}
                     onSubmit={onSubmit}
                 >
                     {editor.quote && (
@@ -167,8 +169,7 @@ export default function FloatingEditor() {
                             noStory
                             noQuote
                             noFullWidth
-                            className="!mb-[10px] !ml-[10px] !mr-[10px]"
-                            sx={{ "& > div": { borderRadius: 2 } }}
+                            className="!mb-2 !mx-2 [&>div]:rounded-lg"
                             maxHeight={200}
                         />
                     )}
@@ -185,9 +186,9 @@ export default function FloatingEditor() {
                         noStatusBar
                         toolbarBottom
                         lengthLimit={50000}
-                        className="!mx-[10px] max-w-[calc(100%-20px)]"
+                        className="max-w-full"
                     />
-                    <Box className="m-[10px]">
+                    <Box className="my-2 ml-1">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
@@ -205,7 +206,7 @@ export default function FloatingEditor() {
                         >
                             Comment
                         </LoadingButton>
-                        <ReCaptchaNotice className="!mt-[10px]" />
+                        <ReCaptchaNotice />
                     </Box>
                 </Box>
             </Box>

@@ -41,6 +41,7 @@ export const AppContext = createContext<{
     notification: [notification, Dispatch<SetStateAction<notification>>];
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
+    darkMode: boolean;
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<SetStateAction<Category[]>>];
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
@@ -74,6 +75,11 @@ export default function AppContextProvider(props: {
                 JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
         )
     );
+    const darkMode =
+        settings.theme === "dark" ||
+        (settings.theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches) ||
+        !settings.theme;
     const [serverPublicKey, setServerPublicKey] = useState<string>(
         localStorage.getItem("serverPublicKey") || ""
     );
@@ -205,6 +211,7 @@ export default function AppContextProvider(props: {
                 notification: [notification, setNotification],
                 settingsOpen: [settingsOpen, setSettingsOpen],
                 settings: [settings, setSettings],
+                darkMode,
                 history: [history, setHistory],
                 categories: [categories, setCategories],
                 serverPublicKey: [serverPublicKey, setServerPublicKey],
@@ -298,6 +305,11 @@ export function useSettingsOpen() {
 export function useSettings() {
     const { settings } = useContext(AppContext);
     return settings;
+}
+
+export function useDarkMode() {
+    const { darkMode } = useContext(AppContext);
+    return darkMode;
 }
 
 /**

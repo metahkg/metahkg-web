@@ -111,7 +111,7 @@ export default function SideBar() {
                                 <ListItemText>Support Ukraine</ListItemText>
                             </ListItemButton>
                         </List>
-                        <Box className="!ml-[10px] !mr-[10px]">
+                        <Box className="!mx-2">
                             <SearchBar
                                 query={query}
                                 onChange={(e) => {
@@ -172,9 +172,9 @@ export default function SideBar() {
                             cats && (
                                 <Box key={index}>
                                     <Box
-                                        className={`m-[20px]${
-                                            user && !index ? " !mb-[10px]" : ""
-                                        }${index ? " !mt-[0px]" : ""}`}
+                                        className={`m-5${user && !index ? " !mb-2" : ""}${
+                                            index ? " !mt-0" : ""
+                                        }`}
                                     >
                                         {cats.map((category, index) => (
                                             <Link
@@ -183,7 +183,7 @@ export default function SideBar() {
                                                 className="!no-underline"
                                             >
                                                 <Typography
-                                                    className="!text-[16px] text-left w-1/2 inline-block !leading-[35px] hover:!text-[#fbc308]"
+                                                    className="!text-base text-left w-1/2 inline-block hover:!text-[#fbc308]"
                                                     sx={(theme) => ({
                                                         color:
                                                             cat === category.id &&
@@ -259,7 +259,7 @@ export default function SideBar() {
                         </ListItemButton>
                     </List>
                     {process.env.REACT_APP_version && (
-                        <Typography gutterBottom className="!ml-[5px]">
+                        <Typography gutterBottom className="!ml-1">
                             Metahkg Web{" "}
                             {(process.env.REACT_APP_build && (
                                 <Link

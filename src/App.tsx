@@ -26,6 +26,7 @@ import AppContextProvider, {
     useSettingsOpen,
     useIsSmallScreen,
     useAlertDialog,
+    useDarkMode,
 } from "./components/AppContextProvider";
 import { Notification as SnackBar } from "./lib/notification";
 import Routes from "./Routes";
@@ -45,6 +46,7 @@ function App() {
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
+    const darkMode = useDarkMode();
     const [alertDialog] = useAlertDialog();
 
     // useEffect hooks
@@ -54,14 +56,21 @@ function App() {
 
     return (
         <Theme
-            primary={{ main: "#222" }}
+            mode={darkMode ? "dark" : "light"}
+            primary={{
+                main: darkMode ? "#222" : "#fff",
+                dark: darkMode ? "#171717" : "#f6f6f6",
+            }}
             secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
             <CssBaseline />
             <AlertDialog {...alertDialog} />
             <SnackBar />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
+            <Box
+                className={`max-h-screen h-screen ${darkMode ? "dark" : ""}`}
+                sx={{ bgcolor: "primary.dark" }}
+            >
                 <ErrorBoundary>
                     <Router>
                         <Box className="flex">

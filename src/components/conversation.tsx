@@ -190,8 +190,8 @@ function Conversation(props: { id: number }) {
                         ref={cRoot}
                         key={Number(reRender)}
                         className={`overflow-auto !bg-none !shadow-none ${
-                            (thread?.pin && "max-h-[calc(100vh-97px)]") ||
-                            "max-h-[calc(100vh-47px)]"
+                            (thread?.pin && "max-h-[calc(100vh-96px)]") ||
+                            "max-h-[calc(100vh-46px)]"
                         }`}
                         sx={{ bgcolor: "primary.dark" }}
                         onScroll={onScroll}

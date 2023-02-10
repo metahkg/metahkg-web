@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
+    darkMode: "class",
     theme: {
         extend: {
             colors: {
@@ -80,7 +81,18 @@ module.exports = {
                 "90v": "90vw",
                 "100v": "100vw",
             },
+            fontSize: {
+                "inherit-size": "inherit",
+            },
         },
     },
-    plugins: [],
+    plugins: [
+        function ({ addVariant }) {
+            addVariant("child", "& *");
+            addVariant("child-a", "& a");
+            addVariant("child-img", "& img");
+            addVariant("child-video", "& video");
+            addVariant("child-blockquote", "& blockquote");
+        },
+    ],
 };

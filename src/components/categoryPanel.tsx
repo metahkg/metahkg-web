@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Category } from "@metahkg/api";
 import { Box, Drawer, Typography } from "@mui/material";
-import { useCategories, useUser } from "./AppContextProvider";
+import { useCategories, useDarkMode, useSettings, useUser } from "./AppContextProvider";
 import { useCat } from "./MenuProvider";
 import { Link } from "react-router-dom";
 import MetahkgLogo from "./logo";
@@ -14,6 +14,8 @@ export function CategoryPanel(props: {
     const [user] = useUser();
     let [categories] = useCategories();
     const [currentCategory] = useCat();
+    const darkMode = useDarkMode();
+    const [settings] = useSettings();
 
     categories.sort((a, b) => a.id - b.id);
 
@@ -66,17 +68,22 @@ export function CategoryPanel(props: {
                 <Typography
                     gutterBottom
                     variant="body2"
-                    className={`${
-                        currentCategory === category.id
-                            ? "text-metahkg-yellow"
-                            : "text-inherit"
-                    } hover:text-metahkg-yellow !my-4`}
+                    className={`!my-4`}
+                    sx={{
+                        color:
+                            currentCategory === category.id
+                                ? settings.secondaryColor?.main || "#f5bd1f"
+                                : "inherit",
+                        "&:hover": {
+                            color: settings.secondaryColor?.main || "#f5bd1f",
+                        },
+                    }}
                 >
                     {category.name}
                 </Typography>
             </Box>
         ),
-        [currentCategory, toggleDrawer]
+        [currentCategory, settings.secondaryColor?.main, toggleDrawer]
     );
 
     return (
@@ -93,7 +100,7 @@ export function CategoryPanel(props: {
         >
             <Box className="ml-4 w-[200px] max-w-full" role="presentation">
                 <Box className="flex items-end my-5">
-                    <MetahkgLogo svg light height={30} width={30} />
+                    <MetahkgLogo svg light={darkMode} height={30} width={30} />
                     <Typography variant="h6" component="h1" className="ml-1">
                         Categories
                     </Typography>

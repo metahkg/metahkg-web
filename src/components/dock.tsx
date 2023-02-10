@@ -35,7 +35,7 @@ export default function Dock(props: {
                     className="flex w-full fixed bottom-0 right-0 z-[100]"
                     sx={{ bgcolor: "primary.dark", height: 60 }}
                 >
-                    <Box className="flex justify-between w-full !ml-[20px] !mr-[20px] items-center">
+                    <Box className="flex justify-between w-full !mx-5 items-center">
                         <SideBar />
                         {btns.map((btn, index) => (
                             <IconButton key={index} onClick={btn.action}>

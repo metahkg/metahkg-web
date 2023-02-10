@@ -80,7 +80,7 @@ export function PopUp(props: {
                 <React.Fragment>
                     <DialogTitle
                         sx={{ bgcolor: "primary.main" }}
-                        className="!px-0 !py-1 !min-w-[270px] flex justify-between items-center"
+                        className="!px-0 !py-1 !min-w-[520px] flex justify-between items-center"
                     >
                         <Typography className="!ml-5" variant="h6">
                             {title}

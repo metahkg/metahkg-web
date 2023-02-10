@@ -26,6 +26,7 @@ import {
     Typography,
 } from "@mui/material";
 import {
+    useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
     useSession,
@@ -63,6 +64,7 @@ export default function Verify() {
     const [user] = useUser();
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const darkMode = useDarkMode();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
@@ -122,7 +124,7 @@ export default function Verify() {
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
-                            light
+                            light={darkMode}
                             height={50}
                             width={40}
                             className="!mb-[10px]"

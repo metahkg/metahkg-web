@@ -96,7 +96,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                 }
 
                 return (
-                    <div className="overflow-scroll py-[5px] px-[20px]">
+                    <div className="py-1 px-5">
                         <h1>Error</h1>
                         {this.renderMessage()}
                         <p>
@@ -113,7 +113,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                 );
             } catch (error) {
                 return (
-                    <div style={{ height: "100vh", overflow: "auto" }}>
+                    <div className="overflow-scroll max-h-screen h-screen">
                         {JSON.stringify(this.state)}
                     </div>
                 );
