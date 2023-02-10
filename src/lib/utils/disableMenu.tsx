@@ -33,7 +33,7 @@ export default function DisableMenu(props: { children: React.ReactNode }) {
         <Box
             className={`max-h-screen h-screen ${
                 isSmallScreen ? "w-100v" : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
-            } overflow-scroll`}
+            } overflow-auto`}
         >
             {children}
         </Box>
