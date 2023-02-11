@@ -39,7 +39,7 @@ export function Link(
                         {children}
                     </InternalLink>
                 ) : (
-                    <MuiLink {...props} href={href || to}>
+                    <MuiLink {...props} color="#3498db" href={href || to}>
                         {children}
                     </MuiLink>
                 )
