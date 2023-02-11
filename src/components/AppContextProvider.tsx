@@ -133,7 +133,10 @@ export default function AppContextProvider(props: {
         JSON.parse(localStorage.getItem("starlist") || "[]")
     );
     const [sidePanelExpanded, setSidePanelExpanded] = useState(
-        JSON.parse(localStorage.getItem("sidePanelExpanded") || "false")
+        JSON.parse(
+            localStorage.getItem("sidePanelExpanded") ||
+                (isSmallScreen ? "true" : "false")
+        )
     );
 
     useEffect(() => {

@@ -16,35 +16,9 @@
  */
 
 import React, { useState } from "react";
-import {
-    Box,
-    Divider,
-    Drawer,
-    IconButton,
-    List,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-} from "@mui/material";
-import {
-    AccessTimeFilled,
-    AccountCircle as AccountCircleIcon,
-    Code as CodeIcon,
-    Logout as LogoutIcon,
-    ManageAccounts as ManageAccountsIcon,
-    Menu as MenuIcon,
-    Settings as SettingsIcon,
-    Telegram as TelegramIcon,
-    Star as StarIcon,
-} from "@mui/icons-material";
-import { Link } from "../lib/link";
-import { useNavigate } from "react-router-dom";
-import SearchBar from "./searchBar";
-import { useCategories, useQuery, useSettingsOpen, useUser } from "./AppContextProvider";
-import { wholePath } from "../lib/common";
-import { useCat, useMenuMode } from "./MenuProvider";
-import MetahkgLogo from "./logo";
+import { Box, Drawer, IconButton } from "@mui/material";
+import SidePanel from "./sidePanel";
+import { Menu as MenuIcon } from "@mui/icons-material";
 
 /**
  * The sidebar is a
@@ -53,14 +27,6 @@ import MetahkgLogo from "./logo";
  */
 export default function SideBar() {
     const [open, setOpen] = useState(false);
-    const [query, setQuery] = useQuery();
-    const [cat] = useCat();
-    const [menuMode] = useMenuMode();
-    const [, setSettingsOpen] = useSettingsOpen();
-    const [user] = useUser();
-    const [categories] = useCategories();
-
-    const navigate = useNavigate();
 
     const toggleDrawer =
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -73,10 +39,6 @@ export default function SideBar() {
             }
             setOpen(open);
         };
-
-    function onClick() {
-        setOpen(false);
-    }
 
     return (
         <Box>
@@ -92,188 +54,11 @@ export default function SideBar() {
                 PaperProps={{
                     sx: {
                         backgroundImage: "none",
-                        backgroundColor: "primary.main",
+                        backgroundColor: "",
                     },
                 }}
             >
-                <Box className="w-[250px] max-w-full" role="presentation">
-                    <Box className="w-full">
-                        <List className="w-full !text-inherit">
-                            <ListItemButton
-                                onClick={onClick}
-                                component={"a"}
-                                href="https://war.ukraine.ua/support-ukraine/"
-                                className="!no-underline"
-                            >
-                                <ListItemIcon>
-                                    <MetahkgLogo height={24} width={30} ua />
-                                </ListItemIcon>
-                                <ListItemText>Support Ukraine</ListItemText>
-                            </ListItemButton>
-                        </List>
-                        <Box className="!mx-2">
-                            <SearchBar
-                                query={query}
-                                onChange={(e) => {
-                                    setQuery(e.target.value);
-                                }}
-                                onKeyPress={(e) => {
-                                    if (e.key === "Enter" && query) {
-                                        navigate(
-                                            `/search?q=${encodeURIComponent(query)}`
-                                        );
-                                        setOpen(false);
-                                    }
-                                }}
-                            />
-                        </Box>
-                    </Box>
-                    <List>
-                        {[
-                            {
-                                title: "Recall",
-                                link: "/recall",
-                                icon: <AccessTimeFilled />,
-                            },
-                            user && {
-                                title: "Starred",
-                                link: "/starred",
-                                icon: <StarIcon />,
-                            },
-                            {
-                                title: user ? "Logout" : "Login / Register",
-                                link: `/users/${
-                                    user ? "logout" : "login"
-                                }?returnto=${encodeURIComponent(wholePath())}`,
-                                icon: user ? <LogoutIcon /> : <AccountCircleIcon />,
-                            },
-                        ].map(
-                            (item, index) =>
-                                item && (
-                                    <ListItemButton
-                                        key={index}
-                                        component={Link}
-                                        onClick={onClick}
-                                        href={item.link}
-                                        className="!no-underline !text-inherit"
-                                    >
-                                        <ListItemIcon>{item.icon}</ListItemIcon>
-                                        <ListItemText>{item.title}</ListItemText>
-                                    </ListItemButton>
-                                )
-                        )}
-                    </List>
-                    <Divider />
-                    {[
-                        categories.filter((i) => !i.hidden),
-                        user && categories.filter((i) => i.hidden),
-                    ].map(
-                        (cats, index) =>
-                            cats && (
-                                <Box key={index}>
-                                    <Box
-                                        className={`m-5${user && !index ? " !mb-2" : ""}${
-                                            index ? " !mt-0" : ""
-                                        }`}
-                                    >
-                                        {cats.map((category, index) => (
-                                            <Link
-                                                key={index}
-                                                to={`/category/${category.id}`}
-                                                className="!no-underline"
-                                            >
-                                                <Typography
-                                                    className="!text-base text-left w-1/2 inline-block hover:!text-[#fbc308]"
-                                                    sx={(theme) => ({
-                                                        color:
-                                                            cat === category.id &&
-                                                            menuMode === "category"
-                                                                ? theme.palette.secondary
-                                                                      .main
-                                                                : "white",
-                                                        "&:hover": {
-                                                            color: `${theme.palette.secondary.main} !important`,
-                                                        },
-                                                    })}
-                                                    onClick={onClick}
-                                                >
-                                                    {category.name}
-                                                </Typography>
-                                            </Link>
-                                        ))}
-                                    </Box>
-                                </Box>
-                            )
-                    )}
-                    <Divider />
-                    <List>
-                        {[
-                            {
-                                icon: <TelegramIcon />,
-                                title: "Telegram group",
-                                link: "https://t.me/+WbB7PyRovUY1ZDFl",
-                            },
-                            {
-                                icon: <CodeIcon />,
-                                title: "Source code",
-                                link: "https://gitlab.com/metahkg/metahkg",
-                            },
-                        ].map((item, index) => (
-                            <ListItemButton
-                                component={"a"}
-                                key={index}
-                                onClick={onClick}
-                                className="!no-underline text-inherit"
-                                href={item.link}
-                            >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                <ListItemText primary={item.title} />
-                            </ListItemButton>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {user && (
-                            <ListItemButton
-                                component={Link}
-                                className="!no-underline text-inherit"
-                                to={`/profile/${user?.id}`}
-                                onClick={onClick}
-                            >
-                                <ListItemIcon>
-                                    <ManageAccountsIcon />
-                                </ListItemIcon>
-                                <ListItemText>{user?.name}</ListItemText>
-                            </ListItemButton>
-                        )}
-                        <ListItemButton
-                            onClick={() => {
-                                setOpen(false);
-                                setSettingsOpen(true);
-                            }}
-                        >
-                            <ListItemIcon>
-                                <SettingsIcon />
-                            </ListItemIcon>
-                            <ListItemText>Settings</ListItemText>
-                        </ListItemButton>
-                    </List>
-                    {process.env.REACT_APP_version && (
-                        <Typography gutterBottom className="!ml-1">
-                            Metahkg Web{" "}
-                            {(process.env.REACT_APP_build && (
-                                <Link
-                                    className="inline"
-                                    href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
-                                >
-                                    {process.env.REACT_APP_build}
-                                </Link>
-                            )) ||
-                                process.env.REACT_APP_date}{" "}
-                            (v{process.env.REACT_APP_version})
-                        </Typography>
-                    )}
-                </Box>
+                <SidePanel />
             </Drawer>
         </Box>
     );
