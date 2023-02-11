@@ -57,6 +57,7 @@ function App() {
 
     useEffect(() => {
         document.body?.classList.add(darkMode ? "dark" : "light");
+        document.body?.classList.remove(darkMode ? "light" : "dark");
     }, [darkMode]);
 
     return (
