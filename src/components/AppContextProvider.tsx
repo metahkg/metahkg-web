@@ -19,6 +19,7 @@ import React, {
     createContext,
     Dispatch,
     SetStateAction,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -37,6 +38,7 @@ export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
     width: [number, Dispatch<SetStateAction<number>>];
+    isSmallScreen: boolean;
     height: [number, Dispatch<SetStateAction<number>>];
     notification: [notification, Dispatch<SetStateAction<notification>>];
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
@@ -67,6 +69,7 @@ export default function AppContextProvider(props: {
     const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
+    const [isSmallScreen, setIsSmallScreen] = useState(width < 768);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<settings>(
@@ -75,11 +78,17 @@ export default function AppContextProvider(props: {
                 JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
         )
     );
-    const darkMode =
-        settings.theme === "dark" ||
-        (settings.theme === "system" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches) ||
-        !settings.theme;
+
+    const isDarkMode = useCallback(() => {
+        return (
+            settings.theme === "dark" ||
+            (settings.theme === "system" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches) ||
+            !settings.theme
+        );
+    }, [settings.theme]);
+
+    const [darkMode, setDarkMode] = useState(isDarkMode());
     const [serverPublicKey, setServerPublicKey] = useState<string>(
         localStorage.getItem("serverPublicKey") || ""
     );
@@ -157,8 +166,13 @@ export default function AppContextProvider(props: {
     }, [query]);
 
     useEffect(() => {
+        setIsSmallScreen(width < 768);
+    }, [width]);
+
+    useEffect(() => {
         localStorage.setItem("settings", JSON.stringify(settings));
-    }, [settings]);
+        setDarkMode(isDarkMode());
+    }, [isDarkMode, settings]);
 
     useEffect(() => {
         localStorage.setItem("serverPublicKey", serverPublicKey);
@@ -206,8 +220,9 @@ export default function AppContextProvider(props: {
             value={{
                 back: [back, setBack],
                 width: [width, setWidth],
-                query: [query, setQuery],
                 height: [height, setHeight],
+                isSmallScreen,
+                query: [query, setQuery],
                 notification: [notification, setNotification],
                 settingsOpen: [settingsOpen, setSettingsOpen],
                 settings: [settings, setSettings],
@@ -332,8 +347,8 @@ export function useUser() {
 }
 
 export function useIsSmallScreen() {
-    const { width } = useContext(AppContext);
-    return width[0] < 760;
+    const { isSmallScreen } = useContext(AppContext);
+    return isSmallScreen;
 }
 
 export function useReCaptchaSiteKey() {
