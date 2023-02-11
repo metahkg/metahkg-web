@@ -58,7 +58,7 @@ export default function SideBar() {
                     },
                 }}
             >
-                <SidePanel />
+                <SidePanel onClickLink={toggleDrawer(false)} />
             </Drawer>
         </Box>
     );

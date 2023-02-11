@@ -52,13 +52,24 @@ import MetahkgLogo from "./logo";
 import { AboutDialog } from "./AboutDialog";
 import { CategoryPanel } from "./categoryPanel";
 
-export default function SidePanel() {
+export default function SidePanel(props: {
+    onClick?: (event: React.MouseEvent) => void;
+    onClickLink?: (event: React.MouseEvent) => void;
+}) {
+    const { onClick, onClickLink } = props;
     const [user] = useUser();
     const [, setSettingsOpen] = useSettingsOpen();
     const [aboutOpen, setAboutOpen] = useState(false);
     const [categoryOpen, setCategoryOpen] = useState(false);
     const [expanded, setExpanded] = useSidePanelExpanded();
     const darkMode = useDarkMode();
+
+    interface Button {
+        title: string;
+        icon: React.ReactNode;
+        link?: string;
+        onClick?: (e: React.MouseEvent) => void;
+    }
 
     const buttons = useMemo(() => {
         return [
@@ -146,13 +157,16 @@ export default function SidePanel() {
                 icon: <CodeIcon />,
                 link: "https://gitlab.com/metahkg/metahkg",
             },
-        ].filter((item) => item) as {
-            title: string;
-            icon: React.ReactElement;
-            onClick?: () => void;
-            link?: string;
-        }[];
+        ].filter((item) => item) as Button[];
     }, [darkMode, setSettingsOpen, user]);
+
+    const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
+        if (button.link) {
+            onClickLink?.(e);
+        }
+        onClick?.(e);
+        button.onClick?.(e);
+    };
 
     return (
         <Box
@@ -172,7 +186,7 @@ export default function SidePanel() {
                     >
                         {expanded ? (
                             <ListItemButton
-                                onClick={button.onClick}
+                                onClick={buttonOnclick(button)}
                                 className="w-full h-[50px] flex justify-between"
                             >
                                 <ListItemIcon>{button.icon}</ListItemIcon>
@@ -181,7 +195,7 @@ export default function SidePanel() {
                         ) : (
                             <Tooltip arrow title={button.title}>
                                 <IconButton
-                                    onClick={button.onClick}
+                                    onClick={buttonOnclick(button)}
                                     className="!mt-2 h-[40px] w-[40px]"
                                 >
                                     {button.icon}
