@@ -86,7 +86,7 @@ export default function Share() {
             <Box className="!mx-2 text-start text-5">
                 <TextField
                     className={`!mt-0 ${
-                        isSmallScreen ? "min-w-[250px]" : "min-w-[500px]"
+                        isSmallScreen ? "!min-w-[250px]" : "!min-w-[500px]"
                     }`}
                     multiline
                     variant="outlined"
