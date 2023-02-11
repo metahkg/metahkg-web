@@ -17,7 +17,7 @@
 
 import React from "react";
 import { Link as InternalLink } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
+import { Box, BoxProps, Link as MuiLink } from "@mui/material";
 
 export function Link(
     props: React.DetailedHTMLProps<
@@ -44,7 +44,7 @@ export function Link(
                     </MuiLink>
                 )
             ) : (
-                children
+                <Box {...(props as BoxProps)}>{children}</Box>
             )}
         </React.Fragment>
     );
