@@ -43,9 +43,6 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import { useMenuMode, useReFetch, useSmode } from "./MenuProvider";
 
 const Search = styled("div")(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.mode === "dark" ? "#111" : "#fff",
     border: `1px solid ${theme.palette.secondary.main}`,
@@ -94,7 +91,7 @@ export default function SearchBar(props: {
     const [menuMode] = useMenuMode();
 
     return (
-        <Search>
+        <Search className="flex relative items-center">
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
@@ -120,7 +117,7 @@ export default function SearchBar(props: {
                             display: "none",
                         },
                     }}
-                    className="!mr-2 !h-[24px] !min-w-[45px]"
+                    className="!absolute !right-2 !h-[24px] !min-w-[45px]"
                 />
             )}
         </Search>
