@@ -169,7 +169,7 @@ export default function FloatingEditor() {
                             noStory
                             noQuote
                             noFullWidth
-                            className="!mb-2 !mx-2 [&>div]:rounded-lg"
+                            className="!mb-2 !mx-1 [&>div]:rounded-lg"
                             maxHeight={200}
                         />
                     )}
