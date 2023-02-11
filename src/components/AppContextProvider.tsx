@@ -53,6 +53,7 @@ export const AppContext = createContext<{
     reCaptchaSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
+    sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
     // @ts-ignore
 }>(null);
 
@@ -131,6 +132,9 @@ export default function AppContextProvider(props: {
     const [starList, setStarList] = useState<Star[]>(
         JSON.parse(localStorage.getItem("starlist") || "[]")
     );
+    const [sidePanelExpanded, setSidePanelExpanded] = useState(
+        JSON.parse(localStorage.getItem("sidePanelExpanded") || "false")
+    );
 
     useEffect(() => {
         api.categories().then(setCategories);
@@ -205,6 +209,10 @@ export default function AppContextProvider(props: {
         localStorage.setItem("starlist", JSON.stringify(starList));
     }, [starList]);
 
+    useEffect(() => {
+        localStorage.setItem("sidePanelExpanded", JSON.stringify(sidePanelExpanded));
+    }, [sidePanelExpanded]);
+
     function updateSize() {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
@@ -236,6 +244,7 @@ export default function AppContextProvider(props: {
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
                 starList: [starList, setStarList],
+                sidePanelExpanded: [sidePanelExpanded, setSidePanelExpanded],
             }}
         >
             {props.children}
@@ -379,4 +388,9 @@ export function useSession() {
 export function useServerPublicKey() {
     const { serverPublicKey } = useContext(AppContext);
     return serverPublicKey;
+}
+
+export function useSidePanelExpanded() {
+    const { sidePanelExpanded } = useContext(AppContext);
+    return sidePanelExpanded;
 }

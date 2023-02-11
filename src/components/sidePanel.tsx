@@ -16,7 +16,15 @@
  */
 
 import React, { useMemo, useState } from "react";
-import { Avatar, Box, IconButton, Tooltip } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    IconButton,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Tooltip,
+} from "@mui/material";
 import {
     AccessTimeFilled as AccessTimeFilledIcon,
     HowToReg as HowToRegIcon,
@@ -30,8 +38,15 @@ import {
     Create as CreateIcon,
     Category as CategoryIcon,
     Search as SearchIcon,
+    ChevronRight as ChevronRightIcon,
+    ChevronLeft as ChevronLeftIcon,
 } from "@mui/icons-material";
-import { useDarkMode, useSettingsOpen, useUser } from "./AppContextProvider";
+import {
+    useDarkMode,
+    useSettingsOpen,
+    useSidePanelExpanded,
+    useUser,
+} from "./AppContextProvider";
 import { Link } from "../lib/link";
 import MetahkgLogo from "./logo";
 import { AboutDialog } from "./AboutDialog";
@@ -42,6 +57,7 @@ export default function SidePanel() {
     const [, setSettingsOpen] = useSettingsOpen();
     const [aboutOpen, setAboutOpen] = useState(false);
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const [expanded, setExpanded] = useSidePanelExpanded();
     const darkMode = useDarkMode();
 
     const buttons = useMemo(() => {
@@ -139,27 +155,61 @@ export default function SidePanel() {
     }, [darkMode, setSettingsOpen, user]);
 
     return (
-        <Box className="w-[50px] h-100v max-h-100v overflow-y-scroll">
-            <Box className="w-full min-h-100v flex flex-col items-center bg-[#fff] dark:bg-[#111]">
+        <Box
+            className={`${
+                expanded ? "w-[200px]" : "w-[50px]"
+            } h-100v max-h-100v relative flex justify-center`}
+        >
+            <Box className="w-full max-h-[calc(100vh-50px)] overflow-y-scroll flex flex-col items-center bg-[#fff] dark:bg-[#111]">
                 <AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
                 <CategoryPanel open={categoryOpen} setOpen={setCategoryOpen} />
                 {buttons.map((button, index) => (
                     <Link
                         href={button.link}
-                        className="text-inherit"
+                        className="!text-inherit !no-underline w-full flex justify-center"
                         target={button.link?.startsWith("/") ? undefined : "_blank"}
                         key={index}
                     >
-                        <Tooltip arrow title={button.title}>
-                            <IconButton
+                        {expanded ? (
+                            <ListItemButton
                                 onClick={button.onClick}
-                                className="no-underline !mt-2 h-[40px] w-[40px]"
+                                className="w-full h-[50px] flex justify-between"
                             >
-                                {button.icon}
-                            </IconButton>
-                        </Tooltip>
+                                <ListItemIcon>{button.icon}</ListItemIcon>
+                                <ListItemText>{button.title}</ListItemText>
+                            </ListItemButton>
+                        ) : (
+                            <Tooltip arrow title={button.title}>
+                                <IconButton
+                                    onClick={button.onClick}
+                                    className="!mt-2 h-[40px] w-[40px]"
+                                >
+                                    {button.icon}
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </Link>
                 ))}
+            </Box>
+            <Box
+                sx={{ bgcolor: "primary.dark" }}
+                className="!absolute !bottom-0 !h-[50px] flex justify-center items-center w-full"
+            >
+                {expanded ? (
+                    <ListItemButton
+                        onClick={() => setExpanded(!expanded)}
+                        className="flex justify-between"
+                    >
+                        <ListItemIcon>
+                            <ChevronLeftIcon />
+                        </ListItemIcon>
+                        <ListItemText>Collapse</ListItemText>
+                    </ListItemButton>
+                ) : (
+                    <IconButton onClick={() => setExpanded(!expanded)}>
+                        <ChevronRightIcon />
+                    </IconButton>
+                )}
             </Box>
         </Box>
     );
