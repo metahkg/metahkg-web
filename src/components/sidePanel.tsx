@@ -73,6 +73,13 @@ export default function SidePanel(props: {
         onClick?: (e: React.MouseEvent) => void;
     }
 
+    interface Button {
+        title: string;
+        icon: React.ReactNode;
+        link?: string;
+        onClick?: (e: React.MouseEvent) => void;
+    }
+
     const buttons = useMemo(() => {
         return [
             {
@@ -159,6 +166,14 @@ export default function SidePanel(props: {
             },
         ].filter((item) => item) as Button[];
     }, [darkMode, user, avatar, setSettingsOpen]);
+
+    const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
+        if (button.link) {
+            onClickLink?.(e);
+        }
+        onClick?.(e);
+        button.onClick?.(e);
+    };
 
     const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
         if (button.link) {
