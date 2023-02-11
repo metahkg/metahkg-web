@@ -44,12 +44,12 @@ export default function EnableMenu(props: {
                     ? isSmallScreen
                         ? "w-0"
                         : sidePanelExpanded
-                        ? "w-[calc(70vw-200px)] max-w-[calc(70vw-200px)]"
+                        ? "w-[calc(70vw-220px)] max-w-[calc(70vw-220px)]"
                         : "w-[calc(70vw-50px)] max-w-[calc(70vw-50px)]"
                     : isSmallScreen
                     ? "w-100v"
                     : sidePanelExpanded
-                    ? "w-[calc(100vw-200px)] max-w-[calc(100vw-200px)]"
+                    ? "w-[calc(100vw-220px)] max-w-[calc(100vw-220px)]"
                     : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
             } overflow-auto`}
         >
