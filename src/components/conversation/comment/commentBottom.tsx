@@ -150,7 +150,7 @@ export default function CommentBottom() {
                 <VoteButtons comment={comment} key={`${comment.U}${comment.D}`} />
                 {comment.replies?.length && (
                     <Button
-                        className={`${css.smallBtn} !ml-2 bg-[#f6f6f6] dark:!bg-[#333]`}
+                        className={`${css.smallBtn} !ml-2 !bg-[#f6f6f6] dark:!bg-[#333]`}
                         variant="text"
                         onClick={() => {
                             if (inPopUp) {
@@ -159,14 +159,7 @@ export default function CommentBottom() {
                             } else setPopupOpen(true);
                         }}
                     >
-                        <Forum
-                            sx={{
-                                "&:hover": {
-                                    color: "white",
-                                },
-                            }}
-                            className="!text-sm"
-                        />
+                        <Forum className="!text-sm hover:text-black dark:hover:text-white" />
                         <Typography className="!ml-1 text-metahkg-grey">
                             {comment.replies?.length}
                         </Typography>
