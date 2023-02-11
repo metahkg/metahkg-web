@@ -63,7 +63,7 @@ export default function SidePanel() {
     const buttons = useMemo(() => {
         return [
             {
-                title: "Home",
+                title: "Metahkg",
                 icon: <MetahkgLogo height={30} width={40} svg light={darkMode} />,
                 link: "/",
             },
