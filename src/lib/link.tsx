@@ -35,11 +35,16 @@ export function Link(
         <React.Fragment>
             {href ? (
                 href.startsWith("/") ? (
-                    <InternalLink to={href || to || ""} {...props}>
+                    <InternalLink {...props} to={href || to || ""}>
                         {children}
                     </InternalLink>
                 ) : (
-                    <MuiLink {...props} color="#3498db" href={href || to}>
+                    <MuiLink
+                        {...props}
+                        sx={{ textDecorationColor: "inherit" }}
+                        color="#3498db"
+                        href={href || to}
+                    >
                         {children}
                     </MuiLink>
                 )
