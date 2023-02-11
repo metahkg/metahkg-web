@@ -64,7 +64,7 @@ export default function SidePanel() {
         return [
             {
                 title: "Metahkg",
-                icon: <MetahkgLogo height={30} width={40} svg light={darkMode} />,
+                icon: <MetahkgLogo height={30} width={30} svg light={darkMode} />,
                 link: "/",
             },
             user && {
