@@ -1,5 +1,6 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "../lib/link";
 import { PopUp } from "../lib/popup";
 
 export function AboutDialog(props: {
