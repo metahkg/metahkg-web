@@ -36,7 +36,7 @@ export default function Forbidden() {
 
     return (
         <Box
-            className="flex items-center justify-center min-h-screen w-screen"
+            className="flex items-center justify-center min-h-screen w-full"
             sx={{ bgcolor: "primary.dark" }}
         >
             <MetahkgLogo
