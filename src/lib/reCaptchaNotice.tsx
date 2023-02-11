@@ -10,14 +10,11 @@ export default function ReCaptchaNotice(props: { className?: string }) {
             className={`text-metahkg-grey !text-xs !mt-2 ${className}`}
         >
             Metahkg is protected by reCAPTCHA. The Google{" "}
-            <Link
-                className="inline !text-link"
-                href="https://policies.google.com/privacy"
-            >
+            <Link className="inline" href="https://policies.google.com/privacy">
                 Privacy Policy
             </Link>{" "}
             and{" "}
-            <Link className="inline !text-link" href="https://policies.google.com/terms">
+            <Link className="inline" href="https://policies.google.com/terms">
                 Terms of Service
             </Link>{" "}
             apply.

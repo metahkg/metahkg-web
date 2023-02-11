@@ -243,7 +243,10 @@ export default function Comment(props: {
                                                 sx={{ color: "secondary.main" }}
                                             >
                                                 Admin{" "}
-                                                <Link href={`/profile/${reply.admin.id}`}>
+                                                <Link
+                                                    color="inherit"
+                                                    href={`/profile/${reply.admin.id}`}
+                                                >
                                                     {reply.admin.name}
                                                 </Link>{" "}
                                                 #{reply.admin.id} replied on{" "}

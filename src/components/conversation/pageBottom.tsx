@@ -50,6 +50,7 @@ export default function PageBottom() {
                         className={`!text-inherit !text-inherit-size !no-underline${
                             index !== socialIcons.length - 1 ? " !mr-2" : ""
                         }`}
+                        color="inherit"
                         href={icon.link}
                         target="_blank"
                         rel="noreferrer"
@@ -63,7 +64,7 @@ export default function PageBottom() {
             <Typography className="!text-sm">
                 Copyright (c) 2022-present Metahkg Contributors.{" "}
                 <Link
-                    className="!text-inherit"
+                    color="inherit"
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"

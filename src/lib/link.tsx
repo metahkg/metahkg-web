@@ -18,6 +18,7 @@
 import React from "react";
 import { Link as InternalLink } from "react-router-dom";
 import { Box, BoxProps, Link as MuiLink } from "@mui/material";
+import { Property } from "csstype";
 
 export function Link(
     props: React.DetailedHTMLProps<
@@ -27,29 +28,36 @@ export function Link(
         ref?: React.RefObject<HTMLAnchorElement>;
         to?: string;
         href?: string;
+        color?: Property.Color;
         children: React.ReactNode;
     }
 ) {
-    const { href, to, children } = props;
+    const { href, to, color, children } = props;
     return (
         <React.Fragment>
             {href ? (
                 href.startsWith("/") ? (
-                    <InternalLink {...props} to={href || to || ""}>
+                    <InternalLink
+                        {...props}
+                        style={{ color: color || "#3498db" }}
+                        to={href || to || ""}
+                    >
                         {children}
                     </InternalLink>
                 ) : (
                     <MuiLink
                         {...props}
                         sx={{ textDecorationColor: "inherit" }}
-                        color="#3498db"
+                        color={color || "#3498db"}
                         href={href || to}
                     >
                         {children}
                     </MuiLink>
                 )
             ) : (
-                <Box {...(props as BoxProps)}>{children}</Box>
+                <Box {...(props as BoxProps)} sx={{ color }}>
+                    {children}
+                </Box>
             )}
         </React.Fragment>
     );
