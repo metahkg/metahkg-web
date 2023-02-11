@@ -37,6 +37,7 @@ import { useCheckSession } from "./hooks/app/useCheckSession";
 import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
 import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
 import SidePanel from "./components/sidePanel";
+import { useEffect } from "react";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -54,6 +55,10 @@ function App() {
     useRegisterServiceWorker();
     useSubscribeNotifications();
 
+    useEffect(() => {
+        document.body?.classList.add(darkMode ? "dark" : "light");
+    }, [darkMode]);
+
     return (
         <Theme
             mode={darkMode ? "dark" : "light"}
@@ -67,10 +72,7 @@ function App() {
             <AlertDialog {...alertDialog} />
             <SnackBar />
             <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box
-                className={`max-h-screen h-screen ${darkMode ? "dark" : ""}`}
-                sx={{ bgcolor: "primary.dark" }}
-            >
+            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
                 <ErrorBoundary>
                     <Router>
                         <Box className="flex">
