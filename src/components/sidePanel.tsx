@@ -158,7 +158,7 @@ export default function SidePanel() {
         <Box
             className={`${
                 expanded ? "w-[220px]" : "w-[50px]"
-            } h-100v max-h-100v relative flex justify-center`}
+            } transition-[width] ease-out duration-600 h-100v max-h-100v relative flex justify-center`}
         >
             <Box className="w-full max-h-[calc(100vh-50px)] overflow-y-scroll flex flex-col items-center bg-[#fff] dark:bg-[#111]">
                 <AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
