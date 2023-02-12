@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDarkMode, useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
@@ -56,6 +56,27 @@ export default function TextEditor(props: {
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
     const darkMode = useDarkMode();
+    const editorRef = useRef<Editor>(null);
+    const [reload, setReload] = useState(false);
+    const [replaceContent, setReplaceContent] = useState("");
+
+    useEffect(() => {
+        const content = editorRef?.current?.editor?.getContent();
+        setReload(!reload);
+        if (content) {
+            setTimeout(() => {
+                setReplaceContent(content);
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [darkMode]);
+
+    useEffect(() => {
+        if (replaceContent) {
+            editorRef?.current?.editor?.setContent(replaceContent);
+            setReplaceContent("");
+        }
+    }, [replaceContent]);
 
     const onEditorChange = useCallback(
         (a: string, editor: import("tinymce/tinymce").Editor) => {
@@ -77,6 +98,8 @@ export default function TextEditor(props: {
     return (
         <Box sx={sx} className={className}>
             <Editor
+                ref={editorRef}
+                key={Number(reload)}
                 onEditorChange={onEditorChange}
                 initialValue={initText || undefined}
                 init={{
