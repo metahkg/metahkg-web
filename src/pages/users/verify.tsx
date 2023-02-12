@@ -97,6 +97,7 @@ export default function Verify() {
                     severity: "error",
                     text: parseError(err),
                 });
+                reCaptchaRef.current?.reset();
             });
     }
 
