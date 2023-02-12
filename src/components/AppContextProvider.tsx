@@ -133,14 +133,19 @@ export default function AppContextProvider(props: {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
+    const updateListsInterval = useRef<NodeJS.Timer>();
+
     useEffect(() => {
-        setInterval(() => {
-            api.meBlocked().then(setBlockList);
-        }, 1000 * 60 * 10);
-        setInterval(() => {
-            api.meStarred().then(setStarList);
-        }, 1000 * 60 * 10);
-    }, []);
+        if (updateListsInterval.current) {
+            clearInterval(updateListsInterval.current);
+        }
+        if (user) {
+            updateListsInterval.current = setInterval(() => {
+                api.meBlocked().then(setBlockList);
+                api.meStarred().then(setStarList);
+            }, 1000 * 60 * 10);
+        }
+    }, [user]);
 
     useEffect(() => {
         localStorage.setItem("history", JSON.stringify(history));
