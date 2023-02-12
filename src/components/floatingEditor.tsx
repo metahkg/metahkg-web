@@ -31,6 +31,7 @@ import {
 import { useUpdate } from "../hooks/conversation/update";
 import TextEditor from "./textEditor";
 import {
+    useDarkMode,
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
@@ -54,6 +55,7 @@ export default function FloatingEditor() {
     const update = useUpdate();
     const changePage = useChangePage();
     const [finalPage] = useFinalPage();
+    const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -179,7 +181,11 @@ export default function FloatingEditor() {
                         }}
                         initText={
                             editor.edit &&
-                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
+                                darkMode ? "#646262" : "e7e7e7"
+                            }; margin-left: 0"><div style="margin-left: 15px">${
+                                editor.edit
+                            }</div></blockquote><p></p>`
                         }
                         autoResize
                         noMenuBar
