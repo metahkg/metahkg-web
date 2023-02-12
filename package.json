@@ -100,7 +100,8 @@
     "deploy": "yarn build && yarn start",
     "dev": "yarn deploy",
     "prepare": "husky install",
-    "lint": "eslint --cache --fix src && (prettier --check src || prettier --write src)"
+    "lint": "eslint --cache --fix src && (prettier --check src || prettier --write src)",
+    "setup": "./setup.sh"
   },
   "eslintConfig": {
     "extends": [
