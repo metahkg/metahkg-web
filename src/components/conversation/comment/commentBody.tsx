@@ -15,7 +15,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "prismjs/themes/prism-tomorrow.min.css";
 import { replace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";

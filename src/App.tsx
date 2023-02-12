@@ -38,6 +38,7 @@ import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
 import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
 import SidePanel from "./components/sidePanel";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -70,11 +71,33 @@ function App() {
             secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
             <CssBaseline />
-            <AlertDialog {...alertDialog} />
-            <SnackBar />
-            <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
-                <ErrorBoundary>
+            <ErrorBoundary>
+                <Box
+                    className="max-h-screen h-screen max-w-100v w-screen overflow-hidden"
+                    sx={{ bgcolor: "primary.dark" }}
+                >
+                    <Helmet>
+                        {darkMode ? (
+                            <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-tomorrow.min.css"
+                                integrity="sha512-kSwGoyIkfz4+hMo5jkJngSByil9jxJPKbweYec/UgS+S1EgE45qm4Gea7Ks2oxQ7qiYyyZRn66A9df2lMtjIsw=="
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                            />
+                        ) : (
+                            <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css"
+                                integrity="sha512-/mZ1FHPkg6EKcxo0fKXF51ak6Cr2ocgDi5ytaTBjsQZIH/RNs6GF6+oId/vPe3eJB836T36nXwVh/WBl/cWT4w=="
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                            />
+                        )}
+                    </Helmet>
+                    <AlertDialog {...alertDialog} />
+                    <SnackBar />
+                    <Settings open={settingsOpen} setOpen={setSettingsOpen} />
                     <Router>
                         <Box className="flex">
                             {!isSmallScreen && <SidePanel />}
@@ -89,8 +112,8 @@ function App() {
                             <Routes />
                         </Box>
                     </Router>
-                </ErrorBoundary>
-            </Box>
+                </Box>
+            </ErrorBoundary>
         </Theme>
     );
 }
