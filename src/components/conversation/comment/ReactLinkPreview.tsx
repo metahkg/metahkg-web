@@ -24,8 +24,13 @@ import { Client as RLPCLient } from "@metahkg/rlp-proxy-rewrite-api";
 import axios from "axios";
 import { useDarkMode } from "../../AppContextProvider";
 
-export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DOMNode }) {
-    const { quote, url, node } = props;
+export function ReactLinkPreview(props: {
+    quote?: boolean;
+    url: string;
+    node: DOMNode;
+    originalUrl?: string;
+}) {
+    const { quote, url, node, originalUrl } = props;
     const [success, setSuccess] = useState(true);
     const darkMode = useDarkMode();
     return success ? (
@@ -64,7 +69,7 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 secondaryTextColor="#aca9a9"
                 titleLength={50}
                 descriptionLength={60}
-                fetcher={async (url: string) => {
+                fetcher={async () => {
                     try {
                         const client = new RLPCLient(
                             `https://${
@@ -73,7 +78,9 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                             }`,
                             axios.create()
                         );
-                        const data = await client.getMetadata(encodeURIComponent(url));
+                        const data = await client.getMetadata(
+                            encodeURIComponent(originalUrl || url)
+                        );
                         const { metadata } = data;
                         if (!metadata?.title || !metadata?.hostname) {
                             setSuccess(false);
