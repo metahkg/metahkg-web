@@ -239,7 +239,7 @@ export default function TextEditor(props: {
                         { text: "PHP", value: "php" },
                     ],
                     autosave_ask_before_unload: true,
-                    autosave_interval: "5s",
+                    autosave_interval: "20s",
                     autosave_prefix: "tinymce-autosave-{path}-",
                     autosave_restore_when_empty: true,
                     autosave_retention: "30m",
