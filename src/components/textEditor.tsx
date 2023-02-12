@@ -78,7 +78,7 @@ export default function TextEditor(props: {
         <Box sx={sx} className={className}>
             <Editor
                 onEditorChange={onEditorChange}
-                initialValue={initText}
+                initialValue={initText || undefined}
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     ...(minHeight && { min_height: minHeight }),
@@ -201,19 +201,22 @@ export default function TextEditor(props: {
                         {
                             title: "Quote",
                             description: "Add a quote.",
-                            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+                            content: /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
+                                darkMode ? "#646262" : "e7e7e7"
+                            }; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
                         },
                     ],
                     browser_spellcheck: true,
                     contextmenu: false,
                     codesample_global_prismjs: true,
                     codesample_languages: [
+                        { text: "Bash", value: "bash" },
+                        { text: "Python", value: "python" },
+                        { text: "Markdown", value: "md" },
                         { text: "TypeScript", value: "typescript" },
                         { text: "TypeScript React", value: "tsx" },
                         { text: "JavaScript", value: "javascript" },
                         { text: "JavaScript React", value: "jsx" },
-                        { text: "Python", value: "python" },
-                        { text: "Bash", value: "bash" },
                         { text: "JSON", value: "json" },
                         { text: "HTML", value: "html" },
                         { text: "XML", value: "xml" },
@@ -221,7 +224,6 @@ export default function TextEditor(props: {
                         { text: "YAML", value: "yaml" },
                         { text: "CSS", value: "css" },
                         { text: "SASS", value: "sass" },
-                        { text: "Markdown", value: "md" },
                         { text: "Mongodb", value: "mongodb" },
                         { text: "SQL", value: "sql" },
                         { text: "C", value: "c" },

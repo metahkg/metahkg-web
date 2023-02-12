@@ -172,8 +172,9 @@ export default function CommentBody(props: {
                         child-video:h-full child-video:max-h-[800px] child-video:max-w-full
                         child-blockquote:text-metahkg-grey child-blockquote:border-0
                         child-blockquote:border-l-2 child-blockquote:border-solid
-                        child-blockquote:border-[#646262] child-blockquote:ml-0
-                        child-blockquote:p-0 first:[&>div]:child-blockquote:ml-4
+                        child-blockquote:border-[#e7e7e7] dark:child-blockquote:border-[#646262]
+                        child-blockquote:ml-0 child-blockquote:p-0
+                        first:[&>div]:child-blockquote:ml-4
                         [&:not(span,button)]:child:[&>blockquote]:text-metahkg-grey
                         first:[&>*]:[&>div]:child-blockquote:mt-1
                         last:[&>*]:[&>div]:child-blockquote:mb-1
