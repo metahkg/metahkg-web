@@ -73,24 +73,6 @@ body {
     --tw-backdrop-sepia: ;
 }
 
-*::-webkit-scrollbar {
-    width: 5px;
-}
-
-*::-webkit-scrollbar-track {
-    background: #151515;
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: #464646;
-    border-radius: 7px;
-}
-
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #464646 #151515;
-}
-
 body {
     font-family: "Roboto", Arial, sans-serif;
 }
