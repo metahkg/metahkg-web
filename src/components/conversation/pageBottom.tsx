@@ -64,10 +64,10 @@ export default function PageBottom() {
             <Typography className="!text-sm">
                 Copyright (c) 2022-present Metahkg Contributors.{" "}
                 <Link
-                    color="inherit"
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noreferrer"
+                    className="!text-metahkg-grey"
                 >
                     AGPL-3.0-or-later
                 </Link>
