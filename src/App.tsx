@@ -57,8 +57,8 @@ function App() {
     useSubscribeNotifications();
 
     useEffect(() => {
-        document.body?.classList.add(darkMode ? "dark" : "light");
-        document.body?.classList.remove(darkMode ? "light" : "dark");
+        document.querySelector("html")?.classList.add(darkMode ? "dark" : "light");
+        document.querySelector("html")?.classList.remove(darkMode ? "light" : "dark");
     }, [darkMode]);
 
     return (

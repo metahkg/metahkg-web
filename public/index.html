@@ -1,4 +1,26 @@
 <!DOCTYPE html>
+
+<!--
+ Source code https://gitlab.com/metahkg/metahkg-web
+ -->
+
+<!--
+ Copyright (C) 2022-present Metahkg Contributors
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ -->
+
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -59,7 +81,9 @@
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     </head>
 
-    <body class="!p-0 max-w-full" style="overflow-x: hidden">
+    <body
+        class="!p-0 max-h-screen max-w-100v overflow-hidden child:scrollbar-thin child:scrollbar-track-[#f5f5f5] dark:child:scrollbar-track-[#151515] child:scrollbar-thumb-[#e1e1e1] dark:child:scrollbar-thumb-[#393939] child:scrollbar-thumb-rounded-md"
+    >
         <noscript>You need to enable JavaScript to run this app.</noscript>
 
         <!-- the element where the react app is rendered -->
