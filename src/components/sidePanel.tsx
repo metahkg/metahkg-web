@@ -220,9 +220,11 @@ export default function SidePanel(props: {
                         <ListItemText>Collapse</ListItemText>
                     </ListItemButton>
                 ) : (
-                    <IconButton onClick={() => setExpanded(!expanded)}>
-                        <ChevronRightIcon />
-                    </IconButton>
+                    <Tooltip arrow title="Expand">
+                        <IconButton onClick={() => setExpanded(!expanded)}>
+                            <ChevronRightIcon />
+                        </IconButton>
+                    </Tooltip>
                 )}
             </Box>
         </Box>
