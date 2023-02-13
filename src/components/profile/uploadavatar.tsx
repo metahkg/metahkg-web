@@ -29,7 +29,9 @@ const Input = styled("input")({
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadAvatar(props: { onChange?: (file: File) => void }) {
+export default function UploadAvatar(props: {
+    onChange?: (file: File) => void | Promise<void>;
+}) {
     const { onChange } = props;
     const [uploading, setUploading] = React.useState(false);
 
