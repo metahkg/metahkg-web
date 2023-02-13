@@ -28,12 +28,6 @@ It is recommended to use docker for deployment (also supports hot reload).
 
 [Docs](https://docs.metahkg.org/docs/category/deploy-metahkg)
 
-### Manually
-
-> **_WARNING:_** This is NOT RECOMMENDED and might be OUTDATED!
-
-For manual deployment, see DEPLOY.md.
-
 ## Use as a module
 
 Since v2.4.0, metahkg-web can be used as a module.
