@@ -25,6 +25,8 @@ import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
 import cssToReact from "../../../lib/cssToReact";
 import { imagesApi } from "../../../lib/common";
+import { useSettings } from "../../AppContextProvider";
+import { Image as ImageIcon } from "@mui/icons-material";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
@@ -38,9 +40,10 @@ interface Props {
 function ImgComponent(props: Props) {
     const { height, style, width } = props;
     const { src } = useImage({
-        srcList: props.src.startsWith(imagesApi)
-            ? props.src
-            : `${imagesApi}/${props.src}`,
+        srcList:
+            new URL(props.src).hostname === process.env.REACT_APP_IMAGES_DOMAIN
+                ? props.src
+                : `${imagesApi}/${props.src}`,
     });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
@@ -133,37 +136,63 @@ function ImgComponent(props: Props) {
 
 export default function Image(props: Props) {
     const { src } = props;
-    return (
-        <a
-            href={src}
-            target={"_blank"}
-            rel={"noopener noreferrer"}
-            onClick={(e) => {
-                e.preventDefault();
-            }}
-        >
-            <Suspense
-                fallback={
-                    <a
-                        href={src}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block"
-                    >
-                        <Loader
-                            position="flex-start"
-                            className="!m-[5px]"
-                            sxProgress={{ color: "darkgrey" }}
-                            thickness={2}
-                            size={45}
-                        />
-                    </a>
-                }
+    const [settings] = useSettings();
+    const [showImage, setShowImage] = useState(settings.autoLoadImages);
+
+    useEffect(() => {
+        if (settings.autoLoadImages && !showImage) {
+            setShowImage(true);
+        }
+    }, [settings.autoLoadImages, showImage]);
+
+    if (!showImage) {
+        return (
+            <a
+                href={src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="!text-metahkg-grey"
+                onClick={(e) => {
+                    e.preventDefault();
+                    setShowImage(true);
+                }}
             >
-                <ImageErrorBoundary src={src}>
+                <ImageIcon />
+            </a>
+        );
+    }
+
+    return (
+        <Suspense
+            fallback={
+                <a
+                    href={src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block"
+                >
+                    <Loader
+                        position="flex-start"
+                        className="!m-[5px]"
+                        sxProgress={{ color: "darkgrey" }}
+                        thickness={2}
+                        size={45}
+                    />
+                </a>
+            }
+        >
+            <ImageErrorBoundary src={src}>
+                <a
+                    href={src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
                     <ImgComponent {...props} />
-                </ImageErrorBoundary>
-            </Suspense>
-        </a>
+                </a>
+            </ImageErrorBoundary>
+        </Suspense>
     );
 }

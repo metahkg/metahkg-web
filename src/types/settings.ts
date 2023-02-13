@@ -28,4 +28,5 @@ export type settings = {
     theme: Theme;
     secondaryColor?: secondaryColor;
     filterSwearWords?: boolean;
+    autoLoadImages?: boolean;
 };
