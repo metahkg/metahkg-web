@@ -73,12 +73,10 @@ export default function AppContextProvider(props: {
     const [isSmallScreen, setIsSmallScreen] = useState(width < 768);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settings, setSettings] = useState<settings>(
-        JSON.parse(
-            localStorage.getItem("settings") ||
-                JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
-        )
-    );
+    const [settings, setSettings] = useState<settings>({
+        ...{ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" }, autoLoadImages: true },
+        ...JSON.parse(localStorage.getItem("settings") || "{}"),
+    });
 
     const isDarkMode = useCallback(() => {
         return (

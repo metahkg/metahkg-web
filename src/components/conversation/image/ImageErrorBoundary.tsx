@@ -47,7 +47,7 @@ export default class ImageErrorBoundary extends React.Component<{
                         </a>
                     }
                 >
-                    <Box className="cursor-pointer inline-block">
+                    <Box className="cursor-pointer inline-block text-link">
                         <BrokenImage />
                     </Box>
                 </Tooltip>

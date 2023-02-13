@@ -95,6 +95,17 @@ export default function Settings(props: {
             },
             checked: settings.filterSwearWords,
         },
+        {
+            title: "Auto load images",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    autoLoadImages: e.target.checked,
+                });
+            },
+            checked: settings.autoLoadImages,
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
