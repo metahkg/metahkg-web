@@ -53,7 +53,7 @@ export default function PageBottom() {
                         color="inherit"
                         href={icon.link}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                     >
                         <IconButton className="!p-0 !text-inherit-size !text-inherit">
                             {icon.icon}
@@ -66,7 +66,7 @@ export default function PageBottom() {
                 <Link
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="!text-metahkg-grey"
                 >
                     AGPL-3.0-or-later

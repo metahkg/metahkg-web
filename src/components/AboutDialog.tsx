@@ -21,7 +21,7 @@ export function AboutDialog(props: {
                     <Link
                         href="https://gitlab.com/metahkg/metahkg"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                     >
                         Metahkg Main Repository
                     </Link>
@@ -30,7 +30,7 @@ export function AboutDialog(props: {
                     <Link
                         href="https://gitlab.com/metahkg/metahkg-web"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                     >
                         Metahkg Web App
                     </Link>
@@ -45,7 +45,7 @@ export function AboutDialog(props: {
                                 href={`https://gitlab.com/metahkg/metahkg-web/-/tree/${process.env.REACT_APP_version}`}
                                 className="inline"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                             >
                                 v{process.env.REACT_APP_version}
                             </Link>
@@ -55,7 +55,7 @@ export function AboutDialog(props: {
                                 href={`https://gitlab.com/metahkg/metahkg-web/-/blob/${process.env.REACT_APP_version}/CHANGELOG.md`}
                                 className="inline"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                             >
                                 CHANGELOG
                             </Link>
@@ -72,7 +72,7 @@ export function AboutDialog(props: {
                                 href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
                                 className="inline"
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                             >
                                 {process.env.REACT_APP_build}
                             </Link>
@@ -98,7 +98,7 @@ export function AboutDialog(props: {
                         href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                         className="inline"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                     >
                         AGPL-3.0-or-later
                     </Link>
@@ -124,7 +124,7 @@ export function AboutDialog(props: {
                         href="https://gitlab.com/metahkg/metahkg-web/-/tree/master/public/images/LICENSE"
                         className="inline"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                     >
                         metahkg-web@public/images/LICENSE
                     </Link>{" "}
