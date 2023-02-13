@@ -137,7 +137,7 @@ export default function Image(props: Props) {
         <a
             href={src}
             target={"_blank"}
-            rel={"noreferrer"}
+            rel={"noopener noreferrer"}
             onClick={(e) => {
                 e.preventDefault();
             }}
@@ -147,7 +147,7 @@ export default function Image(props: Props) {
                     <a
                         href={src}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-block"
                     >
                         <Loader

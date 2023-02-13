@@ -41,7 +41,7 @@ export default class ImageErrorBoundary extends React.Component<{
                             className={`${css.link} !text-inherit`}
                             href={src}
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                         >
                             {src}
                         </a>
