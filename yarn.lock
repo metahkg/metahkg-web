@@ -1693,6 +1693,13 @@
   dependencies:
     axios "^1.1.2"
 
+"@metahkg/rlp-proxy-rewrite-api@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@metahkg/rlp-proxy-rewrite-api/-/rlp-proxy-rewrite-api-6.4.0.tgz#33541ce6283d2edf9e5581f76ba95b86f782b440"
+  integrity sha512-f2oa6IyWujHpKhII62E9g4njwJVhwKPZaJ9/V50Spazh8K8J28ZnRmfoj5T33vwrPPmei1MkEuD0zGW6RVPV4w==
+  dependencies:
+    axios "^1.1.2"
+
 "@mui/base@5.0.0-alpha.114":
   version "5.0.0-alpha.114"
   resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.114.tgz#19125f28b7d09d1cc60550872440ecba699d8374"
