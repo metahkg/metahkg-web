@@ -79,6 +79,7 @@
     "@types/react-swipeable-views-utils": "^0.13.4",
     "eslint": "^8.32.0",
     "eslint-config-react-app": "^7.0.1",
+    "generate-changelog": "^1.8.0",
     "generate-license-file": "^2.0.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
@@ -101,7 +102,8 @@
     "dev": "yarn deploy",
     "prepare": "husky install",
     "lint": "eslint --cache --fix src && (prettier --check src || prettier --write src)",
-    "setup": "./setup.sh"
+    "setup": "./setup.sh",
+    "changelog": "generate-changelog && prettier --write CHANGELOG.md"
   },
   "eslintConfig": {
     "extends": [
