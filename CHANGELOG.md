@@ -1,3 +1,33 @@
+#### 6.4.1 (2023-02-16)
+
+##### Chores
+
+*  v6.4.1 (66933900)
+
+##### Continuous Integration
+
+*  fix tagging (b138e047)
+* **tagging:**  fetch and merge before pushing changes to changelog (24e69a77)
+
+##### Documentation Changes
+
+*  generate CHANGELOG.md using generate-changelog (ba18c2b5)
+*  remove deprecated DEPLOY.md (8bcfa9c7)
+
+##### New Features
+
+*  use a standard size for images in comments & use a lower quality to reduce file size (fff4752c)
+*  opt out of auto load images (aa696054)
+
+##### Bug Fixes
+
+*  add noopener for target="_blank" (1132f631)
+* **uploadavatar:**  allow async function (07274b2b)
+
+##### Other Changes
+
+* //gitlab.com/metahkg/metahkg-web into dev (3ed4ef95)
+
 #### 6.4.0 (2023-02-13)
 
 ##### Chores
