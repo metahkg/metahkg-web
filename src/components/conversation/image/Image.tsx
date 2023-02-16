@@ -40,10 +40,7 @@ interface Props {
 function ImgComponent(props: Props) {
     const { height, style, width } = props;
     const { src } = useImage({
-        srcList:
-            new URL(props.src).hostname === process.env.REACT_APP_IMAGES_DOMAIN
-                ? props.src
-                : `${imagesApi}/${props.src}`,
+        srcList: `${imagesApi}/540x350,fit,q80/${props.src}`,
     });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);

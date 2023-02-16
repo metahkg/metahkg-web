@@ -54,7 +54,7 @@ export default function Gallery(props: {
                                 <PhotoView src={src} key={src}>
                                     <ImageListItem className="cursor-pointer" key={src}>
                                         <img
-                                            src={`${imagesApi}/300x300/${item.src}`}
+                                            src={`${imagesApi}/300x300,q50/${item.src}`}
                                             alt=""
                                             loading="lazy"
                                             onLoad={() => {
