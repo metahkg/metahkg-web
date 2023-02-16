@@ -84,7 +84,8 @@ tagging:
     - tag=$(node -e "console.log(require('./package.json').version)")
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
     - "if [ $CI_COMMIT_BRANCH = 'dev' ];
-       then yarn generate-changelog;
+       then yarn install;
+       yarn generate-changelog;
        git add CHANGELOG.md;
        git commit -m 'update: CHANGELOG.md'; fi;"
     - git tag "$tag"
