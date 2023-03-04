@@ -30,7 +30,7 @@ import type { notification } from "../types/notification";
 import type { settings } from "../types/settings";
 import { api } from "../lib/api";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User, Star } from "@metahkg/api";
+import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
 import { AvatarProps, useAvatar } from "./useAvatar";
@@ -48,6 +48,7 @@ export const AppContext = createContext<{
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<SetStateAction<Category[]>>];
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
+    serverConfig: [ServerConfig | null, Dispatch<SetStateAction<ServerConfig | null>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     userAvatar: AvatarProps;
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
@@ -92,6 +93,9 @@ export default function AppContextProvider(props: {
     const [darkMode, setDarkMode] = useState(isDarkMode());
     const [serverPublicKey, setServerPublicKey] = useState<string>(
         localStorage.getItem("serverPublicKey") || ""
+    );
+    const [serverConfig, setServerConfig] = useState<ServerConfig | null>(
+        JSON.parse(localStorage.getItem("serverConfig") || "null") || null
     );
     const [session, setSession] = useState<Session | null>(
         JSON.parse(localStorage.getItem("session") || "null") || null
@@ -149,6 +153,10 @@ export default function AppContextProvider(props: {
     }, []);
 
     useEffect(() => {
+        api.serverConfig().then(setServerConfig);
+    }, []);
+
+    useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
             api.meStarred().then(setStarList);
@@ -190,6 +198,10 @@ export default function AppContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("serverPublicKey", serverPublicKey);
     }, [serverPublicKey]);
+
+    useEffect(() => {
+        localStorage.setItem("serverConfig", JSON.stringify(serverConfig));
+    }, [serverConfig]);
 
     useEffect(() => {
         if (!session) {
@@ -247,6 +259,7 @@ export default function AppContextProvider(props: {
                 history: [history, setHistory],
                 categories: [categories, setCategories],
                 serverPublicKey: [serverPublicKey, setServerPublicKey],
+                serverConfig: [serverConfig, setServerConfig],
                 user: [user, setUser],
                 userAvatar,
                 session: [session, setSession],
@@ -406,6 +419,11 @@ export function useSession() {
 export function useServerPublicKey() {
     const { serverPublicKey } = useContext(AppContext);
     return serverPublicKey;
+}
+
+export function useServerConfig() {
+    const { serverConfig } = useContext(AppContext);
+    return serverConfig;
 }
 
 export function useSidePanelExpanded() {
