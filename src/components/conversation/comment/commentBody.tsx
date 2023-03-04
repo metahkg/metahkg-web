@@ -25,6 +25,7 @@ import { Comment } from "@metahkg/api";
 import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
+import { isIOS, isSafari } from "react-device-detect";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -51,7 +52,7 @@ export default function CommentBody(props: {
 
     const [commentJSX, setCommentJSX] = useState(
         parse(
-            settings.filterSwearWords
+            settings.filterSwearWords && !(isSafari || isIOS)
                 ? filterSwearWords(comment.comment)
                 : comment.comment,
             { replace: replace({ quote: depth > 0 }) }
