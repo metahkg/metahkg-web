@@ -27,7 +27,7 @@ import React, {
 } from "react";
 import type { history } from "../types/history";
 import type { notification } from "../types/notification";
-import type { settings } from "../types/settings";
+import type { Settings } from "../types/settings";
 import { api } from "../lib/api";
 import { AlertDialogProps } from "../lib/alertDialog";
 import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
@@ -42,7 +42,7 @@ export const AppContext = createContext<{
     height: [number, Dispatch<SetStateAction<number>>];
     notification: [notification, Dispatch<SetStateAction<notification>>];
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
-    settings: [settings, Dispatch<SetStateAction<settings>>];
+    settings: [Settings, Dispatch<SetStateAction<Settings>>];
     darkMode: boolean;
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<SetStateAction<Category[]>>];
@@ -74,8 +74,12 @@ export default function AppContextProvider(props: {
     const [isSmallScreen, setIsSmallScreen] = useState(width < 768);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settings, setSettings] = useState<settings>({
-        ...{ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" }, autoLoadImages: true },
+    const [settings, setSettings] = useState<Settings>({
+        ...{
+            secondaryColor: { main: "#f5bd1f", dark: "#ffc100" },
+            autoLoadImages: true,
+            resizeImages: true,
+        },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });
 
