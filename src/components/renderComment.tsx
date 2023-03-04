@@ -19,20 +19,28 @@ import { Comment } from "@metahkg/api";
 import parse from "html-react-parser";
 import React from "react";
 
-export default function RenderComment(props: { comment: Comment; depth: number }) {
-    const { comment, depth } = props;
+export default function RenderComment(props: {
+    comment: Comment;
+    depth: number;
+    darkMode: boolean;
+}) {
+    const { comment, depth, darkMode } = props;
     const commentJSX = parse(comment.comment);
     const content = [
         comment.quote && depth < 3 && (
             <blockquote
                 style={{
                     color: "#aca9a9",
-                    borderLeft: "2px solid #646262",
+                    borderLeft: `2px solid ${darkMode ? "#646262" : "e7e7e7"}`,
                     marginLeft: 0,
                 }}
             >
                 <div style={{ marginLeft: 15 }}>
-                    <RenderComment comment={comment.quote} depth={depth + 1} />
+                    <RenderComment
+                        comment={comment.quote}
+                        depth={depth + 1}
+                        darkMode={darkMode}
+                    />
                 </div>
             </blockquote>
         ),

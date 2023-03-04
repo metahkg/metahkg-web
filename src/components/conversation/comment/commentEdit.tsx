@@ -16,7 +16,7 @@
  */
 
 import { useComment, useEditing } from "../comment";
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { Edit as EditIcon } from "@mui/icons-material";
 import TextEditor from "../../textEditor";
 import { useState } from "react";
@@ -24,6 +24,7 @@ import { api } from "../../../lib/api";
 import { useThreadId } from "../ConversationContext";
 import { useNotification } from "../../AppContextProvider";
 import { parseError } from "../../../lib/parseError";
+import { LoadingButton } from "@mui/lab";
 
 export default function CommentEdit() {
     const threadId = useThreadId();
@@ -62,18 +63,20 @@ export default function CommentEdit() {
     };
 
     return (
-        <Box className="my-[10px]">
+        <Box className="my-2">
             <TextEditor
                 initText={comment.comment}
                 onChange={setEdited}
                 toolbarBottom
                 noMenuBar
                 noStatusBar
+                lengthLimit={50000}
                 autoResize
+                noAutoSave
             />
-            <Box className="my-[10px] flex justify-between items-center">
+            <Box className="my-2 flex justify-between items-center">
                 <TextField
-                    className="!mr-[20px]"
+                    className="!mr-5"
                     color="secondary"
                     variant="outlined"
                     fullWidth
@@ -83,19 +86,17 @@ export default function CommentEdit() {
                         setReason(e.target.value);
                     }}
                 />
-                {saving ? (
-                    <CircularProgress color="secondary" disableShrink />
-                ) : (
-                    <Button
-                        variant="contained"
-                        onClick={onSave}
-                        disabled={comment.comment === edited || !reason}
-                        color="secondary"
-                    >
-                        <EditIcon className="!mr-[5px]" />
-                        Save
-                    </Button>
-                )}
+                <LoadingButton
+                    variant="contained"
+                    onClick={onSave}
+                    disabled={comment.comment === edited || !reason}
+                    color="secondary"
+                    loading={saving}
+                    startIcon={<EditIcon />}
+                    loadingPosition="start"
+                >
+                    Save
+                </LoadingButton>
             </Box>
         </Box>
     );

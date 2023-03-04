@@ -15,8 +15,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "../../../css/components/conversation/comment/commentBody.css";
-import "prismjs/themes/prism-tomorrow.min.css";
 import { replace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
@@ -83,7 +81,7 @@ export default function CommentBody(props: {
                     <Box
                         className={`${
                             showQuote ? "cursor-pointer " : ""
-                        }border-solid border-[0px] border-l-[2px] border-l-[#646262] !p-0 text-metahkg-grey !ml-[0px]`}
+                        }border-solid border-0 border-l-2 border-l-[#e7e7e7] dark:border-l-[#646262] !p-0 text-metahkg-grey !ml-0`}
                         sx={(theme) => ({
                             width: 15,
                             "&:hover": {
@@ -110,7 +108,7 @@ export default function CommentBody(props: {
                                     background: "rgba(255, 255, 255, 0.1)",
                                 },
                             }}
-                            className="!text-metahkg-grey !normal-case !pt-[3px] !pb-[3px] !pl-[5px] !pr-[5px]"
+                            className="!text-metahkg-grey !normal-case !py-[3px] !px-[5px]"
                             onClick={() => {
                                 setShowQuote(true);
                             }}
@@ -123,7 +121,7 @@ export default function CommentBody(props: {
             <React.Fragment key={1}>
                 {blocked && depth !== 0 ? (
                     <BlockedBtn
-                        className="!my-[10px]"
+                        className="!my-2"
                         userName={comment.user.name}
                         setBlocked={setBlocked}
                         reason={blockList.find((x) => x.id === comment.user.id)?.reason}
@@ -168,7 +166,20 @@ export default function CommentBody(props: {
                     }}
                 >
                     <Box
-                        className={`!my-0 comment-body max-w-full overflow-hidden w-full !break-words text-[16px]`}
+                        className={`child:object-contain child-a:no-underline child-a:hover:underline
+                        child-img:h-full child-img:max-h-[800px] child-img:max-w-full
+                        child-video:h-full child-video:max-h-[800px] child-video:max-w-full
+                        child-blockquote:text-metahkg-grey child-blockquote:border-0
+                        child-blockquote:border-l-2 child-blockquote:border-solid
+                        child-blockquote:border-[#e7e7e7] dark:child-blockquote:border-[#646262]
+                        child-blockquote:ml-0 child-blockquote:p-0
+                        first:[&>div]:child-blockquote:ml-4
+                        [&:not(span,button)]:child:[&>blockquote]:text-metahkg-grey
+                        first:[&>*]:[&>div]:child-blockquote:mt-1
+                        last:[&>*]:[&>div]:child-blockquote:mb-1
+                        first:[&>*]:mt-3
+                        last:[&>*]:mb-3
+                        !my-0 max-w-full overflow-hidden w-full !break-words text-base`}
                     >
                         {content}
                     </Box>

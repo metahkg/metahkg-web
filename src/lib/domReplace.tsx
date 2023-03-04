@@ -38,6 +38,9 @@ export const replace = (params: { quote?: boolean }) => {
             try {
                 if (domNode.name === "a") {
                     const href: string = domNode.attribs?.href;
+                    const redirectHref = `https://${
+                        process.env.REACT_APP_REDIRECT_DOMAIN
+                    }/?url=${encodeURIComponent(href)}`;
                     if (
                         [regex.facebook.videos, regex.youtube, regex.streamable]
                             .flat()
@@ -78,6 +81,10 @@ export const replace = (params: { quote?: boolean }) => {
                         );
                     }
                     // TODO: embed instagram and facebook
+
+                    // untrusted from now on
+                    domNode.attribs.href = redirectHref;
+
                     const firstChild = domNode.children?.[0] as Element;
                     if (
                         domNode.children?.length === 1 &&
@@ -85,7 +92,7 @@ export const replace = (params: { quote?: boolean }) => {
                         firstChild?.attribs
                     ) {
                         const { src, height, width, style } = firstChild.attribs;
-                        if (src && domNode.attribs.href === src) {
+                        if (src && href === src) {
                             return (
                                 <Img
                                     src={src}
@@ -96,15 +103,24 @@ export const replace = (params: { quote?: boolean }) => {
                                 />
                             );
                         }
-                    } else if (
-                        (firstChild as unknown as Text)?.type === "text" &&
-                        [
-                            domNode?.attribs?.href,
-                            decodeURIComponent(domNode?.attribs?.href),
-                        ].some((i) => i === (firstChild as unknown as Text)?.data)
-                    ) {
-                        return <ReactLinkPreview quote={quote} url={href} node={node} />;
+                    } else if ((firstChild as unknown as Text)?.type === "text") {
+                        if (
+                            href &&
+                            [href, decodeURIComponent(href)].some(
+                                (i) => i === (firstChild as unknown as Text)?.data
+                            )
+                        ) {
+                            return (
+                                <ReactLinkPreview
+                                    quote={quote}
+                                    url={redirectHref}
+                                    originalUrl={href}
+                                    node={domNode}
+                                />
+                            );
+                        }
                     }
+                    return domNode;
                 }
                 if (domNode.name === "img" && domNode.attribs?.src) {
                     const { src, height, width, style } = domNode.attribs;

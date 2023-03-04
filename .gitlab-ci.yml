@@ -23,7 +23,7 @@ lint:
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
     - git config user.email bot@metahkg.org
-    - git remote set-url origin https://root:$gitlab_token@gitlab.com/$CI_PROJECT_PATH
+    - git remote set-url origin https://root:$GITLAB_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH
   script:
     - yarn install
     - yarn lint
@@ -57,6 +57,7 @@ docker-build:
       --build-arg REACT_APP_version=$version
       --build-arg REACT_APP_IMAGES_DOMAIN='{IMAGES_DOMAIN}'
       --build-arg REACT_APP_RLP_PROXY_DOMAIN='{RLP_PROXY_DOMAIN}'
+      --build-arg REACT_APP_REDIRECT_DOMAIN='{REDIRECT_DOMAIN}'
       --build-arg REACT_APP_VAPID_PUBLIC_KEY='{VAPID_PUBLIC_KEY}'
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
@@ -76,13 +77,24 @@ tagging:
   allow_failure: true
   before_script:
     - apk add git
-  script:
     - git config --global user.name metahkg-bot
     - git config --global user.email bot@metahkg.org
+    - git config pull.rebase false
+    - git remote set-url origin https://root:$GITLAB_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH
+  script:
     - tag=$(node -e "console.log(require('./package.json').version)")
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
+    - "if [ $CI_COMMIT_BRANCH = 'dev' ];
+       then yarn install;
+       yarn generate-changelog;
+       git add CHANGELOG.md;
+       git commit -m 'update: CHANGELOG.md'; fi;"
     - git tag "$tag"
-    - git push https://root:$gitlab_token@$CI_SERVER_HOST/$CI_PROJECT_PATH.git $tag
+    - git push origin $tag
+    - if [ $CI_COMMIT_BRANCH = "dev" ]; then
+       git fetch origin $CI_COMMIT_BRANCH;
+       git merge -X theirs origin/$CI_COMMIT_BRANCH -m "merge";
+       git push origin $CI_COMMIT_BRANCH; fi;
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -108,7 +120,7 @@ publish:
 
 container_scanning:
   stage: review
-  needs: [ "docker-build" ]
+  needs: ["docker-build"]
   variables:
     GIT_STRATEGY: fetch
     CI_APPLICATION_REPOSITORY: "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH"
@@ -133,16 +145,16 @@ sast:
 test:
   stage: test
   rules:
-     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-     - if: $CI_COMMIT_TAG
-     - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
 
 code_quality:
   stage: test
   rules:
-     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-     - if: $CI_COMMIT_TAG
-     - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
 
 build:
   stage: build

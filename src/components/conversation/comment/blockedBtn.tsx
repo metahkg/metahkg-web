@@ -31,7 +31,7 @@ export default function BlockedBtn(props: {
             title={`User ${userName} blocked${reason ? ` because of "${reason}"` : ""}.`}
         >
             <Button
-                className={`${className} !text-[14px] !normal-case`}
+                className={`${className} !text-sm !normal-case`}
                 color="error"
                 onClick={() => {
                     setBlocked?.(false);

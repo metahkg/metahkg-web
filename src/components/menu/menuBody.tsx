@@ -17,14 +17,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    useCat,
-    useReFetch,
-    useId,
-    useProfile,
-    useSmode,
-    useMenuMode,
-} from "../MenuProvider";
+import { useCat, useReFetch, useProfile, useSmode, useMenuMode } from "../MenuProvider";
 import {
     useHistory,
     useNotification,
@@ -50,7 +43,6 @@ export default function MenuBody(props: { selected: number }) {
     const [profile] = useProfile();
     const [query] = useQuery();
     const [, setNotification] = useNotification();
-    const [id] = useId();
     const [data, setData] = useState<ThreadMeta[]>([]);
     const [smode] = useSmode();
     const [page, setPage] = useState(1);
@@ -250,13 +242,15 @@ export default function MenuBody(props: { selected: number }) {
             onScroll={onScroll}
             ref={paperRef}
         >
-            <Box className="min-h-full bg-[#1e1e1e] flex flex-col">
+            <Box
+                className="min-h-full flex flex-col dark:!bg-[#1e1e1e]"
+                sx={{ bgcolor: "primary.main" }}
+            >
                 {Boolean(data.length) && (
-                    <Box className="flex flex-col max-w-full bg-[#1e1e1e]">
+                    <Box className="flex flex-col max-w-full">
                         {data.map((thread, index) => (
                             <Box key={index}>
                                 <MenuThread
-                                    key={`${category}${id === thread.id}`}
                                     thread={thread}
                                     onClick={() => {
                                         const index = history.findIndex(

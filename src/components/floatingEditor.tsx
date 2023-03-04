@@ -17,14 +17,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    CircularProgress,
-    DialogTitle,
-    IconButton,
-    Snackbar,
-} from "@mui/material";
+import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
@@ -38,6 +31,7 @@ import {
 import { useUpdate } from "../hooks/conversation/update";
 import TextEditor from "./textEditor";
 import {
+    useDarkMode,
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
@@ -46,6 +40,8 @@ import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import { clearTinymceDraft } from "../lib/clearTinymceDraft";
+import { LoadingButton } from "@mui/lab";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -59,6 +55,7 @@ export default function FloatingEditor() {
     const update = useUpdate();
     const changePage = useChangePage();
     const [finalPage] = useFinalPage();
+    const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
@@ -99,6 +96,7 @@ export default function FloatingEditor() {
                 const numOfPages = roundup((data.id || 0) / 25);
 
                 setEditor({ ...editor, open: false });
+                clearTinymceDraft(window.location.pathname);
 
                 if (numOfPages !== finalPage)
                     changePage(numOfPages, () => {
@@ -122,8 +120,8 @@ export default function FloatingEditor() {
 
     return (
         <Snackbar
-            className={`rounded-[20px] !z-[1000] ${
-                isSmallScreen ? "!right-[8px] !left-[8px]" : ""
+            className={`rounded-2xl !z-[1000] ${
+                isSmallScreen ? "!right-2 !left-2" : ""
             }  ${thread?.pin ? "!top-[110px]" : "!top-[60px]"}`}
             anchorOrigin={{ horizontal: "right", vertical: "top" }}
             open={editor.open}
@@ -133,33 +131,35 @@ export default function FloatingEditor() {
                 sx={{
                     bgcolor: "primary.dark",
                 }}
-                className={`rounded-[15px] overflow-auto ${
+                className={`rounded-2xl shadow overflow-auto ${
                     isSmallScreen
                         ? "!max-w-[calc(100vw-16px)] w-[calc(100vw-16px)] max-h-50v"
                         : "max-w-70v w-50v max-h-70v"
                 }`}
             >
                 <DialogTitle className="flex justify-between items-center !p-0">
-                    <p className="!ml-[20px] !mt-[10px] !mb-[10px]">
+                    <Typography variant="h5" className="!ml-5 !my-2">
                         {editor.quote ? "Reply" : "Comment"}
-                    </p>
-                    <Box className="flex">
+                    </Typography>
+                    <Box className="flex mr-1">
                         <IconButton
-                            className="!my-0 cursor-pointer !mr-[10px] metahkg-yellow"
+                            className="!my-0 !mr-2 cursor-pointer"
                             onClick={() => {
                                 setFold(!fold);
                             }}
                         >
                             {fold ? <ExpandMore /> : <ExpandLess />}
                         </IconButton>
-                        <IconButton className="!mr-[5px]" onClick={handleClose}>
-                            <Close className="!text-[18px]" />
+                        <IconButton onClick={handleClose}>
+                            <Close className="!text-lg" />
                         </IconButton>
                     </Box>
                 </DialogTitle>
                 <Box
                     component="form"
-                    className={`rounded-[20px] flex flex-col ${fold ? "hidden" : ""}`}
+                    className={`mx-2 rounded-5 flex flex-col justify-center ${
+                        fold ? "hidden" : ""
+                    }`}
                     onSubmit={onSubmit}
                 >
                     {editor.quote && (
@@ -171,8 +171,7 @@ export default function FloatingEditor() {
                             noStory
                             noQuote
                             noFullWidth
-                            className="!mb-[10px] !ml-[10px] !mr-[10px]"
-                            sx={{ "& > div": { borderRadius: 2 } }}
+                            className="!mb-2 !mx-1 [&>div]:rounded-lg"
                             maxHeight={200}
                         />
                     )}
@@ -182,41 +181,38 @@ export default function FloatingEditor() {
                         }}
                         initText={
                             editor.edit &&
-                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">${editor.edit}</div></blockquote><p></p>`
+                            /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
+                                darkMode ? "#646262" : "e7e7e7"
+                            }; margin-left: 0"><div style="margin-left: 15px">${
+                                editor.edit
+                            }</div></blockquote><p></p>`
                         }
                         autoResize
                         noMenuBar
                         noStatusBar
                         toolbarBottom
-                        className="!mx-[10px] max-w-[calc(100%-20px)]"
+                        lengthLimit={50000}
+                        className="max-w-full"
                     />
-                    <Box className="m-[10px]">
+                    <Box className="my-2 ml-1">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
                             size="invisible"
                             ref={reCaptchaRef}
                         />
-                        {creating ? (
-                            <CircularProgress
-                                color="secondary"
-                                disableShrink
-                                className="my-[5px]"
-                            />
-                        ) : (
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                type="submit"
-                                disabled={!comment}
-                            >
-                                <CommentIcon className="!mr-[5px]" />
-                                Comment
-                            </Button>
-                        )}
-                        <ReCaptchaNotice
-                            className={creating ? "my-0" : "mt-[10px] mb-0"}
-                        />
+                        <LoadingButton
+                            variant="contained"
+                            color="secondary"
+                            type="submit"
+                            loading={creating}
+                            loadingPosition="start"
+                            disabled={!comment || creating}
+                            startIcon={<CommentIcon />}
+                        >
+                            Comment
+                        </LoadingButton>
+                        <ReCaptchaNotice />
                     </Box>
                 </Box>
             </Box>

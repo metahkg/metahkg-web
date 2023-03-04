@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Alert, Box, Button, TextField } from "@mui/material";
+import { Alert, Box, TextField, Typography } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -24,6 +24,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useCat, useMenu } from "../components/MenuProvider";
 import {
+    useDarkMode,
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
@@ -36,6 +37,8 @@ import { api } from "../lib/api";
 import ChooseCat from "../components/create/ChooseCat";
 import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import { clearTinymceDraft } from "../lib/clearTinymceDraft";
+import { LoadingButton } from "@mui/lab";
 
 /**
  * Page for creating a new thread
@@ -50,11 +53,12 @@ export default function Create() {
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
     const [threadTitle, setThreadTitle] = useState(""); //this will be the post title
     const [comment, setComment] = useState(""); //initial comment (#1)
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
 
     const quote = {
@@ -82,7 +86,9 @@ export default function Create() {
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
                     if (data) {
-                        setInittext(/*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0">
+                        setInittext(/*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
+                            darkMode ? "#646262" : "e7e7e7"
+                        }; margin-left: 0">
                                         <div style="margin-left: 15px">
                                             ${data.comment}
                                         </div>
@@ -124,7 +130,7 @@ export default function Create() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        setDisabled(true);
+        setLoading(true);
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
         setAlert({ severity: "info", text: "Creating thread..." });
@@ -136,6 +142,7 @@ export default function Create() {
             rtoken,
         })
             .then((data) => {
+                clearTinymceDraft(window.location.pathname);
                 navigate(`/thread/${data.id}`, { replace: true });
                 setTimeout(() => {
                     notification.open && setNotification({ open: false, text: "" });
@@ -145,7 +152,7 @@ export default function Create() {
                 const text = parseError(err);
                 setAlert({ severity: "error", text });
                 setNotification({ open: true, severity: "error", text });
-                setDisabled(false);
+                setLoading(false);
                 reCaptchaRef.current?.reset();
             });
     }
@@ -158,26 +165,26 @@ export default function Create() {
             }}
         >
             <Box className={isSmallScreen ? "w-100v" : "w-80v"}>
-                <Box className="m-[20px]" component="form" onSubmit={onSubmit}>
-                    <Box className="flex items-center">
+                <Box className="m-5" component="form" onSubmit={onSubmit}>
+                    <Box className="flex items-center my-4">
                         <MetahkgLogo
                             svg
                             height={50}
                             width={40}
-                            light
-                            className="!mr-[10px] !mb-[10px]"
+                            light={darkMode}
+                            className="!mr-2 !mb-2"
                         />
-                        <h1>Create thread</h1>
+                        <Typography variant="h4">Create thread</Typography>
                     </Box>
                     {alert.text && (
-                        <Alert className="!mb-[15px]" severity={alert.severity}>
+                        <Alert className="!mb-4" severity={alert.severity}>
                             {alert.text}
                         </Alert>
                     )}
-                    <Box className={`mb-[15px] ${isSmallScreen ? "" : "flex "}`}>
+                    <Box className={`mb-4 ${isSmallScreen ? "" : "flex "}`}>
                         <ChooseCat cat={catchoosed} setCat={setCatchoosed} />
                         <TextField
-                            className={isSmallScreen ? "!mt-[15px]" : "!ml-[15px]"}
+                            className={isSmallScreen ? "!mt-4" : "!ml-4"}
                             variant="filled"
                             color="secondary"
                             fullWidth
@@ -194,26 +201,29 @@ export default function Create() {
                         initText={inittext}
                         toolbarSticky
                         autoResize
+                        lengthLimit={50000}
                         minHeight={isSmallScreen ? 310 : 350}
                     />
-                    <Box className="mt-[15px]">
+                    <Box className="mt-4">
                         <ReCAPTCHA
                             theme="dark"
                             sitekey={reCaptchaSiteKey}
                             size="invisible"
                             ref={reCaptchaRef}
                         />
-                        <Button
-                            disabled={disabled || !(comment && threadTitle && catchoosed)}
-                            className={"text-[16px] !h-[40px] !py-0 !normal-case"}
+                        <LoadingButton
+                            disabled={loading || !(comment && threadTitle && catchoosed)}
+                            loading={loading}
+                            className={"text-4 !h-10 !py-0 !normal-case"}
                             variant="contained"
                             color="secondary"
                             type="submit"
+                            startIcon={<CreateIcon className="!text-4" />}
+                            loadingPosition="start"
                         >
-                            <CreateIcon className="!mr-[5px] !text-[16px]" />
                             Create
-                        </Button>
-                        <ReCaptchaNotice />
+                        </LoadingButton>
+                        <ReCaptchaNotice className="!mt-[10px]" />
                     </Box>
                 </Box>
             </Box>

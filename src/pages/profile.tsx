@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { Avatar, Box, Button, Tooltip } from "@mui/material";
+import { Avatar, Box, Button, Tooltip, Typography } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useReFetch,
@@ -130,7 +130,7 @@ export default function Profile() {
 
     return (
         <Box
-            className="max-h-screen h-screen overflow-auto w-full"
+            className="max-h-screen h-screen overflow-auto w-full grid"
             sx={{
                 backgroundColor: "primary.dark",
             }}
@@ -138,7 +138,7 @@ export default function Profile() {
             {!reqUser ? (
                 <Loader position="center" />
             ) : (
-                <Box className="flex justify-center items-center flex-col">
+                <Box className="flex place-self-center justify-center items-center flex-col w-[90%] max-w-[90%]">
                     {uploadedAvatarOriginal && (
                         <AvatarEditorPopUp
                             open={editorOpen}
@@ -157,7 +157,7 @@ export default function Profile() {
                     )}
                     <Box
                         className={
-                            "flex justify-center items-center max-w-full !mt-[20px] w-full"
+                            "flex justify-center items-center max-w-full !mt-5 w-full"
                         }
                     >
                         <Avatar
@@ -169,31 +169,29 @@ export default function Profile() {
                             }}
                         />
                         <Box
-                            className={`!ml-[20px] flex justify-center h-[200px] ${
+                            className={`!ml-[20px] flex justify-center overflow-x-hidden h-[200px] ${
                                 isSelf ? "flex-col" : ""
                             }`}
                         >
-                            <h1 className="text-[30px] self-center whitespace-nowrap leading-[37px] max-h-[37px] mt-0">
-                                <Box
-                                    className={`overflow-hidden ${
-                                        isSmallScreen
-                                            ? "max-w-[calc(100vw-50px-250px)]"
-                                            : "max-w-[calc(70vw-50px-350px)]"
-                                    }`}
-                                >
-                                    <span
-                                        className={`overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full ${
-                                            reqUser.sex === "M"
-                                                ? "text-[#34aadc]"
-                                                : "text-[red]"
-                                        }`}
-                                    >
-                                        {reqUser.name}
-                                    </span>
-                                </Box>
+                            <Typography
+                                variant="h5"
+                                component="p"
+                                gutterBottom
+                                className={`!text-3xl text-left whitespace-nowrap !max-h-9 text-ellipsis overflow-hidden !max-w-full ${
+                                    reqUser.sex === "M" ? "text-[#34aadc]" : "text-[red]"
+                                }`}
+                            >
+                                {reqUser.name}
+                            </Typography>
+                            <Typography
+                                variant="h6"
+                                component="p"
+                                className="!text-2xl text-left"
+                                gutterBottom
+                            >
                                 #{reqUser.id}
-                            </h1>
-                            <Box className={isSelf ? "mt-[25px]" : ""}>
+                            </Typography>
+                            <Box>
                                 {isSelf && (
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
@@ -208,7 +206,7 @@ export default function Profile() {
                             </Box>
                         </Box>
                     </Box>
-                    <Box className="flex !mt-[20px] !mb-[10px] w-full font justify-center">
+                    <Box className="flex !mt-5 !mb-2 w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
                             setReqUser={setReqUser}
@@ -217,10 +215,10 @@ export default function Profile() {
                         />
                     </Box>
                     {isSmallScreen && (
-                        <Box className="!mt-[20px]">
+                        <Box className="!mt-5">
                             <Link className="!no-underline" to={`/history/${userId}`}>
                                 <Button
-                                    className="text-[16px]"
+                                    className="text-base"
                                     variant="text"
                                     color="secondary"
                                 >

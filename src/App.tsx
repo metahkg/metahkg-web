@@ -16,16 +16,17 @@
  */
 
 import "./css/App.css";
-import "@fontsource/ibm-plex-sans";
+import "@fontsource/roboto";
 import Theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import MenuProvider, { useMenu } from "./components/MenuProvider";
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import AppContextProvider, {
     useSettings,
     useSettingsOpen,
     useIsSmallScreen,
     useAlertDialog,
+    useDarkMode,
 } from "./components/AppContextProvider";
 import { Notification as SnackBar } from "./lib/notification";
 import Routes from "./Routes";
@@ -36,6 +37,8 @@ import { useCheckSession } from "./hooks/app/useCheckSession";
 import { useRegisterServiceWorker } from "./hooks/app/useRegisterServiceWorker";
 import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications";
 import SidePanel from "./components/sidePanel";
+import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -45,6 +48,7 @@ function App() {
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
     const [settings] = useSettings();
+    const darkMode = useDarkMode();
     const [alertDialog] = useAlertDialog();
 
     // useEffect hooks
@@ -52,16 +56,48 @@ function App() {
     useRegisterServiceWorker();
     useSubscribeNotifications();
 
+    useEffect(() => {
+        document.querySelector("html")?.classList.add(darkMode ? "dark" : "light");
+        document.querySelector("html")?.classList.remove(darkMode ? "light" : "dark");
+    }, [darkMode]);
+
     return (
         <Theme
-            primary={{ main: "#222" }}
+            mode={darkMode ? "dark" : "light"}
+            primary={{
+                main: darkMode ? "#222" : "#fff",
+                dark: darkMode ? "#171717" : "#f6f6f6",
+            }}
             secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
         >
-            <AlertDialog {...alertDialog} />
-            <SnackBar />
-            <Settings open={settingsOpen} setOpen={setSettingsOpen} />
-            <Box className="max-h-screen h-screen" sx={{ bgcolor: "primary.dark" }}>
-                <ErrorBoundary>
+            <CssBaseline />
+            <ErrorBoundary>
+                <Box
+                    className="max-h-screen h-screen max-w-100v w-screen overflow-hidden"
+                    sx={{ bgcolor: "primary.dark" }}
+                >
+                    <Helmet>
+                        {darkMode ? (
+                            <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-tomorrow.min.css"
+                                integrity="sha512-kSwGoyIkfz4+hMo5jkJngSByil9jxJPKbweYec/UgS+S1EgE45qm4Gea7Ks2oxQ7qiYyyZRn66A9df2lMtjIsw=="
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                            />
+                        ) : (
+                            <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css"
+                                integrity="sha512-/mZ1FHPkg6EKcxo0fKXF51ak6Cr2ocgDi5ytaTBjsQZIH/RNs6GF6+oId/vPe3eJB836T36nXwVh/WBl/cWT4w=="
+                                crossOrigin="anonymous"
+                                referrerPolicy="no-referrer"
+                            />
+                        )}
+                    </Helmet>
+                    <AlertDialog {...alertDialog} />
+                    <SnackBar />
+                    <Settings open={settingsOpen} setOpen={setSettingsOpen} />
                     <Router>
                         <Box className="flex">
                             {!isSmallScreen && <SidePanel />}
@@ -76,8 +112,8 @@ function App() {
                             <Routes />
                         </Box>
                     </Router>
-                </ErrorBoundary>
-            </Box>
+                </Box>
+            </ErrorBoundary>
         </Theme>
     );
 }

@@ -35,6 +35,7 @@ import { parseError } from "../../lib/parseError";
 import { Comment as CommentType } from "@metahkg/api";
 import CommentBottom from "./comment/commentBottom";
 import CommentEdit from "./comment/commentEdit";
+import { Link } from "../../lib/link";
 
 const CommentContext = createContext<{
     comment: [CommentType, React.Dispatch<React.SetStateAction<CommentType>>];
@@ -183,7 +184,7 @@ export default function Comment(props: {
             >
                 <Box className="flex flex-col">
                     <Box
-                        className={`${noFullWidth ? "" : "w-[calc(100%-8px)]"} mx-[4px] ${
+                        className={`${noFullWidth ? "" : "w-[calc(100%-8px)]"} mx-1 ${
                             className || ""
                         }`}
                         sx={sx}
@@ -199,9 +200,9 @@ export default function Comment(props: {
                             />
                         )}
                         <Box
-                            className={`text-left !my-[4px] ${
+                            className={`text-left !my-1 ${
                                 showReplies ? "" : "overflow-auto"
-                            } w-full rounded-[8px]`}
+                            } w-full rounded-md`}
                             sx={(theme) => ({
                                 "& *::selection": {
                                     background: theme.palette.secondary.main,
@@ -211,7 +212,7 @@ export default function Comment(props: {
                                 maxHeight: inPopUp && !showReplies ? "90vh" : "",
                             })}
                         >
-                            <Box className="!mx-[20px]">
+                            <Box className="!mx-5">
                                 <CommentTop comment={comment} noStory={noStory} />
                                 {!fold && !blocked && (
                                     <React.Fragment>
@@ -229,33 +230,40 @@ export default function Comment(props: {
                                 )}
                             </Box>
                             {ready && !fold && !blocked && <CommentBottom />}
-                            <Box className="h-[15px]" />
+                            <Box className="h-4" />
                         </Box>
 
                         {inThread && (
                             <React.Fragment>
                                 {comment.admin?.replies?.map((reply) => {
                                     return (
-                                        <p className="mx-[10px] my-[8px]">
+                                        <Typography className="!m-2">
                                             <Typography
                                                 className="inline"
                                                 sx={{ color: "secondary.main" }}
-                                            >{`Admin ${reply.admin.name} #${
-                                                reply.admin.id
-                                            } replied on ${
-                                                reply.date
+                                            >
+                                                Admin{" "}
+                                                <Link
+                                                    color="inherit"
+                                                    href={`/profile/${reply.admin.id}`}
+                                                >
+                                                    {reply.admin.name}
+                                                </Link>{" "}
+                                                #{reply.admin.id} replied on{" "}
+                                                {reply.date
                                                     ? new Date(reply.date)
                                                           .toISOString()
                                                           .split("T")[0]
-                                                    : "unknown"
-                                            }: `}</Typography>
+                                                    : "unknown"}
+                                                :{" "}
+                                            </Typography>
                                             {reply.reply}
-                                        </p>
+                                        </Typography>
                                     );
                                 })}
                                 {comment.admin?.edits?.map((edit) => {
                                     return (
-                                        <p className="mx-[10px] my-[8px]">
+                                        <Typography className="!m-2">
                                             <Typography
                                                 className="inline"
                                                 sx={{ color: "secondary.main" }}
@@ -269,7 +277,7 @@ export default function Comment(props: {
                                                     : "unknown"
                                             }: `}</Typography>
                                             {edit.reason}
-                                        </p>
+                                        </Typography>
                                     );
                                 })}
                             </React.Fragment>
@@ -278,7 +286,7 @@ export default function Comment(props: {
                             <Box className="flex justify-center items-center">
                                 <CircularProgress
                                     size={30}
-                                    className="!mt-[10px] !mb-[5px]"
+                                    className="!mt-2 !mb-1"
                                     color={"secondary"}
                                 />
                             </Box>
@@ -292,10 +300,7 @@ export default function Comment(props: {
                                         setIsExpanded?.(!showReplies);
                                     }}
                                 >
-                                    <Typography
-                                        className="!mt-[5px] !mb-[5px]"
-                                        color="secondary"
-                                    >
+                                    <Typography className="!mt-1 !mb-1" color="secondary">
                                         {showReplies ? "Hide" : "Show"} Replies
                                     </Typography>
                                     {showReplies ? (
@@ -317,7 +322,7 @@ export default function Comment(props: {
                                         ))}
                                         <Box className="flex justify-center items-center">
                                             <Typography
-                                                className="!mt-[5px] !mb-[5px] !text-[18px]"
+                                                className="!mt-1 !mb-1 !text-lg"
                                                 color="secondary"
                                             >
                                                 End

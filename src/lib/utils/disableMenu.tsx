@@ -17,13 +17,17 @@
 
 import { Box } from "@mui/material";
 import React, { useLayoutEffect } from "react";
-import { useIsSmallScreen } from "../../components/AppContextProvider";
+import {
+    useIsSmallScreen,
+    useSidePanelExpanded,
+} from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
 export default function DisableMenu(props: { children: React.ReactNode }) {
     const { children } = props;
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
+    const [sidePanelExpanded] = useSidePanelExpanded();
 
     useLayoutEffect(() => {
         menu && setMenu(false);
@@ -32,7 +36,11 @@ export default function DisableMenu(props: { children: React.ReactNode }) {
     return (
         <Box
             className={`max-h-screen h-screen ${
-                isSmallScreen ? "w-100v" : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
+                isSmallScreen
+                    ? "w-100v"
+                    : sidePanelExpanded
+                    ? "w-[calc(100vw-220px)] max-w-[calc(100vw-220px)]"
+                    : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
             } overflow-auto`}
         >
             {children}

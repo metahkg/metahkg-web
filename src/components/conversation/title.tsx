@@ -40,22 +40,22 @@ export default function Title(props: {
     const isSmallScreen = useIsSmallScreen();
     return (
         <Box
-            className="h-[46px] border-solid border-0 border-b-[1px] border-[#3b3b3b]"
+            className="h-[46px] border-solid border-0 border-b-[1px] border-[#f3f3f3] dark:border-[#3b3b3b]"
             sx={{
                 bgcolor: "primary.main",
             }}
         >
-            <Box className="flex !ml-[10px] !mr-[20px] items-center justify-between h-full">
-                <Box className="flex items-center !mr-[10px] overflow-hidden">
+            <Box className="flex !ml-2 !mr-5 items-center justify-between h-full">
+                <Box className="flex items-center !mr-2 overflow-hidden">
                     {(history || category) && (
                         <Link to={history || `/category/${category}`}>
-                            <IconButton className="!m-0 !p-0">
+                            <IconButton className="!m-0 !p-0 leading-7">
                                 <ArrowBackIcon color="secondary" />
                             </IconButton>
                         </Link>
                     )}
                     <Typography
-                        className={`!my-0 !ml-[10px] overflow-hidden text-ellipsis whitespace-nowrap !text-[18px] leading-[24px] max-h-[24px] ${
+                        className={`!my-0 !ml-2 overflow-hidden text-ellipsis !text-lg max-h-7 whitespace-nowrap ${
                             isSmallScreen ? "text-center" : ""
                         }`}
                         sx={{

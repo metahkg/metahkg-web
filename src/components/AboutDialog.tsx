@@ -1,5 +1,6 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "../lib/link";
 import { PopUp } from "../lib/popup";
 
 export function AboutDialog(props: {
@@ -9,79 +10,126 @@ export function AboutDialog(props: {
     const { open, setOpen } = props;
     return (
         <PopUp title="About Metahkg" closeBtn open={open} setOpen={setOpen} fullWidth>
-            <Box className="mb-[15px] flex flex-col">
-                <p className="mb-0">
+            <Box className="mb-4 flex flex-col">
+                <Typography variant="body1" gutterBottom className="!mt-4">
                     Metahkg is a free and open source lihkg-style forum.
-                </p>
-                <h3>Source code</h3>
-                <a
-                    href="https://gitlab.com/metahkg/metahkg"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    Metahkg Main Repository
-                </a>
-                <a
-                    href="https://gitlab.com/metahkg/metahkg-web"
-                    className="mt-[10px]"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    Metahkg Web App
-                </a>
+                </Typography>
+                <Typography variant="h5" gutterBottom>
+                    Source code
+                </Typography>
+                <Typography gutterBottom>
+                    <Link
+                        href="https://gitlab.com/metahkg/metahkg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Metahkg Main Repository
+                    </Link>
+                </Typography>
+                <Typography gutterBottom>
+                    <Link
+                        href="https://gitlab.com/metahkg/metahkg-web"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Metahkg Web App
+                    </Link>
+                </Typography>
                 {process.env.REACT_APP_version ? (
                     <React.Fragment>
-                        <h3>Version</h3>
-                        <a
-                            href={`https://gitlab.com/metahkg/metahkg-web/-/tree/${process.env.REACT_APP_version}`}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            v{process.env.REACT_APP_version}
-                        </a>
-                        <a
-                            href={`https://gitlab.com/metahkg/metahkg-web/-/blob/${process.env.REACT_APP_version}/CHANGELOG.md`}
-                            className="mt-[10px]"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            CHANGELOG
-                        </a>
+                        <Typography gutterBottom variant="h5">
+                            Version
+                        </Typography>
+                        <Typography gutterBottom>
+                            <Link
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/tree/${process.env.REACT_APP_version}`}
+                                className="inline"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                v{process.env.REACT_APP_version}
+                            </Link>
+                        </Typography>
+                        <Typography gutterBottom>
+                            <Link
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/blob/${process.env.REACT_APP_version}/CHANGELOG.md`}
+                                className="inline"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                CHANGELOG
+                            </Link>
+                        </Typography>
                     </React.Fragment>
-                ) : (
-                    <></>
-                )}
+                ) : null}
                 {process.env.REACT_APP_build ? (
                     <React.Fragment>
-                        <h3>Build</h3>
-                        <a
-                            href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {process.env.REACT_APP_build}
-                        </a>
+                        <Typography variant="h5" gutterBottom>
+                            Build
+                        </Typography>
+                        <Typography gutterBottom>
+                            <Link
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
+                                className="inline"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {process.env.REACT_APP_build}
+                            </Link>
+                        </Typography>
                     </React.Fragment>
-                ) : (
-                    <></>
-                )}
+                ) : null}
                 {!process.env.REACT_APP_build && process.env.REACT_APP_date ? (
                     <React.Fragment>
-                        <h3>Build</h3>
-                        <p className="my-0">{process.env.REACT_APP_date}</p>
+                        <Typography variant="h5" gutterBottom>
+                            Build
+                        </Typography>
+                        <Typography gutterBottom>{process.env.REACT_APP_date}</Typography>
                     </React.Fragment>
-                ) : (
-                    <></>
-                )}
-                <h3>Copyright</h3>
-                <p className="my-0">
+                ) : null}
+                <Typography variant="h5" gutterBottom>
+                    Copyright
+                </Typography>
+                <Typography gutterBottom>
                     Metahkg Copyright (c) 2022-present Metahkg Contributors
-                </p>
-                <p className="mb-0">
-                    <a href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md">
+                </Typography>
+                <Typography gutterBottom>
+                    <Link
+                        href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
+                        className="inline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         AGPL-3.0-or-later
-                    </a>
-                </p>
+                    </Link>
+                </Typography>
+                <Typography gutterBottom>
+                    <Link
+                        href="/third-party-licenses.txt"
+                        className="inline"
+                        target="_blank"
+                    >
+                        Third-party Licenses
+                    </Link>
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                    Logo
+                </Typography>
+                <Typography gutterBottom>
+                    Metahkg logo Copyright (c) 2022 "white card", CC-BY-4.0
+                </Typography>
+                <Typography gutterBottom>
+                    See{" "}
+                    <Link
+                        href="https://gitlab.com/metahkg/metahkg-web/-/tree/master/public/images/LICENSE"
+                        className="inline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        metahkg-web@public/images/LICENSE
+                    </Link>{" "}
+                    for more information.
+                </Typography>
             </Box>
         </PopUp>
     );

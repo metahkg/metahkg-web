@@ -19,10 +19,12 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import Loader from "../../../lib/loader";
+import { useDarkMode } from "../../AppContextProvider";
 
 export default function TweetEmbed(props: { tweetId: string }) {
     const { tweetId } = props;
     const [loading, setLoading] = useState(true);
+    const darkMode = useDarkMode();
     return (
         <Box>
             {loading && (
@@ -36,7 +38,7 @@ export default function TweetEmbed(props: { tweetId: string }) {
             )}
             <TwitterTweetEmbed
                 options={{
-                    theme: "dark",
+                    theme: darkMode ? "dark" : "light",
                 }}
                 tweetId={tweetId}
                 onLoad={() => {

@@ -17,13 +17,18 @@
 
 import React, { useRef, useState } from "react";
 import { AddReaction, Forum } from "@mui/icons-material";
-import { Box, Button, IconButton, Popover } from "@mui/material";
+import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
 import VoteButtons from "./voteButtons";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { css } from "../../../lib/css";
 import { useThreadId } from "../ConversationContext";
-import { useIsSmallScreen, useNotification, useUser } from "../../AppContextProvider";
+import {
+    useDarkMode,
+    useIsSmallScreen,
+    useNotification,
+    useUser,
+} from "../../AppContextProvider";
 import {
     useInPopUp,
     useSetIsExpanded,
@@ -48,6 +53,7 @@ export default function CommentBottom() {
     const [user] = useUser();
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
     const isSmallScreen = useIsSmallScreen();
+    const darkMode = useDarkMode();
 
     const choosed = user && comment.emotions?.find((i) => i.user === user.id)?.emotion;
 
@@ -140,11 +146,11 @@ export default function CommentBottom() {
 
     return (
         <Box className="flex justify-between items-center w-full">
-            <Box className="flex !ml-[20px] !mr-[20px]">
+            <Box className="flex !mx-5">
                 <VoteButtons comment={comment} key={`${comment.U}${comment.D}`} />
                 {comment.replies?.length && (
                     <Button
-                        className={`${css.smallBtn} !ml-[10px] !bg-[#333]`}
+                        className={`${css.smallBtn} !ml-2 !bg-[#f6f6f6] dark:!bg-[#333]`}
                         variant="text"
                         onClick={() => {
                             if (inPopUp) {
@@ -153,17 +159,10 @@ export default function CommentBottom() {
                             } else setPopupOpen(true);
                         }}
                     >
-                        <Forum
-                            sx={{
-                                "&:hover": {
-                                    color: "white",
-                                },
-                            }}
-                            className="!text-[14px]"
-                        />
-                        <p className="!ml-[5px] !my-0 text-metahkg-grey">
+                        <Forum className="!text-sm hover:text-black dark:hover:text-white" />
+                        <Typography className="!ml-1 text-metahkg-grey">
                             {comment.replies?.length}
-                        </p>
+                        </Typography>
                     </Button>
                 )}
             </Box>
@@ -177,7 +176,7 @@ export default function CommentBottom() {
                                     const isChoosed = choosed === item.emotion;
                                     return (
                                         <Button
-                                            className={`${css.smallBtn} !mx-[5px]`}
+                                            className={`${css.smallBtn} !mx-1`}
                                             key={index}
                                             onClick={() => {
                                                 isChoosed
@@ -201,7 +200,7 @@ export default function CommentBottom() {
                             onClick={() => {
                                 setEmojiOpen(true);
                             }}
-                            className="!text-metahkg-grey !mx-[10px]"
+                            className="!text-metahkg-grey !mx-2"
                             ref={emotionBtnRef}
                         >
                             <AddReaction />
@@ -222,7 +221,7 @@ export default function CommentBottom() {
                                     onEmojiSelect={(emoji) => {
                                         setEmotion(emoji.native);
                                     }}
-                                    theme={"dark"}
+                                    theme={darkMode ? "dark" : "light"}
                                 />
                             </Box>
                         </Popover>

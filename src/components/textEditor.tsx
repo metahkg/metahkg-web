@@ -15,9 +15,9 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useIsSmallScreen } from "./AppContextProvider";
+import { useDarkMode, useIsSmallScreen } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
@@ -35,6 +35,8 @@ export default function TextEditor(props: {
     noMenuBar?: boolean;
     noStatusBar?: boolean;
     minHeight?: number;
+    lengthLimit?: number;
+    noAutoSave?: boolean;
 }) {
     const {
         onChange,
@@ -47,23 +49,70 @@ export default function TextEditor(props: {
         noMenuBar,
         noStatusBar,
         minHeight,
+        lengthLimit,
+        noAutoSave,
     } = props;
 
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
+    const darkMode = useDarkMode();
+    const editorRef = useRef<Editor>(null);
+    const [reload, setReload] = useState(false);
+    const [replaceContent, setReplaceContent] = useState("");
+
+    useEffect(() => {
+        const content = editorRef?.current?.editor?.getContent();
+        setReload(!reload);
+        if (content) {
+            setTimeout(() => {
+                setReplaceContent(content);
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [darkMode]);
+
+    useEffect(() => {
+        if (replaceContent) {
+            editorRef?.current?.editor?.setContent(replaceContent);
+            setReplaceContent("");
+        }
+    }, [replaceContent]);
+
+    const onEditorChange = useCallback(
+        (a: string, editor: import("tinymce/tinymce").Editor) => {
+            if (lengthLimit) {
+                if (a.length > lengthLimit) {
+                    a = a.substring(0, lengthLimit);
+                    editor.setContent(a);
+                    editor.windowManager.alert(
+                        "Content exceeded length limit. Automatically truncated."
+                    );
+                    return;
+                }
+            }
+            onChange?.(a, editor);
+        },
+        [onChange, lengthLimit]
+    );
 
     return (
         <Box sx={sx} className={className}>
             <Editor
-                onEditorChange={onChange}
-                initialValue={initText}
+                ref={editorRef}
+                key={Number(reload)}
+                onEditorChange={onEditorChange}
+                initialValue={initText || undefined}
                 init={{
                     height: isSmallScreen ? 310 : 350,
                     ...(minHeight && { min_height: minHeight }),
-                    skin_url:
-                        "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/ui/metahkg-dark",
-                    content_css:
-                        "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/content/metahkg-dark/content.min.css",
+                    ...(darkMode
+                        ? {
+                              skin_url:
+                                  "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/ui/metahkg-dark",
+                              content_css:
+                                  "https://cdn.jsdelivr.net/npm/@metahkg/tinymce-skins@1.0.0/content/metahkg-dark/content.min.css",
+                          }
+                        : { skin: "oxide" }),
                     branding: false,
                     promotion: false,
                     ...(noStatusBar && { statusbar: false }),
@@ -163,7 +212,9 @@ export default function TextEditor(props: {
                         : "file edit view insert format tools table",
                     plugins: `${
                         autoresize ? "autoresize" : ""
-                    } preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons`,
+                    } preview importcss searchreplace autolink ${
+                        noAutoSave ? "" : "autosave"
+                    } save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons`,
                     toolbar:
                         "undo redo | bold italic underline strikethrough | emoticons | uploadimage image template link codesample | fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap | fullscreen preview save print | insertfile media anchor | ltr rtl",
                     toolbar_sticky: toolbarSticky,
@@ -173,17 +224,22 @@ export default function TextEditor(props: {
                         {
                             title: "Quote",
                             description: "Add a quote.",
-                            content: `<blockquote style="color: #aca9a9; border-left: 2px solid #646262; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
+                            content: /*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
+                                darkMode ? "#646262" : "e7e7e7"
+                            }; margin-left: 0"><div style="margin-left: 15px">quote</div></blockquote><p></p>`,
                         },
                     ],
+                    browser_spellcheck: true,
+                    contextmenu: false,
                     codesample_global_prismjs: true,
                     codesample_languages: [
+                        { text: "Bash", value: "bash" },
+                        { text: "Python", value: "python" },
+                        { text: "Markdown", value: "md" },
                         { text: "TypeScript", value: "typescript" },
                         { text: "TypeScript React", value: "tsx" },
                         { text: "JavaScript", value: "javascript" },
                         { text: "JavaScript React", value: "jsx" },
-                        { text: "Python", value: "python" },
-                        { text: "Bash", value: "bash" },
                         { text: "JSON", value: "json" },
                         { text: "HTML", value: "html" },
                         { text: "XML", value: "xml" },
@@ -191,7 +247,6 @@ export default function TextEditor(props: {
                         { text: "YAML", value: "yaml" },
                         { text: "CSS", value: "css" },
                         { text: "SASS", value: "sass" },
-                        { text: "Markdown", value: "md" },
                         { text: "Mongodb", value: "mongodb" },
                         { text: "SQL", value: "sql" },
                         { text: "C", value: "c" },
@@ -207,10 +262,10 @@ export default function TextEditor(props: {
                         { text: "PHP", value: "php" },
                     ],
                     autosave_ask_before_unload: true,
-                    autosave_interval: "10s",
-                    autosave_prefix: "{path}{query}-{id}-",
+                    autosave_interval: "20s",
+                    autosave_prefix: "tinymce-autosave-{path}-",
                     autosave_restore_when_empty: true,
-                    autosave_retention: "2m",
+                    autosave_retention: "30m",
                     image_advtab: true,
                     images_upload_handler: async (blobInfo, _progress) => {
                         const formData = new FormData();

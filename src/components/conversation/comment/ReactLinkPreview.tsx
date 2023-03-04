@@ -22,16 +22,25 @@ import React, { useState } from "react";
 import Loader from "../../../lib/loader";
 import { Client as RLPCLient } from "@metahkg/rlp-proxy-rewrite-api";
 import axios from "axios";
+import { useDarkMode } from "../../AppContextProvider";
 
-export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DOMNode }) {
-    const { quote, url, node } = props;
+export function ReactLinkPreview(props: {
+    quote?: boolean;
+    url: string;
+    node: DOMNode;
+    originalUrl?: string;
+}) {
+    const { quote, url, node, originalUrl } = props;
     const [success, setSuccess] = useState(true);
+    const darkMode = useDarkMode();
     return success ? (
         <Box
             sx={{
                 "& .Container, & .Container *:hover, & .LowerContainer, & .LowerContainer:hover, & .LinkPreview, & .LinkPreview:hover, & .LinkPreview *, & .LinkPreview *:hover":
                     {
-                        backgroundColor: "#333 !important",
+                        backgroundColor: darkMode
+                            ? "#333 !important"
+                            : "#f6f6f6 !important",
                     },
                 "& .Container": {
                     maxWidth: `${quote ? 400 : 450}px !important`,
@@ -54,13 +63,13 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                 imageHeight={250}
                 width={"100%"}
                 className="!mt-[5px] !mb-[5px] LinkPreview"
-                borderColor="#333"
-                backgroundColor="#333"
-                primaryTextColor="white"
+                borderColor={darkMode ? "#333" : "#f6f6f6"}
+                backgroundColor={darkMode ? "#333" : "#f6f6f6"}
+                primaryTextColor={darkMode ? "white" : "black"}
                 secondaryTextColor="#aca9a9"
                 titleLength={50}
                 descriptionLength={60}
-                fetcher={async (url: string) => {
+                fetcher={async () => {
                     try {
                         const client = new RLPCLient(
                             `https://${
@@ -69,7 +78,9 @@ export function ReactLinkPreview(props: { quote?: boolean; url: string; node: DO
                             }`,
                             axios.create()
                         );
-                        const data = await client.getMetadata(encodeURIComponent(url));
+                        const data = await client.getMetadata(
+                            encodeURIComponent(originalUrl || url)
+                        );
                         const { metadata } = data;
                         if (!metadata?.title || !metadata?.hostname) {
                             setSuccess(false);
