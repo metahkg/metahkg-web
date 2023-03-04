@@ -16,16 +16,18 @@
  */
 
 import React, { useLayoutEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
+import { useDarkMode } from "../components/AppContextProvider";
 
 /**
  * 404 page
  */
 export default function NotFound() {
     const [menu, setMenu] = useMenu();
+    const darkMode = useDarkMode();
 
     useLayoutEffect(() => {
         setTitle("404 Not Found | Metahkg");
@@ -34,17 +36,17 @@ export default function NotFound() {
 
     return (
         <Box
-            className="flex items-center justify-center min-h-screen w-screen"
+            className="flex items-center justify-center min-h-screen w-full"
             sx={{ bgcolor: "primary.dark" }}
         >
             <MetahkgLogo
                 className="!mr-[10px] !mb-[20px]"
                 svg
-                light
+                light={darkMode}
                 height={100}
                 width={80}
             />
-            <h1>404 Not Found</h1>
+            <Typography variant="h3">404 Not Found</Typography>
         </Box>
     );
 }

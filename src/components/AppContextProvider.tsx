@@ -19,6 +19,7 @@ import React, {
     createContext,
     Dispatch,
     SetStateAction,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -37,10 +38,12 @@ export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
     query: [string, Dispatch<SetStateAction<string>>];
     width: [number, Dispatch<SetStateAction<number>>];
+    isSmallScreen: boolean;
     height: [number, Dispatch<SetStateAction<number>>];
     notification: [notification, Dispatch<SetStateAction<notification>>];
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
     settings: [settings, Dispatch<SetStateAction<settings>>];
+    darkMode: boolean;
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<SetStateAction<Category[]>>];
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
@@ -50,6 +53,7 @@ export const AppContext = createContext<{
     reCaptchaSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
+    sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
     // @ts-ignore
 }>(null);
 
@@ -66,14 +70,24 @@ export default function AppContextProvider(props: {
     const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
+    const [isSmallScreen, setIsSmallScreen] = useState(width < 768);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settings, setSettings] = useState<settings>(
-        JSON.parse(
-            localStorage.getItem("settings") ||
-                JSON.stringify({ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" } })
-        )
-    );
+    const [settings, setSettings] = useState<settings>({
+        ...{ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" }, autoLoadImages: true },
+        ...JSON.parse(localStorage.getItem("settings") || "{}"),
+    });
+
+    const isDarkMode = useCallback(() => {
+        return (
+            settings.theme === "dark" ||
+            (settings.theme === "system" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches) ||
+            !settings.theme
+        );
+    }, [settings.theme]);
+
+    const [darkMode, setDarkMode] = useState(isDarkMode());
     const [serverPublicKey, setServerPublicKey] = useState<string>(
         localStorage.getItem("serverPublicKey") || ""
     );
@@ -116,6 +130,12 @@ export default function AppContextProvider(props: {
     const [starList, setStarList] = useState<Star[]>(
         JSON.parse(localStorage.getItem("starlist") || "[]")
     );
+    const [sidePanelExpanded, setSidePanelExpanded] = useState(
+        JSON.parse(
+            localStorage.getItem("sidePanelExpanded") ||
+                (isSmallScreen ? "true" : "false")
+        )
+    );
 
     useEffect(() => {
         api.categories().then(setCategories);
@@ -156,8 +176,13 @@ export default function AppContextProvider(props: {
     }, [query]);
 
     useEffect(() => {
+        setIsSmallScreen(width < 768);
+    }, [width]);
+
+    useEffect(() => {
         localStorage.setItem("settings", JSON.stringify(settings));
-    }, [settings]);
+        setDarkMode(isDarkMode());
+    }, [isDarkMode, settings]);
 
     useEffect(() => {
         localStorage.setItem("serverPublicKey", serverPublicKey);
@@ -190,6 +215,10 @@ export default function AppContextProvider(props: {
         localStorage.setItem("starlist", JSON.stringify(starList));
     }, [starList]);
 
+    useEffect(() => {
+        localStorage.setItem("sidePanelExpanded", JSON.stringify(sidePanelExpanded));
+    }, [sidePanelExpanded]);
+
     function updateSize() {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
@@ -205,11 +234,13 @@ export default function AppContextProvider(props: {
             value={{
                 back: [back, setBack],
                 width: [width, setWidth],
-                query: [query, setQuery],
                 height: [height, setHeight],
+                isSmallScreen,
+                query: [query, setQuery],
                 notification: [notification, setNotification],
                 settingsOpen: [settingsOpen, setSettingsOpen],
                 settings: [settings, setSettings],
+                darkMode,
                 history: [history, setHistory],
                 categories: [categories, setCategories],
                 serverPublicKey: [serverPublicKey, setServerPublicKey],
@@ -219,6 +250,7 @@ export default function AppContextProvider(props: {
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
                 starList: [starList, setStarList],
+                sidePanelExpanded: [sidePanelExpanded, setSidePanelExpanded],
             }}
         >
             {props.children}
@@ -305,6 +337,11 @@ export function useSettings() {
     return settings;
 }
 
+export function useDarkMode() {
+    const { darkMode } = useContext(AppContext);
+    return darkMode;
+}
+
 /**
  * It returns the history of the current user
  * @returns The history array and a setter function.
@@ -325,8 +362,8 @@ export function useUser() {
 }
 
 export function useIsSmallScreen() {
-    const { width } = useContext(AppContext);
-    return width[0] < 760;
+    const { isSmallScreen } = useContext(AppContext);
+    return isSmallScreen;
 }
 
 export function useReCaptchaSiteKey() {
@@ -357,4 +394,9 @@ export function useSession() {
 export function useServerPublicKey() {
     const { serverPublicKey } = useContext(AppContext);
     return serverPublicKey;
+}
+
+export function useSidePanelExpanded() {
+    const { sidePanelExpanded } = useContext(AppContext);
+    return sidePanelExpanded;
 }

@@ -103,7 +103,7 @@ export default function MenuTop(props: {
                             <Box className="flex absolute right-[10px]">
                                 <Tooltip title="Refresh" arrow>
                                     <IconButton onClick={props.refresh}>
-                                        <AutorenewIcon className="!text-white" />
+                                        <AutorenewIcon />
                                     </IconButton>
                                 </Tooltip>
                             </Box>

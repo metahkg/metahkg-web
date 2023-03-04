@@ -27,6 +27,9 @@ ENV REACT_APP_IMAGES_DOMAIN $REACT_APP_IMAGES_DOMAIN
 ARG REACT_APP_RLP_PROXY_DOMAIN
 ENV REACT_APP_RLP_PROXY_DOMAIN $REACT_APP_RLP_PROXY_DOMAIN
 
+ARG REACT_APP_REDIRECT_DOMAIN
+ENV REACT_APP_REDIRECT_DOMAIN $REACT_APP_REDIRECT_DOMAIN
+
 ARG REACT_APP_build
 ENV REACT_APP_build $REACT_APP_build
 
@@ -99,7 +102,7 @@ COPY ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then yarn global add serve --network-timeout 1000000; fi;
 
-RUN chown -f node:node /app && if [ -d /app/build  ]; then chown -Rf node:node /app/build; fi;
+RUN chown -f node:node /app /app/node_modules && if [ -d /app/build  ]; then chown -Rf node:node /app/build; fi;
 
 USER node
 

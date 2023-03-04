@@ -30,10 +30,7 @@ export default function PageTop(props: {
 }) {
     const { pages, page, onChange, last, next, onLastClicked, onNextClicked, id } = props;
     return (
-        <Box
-            className="flex justify-between items-center !ml-[30px] !mr-[30px] h-[68px]"
-            id={String(id)}
-        >
+        <Box className="flex justify-between items-center !mx-7 h-[68px]" id={String(id)}>
             <Typography
                 className={last ? "cursor-pointer" : "!select-none text-transparent"}
                 sx={last ? { color: "secondary.main" } : {}}

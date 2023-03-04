@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Category } from "@metahkg/api";
-import { Box, Drawer } from "@mui/material";
-import { useCategories, useUser } from "./AppContextProvider";
+import { Box, Drawer, Typography } from "@mui/material";
+import { useCategories, useDarkMode, useSettings, useUser } from "./AppContextProvider";
 import { useCat } from "./MenuProvider";
 import { Link } from "react-router-dom";
 import MetahkgLogo from "./logo";
@@ -14,6 +14,12 @@ export function CategoryPanel(props: {
     const [user] = useUser();
     let [categories] = useCategories();
     const [currentCategory] = useCat();
+    const darkMode = useDarkMode();
+    const [settings] = useSettings();
+
+    categories.sort((a, b) => a.id - b.id);
+
+    const hidden = categories.filter((category) => category.hidden);
 
     if (!user) {
         categories = categories.filter((category) => !category.hidden);
@@ -28,10 +34,13 @@ export function CategoryPanel(props: {
         return prev;
     }, [] as string[]);
 
-    const pinned = categories.filter((category) => category.pinned);
-    const others = categories.filter(
-        (category) => !category.tags?.length && !category.pinned
-    );
+    // hidden categories shall not be pinned
+    const pinned = categories.filter((category) => category.pinned && !category.hidden);
+    const others = categories
+        .filter(
+            (category) => !category.tags?.length && !category.pinned && !category.hidden
+        )
+        .concat(hidden.filter((category) => !category.tags?.length));
 
     const toggleDrawer = useCallback(
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -53,21 +62,28 @@ export function CategoryPanel(props: {
                 key={category.id}
                 component={Link}
                 to={`/category/${category.id}`}
-                className="no-underline"
+                className="no-underline !text-inherit"
                 onClick={toggleDrawer(false)}
             >
-                <h5
-                    className={`${
-                        currentCategory === category.id
-                            ? "text-metahkg-yellow"
-                            : "text-metahkg-grey"
-                    } hover:text-metahkg-yellow`}
+                <Typography
+                    gutterBottom
+                    variant="body2"
+                    className={`!my-4`}
+                    sx={{
+                        color:
+                            currentCategory === category.id
+                                ? settings.secondaryColor?.main || "#f5bd1f"
+                                : "inherit",
+                        "&:hover": {
+                            color: settings.secondaryColor?.main || "#f5bd1f",
+                        },
+                    }}
                 >
                     {category.name}
-                </h5>
+                </Typography>
             </Box>
         ),
-        [currentCategory, toggleDrawer]
+        [currentCategory, settings.secondaryColor?.main, toggleDrawer]
     );
 
     return (
@@ -82,24 +98,45 @@ export function CategoryPanel(props: {
             open={open}
             onClose={toggleDrawer(false)}
         >
-            <Box className="ml-[15px] w-[200px] max-w-full" role="presentation">
-                <Box className="flex items-end my-[20px]">
-                    <MetahkgLogo svg light height={30} width={30} />
-                    <h3 className="ml-[5px] my-0">Categories</h3>
+            <Box className="ml-4 w-[200px] max-w-full" role="presentation">
+                <Box className="flex items-end my-5">
+                    <MetahkgLogo svg light={darkMode} height={30} width={30} />
+                    <Typography variant="h6" component="h1" className="ml-1">
+                        Categories
+                    </Typography>
                 </Box>
                 <React.Fragment>
-                    {pinned.map(CategoryEle)}
+                    {Boolean(pinned.length) && (
+                        <Box>
+                            <Typography className="text-metahkg-grey" gutterBottom>
+                                Pinned
+                            </Typography>
+                            {pinned.map(CategoryEle)}
+                        </Box>
+                    )}
                     {tags.map((tag) => (
                         <Box key={tag}>
-                            <h4>{tag}</h4>
+                            <Typography gutterBottom className="text-metahkg-grey">
+                                {tag}
+                            </Typography>
                             {categories
-                                .filter((category) => category.tags?.includes(tag))
+                                .filter(
+                                    (category) =>
+                                        category.tags?.includes(tag) && !category.hidden
+                                )
+                                .concat(
+                                    hidden.filter((category) =>
+                                        category.tags?.includes(tag)
+                                    )
+                                )
                                 .map(CategoryEle)}
                         </Box>
                     ))}
                     {Boolean(others.length) && (
                         <Box>
-                            <h4>Others</h4>
+                            <Typography gutterBottom className="text-metahkg-grey">
+                                Others
+                            </Typography>
                             {others.map(CategoryEle)}
                         </Box>
                     )}

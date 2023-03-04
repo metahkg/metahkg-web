@@ -21,8 +21,12 @@ export type secondaryColor = {
     main: secondaryColorMain;
     dark: secondaryColorDark;
 };
+
+export type Theme = "light" | "dark" | "system";
+
 export type settings = {
-    votebar?: boolean;
+    theme: Theme;
     secondaryColor?: secondaryColor;
     filterSwearWords?: boolean;
+    autoLoadImages?: boolean;
 };

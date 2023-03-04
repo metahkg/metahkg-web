@@ -18,6 +18,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, Button, TextField } from "@mui/material";
 import {
+    useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
     useUser,
@@ -48,6 +49,7 @@ export default function Forgot() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [user] = useUser();
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
@@ -114,7 +116,7 @@ export default function Forgot() {
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
                 <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
                     <Box className="flex justify-center items-center !mb-[20px]">
-                        <MetahkgLogo svg light height={50} width={40} />
+                        <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">Forgot password</h1>
                     </Box>
                     {alert.text && (

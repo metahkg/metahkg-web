@@ -17,7 +17,10 @@
 
 import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
-import { useIsSmallScreen } from "../../components/AppContextProvider";
+import {
+    useIsSmallScreen,
+    useSidePanelExpanded,
+} from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
 export default function EnableMenu(props: {
@@ -27,6 +30,7 @@ export default function EnableMenu(props: {
     const { children, notOnSmallScreen: noSmallScreen } = props;
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
+    const [sidePanelExpanded] = useSidePanelExpanded();
 
     useLayoutEffect(() => {
         if (!menu && (!noSmallScreen || !isSmallScreen)) setMenu(true);
@@ -39,9 +43,13 @@ export default function EnableMenu(props: {
                 menu
                     ? isSmallScreen
                         ? "w-0"
+                        : sidePanelExpanded
+                        ? "w-[calc(70vw-220px)] max-w-[calc(70vw-220px)]"
                         : "w-[calc(70vw-50px)] max-w-[calc(70vw-50px)]"
                     : isSmallScreen
                     ? "w-100v"
+                    : sidePanelExpanded
+                    ? "w-[calc(100vw-220px)] max-w-[calc(100vw-220px)]"
                     : "w-[calc(100vw-50px)] max-w-[calc(100vw-50px)]"
             } overflow-auto`}
         >

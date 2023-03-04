@@ -17,35 +17,47 @@
 
 import React from "react";
 import { Link as InternalLink } from "react-router-dom";
-export function Link(props: {
-    href?: string;
-    children: JSX.Element | JSX.Element[];
-    className?: string;
-    style?: React.StyleHTMLAttributes<HTMLElement>;
-    target?: "_blank" | "_self" | "_parent" | "_top";
-    rel?: string;
-}) {
-    const { href, children, className, style, target, rel } = props;
+import { Box, BoxProps, Link as MuiLink } from "@mui/material";
+import { Property } from "csstype";
+
+export function Link(
+    props: React.DetailedHTMLProps<
+        React.AnchorHTMLAttributes<HTMLAnchorElement>,
+        HTMLAnchorElement
+    > & {
+        ref?: React.RefObject<HTMLAnchorElement>;
+        to?: string;
+        href?: string;
+        color?: Property.Color;
+        children: React.ReactNode;
+    }
+) {
+    const { href, to, color, children } = props;
     return (
         <React.Fragment>
             {href ? (
                 href.startsWith("/") ? (
-                    <InternalLink to={href} className={className} style={style}>
+                    <InternalLink
+                        {...props}
+                        style={{ color: color || "#3498db" }}
+                        to={href || to || ""}
+                    >
                         {children}
                     </InternalLink>
                 ) : (
-                    <a
-                        href={href}
-                        className={className}
-                        style={style}
-                        target={target}
-                        rel={rel || "noreferrer"}
+                    <MuiLink
+                        {...props}
+                        sx={{ textDecorationColor: "inherit" }}
+                        color={color || "#3498db"}
+                        href={href || to}
                     >
                         {children}
-                    </a>
+                    </MuiLink>
                 )
             ) : (
-                children
+                <Box {...(props as BoxProps)} sx={{ color }}>
+                    {children}
+                </Box>
             )}
         </React.Fragment>
     );

@@ -25,6 +25,7 @@ import {
     DialogTitle,
     Divider,
     IconButton,
+    Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import type { SxProps } from "@mui/system/styleFunctionSx";
@@ -70,7 +71,7 @@ export function PopUp(props: {
                     bgcolor: "primary.main",
                     ...sx,
                 },
-                className: `!rounded-[10px] ${className}`,
+                className: `!rounded-lg ${className}`,
             }}
             fullWidth={fullWidth}
             onClose={handleClose}
@@ -78,12 +79,14 @@ export function PopUp(props: {
             {(title || closeBtn) && (
                 <React.Fragment>
                     <DialogTitle
-                        sx={{ minWidth: 270, bgcolor: "primary.main" }}
-                        className="!pr-[0px] !pl-[0px] flex !pt-[5px] !pb-[5px] justify-between items-center"
+                        sx={{ bgcolor: "primary.main" }}
+                        className="!px-0 !py-1 !min-w-[270px] flex justify-between items-center"
                     >
-                        <p className="!ml-[20px] !my-0">{title}</p>
-                        <IconButton className="!mr-[5px]" onClick={handleClose}>
-                            <Close className="!text-[18px]" />
+                        <Typography className="!ml-5" variant="h6">
+                            {title}
+                        </Typography>
+                        <IconButton className="!mr-1" onClick={handleClose}>
+                            <Close className="!text-lg" />
                         </IconButton>
                     </DialogTitle>
                     <Divider />
@@ -92,8 +95,8 @@ export function PopUp(props: {
             <DialogContent className="!p-0">
                 <Box
                     className={`w-full flex flex-col justify-center text-center ${
-                        title ? "!mt-[5px]" : ""
-                    } ${buttons?.length ? "!mb-[5px]" : ""}`}
+                        title ? "!mt-1" : ""
+                    } ${buttons?.length ? "!mb-1" : ""}`}
                 >
                     {children}
                 </Box>
@@ -111,7 +114,7 @@ export function PopUp(props: {
                                                 to: button.link,
                                             })}
                                             onClick={button.action}
-                                            className="!normal-case !text-[18px] !no-underline w-full"
+                                            className="!normal-case !text-lg !no-underline w-full"
                                             sx={(theme) => ({
                                                 color: `${theme.palette.secondary.main} !important`,
                                             })}

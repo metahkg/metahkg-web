@@ -31,12 +31,13 @@ import {
     ListItemIcon,
     ListItemText,
     Paper,
+    Typography,
 } from "@mui/material";
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
-import { useUser } from "./AppContextProvider";
+import { useDarkMode, useUser } from "./AppContextProvider";
 
 /**
  * just a template for large screens if there's no content
@@ -61,7 +62,10 @@ export default function Template() {
             link: "https://gitlab.com/metahkg/metahkg",
         },
     ];
+
     const [user] = useUser();
+    const darkMode = useDarkMode();
+
     return (
         <Paper
             className="overflow-auto justify-center flex h-screen w-full"
@@ -69,15 +73,17 @@ export default function Template() {
                 bgcolor: "primary.dark",
             }}
         >
-            <Box className="w-full m-[50px]">
-                <Box className="flex items-center">
-                    <MetahkgIcon height={50} width={50} svg light />
-                    <h1>Metahkg</h1>
+            <Box className="w-full m-10">
+                <Box className="flex items-center my-5">
+                    <MetahkgIcon height={50} width={50} svg light={darkMode} />
+                    <Typography variant="h4" component="h1" className="!ml-1">
+                        Metahkg
+                    </Typography>
                 </Box>
                 <List>
                     <ListItemButton
-                        className="w-full !no-underline text-white"
-                        component={"a"}
+                        className="w-full !no-underline !text-inherit"
+                        component={Link}
                         href="https://war.ukraine.ua/support-ukraine/"
                     >
                         <ListItemIcon>
@@ -87,7 +93,7 @@ export default function Template() {
                     </ListItemButton>
                     <ListItemButton
                         component={Link}
-                        className="!no-underline text-white w-full"
+                        className="!no-underline !text-inherit w-full"
                         href={`/${
                             user ? "users/logout" : "users/login"
                         }?returnto=${encodeURIComponent(wholePath())}`}
@@ -103,7 +109,7 @@ export default function Template() {
                         <ListItemButton
                             component={Link}
                             href={`/profile/${user?.id}`}
-                            className="w-full !no-underline text-white"
+                            className="w-full !no-underline !text-inherit"
                         >
                             <ListItemIcon>
                                 <ManageAccountsIcon />
@@ -117,7 +123,7 @@ export default function Template() {
                             key={index}
                             component={Link}
                             href={link.link}
-                            className="w-full !no-underline text-white"
+                            className="w-full !no-underline !text-inherit"
                         >
                             <ListItemIcon>{link.icon}</ListItemIcon>
                             <ListItemText>{link.title}</ListItemText>

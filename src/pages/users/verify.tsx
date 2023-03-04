@@ -19,7 +19,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
-    Button,
     Checkbox,
     FormControlLabel,
     FormGroup,
@@ -27,6 +26,7 @@ import {
     Typography,
 } from "@mui/material";
 import {
+    useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
     useSession,
@@ -47,6 +47,7 @@ import { css } from "../../lib/css";
 import ReCAPTCHA from "react-google-recaptcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
+import { LoadingButton } from "@mui/lab";
 
 export default function Verify() {
     const [menu, setMenu] = useMenu();
@@ -56,13 +57,14 @@ export default function Verify() {
         severity: "info",
         text: "",
     });
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [user] = useUser();
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const darkMode = useDarkMode();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
@@ -75,7 +77,7 @@ export default function Verify() {
         if (!rtoken) return;
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
-        setDisabled(true);
+        setLoading(true);
         api.authVerify({ email, code, rtoken, sameIp })
             .then((data) => {
                 setSession(data);
@@ -87,7 +89,7 @@ export default function Verify() {
                 navigate(String(query.returnto || "/"));
             })
             .catch((err) => {
-                setDisabled(false);
+                setLoading(false);
                 setAlert({
                     severity: "error",
                     text: parseError(err),
@@ -123,7 +125,7 @@ export default function Verify() {
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
-                            light
+                            light={darkMode}
                             height={50}
                             width={40}
                             className="!mb-[10px]"
@@ -195,18 +197,20 @@ export default function Verify() {
                         size="invisible"
                         ref={reCaptchaRef}
                     />
-                    <Button
+                    <LoadingButton
                         variant="contained"
                         className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
                         disabled={
-                            disabled || !(email && code && EmailValidator.validate(email))
+                            loading || !(email && code && EmailValidator.validate(email))
                         }
+                        loading={loading}
+                        loadingPosition="start"
+                        startIcon={<HowToReg />}
                     >
-                        <HowToReg className="!mr-[5px]" />
                         Verify
-                    </Button>
+                    </LoadingButton>
                     <ReCaptchaNotice />
                 </Box>
             </Box>

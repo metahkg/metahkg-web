@@ -20,7 +20,6 @@ import hash from "hash.js";
 import {
     Alert,
     Box,
-    Button,
     FormControl,
     IconButton,
     InputLabel,
@@ -35,6 +34,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
+    useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
     useUser,
@@ -51,6 +51,7 @@ import { parseError } from "../../lib/parseError";
 import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import { LoadingButton } from "@mui/lab";
 
 /**
  * Sex selector
@@ -91,13 +92,15 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
-    const [disabled, setDisabled] = useState(false);
+    const [disable, setDisable] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
     });
     const [menu, setMenu] = useMenu();
     const [user] = useUser();
+    const darkMode = useDarkMode();
     const reCaptchaRef = useRef<ReCAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
 
@@ -117,7 +120,8 @@ export default function Register() {
         e?.preventDefault();
         const rtoken = await reCaptchaRef.current?.executeAsync();
         if (!rtoken) return;
-        setDisabled(true);
+        setDisable(true);
+        setLoading(true);
         setAlert({ severity: "info", text: "Registering..." });
         api.authRegister({
             email,
@@ -144,9 +148,10 @@ export default function Register() {
                     severity: "error",
                     text: parseError(err),
                 });
-                setDisabled(false);
+                setDisable(false);
                 reCaptchaRef.current?.reset();
             });
+        setLoading(false);
     }
 
     const inputs: TextFieldProps[] = [
@@ -200,7 +205,7 @@ export default function Register() {
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
-                            light
+                            light={darkMode}
                             height={50}
                             width={40}
                             className="!mb-[10px]"
@@ -221,13 +226,13 @@ export default function Register() {
                             key={index}
                             {...props}
                             color="secondary"
-                            disabled={disabled}
+                            disabled={disable}
                             variant="filled"
                             required
                             fullWidth
                         />
                     ))}
-                    <SexSelect disabled={disabled} sex={sex} setSex={setSex} />
+                    <SexSelect disabled={disable} sex={sex} setSex={setSex} />
                     <Box className="!mt-[15px] !mb-[15px]">
                         <Typography
                             component={Link}
@@ -247,16 +252,18 @@ export default function Register() {
                             size="invisible"
                             ref={reCaptchaRef}
                         />
-                        <Button
-                            disabled={disabled}
+                        <LoadingButton
+                            disabled={disable}
+                            loading={loading}
+                            loadingPosition="start"
+                            startIcon={<HowToReg className="!text-[17px]" />}
                             type="submit"
                             className="!text-[16px] !normal-case h-[40px]"
                             color="secondary"
                             variant="contained"
                         >
-                            <HowToReg className="!mr-[5px] !text-[17px]" />
                             Register
-                        </Button>
+                        </LoadingButton>
                         <ReCaptchaNotice />
                     </Box>
                 </Box>

@@ -16,7 +16,15 @@
  */
 
 import React, { useMemo, useState } from "react";
-import { Avatar, Box, IconButton, Tooltip } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    IconButton,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Tooltip,
+} from "@mui/material";
 import {
     AccessTimeFilled as AccessTimeFilledIcon,
     HowToReg as HowToRegIcon,
@@ -30,24 +38,44 @@ import {
     Create as CreateIcon,
     Category as CategoryIcon,
     Search as SearchIcon,
+    ChevronRight as ChevronRightIcon,
+    ChevronLeft as ChevronLeftIcon,
 } from "@mui/icons-material";
-import { useSettingsOpen, useUser } from "./AppContextProvider";
+import {
+    useDarkMode,
+    useSettingsOpen,
+    useSidePanelExpanded,
+    useUser,
+} from "./AppContextProvider";
 import { Link } from "../lib/link";
 import MetahkgLogo from "./logo";
 import { AboutDialog } from "./AboutDialog";
 import { CategoryPanel } from "./categoryPanel";
 
-export default function SidePanel() {
+export default function SidePanel(props: {
+    onClick?: (event: React.MouseEvent) => void;
+    onClickLink?: (event: React.MouseEvent) => void;
+}) {
+    const { onClick, onClickLink } = props;
     const [user] = useUser();
     const [, setSettingsOpen] = useSettingsOpen();
     const [aboutOpen, setAboutOpen] = useState(false);
     const [categoryOpen, setCategoryOpen] = useState(false);
+    const [expanded, setExpanded] = useSidePanelExpanded();
+    const darkMode = useDarkMode();
+
+    interface Button {
+        title: string;
+        icon: React.ReactNode;
+        link?: string;
+        onClick?: (e: React.MouseEvent) => void;
+    }
 
     const buttons = useMemo(() => {
         return [
             {
-                title: "Home",
-                icon: <MetahkgLogo height={30} width={40} svg light />,
+                title: "Metahkg",
+                icon: <MetahkgLogo height={30} width={30} svg light={darkMode} />,
                 link: "/",
             },
             user && {
@@ -129,31 +157,75 @@ export default function SidePanel() {
                 icon: <CodeIcon />,
                 link: "https://gitlab.com/metahkg/metahkg",
             },
-        ].filter((item) => item) as {
-            title: string;
-            icon: React.ReactElement;
-            onClick?: () => void;
-            link?: string;
-        }[];
-    }, [setSettingsOpen, user]);
+        ].filter((item) => item) as Button[];
+    }, [darkMode, setSettingsOpen, user]);
+
+    const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
+        if (button.link) {
+            onClickLink?.(e);
+        }
+        onClick?.(e);
+        button.onClick?.(e);
+    };
 
     return (
-        <Box className="w-[50px] h-[100vh] max-h-[100vh] overflow-y-scroll">
-            <Box className="w-full min-h-[100vh] flex flex-col bg-[#111] items-center">
+        <Box
+            className={`${
+                expanded ? "w-[220px]" : "w-[50px]"
+            } transition-[width] ease-out duration-200 h-100v max-h-100v relative flex justify-center`}
+        >
+            <Box className="w-full max-h-[calc(100vh-50px)] overflow-y-scroll flex flex-col items-center bg-[#fff] dark:bg-[#111]">
                 <AboutDialog open={aboutOpen} setOpen={setAboutOpen} />
                 <CategoryPanel open={categoryOpen} setOpen={setCategoryOpen} />
                 {buttons.map((button, index) => (
-                    <Link href={button.link} target="_blank" key={index}>
-                        <Tooltip arrow title={button.title}>
-                            <IconButton
-                                onClick={button.onClick}
-                                className="no-underline !text-white !mt-[10px] h-[40px] w-[40px]"
+                    <Link
+                        href={button.link}
+                        className="!text-inherit !no-underline w-full flex justify-center"
+                        target={button.link?.startsWith("/") ? undefined : "_blank"}
+                        key={index}
+                    >
+                        {expanded ? (
+                            <ListItemButton
+                                onClick={buttonOnclick(button)}
+                                className="w-full h-[50px] flex justify-between"
                             >
-                                {button.icon}
-                            </IconButton>
-                        </Tooltip>
+                                <ListItemIcon>{button.icon}</ListItemIcon>
+                                <ListItemText>{button.title}</ListItemText>
+                            </ListItemButton>
+                        ) : (
+                            <Tooltip arrow title={button.title}>
+                                <IconButton
+                                    onClick={buttonOnclick(button)}
+                                    className="!mt-2 h-[40px] w-[40px]"
+                                >
+                                    {button.icon}
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </Link>
                 ))}
+            </Box>
+            <Box
+                sx={{ bgcolor: "primary.dark" }}
+                className="!absolute !bottom-0 !h-[50px] flex justify-center items-center w-full"
+            >
+                {expanded ? (
+                    <ListItemButton
+                        onClick={() => setExpanded(!expanded)}
+                        className="flex justify-between"
+                    >
+                        <ListItemIcon>
+                            <ChevronLeftIcon />
+                        </ListItemIcon>
+                        <ListItemText>Collapse</ListItemText>
+                    </ListItemButton>
+                ) : (
+                    <Tooltip arrow title="Expand">
+                        <IconButton onClick={() => setExpanded(!expanded)}>
+                            <ChevronRightIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
             </Box>
         </Box>
     );

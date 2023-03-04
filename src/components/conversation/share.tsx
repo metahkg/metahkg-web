@@ -29,6 +29,7 @@ import { Box, IconButton, TextField, Tooltip } from "@mui/material";
 import { PopUp } from "../../lib/popup";
 import { useNotification, useIsSmallScreen } from "../AppContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
+import { Link } from "../../lib/link";
 
 /**
  * It shows a pop up with a text field and some buttons for
@@ -82,19 +83,18 @@ export default function Share() {
     ];
     return (
         <PopUp open={open} setOpen={setOpen} title="Share">
-            <Box className="!ml-[10px] !mr-[10px] text-start text-[20px]">
+            <Box className="!mx-2 text-start text-5">
                 <TextField
-                    className="!mt-[0px]"
-                    sx={{
-                        minWidth: isSmallScreen ? "250px" : "500px",
-                    }}
+                    className={`!mt-0 ${
+                        isSmallScreen ? "!min-w-[250px]" : "!min-w-[500px]"
+                    }`}
                     multiline
                     variant="outlined"
                     fullWidth
                     aria-readonly
                     value={text}
                 />
-                <Box className="!mt-[5px] overflow-auto whitespace-nowrap">
+                <Box className="!mt-1 overflow-auto whitespace-nowrap">
                     <Tooltip arrow title="Copy">
                         <IconButton
                             onClick={async () => {
@@ -125,9 +125,13 @@ export default function Share() {
                     </Tooltip>
                     {externals.map((external, index) => (
                         <Tooltip key={index} arrow title={external.title}>
-                            <a href={external.link} target="_blank" rel="noreferrer">
+                            <Link
+                                href={external.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 <IconButton>{external.icon}</IconButton>
-                            </a>
+                            </Link>
                         </Tooltip>
                     ))}
                 </Box>

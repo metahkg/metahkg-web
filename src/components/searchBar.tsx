@@ -43,11 +43,8 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import { useMenuMode, useReFetch, useSmode } from "./MenuProvider";
 
 const Search = styled("div")(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: "#111",
+    backgroundColor: theme.palette.mode === "dark" ? "#111" : "#fff",
     border: `1px solid ${theme.palette.secondary.main}`,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
@@ -58,7 +55,6 @@ const Search = styled("div")(({ theme }) => ({
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
     padding: theme.spacing(0, 2),
-    color: "white",
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -68,7 +64,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "white",
     "& .MuiInputBase-input": {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
@@ -96,7 +91,7 @@ export default function SearchBar(props: {
     const [menuMode] = useMenuMode();
 
     return (
-        <Search>
+        <Search className="flex relative items-center">
             <SearchIconWrapper>
                 <SearchIcon />
             </SearchIconWrapper>
@@ -122,7 +117,7 @@ export default function SearchBar(props: {
                             display: "none",
                         },
                     }}
-                    className="!mr-[10px] !h-[24px] !min-w-[45px]"
+                    className="!absolute !right-2 !h-[24px] !min-w-[45px]"
                 />
             )}
         </Search>
