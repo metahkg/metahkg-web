@@ -106,6 +106,17 @@ export default function Settings(props: {
             },
             checked: settings.autoLoadImages,
         },
+        {
+            title: "Resize images",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    resizeImages: e.target.checked,
+                });
+            },
+            checked: settings.resizeImages,
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>

@@ -39,8 +39,11 @@ interface Props {
 
 function ImgComponent(props: Props) {
     const { height, style, width } = props;
+    const [settings] = useSettings();
     const { src } = useImage({
-        srcList: `${imagesApi}/540x350,fit,q80/${props.src}`,
+        srcList: `${imagesApi}${settings.resizeImages ? "/540x350,fit,q80" : ""}/${
+            props.src
+        }`,
     });
     const { src: origPhoto } = useImage({
         srcList: `${imagesApi}/${props.src}`,

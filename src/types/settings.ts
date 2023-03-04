@@ -24,9 +24,10 @@ export type secondaryColor = {
 
 export type Theme = "light" | "dark" | "system";
 
-export type settings = {
+export type Settings = {
     theme: Theme;
     secondaryColor?: secondaryColor;
     filterSwearWords?: boolean;
     autoLoadImages?: boolean;
+    resizeImages?: boolean;
 };
