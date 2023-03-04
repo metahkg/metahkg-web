@@ -22,6 +22,7 @@ import loadable from "@loadable/component";
 import EnableMenu from "./lib/utils/enableMenu";
 import DisableMenu from "./lib/utils/disableMenu";
 import { useId } from "./components/MenuProvider";
+import { useServerConfig, useUser } from "./components/AppContextProvider";
 
 const Thread = loadable(() => import("./pages/thread"));
 
@@ -52,7 +53,11 @@ const Forbidden = loadable(() => import("./pages/forbidden"));
 export default function Routes() {
     const location = useLocation();
     const [id, setId] = useId();
+    const [serverConfig] = useServerConfig();
+    const [user] = useUser();
     const prev = React.useRef(location.pathname);
+
+    const noAccess = serverConfig?.visibility === "internal" && !user;
 
     useLayoutEffect(() => {
         if (!/^\/thread\/[1-9]\d*$/.test(location.pathname)) id && setId(0);
@@ -68,69 +73,109 @@ export default function Routes() {
 
     return (
         <Switch>
-            <Route path="/" element={<Navigate to="/category/1" replace />} />
+            <Route
+                path="/"
+                element={
+                    <Navigate
+                        to={noAccess ? "/users/login?continue=true" : "/category/1"}
+                        replace
+                    />
+                }
+            />
             <Route
                 path="/category/:category"
                 element={
-                    <EnableMenu>
-                        <Category />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu>
+                            <Category />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/thread/:id"
                 element={
-                    <EnableMenu notOnSmallScreen>
-                        <Thread />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu notOnSmallScreen>
+                            <Thread />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/search"
                 element={
-                    <EnableMenu>
-                        <Search />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu>
+                            <Search />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/recall"
                 element={
-                    <EnableMenu>
-                        <Recall />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu>
+                            <Recall />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/starred"
                 element={
-                    <EnableMenu>
-                        <Starred />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu>
+                            <Starred />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/profile/:id"
                 element={
-                    <EnableMenu notOnSmallScreen>
-                        <Profile />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu notOnSmallScreen>
+                            <Profile />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/history/:id"
                 element={
-                    <EnableMenu>
-                        <History />
-                    </EnableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu notOnSmallScreen>
+                            <History />
+                        </EnableMenu>
+                    )
                 }
             />
             <Route
                 path="/create"
                 element={
-                    <DisableMenu>
-                        <Create />
-                    </DisableMenu>
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <DisableMenu>
+                            <Create />
+                        </DisableMenu>
+                    )
                 }
             />
             <Route
