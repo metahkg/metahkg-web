@@ -26,6 +26,7 @@ import {
     secondaryColorMain,
     Theme,
 } from "../types/settings";
+import { isIOS, isSafari } from "react-device-detect";
 
 export default function Settings(props: {
     open: boolean;
@@ -57,7 +58,7 @@ export default function Settings(props: {
               options: string[];
               action: (e: SelectChangeEvent<string>) => void;
           }
-    ) & { title: string })[] = [
+    ) & { title: string; disabled?: boolean })[] = [
         {
             title: "Theme",
             type: "select",
@@ -93,7 +94,8 @@ export default function Settings(props: {
             action: (e) => {
                 setSettings({ ...settings, filterSwearWords: e.target.checked });
             },
-            checked: settings.filterSwearWords,
+            checked: isSafari || isIOS ? false : settings.filterSwearWords,
+            disabled: isSafari || isIOS,
         },
         {
             title: "Auto load images",
@@ -144,6 +146,7 @@ export default function Settings(props: {
                                 value={item.selected}
                                 onChange={item.action}
                                 className="max-h-12 min-w-[100px]"
+                                disabled={item.disabled}
                             >
                                 {item.options.map((option) => (
                                     <MenuItem value={option}>{option}</MenuItem>
