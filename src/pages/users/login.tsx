@@ -38,6 +38,8 @@ import {
     useReCaptchaSiteKey,
     useSession,
     useDarkMode,
+    useTurnstileSiteKey,
+    useServerConfig,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -46,7 +48,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
@@ -65,9 +67,11 @@ export default function Login() {
         text: "",
     });
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const turnstileSiteKey = useTurnstileSiteKey();
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -93,15 +97,21 @@ export default function Login() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
-        setAlert({ severity: "info", text: "Logging in..." });
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
+        setAlert({ severity: "info", text: "Logging in..." });
         api.authLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
             sameIp,
-            rtoken,
+            captchaToken,
         })
             .then((data) => {
                 setSession(data);
@@ -125,7 +135,7 @@ export default function Login() {
                     text: parseError(err),
                 });
                 setLoading(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -215,11 +225,16 @@ export default function Login() {
                             Forgot password?
                         </Typography>
                     </Box>
-                    <ReCAPTCHA
+                    <CAPTCHA
                         theme="dark"
-                        sitekey={reCaptchaSiteKey}
+                        sitekey={
+                            serverConfig?.captcha === "turnstile"
+                                ? turnstileSiteKey
+                                : reCaptchaSiteKey
+                        }
                         size="invisible"
-                        ref={reCaptchaRef}
+                        ref={captchaRef}
+                        useTurnstile={serverConfig?.captcha === "turnstile"}
                     />
                     <Box className="flex justify-between">
                         <Button

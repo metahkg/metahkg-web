@@ -29,7 +29,9 @@ import {
     useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
     useSession,
+    useTurnstileSiteKey,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -44,7 +46,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
@@ -64,21 +66,29 @@ export default function Verify() {
     const [user] = useUser();
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const turnstileSiteKey = useTurnstileSiteKey();
+    const captchaRef = useRef<CAPTCHA>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
-        setLoading(true);
-        api.authVerify({ email, code, rtoken, sameIp })
+        api.authVerify({ email, code, captchaToken, sameIp })
             .then((data) => {
                 setSession(data);
                 setNotification({
@@ -99,7 +109,7 @@ export default function Verify() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -191,11 +201,16 @@ export default function Verify() {
                             Resend verification email
                         </Typography>
                     </Box>
-                    <ReCAPTCHA
+                    <CAPTCHA
                         theme="dark"
-                        sitekey={reCaptchaSiteKey}
+                        sitekey={
+                            serverConfig?.captcha === "turnstile"
+                                ? turnstileSiteKey
+                                : reCaptchaSiteKey
+                        }
                         size="invisible"
-                        ref={reCaptchaRef}
+                        ref={captchaRef}
+                        useTurnstile={serverConfig?.captcha === "turnstile"}
                     />
                     <LoadingButton
                         variant="contained"
