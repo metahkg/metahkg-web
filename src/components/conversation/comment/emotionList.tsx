@@ -67,7 +67,11 @@ export default function EmotionList(props: {
         const avatar = useAvatar(user.id);
 
         return (
-            <MenuItem component={Link} to={`/profile/${user.id}`}>
+            <MenuItem
+                component={Link}
+                to={`/profile/${user.id}`}
+                className="!text-inherit"
+            >
                 <ListItemIcon>
                     <Avatar
                         alt={user.name}
