@@ -1,3 +1,37 @@
+#### 6.6.0 (2023-03-05)
+
+##### Chores
+
+*  v6.6.1 (052c0651)
+*  v6.4.1 (66933900)
+
+##### Continuous Integration
+
+*  fix tagging (81f3a9ad)
+*  fix tagging (b138e047)
+
+##### New Features
+
+* **captcha:**  add turnstile support - migrated to v6.6.1 api - WARNING: turnstile may not work currently (fe331778)
+* **comment:**  link to edited admin (f0260dc8)
+*  force disable filter swear words on safari /ios (webkit) (4150700e)
+*  allow opt out of resize images via setting (39be74bd)
+*  redirect to login if visibility is internal and user not logged in (3054844b)
+*  use a standard size for images in comments & use a lower quality to reduce file size (fff4752c)
+*  opt out of auto load images (aa696054)
+* **parse error:**  include message (a0565512)
+
+##### Bug Fixes
+
+* **tinymce:**  disable autosave restore (82804e27)
+* **emotion list:**  link color (19976682)
+* **avatar:**  avatar not shown when visibility is internal - changed to generate a blob url using the data from api.userAvatar (c1b209b0)
+* **profile:**  wrong position of name and id (6f3e6f97)
+
+##### Other Changes
+
+*  CHANGELOG.md (a013c9bd)
+
 #### 6.4.1 (2023-02-16)
 
 ##### Chores
