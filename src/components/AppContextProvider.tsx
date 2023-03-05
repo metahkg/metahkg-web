@@ -33,6 +33,7 @@ import { AlertDialogProps } from "../lib/alertDialog";
 import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
+import { AvatarProps, useAvatar } from "./useAvatar";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -49,6 +50,7 @@ export const AppContext = createContext<{
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
     serverConfig: [ServerConfig | null, Dispatch<SetStateAction<ServerConfig | null>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
+    userAvatar: AvatarProps;
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
@@ -103,6 +105,7 @@ export default function AppContextProvider(props: {
         JSON.parse(localStorage.getItem("session") || "null") || null
     );
     const [user, setUser] = useState(loadUser(session?.token));
+    const userAvatar = useAvatar(user?.id || 0);
     const [categories, setCategories] = useState<Category[]>(
         JSON.parse(localStorage.getItem("categories") || "[]")
     );
@@ -262,6 +265,7 @@ export default function AppContextProvider(props: {
                 serverPublicKey: [serverPublicKey, setServerPublicKey],
                 serverConfig: [serverConfig, setServerConfig],
                 user: [user, setUser],
+                userAvatar,
                 session: [session, setSession],
                 reCaptchaSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
@@ -376,6 +380,14 @@ export function useCategories() {
 export function useUser() {
     const { user } = useContext(AppContext);
     return user;
+}
+
+/**
+ * @description returns the current user's avatar
+ */
+export function useUserAvatar() {
+    const { userAvatar } = useContext(AppContext);
+    return userAvatar;
 }
 
 export function useIsSmallScreen() {
