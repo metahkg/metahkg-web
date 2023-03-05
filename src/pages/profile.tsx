@@ -168,11 +168,7 @@ export default function Profile() {
                                 width: 150,
                             }}
                         />
-                        <Box
-                            className={`!ml-[20px] flex justify-center overflow-x-hidden h-[200px] ${
-                                isSelf ? "flex-col" : ""
-                            }`}
-                        >
+                        <Box className="!ml-[20px] flex justify-center overflow-x-hidden h-[200px] flex-col">
                             <Typography
                                 variant="h5"
                                 component="p"
@@ -191,8 +187,8 @@ export default function Profile() {
                             >
                                 #{reqUser.id}
                             </Typography>
-                            <Box>
-                                {isSelf && (
+                            {isSelf && (
+                                <Box>
                                     <Tooltip title="jpg / png / svg supported" arrow>
                                         <UploadAvatar
                                             onChange={(image) => {
@@ -202,8 +198,8 @@ export default function Profile() {
                                             }}
                                         />
                                     </Tooltip>
-                                )}
-                            </Box>
+                                </Box>
+                            )}
                         </Box>
                     </Box>
                     <Box className="flex !mt-5 !mb-2 w-full font justify-center">
