@@ -36,6 +36,7 @@ import { Link } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { useThreadId } from "../ConversationContext";
 import Loader from "../../../lib/loader";
+import { useAvatar } from "../../useAvatar";
 
 export default function EmotionList(props: {
     emotions: { emotion: string; count: number }[];
@@ -60,6 +61,28 @@ export default function EmotionList(props: {
         setEmotion("");
         setOpenAdditional(true);
     };
+
+    function UserItem(props: { user: User }) {
+        const { user } = props;
+        const avatar = useAvatar(user.id);
+
+        return (
+            <MenuItem
+                component={Link}
+                to={`/profile/${user.id}`}
+                className="!text-inherit"
+            >
+                <ListItemIcon>
+                    <Avatar
+                        alt={user.name}
+                        src={avatar.blobUrl}
+                        className="!h-[25px] !w-[25px] mr-[5px]"
+                    />
+                </ListItemIcon>
+                <ListItemText>{user.name}</ListItemText>
+            </MenuItem>
+        );
+    }
 
     return (
         <Box>
@@ -121,22 +144,7 @@ export default function EmotionList(props: {
                     <MenuList>
                         {users ? (
                             users.map((user, index) => (
-                                <MenuItem
-                                    key={index}
-                                    component={Link}
-                                    to={`/profile/${user.id}`}
-                                >
-                                    <ListItemIcon>
-                                        <Avatar
-                                            alt={user.name}
-                                            src={`${
-                                                process.env.REACT_APP_BACKEND || "/api"
-                                            }/users/${user.id}/avatar`}
-                                            className="!h-[25px] !w-[25px] mr-[5px]"
-                                        />
-                                    </ListItemIcon>
-                                    <ListItemText>{user.name}</ListItemText>
-                                </MenuItem>
+                                <UserItem key={index} user={user} />
                             ))
                         ) : (
                             <Loader
