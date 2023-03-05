@@ -34,12 +34,14 @@ import {
     useNotification,
     useUser,
     useIsSmallScreen,
+    useUserAvatar,
 } from "../components/AppContextProvider";
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
 import { parseError } from "../lib/parseError";
 import Loader from "../lib/loader";
 import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
+import { useAvatar } from "../components/useAvatar";
 
 export default function Profile() {
     const params = useParams();
@@ -59,12 +61,14 @@ export default function Profile() {
         null
     );
     const [editorOpen, setEditorOpen] = useState(false);
-    const [avatarSrc, setAvatarSrc] = useState("");
 
     const navigate = useNavigate();
 
     const userId = Number(params.id);
     const isSelf = userId === user?.id;
+
+    const avatar = useAvatar(isSelf ? 0 : reqUser?.id || 0);
+    const userAvatar = useUserAvatar();
 
     useEffect(() => {
         if (Number.isInteger(userId) && (!reqUser || reqUser.id !== userId)) {
@@ -72,11 +76,6 @@ export default function Profile() {
                 .then((data) => {
                     setReqUser(data);
                     setTitle(`${data.name} | Metahkg`);
-                    setAvatarSrc(
-                        `${process.env.REACT_APP_BACKEND || "/api"}/users/${
-                            data.id
-                        }/avatar`
-                    );
                 })
                 .catch((err) => {
                     setNotification({
@@ -147,11 +146,7 @@ export default function Profile() {
                             setAvatar={setUploadedAvatar}
                             avatarOriginal={uploadedAvatarOriginal}
                             onSuccess={() => {
-                                setAvatarSrc(
-                                    `${process.env.REACT_APP_BACKEND || "/api"}/users/${
-                                        reqUser.id
-                                    }/avatar?rand=${Math.random()}`
-                                );
+                                userAvatar.reload();
                             }}
                         />
                     )}
@@ -161,7 +156,7 @@ export default function Profile() {
                         }
                     >
                         <Avatar
-                            src={avatarSrc}
+                            src={(isSelf ? userAvatar : avatar).blobUrl}
                             alt={reqUser.name}
                             sx={{
                                 height: 150,

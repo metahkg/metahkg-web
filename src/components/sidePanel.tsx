@@ -46,6 +46,7 @@ import {
     useSettingsOpen,
     useSidePanelExpanded,
     useUser,
+    useUserAvatar,
 } from "./AppContextProvider";
 import { Link } from "../lib/link";
 import MetahkgLogo from "./logo";
@@ -63,6 +64,7 @@ export default function SidePanel(props: {
     const [categoryOpen, setCategoryOpen] = useState(false);
     const [expanded, setExpanded] = useSidePanelExpanded();
     const darkMode = useDarkMode();
+    const avatar = useUserAvatar();
 
     interface Button {
         title: string;
@@ -82,9 +84,7 @@ export default function SidePanel(props: {
                 title: "Profile",
                 icon: (
                     <Avatar
-                        src={`${process.env.REACT_APP_BACKEND || "/api"}/users/${
-                            user.id
-                        }/avatar`}
+                        src={avatar.blobUrl}
                         className="!h-[30px] !w-[30px]"
                         alt={user.name}
                     />
@@ -158,7 +158,7 @@ export default function SidePanel(props: {
                 link: "https://gitlab.com/metahkg/metahkg",
             },
         ].filter((item) => item) as Button[];
-    }, [darkMode, setSettingsOpen, user]);
+    }, [darkMode, user, avatar, setSettingsOpen]);
 
     const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
         if (button.link) {
