@@ -30,13 +30,15 @@ import {
     TextFieldProps,
     Typography,
 } from "@mui/material";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
     useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
+    useTurnstileSiteKey,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -100,9 +102,11 @@ export default function Register() {
     });
     const [menu, setMenu] = useMenu();
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const turnstileSiteKey = useTurnstileSiteKey();
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
@@ -118,8 +122,16 @@ export default function Register() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+            setDisable(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            setDisable(false);
+            return;
+        }
         setDisable(true);
         setLoading(true);
         setAlert({ severity: "info", text: "Registering..." });
@@ -128,7 +140,7 @@ export default function Register() {
             name,
             password: hash.sha256().update(password).digest("hex"),
             sex: sex as UserSex,
-            rtoken,
+            captchaToken,
         })
             .then(() => {
                 setAlert({
@@ -149,7 +161,7 @@ export default function Register() {
                     text: parseError(err),
                 });
                 setDisable(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
         setLoading(false);
     }
@@ -246,11 +258,16 @@ export default function Register() {
                         </Typography>
                     </Box>
                     <Box className="!mt-[15px]">
-                        <ReCAPTCHA
+                        <CAPTCHA
                             theme="dark"
-                            sitekey={reCaptchaSiteKey}
+                            sitekey={
+                                serverConfig?.captcha === "turnstile"
+                                    ? turnstileSiteKey
+                                    : reCaptchaSiteKey
+                            }
                             size="invisible"
-                            ref={reCaptchaRef}
+                            ref={captchaRef}
+                            useTurnstile={serverConfig?.captcha === "turnstile"}
                         />
                         <LoadingButton
                             disabled={disable}

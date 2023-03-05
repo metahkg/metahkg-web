@@ -19,17 +19,19 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
-    Button,
     Checkbox,
     FormControlLabel,
     FormGroup,
     TextField,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import {
     useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
     useSession,
+    useTurnstileSiteKey,
     useWidth,
 } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
@@ -42,7 +44,7 @@ import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
@@ -55,32 +57,40 @@ export default function Reset() {
         severity: "info",
         text: "",
     });
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [password, setPassword] = useState("");
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const turnstileSiteKey = useTurnstileSiteKey();
+    const captchaRef = useRef<CAPTCHA>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
         setAlert({ severity: "info", text: "Reseting..." });
         setNotification({ open: true, severity: "info", text: "Reseting..." });
-        setDisabled(true);
         api.authReset({
             email,
             code,
             password: hash.sha256().update(password).digest("hex"),
-            rtoken,
+            captchaToken,
             sameIp,
         })
             .then((data) => {
@@ -93,7 +103,7 @@ export default function Reset() {
                 navigate(String(query.returnto || "/"));
             })
             .catch((err) => {
-                setDisabled(false);
+                setLoading(false);
                 setAlert({
                     severity: "error",
                     text: parseError(err),
@@ -103,7 +113,7 @@ export default function Reset() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -189,24 +199,31 @@ export default function Reset() {
                             label="Restrict session to same ip address"
                         />
                     </FormGroup>
-                    <ReCAPTCHA
+                    <CAPTCHA
                         theme="dark"
-                        sitekey={reCaptchaSiteKey}
+                        sitekey={
+                            serverConfig?.captcha === "turnstile"
+                                ? turnstileSiteKey
+                                : reCaptchaSiteKey
+                        }
                         size="invisible"
-                        ref={reCaptchaRef}
+                        ref={captchaRef}
+                        useTurnstile={serverConfig?.captcha === "turnstile"}
                     />
-                    <Button
+                    <LoadingButton
                         variant="contained"
                         className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
                         disabled={
-                            disabled || !(email && code && EmailValidator.validate(email))
+                            loading || !(email && code && EmailValidator.validate(email))
                         }
+                        loading={loading}
+                        startIcon={<LockOpen />}
+                        loadingPosition="start"
                     >
-                        <LockOpen className="!mr-[5px]" />
                         Reset
-                    </Button>
+                    </LoadingButton>
                     <ReCaptchaNotice />
                 </Box>
             </Box>

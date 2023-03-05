@@ -19,7 +19,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, TextField, Typography } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useCat, useMenu } from "../components/MenuProvider";
@@ -28,6 +28,8 @@ import {
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
+    useTurnstileSiteKey,
     useUser,
 } from "../components/AppContextProvider";
 import { setTitle, wholePath } from "../lib/common";
@@ -59,7 +61,7 @@ export default function Create() {
         text: "",
     });
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CAPTCHA>(null);
 
     const quote = {
         threadId: Number(String(query.quote).split(".")[0]),
@@ -68,7 +70,9 @@ export default function Create() {
 
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const turnstileSiteKey = useTurnstileSiteKey();
 
     useLayoutEffect(() => {
         setTitle("Create thread | Metahkg");
@@ -130,16 +134,22 @@ export default function Create() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
         api.threadCreate({
             title: threadTitle,
             category: catchoosed,
             comment,
-            rtoken,
+            captchaToken,
         })
             .then((data) => {
                 clearTinymceDraft(window.location.pathname);
@@ -153,7 +163,7 @@ export default function Create() {
                 setAlert({ severity: "error", text });
                 setNotification({ open: true, severity: "error", text });
                 setLoading(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -205,11 +215,16 @@ export default function Create() {
                         minHeight={isSmallScreen ? 310 : 350}
                     />
                     <Box className="mt-4">
-                        <ReCAPTCHA
+                        <CAPTCHA
                             theme="dark"
-                            sitekey={reCaptchaSiteKey}
+                            sitekey={
+                                serverConfig?.captcha === "turnstile"
+                                    ? turnstileSiteKey
+                                    : reCaptchaSiteKey
+                            }
                             size="invisible"
-                            ref={reCaptchaRef}
+                            ref={captchaRef}
+                            useTurnstile={serverConfig?.captcha === "turnstile"}
                         />
                         <LoadingButton
                             disabled={loading || !(comment && threadTitle && catchoosed)}

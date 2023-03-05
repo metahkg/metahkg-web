@@ -21,6 +21,8 @@ import {
     useDarkMode,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
+    useTurnstileSiteKey,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -31,7 +33,7 @@ import { Navigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
@@ -50,9 +52,11 @@ export default function Resend() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const turnstileSiteKey = useTurnstileSiteKey();
 
     const small = width / 2 - 100 <= 450;
 
@@ -65,12 +69,18 @@ export default function Resend() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
-        api.authResend({ email, rtoken })
+        api.authResend({ email, captchaToken })
             .then(() => {
                 setNotification({
                     open: true,
@@ -80,7 +90,7 @@ export default function Resend() {
                     severity: "success",
                     text: "Verification email sent.",
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
                 setLoading(false);
             })
             .catch((err) => {
@@ -93,7 +103,7 @@ export default function Resend() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
                 setLoading(false);
             });
     }
@@ -134,11 +144,16 @@ export default function Resend() {
                         fullWidth
                     />
                     <Box className="!mt-[20px]">
-                        <ReCAPTCHA
+                        <CAPTCHA
                             theme="dark"
-                            sitekey={reCaptchaSiteKey}
+                            sitekey={
+                                serverConfig?.captcha === "turnstile"
+                                    ? turnstileSiteKey
+                                    : reCaptchaSiteKey
+                            }
                             size="invisible"
-                            ref={reCaptchaRef}
+                            ref={captchaRef}
+                            useTurnstile={serverConfig?.captcha === "turnstile"}
                         />
                         <LoadingButton
                             variant="contained"

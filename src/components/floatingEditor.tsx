@@ -19,7 +19,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
 import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA from "@metahkg/react-captcha";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
 import {
@@ -35,6 +35,8 @@ import {
     useIsSmallScreen,
     useNotification,
     useReCaptchaSiteKey,
+    useServerConfig,
+    useTurnstileSiteKey,
 } from "./AppContextProvider";
 import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
@@ -58,8 +60,10 @@ export default function FloatingEditor() {
     const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CAPTCHA>(null);
     const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const turnstileSiteKey = useTurnstileSiteKey();
+    const [serverConfig] = useServerConfig();
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
@@ -82,13 +86,19 @@ export default function FloatingEditor() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setCreating(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setCreating(false);
+            return;
+        }
         setCreating(true);
         api.commentCreate(threadId, {
             comment,
             quote: editor.quote?.id,
-            rtoken,
+            captchaToken,
         })
             .then((data) => {
                 setNewCommentId(data.id);
@@ -114,7 +124,7 @@ export default function FloatingEditor() {
                     text: parseError(err),
                 });
                 setCreating(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -195,11 +205,16 @@ export default function FloatingEditor() {
                         className="max-w-full"
                     />
                     <Box className="my-2 ml-1">
-                        <ReCAPTCHA
+                        <CAPTCHA
                             theme="dark"
-                            sitekey={reCaptchaSiteKey}
+                            sitekey={
+                                serverConfig?.captcha === "turnstile"
+                                    ? turnstileSiteKey
+                                    : reCaptchaSiteKey
+                            }
                             size="invisible"
-                            ref={reCaptchaRef}
+                            ref={captchaRef}
+                            useTurnstile={serverConfig?.captcha === "turnstile"}
                         />
                         <LoadingButton
                             variant="contained"

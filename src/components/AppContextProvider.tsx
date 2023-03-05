@@ -54,6 +54,7 @@ export const AppContext = createContext<{
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
+    turnstileSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
@@ -68,6 +69,7 @@ export const AppContext = createContext<{
 export default function AppContextProvider(props: {
     children: JSX.Element;
     reCaptchaSiteKey?: string;
+    turnstileSiteKey?: string;
 }) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState(localStorage.query || "");
@@ -123,8 +125,13 @@ export default function AppContextProvider(props: {
     const listeningResize = useRef(false);
     const [reCaptchaSiteKey] = useState(
         props.reCaptchaSiteKey ||
-            process.env.REACT_APP_recaptchasitekey ||
+            process.env.REACT_APP_RECAPTCHA_SITE_KEY ||
             "{RECAPTCHA_SITE_KEY}"
+    );
+    const [turnstileSiteKey] = useState(
+        props.turnstileSiteKey ||
+            process.env.REACT_APP_TURNSTILE_SITE_KEY ||
+            "{TURNSTILE_SITE_KEY}"
     );
     const [alertDialog, setAlertDialog] = useState<AlertDialogProps>({
         open: false,
@@ -268,6 +275,7 @@ export default function AppContextProvider(props: {
                 userAvatar,
                 session: [session, setSession],
                 reCaptchaSiteKey,
+                turnstileSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
                 starList: [starList, setStarList],
@@ -398,6 +406,11 @@ export function useIsSmallScreen() {
 export function useReCaptchaSiteKey() {
     const { reCaptchaSiteKey } = useContext(AppContext);
     return reCaptchaSiteKey;
+}
+
+export function useTurnstileSiteKey() {
+    const { turnstileSiteKey } = useContext(AppContext);
+    return turnstileSiteKey;
 }
 
 export function useAlertDialog() {

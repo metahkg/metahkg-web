@@ -118,11 +118,17 @@ function App() {
     );
 }
 
-export default function MetahkgWebApp(props: { reCaptchaSiteKey?: string }) {
-    const { reCaptchaSiteKey } = props;
+export default function MetahkgWebApp(props: {
+    reCaptchaSiteKey?: string;
+    turnstileSiteKey?: string;
+}) {
+    const { reCaptchaSiteKey, turnstileSiteKey } = props;
     return (
         <ErrorBoundary>
-            <AppContextProvider reCaptchaSiteKey={reCaptchaSiteKey}>
+            <AppContextProvider
+                reCaptchaSiteKey={reCaptchaSiteKey}
+                turnstileSiteKey={turnstileSiteKey}
+            >
                 <MenuProvider>
                     <ErrorBoundary>
                         <App />
