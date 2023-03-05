@@ -281,7 +281,7 @@ export default function TextEditor(props: {
                     autosave_ask_before_unload: true,
                     autosave_interval: "20s",
                     autosave_prefix: "tinymce-autosave-{path}-",
-                    autosave_restore_when_empty: true,
+                    autosave_restore_when_empty: false,
                     autosave_retention: "30m",
                     image_advtab: true,
                     images_upload_handler: async (blobInfo, _progress) => {
