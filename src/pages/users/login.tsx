@@ -35,10 +35,8 @@ import {
     useNotification,
     useIsSmallScreen,
     useUser,
-    useReCaptchaSiteKey,
     useSession,
     useDarkMode,
-    useTurnstileSiteKey,
     useServerConfig,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
@@ -48,10 +46,11 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import CAPTCHA from "@metahkg/react-captcha";
+import CAPTCHA from "../../lib/captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
+import ReCAPTCHA from "@metahkg/react-captcha";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -69,9 +68,7 @@ export default function Login() {
     const [sameIp, setSameIp] = useState(false);
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<CAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const turnstileSiteKey = useTurnstileSiteKey();
+    const captchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -225,17 +222,7 @@ export default function Login() {
                             Forgot password?
                         </Typography>
                     </Box>
-                    <CAPTCHA
-                        theme="dark"
-                        sitekey={
-                            serverConfig?.captcha === "turnstile"
-                                ? turnstileSiteKey
-                                : reCaptchaSiteKey
-                        }
-                        size="invisible"
-                        ref={captchaRef}
-                        useTurnstile={serverConfig?.captcha === "turnstile"}
-                    />
+                    <CAPTCHA ref={captchaRef} />
                     <Box className="flex justify-between">
                         <Button
                             className="flex !text-[18px] !no-underline !normal-case"

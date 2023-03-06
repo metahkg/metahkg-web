@@ -19,7 +19,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, TextField, Typography } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
-import CAPTCHA from "@metahkg/react-captcha";
+import CAPTCHA from "../lib/captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useCat, useMenu } from "../components/MenuProvider";
@@ -27,9 +27,7 @@ import {
     useDarkMode,
     useIsSmallScreen,
     useNotification,
-    useReCaptchaSiteKey,
     useServerConfig,
-    useTurnstileSiteKey,
     useUser,
 } from "../components/AppContextProvider";
 import { setTitle, wholePath } from "../lib/common";
@@ -41,6 +39,7 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
+import ReCAPTCHA from "@metahkg/react-captcha";
 
 /**
  * Page for creating a new thread
@@ -61,7 +60,7 @@ export default function Create() {
         text: "",
     });
     const darkMode = useDarkMode();
-    const captchaRef = useRef<CAPTCHA>(null);
+    const captchaRef = useRef<ReCAPTCHA>(null);
 
     const quote = {
         threadId: Number(String(query.quote).split(".")[0]),
@@ -71,8 +70,6 @@ export default function Create() {
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const turnstileSiteKey = useTurnstileSiteKey();
 
     useLayoutEffect(() => {
         setTitle("Create thread | Metahkg");
@@ -215,17 +212,7 @@ export default function Create() {
                         minHeight={isSmallScreen ? 310 : 350}
                     />
                     <Box className="mt-4">
-                        <CAPTCHA
-                            theme="dark"
-                            sitekey={
-                                serverConfig?.captcha === "turnstile"
-                                    ? turnstileSiteKey
-                                    : reCaptchaSiteKey
-                            }
-                            size="invisible"
-                            ref={captchaRef}
-                            useTurnstile={serverConfig?.captcha === "turnstile"}
-                        />
+                        <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             disabled={loading || !(comment && threadTitle && catchoosed)}
                             loading={loading}

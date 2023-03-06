@@ -28,10 +28,8 @@ import { LoadingButton } from "@mui/lab";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
     useServerConfig,
     useSession,
-    useTurnstileSiteKey,
     useWidth,
 } from "../../components/AppContextProvider";
 import MetahkgLogo from "../../components/logo";
@@ -44,10 +42,11 @@ import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import CAPTCHA from "@metahkg/react-captcha";
+import CAPTCHA from "../../lib/captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
+import ReCAPTCHA from "@metahkg/react-captcha";
 
 export default function Reset() {
     const [menu, setMenu] = useMenu();
@@ -66,9 +65,7 @@ export default function Reset() {
     const [sameIp, setSameIp] = useState(false);
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const turnstileSiteKey = useTurnstileSiteKey();
-    const captchaRef = useRef<CAPTCHA>(null);
+    const captchaRef = useRef<ReCAPTCHA>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
@@ -199,17 +196,7 @@ export default function Reset() {
                             label="Restrict session to same ip address"
                         />
                     </FormGroup>
-                    <CAPTCHA
-                        theme="dark"
-                        sitekey={
-                            serverConfig?.captcha === "turnstile"
-                                ? turnstileSiteKey
-                                : reCaptchaSiteKey
-                        }
-                        size="invisible"
-                        ref={captchaRef}
-                        useTurnstile={serverConfig?.captcha === "turnstile"}
-                    />
+                    <CAPTCHA ref={captchaRef} />
                     <LoadingButton
                         variant="contained"
                         className="!text-[16px] !normal-case"
