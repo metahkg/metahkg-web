@@ -19,7 +19,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
 import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import CAPTCHA from "@metahkg/react-captcha";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
 import {
@@ -34,9 +33,7 @@ import {
     useDarkMode,
     useIsSmallScreen,
     useNotification,
-    useReCaptchaSiteKey,
     useServerConfig,
-    useTurnstileSiteKey,
 } from "./AppContextProvider";
 import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
@@ -44,6 +41,8 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
+import ReCAPTCHA from "@metahkg/react-captcha";
+import CAPTCHA from "../lib/captcha";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -60,9 +59,7 @@ export default function FloatingEditor() {
     const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
-    const captchaRef = useRef<CAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const turnstileSiteKey = useTurnstileSiteKey();
+    const captchaRef = useRef<ReCAPTCHA>(null);
     const [serverConfig] = useServerConfig();
 
     useEffect(() => {
@@ -205,17 +202,7 @@ export default function FloatingEditor() {
                         className="max-w-full"
                     />
                     <Box className="my-2 ml-1">
-                        <CAPTCHA
-                            theme="dark"
-                            sitekey={
-                                serverConfig?.captcha === "turnstile"
-                                    ? turnstileSiteKey
-                                    : reCaptchaSiteKey
-                            }
-                            size="invisible"
-                            ref={captchaRef}
-                            useTurnstile={serverConfig?.captcha === "turnstile"}
-                        />
+                        <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             variant="contained"
                             color="secondary"

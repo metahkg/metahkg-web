@@ -30,15 +30,13 @@ import {
     TextFieldProps,
     Typography,
 } from "@mui/material";
-import CAPTCHA from "@metahkg/react-captcha";
+import CAPTCHA from "../../lib/captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
     useServerConfig,
-    useTurnstileSiteKey,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -54,6 +52,7 @@ import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { LoadingButton } from "@mui/lab";
+import ReCAPTCHA from "@metahkg/react-captcha";
 
 /**
  * Sex selector
@@ -104,9 +103,7 @@ export default function Register() {
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<CAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const turnstileSiteKey = useTurnstileSiteKey();
+    const captchaRef = useRef<ReCAPTCHA>(null);
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
@@ -258,17 +255,7 @@ export default function Register() {
                         </Typography>
                     </Box>
                     <Box className="!mt-[15px]">
-                        <CAPTCHA
-                            theme="dark"
-                            sitekey={
-                                serverConfig?.captcha === "turnstile"
-                                    ? turnstileSiteKey
-                                    : reCaptchaSiteKey
-                            }
-                            size="invisible"
-                            ref={captchaRef}
-                            useTurnstile={serverConfig?.captcha === "turnstile"}
-                        />
+                        <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             disabled={disable}
                             loading={loading}
