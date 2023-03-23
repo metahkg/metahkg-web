@@ -70,7 +70,12 @@ export default function CommentBody(props: {
             )
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [settings.filterSwearWords, settings.linkPreview]);
+    }, [
+        settings.filterSwearWords,
+        settings.linkPreview,
+        settings.pdfViewer,
+        settings.videoPlayer,
+    ]);
 
     const content = useMemo(
         () => [

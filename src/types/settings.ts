@@ -31,4 +31,6 @@ export type Settings = {
     autoLoadImages?: boolean;
     resizeImages?: boolean;
     linkPreview?: boolean;
+    pdfViewer?: boolean;
+    videoPlayer?: boolean;
 };

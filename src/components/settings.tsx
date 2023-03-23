@@ -130,6 +130,28 @@ export default function Settings(props: {
             },
             checked: settings.linkPreview,
         },
+        {
+            title: "Pdf viewer from URL (experimental)",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    pdfViewer: e.target.checked,
+                });
+            },
+            checked: settings.pdfViewer,
+        },
+        {
+            title: "Video player from URL (experimental)",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    videoPlayer: e.target.checked,
+                });
+            },
+            checked: settings.videoPlayer,
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
