@@ -41,7 +41,11 @@ export const replace = (params: { quote?: boolean }) => {
                     if (!href) return;
                     const redirectHref = `https://${
                         process.env.REACT_APP_REDIRECT_DOMAIN
-                    }/?url=${encodeURIComponent(href)}`;
+                    }/?url=${encodeURIComponent(href)}${
+                        (domNode.firstChild as unknown as Text)?.data === href
+                            ? ""
+                            : "&forceLanding=true"
+                    }`;
                     if (
                         [regex.facebook.videos, regex.youtube, regex.streamable]
                             .flat()
@@ -81,7 +85,6 @@ export const replace = (params: { quote?: boolean }) => {
                             </Box>
                         );
                     }
-                    // TODO: embed instagram and facebook
 
                     // untrusted from now on
                     domNode.attribs.href = redirectHref;
