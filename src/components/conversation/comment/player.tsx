@@ -32,12 +32,12 @@ import {
 import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
-import { useDarkMode, useWidth } from "../../AppContextProvider";
+import { useDarkMode, useIsSmallScreen } from "../../AppContextProvider";
 
 export default function Player(props: { url: string; style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
-    const [width] = useWidth();
+    const isSmallScreen = useIsSmallScreen();
     const darkMode = useDarkMode();
     const YoutubePlayerRef = useRef<YoutubePlayer>(null);
     const FacebookPlayerRef = useRef<FacebookPlayer>(null);
@@ -87,7 +87,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
     ];
 
     const commonProps = {
-        width: window.innerWidth < 760 ? "100%" : "65%",
+        width: isSmallScreen ? "100%" : "65%",
         height: "auto",
         className: "aspect-video",
         stopOnUnmount: false,
@@ -105,7 +105,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
         <Box className="!mb-[5px]" style={style}>
             {play && (
                 <Box
-                    width={width < 760 ? "100%" : "65%"}
+                    width={isSmallScreen ? "100%" : "65%"}
                     sx={{ bgcolor: darkMode ? "#333" : "#eeeeee", height: 30 }}
                     className="!text-metahkg-grey !text-[15px] flex justify-between items-center"
                 >
