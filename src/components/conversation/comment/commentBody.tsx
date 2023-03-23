@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { replace } from "../../../lib/domReplace";
+import { useReplace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
@@ -41,6 +41,7 @@ export default function CommentBody(props: {
     const [blocked, setBlocked] = useState<boolean | undefined>(
         Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
     );
+    const replace = useReplace({ quote: depth > 0 });
 
     useEffect(() => {
         if (blocked || blocked === undefined)
@@ -55,7 +56,7 @@ export default function CommentBody(props: {
             settings.filterSwearWords && !(isSafari || isIOS)
                 ? filterSwearWords(comment.comment)
                 : comment.comment,
-            { replace: replace({ quote: depth > 0 }) }
+            { replace }
         )
     );
 
@@ -65,11 +66,11 @@ export default function CommentBody(props: {
                 settings.filterSwearWords
                     ? filterSwearWords(comment.comment)
                     : comment.comment,
-                { replace: replace({ quote: depth > 0 }) }
+                { replace }
             )
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [settings.filterSwearWords]);
+    }, [settings.filterSwearWords, settings.linkPreview]);
 
     const content = useMemo(
         () => [

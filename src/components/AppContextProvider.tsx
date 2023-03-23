@@ -80,9 +80,12 @@ export default function AppContextProvider(props: {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState<Settings>({
         ...{
+            theme: "dark",
             secondaryColor: { main: "#f5bd1f", dark: "#ffc100" },
+            filterSwearWords: false,
             autoLoadImages: true,
             resizeImages: true,
+            linkPreview: true,
         },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });
