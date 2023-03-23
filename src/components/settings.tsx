@@ -119,6 +119,17 @@ export default function Settings(props: {
             },
             checked: settings.resizeImages,
         },
+        {
+            title: "Preview links",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    linkPreview: e.target.checked,
+                });
+            },
+            checked: settings.linkPreview,
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
