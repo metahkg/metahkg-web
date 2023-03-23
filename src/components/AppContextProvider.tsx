@@ -86,6 +86,8 @@ export default function AppContextProvider(props: {
             autoLoadImages: true,
             resizeImages: true,
             linkPreview: true,
+            pdfViewer: false,
+            videoPlayer: false,
         },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });

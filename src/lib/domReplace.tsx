@@ -22,7 +22,10 @@ import { regex } from "./regex";
 import React, { useCallback } from "react";
 import loadable from "@loadable/component";
 import { ReactLinkPreview } from "../components/conversation/comment/ReactLinkPreview";
-import { useSettings } from "../components/AppContextProvider";
+import { useIsSmallScreen, useSettings } from "../components/AppContextProvider";
+import { Player as VideoPlayer } from "video-react";
+import "video-react/dist/video-react.css";
+import PDF from "../components/conversation/comment/pdf";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
@@ -128,6 +131,30 @@ export function useReplace(params: { quote?: boolean }) {
                                     (i) => i === (firstChild as unknown as Text)?.data
                                 )
                             ) {
+                                console.log(href, href.endsWith(".pdf"));
+                                if (settings.pdfViewer && href.endsWith(".pdf")) {
+                                    return (
+                                        <>
+                                            <PDF src={href} />
+                                            {domToReact([domNode])}
+                                        </>
+                                    );
+                                }
+                                if (settings.videoPlayer && href.endsWith(".mp4")) {
+                                    return (
+                                        <>
+                                            <Box
+                                                width={isSmallScreen ? "100%" : "65%"}
+                                                className="mb-[5px]"
+                                            >
+                                                <VideoPlayer playsInline preload="none">
+                                                    <source src={href} />
+                                                </VideoPlayer>
+                                            </Box>
+                                            {domToReact([domNode])}
+                                        </>
+                                    );
+                                }
                                 return (
                                     <ReactLinkPreview
                                         quote={quote}
@@ -155,6 +182,12 @@ export function useReplace(params: { quote?: boolean }) {
                 } catch {}
             }
         },
-        [quote, settings.linkPreview]
+        [
+            settings.linkPreview,
+            settings.pdfViewer,
+            settings.videoPlayer,
+            quote,
+            isSmallScreen,
+        ]
     );
 }
