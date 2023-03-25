@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { Avatar, Box, Button, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useReFetch,
@@ -41,7 +41,7 @@ import DataTable, { UserData } from "../components/profile/DataTable";
 import { parseError } from "../lib/parseError";
 import Loader from "../lib/loader";
 import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
-import { useAvatar } from "../components/useAvatar";
+import UserAvatar from "../components/UserAvatar";
 
 export default function Profile() {
     const params = useParams();
@@ -67,7 +67,6 @@ export default function Profile() {
     const userId = Number(params.id);
     const isSelf = userId === user?.id;
 
-    const avatar = useAvatar(isSelf ? 0 : reqUser?.id || 0);
     const userAvatar = useUserAvatar();
 
     useEffect(() => {
@@ -155,9 +154,9 @@ export default function Profile() {
                             "flex justify-center items-center max-w-full !mt-5 w-full"
                         }
                     >
-                        <Avatar
-                            src={(isSelf ? userAvatar : avatar).blobUrl}
-                            alt={reqUser.name}
+                        <UserAvatar
+                            user={reqUser}
+                            avatar={userAvatar}
                             sx={{
                                 height: 150,
                                 width: 150,
