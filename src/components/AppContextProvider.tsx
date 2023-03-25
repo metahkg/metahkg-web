@@ -33,7 +33,7 @@ import { AlertDialogProps } from "../lib/alertDialog";
 import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
-import { AvatarProps, useAvatar } from "./useAvatar";
+import { AvatarProps, useAvatar } from "../lib/useAvatar";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
