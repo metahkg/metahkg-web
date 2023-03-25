@@ -88,6 +88,7 @@ export default function AppContextProvider(props: {
             linkPreview: true,
             pdfViewer: false,
             videoPlayer: false,
+            notifications: true,
         },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });
