@@ -17,7 +17,6 @@
 
 import React, { useMemo, useState } from "react";
 import {
-    Avatar,
     Box,
     IconButton,
     ListItemButton,
@@ -52,6 +51,7 @@ import { Link } from "../lib/link";
 import MetahkgLogo from "./logo";
 import { AboutDialog } from "./AboutDialog";
 import { CategoryPanel } from "./categoryPanel";
+import UserAvatar from "./UserAvatar";
 
 export default function SidePanel(props: {
     onClick?: (event: React.MouseEvent) => void;
@@ -83,10 +83,10 @@ export default function SidePanel(props: {
             user && {
                 title: "Profile",
                 icon: (
-                    <Avatar
-                        src={avatar.blobUrl}
+                    <UserAvatar
+                        user={user}
+                        avatar={avatar}
                         className="!h-[30px] !w-[30px]"
-                        alt={user.name}
                     />
                 ),
                 link: `/profile/${user.id}`,
