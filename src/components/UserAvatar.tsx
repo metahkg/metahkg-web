@@ -1,5 +1,5 @@
 import React, { useImperativeHandle } from "react";
-import { Avatar, SxProps, Theme } from "@mui/material";
+import { Avatar, Skeleton, SxProps, Theme } from "@mui/material";
 import { AvatarProps, useAvatar } from "./useAvatar";
 import { generateRandomColor } from "../lib/randomColor";
 
@@ -29,7 +29,13 @@ const UserAvatar = React.forwardRef(
             loading,
         }));
 
-        return (
+        return loading ? (
+            <Skeleton
+                sx={{ ...{ height: "100%", width: "100%" }, ...sx }}
+                variant="circular"
+                animation="wave"
+            />
+        ) : (
             <Avatar
                 src={blobUrl}
                 className={className}

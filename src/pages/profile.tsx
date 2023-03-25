@@ -158,11 +158,11 @@ export default function Profile() {
                             user={reqUser}
                             avatar={userAvatar}
                             sx={{
-                                height: 150,
-                                width: 150,
+                                height: 120,
+                                width: 120,
                             }}
                         />
-                        <Box className="!ml-[20px] flex justify-center overflow-x-hidden h-[200px] flex-col">
+                        <Box className="!ml-[25px] flex justify-center overflow-x-hidden h-[200px] flex-col">
                             <Typography
                                 variant="h5"
                                 component="p"
