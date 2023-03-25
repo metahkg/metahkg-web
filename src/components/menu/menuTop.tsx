@@ -95,7 +95,7 @@ export default function MenuTop(props: {
                     <Box className="flex relative w-full justify-center items-center h-[50px]">
                         <Typography
                             sx={{ color: "secondary.main" }}
-                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-ellipsis overflow-hidden"
+                            className="!my-0 !text-[18px] !select-none text-center whitespace-nowrap text-ellipsis overflow-hidden max-w-[75%]"
                         >
                             {menuTitle || inittitle}
                         </Typography>
