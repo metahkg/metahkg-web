@@ -18,7 +18,7 @@
 import React from "react";
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { PopUp } from "../lib/popup";
-import { useSettings } from "./AppContextProvider";
+import { useSettings, useUser } from "./AppContextProvider";
 import { IOSSwitch } from "../lib/switch";
 import {
     secondaryColor,
@@ -27,6 +27,7 @@ import {
     Theme,
 } from "../types/settings";
 import { isIOS, isSafari } from "react-device-detect";
+import { subscribe, unsubscribe } from "../lib/notifications";
 
 export default function Settings(props: {
     open: boolean;
@@ -34,6 +35,7 @@ export default function Settings(props: {
 }) {
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
+    const [user] = useUser();
 
     const colorOptions: {
         value: string;
@@ -129,6 +131,23 @@ export default function Settings(props: {
                 });
             },
             checked: settings.linkPreview,
+        },
+        {
+            title: "Notifications",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    notifications: e.target.checked,
+                });
+                if (e.target.checked) {
+                    subscribe();
+                } else {
+                    unsubscribe();
+                }
+            },
+            checked: Boolean(user && settings.notifications),
+            disabled: !user,
         },
         {
             title: "Pdf viewer from URL (experimental)",

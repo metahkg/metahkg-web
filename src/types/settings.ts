@@ -33,4 +33,5 @@ export type Settings = {
     linkPreview?: boolean;
     pdfViewer?: boolean;
     videoPlayer?: boolean;
+    notifications?: boolean;
 };
