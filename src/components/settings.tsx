@@ -156,7 +156,7 @@ export default function Settings(props: {
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
             <Box
-                className="!mx-5 !my-2 grid grid-columns-1 grid-flow-row gap-y-2"
+                className="!mx-5 !my-2 grid grid-cols-1 grid-flow-row gap-y-2"
                 sx={{ bgcolor: "primary.main" }}
             >
                 {settingItems.map((item) => (

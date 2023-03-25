@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../lib/api";
+import { api } from "./api";
 
 export interface AvatarProps {
     error: unknown;
@@ -25,9 +25,10 @@ export function useAvatar(id: number): AvatarProps {
                     setLoading(true);
                     const data = await api.userAvatar(id);
                     setBlobUrl(URL.createObjectURL(data.data));
+                    setError(null);
                 } catch (error) {
                     setError(error);
-                    setBlobUrl("/api/404");
+                    setBlobUrl(undefined);
                 } finally {
                     setLoading(false);
                 }

@@ -42,6 +42,7 @@ import { parseError } from "../lib/parseError";
 import Loader from "../lib/loader";
 import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
 import UserAvatar from "../components/UserAvatar";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 
 export default function Profile() {
     const params = useParams();
@@ -136,7 +137,7 @@ export default function Profile() {
             {!reqUser ? (
                 <Loader position="center" />
             ) : (
-                <Box className="flex place-self-center justify-center items-center flex-col w-[90%] max-w-[90%]">
+                <Box className="flex place-self-center justify-center items-center flex-col w-[90%] max-w-[90%] mb-5">
                     {uploadedAvatarOriginal && (
                         <AvatarEditorPopUp
                             open={editorOpen}
@@ -151,18 +152,74 @@ export default function Profile() {
                     )}
                     <Box
                         className={
-                            "flex justify-center items-center max-w-full !mt-5 w-full"
+                            "flex justify-center items-center max-w-full mt-3 w-full"
                         }
                     >
                         <UserAvatar
                             user={reqUser}
-                            avatar={userAvatar}
+                            avatar={isSelf ? userAvatar : undefined}
                             sx={{
                                 height: 120,
                                 width: 120,
                             }}
+                            buttons={
+                                isSelf
+                                    ? ([
+                                          !userAvatar.error && {
+                                              icon: <DeleteIcon />,
+                                              label: "Delete",
+                                              onClick: () => {
+                                                  setNotification({
+                                                      open: true,
+                                                      severity: "info",
+                                                      text: "Deleting avatar...",
+                                                  });
+                                                  api.userAvatarDelete(user.id)
+                                                      .then(() => {
+                                                          setNotification({
+                                                              open: true,
+                                                              severity: "success",
+                                                              text: "Avatar deleted",
+                                                          });
+                                                          userAvatar.reload();
+                                                      })
+                                                      .catch((err) => {
+                                                          setNotification({
+                                                              open: true,
+                                                              severity: "error",
+                                                              text: parseError(err),
+                                                          });
+                                                      });
+                                              },
+                                          },
+                                      ].filter(Boolean) as {
+                                          icon: React.ReactNode;
+                                          label?: string;
+                                          onClick?: () => void;
+                                      }[])
+                                    : undefined
+                            }
+                            customButtons={
+                                isSelf
+                                    ? [
+                                          <Tooltip title="Upload" arrow>
+                                              <UploadAvatar
+                                                  onChange={(image) => {
+                                                      setUploadedAvatarOriginal(image);
+                                                      setUploadedAvatar(image);
+                                                      setEditorOpen(true);
+                                                  }}
+                                              />
+                                          </Tooltip>,
+                                      ]
+                                    : undefined
+                            }
                         />
-                        <Box className="!ml-[25px] flex justify-center overflow-x-hidden h-[200px] flex-col">
+                        <Box
+                            className={`${
+                                isSelf ? "!ml-[40px]" : "!ml-[25px]"
+                            } flex justify-center overflow-x-hidden h-[200px] flex-col`}
+                        >
                             <Typography
                                 variant="h5"
                                 component="p"
@@ -177,26 +234,12 @@ export default function Profile() {
                                 variant="h6"
                                 component="p"
                                 className="!text-2xl text-left"
-                                gutterBottom
                             >
                                 #{reqUser.id}
                             </Typography>
-                            {isSelf && (
-                                <Box>
-                                    <Tooltip title="jpg / png / svg supported" arrow>
-                                        <UploadAvatar
-                                            onChange={(image) => {
-                                                setUploadedAvatarOriginal(image);
-                                                setUploadedAvatar(image);
-                                                setEditorOpen(true);
-                                            }}
-                                        />
-                                    </Tooltip>
-                                </Box>
-                            )}
                         </Box>
                     </Box>
-                    <Box className="flex !mt-5 !mb-2 w-full font justify-center">
+                    <Box className="flex !mb-2 w-full font justify-center">
                         <DataTable
                             isSelf={isSelf}
                             setReqUser={setReqUser}
