@@ -189,6 +189,7 @@ export default function Settings(props: {
                                 color="secondary"
                                 checked={item.checked}
                                 onChange={item.action}
+                                disabled={item.disabled}
                             />
                         )}
                         {item.type === "select" && (
