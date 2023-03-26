@@ -32,12 +32,11 @@ import { Navigate } from "react-router-dom";
 import queryString from "query-string";
 import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
-import CAPTCHA from "../../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
-import ReCAPTCHA from "@metahkg/react-captcha";
 
 export default function Forgot() {
     const [menu, setMenu] = useMenu();
@@ -53,7 +52,7 @@ export default function Forgot() {
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
 
     const small = width / 2 - 100 <= 450;
 

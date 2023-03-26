@@ -30,7 +30,7 @@ import {
     TextFieldProps,
     Typography,
 } from "@mui/material";
-import CAPTCHA from "../../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useMenu } from "../../components/MenuProvider";
 import {
@@ -52,7 +52,6 @@ import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { LoadingButton } from "@mui/lab";
-import ReCAPTCHA from "@metahkg/react-captcha";
 
 /**
  * Sex selector
@@ -103,7 +102,7 @@ export default function Register() {
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
 
     const query = queryString.parse(window.location.search);
     const navigate = useNavigate();
