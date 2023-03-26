@@ -41,8 +41,7 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
-import ReCAPTCHA from "@metahkg/react-captcha";
-import CAPTCHA from "../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -59,7 +58,7 @@ export default function FloatingEditor() {
     const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
     const [serverConfig] = useServerConfig();
 
     useEffect(() => {

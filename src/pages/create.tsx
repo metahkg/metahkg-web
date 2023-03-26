@@ -19,7 +19,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, TextField, Typography } from "@mui/material";
 import { Create as CreateIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
-import CAPTCHA from "../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import { useCat, useMenu } from "../components/MenuProvider";
@@ -39,7 +39,6 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
-import ReCAPTCHA from "@metahkg/react-captcha";
 
 /**
  * Page for creating a new thread
@@ -60,7 +59,7 @@ export default function Create() {
         text: "",
     });
     const darkMode = useDarkMode();
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
 
     const quote = {
         threadId: Number(String(query.quote).split(".")[0]),

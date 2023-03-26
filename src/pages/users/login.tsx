@@ -46,11 +46,10 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import CAPTCHA from "../../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
-import ReCAPTCHA from "@metahkg/react-captcha";
 
 export default function Login() {
     const [menu, setMenu] = useMenu();
@@ -68,7 +67,7 @@ export default function Login() {
     const [sameIp, setSameIp] = useState(false);
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);

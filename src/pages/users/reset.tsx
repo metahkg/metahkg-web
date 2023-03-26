@@ -42,11 +42,10 @@ import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import CAPTCHA from "../../lib/captcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
-import ReCAPTCHA from "@metahkg/react-captcha";
 
 export default function Reset() {
     const [menu, setMenu] = useMenu();
@@ -65,7 +64,7 @@ export default function Reset() {
     const [sameIp, setSameIp] = useState(false);
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const captchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
