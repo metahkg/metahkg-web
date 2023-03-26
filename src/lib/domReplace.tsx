@@ -124,7 +124,6 @@ export function useReplace(params: { quote?: boolean }) {
                                     (i) => i === (firstChild as unknown as Text)?.data
                                 )
                             ) {
-                                console.log(href, href.endsWith(".pdf"));
                                 if (settings.pdfViewer && href.endsWith(".pdf")) {
                                     return (
                                         <>
