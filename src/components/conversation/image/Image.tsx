@@ -45,6 +45,9 @@ function ImgComponent(props: Props) {
             props.src
         }`,
     });
+    const { src: origPhoto } = useImage({
+        srcList: `${imagesApi}/${props.src}`,
+    });
     const [small, setSmall] = useState(props.small || false);
     const [disableResize, setDisableResize] = useState(false);
     const cRoot = useCRoot();
@@ -76,7 +79,7 @@ function ImgComponent(props: Props) {
     }, [small]);
 
     return (
-        <PhotoView src={src}>
+        <PhotoView src={origPhoto}>
             <Box
                 className={`relative ${
                     imgRef.current &&
