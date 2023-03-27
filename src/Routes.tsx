@@ -160,7 +160,7 @@ export default function Routes() {
                     noAccess ? (
                         <Navigate to="/users/login?continue=true" replace />
                     ) : (
-                        <EnableMenu notOnSmallScreen>
+                        <EnableMenu>
                             <History />
                         </EnableMenu>
                     )
