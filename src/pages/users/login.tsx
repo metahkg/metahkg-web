@@ -117,7 +117,7 @@ export default function Login() {
                 });
                 setNotification({
                     open: true,
-                    severity: "info",
+                    severity: "success",
                     text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
             })
