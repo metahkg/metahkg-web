@@ -30,7 +30,6 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
 import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
@@ -53,6 +52,7 @@ export default function Forgot() {
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const small = width / 2 - 100 <= 450;
 
@@ -121,7 +121,12 @@ export default function Forgot() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">Forgot password</h1>
@@ -150,9 +155,7 @@ export default function Forgot() {
                             className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
-                            disabled={
-                                loading || !(email && EmailValidator.validate(email))
-                            }
+                            disabled={loading || !formRef.current?.checkValidity()}
                             loading
                             startIcon={<SendIcon className="!text-[16px]" />}
                             loadingPosition="start"

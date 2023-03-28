@@ -31,3 +31,10 @@ export const regex = {
     ],
     streamable: [/^https:\/\/streamable\.com\/[a-z|\d]{6}$/i],
 };
+
+export const regexString = {
+    // see: https://gitlab.com/metahkg/metahkg-server/-/blob/f628abbcfbb2f30ab0e94ad2762e006073eab3d6/src/lib/schemas.ts#L35
+    username: `[a-zA-Z0-9\\u0370-\\u03ff\\u1f00-\\u1fff\\u3000-\\u303F\\u3400-\\u4DBF\\u4E00-\\u9FFF一-龯\\p{Emoji}\\p{Emoji_Presentation}\\p{Extended_Pictographic}~!#$%^&*_\\-=+\\(\\)\\[\\]\\{\\}\\|\\\\\\.,\\/\\?"';:<>]{1,15}`,
+    email: "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
+    password: "\\S{8,}",
+};
