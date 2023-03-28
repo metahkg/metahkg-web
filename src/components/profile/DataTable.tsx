@@ -37,6 +37,7 @@ import { parseError } from "../../lib/parseError";
 import { User, UserSex } from "@metahkg/api";
 import { Session } from "../../types/session";
 import { LoadingButton } from "@mui/lab";
+import { regexString } from "../../lib/regex";
 
 export type UserData = User & { count: number; createdAt?: Date };
 
@@ -76,7 +77,7 @@ export default function DataTable(props: DataTableProps) {
                         "Username must be 1 to 15 characters without spaces."
                     }
                     error={name !== reqUser.name && !nameValid}
-                    inputProps={{ pattern: "\\S{1, 15}" }}
+                    inputProps={{ pattern: regexString.username }}
                 />
             ) : (
                 reqUser.name
