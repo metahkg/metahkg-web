@@ -68,6 +68,7 @@ export default function Login() {
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -145,6 +146,7 @@ export default function Login() {
             <Box
                 className={`min-h-50v ${isSmallScreen ? "w-100v" : "w-50v"}`}
                 component="form"
+                ref={formRef}
                 onSubmit={onSubmit}
             >
                 <Box className="m-[50px]">
@@ -236,7 +238,7 @@ export default function Login() {
                             Register
                         </Button>
                         <LoadingButton
-                            disabled={loading || !(name && password)}
+                            disabled={loading || !formRef.current?.checkValidity()}
                             loading={loading}
                             loadingPosition="start"
                             startIcon={<LoginIcon className="!text-[16px]" />}

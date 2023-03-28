@@ -25,7 +25,6 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    SelectChangeEvent,
     TextField,
     TextFieldProps,
     Typography,
@@ -52,38 +51,7 @@ import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { LoadingButton } from "@mui/lab";
-
-/**
- * Sex selector
- * @param props.disabled disable the selector
- * @param props.sex the selected sex
- * @param props.setSex: function to update sex
- */
-function SexSelect(props: {
-    sex: "M" | "F" | undefined;
-    setSex: React.Dispatch<React.SetStateAction<"M" | "F" | undefined>>;
-    disabled: boolean;
-}) {
-    const { sex, setSex, disabled } = props;
-    const onChange = function (e: SelectChangeEvent) {
-        setSex(e.target.value ? "M" : "F");
-    };
-    return (
-        <FormControl required className="!min-w-[200px]">
-            <InputLabel color="secondary">Gender</InputLabel>
-            <Select
-                color="secondary"
-                disabled={disabled}
-                value={sex}
-                label="Gender"
-                onChange={onChange}
-            >
-                <MenuItem value={1}>Male</MenuItem>
-                <MenuItem value={0}>Female</MenuItem>
-            </Select>
-        </FormControl>
-    );
-}
+import { regexString } from "../../lib/regex";
 
 export default function Register() {
     const [width] = useWidth();
@@ -94,6 +62,7 @@ export default function Register() {
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
     const [disable, setDisable] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isValid, setIsValid] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
         text: "",
@@ -101,6 +70,7 @@ export default function Register() {
     const [menu, setMenu] = useMenu();
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
+    const formRef = useRef<HTMLFormElement>(null);
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
 
@@ -169,7 +139,9 @@ export default function Register() {
                 setName(e.target.value);
             },
             type: "text",
-            inputProps: { pattern: "\\S{1,15}" },
+            inputProps: {
+                pattern: regexString.username,
+            },
             helperText: "Username must be composed of 1-15 characters without spaces",
         },
         {
@@ -177,15 +149,14 @@ export default function Register() {
             onChange: (e) => setEmail(e.target.value),
             type: "email",
             inputProps: {
-                pattern:
-                    "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
+                pattern: regexString.email,
             },
         },
         {
             label: "Password",
             onChange: (e) => setPassword(e.target.value),
             type: "password",
-            inputProps: { pattern: "\\S{8,}" },
+            inputProps: { pattern: regexString.password },
             helperText: "Password must be at least 8 characters long, without spaces.",
         },
     ];
@@ -198,7 +169,15 @@ export default function Register() {
             }}
         >
             <Box className={`min-h-50v ${small ? "w-100v" : "w-50v"}`}>
-                <Box component="form" onSubmit={onSubmit} className="m-[50px]">
+                <Box
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                    onChange={(e) => {
+                        setIsValid(e.currentTarget.checkValidity());
+                    }}
+                    className="m-[50px]"
+                >
                     {query.returnto && (
                         <Box className="flex items-center justify-end">
                             <IconButton
@@ -240,7 +219,27 @@ export default function Register() {
                             fullWidth
                         />
                     ))}
-                    <SexSelect disabled={disable} sex={sex} setSex={setSex} />
+                    <FormControl required className="!min-w-[200px]">
+                        <InputLabel color="secondary">Gender</InputLabel>
+                        <Select
+                            color="secondary"
+                            defaultValue=""
+                            disabled={disable}
+                            label="Gender"
+                            onChange={(e) => {
+                                setSex(e.target.value as "M" | "F" | undefined);
+                                // wait until formRef is updated
+                                setTimeout(() => {
+                                    if (formRef.current) {
+                                        setIsValid(formRef.current?.checkValidity());
+                                    }
+                                });
+                            }}
+                        >
+                            <MenuItem value="M">Male</MenuItem>
+                            <MenuItem value="F">Female</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Box className="!mt-[15px] !mb-[15px]">
                         <Typography
                             component={Link}
@@ -256,7 +255,7 @@ export default function Register() {
                     <Box className="!mt-[15px]">
                         <CAPTCHA ref={captchaRef} />
                         <LoadingButton
-                            disabled={disable}
+                            disabled={disable || !isValid}
                             loading={loading}
                             loadingPosition="start"
                             startIcon={<HowToReg className="!text-[17px]" />}

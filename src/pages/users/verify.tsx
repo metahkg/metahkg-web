@@ -23,6 +23,7 @@ import {
     FormControlLabel,
     FormGroup,
     TextField,
+    TextFieldProps,
     Typography,
 } from "@mui/material";
 import {
@@ -38,7 +39,6 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
@@ -67,6 +67,7 @@ export default function Verify() {
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
@@ -127,7 +128,12 @@ export default function Verify() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box className={small ? "w-100v" : "w-50v"}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
@@ -143,28 +149,25 @@ export default function Verify() {
                             {alert.text}
                         </Alert>
                     )}
-                    {[
-                        {
-                            label: "Email",
-                            value: email,
-                            set: setEmail,
-                            type: "email",
-                        },
-                        {
-                            label: "Code",
-                            value: code,
-                            set: setCode,
-                            type: "password",
-                        },
-                    ].map((item, index) => (
+                    {(
+                        [
+                            {
+                                label: "Email",
+                                value: email,
+                                onChange: (e) => setEmail(e.target.value),
+                                type: "email",
+                            },
+                            {
+                                label: "Code",
+                                value: code,
+                                onChange: (e) => setCode(e.target.value),
+                                type: "password",
+                            },
+                        ] as TextFieldProps[]
+                    ).map((props, index) => (
                         <TextField
-                            label={item.label}
-                            value={item.value}
-                            type={item.type}
+                            {...props}
                             className={!index ? "!mb-[15px]" : ""}
-                            onChange={(e) => {
-                                item.set(e.target.value);
-                            }}
                             variant="filled"
                             color="secondary"
                             required
@@ -203,9 +206,7 @@ export default function Verify() {
                         className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
-                        disabled={
-                            loading || !(email && code && EmailValidator.validate(email))
-                        }
+                        disabled={loading || !formRef.current?.checkValidity()}
                         loading={loading}
                         loadingPosition="start"
                         startIcon={<HowToReg />}

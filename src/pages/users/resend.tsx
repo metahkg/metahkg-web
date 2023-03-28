@@ -29,7 +29,6 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
 import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
@@ -37,6 +36,7 @@ import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { LoadingButton } from "@mui/lab";
+import { regexString } from "../../lib/regex";
 
 export default function Resend() {
     const [menu, setMenu] = useMenu();
@@ -53,6 +53,7 @@ export default function Resend() {
     const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const small = width / 2 - 100 <= 450;
 
@@ -115,7 +116,12 @@ export default function Resend() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">
@@ -136,6 +142,9 @@ export default function Resend() {
                         }}
                         variant="filled"
                         color="secondary"
+                        inputProps={{
+                            pattern: regexString.email,
+                        }}
                         required
                         fullWidth
                     />
@@ -146,9 +155,7 @@ export default function Resend() {
                             className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
-                            disabled={
-                                loading || !(email && EmailValidator.validate(email))
-                            }
+                            disabled={loading || !formRef.current?.checkValidity()}
                             loading={loading}
                             loadingPosition="start"
                             startIcon={<SendIcon className="!text-[16px]" />}
