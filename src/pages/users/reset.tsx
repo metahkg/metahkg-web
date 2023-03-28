@@ -95,7 +95,7 @@ export default function Reset() {
                 setSession(data);
                 setNotification({
                     open: true,
-                    severity: "info",
+                    severity: "success",
                     text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
