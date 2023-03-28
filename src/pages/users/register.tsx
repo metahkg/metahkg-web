@@ -59,6 +59,7 @@ export default function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [inviteCode, setInviteCode] = useState("");
     const [sex, setSex] = useState<"M" | "F" | undefined>(undefined);
     const [disable, setDisable] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -107,6 +108,7 @@ export default function Register() {
             password: hash.sha256().update(password).digest("hex"),
             sex: sex as UserSex,
             captchaToken,
+            ...(inviteCode && { inviteCode }),
         })
             .then(() => {
                 setAlert({
@@ -211,12 +213,12 @@ export default function Register() {
                         <TextField
                             className="!mb-[15px]"
                             key={index}
-                            {...props}
                             color="secondary"
                             disabled={disable}
                             variant="filled"
                             required
                             fullWidth
+                            {...props}
                         />
                     ))}
                     <FormControl required className="!min-w-[200px]">
@@ -240,6 +242,23 @@ export default function Register() {
                             <MenuItem value="F">Female</MenuItem>
                         </Select>
                     </FormControl>
+                    {serverConfig?.register.mode === "invite" && (
+                        <TextField
+                            className="!mt-[15px] !min-w-[300px] !mr-[100%]"
+                            color="secondary"
+                            disabled={disable}
+                            required
+                            label="Invite Code"
+                            onChange={(e) => {
+                                setInviteCode(e.target.value);
+                            }}
+                            type="text"
+                            variant="outlined"
+                            inputProps={{
+                                pattern: regexString.inviteCode,
+                            }}
+                        />
+                    )}
                     <Box className="!mt-[15px] !mb-[15px]">
                         <Typography
                             component={Link}
