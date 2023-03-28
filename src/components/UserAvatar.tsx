@@ -9,7 +9,7 @@ import {
     Theme,
     Tooltip,
 } from "@mui/material";
-import { AvatarProps, useAvatar } from "../lib/useAvatar";
+import { AvatarProps, useAvatar } from "../hooks/useAvatar";
 import { generateRandomColor } from "../lib/randomColor";
 
 export function avatarName(name: string) {
