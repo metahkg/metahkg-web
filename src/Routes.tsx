@@ -44,7 +44,6 @@ const Forgot = loadable(() => import("./pages/users/forgot"));
 const Reset = loadable(() => import("./pages/users/reset"));
 const Register = loadable(() => import("./pages/users/register"));
 const Login = loadable(() => import("./pages/users/login"));
-const Logout = loadable(() => import("./pages/users/logout"));
 
 // errors
 const NotFound = loadable(() => import("./pages/notfound"));
@@ -193,7 +192,6 @@ export default function Routes() {
                 <Route path="forgot" element={<Forgot />} />
                 <Route path="reset" element={<Reset />} />
                 <Route path="login" element={<Login />} />
-                <Route path="logout" element={<Logout />} />
             </Route>
             <Route
                 path="/404"

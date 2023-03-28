@@ -15,17 +15,37 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useSession } from "../components/AppContextProvider";
+import { useNotification } from "../components/AppContextProvider";
+import { api } from "../lib/api";
+import { parseError } from "../lib/parseError";
+import { useClearSession } from "./useClearSession";
 
 export function useLogout() {
-    const [, setSession] = useSession();
-    return function () {
-        setSession(null);
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.ready.then(async (registration) => {
-                const subscription = await registration.pushManager.getSubscription();
-                subscription?.unsubscribe();
+    const [, setNotification] = useNotification();
+    const clearSession = useClearSession();
+
+    return async () => {
+        setNotification({
+            open: true,
+            severity: "info",
+            text: "Logging you out...",
+        });
+        await api
+            .authLogout()
+            .then(() => {
+                clearSession();
+                setNotification({
+                    open: true,
+                    severity: "success",
+                    text: "Logged out.",
+                });
+            })
+            .catch((err) => {
+                setNotification({
+                    open: true,
+                    severity: "error",
+                    text: parseError(err),
+                });
             });
-        }
     };
 }

@@ -52,6 +52,7 @@ import MetahkgLogo from "./logo";
 import { AboutDialog } from "./AboutDialog";
 import { CategoryPanel } from "./categoryPanel";
 import UserAvatar from "./UserAvatar";
+import { useLogout } from "../hooks/useLogout";
 
 export default function SidePanel(props: {
     onClick?: (event: React.MouseEvent) => void;
@@ -65,6 +66,7 @@ export default function SidePanel(props: {
     const [expanded, setExpanded] = useSidePanelExpanded();
     const darkMode = useDarkMode();
     const avatar = useUserAvatar();
+    const logout = useLogout();
 
     interface Button {
         title: string;
@@ -123,7 +125,9 @@ export default function SidePanel(props: {
             user && {
                 title: "Logout",
                 icon: <LogoutIcon />,
-                link: "/users/logout",
+                onClick: () => {
+                    logout();
+                },
             },
             !user && {
                 title: "Login",
@@ -165,7 +169,7 @@ export default function SidePanel(props: {
                 link: "https://gitlab.com/metahkg/metahkg",
             },
         ].filter((item) => item) as Button[];
-    }, [darkMode, user, avatar, setSettingsOpen]);
+    }, [darkMode, user, avatar, logout, setSettingsOpen]);
 
     const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
         if (button.link) {
