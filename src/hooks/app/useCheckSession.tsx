@@ -24,13 +24,14 @@ import {
 } from "../../components/AppContextProvider";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
-import { useLogout } from "../useLogout";
+import { useClearSession } from "../useClearSession";
 
 export function useCheckSession() {
     const [user] = useUser();
     const [session, setSession] = useSession();
     const [, setNotification] = useNotification();
-    const logout = useLogout();
+    const clearSession = useClearSession();
+
     useEffect(() => {
         if (user && session) {
             api.authSessionCurrent()
@@ -48,7 +49,7 @@ export function useCheckSession() {
                             })
                             .catch(async (data?: ErrorDto) => {
                                 if ([401, 403, 404].includes(data?.statusCode || 0)) {
-                                    logout();
+                                    clearSession();
                                 } else {
                                     setNotification({
                                         open: true,

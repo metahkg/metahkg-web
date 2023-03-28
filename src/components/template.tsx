@@ -38,6 +38,7 @@ import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
 import { useDarkMode, useUser } from "./AppContextProvider";
+import { useLogout } from "../hooks/useLogout";
 
 /**
  * just a template for large screens if there's no content
@@ -65,6 +66,7 @@ export default function Template() {
 
     const [user] = useUser();
     const darkMode = useDarkMode();
+    const logout = useLogout();
 
     return (
         <Paper
@@ -91,12 +93,21 @@ export default function Template() {
                         </ListItemIcon>
                         <ListItemText>Support Ukraine</ListItemText>
                     </ListItemButton>
+
                     <ListItemButton
-                        component={Link}
+                        {...(!user
+                            ? {
+                                  component: Link,
+                                  href: `/users/login?returnto=${encodeURIComponent(
+                                      wholePath()
+                                  )}`,
+                              }
+                            : {
+                                  onClick: () => {
+                                      logout();
+                                  },
+                              })}
                         className="!no-underline !text-inherit w-full"
-                        href={`/${
-                            user ? "users/logout" : "users/login"
-                        }?returnto=${encodeURIComponent(wholePath())}`}
                     >
                         <ListItemIcon>
                             {user ? <LogoutIcon /> : <AccountCircleIcon />}
