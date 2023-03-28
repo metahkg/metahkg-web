@@ -178,9 +178,9 @@ export default function Settings(props: {
                 className="!mx-5 !my-2 grid grid-cols-1 grid-flow-row gap-y-2"
                 sx={{ bgcolor: "primary.main" }}
             >
-                {settingItems.map((item) => (
+                {settingItems.map((item, index) => (
                     <Box
-                        key={item.title}
+                        key={index}
                         className="flex justify-between items-center w-full h-12"
                     >
                         <Typography>{item.title}</Typography>
@@ -201,8 +201,10 @@ export default function Settings(props: {
                                 className="max-h-12 min-w-[100px]"
                                 disabled={item.disabled}
                             >
-                                {item.options.map((option) => (
-                                    <MenuItem value={option}>{option}</MenuItem>
+                                {item.options.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option}
+                                    </MenuItem>
                                 ))}
                             </Select>
                         )}
