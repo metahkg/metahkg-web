@@ -76,7 +76,7 @@ export default function DataTable(props: DataTableProps) {
                         "Username must be 1 to 15 characters without spaces."
                     }
                     error={name !== reqUser.name && !nameValid}
-                    inputProps={{ pattern: "S{1, 15}" }}
+                    inputProps={{ pattern: "\\S{1, 15}" }}
                 />
             ) : (
                 reqUser.name
