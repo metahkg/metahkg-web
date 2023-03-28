@@ -90,7 +90,7 @@ export default function SidePanel(props: {
                 link: "/",
             },
             user && {
-                title: "Profile",
+                title: user.name,
                 icon: (
                     <UserAvatar
                         user={user}
