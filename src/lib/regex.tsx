@@ -37,4 +37,5 @@ export const regexString = {
     username: `[a-zA-Z0-9\\u0370-\\u03ff\\u1f00-\\u1fff\\u3000-\\u303F\\u3400-\\u4DBF\\u4E00-\\u9FFF一-龯\\p{Emoji}\\p{Emoji_Presentation}\\p{Extended_Pictographic}~!#$%^&*_\\-=+\\(\\)\\[\\]\\{\\}\\|\\\\\\.,\\/\\?"';:<>]{1,15}`,
     email: "[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9}",
     password: "\\S{8,}",
+    inviteCode: "[a-zA-Z0-9]{10}",
 };
