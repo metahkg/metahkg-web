@@ -38,6 +38,7 @@ export const replace = (params: { quote?: boolean }) => {
             try {
                 if (domNode.name === "a") {
                     const href: string = domNode.attribs?.href;
+                    if (!href) return;
                     const redirectHref = `https://${
                         process.env.REACT_APP_REDIRECT_DOMAIN
                     }/?url=${encodeURIComponent(href)}`;
