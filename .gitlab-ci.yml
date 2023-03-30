@@ -94,6 +94,7 @@ tagging:
     - git push origin $tag
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then
        git fetch origin $CI_COMMIT_BRANCH;
+       git checkout dev;
        git merge -X theirs origin/$CI_COMMIT_BRANCH -m "merge";
        git push origin $CI_COMMIT_BRANCH; fi;
   rules:
