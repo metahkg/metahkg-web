@@ -2,33 +2,33 @@
 
 ##### Chores
 
-*  v6.6.1 (052c0651)
+-   v6.6.1 (052c0651)
 
 ##### Continuous Integration
 
-*  fix tagging (81f3a9ad)
+-   fix tagging (81f3a9ad)
 
 ##### New Features
 
-* **captcha:**  add turnstile support - migrated to v6.6.1 api - WARNING: turnstile may not work currently (fe331778)
-* **comment:**  link to edited admin (f0260dc8)
-*  force disable filter swear words on safari /ios (webkit) (4150700e)
-*  allow opt out of resize images via setting (39be74bd)
-*  redirect to login if visibility is internal and user not logged in (3054844b)
-* **parse error:**  include message (a0565512)
+-   **captcha:** add turnstile support - migrated to v6.6.1 api - WARNING: turnstile may not work currently (fe331778)
+-   **comment:** link to edited admin (f0260dc8)
+-   force disable filter swear words on safari /ios (webkit) (4150700e)
+-   allow opt out of resize images via setting (39be74bd)
+-   redirect to login if visibility is internal and user not logged in (3054844b)
+-   **parse error:** include message (a0565512)
 
 ##### Bug Fixes
 
-* **tinymce:**  disable autosave restore (82804e27)
-* **emotion list:**  link color (19976682)
-* **avatar:**  avatar not shown when visibility is internal - changed to generate a blob url using the data from api.userAvatar (c1b209b0)
-* **profile:**  wrong position of name and id (6f3e6f97)
+-   **tinymce:** disable autosave restore (82804e27)
+-   **emotion list:** link color (19976682)
+-   **avatar:** avatar not shown when visibility is internal - changed to generate a blob url using the data from api.userAvatar (c1b209b0)
+-   **profile:** wrong position of name and id (6f3e6f97)
 
 ##### Other Changes
 
-*  CHANGELOG.md (2cd8f0f4)
-*  CHANGELOG.md (a013c9bd)
-*  CHANGELOG.md (8101c897)
+-   CHANGELOG.md (2cd8f0f4)
+-   CHANGELOG.md (a013c9bd)
+-   CHANGELOG.md (8101c897)
 
 #### 6.4.1 (2023-02-16)
 
