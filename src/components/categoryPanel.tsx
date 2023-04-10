@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Category } from "@metahkg/api";
 import { Box, Drawer, Typography } from "@mui/material";
 import { useCategories, useDarkMode, useSettings, useUser } from "./AppContextProvider";
-import { useCat } from "./MenuProvider";
+import { useCat, useMenuMode } from "./MenuProvider";
 import { Link } from "react-router-dom";
 import MetahkgLogo from "./logo";
 
@@ -16,6 +16,7 @@ export function CategoryPanel(props: {
     const [currentCategory] = useCat();
     const darkMode = useDarkMode();
     const [settings] = useSettings();
+    const [menuMode] = useMenuMode();
 
     categories.sort((a, b) => a.id - b.id);
 
@@ -75,7 +76,7 @@ export function CategoryPanel(props: {
                     className={`!my-4`}
                     sx={{
                         color:
-                            currentCategory === category.id
+                            menuMode === "category" && currentCategory === category.id
                                 ? settings.secondaryColor?.main || "#f5bd1f"
                                 : "inherit",
                         "&:hover": {
@@ -87,7 +88,7 @@ export function CategoryPanel(props: {
                 </Typography>
             </Box>
         ),
-        [currentCategory, settings.secondaryColor?.main, toggleDrawer]
+        [currentCategory, menuMode, settings.secondaryColor?.main, toggleDrawer]
     );
 
     return (
