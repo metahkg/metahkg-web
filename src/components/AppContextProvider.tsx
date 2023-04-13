@@ -163,7 +163,7 @@ export default function AppContextProvider(props: {
 
     useEffect(() => {
         api.categories().then(setCategories);
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         api.serverPublicKey().then(setServerPublicKey);
