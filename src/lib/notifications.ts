@@ -51,6 +51,9 @@ export function unsubscribe() {
             if (!(await registration.pushManager.getSubscription())) return;
             console.log("unsubscribe");
             await api.meNotificationsUnsubscribe().catch(console.error);
+            await registration.pushManager.getSubscription().then((subscription) => {
+                subscription?.unsubscribe();
+            });
         });
     }
 }
