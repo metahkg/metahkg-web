@@ -1,3 +1,41 @@
+#### 6.7.0 (2023-04-23)
+
+##### Chores
+
+*  set version v6.7.0 (8b1a6774)
+*  upgrade dependencies (997ba0c3)
+*  update changelog (180fdd86)
+
+##### Continuous Integration
+
+*  fix tagging (3b8a2fcf)
+
+##### New Features
+
+* **error boundary:**  console.error the error for better debugging (4b299f9b)
+*  implement invite codes (a771d901)
+*  logout without going to another page - removed /users/logout - added useLogout hook - renamed original useLogout hook to useClearSession (973d317f)
+
+##### Bug Fixes
+
+* **notifications:**  unsubscribe in push manager as well (2ca40af9)
+* **Dockerfile:**  reduce size (a83d70dc)
+* **categories:**  reload categories when user state changed (15c5d746)
+* **category panel:**  highlight category only if menuMode === "category" (4d993d2e)
+* **domReplace:**  directly use the original element if href is undefined [links] (45342881)
+* **user pages:**  logged in should use severity success (4dae0c0d)
+* **profile datatable:**
+  *  follow server username regex (3ee2338f)
+  *  name regex (fixes #14) (8acc559e)
+* **settings:**  unique keys for elements in lists (66d8835c)
+* **history:**  maximum update error - routes added notOnSmallScreen by mistake (aa75795d)
+
+##### Other Changes
+
+*  use user's name for the profile button (4f317517)
+* **useAvatar:**  move to hooks (4af134b6)
+* **user pages:**  use form.checkValidity (9b3f7697)
+
 #### 6.6.0 (2023-03-30)
 
 ##### Chores
