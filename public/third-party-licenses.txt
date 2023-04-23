@@ -2206,7 +2206,6 @@ The following npm packages may be included in this product:
  - @types/prop-types@15.7.5
  - @types/qs@6.9.7
  - @types/range-parser@1.2.4
- - @types/react-google-recaptcha@2.1.5
  - @types/react-is@17.0.3
  - @types/react-transition-group@4.4.5
  - @types/react@18.0.27
