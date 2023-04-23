@@ -16,7 +16,7 @@
  */
 
 import React, { useEffect, useState, useLayoutEffect } from "react";
-import { Box, Button, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
     useReFetch,
@@ -202,15 +202,13 @@ export default function Profile() {
                             customButtons={
                                 isSelf
                                     ? [
-                                          <Tooltip title="Upload" arrow>
-                                              <UploadAvatar
-                                                  onChange={(image) => {
-                                                      setUploadedAvatarOriginal(image);
-                                                      setUploadedAvatar(image);
-                                                      setEditorOpen(true);
-                                                  }}
-                                              />
-                                          </Tooltip>,
+                                          <UploadAvatar
+                                              onChange={(image) => {
+                                                  setUploadedAvatarOriginal(image);
+                                                  setUploadedAvatar(image);
+                                                  setEditorOpen(true);
+                                              }}
+                                          />,
                                       ]
                                     : undefined
                             }

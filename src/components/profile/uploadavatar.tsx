@@ -16,7 +16,7 @@
  */
 
 import React from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
 
@@ -34,31 +34,33 @@ export default function UploadAvatar(props: {
     const { onChange } = props;
 
     return (
-        <Box component="form" encType="multipart/form-data">
-            <label htmlFor="contained-button-file">
-                <Input
-                    accept="image/*"
-                    id="contained-button-file"
-                    type="file"
-                    name="avatar"
-                    onChange={async (e) => {
-                        const avatar = e?.target?.files?.[0];
-                        if (avatar) {
-                            await onChange?.(avatar);
-                        }
-                    }}
-                />
-                <IconButton
-                    className="!mt-[5px] !normal-case"
-                    sx={{
-                        bgcolor: "primary.main",
-                        "&:hover": { bgcolor: "primary.main" },
-                    }}
-                    component="span"
-                >
-                    <FileUpload />
-                </IconButton>
-            </label>
-        </Box>
+        <Tooltip title="Upload">
+            <Box component="form" encType="multipart/form-data">
+                <label htmlFor="contained-button-file">
+                    <Input
+                        accept="image/*"
+                        id="contained-button-file"
+                        type="file"
+                        name="avatar"
+                        onChange={async (e) => {
+                            const avatar = e?.target?.files?.[0];
+                            if (avatar) {
+                                await onChange?.(avatar);
+                            }
+                        }}
+                    />
+                    <IconButton
+                        className="!mt-[5px] !normal-case"
+                        sx={{
+                            bgcolor: "primary.main",
+                            "&:hover": { bgcolor: "primary.main" },
+                        }}
+                        component="span"
+                    >
+                        <FileUpload />
+                    </IconButton>
+                </label>
+            </Box>
+        </Tooltip>
     );
 }

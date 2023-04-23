@@ -83,62 +83,66 @@ export default function Template() {
                     </Typography>
                 </Box>
                 <List>
-                    <ListItemButton
+                    <Link
                         className="w-full !no-underline !text-inherit"
-                        component={Link}
                         href="https://war.ukraine.ua/support-ukraine/"
                     >
-                        <ListItemIcon>
-                            <MetahkgLogo ua height={24} width={30} />
-                        </ListItemIcon>
-                        <ListItemText>Support Ukraine</ListItemText>
-                    </ListItemButton>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <MetahkgLogo ua height={24} width={30} />
+                            </ListItemIcon>
+                            <ListItemText>Support Ukraine</ListItemText>
+                        </ListItemButton>
+                    </Link>
 
-                    <ListItemButton
-                        {...(!user
-                            ? {
-                                  component: Link,
-                                  href: `/users/login?returnto=${encodeURIComponent(
-                                      wholePath()
-                                  )}`,
-                              }
-                            : {
-                                  onClick: () => {
-                                      logout();
-                                  },
-                              })}
-                        className="!no-underline !text-inherit w-full"
-                    >
-                        <ListItemIcon>
-                            {user ? <LogoutIcon /> : <AccountCircleIcon />}
-                        </ListItemIcon>
-                        <ListItemText>
-                            {user ? "Logout" : "Login / Register"}
-                        </ListItemText>
-                    </ListItemButton>
+                    {user ? (
+                        <ListItemButton onClick={logout} className="!text-inherit w-full">
+                            <ListItemIcon>
+                                <LogoutIcon />
+                            </ListItemIcon>
+                            <ListItemText>Logout</ListItemText>
+                        </ListItemButton>
+                    ) : (
+                        <Link
+                            href={`/users/login?returnto=${encodeURIComponent(
+                                wholePath()
+                            )}`}
+                            className="!no-underline !text-inherit w-full"
+                        >
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <AccountCircleIcon />
+                                </ListItemIcon>
+                                <ListItemText>Login / Register</ListItemText>
+                            </ListItemButton>
+                        </Link>
+                    )}
+
                     {user && (
-                        <ListItemButton
-                            component={Link}
+                        <Link
                             href={`/profile/${user?.id}`}
                             className="w-full !no-underline !text-inherit"
                         >
-                            <ListItemIcon>
-                                <ManageAccountsIcon />
-                            </ListItemIcon>
-                            <ListItemText>{user?.name}</ListItemText>
-                        </ListItemButton>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <ManageAccountsIcon />
+                                </ListItemIcon>
+                                <ListItemText>{user?.name}</ListItemText>
+                            </ListItemButton>
+                        </Link>
                     )}
 
                     {links.map((link, index) => (
-                        <ListItemButton
+                        <Link
                             key={index}
-                            component={Link}
                             href={link.link}
                             className="w-full !no-underline !text-inherit"
                         >
-                            <ListItemIcon>{link.icon}</ListItemIcon>
-                            <ListItemText>{link.title}</ListItemText>
-                        </ListItemButton>
+                            <ListItemButton>
+                                <ListItemIcon>{link.icon}</ListItemIcon>
+                                <ListItemText>{link.title}</ListItemText>
+                            </ListItemButton>
+                        </Link>
                     ))}
                 </List>
             </Box>
