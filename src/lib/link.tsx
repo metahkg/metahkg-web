@@ -20,45 +20,50 @@ import { Link as InternalLink } from "react-router-dom";
 import { Box, BoxProps, Link as MuiLink } from "@mui/material";
 import { Property } from "csstype";
 
-export function Link(
-    props: React.DetailedHTMLProps<
-        React.AnchorHTMLAttributes<HTMLAnchorElement>,
-        HTMLAnchorElement
-    > & {
-        ref?: React.RefObject<HTMLAnchorElement>;
-        to?: string;
-        href?: string;
-        color?: Property.Color;
-        children: React.ReactNode;
-    }
-) {
-    const { href, to, color, children } = props;
-    return (
-        <React.Fragment>
-            {href ? (
-                href.startsWith("/") ? (
-                    <InternalLink
-                        {...props}
-                        style={{ color: color || "#3498db" }}
-                        to={href || to || ""}
-                    >
-                        {children}
-                    </InternalLink>
+export const Link = React.forwardRef(
+    (
+        props: React.DetailedHTMLProps<
+            React.AnchorHTMLAttributes<HTMLAnchorElement>,
+            HTMLAnchorElement
+        > & {
+            to?: string;
+            href?: string;
+            color?: Property.Color;
+            ref?: undefined;
+            children: React.ReactNode;
+        },
+        ref: React.ForwardedRef<HTMLAnchorElement>
+    ) => {
+        const { href, to, color, children } = props;
+        return (
+            <React.Fragment>
+                {href ? (
+                    href.startsWith("/") ? (
+                        <InternalLink
+                            {...props}
+                            ref={ref}
+                            style={{ color: color || "#3498db" }}
+                            to={href || to || ""}
+                        >
+                            {children}
+                        </InternalLink>
+                    ) : (
+                        <MuiLink
+                            {...props}
+                            ref={ref}
+                            sx={{ textDecorationColor: "inherit" }}
+                            color={color || "#3498db"}
+                            href={href || to}
+                        >
+                            {children}
+                        </MuiLink>
+                    )
                 ) : (
-                    <MuiLink
-                        {...props}
-                        sx={{ textDecorationColor: "inherit" }}
-                        color={color || "#3498db"}
-                        href={href || to}
-                    >
+                    <Box {...(props as BoxProps)} sx={{ color }}>
                         {children}
-                    </MuiLink>
-                )
-            ) : (
-                <Box {...(props as BoxProps)} sx={{ color }}>
-                    {children}
-                </Box>
-            )}
-        </React.Fragment>
-    );
-}
+                    </Box>
+                )}
+            </React.Fragment>
+        );
+    }
+);
