@@ -96,10 +96,10 @@ tagging:
        git fetch origin $CI_COMMIT_BRANCH;
        git checkout dev;
        git merge -X theirs origin/$CI_COMMIT_BRANCH -m 'merge';
-       git push origin $CI_COMMIT_BRANCH;
        yarn generate-changelog;
        git add CHANGELOG.md;
        git commit -m 'update: CHANGELOG.md';
+       git push origin $CI_COMMIT_BRANCH;
        fi;"
   rules:
     - if: $CI_COMMIT_TAG
