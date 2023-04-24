@@ -94,3 +94,7 @@ code {
 .grecaptcha-badge {
     visibility: hidden;
 }
+
+iframe {
+    display: none;
+}
