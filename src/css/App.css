@@ -95,6 +95,7 @@ code {
     visibility: hidden;
 }
 
-iframe {
+#webpack-dev-server-client-overlay {
     display: none;
 }
+
