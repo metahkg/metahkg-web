@@ -2,94 +2,94 @@
 
 ##### Chores
 
-*  set version v6.7.0 (8b1a6774)
-*  upgrade dependencies (997ba0c3)
-*  update changelog (180fdd86)
+-   set version v6.7.0 (8b1a6774)
+-   upgrade dependencies (997ba0c3)
+-   update changelog (180fdd86)
 
 ##### Continuous Integration
 
-*  fix tagging (3b8a2fcf)
-* **test:**  use gliderlabs/herokuish:latest-22 (7ac1f478)
+-   fix tagging (3b8a2fcf)
+-   **test:** use gliderlabs/herokuish:latest-22 (7ac1f478)
 
 ##### New Features
 
-* **error boundary:**  console.error the error for better debugging (4b299f9b)
-*  implement invite codes (a771d901)
-*  logout without going to another page - removed /users/logout - added useLogout hook - renamed original useLogout hook to useClearSession (973d317f)
-*  notification setting (364495fb)
-*  pdf viewer & video player from URL (experimental) (5c373424)
-*  disable link previews (d459874c)
-*  force landing for link-text mismatch (1a458ab9)
-* **profile:**  embedded delete and upload at right-bottom of avatar (35162ed1)
-* **avatar:**
-  *  skeleton while loading (c2de6449)
-  *  assign random colors using name as seed (d1ead5d5)
+-   **error boundary:** console.error the error for better debugging (4b299f9b)
+-   implement invite codes (a771d901)
+-   logout without going to another page - removed /users/logout - added useLogout hook - renamed original useLogout hook to useClearSession (973d317f)
+-   notification setting (364495fb)
+-   pdf viewer & video player from URL (experimental) (5c373424)
+-   disable link previews (d459874c)
+-   force landing for link-text mismatch (1a458ab9)
+-   **profile:** embedded delete and upload at right-bottom of avatar (35162ed1)
+-   **avatar:**
+    -   skeleton while loading (c2de6449)
+    -   assign random colors using name as seed (d1ead5d5)
 
 ##### Bug Fixes
 
-* **notifications:**  unsubscribe in push manager as well (2ca40af9)
-* **Dockerfile:**  reduce size (a83d70dc)
-* **categories:**  reload categories when user state changed (15c5d746)
-* **category panel:**  highlight category only if menuMode === "category" (4d993d2e)
-* **domReplace:**
-  *  directly use the original element if href is undefined [links] (45342881)
-  *  remove console.log (580ffca9)
-* **user pages:**  logged in should use severity success (4dae0c0d)
-* **profile datatable:**
-  *  follow server username regex (3ee2338f)
-  *  name regex (fixes #14) (8acc559e)
-* **settings:**
-  *  unique keys for elements in lists (66d8835c)
-  *  checkbox not disabled (7ed4c91c)
-* **history:**  maximum update error - routes added notOnSmallScreen by mistake (aa75795d)
-* **image:**  use original image in photo view (52c320b1)
-*  turnstile - unified interface for both recaptcha and turnstile - reset turnstile after timeout (70c91a17)
-*  remove frame-src csp (91c615cc)
-*  add recaptcha to frame-src csp (3307833c)
-* **menu:**  text overflow (0a1fde78)
-* **tsconfig:**  files (33fdb613)
-* **player:**  width (3e775e45)
+-   **notifications:** unsubscribe in push manager as well (2ca40af9)
+-   **Dockerfile:** reduce size (a83d70dc)
+-   **categories:** reload categories when user state changed (15c5d746)
+-   **category panel:** highlight category only if menuMode === "category" (4d993d2e)
+-   **domReplace:**
+    -   directly use the original element if href is undefined [links] (45342881)
+    -   remove console.log (580ffca9)
+-   **user pages:** logged in should use severity success (4dae0c0d)
+-   **profile datatable:**
+    -   follow server username regex (3ee2338f)
+    -   name regex (fixes #14) (8acc559e)
+-   **settings:**
+    -   unique keys for elements in lists (66d8835c)
+    -   checkbox not disabled (7ed4c91c)
+-   **history:** maximum update error - routes added notOnSmallScreen by mistake (aa75795d)
+-   **image:** use original image in photo view (52c320b1)
+-   turnstile - unified interface for both recaptcha and turnstile - reset turnstile after timeout (70c91a17)
+-   remove frame-src csp (91c615cc)
+-   add recaptcha to frame-src csp (3307833c)
+-   **menu:** text overflow (0a1fde78)
+-   **tsconfig:** files (33fdb613)
+-   **player:** width (3e775e45)
 
 ##### Other Changes
 
-*  CHANGELOG.md (120d4203)
-*  use user's name for the profile button (4f317517)
-* //gitlab.com/metahkg/metahkg-web into dev (50d799e6)
-* **useAvatar:**  move to hooks (4af134b6)
-* **user pages:**  use form.checkValidity (9b3f7697)
-* **captcha:**  use a component to reduce duplicated code (579793dd)
+-   CHANGELOG.md (120d4203)
+-   use user's name for the profile button (4f317517)
+-   //gitlab.com/metahkg/metahkg-web into dev (50d799e6)
+-   **useAvatar:** move to hooks (4af134b6)
+-   **user pages:** use form.checkValidity (9b3f7697)
+-   **captcha:** use a component to reduce duplicated code (579793dd)
 
 #### 6.6.0 (2023-03-30)
 
 ##### Chores
 
-*  v6.6.1 (052c0651)
+-   v6.6.1 (052c0651)
 
 ##### Continuous Integration
 
-*  fix tagging (81f3a9ad)
+-   fix tagging (81f3a9ad)
 
 ##### New Features
 
-* **captcha:**  add turnstile support - migrated to v6.6.1 api - WARNING: turnstile may not work currently (fe331778)
-* **comment:**  link to edited admin (f0260dc8)
-*  force disable filter swear words on safari /ios (webkit) (4150700e)
-*  allow opt out of resize images via setting (39be74bd)
-*  redirect to login if visibility is internal and user not logged in (3054844b)
-* **parse error:**  include message (a0565512)
+-   **captcha:** add turnstile support - migrated to v6.6.1 api - WARNING: turnstile may not work currently (fe331778)
+-   **comment:** link to edited admin (f0260dc8)
+-   force disable filter swear words on safari /ios (webkit) (4150700e)
+-   allow opt out of resize images via setting (39be74bd)
+-   redirect to login if visibility is internal and user not logged in (3054844b)
+-   **parse error:** include message (a0565512)
 
 ##### Bug Fixes
 
-* **tinymce:**  disable autosave restore (82804e27)
-* **emotion list:**  link color (19976682)
-* **avatar:**  avatar not shown when visibility is internal - changed to generate a blob url using the data from api.userAvatar (c1b209b0)
-* **profile:**  wrong position of name and id (6f3e6f97)
+-   **tinymce:** disable autosave restore (82804e27)
+-   **emotion list:** link color (19976682)
+-   **avatar:** avatar not shown when visibility is internal - changed to generate a blob url using the data from api.userAvatar (c1b209b0)
+-   **profile:** wrong position of name and id (6f3e6f97)
 
 ##### Other Changes
 
-*  CHANGELOG.md (2cd8f0f4)
-*  CHANGELOG.md (a013c9bd)
-*  CHANGELOG.md (8101c897)
+-   CHANGELOG.md (2cd8f0f4)
+-   CHANGELOG.md (a013c9bd)
+-   CHANGELOG.md (8101c897)
 
 #### 6.4.1 (2023-02-16)
 
