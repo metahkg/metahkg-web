@@ -114,6 +114,10 @@ export function useReplace(params: { quote?: boolean }) {
                                 return (
                                     <Img
                                         src={src}
+                                        signature={
+                                            images?.find((i) => i.src === src)
+                                                ?.signature || ""
+                                        }
                                         height={height}
                                         width={width}
                                         style={style}
@@ -171,6 +175,9 @@ export function useReplace(params: { quote?: boolean }) {
                         return (
                             <Img
                                 src={src}
+                                signature={
+                                    images?.find((i) => i.src === src)?.signature || ""
+                                }
                                 height={height}
                                 width={width}
                                 style={style}
@@ -187,6 +194,7 @@ export function useReplace(params: { quote?: boolean }) {
             settings.videoPlayer,
             quote,
             isSmallScreen,
+            images,
         ]
     );
 }

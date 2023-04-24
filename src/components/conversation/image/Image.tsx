@@ -31,6 +31,7 @@ import { Image as ImageIcon } from "@mui/icons-material";
 
 interface Props {
     src: string;
+    signature: string;
     height?: string | number;
     width?: string | number;
     style?: string;
@@ -42,12 +43,12 @@ const ImgComponent = React.forwardRef(
         const { height, style, width } = props;
         const [settings] = useSettings();
         const { src } = useImage({
-            srcList: `${imagesApi}${settings.resizeImages ? "/540x350,fit,q80" : ""}/${
-                props.src
-            }`,
+            srcList: `${imagesApi}/${settings.resizeImages ? "540x350,fit,q80," : ""}s${
+                props.signature
+            }/${props.src}`,
         });
         const { src: origPhoto } = useImage({
-            srcList: `${imagesApi}/${props.src}`,
+            srcList: `${imagesApi}/s${props.signature}/${props.src}`,
         });
         const [small, setSmall] = useState(props.small || false);
         const [disableResize, setDisableResize] = useState(false);

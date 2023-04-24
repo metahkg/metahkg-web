@@ -23,6 +23,7 @@ import Loader from "../../../lib/loader";
 import { Client as RLPCLient } from "@metahkg/rlp-proxy-rewrite-api";
 import axios from "axios";
 import { useDarkMode } from "../../AppContextProvider";
+import { imagesApi } from "../../../lib/common";
 
 export function ReactLinkPreview(props: {
     quote?: boolean;
@@ -85,6 +86,9 @@ export function ReactLinkPreview(props: {
                         if (!metadata?.title || !metadata?.hostname) {
                             setSuccess(false);
                         }
+                        if (metadata?.image && metadata?.image_signature) {
+                            metadata.image = `${imagesApi}/s${metadata.image_signature}/${metadata.image}`;
+                        }
                         return metadata;
                     } catch (err) {
                         console.log(err);
@@ -102,9 +106,7 @@ export function ReactLinkPreview(props: {
                     />
                 }
                 showPlaceholderIfNoImage
-                imageProxy={`https://${
-                    process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"
-                }`}
+                imageProxy=""
             />
             {domToReact([node])}
         </Box>
