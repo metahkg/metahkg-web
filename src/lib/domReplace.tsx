@@ -34,8 +34,11 @@ const SocialMediaEmbed = loadable(
     () => import("../components/conversation/comment/socialMediaEmbed")
 );
 
-export function useReplace(params: { quote?: boolean }) {
-    const { quote } = params;
+export function useReplace(params: {
+    quote?: boolean;
+    images?: { src: string; signature: string }[];
+}) {
+    const { quote, images } = params;
     const [settings] = useSettings();
     const isSmallScreen = useIsSmallScreen();
 
@@ -108,6 +111,10 @@ export function useReplace(params: { quote?: boolean }) {
                                 return (
                                     <Img
                                         src={src}
+                                        signature={
+                                            images?.find((i) => i.src === src)
+                                                ?.signature || ""
+                                        }
                                         height={height}
                                         width={width}
                                         style={style}
@@ -165,6 +172,9 @@ export function useReplace(params: { quote?: boolean }) {
                         return (
                             <Img
                                 src={src}
+                                signature={
+                                    images?.find((i) => i.src === src)?.signature || ""
+                                }
                                 height={height}
                                 width={width}
                                 style={style}
@@ -181,6 +191,7 @@ export function useReplace(params: { quote?: boolean }) {
             settings.videoPlayer,
             quote,
             isSmallScreen,
+            images,
         ]
     );
 }

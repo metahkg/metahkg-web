@@ -1688,10 +1688,9 @@
   dependencies:
     "@types/react" "*"
 
-"@metahkg/api@^6.7.0-dev":
-  version "6.7.0-dev"
-  resolved "https://registry.yarnpkg.com/@metahkg/api/-/api-6.7.0-dev.tgz#f0f94d55875230e1e94ad2d99c20faf4b6cb7a80"
-  integrity sha512-0zOL6L5cNDYnMStPJUFNlKqur5/LkzyttYp6WXdgxLd5Xpj6s52S0E8Gre1VWmr2q9YJv/Kw69RtxhE/DRzQzw==
+"@metahkg/api@https://gitlab.com/metahkg/metahkg-api/-/archive/6.9.0-dev/metahkg-api-6.9.0-dev.tar.gz":
+  version "6.9.0"
+  resolved "https://gitlab.com/metahkg/metahkg-api/-/archive/6.9.0-dev/metahkg-api-6.9.0-dev.tar.gz#89afb13ca20dc9c3782715d13ca33e1ecaf1194a"
   dependencies:
     axios "^1.1.2"
 
@@ -1708,12 +1707,18 @@
     "@metahkg/rlp-proxy-rewrite-api" "^6.3.0-1"
     react-loading-skeleton "^3.1.0"
 
-"@metahkg/rlp-proxy-rewrite-api@^6.3.0-1", "@metahkg/rlp-proxy-rewrite-api@^6.4.0":
+"@metahkg/rlp-proxy-rewrite-api@^6.3.0-1":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@metahkg/rlp-proxy-rewrite-api/-/rlp-proxy-rewrite-api-6.4.0.tgz#33541ce6283d2edf9e5581f76ba95b86f782b440"
   integrity sha512-f2oa6IyWujHpKhII62E9g4njwJVhwKPZaJ9/V50Spazh8K8J28ZnRmfoj5T33vwrPPmei1MkEuD0zGW6RVPV4w==
   dependencies:
     axios "^1.1.2"
+
+"@metahkg/rlp-proxy-rewrite-api@https://gitlab.com/metahkg/rlp-proxy-rewrite-api/-/archive/6.9.0-dev/rlp-proxy-rewrite-api-6.9.0-dev.tar.gz":
+  version "6.9.0-dev"
+  resolved "https://gitlab.com/metahkg/rlp-proxy-rewrite-api/-/archive/6.9.0-dev/rlp-proxy-rewrite-api-6.9.0-dev.tar.gz#3c055bd84035c10011c871ac1aecf498e4a1da31"
+  dependencies:
+    axios "^1.3.6"
 
 "@mui/base@5.0.0-alpha.126":
   version "5.0.0-alpha.126"
