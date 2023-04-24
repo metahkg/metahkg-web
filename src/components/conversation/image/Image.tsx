@@ -37,105 +37,110 @@ interface Props {
     small?: boolean;
 }
 
-function ImgComponent(props: Props) {
-    const { height, style, width } = props;
-    const [settings] = useSettings();
-    const { src } = useImage({
-        srcList: `${imagesApi}${settings.resizeImages ? "/540x350,fit,q80" : ""}/${
-            props.src
-        }`,
-    });
-    const { src: origPhoto } = useImage({
-        srcList: `${imagesApi}/${props.src}`,
-    });
-    const [small, setSmall] = useState(props.small || false);
-    const [disableResize, setDisableResize] = useState(false);
-    const cRoot = useCRoot();
-    const imgRef = useRef<HTMLImageElement>(null);
-    const [reRender, setReRender] = useState(false);
-
-    const smallMaxH = 250;
-    const smallMaxW = 250;
-    const maxW = 800;
-
-    const checkCanResize = () => {
-        //if (isIOS || isSafari || engineName === "Webkit") return;
-
-        const img = imgRef.current;
-        if (img) {
-            const { width, height } = img;
-            if (
-                (width < smallMaxW && height < smallMaxH) ||
-                (!small && width <= smallMaxW && height <= smallMaxH)
-            )
-                setDisableResize(true);
+const ImgComponent = React.forwardRef(
+    (props: Props, ref: React.ForwardedRef<HTMLImageElement>) => {
+        const { height, style, width } = props;
+        const [settings] = useSettings();
+        const { src } = useImage({
+            srcList: `${imagesApi}${settings.resizeImages ? "/540x350,fit,q80" : ""}/${
+                props.src
+            }`,
+        });
+        const { src: origPhoto } = useImage({
+            srcList: `${imagesApi}/${props.src}`,
+        });
+        const [small, setSmall] = useState(props.small || false);
+        const [disableResize, setDisableResize] = useState(false);
+        const cRoot = useCRoot();
+        let imgRef = useRef<HTMLImageElement>(null);
+        if (ref) {
+            imgRef = ref as React.MutableRefObject<HTMLImageElement>;
         }
-    };
+        const [reRender, setReRender] = useState(false);
 
-    useEffect(() => {
-        checkCanResize();
-        setReRender(!reRender);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [small]);
+        const smallMaxH = 250;
+        const smallMaxW = 250;
+        const maxW = 800;
 
-    return (
-        <PhotoView src={origPhoto}>
-            <Box
-                className={`relative ${
-                    imgRef.current &&
-                    cRoot.current &&
-                    // TODO: should not hard code
-                    imgRef.current.clientWidth < cRoot.current.clientWidth - 40
-                        ? "inline-block"
-                        : ""
-                }`}
-            >
-                {!disableResize && (
-                    <IconButton
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setSmall(!small);
+        const checkCanResize = () => {
+            //if (isIOS || isSafari || engineName === "Webkit") return;
+
+            const img = imgRef.current;
+            if (img) {
+                const { width, height } = img;
+                if (
+                    (width < smallMaxW && height < smallMaxH) ||
+                    (!small && width <= smallMaxW && height <= smallMaxH)
+                )
+                    setDisableResize(true);
+            }
+        };
+
+        useEffect(() => {
+            checkCanResize();
+            setReRender(!reRender);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [small]);
+
+        return (
+            <PhotoView src={origPhoto}>
+                <Box
+                    className={`relative ${
+                        imgRef.current &&
+                        cRoot.current &&
+                        // TODO: should not hard code
+                        imgRef.current.clientWidth < cRoot.current.clientWidth - 40
+                            ? "inline-block"
+                            : ""
+                    }`}
+                >
+                    {!disableResize && (
+                        <IconButton
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setSmall(!small);
+                            }}
+                            className={"!rounded-[10px] !absolute"}
+                            sx={{
+                                bgcolor: "primary.main",
+                                "&:hover": {
+                                    bgcolor: "primary.dark",
+                                    opacity: 0.9,
+                                },
+                                right: 10,
+                                bottom: 10,
+                                opacity: 0.6,
+                            }}
+                        >
+                            {small ? <ZoomOutMap /> : <ZoomInMap />}
+                        </IconButton>
+                    )}
+                    <img
+                        src={src}
+                        alt=""
+                        className={"block"}
+                        height={height}
+                        width={Number(height) > maxW ? "auto" : width}
+                        style={{
+                            ...(style && cssToReact(style)),
+                            ...(small && {
+                                maxWidth: smallMaxW,
+                                maxHeight: smallMaxH,
+                            }),
                         }}
-                        className={"!rounded-[10px] !absolute"}
-                        sx={{
-                            bgcolor: "primary.main",
-                            "&:hover": {
-                                bgcolor: "primary.dark",
-                                opacity: 0.9,
-                            },
-                            right: 10,
-                            bottom: 10,
-                            opacity: 0.6,
+                        loading="lazy"
+                        ref={imgRef}
+                        onLoad={() => {
+                            checkCanResize();
+                            setReRender(!reRender);
                         }}
-                    >
-                        {small ? <ZoomOutMap /> : <ZoomInMap />}
-                    </IconButton>
-                )}
-                <img
-                    src={src}
-                    alt=""
-                    className={"block"}
-                    height={height}
-                    width={Number(height) > maxW ? "auto" : width}
-                    style={{
-                        ...(style && cssToReact(style)),
-                        ...(small && {
-                            maxWidth: smallMaxW,
-                            maxHeight: smallMaxH,
-                        }),
-                    }}
-                    loading="lazy"
-                    ref={imgRef}
-                    onLoad={() => {
-                        checkCanResize();
-                        setReRender(!reRender);
-                    }}
-                />
-            </Box>
-        </PhotoView>
-    );
-}
+                    />
+                </Box>
+            </PhotoView>
+        );
+    }
+);
 
 export default function Image(props: Props) {
     const { src } = props;
