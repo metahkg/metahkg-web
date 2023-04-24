@@ -16,7 +16,9 @@ export function subscribe() {
                 console.log("subscribe");
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
-                    applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC_KEY,
+                    applicationServerKey: JSON.parse(
+                        localStorage.getItem("serverConfig") || "null"
+                    )?.vapidPublicKey,
                 });
                 const auth = subscription.toJSON().keys?.auth;
                 const p256dh = subscription.toJSON().keys?.p256dh;
