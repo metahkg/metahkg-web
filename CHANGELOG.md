@@ -1,3 +1,40 @@
+#### 6.9.0 (2023-04-24)
+
+##### Chores
+
+*  set version v6.9.0 (32211ed0)
+*  update dependencies (1b2426ab)
+*  update CHANGELOG (5375d6bf)
+*  set version v6.7.0 (8b1a6774)
+*  upgrade dependencies (997ba0c3)
+
+##### Continuous Integration
+
+*  fix tagging (cdece400)
+*  fix tagging (3b8a2fcf)
+
+##### New Features
+
+* **images:**  use hmac signatures - switched to gitlab repo archives for @metahkg/api and @metahkg/rlp-proxy-rewrite-api due to npm outrage (e9c26692)
+* **error boundary:**  console.error the error for better debugging (4b299f9b)
+
+##### Bug Fixes
+
+*  hide webpack dev server error by using a more specific selector (1d211028)
+*  ignore development build errors by not displaying iframes (e2e584dd)
+*  dependencies (webpack) - remove webpack from custom dev dependencies - use the webpack version from react-scripts instead (9706481a)
+*  ref error (f81abf77)
+* **menu thread:**  remove text-metahkg-grey class (6ef1e662)
+* **notifications:**  unsubscribe in push manager as well (2ca40af9)
+* **Dockerfile:**  reduce size (a83d70dc)
+* **categories:**  reload categories when user state changed (15c5d746)
+* **category panel:**  highlight category only if menuMode === "category" (4d993d2e)
+
+##### Other Changes
+
+* //gitlab.com/metahkg/metahkg-web into dev (59b16dbc)
+*  use serverConfig.vapidPublicKey to replace process.env.VAPID_PUBLIC_KEY (cee6b0b3)
+
 #### 6.7.0 (2023-04-24)
 
 ##### Chores
