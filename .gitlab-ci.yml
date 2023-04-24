@@ -92,11 +92,15 @@ tagging:
        git commit -m 'update: CHANGELOG.md'; fi;"
     - git tag "$tag"
     - git push origin $tag
-    - if [ $CI_COMMIT_BRANCH = "dev" ]; then
+    - "if [ $CI_COMMIT_BRANCH = 'dev' ]; then
        git fetch origin $CI_COMMIT_BRANCH;
        git checkout dev;
-       git merge -X theirs origin/$CI_COMMIT_BRANCH -m "merge";
-       git push origin $CI_COMMIT_BRANCH; fi;
+       git merge -X theirs origin/$CI_COMMIT_BRANCH -m 'merge';
+       git push origin $CI_COMMIT_BRANCH;
+       yarn generate-changelog;
+       git add CHANGELOG.md;
+       git commit -m 'update: CHANGELOG.md';
+       fi;"
   rules:
     - if: $CI_COMMIT_TAG
       when: never
