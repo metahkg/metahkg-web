@@ -1,3 +1,33 @@
+#### 6.9.0 (2023-04-25)
+
+##### Chores
+
+*  set version v6.9.0 (32211ed0)
+*  update dependencies (1b2426ab)
+*  update CHANGELOG (5375d6bf)
+
+##### Continuous Integration
+
+*  fix tagging (cdece400)
+
+##### New Features
+
+* **images:**  use hmac signatures - switched to gitlab repo archives for @metahkg/api and @metahkg/rlp-proxy-rewrite-api due to npm outrage (e9c26692)
+
+##### Bug Fixes
+
+*  hide webpack dev server error by using a more specific selector (1d211028)
+*  ignore development build errors by not displaying iframes (e2e584dd)
+*  dependencies (webpack) - remove webpack from custom dev dependencies - use the webpack version from react-scripts instead (9706481a)
+*  ref error (f81abf77)
+* **menu thread:**  remove text-metahkg-grey class (6ef1e662)
+
+##### Other Changes
+
+*  CHANGELOG.md (654296d2)
+* //gitlab.com/metahkg/metahkg-web into dev (59b16dbc)
+*  use serverConfig.vapidPublicKey to replace process.env.VAPID_PUBLIC_KEY (cee6b0b3)
+
 #### 6.7.0 (2023-04-24)
 
 ##### Chores
