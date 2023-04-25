@@ -51,10 +51,11 @@ docker-build:
     - version=$(node -e 'console.log(require("./package.json").version)')
     - major=$(node -e "console.log('${version}'.split('.')[0])")
     - minor=$(node -e "console.log('${version}'.split('.').slice(0, 2).join('.'))")
+    - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then build_version="${version}-dev"; else build_version=$version; fi;
     - docker buildx create --use
     - docker buildx build --push --pull --platform linux/amd64,linux/arm64
       --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA
-      --build-arg REACT_APP_version=$version
+      --build-arg REACT_APP_version=$build_version
       --build-arg REACT_APP_IMAGES_DOMAIN='{IMAGES_DOMAIN}'
       --build-arg REACT_APP_RLP_PROXY_DOMAIN='{RLP_PROXY_DOMAIN}'
       --build-arg REACT_APP_REDIRECT_DOMAIN='{REDIRECT_DOMAIN}'
