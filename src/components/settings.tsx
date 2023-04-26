@@ -27,7 +27,7 @@ import {
     Theme,
 } from "../types/settings";
 import { isIOS, isSafari } from "react-device-detect";
-import { subscribe, unsubscribe } from "../lib/notifications";
+import { unsubscribe } from "../lib/notifications";
 
 export default function Settings(props: {
     open: boolean;
@@ -140,9 +140,8 @@ export default function Settings(props: {
                     ...settings,
                     notifications: e.target.checked,
                 });
-                if (e.target.checked) {
-                    subscribe();
-                } else {
+                // no need to run subscribe since it is handled by useSubscribeNotifications hook
+                if (!e.target.checked) {
                     unsubscribe();
                 }
             },
