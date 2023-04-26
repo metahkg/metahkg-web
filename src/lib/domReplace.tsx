@@ -26,6 +26,7 @@ import { useIsSmallScreen, useSettings } from "../components/AppContextProvider"
 import { Player as VideoPlayer } from "video-react";
 import "video-react/dist/video-react.css";
 import PDF from "../components/conversation/comment/pdf";
+import { Link } from "@metahkg/api";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
@@ -163,6 +164,7 @@ export function useReplace(params: { quote?: boolean }) {
                                         quote={quote}
                                         url={redirectHref}
                                         originalUrl={href}
+                                        signature={signature}
                                         node={domNode}
                                     />
                                 );
@@ -189,12 +191,13 @@ export function useReplace(params: { quote?: boolean }) {
             }
         },
         [
+            links,
             settings.linkPreview,
             settings.pdfViewer,
             settings.videoPlayer,
+            images,
             quote,
             isSmallScreen,
-            images,
         ]
     );
 }
