@@ -621,7 +621,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following npm package may be included in this product:
 
- - @metahkg/api@6.9.0-1-dev
+ - @metahkg/api@6.9.1-dev
 
 This package contains the following license and notice below:
 
@@ -696,7 +696,7 @@ THE SOFTWARE.
 The following npm packages may be included in this product:
 
  - @metahkg/rlp-proxy-rewrite-api@6.4.0
- - @metahkg/rlp-proxy-rewrite-api@6.9.0-dev
+ - @metahkg/rlp-proxy-rewrite-api@6.9.3-dev
 
 These packages each contain the following license and notice below:
 

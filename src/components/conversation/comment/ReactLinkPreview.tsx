@@ -30,8 +30,9 @@ export function ReactLinkPreview(props: {
     url: string;
     node: DOMNode;
     originalUrl?: string;
+    signature?: string;
 }) {
-    const { quote, url, node, originalUrl } = props;
+    const { quote, url, node, originalUrl, signature } = props;
     const [success, setSuccess] = useState(true);
     const darkMode = useDarkMode();
     return success ? (
@@ -80,7 +81,8 @@ export function ReactLinkPreview(props: {
                             axios.create()
                         );
                         const data = await client.getMetadata(
-                            encodeURIComponent(originalUrl || url)
+                            encodeURIComponent(originalUrl || url),
+                            signature
                         );
                         const { metadata } = data;
                         if (!metadata?.title || !metadata?.hostname) {

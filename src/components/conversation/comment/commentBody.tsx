@@ -41,7 +41,11 @@ export default function CommentBody(props: {
     const [blocked, setBlocked] = useState<boolean | undefined>(
         Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
     );
-    const replace = useReplace({ quote: depth > 0, images: comment.images });
+    const replace = useReplace({
+        quote: depth > 0,
+        images: comment.images,
+        links: comment.links,
+    });
 
     useEffect(() => {
         if (blocked || blocked === undefined)

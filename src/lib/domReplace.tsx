@@ -26,6 +26,7 @@ import { useIsSmallScreen, useSettings } from "../components/AppContextProvider"
 import { Player as VideoPlayer } from "video-react";
 import "video-react/dist/video-react.css";
 import PDF from "../components/conversation/comment/pdf";
+import { Link } from "@metahkg/api";
 
 const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
@@ -37,8 +38,9 @@ const SocialMediaEmbed = loadable(
 export function useReplace(params: {
     quote?: boolean;
     images?: { src: string; signature: string }[];
+    links?: Link[];
 }) {
-    const { quote, images } = params;
+    const { quote, images, links } = params;
     const [settings] = useSettings();
     const isSmallScreen = useIsSmallScreen();
 
@@ -50,9 +52,11 @@ export function useReplace(params: {
                     if (domNode.name === "a") {
                         const href: string = domNode.attribs?.href;
                         if (!href) return;
+                        const signature =
+                            links?.find((v) => v.url === href)?.signature ?? "";
                         const redirectHref = `https://${
                             process.env.REACT_APP_REDIRECT_DOMAIN
-                        }/?url=${encodeURIComponent(href)}${
+                        }/?url=${encodeURIComponent(href)}&signature=${signature}${
                             (domNode.firstChild as unknown as Text)?.data === href
                                 ? ""
                                 : "&forceLanding=true"
@@ -160,6 +164,7 @@ export function useReplace(params: {
                                         quote={quote}
                                         url={redirectHref}
                                         originalUrl={href}
+                                        signature={signature}
                                         node={domNode}
                                     />
                                 );
@@ -186,12 +191,13 @@ export function useReplace(params: {
             }
         },
         [
+            links,
             settings.linkPreview,
             settings.pdfViewer,
             settings.videoPlayer,
+            images,
             quote,
             isSmallScreen,
-            images,
         ]
     );
 }
