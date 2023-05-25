@@ -233,7 +233,12 @@ function Conversation(props: { id: number }) {
                                             </VisibilitySensor>
                                             <React.Fragment>
                                                 {thread.conversation
-                                                    .slice(index * 25, (index + 1) * 25)
+                                                    .filter(
+                                                        (comment) =>
+                                                            comment.id >
+                                                                (page - 1) * 25 &&
+                                                            comment.id <= page * 25
+                                                    )
                                                     .map(
                                                         (comment) =>
                                                             !("removed" in comment) &&
