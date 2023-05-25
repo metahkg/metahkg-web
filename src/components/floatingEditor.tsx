@@ -42,11 +42,16 @@ import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
+import { Visibility } from "@metahkg/api";
+import VisibilityChooser from "./VisibilityChooser";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
+    const [visibility, setVisibility] = useState<Visibility>(
+        editor.quote?.visibility === "internal" ? "internal" : "public"
+    );
     const [creating, setCreating] = useState(false);
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
@@ -95,6 +100,7 @@ export default function FloatingEditor() {
             comment,
             quote: editor.quote?.id,
             captchaToken,
+            visibility,
         })
             .then((data) => {
                 setNewCommentId(data.id);
@@ -199,6 +205,12 @@ export default function FloatingEditor() {
                         toolbarBottom
                         lengthLimit={50000}
                         className="max-w-full"
+                    />
+                    <VisibilityChooser
+                        visibility={visibility}
+                        setVisibility={setVisibility}
+                        disabled={editor.quote?.visibility === "internal"}
+                        className="mt-2 ml-1"
                     />
                     <Box className="my-2 ml-1">
                         <CAPTCHA ref={captchaRef} />

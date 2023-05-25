@@ -39,6 +39,8 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
+import { Visibility } from "@metahkg/api";
+import VisibilityChooser from "../components/VisibilityChooser";
 
 /**
  * Page for creating a new thread
@@ -53,6 +55,7 @@ export default function Create() {
     const [catchoosed, setCatchoosed] = useState<number>(cat || 1);
     const [threadTitle, setThreadTitle] = useState(""); //this will be the post title
     const [comment, setComment] = useState(""); //initial comment (#1)
+    const [visibility, setVisibility] = useState<Visibility>("public");
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState<{ severity: severity; text: string }>({
         severity: "info",
@@ -146,6 +149,7 @@ export default function Create() {
             category: catchoosed,
             comment,
             captchaToken,
+            visibility,
         })
             .then((data) => {
                 clearTinymceDraft(window.location.pathname);
@@ -210,7 +214,12 @@ export default function Create() {
                         lengthLimit={50000}
                         minHeight={isSmallScreen ? 310 : 350}
                     />
-                    <Box className="mt-4">
+                    <VisibilityChooser
+                        visibility={visibility}
+                        setVisibility={setVisibility}
+                        className="mt-2 ml-1"
+                    />
+                    <Box className="mt-2">
                         <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             disabled={loading || !(comment && threadTitle && catchoosed)}
