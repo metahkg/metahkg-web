@@ -7,8 +7,9 @@ export default function VisibilityChooser(props: {
     setVisibility: React.Dispatch<React.SetStateAction<Visibility>>;
     disabled?: boolean;
     className?: string;
+    title?: string;
 }) {
-    const { visibility, setVisibility, disabled, className } = props;
+    const { visibility, setVisibility, disabled, className, title } = props;
 
     return (
         <Box className={className}>
@@ -25,7 +26,9 @@ export default function VisibilityChooser(props: {
                 }
                 label={
                     <Box className="flex">
-                        <Typography variant="body1">Internal comment</Typography>
+                        <Typography variant="body1">
+                            {title || "Internal comment"}
+                        </Typography>
                         <Tooltip
                             arrow
                             title="Internal comments can only be seen by logged in users. All replies will also be made internal."
