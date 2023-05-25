@@ -218,6 +218,7 @@ export default function Create() {
                         visibility={visibility}
                         setVisibility={setVisibility}
                         className="mt-2 ml-1"
+                        title="Internal thread"
                     />
                     <Box className="mt-2">
                         <CAPTCHA ref={captchaRef} />

@@ -74,6 +74,10 @@ export default function FloatingEditor() {
         }
     }, [newCommentId, shouldUpdate, update]);
 
+    useEffect(() => {
+        setVisibility(editor.quote?.visibility === "internal" ? "internal" : "public");
+    }, [editor.quote?.visibility]);
+
     function clearState() {
         setComment("");
         setCreating(false);
@@ -211,6 +215,7 @@ export default function FloatingEditor() {
                         setVisibility={setVisibility}
                         disabled={editor.quote?.visibility === "internal"}
                         className="mt-2 ml-1"
+                        title="Internal comment"
                     />
                     <Box className="my-2 ml-1">
                         <CAPTCHA ref={captchaRef} />
