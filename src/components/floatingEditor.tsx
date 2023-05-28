@@ -49,13 +49,15 @@ export default function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
-    const [visibility, setVisibility] = useState<Visibility>(
-        editor.quote?.visibility === "internal" ? "internal" : "public"
-    );
     const [creating, setCreating] = useState(false);
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
     const [thread] = useThread();
+    const [visibility, setVisibility] = useState<Visibility>(
+        editor.quote?.visibility === "internal" || thread?.visibility === "internal"
+            ? "internal"
+            : "public"
+    );
     const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
     const changePage = useChangePage();
@@ -75,8 +77,12 @@ export default function FloatingEditor() {
     }, [newCommentId, shouldUpdate, update]);
 
     useEffect(() => {
-        setVisibility(editor.quote?.visibility === "internal" ? "internal" : "public");
-    }, [editor.quote?.visibility]);
+        setVisibility(
+            editor.quote?.visibility === "internal" || thread?.visibility === "internal"
+                ? "internal"
+                : "public"
+        );
+    }, [editor.quote?.visibility, thread?.visibility]);
 
     function clearState() {
         setComment("");
@@ -213,7 +219,10 @@ export default function FloatingEditor() {
                     <VisibilityChooser
                         visibility={visibility}
                         setVisibility={setVisibility}
-                        disabled={editor.quote?.visibility === "internal"}
+                        disabled={
+                            editor.quote?.visibility === "internal" ||
+                            thread?.visibility === "internal"
+                        }
                         className="mt-2 ml-1"
                         title="Internal comment"
                     />
