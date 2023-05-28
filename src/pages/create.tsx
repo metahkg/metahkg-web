@@ -97,6 +97,9 @@ export default function Create() {
                                         </div>
                                     </blockquote>
                                     <p></p>`);
+                        if (data.visibility === "internal") {
+                            setVisibility("internal");
+                        }
                         setAlert({ severity: "info", text: "" });
                         setTimeout(() => {
                             if (notification.open)
