@@ -22,6 +22,7 @@ import { api } from "../../lib/api";
 import {
     useHistory,
     useNotification,
+    useServerConfig,
     useUser,
 } from "../../components/AppContextProvider";
 import { useCat, useId, useMenuMode } from "../../components/MenuProvider";
@@ -52,6 +53,7 @@ export default function useFirstFetch() {
     const [notification, setNotification] = useNotification();
     const [reRender] = useRerender();
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const query = queryString.parse(window.location.search);
     const onError = (err: AxiosError<any>) => {
         !notification.open &&
@@ -75,7 +77,7 @@ export default function useFirstFetch() {
                 }
                 !cat && menuMode === "category" && setCat(data.category);
                 id !== data.id && setId(data.id);
-                setTitle(`${data.title} | Metahkg`);
+                setTitle(`${data.title} | ${serverConfig?.branding || "Metahkg"}`);
                 setDescription(
                     (query.c &&
                         (data.conversation?.[Number(query.c) - 1] as Comment)?.text) ||

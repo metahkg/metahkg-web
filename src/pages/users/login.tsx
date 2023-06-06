@@ -47,7 +47,7 @@ import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
 import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
-import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import CaptchaNotice from "../../lib/captchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
 
@@ -86,15 +86,15 @@ export default function Login() {
     }, []);
 
     useLayoutEffect(() => {
-        setTitle("Login | Metahkg");
+        setTitle(`Login | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
+    }, [menu, setMenu, user, serverConfig?.branding]);
 
     if (user) return <Navigate to="/" replace />;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -250,7 +250,7 @@ export default function Login() {
                             Login
                         </LoadingButton>
                     </Box>
-                    <ReCaptchaNotice />
+                    <CaptchaNotice />
                 </Box>
             </Box>
         </Box>

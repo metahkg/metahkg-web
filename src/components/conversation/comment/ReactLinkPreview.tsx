@@ -22,8 +22,7 @@ import React, { useState } from "react";
 import Loader from "../../../lib/loader";
 import { Client as RLPCLient } from "@metahkg/rlp-proxy-rewrite-api";
 import axios from "axios";
-import { useDarkMode } from "../../AppContextProvider";
-import { imagesApi } from "../../../lib/common";
+import { useDarkMode, useServerConfig } from "../../AppContextProvider";
 
 export function ReactLinkPreview(props: {
     quote?: boolean;
@@ -35,6 +34,8 @@ export function ReactLinkPreview(props: {
     const { quote, url, node, originalUrl, signature } = props;
     const [success, setSuccess] = useState(true);
     const darkMode = useDarkMode();
+    const [serverConfig] = useServerConfig();
+
     return success ? (
         <Box
             sx={{
@@ -75,8 +76,7 @@ export function ReactLinkPreview(props: {
                     try {
                         const client = new RLPCLient(
                             `https://${
-                                process.env.REACT_APP_RLP_PROXY_DOMAIN ||
-                                "rlp.metahkg.org"
+                                serverConfig?.domains.rlpProxy || "rlp.metahkg.org"
                             }`,
                             axios.create()
                         );
@@ -89,7 +89,7 @@ export function ReactLinkPreview(props: {
                             setSuccess(false);
                         }
                         if (metadata?.image && metadata?.image_signature) {
-                            metadata.image = `${imagesApi}/s${metadata.image_signature}/${metadata.image}`;
+                            metadata.image = `https://${serverConfig?.domains.images}/s${metadata.image_signature}/${metadata.image}`;
                         }
                         return metadata;
                     } catch (err) {

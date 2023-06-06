@@ -20,7 +20,7 @@ import { Box, Typography } from "@mui/material";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
-import { useDarkMode } from "../components/AppContextProvider";
+import { useDarkMode, useServerConfig } from "../components/AppContextProvider";
 
 /**
  * 403 page
@@ -28,11 +28,12 @@ import { useDarkMode } from "../components/AppContextProvider";
 export default function Forbidden() {
     const [menu, setMenu] = useMenu();
     const darkMode = useDarkMode();
+    const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle("403 Forbidden | Metahkg");
+        setTitle(`403 Forbidden | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu]);
+    }, [menu, setMenu, serverConfig?.branding]);
 
     return (
         <Box

@@ -38,7 +38,7 @@ import {
 import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
 import { parseError } from "../lib/parseError";
-import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import CaptchaNotice from "../lib/captchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
@@ -97,7 +97,7 @@ export default function FloatingEditor() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setCreating(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -239,7 +239,7 @@ export default function FloatingEditor() {
                         >
                             Comment
                         </LoadingButton>
-                        <ReCaptchaNotice />
+                        <CaptchaNotice />
                     </Box>
                 </Box>
             </Box>

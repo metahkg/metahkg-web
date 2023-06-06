@@ -34,7 +34,7 @@ import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import CaptchaNotice from "../../lib/captchaNotice";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
 
@@ -58,15 +58,15 @@ export default function Resend() {
     const small = width / 2 - 100 <= 450;
 
     useLayoutEffect(() => {
-        setTitle("Resend Verification Email | Metahkg");
+        setTitle(`Resend Verification Email | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
+    }, [menu, serverConfig?.branding, setMenu, user]);
 
     if (user) <Navigate to="/" replace />;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -162,7 +162,7 @@ export default function Resend() {
                         >
                             Resend
                         </LoadingButton>
-                        <ReCaptchaNotice />
+                        <CaptchaNotice />
                     </Box>
                 </Box>
             </Box>

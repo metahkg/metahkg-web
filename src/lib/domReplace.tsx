@@ -22,7 +22,11 @@ import { regex } from "./regex";
 import React, { useCallback } from "react";
 import loadable from "@loadable/component";
 import { ReactLinkPreview } from "../components/conversation/comment/ReactLinkPreview";
-import { useIsSmallScreen, useSettings } from "../components/AppContextProvider";
+import {
+    useIsSmallScreen,
+    useServerConfig,
+    useSettings,
+} from "../components/AppContextProvider";
 import { Player as VideoPlayer } from "video-react";
 import "video-react/dist/video-react.css";
 import PDF from "../components/conversation/comment/pdf";
@@ -43,6 +47,7 @@ export function useReplace(params: {
     const { quote, images, links } = params;
     const [settings] = useSettings();
     const isSmallScreen = useIsSmallScreen();
+    const [serverConfig] = useServerConfig();
 
     return useCallback(
         (node: DOMNode) => {
@@ -55,7 +60,7 @@ export function useReplace(params: {
                         const signature =
                             links?.find((v) => v.url === href)?.signature ?? "";
                         const redirectHref = `https://${
-                            process.env.REACT_APP_REDIRECT_DOMAIN
+                            serverConfig?.domains.redirect
                         }/?url=${encodeURIComponent(href)}&signature=${signature}${
                             (domNode.firstChild as unknown as Text)?.data === href
                                 ? ""
@@ -192,6 +197,7 @@ export function useReplace(params: {
         },
         [
             links,
+            serverConfig?.domains.redirect,
             settings.linkPreview,
             settings.pdfViewer,
             settings.videoPlayer,

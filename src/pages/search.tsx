@@ -25,7 +25,12 @@ import {
     useSelected,
     useMenuTitle,
 } from "../components/MenuProvider";
-import { useBack, useIsSmallScreen, useQuery } from "../components/AppContextProvider";
+import {
+    useBack,
+    useIsSmallScreen,
+    useQuery,
+    useServerConfig,
+} from "../components/AppContextProvider";
 import { setTitle } from "../lib/common";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +44,7 @@ export default function Search() {
     const isSmallScreen = useIsSmallScreen();
     const [selected, setSelected] = useSelected();
     const [, setMenuTitle] = useMenuTitle();
+    const [serverConfig] = useServerConfig();
     const navigate = useNavigate();
     const querystring = queryString.parse(window.location.search);
 
@@ -52,7 +58,7 @@ export default function Search() {
     }, [navigate, query]);
 
     useLayoutEffect(() => {
-        setTitle("Search | Metahkg");
+        setTitle(`Search | ${serverConfig?.branding || "Metahkg"}`);
 
         function clearData() {
             setReFetch(true);
@@ -74,6 +80,7 @@ export default function Search() {
         menu,
         menuMode,
         selected,
+        serverConfig?.branding,
         setBack,
         setMenu,
         setMenuMode,

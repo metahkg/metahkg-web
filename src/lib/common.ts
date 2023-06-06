@@ -17,10 +17,6 @@
 
 import humanizeDuration from "humanize-duration";
 
-export const imagesApi = `https://${
-    process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org"
-}`;
-
 export function roundup(num: number, precision = 0): number {
     precision = Math.pow(10, precision);
     return Math.ceil(num * precision) / precision;
@@ -105,14 +101,20 @@ export function allEqual(arr: any[]) {
     return true;
 }
 
-export function setTitle(title = "Metahkg") {
+export function setTitle(
+    title = JSON.parse(localStorage.getItem("serverConfig") || "{}")?.branding ||
+        "Metahkg"
+) {
     document.title = title;
     document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
+    document.querySelector(`meta[name="og:site_name"]`)?.setAttribute("content", title);
     document.querySelector(`meta[name="twitter:title"]`)?.setAttribute("content", title);
 }
 
 export function setDescription(
-    description = "Metahkg is a free and open source lihkg-style forum."
+    description = `${
+        JSON.parse(localStorage.getItem("serverConfig") || "{}")?.branding || "Metahkg"
+    } is a free and open source lihkg-style forum.`
 ) {
     document
         .querySelector(`meta[name="description"]`)

@@ -621,7 +621,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following npm package may be included in this product:
 
- - @metahkg/api@6.9.1-dev
+ - @metahkg/api@6.10.0-dev
 
 This package contains the following license and notice below:
 

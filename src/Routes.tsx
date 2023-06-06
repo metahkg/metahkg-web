@@ -64,11 +64,15 @@ export default function Routes() {
 
     useEffect(() => {
         if (location.pathname !== prev.current) {
-            setTitle("Metahkg");
-            setDescription("Metahkg is a free and open source lihkg-style forum.");
+            setTitle(serverConfig?.branding || "Metahkg");
+            setDescription(
+                `${
+                    serverConfig?.branding || "Metahkg"
+                } is a free and open source lihkg-style forum.`
+            );
             prev.current = location.pathname;
         }
-    }, [location]);
+    }, [serverConfig, location]);
 
     return (
         <Switch>

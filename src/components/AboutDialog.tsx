@@ -2,16 +2,22 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "../lib/link";
 import { PopUp } from "../lib/popup";
+import { useServerConfig } from "./AppContextProvider";
 
 export function AboutDialog(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const { open, setOpen } = props;
+    const [serverConfig] = useServerConfig();
+
     return (
         <PopUp title="About Metahkg" closeBtn open={open} setOpen={setOpen} fullWidth>
             <Box className="mb-4 flex flex-col">
                 <Typography variant="body1" gutterBottom className="!mt-4">
+                    {serverConfig?.branding &&
+                        serverConfig?.branding !== "Metahkg" &&
+                        `${serverConfig.branding} is powered by Metahkg.`}
                     Metahkg is a free and open source lihkg-style forum.
                 </Typography>
                 <Typography variant="h5" gutterBottom>

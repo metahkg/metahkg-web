@@ -24,8 +24,7 @@ import { Box, IconButton } from "@mui/material";
 import { ZoomInMap, ZoomOutMap } from "@mui/icons-material";
 import { useCRoot } from "../ConversationContext";
 import cssToReact from "../../../lib/cssToReact";
-import { imagesApi } from "../../../lib/common";
-import { useSettings } from "../../AppContextProvider";
+import { useServerConfig, useSettings } from "../../AppContextProvider";
 import { Image as ImageIcon } from "@mui/icons-material";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
 
@@ -42,13 +41,14 @@ const ImgComponent = React.forwardRef(
     (props: Props, ref: React.ForwardedRef<HTMLImageElement>) => {
         const { height, style, width } = props;
         const [settings] = useSettings();
+        const [serverConfig] = useServerConfig();
         const { src } = useImage({
-            srcList: `${imagesApi}/${settings.resizeImages ? "540x350,fit,q80," : ""}s${
-                props.signature
-            }/${props.src}`,
+            srcList: `https://${serverConfig?.domains.images}/${
+                settings.resizeImages ? "540x350,fit,q80," : ""
+            }s${props.signature}/${props.src}`,
         });
         const { src: origPhoto } = useImage({
-            srcList: `${imagesApi}/s${props.signature}/${props.src}`,
+            srcList: `https://${serverConfig?.domains.images}/s${props.signature}/${props.src}`,
         });
         const [small, setSmall] = useState(props.small || false);
         const [disableResize, setDisableResize] = useState(false);

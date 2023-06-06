@@ -35,7 +35,7 @@ import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import CaptchaNotice from "../../lib/captchaNotice";
 
 export default function Forgot() {
     const [menu, setMenu] = useMenu();
@@ -57,15 +57,15 @@ export default function Forgot() {
     const small = width / 2 - 100 <= 450;
 
     useLayoutEffect(() => {
-        setTitle("Forgot password | Metahkg");
+        setTitle(`Forgot password | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
+    }, [menu, setMenu, user, serverConfig?.branding]);
 
     if (user) <Navigate to="/" replace />;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -162,7 +162,7 @@ export default function Forgot() {
                         >
                             Reset
                         </LoadingButton>
-                        <ReCaptchaNotice />
+                        <CaptchaNotice />
                     </Box>
                 </Box>
             </Box>

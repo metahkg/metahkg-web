@@ -18,10 +18,9 @@
 import { Box, ImageList, ImageListItem } from "@mui/material";
 import React, { useState } from "react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
-import { imagesApi } from "../../lib/common";
 import Loader from "../../lib/loader";
 import { PopUp } from "../../lib/popup";
-import { useWidth } from "../AppContextProvider";
+import { useServerConfig, useWidth } from "../AppContextProvider";
 
 export default function Gallery(props: {
     open: boolean;
@@ -31,6 +30,8 @@ export default function Gallery(props: {
     const { open, setOpen, images } = props;
     const [width] = useWidth();
     const [loading, setLoading] = useState(true);
+    const [serverConfig] = useServerConfig();
+
     return (
         <PopUp title="Images" open={open} setOpen={setOpen} fullScreen>
             <Box sx={{ bgcolor: "primary.main" }} className="!mx-2">
@@ -49,12 +50,12 @@ export default function Gallery(props: {
                         gap={5}
                     >
                         {images.map((item) => {
-                            const src = `${imagesApi}/s${item.signature}/${item.src}`;
+                            const src = `https://${serverConfig?.domains.images}/s${item.signature}/${item.src}`;
                             return (
                                 <PhotoView src={src} key={src}>
                                     <ImageListItem className="cursor-pointer" key={src}>
                                         <img
-                                            src={`${imagesApi}/300x300,q50,s${item.signature}/${item.src}`}
+                                            src={`https://${serverConfig?.domains.images}/300x300,q50,s${item.signature}/${item.src}`}
                                             alt=""
                                             loading="lazy"
                                             onLoad={() => {

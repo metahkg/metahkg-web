@@ -45,7 +45,7 @@ import React from "react";
 import MetahkgWebApp from "@metahkg/web";
 
 export default function App() {
-    return <MetahkgWebApp reCaptchaSiteKey={"<your-recaptcha-site-key>"} />;
+    return <MetahkgWebApp />;
 }
 ```
 

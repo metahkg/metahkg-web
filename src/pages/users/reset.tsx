@@ -43,7 +43,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
-import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import CaptchaNotice from "../../lib/captchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
 import { regexString } from "../../lib/regex";
@@ -73,7 +73,7 @@ export default function Reset() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -116,9 +116,9 @@ export default function Reset() {
     }
 
     useLayoutEffect(() => {
-        setTitle("Reset password | Metahkg");
+        setTitle(`Reset password | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu]);
+    }, [menu, setMenu, serverConfig?.branding]);
 
     return (
         <Box
@@ -210,7 +210,7 @@ export default function Reset() {
                     >
                         Reset
                     </LoadingButton>
-                    <ReCaptchaNotice />
+                    <CaptchaNotice />
                 </Box>
             </Box>
         </Box>

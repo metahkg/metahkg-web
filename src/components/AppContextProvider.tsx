@@ -53,8 +53,6 @@ export const AppContext = createContext<{
     userAvatar: AvatarProps;
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
-    reCaptchaSiteKey: string;
-    turnstileSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
@@ -66,11 +64,7 @@ export const AppContext = createContext<{
  * @param props - { children: JSX.Element }
  * @returns The AppContextProvider is returning a JSX element.
  */
-export default function AppContextProvider(props: {
-    children: JSX.Element;
-    reCaptchaSiteKey?: string;
-    turnstileSiteKey?: string;
-}) {
+export default function AppContextProvider(props: { children: JSX.Element }) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
@@ -129,16 +123,6 @@ export default function AppContextProvider(props: {
     }
     const [history, setHistory] = useState(parsedHistory);
     const listeningResize = useRef(false);
-    const [reCaptchaSiteKey] = useState(
-        props.reCaptchaSiteKey ||
-            process.env.REACT_APP_RECAPTCHA_SITE_KEY ||
-            "{RECAPTCHA_SITE_KEY}"
-    );
-    const [turnstileSiteKey] = useState(
-        props.turnstileSiteKey ||
-            process.env.REACT_APP_TURNSTILE_SITE_KEY ||
-            "{TURNSTILE_SITE_KEY}"
-    );
     const [alertDialog, setAlertDialog] = useState<AlertDialogProps>({
         open: false,
         setOpen: (x) => {
@@ -280,8 +264,6 @@ export default function AppContextProvider(props: {
                 user: [user, setUser],
                 userAvatar,
                 session: [session, setSession],
-                reCaptchaSiteKey,
-                turnstileSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
                 starList: [starList, setStarList],
@@ -407,16 +389,6 @@ export function useUserAvatar() {
 export function useIsSmallScreen() {
     const { isSmallScreen } = useContext(AppContext);
     return isSmallScreen;
-}
-
-export function useReCaptchaSiteKey() {
-    const { reCaptchaSiteKey } = useContext(AppContext);
-    return reCaptchaSiteKey;
-}
-
-export function useTurnstileSiteKey() {
-    const { turnstileSiteKey } = useContext(AppContext);
-    return turnstileSiteKey;
 }
 
 export function useAlertDialog() {

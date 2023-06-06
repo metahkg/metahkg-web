@@ -18,7 +18,11 @@
 import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
-import { useBack, useIsSmallScreen } from "../components/AppContextProvider";
+import {
+    useBack,
+    useIsSmallScreen,
+    useServerConfig,
+} from "../components/AppContextProvider";
 import {
     useReFetch,
     useMenu,
@@ -41,9 +45,10 @@ export default function Starred() {
     const isSmallScreen = useIsSmallScreen();
     const [title, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
+    const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle("Starred | Metahkg");
+        setTitle(`Starred | ${serverConfig?.branding || "Metahkg"}`);
 
         function clearData() {
             setReFetch(true);
@@ -63,6 +68,7 @@ export default function Starred() {
         menu,
         menuMode,
         selected,
+        serverConfig?.branding,
         setBack,
         setMenu,
         setMenuMode,

@@ -35,6 +35,7 @@ import {
     useUser,
     useIsSmallScreen,
     useUserAvatar,
+    useServerConfig,
 } from "../components/AppContextProvider";
 import { api } from "../lib/api";
 import DataTable, { UserData } from "../components/profile/DataTable";
@@ -62,6 +63,7 @@ export default function Profile() {
         null
     );
     const [editorOpen, setEditorOpen] = useState(false);
+    const [serverConfig] = useServerConfig();
 
     const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ export default function Profile() {
             api.userProfile(userId)
                 .then((data) => {
                     setReqUser(data);
-                    setTitle(`${data.name} | Metahkg`);
+                    setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
                 })
                 .catch((err) => {
                     setNotification({
@@ -87,7 +89,7 @@ export default function Profile() {
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
         }
-    }, [navigate, params.id, reqUser, setNotification, userId]);
+    }, [navigate, params.id, reqUser, serverConfig?.branding, setNotification, userId]);
 
     useLayoutEffect(() => {
         /**

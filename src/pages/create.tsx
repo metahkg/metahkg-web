@@ -36,7 +36,7 @@ import MetahkgLogo from "../components/logo";
 import { api } from "../lib/api";
 import ChooseCat from "../components/create/ChooseCat";
 import { parseError } from "../lib/parseError";
-import ReCaptchaNotice from "../lib/reCaptchaNotice";
+import CaptchaNotice from "../lib/captchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
 import { Visibility } from "@metahkg/api";
@@ -74,9 +74,9 @@ export default function Create() {
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle("Create thread | Metahkg");
+        setTitle(`Create thread | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
+    }, [menu, setMenu, user, serverConfig?.branding]);
 
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
@@ -136,7 +136,7 @@ export default function Create() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
         }
         const captchaToken = await captchaRef.current?.executeAsync();
@@ -237,7 +237,7 @@ export default function Create() {
                         >
                             Create
                         </LoadingButton>
-                        <ReCaptchaNotice className="!mt-[10px]" />
+                        <CaptchaNotice className="!mt-[10px]" />
                     </Box>
                 </Box>
             </Box>

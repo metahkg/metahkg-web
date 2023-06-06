@@ -37,7 +37,7 @@ import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
 import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
-import { useDarkMode, useUser } from "./AppContextProvider";
+import { useDarkMode, useServerConfig, useUser } from "./AppContextProvider";
 import { useLogout } from "../hooks/useLogout";
 
 /**
@@ -67,6 +67,7 @@ export default function Template() {
     const [user] = useUser();
     const darkMode = useDarkMode();
     const logout = useLogout();
+    const [serverConfig] = useServerConfig();
 
     return (
         <Paper
@@ -79,7 +80,7 @@ export default function Template() {
                 <Box className="flex items-center my-5">
                     <MetahkgIcon height={50} width={50} svg light={darkMode} />
                     <Typography variant="h4" component="h1" className="!ml-1">
-                        Metahkg
+                        {serverConfig?.branding || "Metahkg"}
                     </Typography>
                 </Box>
                 <List>

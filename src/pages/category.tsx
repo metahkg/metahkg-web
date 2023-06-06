@@ -23,6 +23,7 @@ import {
     useBack,
     useCategories,
     useIsSmallScreen,
+    useServerConfig,
 } from "../components/AppContextProvider";
 import {
     useCat,
@@ -50,10 +51,12 @@ export default function Category() {
     const [, setMenuTitle] = useMenuTitle();
     const [selected, setSelected] = useSelected();
     const [categories] = useCategories();
+    const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
         const categoryName = categories.find((i) => i.id === category)?.name;
-        categoryName && setTitle(categoryName + " | Metahkg");
+        categoryName &&
+            setTitle(categoryName + ` | ${serverConfig?.branding || "Metahkg"}`);
 
         function clearData() {
             setReFetch(true);
@@ -81,6 +84,7 @@ export default function Category() {
         menuMode,
         params.category,
         selected,
+        serverConfig?.branding,
         setBack,
         setCategory,
         setMenu,

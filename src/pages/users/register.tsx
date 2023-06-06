@@ -49,7 +49,7 @@ import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { UserSex } from "@metahkg/api";
 import { css } from "../../lib/css";
-import ReCaptchaNotice from "../../lib/reCaptchaNotice";
+import CaptchaNotice from "../../lib/captchaNotice";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
 
@@ -81,15 +81,15 @@ export default function Register() {
     const small = width / 2 - 100 <= 450;
 
     useLayoutEffect(() => {
-        setTitle("Register | Metahkg");
+        setTitle(`Register | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user]);
+    }, [menu, setMenu, user, serverConfig?.branding]);
 
     if (user) <Navigate to="/" replace />;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        if (serverConfig?.captcha === "turnstile") {
+        if (serverConfig?.captcha.type === "turnstile") {
             setLoading(true);
             setDisable(true);
         }
@@ -285,7 +285,7 @@ export default function Register() {
                         >
                             Register
                         </LoadingButton>
-                        <ReCaptchaNotice />
+                        <CaptchaNotice />
                     </Box>
                 </Box>
             </Box>

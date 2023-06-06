@@ -19,7 +19,7 @@ import React, { MouseEventHandler, useEffect } from "react";
 import { Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
-import { useIsSmallScreen } from "../AppContextProvider";
+import { useIsSmallScreen, useServerConfig } from "../AppContextProvider";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 
@@ -45,6 +45,7 @@ export default function MenuTop(props: {
     const [id] = useId();
     const [menuMode] = useMenuMode();
     const isSmallScreen = useIsSmallScreen();
+    const [serverConfig] = useServerConfig();
 
     const inittitle = {
         search: "Search",
@@ -69,16 +70,25 @@ export default function MenuTop(props: {
             if (menuMode === "profile") {
                 api.userName(profile).then((data) => {
                     setMenuTitle(data.name);
-                    setTitle(`${data.name} | Metahkg`);
+                    setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
                 });
             } else if (menuMode === "category" && category) {
                 api.category(category).then((data) => {
                     setMenuTitle(data.name);
-                    if (!id) setTitle(`${data.name} | Metahkg`);
+                    if (!id)
+                        setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
                 });
             }
         }
-    }, [category, id, profile, setMenuTitle, menuTitle, menuMode]);
+    }, [
+        category,
+        id,
+        profile,
+        setMenuTitle,
+        menuTitle,
+        menuMode,
+        serverConfig?.branding,
+    ]);
 
     return (
         <Box>

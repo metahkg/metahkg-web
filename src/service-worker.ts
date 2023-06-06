@@ -120,8 +120,10 @@ registerRoute(
             "cdn.jsdelivr.net",
             "cdnjs.cloudflare.com",
             "static.cloudflareinsights.com",
-            process.env.REACT_APP_IMAGES_DOMAIN || "i.metahkg.org",
-            "rlp.metahkg.org",
+            JSON.parse(localStorage.getItem("serverConfig") || "{}")?.domains?.images ||
+                "i.metahkg.org",
+            JSON.parse(localStorage.getItem("serverConfig") || "{}")?.domains?.rlpProxy ||
+                "rlp.metahkg.org",
             "na.cx",
             "gstatic.com",
             "google.com",

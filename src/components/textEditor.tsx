@@ -17,12 +17,11 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useDarkMode, useIsSmallScreen } from "./AppContextProvider";
+import { useDarkMode, useIsSmallScreen, useServerConfig } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
 import axios from "axios";
 import { parseError } from "../lib/parseError";
 import { useSession } from "./AppContextProvider";
-import { imagesApi } from "../lib/common";
 
 export default function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
@@ -56,6 +55,7 @@ export default function TextEditor(props: {
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
     const darkMode = useDarkMode();
+    const [serverConfig] = useServerConfig();
     const editorRef = useRef<Editor>(null);
     const [reload, setReload] = useState(false);
     const [replaceContent, setReplaceContent] = useState("");
@@ -152,12 +152,17 @@ export default function TextEditor(props: {
                                         const formData = new FormData();
                                         formData.append("file", file);
                                         axios
-                                            .post(`${imagesApi}/upload`, formData, {
-                                                headers: {
-                                                    "Content-Type": "multipart/form-data",
-                                                    Authorization: `Bearer ${session?.token}`,
-                                                },
-                                            })
+                                            .post(
+                                                `https://${serverConfig?.domains.images}/upload`,
+                                                formData,
+                                                {
+                                                    headers: {
+                                                        "Content-Type":
+                                                            "multipart/form-data",
+                                                        Authorization: `Bearer ${session?.token}`,
+                                                    },
+                                                }
+                                            )
                                             .then((res) => {
                                                 editor.windowManager.close();
                                                 editor.insertContent(
@@ -271,7 +276,7 @@ export default function TextEditor(props: {
                         const formData = new FormData();
                         formData.append("file", blobInfo.blob());
                         const { data } = await axios.post(
-                            `${imagesApi}/upload`,
+                            `https://${serverConfig?.domains.images}/upload`,
                             formData,
                             {
                                 headers: {

@@ -1,12 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Turnstile from "react-turnstile";
-import {
-    useDarkMode,
-    useReCaptchaSiteKey,
-    useServerConfig,
-    useTurnstileSiteKey,
-} from "../components/AppContextProvider";
+import { useDarkMode, useServerConfig } from "../components/AppContextProvider";
 
 export interface CaptchaRefProps {
     token: string | null;
@@ -29,11 +24,9 @@ const CAPTCHA = React.forwardRef(
         const [token, setToken] = useState<string | null>(null);
         const [reload, setReload] = useState<boolean>(false);
         const RecaptchaRef = useRef<ReCAPTCHA>(null);
-        const turnstileSiteKey = useTurnstileSiteKey();
-        const recaptchaSiteKey = useReCaptchaSiteKey();
         const darkMode = useDarkMode();
         const [serverConfig] = useServerConfig();
-        const mode = props.mode || serverConfig?.captcha || "recaptcha";
+        const mode = props.mode || serverConfig?.captcha.type || "recaptcha";
         const timeout = props.timeout || 5000;
 
         useImperativeHandle(ref, () => ({
@@ -74,7 +67,7 @@ const CAPTCHA = React.forwardRef(
                 <Turnstile
                     key={Number(reload)}
                     theme={theme || (darkMode ? "dark" : "light")}
-                    sitekey={siteKey || turnstileSiteKey}
+                    sitekey={siteKey || serverConfig?.captcha.siteKey || ""}
                     onVerify={setToken}
                     onExpire={() => setToken(null)}
                     onTimeout={() => {
@@ -88,7 +81,7 @@ const CAPTCHA = React.forwardRef(
             return (
                 <ReCAPTCHA
                     ref={RecaptchaRef}
-                    sitekey={siteKey || recaptchaSiteKey}
+                    sitekey={siteKey || serverConfig?.captcha.siteKey || ""}
                     theme={theme || (darkMode ? "dark" : "light")}
                     onChange={setToken}
                     onExpired={() => setToken(null)}
