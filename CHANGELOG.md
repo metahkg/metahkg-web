@@ -1,3 +1,41 @@
+#### 6.10.0 (2023-06-06)
+
+##### Chores
+
+*  set version v6.10.0 (f2ca9200)
+*  update CHANGELOG.md (27d036fc)
+*  change back to npm (5049a1c9)
+*  set version v6.9.0 (32211ed0)
+
+##### Continuous Integration
+
+* **docker build:**  add dev to the version passed to docker build if branch is dev (67f0298d)
+
+##### New Features
+
+*  branding - migrate to 6.10 api (b9c80619)
+*  visibility chooser (93cda697)
+*  add hmac signature for requests to rlp proxy and metahkg redirect (96b0ded4)
+* **images:**  use hmac signatures - switched to gitlab repo archives for @metahkg/api and @metahkg/rlp-proxy-rewrite-api due to npm outrage (e9c26692)
+
+##### Bug Fixes
+
+* **create:**  default internal if edit comment is internal (448009fd)
+* **floating editor:**  comment should be internal if thread is internal (c0282230)
+* **forgot:**  button keeps loading (e4906a1e)
+* **conversation:**  pagifying problem caused by visibility (3c47873e)
+* **visibility:**  wording (17959c8b)
+* **notifications:**  fix subscriptions getting sent two times after re-enabling the notifications setting (b344be4b)
+*  hide webpack dev server error by using a more specific selector (1d211028)
+
+##### Other Changes
+
+* //gitlab.com/metahkg/metahkg-web into dev (26eb5065)
+* //gitlab.com/metahkg/metahkg-web into dev (76552f4e)
+* //gitlab.com/metahkg/metahkg-web into dev (deb22fe1)
+* //gitlab.com/metahkg/metahkg-web into dev (59b16dbc)
+*  use serverConfig.vapidPublicKey to replace process.env.VAPID_PUBLIC_KEY (cee6b0b3)
+
 #### 6.9.0 (2023-04-25)
 
 ##### Chores
