@@ -15,9 +15,11 @@ export function AboutDialog(props: {
         <PopUp title="About Metahkg" closeBtn open={open} setOpen={setOpen} fullWidth>
             <Box className="mb-4 flex flex-col">
                 <Typography variant="body1" gutterBottom className="!mt-4">
-                    {serverConfig?.branding &&
-                        serverConfig?.branding !== "Metahkg" &&
-                        `${serverConfig.branding} is powered by Metahkg.`}
+                    {serverConfig?.branding && serverConfig?.branding !== "Metahkg"
+                        ? `${serverConfig.branding} is powered by Metahkg.`
+                        : ""}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
                     Metahkg is a free and open source lihkg-style forum.
                 </Typography>
                 <Typography variant="h5" gutterBottom>
