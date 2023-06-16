@@ -35,8 +35,8 @@ export default function useOnScroll() {
         if (!end && !updating) {
             const diff = e.target.scrollHeight - e.target.scrollTop;
             if (
-                (e.target.clientHeight >= diff - 1.5 &&
-                    e.target.clientHeight <= diff + 1.5) ||
+                (e.target.clientHeight >= diff - 5 &&
+                    e.target.clientHeight <= diff + 5) ||
                 diff < e.target.clientHeight
             ) {
                 update();

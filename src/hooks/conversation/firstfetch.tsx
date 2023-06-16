@@ -15,7 +15,6 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { useEffect } from "react";
 import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
@@ -31,7 +30,8 @@ import {
     useFinalPage,
     useThread,
     useVotes,
-    useRerender,
+    useLimit,
+    useSort,
 } from "../../components/conversation/ConversationContext";
 import { setDescription, setTitle } from "../../lib/common";
 import queryString from "query-string";
@@ -47,11 +47,12 @@ export default function useFirstFetch() {
     const [id, setId] = useId();
     const [, setEnd] = useEnd();
     const [, setVotes] = useVotes();
+    const [limit] = useLimit();
+    const [sort] = useSort();
     const params = useParams();
     const threadId = Number(params.id);
     const navigate = useNavigate();
     const [notification, setNotification] = useNotification();
-    const [reRender] = useRerender();
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
     const query = queryString.parse(window.location.search);
@@ -65,8 +66,8 @@ export default function useFirstFetch() {
         err?.response?.status === 404 && navigate("/404", { replace: true });
         err?.response?.status === 403 && navigate("/403", { replace: true });
     };
-    useEffect(() => {
-        api.thread(threadId, finalPage)
+    return () => {
+        api.thread(threadId, finalPage, limit, sort)
             .then((data) => {
                 data.slink && setThread(data);
                 const historyIndex = history.findIndex((i) => i.id === threadId);
@@ -87,7 +88,7 @@ export default function useFirstFetch() {
                     data.slink = `${window.location.origin}/thread/${threadId}?page=1`;
                     setThread(data);
                 }
-                data.conversation.length % 25 && setEnd(true);
+                data.conversation.length % limit && setEnd(true);
             })
             .catch(onError);
 
@@ -97,7 +98,5 @@ export default function useFirstFetch() {
                     setVotes(data);
                 })
                 .catch(onError);
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reRender]);
+    };
 }

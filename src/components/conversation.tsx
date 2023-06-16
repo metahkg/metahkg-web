@@ -36,9 +36,11 @@ import {
     useEnd,
     useFinalPage,
     useGalleryOpen,
+    useLimit,
     useLoading,
     usePages,
     useRerender,
+    useSort,
     useStory,
     useThread,
     useUpdating,
@@ -57,11 +59,12 @@ import PinnedComment from "./conversation/pin";
 import Comment from "./conversation/comment";
 import { LoadingButton } from "@mui/lab";
 import { Refresh } from "@mui/icons-material";
+import { useFirstRender } from "../hooks/useFirstRender";
 
 function Conversation(props: { id: number }) {
     const query = queryString.parse(window.location.search);
-    const [thread] = useThread();
-    const [finalPage] = useFinalPage();
+    const [thread, setThread] = useThread();
+    const [finalPage, setFinalPage] = useFinalPage();
     /** Current page */
     const [currentPage, setCurrentPage] = useCurrentPage();
     const [votes] = useVotes();
@@ -69,18 +72,26 @@ function Conversation(props: { id: number }) {
     const [pages] = usePages();
     const [, setEnd] = useEnd();
     const [loading, setLoading] = useLoading();
-    const [reRender] = useRerender();
+    const [reRender, setReRender] = useRerender();
     const isSmallScreen = useIsSmallScreen();
     const [story] = useStory();
+    const [sort] = useSort();
+    const [limit] = useLimit();
     const [galleryOpen, setGalleryOpen] = useGalleryOpen();
     const [history, setHistory] = useHistory();
     const [user] = useUser();
     const cRoot = useCRoot();
     const cBottom = useCBottom();
     const navigate = useNavigate();
+    const firstRender = useFirstRender();
     /* Checking if the error is a 404 error and if it is, it will navigate to the 404 page. */
 
-    useFirstFetch();
+    const firstFetch = useFirstFetch();
+
+    useEffect(() => {
+        firstFetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reRender]);
 
     useEffect(() => {
         if (history.findIndex((i) => i.id === props.id) === -1) {
@@ -91,7 +102,7 @@ function Conversation(props: { id: number }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     /**
-     * It fetches new comments, or the next page (if last comment id % 25 = 0)
+     * It fetches new comments, or the next page (if last comment id % limit = 0)
      * of messages from the server and appends them to the conversation array
      */
     const update = useUpdate();
@@ -131,7 +142,18 @@ function Conversation(props: { id: number }) {
         setLoading,
     ]);
 
-    const numOfPages = roundup((thread?.count || 0) / 25);
+    useEffect(() => {
+        if (!firstRender) {
+            setCurrentPage(1);
+            setFinalPage(1);
+            setLoading(true);
+            setThread(null);
+            setReRender(!reRender);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sort, limit]);
+
+    const numOfPages = roundup((thread?.count || 0) / limit);
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
 
@@ -198,7 +220,10 @@ function Conversation(props: { id: number }) {
                             {ready &&
                                 [...Array(pages)].map((p, index) => {
                                     const page =
-                                        roundup(thread.conversation[0].id / 25) + index;
+                                        sort === "time"
+                                            ? roundup(thread.conversation[0].id / limit) +
+                                              index
+                                            : index + 1;
 
                                     return (
                                         <Box key={index}>
@@ -232,32 +257,34 @@ function Conversation(props: { id: number }) {
                                                 />
                                             </VisibilitySensor>
                                             <React.Fragment>
-                                                {thread.conversation
-                                                    .filter(
-                                                        (comment) =>
-                                                            comment.id >
-                                                                (page - 1) * 25 &&
-                                                            comment.id <= page * 25
-                                                    )
-                                                    .map(
-                                                        (comment) =>
-                                                            !("removed" in comment) &&
-                                                            (story
-                                                                ? story ===
-                                                                  comment?.user.id
-                                                                : 1) && (
-                                                                <Comment
-                                                                    key={comment.id}
-                                                                    inThread
-                                                                    comment={comment}
-                                                                    scrollIntoView={
-                                                                        Number(
-                                                                            query.c
-                                                                        ) === comment.id
-                                                                    }
-                                                                />
-                                                            )
-                                                    )}
+                                                {(sort === "time"
+                                                    ? thread.conversation.filter(
+                                                          (comment) =>
+                                                              comment.id >
+                                                                  (page - 1) * limit &&
+                                                              comment.id <= page * limit
+                                                      )
+                                                    : thread.conversation.slice(
+                                                          index * limit,
+                                                          (index + 1) * limit
+                                                      )
+                                                ).map(
+                                                    (comment) =>
+                                                        !("removed" in comment) &&
+                                                        (story
+                                                            ? story === comment?.user.id
+                                                            : 1) && (
+                                                            <Comment
+                                                                key={comment.id}
+                                                                inThread
+                                                                comment={comment}
+                                                                scrollIntoView={
+                                                                    Number(query.c) ===
+                                                                    comment.id
+                                                                }
+                                                            />
+                                                        )
+                                                )}
                                             </React.Fragment>
                                         </Box>
                                     );
@@ -297,6 +324,7 @@ function Conversation(props: { id: number }) {
             currentPage,
             galleryOpen,
             isSmallScreen,
+            limit,
             loading,
             numOfPages,
             onScroll,
@@ -307,8 +335,13 @@ function Conversation(props: { id: number }) {
             ready,
             setEnd,
             setGalleryOpen,
+            sort,
             story,
-            thread,
+            thread?.category,
+            thread?.conversation,
+            thread?.images,
+            thread?.pin,
+            thread?.title,
             update,
             updating,
         ]

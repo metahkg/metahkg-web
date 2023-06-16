@@ -144,7 +144,7 @@ export default function Register() {
             inputProps: {
                 pattern: regexString.username,
             },
-            helperText: "Username must be composed of 1-15 characters without spaces",
+            helperText: "1-15 en/jp/greek/zh-tw/number/emoji characters without spaces",
         },
         {
             label: "Email",
@@ -159,7 +159,7 @@ export default function Register() {
             onChange: (e) => setPassword(e.target.value),
             type: "password",
             inputProps: { pattern: regexString.password },
-            helperText: "Password must be at least 8 characters long, without spaces.",
+            helperText: "At least 8 characters long without spaces",
         },
     ];
 

@@ -23,8 +23,10 @@ import {
     useEnd,
     useFinalPage,
     useLastHeight,
+    useLimit,
     useLoading,
     usePages,
+    useSort,
     useThread,
     useThreadId,
 } from "../../components/conversation/ConversationContext";
@@ -40,9 +42,11 @@ export default function useChangePage() {
     const [, setCurrentPage] = useCurrentPage();
     const [, setNotification] = useNotification();
     const [thread, setThread] = useThread();
+    const [sort] = useSort();
+    const [limit] = useLimit();
     const navigate = useNavigate();
     const threadId = useThreadId();
-    const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / 25);
+    const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / limit);
 
     return (newPage: number, callback?: () => void) => {
         if (thread) {
@@ -72,7 +76,7 @@ export default function useChangePage() {
                     : finalPage
             );
 
-            api.thread(threadId, newPage)
+            api.thread(threadId, newPage, limit, sort)
                 .then((data) => {
                     if (!data.conversation.length)
                         return setNotification({
@@ -97,7 +101,7 @@ export default function useChangePage() {
                               }
                     );
 
-                    data.conversation.length % 25 && setEnd(true);
+                    data.conversation.length % limit && setEnd(true);
 
                     setTimeout(() => {
                         setCurrentPage(newPage);

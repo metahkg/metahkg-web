@@ -21,6 +21,9 @@ import {
     Reply,
     Share as ShareIcon,
     Star,
+    Bolt,
+    FastForward,
+    FastRewind,
 } from "@mui/icons-material";
 import { useUpdate } from "./update";
 import {
@@ -30,6 +33,7 @@ import {
     useEditor,
     useThreadId,
     useCurrentPage,
+    useSort,
 } from "../../components/conversation/ConversationContext";
 import {
     useShareOpen,
@@ -56,6 +60,7 @@ export default function useBtns() {
     const [shareLink, setShareLink] = useShareLink();
     const [shareTitle, setShareTitle] = useShareTitle();
     const [thread] = useThread();
+    const [sort, setSort] = useSort();
     const [, setEditor] = useEditor();
     const [currentPage] = useCurrentPage();
     const [starList, setStarList] = useStarList();
@@ -72,6 +77,27 @@ export default function useBtns() {
                 if (croot.current) croot.current.scrollTop = newscrollTop;
             },
             title: "Refresh",
+        },
+        sort !== "score" && {
+            icon: <Bolt />,
+            action: () => {
+                setSort("score");
+            },
+            title: "Sort by score",
+        },
+        sort !== "time" && {
+            icon: <FastForward />,
+            action: () => {
+                setSort("time");
+            },
+            title: "Sort by time (oldest first)",
+        },
+        sort !== "latest" && {
+            icon: <FastRewind />,
+            action: () => {
+                setSort("latest");
+            },
+            title: "Sort by time (newest first)",
         },
         user && {
             icon: (

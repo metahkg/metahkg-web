@@ -83,6 +83,7 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
             pdfViewer: false,
             videoPlayer: false,
             notifications: true,
+            conversationLimit: 25,
         },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });

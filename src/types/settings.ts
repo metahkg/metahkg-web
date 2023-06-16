@@ -34,4 +34,5 @@ export type Settings = {
     pdfViewer?: boolean;
     videoPlayer?: boolean;
     notifications?: boolean;
+    conversationLimit?: number;
 };

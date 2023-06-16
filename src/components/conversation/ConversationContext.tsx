@@ -18,6 +18,7 @@
 import React, { createContext, useState, useRef } from "react";
 import queryString from "query-string";
 import { Comment, Thread } from "@metahkg/api";
+import { useSettings } from "../AppContextProvider";
 
 interface editorStateType {
     open: boolean;
@@ -39,6 +40,11 @@ const ConversationContext = createContext<{
     loading: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     reRender: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     story: [number, React.Dispatch<React.SetStateAction<number>>];
+    sort: [
+        "time" | "latest" | "score",
+        React.Dispatch<React.SetStateAction<"time" | "latest" | "score">>
+    ];
+    limit: [number, React.Dispatch<React.SetStateAction<number>>];
     lastHeight: React.MutableRefObject<number>;
     galleryOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     editor: [editorStateType, React.Dispatch<React.SetStateAction<editorStateType>>];
@@ -55,13 +61,15 @@ export default function ConversationProvider(props: {
 }) {
     const query = queryString.parse(window.location.search);
     const { threadId, children } = props;
+    const [settings] = useSettings();
     const [thread, setThread] = useState<Thread | null>(null);
+    const [limit, setLimit] = useState(settings.conversationLimit || 25);
     const [finalPage, setFinalPage] = useState(
-        Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1
     );
     /** Current page */
     const [currentPage, setCurrentPage] = useState(
-        Number(query.page) || Math.floor((Number(query.c) - 1) / 25) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1
     );
     const [votes, setVotes] = useState<{ cid: number; vote: "U" | "D" }[] | null>(null);
     const [updating, setUpdating] = useState(false);
@@ -70,6 +78,7 @@ export default function ConversationProvider(props: {
     const [loading, setLoading] = useState(true);
     const [reRender, setReRender] = useState(false);
     const [story, setStory] = useState(0);
+    const [sort, setSort] = useState<"time" | "latest" | "score">("time");
     const lastHeight = useRef(0);
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [editor, setEditor] = useState<editorStateType>({ open: false });
@@ -88,6 +97,8 @@ export default function ConversationProvider(props: {
                 loading: [loading, setLoading],
                 reRender: [reRender, setReRender],
                 story: [story, setStory],
+                sort: [sort, setSort],
+                limit: [limit, setLimit],
                 galleryOpen: [galleryOpen, setGalleryOpen],
                 lastHeight: lastHeight,
                 title: thread?.title,
@@ -150,6 +161,16 @@ export function useRerender() {
 export function useStory() {
     const { story } = React.useContext(ConversationContext);
     return story;
+}
+
+export function useSort() {
+    const { sort } = React.useContext(ConversationContext);
+    return sort;
+}
+
+export function useLimit() {
+    const { limit } = React.useContext(ConversationContext);
+    return limit;
 }
 
 export function useGalleryOpen() {

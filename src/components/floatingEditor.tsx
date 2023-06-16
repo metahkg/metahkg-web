@@ -24,6 +24,7 @@ import Comment from "./conversation/comment";
 import {
     useEditor,
     useFinalPage,
+    useLimit,
     useThread,
     useThreadId,
 } from "./conversation/ConversationContext";
@@ -62,6 +63,7 @@ export default function FloatingEditor() {
     const update = useUpdate();
     const changePage = useChangePage();
     const [finalPage] = useFinalPage();
+    const [limit] = useLimit();
     const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
@@ -115,7 +117,7 @@ export default function FloatingEditor() {
             .then((data) => {
                 setNewCommentId(data.id);
 
-                const numOfPages = roundup((data.id || 0) / 25);
+                const numOfPages = roundup((data.id || 0) / limit);
 
                 setEditor({ ...editor, open: false });
                 clearTinymceDraft(window.location.pathname);

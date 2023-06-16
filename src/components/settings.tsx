@@ -15,8 +15,15 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
-import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import React, { ChangeEvent } from "react";
+import {
+    Box,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { PopUp } from "../lib/popup";
 import { useSettings, useUser } from "./AppContextProvider";
 import { IOSSwitch } from "../lib/switch";
@@ -59,6 +66,13 @@ export default function Settings(props: {
               selected?: string;
               options: string[];
               action: (e: SelectChangeEvent<string>) => void;
+          }
+        | {
+              type: "number";
+              value?: number;
+              pattern?: string;
+              helperText?: string;
+              action: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
           }
     ) & { title: string; disabled?: boolean })[] = [
         {
@@ -170,6 +184,21 @@ export default function Settings(props: {
             },
             checked: settings.videoPlayer,
         },
+        {
+            title: "Conversation comments limit per page (1-50)",
+            type: "number",
+            pattern: "([1-4][0-9]{0,1}|50)",
+            value: settings.conversationLimit,
+            action: (e) => {
+                if (/^([1-4][0-9]{0,1}|50)$/.test(e.target.value)) {
+                    setSettings({
+                        ...settings,
+                        conversationLimit: Number(e.target.value),
+                    });
+                }
+            },
+            helperText: "Integers between 1-50 only",
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
@@ -206,6 +235,19 @@ export default function Settings(props: {
                                     </MenuItem>
                                 ))}
                             </Select>
+                        )}
+                        {item.type === "number" && (
+                            <TextField
+                                variant="standard"
+                                color="secondary"
+                                value={item.value}
+                                type="number"
+                                inputProps={{ pattern: item.pattern }}
+                                title={item.title}
+                                disabled={item.disabled}
+                                onChange={item.action}
+                                helperText={item.helperText}
+                            />
                         )}
                     </Box>
                 ))}

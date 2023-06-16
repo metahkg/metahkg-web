@@ -22,7 +22,9 @@ import {
     useEnd,
     useFinalPage,
     useLastHeight,
+    useLimit,
     usePages,
+    useSort,
     useThread,
     useThreadId,
     useUpdating,
@@ -38,20 +40,26 @@ export function useUpdate() {
     const [, setCurrentPage] = useCurrentPage();
     const navigate = useNavigate();
     const threadId = useThreadId();
+    const [limit] = useLimit();
+    const [sort] = useSort();
 
     return (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
         if (thread) {
-            let openNewPage = !(thread.conversation.length % 25);
+            let openNewPage = !(
+                (sort === "time"
+                    ? thread.conversation[thread.conversation.length - 1].id
+                    : thread.conversation.length) % limit
+            );
             setUpdating(true);
 
-            function update() {
+            function update(norepeat?: boolean) {
                 if (thread) {
                     api.thread(
                         threadId,
                         openNewPage ? finalPage + 1 : finalPage,
-                        undefined,
-                        undefined,
-                        openNewPage
+                        limit,
+                        sort,
+                        openNewPage || sort !== "time"
                             ? undefined
                             : thread.conversation[thread.conversation.length - 1].id + 1
                     ).then((data) => {
@@ -69,10 +77,18 @@ export function useUpdate() {
                                 )
                                 ?.scrollIntoView({ behavior: "smooth" });
                         };
+                        data.conversation = data.conversation.filter(
+                            (v) => !thread.conversation.find((c) => c.id === v.id)
+                        );
                         if (!data.conversation.length) {
-                            if (!openNewPage && data.count / 25 > finalPage) {
+                            if (
+                                !openNewPage &&
+                                data.count / limit > finalPage &&
+                                !norepeat
+                            ) {
                                 openNewPage = true;
-                                return update();
+                                console.log("update");
+                                return update(true);
                             }
                             setEnd(true);
                             setUpdating(false);
@@ -92,7 +108,7 @@ export function useUpdate() {
                                 conversation,
                             });
                             setTimeout(scroll, 1);
-                            conversation.length % 25 && setEnd(true);
+                            conversation.length % limit && setEnd(true);
                         } else {
                             setThread({
                                 ...thread,
