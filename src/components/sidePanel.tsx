@@ -42,6 +42,7 @@ import {
 } from "@mui/icons-material";
 import {
     useDarkMode,
+    useServerConfig,
     useSettingsOpen,
     useSidePanelExpanded,
     useUser,
@@ -67,6 +68,7 @@ export default function SidePanel(props: {
     const darkMode = useDarkMode();
     const avatar = useUserAvatar();
     const logout = useLogout();
+    const [serverConfig] = useServerConfig();
 
     interface Button {
         title: string;
@@ -78,7 +80,7 @@ export default function SidePanel(props: {
     const buttons = useMemo(() => {
         return [
             {
-                title: "Metahkg",
+                title: serverConfig?.branding || "Metahkg",
                 icon: <MetahkgLogo height={30} width={30} svg light={darkMode} />,
                 link: "/",
             },
@@ -162,7 +164,7 @@ export default function SidePanel(props: {
                 link: "https://gitlab.com/metahkg/metahkg",
             },
         ].filter((item) => item) as Button[];
-    }, [darkMode, user, avatar, logout, setSettingsOpen]);
+    }, [serverConfig?.branding, darkMode, user, avatar, logout, setSettingsOpen]);
 
     const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
         if (button.link) {
