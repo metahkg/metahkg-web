@@ -35,37 +35,37 @@ const SocialMediaEmbed = loadable(
     () => import("../components/conversation/comment/socialMediaEmbed")
 );
 
-export function useReplace(params: { quote?: boolean }) {
-    const { quote } = params;
-    return (node: DOMNode) => {
-        const domNode = node as Element;
-        if (domNode.attribs) {
-            try {
-                if (domNode.name === "a") {
-                    const href: string = domNode.attribs?.href;
-                    if (!href) return;
-                    const redirectHref = `https://${
-                        process.env.REACT_APP_REDIRECT_DOMAIN
-                    }/?url=${encodeURIComponent(href)}${
-                        (domNode.firstChild as unknown as Text)?.data === href
-                            ? ""
-                            : "&forceLanding=true"
-                    }`;
-                    if (
-                        [regex.facebook.videos, regex.youtube, regex.streamable]
-                            .flat()
-                            .some((r) => r.test(href))
-                    ) {
-                        return (
-                            <React.Fragment>
-                                <Player url={href} />
-                                {domToReact([node])}
-                            </React.Fragment>
-                        );
-                    } else if (regex.twitter.some((r) => r.test(href))) {
-                        const url = new URL(href);
-                        const tweetId = url.pathname.split("/").pop();
-                        if (tweetId)
+export function useReplace(params: {
+    quote?: boolean;
+    images?: { src: string; signature: string }[];
+    links?: Link[];
+}) {
+    const { quote, images, links } = params;
+    const [settings] = useSettings();
+    const isSmallScreen = useIsSmallScreen();
+
+    return useCallback(
+        (node: DOMNode) => {
+            const domNode = node as Element;
+            if (domNode.attribs) {
+                try {
+                    if (domNode.name === "a") {
+                        const href: string = domNode.attribs?.href;
+                        if (!href) return;
+                        const signature =
+                            links?.find((v) => v.url === href)?.signature ?? "";
+                        const redirectHref = `https://${
+                            process.env.REACT_APP_REDIRECT_DOMAIN
+                        }/?url=${encodeURIComponent(href)}&signature=${signature}${
+                            (domNode.firstChild as unknown as Text)?.data === href
+                                ? ""
+                                : "&forceLanding=true"
+                        }`;
+                        if (
+                            [regex.facebook.videos, regex.youtube, regex.streamable]
+                                .flat()
+                                .some((r) => r.test(href))
+                        ) {
                             return (
                                 <React.Fragment>
                                     <Player url={href} />

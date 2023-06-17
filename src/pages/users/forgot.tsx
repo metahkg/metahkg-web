@@ -156,7 +156,7 @@ export default function Forgot() {
                             color="secondary"
                             type="submit"
                             disabled={loading || !formRef.current?.checkValidity()}
-                            loading
+                            loading={loading}
                             startIcon={<SendIcon className="!text-[16px]" />}
                             loadingPosition="start"
                         >

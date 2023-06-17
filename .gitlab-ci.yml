@@ -17,9 +17,8 @@ stages:
 
 lint:
   stage: lint
-  image: node:18-alpine
+  image: node:18
   before_script:
-    - apk add git
     - git checkout $CI_COMMIT_BRANCH
     - git config user.name metahkg-bot
     - git config user.email bot@metahkg.org

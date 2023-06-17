@@ -22,10 +22,6 @@ export function CategoryPanel(props: {
 
     const hidden = categories.filter((category) => category.hidden);
 
-    categories.sort((a, b) => a.id - b.id);
-
-    const hidden = categories.filter((category) => category.hidden);
-
     if (!user) {
         categories = categories.filter((category) => !category.hidden);
     }

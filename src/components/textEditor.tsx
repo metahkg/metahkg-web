@@ -95,23 +95,6 @@ export default function TextEditor(props: {
         [onChange, lengthLimit]
     );
 
-    const onEditorChange = useCallback(
-        (a: string, editor: import("tinymce/tinymce").Editor) => {
-            if (lengthLimit) {
-                if (a.length > lengthLimit) {
-                    a = a.substring(0, lengthLimit);
-                    editor.setContent(a);
-                    editor.windowManager.alert(
-                        "Content exceeded length limit. Automatically truncated."
-                    );
-                    return;
-                }
-            }
-            onChange?.(a, editor);
-        },
-        [onChange, lengthLimit]
-    );
-
     return (
         <Box sx={sx} className={className}>
             <Editor
