@@ -61,7 +61,7 @@ export default function MenuThread(props: {
                         <Typography
                             variant="subtitle1"
                             component="p"
-                            className={`!ml-5 text-metahkg-grey ${
+                            className={`!ml-5 ${
                                 thread.op.sex === "M" ? "text-[#0277bd]" : "text-[red]"
                             }`}
                         >

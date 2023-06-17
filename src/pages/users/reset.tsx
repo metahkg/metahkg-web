@@ -19,16 +19,17 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
-    Button,
     Checkbox,
     FormControlLabel,
     FormGroup,
     TextField,
+    TextFieldProps,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
+    useServerConfig,
     useSession,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -37,15 +38,15 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { LockOpen } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
+import { regexString } from "../../lib/regex";
 
 export default function Reset() {
     const [menu, setMenu] = useMenu();
@@ -55,45 +56,52 @@ export default function Reset() {
         severity: "info",
         text: "",
     });
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(decodeURIComponent(String(query.email || "")));
     const [code, setCode] = useState(decodeURIComponent(String(query.code || "")));
     const [password, setPassword] = useState("");
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
         setAlert({ severity: "info", text: "Reseting..." });
         setNotification({ open: true, severity: "info", text: "Reseting..." });
-        setDisabled(true);
         api.authReset({
             email,
             code,
             password: hash.sha256().update(password).digest("hex"),
-            rtoken,
+            captchaToken,
             sameIp,
         })
             .then((data) => {
                 setSession(data);
                 setNotification({
                     open: true,
-                    severity: "info",
+                    severity: "success",
                     text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
             })
             .catch((err) => {
-                setDisabled(false);
+                setLoading(false);
                 setAlert({
                     severity: "error",
                     text: parseError(err),
@@ -103,7 +111,7 @@ export default function Reset() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -118,7 +126,12 @@ export default function Reset() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box className={small ? "w-100v" : "w-50v"}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
@@ -134,45 +147,40 @@ export default function Reset() {
                             {alert.text}
                         </Alert>
                     )}
-                    {[
-                        {
-                            label: "Email",
-                            value: email,
-                            set: setEmail,
-                            type: "email",
-                        },
-                        {
-                            label: "Code",
-                            value: code,
-                            set: setCode,
-                            type: "password",
-                        },
-                        {
-                            label: "New password",
-                            value: password,
-                            set: setPassword,
-                            type: "password",
-                            pattern: "\\S{8,}",
-                            helperText:
-                                "Password must be at least 8 characters long, without spaces.",
-                        },
-                    ].map((item, index) => (
+                    {(
+                        [
+                            {
+                                label: "Email",
+                                value: email,
+                                onChange: (e) => setEmail(e.target.value),
+                                type: "email",
+                            },
+                            {
+                                label: "Code",
+                                value: code,
+                                onChange: (e) => setCode(e.target.value),
+                                type: "password",
+                            },
+                            {
+                                label: "New password",
+                                value: password,
+                                onChange: (e) => setPassword(e.target.value),
+                                type: "password",
+                                inputProps: {
+                                    pattern: regexString.password,
+                                },
+                                helperText:
+                                    "Password must be at least 8 characters long, without spaces.",
+                            },
+                        ] as TextFieldProps[]
+                    ).map((props, index) => (
                         <TextField
-                            label={item.label}
-                            value={item.value}
-                            type={item.type}
+                            {...props}
                             className={index ? "!mt-[15px]" : ""}
-                            onChange={(e) => {
-                                item.set(e.target.value);
-                            }}
                             variant="filled"
                             color="secondary"
                             required
                             fullWidth
-                            helperText={item.helperText}
-                            inputProps={{
-                                ...(item.pattern && { pattern: item.pattern }),
-                            }}
                         />
                     ))}
                     <FormGroup className="my-[15px]">
@@ -189,24 +197,19 @@ export default function Reset() {
                             label="Restrict session to same ip address"
                         />
                     </FormGroup>
-                    <ReCAPTCHA
-                        theme="dark"
-                        sitekey={reCaptchaSiteKey}
-                        size="invisible"
-                        ref={reCaptchaRef}
-                    />
-                    <Button
+                    <CAPTCHA ref={captchaRef} />
+                    <LoadingButton
                         variant="contained"
                         className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
-                        disabled={
-                            disabled || !(email && code && EmailValidator.validate(email))
-                        }
+                        disabled={loading || !formRef.current?.checkValidity()}
+                        loading={loading}
+                        startIcon={<LockOpen />}
+                        loadingPosition="start"
                     >
-                        <LockOpen className="!mr-[5px]" />
                         Reset
-                    </Button>
+                    </LoadingButton>
                     <ReCaptchaNotice />
                 </Box>
             </Box>

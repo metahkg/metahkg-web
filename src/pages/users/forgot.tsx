@@ -16,11 +16,12 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Alert, Box, Button, TextField } from "@mui/material";
+import { Alert, Box, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
+    useServerConfig,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -29,9 +30,8 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
@@ -45,13 +45,14 @@ export default function Forgot() {
         severity: "info",
         text: "",
     });
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const small = width / 2 - 100 <= 450;
 
@@ -64,16 +65,22 @@ export default function Forgot() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
-        setDisabled(true);
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
         setAlert({ severity: "info", text: "Requesting reset password..." });
         setNotification({
             open: true,
             severity: "info",
             text: "Requesting reset password...",
         });
-        api.authForgot({ email, rtoken })
+        api.authForgot({ email, captchaToken })
             .then(() => {
                 setNotification({
                     open: true,
@@ -83,8 +90,8 @@ export default function Forgot() {
                     severity: "success",
                     text: "Reset password email sent. Please click the link to reset your password.",
                 });
-                reCaptchaRef.current?.reset();
-                setDisabled(false);
+                captchaRef.current?.reset();
+                setLoading(false);
             })
             .catch((err) => {
                 setAlert({
@@ -96,8 +103,8 @@ export default function Forgot() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
-                setDisabled(false);
+                captchaRef.current?.reset();
+                setLoading(false);
             });
     }
 
@@ -114,7 +121,12 @@ export default function Forgot() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">Forgot password</h1>
@@ -137,24 +149,19 @@ export default function Forgot() {
                         fullWidth
                     />
                     <Box className="!mt-[20px]">
-                        <ReCAPTCHA
-                            theme="dark"
-                            sitekey={reCaptchaSiteKey}
-                            size="invisible"
-                            ref={reCaptchaRef}
-                        />
-                        <Button
+                        <CAPTCHA ref={captchaRef} />
+                        <LoadingButton
                             variant="contained"
                             className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
-                            disabled={
-                                disabled || !(email && EmailValidator.validate(email))
-                            }
+                            disabled={loading || !formRef.current?.checkValidity()}
+                            loading={loading}
+                            startIcon={<SendIcon className="!text-[16px]" />}
+                            loadingPosition="start"
                         >
-                            <SendIcon className="!mr-[5px] !text-[16px]" />
                             Reset
-                        </Button>
+                        </LoadingButton>
                         <ReCaptchaNotice />
                     </Box>
                 </Box>

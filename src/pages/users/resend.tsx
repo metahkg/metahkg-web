@@ -20,7 +20,7 @@ import { Alert, Box, TextField } from "@mui/material";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
+    useServerConfig,
     useUser,
     useWidth,
 } from "../../components/AppContextProvider";
@@ -29,14 +29,14 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Navigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { Send as SendIcon } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { LoadingButton } from "@mui/lab";
+import { regexString } from "../../lib/regex";
 
 export default function Resend() {
     const [menu, setMenu] = useMenu();
@@ -50,9 +50,10 @@ export default function Resend() {
     const query = queryString.parse(window.location.search);
     const [email, setEmail] = useState(String(query.email || ""));
     const [user] = useUser();
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const small = width / 2 - 100 <= 450;
 
@@ -65,12 +66,18 @@ export default function Resend() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         setAlert({ severity: "info", text: "Requesting resend..." });
         setNotification({ open: true, severity: "info", text: "Requesting resend..." });
-        api.authResend({ email, rtoken })
+        api.authResend({ email, captchaToken })
             .then(() => {
                 setNotification({
                     open: true,
@@ -80,7 +87,7 @@ export default function Resend() {
                     severity: "success",
                     text: "Verification email sent.",
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
                 setLoading(false);
             })
             .catch((err) => {
@@ -93,7 +100,7 @@ export default function Resend() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
                 setLoading(false);
             });
     }
@@ -109,7 +116,12 @@ export default function Resend() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box sx={{ width: small ? "100vw" : "50vw" }}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">
@@ -130,24 +142,20 @@ export default function Resend() {
                         }}
                         variant="filled"
                         color="secondary"
+                        inputProps={{
+                            pattern: regexString.email,
+                        }}
                         required
                         fullWidth
                     />
                     <Box className="!mt-[20px]">
-                        <ReCAPTCHA
-                            theme="dark"
-                            sitekey={reCaptchaSiteKey}
-                            size="invisible"
-                            ref={reCaptchaRef}
-                        />
+                        <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             variant="contained"
                             className="!text-[16px] !normal-case"
                             color="secondary"
                             type="submit"
-                            disabled={
-                                loading || !(email && EmailValidator.validate(email))
-                            }
+                            disabled={loading || !formRef.current?.checkValidity()}
                             loading={loading}
                             loadingPosition="start"
                             startIcon={<SendIcon className="!text-[16px]" />}

@@ -15,11 +15,11 @@
 
 FROM node:18-alpine AS build
 
-ARG REACT_APP_recaptchasitekey
-ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
+ARG REACT_APP_RECAPTCHA_SITE_KEY
+ENV REACT_APP_RECAPTCHA_SITE_KEY $REACT_APP_RECAPTCHA_SITE_KEY
 
-ARG REACT_APP_VAPID_PUBLIC_KEY
-ENV REACT_APP_VAPID_PUBLIC_KEY $REACT_APP_VAPID_PUBLIC_KEY
+ARG REACT_APP_TURNSTILE_SITE_KEY
+ENV REACT_APP_TURNSTILE_SITE_KEY $REACT_APP_TURNSTILE_SITE_KEY
 
 ARG REACT_APP_IMAGES_DOMAIN
 ENV REACT_APP_IMAGES_DOMAIN $REACT_APP_IMAGES_DOMAIN
@@ -59,18 +59,18 @@ COPY ./public ./public
 COPY ./scripts ./scripts
 COPY ./.babelrc ./config-overrides.js ./
 
-RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules/*; fi;
+RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules && mkdir node_modules; fi;
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js postcss.config.js tailwind.config.js; fi;
 
 FROM node:18-alpine
 
 WORKDIR /app
 
-ARG REACT_APP_recaptchasitekey
-ENV REACT_APP_recaptchasitekey $REACT_APP_recaptchasitekey
+ARG REACT_APP_RECAPTCHA_SITE_KEY
+ENV REACT_APP_RECAPTCHA_SITE_KEY $REACT_APP_RECAPTCHA_SITE_KEY
 
-ARG REACT_APP_VAPID_PUBLIC_KEY
-ENV REACT_APP_VAPID_PUBLIC_KEY $REACT_APP_VAPID_PUBLIC_KEY
+ARG REACT_APP_TURNSTILE_SITE_KEY
+ENV REACT_APP_TURNSTILE_SITE_KEY $REACT_APP_TURNSTILE_SITE_KEY
 
 ARG REACT_APP_IMAGES_DOMAIN
 ENV REACT_APP_IMAGES_DOMAIN $REACT_APP_IMAGES_DOMAIN

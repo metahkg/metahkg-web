@@ -54,6 +54,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     componentDidCatch(error: any) {
         if (typeof error === "string") error = { message: error };
 
+        console.error(error);
+
         this.setState({ error });
     }
 

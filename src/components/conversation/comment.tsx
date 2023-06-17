@@ -267,15 +267,22 @@ export default function Comment(props: {
                                             <Typography
                                                 className="inline"
                                                 sx={{ color: "secondary.main" }}
-                                            >{`Admin ${edit.admin.name} #${
-                                                edit.admin.id
-                                            } edited on ${
-                                                edit.date
+                                            >
+                                                Admin{" "}
+                                                <Link
+                                                    color="inherit"
+                                                    href={`/profile/${edit.admin.id}`}
+                                                >
+                                                    {edit.admin.name}
+                                                </Link>{" "}
+                                                #{edit.admin.id} edited on{" "}
+                                                {edit.date
                                                     ? new Date(edit.date)
                                                           .toISOString()
                                                           .split("T")[0]
-                                                    : "unknown"
-                                            }: `}</Typography>
+                                                    : "unknown"}
+                                                :{" "}
+                                            </Typography>
                                             {edit.reason}
                                         </Typography>
                                     );
