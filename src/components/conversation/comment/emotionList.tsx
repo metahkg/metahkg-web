@@ -26,7 +26,6 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Avatar,
     Divider,
     Typography,
 } from "@mui/material";
@@ -36,7 +35,7 @@ import { Link } from "react-router-dom";
 import { api } from "../../../lib/api";
 import { useThreadId } from "../ConversationContext";
 import Loader from "../../../lib/loader";
-import { useAvatar } from "../../useAvatar";
+import UserAvatar from "../../UserAvatar";
 
 export default function EmotionList(props: {
     emotions: { emotion: string; count: number }[];
@@ -64,7 +63,6 @@ export default function EmotionList(props: {
 
     function UserItem(props: { user: User }) {
         const { user } = props;
-        const avatar = useAvatar(user.id);
 
         return (
             <MenuItem
@@ -73,11 +71,7 @@ export default function EmotionList(props: {
                 className="!text-inherit"
             >
                 <ListItemIcon>
-                    <Avatar
-                        alt={user.name}
-                        src={avatar.blobUrl}
-                        className="!h-[25px] !w-[25px] mr-[5px]"
-                    />
+                    <UserAvatar user={user} className="!h-[25px] !w-[25px] mr-[5px]" />
                 </ListItemIcon>
                 <ListItemText>{user.name}</ListItemText>
             </MenuItem>

@@ -26,7 +26,7 @@ import { useWidth } from "../AppContextProvider";
 export default function Gallery(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    images: { src: string }[];
+    images: { src: string; signature: string }[];
 }) {
     const { open, setOpen, images } = props;
     const [width] = useWidth();
@@ -49,12 +49,12 @@ export default function Gallery(props: {
                         gap={5}
                     >
                         {images.map((item) => {
-                            const src = `${imagesApi}/${item.src}`;
+                            const src = `${imagesApi}/s${item.signature}/${item.src}`;
                             return (
                                 <PhotoView src={src} key={src}>
                                     <ImageListItem className="cursor-pointer" key={src}>
                                         <img
-                                            src={`${imagesApi}/300x300,q50/${item.src}`}
+                                            src={`${imagesApi}/300x300,q50,s${item.signature}/${item.src}`}
                                             alt=""
                                             loading="lazy"
                                             onLoad={() => {

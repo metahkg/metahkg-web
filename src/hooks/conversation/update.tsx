@@ -41,65 +41,80 @@ export function useUpdate() {
 
     return (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
         if (thread) {
+            let openNewPage = !(thread.conversation.length % 25);
             setUpdating(true);
-            const openNewPage = !(thread.conversation.length % 25);
 
-            api.thread(
-                threadId,
-                openNewPage ? finalPage + 1 : finalPage,
-                undefined,
-                undefined,
-                openNewPage
-                    ? undefined
-                    : thread.conversation[thread.conversation.length - 1].id + 1
-            ).then((data) => {
-                const scroll = () => {
-                    document
-                        .getElementById(
-                            `c${
-                                options?.scrollToComment ||
-                                data?.conversation[
-                                    options?.scrollToBottom
-                                        ? data?.conversation?.length - 1
-                                        : 0
-                                ]?.id
-                            }`
-                        )
-                        ?.scrollIntoView({ behavior: "smooth" });
-                };
-                if (!data.conversation.length) {
-                    setEnd(true);
-                    setUpdating(false);
-                    if (options?.scrollToBottom || options?.scrollToComment)
-                        setTimeout(scroll, 1);
-                    return;
+            function update() {
+                if (thread) {
+                    api.thread(
+                        threadId,
+                        openNewPage ? finalPage + 1 : finalPage,
+                        undefined,
+                        undefined,
+                        openNewPage
+                            ? undefined
+                            : thread.conversation[thread.conversation.length - 1].id + 1
+                    ).then((data) => {
+                        const scroll = () => {
+                            document
+                                .getElementById(
+                                    `c${
+                                        options?.scrollToComment ||
+                                        data?.conversation[
+                                            options?.scrollToBottom
+                                                ? data?.conversation?.length - 1
+                                                : 0
+                                        ]?.id
+                                    }`
+                                )
+                                ?.scrollIntoView({ behavior: "smooth" });
+                        };
+                        if (!data.conversation.length) {
+                            if (!openNewPage && data.count / 25 > finalPage) {
+                                openNewPage = true;
+                                return update();
+                            }
+                            setEnd(true);
+                            setUpdating(false);
+                            if (options?.scrollToBottom || options?.scrollToComment)
+                                setTimeout(scroll, 1);
+                            return;
+                        }
+                        if (!openNewPage) {
+                            lastHeight.current = 0;
+                            const conversation = [
+                                ...thread.conversation,
+                                ...data.conversation,
+                            ];
+                            setThread({
+                                ...thread,
+                                ...data,
+                                conversation,
+                            });
+                            setTimeout(scroll, 1);
+                            conversation.length % 25 && setEnd(true);
+                        } else {
+                            setThread({
+                                ...thread,
+                                ...data,
+                                conversation: [
+                                    ...thread.conversation,
+                                    ...data.conversation,
+                                ],
+                            });
+                            setUpdating(false);
+                            setFinalPage(finalPage + 1);
+                            setPages(pages + 1);
+                            navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
+                                replace: true,
+                            });
+                            setCurrentPage(finalPage + 1);
+                        }
+                        setUpdating(false);
+                    });
                 }
-                if (!openNewPage) {
-                    lastHeight.current = 0;
-                    const conversation = [...thread.conversation, ...data.conversation];
-                    setThread({
-                        ...thread,
-                        ...data,
-                        conversation,
-                    });
-                    setTimeout(scroll, 1);
-                    conversation.length % 25 && setEnd(true);
-                } else {
-                    setThread({
-                        ...thread,
-                        ...data,
-                        conversation: [...thread.conversation, ...data.conversation],
-                    });
-                    setUpdating(false);
-                    setFinalPage(finalPage + 1);
-                    setPages(pages + 1);
-                    navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
-                        replace: true,
-                    });
-                    setCurrentPage(finalPage + 1);
-                }
-                setUpdating(false);
-            });
+            }
+            update();
         }
     };
 }

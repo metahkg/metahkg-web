@@ -15,23 +15,17 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export type secondaryColorMain = "#651fff" | "#009688" | "#ff9800" | "#f5bd1f";
-export type secondaryColorDark = "#4615b2" | "#00695f" | "#b26a00" | "#ffc100";
-export type secondaryColor = {
-    main: secondaryColorMain;
-    dark: secondaryColorDark;
-};
+import { useSession } from "../components/AppContextProvider";
 
-export type Theme = "light" | "dark" | "system";
-
-export type Settings = {
-    theme?: Theme;
-    secondaryColor?: secondaryColor;
-    filterSwearWords?: boolean;
-    autoLoadImages?: boolean;
-    resizeImages?: boolean;
-    linkPreview?: boolean;
-    pdfViewer?: boolean;
-    videoPlayer?: boolean;
-    notifications?: boolean;
-};
+export function useClearSession() {
+    const [, setSession] = useSession();
+    return function () {
+        setSession(null);
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.ready.then(async (registration) => {
+                const subscription = await registration.pushManager.getSubscription();
+                subscription?.unsubscribe();
+            });
+        }
+    };
+}

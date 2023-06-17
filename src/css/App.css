@@ -94,3 +94,7 @@ code {
 .grecaptcha-badge {
     visibility: hidden;
 }
+
+#webpack-dev-server-client-overlay {
+    display: none;
+}

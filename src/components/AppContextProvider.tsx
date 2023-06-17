@@ -27,13 +27,13 @@ import React, {
 } from "react";
 import type { history } from "../types/history";
 import type { notification } from "../types/notification";
-import type { settings } from "../types/settings";
+import type { Settings } from "../types/settings";
 import { api } from "../lib/api";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User, Star } from "@metahkg/api";
+import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
-import { AvatarProps, useAvatar } from "./useAvatar";
+import { AvatarProps, useAvatar } from "../hooks/useAvatar";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -43,16 +43,18 @@ export const AppContext = createContext<{
     height: [number, Dispatch<SetStateAction<number>>];
     notification: [notification, Dispatch<SetStateAction<notification>>];
     settingsOpen: [boolean, Dispatch<SetStateAction<boolean>>];
-    settings: [settings, Dispatch<SetStateAction<settings>>];
+    settings: [Settings, Dispatch<SetStateAction<Settings>>];
     darkMode: boolean;
     history: [history, Dispatch<SetStateAction<history>>];
     categories: [Category[], Dispatch<SetStateAction<Category[]>>];
     serverPublicKey: [string, Dispatch<SetStateAction<string>>];
+    serverConfig: [ServerConfig | null, Dispatch<SetStateAction<ServerConfig | null>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     userAvatar: AvatarProps;
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     reCaptchaSiteKey: string;
+    turnstileSiteKey: string;
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
@@ -67,6 +69,7 @@ export const AppContext = createContext<{
 export default function AppContextProvider(props: {
     children: JSX.Element;
     reCaptchaSiteKey?: string;
+    turnstileSiteKey?: string;
 }) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState(localStorage.query || "");
@@ -75,8 +78,18 @@ export default function AppContextProvider(props: {
     const [isSmallScreen, setIsSmallScreen] = useState(width < 768);
     const [notification, setNotification] = useState({ open: false, text: "" });
     const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settings, setSettings] = useState<settings>({
-        ...{ secondaryColor: { main: "#f5bd1f", dark: "#ffc100" }, autoLoadImages: true },
+    const [settings, setSettings] = useState<Settings>({
+        ...{
+            theme: "dark",
+            secondaryColor: { main: "#f5bd1f", dark: "#ffc100" },
+            filterSwearWords: false,
+            autoLoadImages: true,
+            resizeImages: true,
+            linkPreview: true,
+            pdfViewer: false,
+            videoPlayer: false,
+            notifications: true,
+        },
         ...JSON.parse(localStorage.getItem("settings") || "{}"),
     });
 
@@ -92,6 +105,9 @@ export default function AppContextProvider(props: {
     const [darkMode, setDarkMode] = useState(isDarkMode());
     const [serverPublicKey, setServerPublicKey] = useState<string>(
         localStorage.getItem("serverPublicKey") || ""
+    );
+    const [serverConfig, setServerConfig] = useState<ServerConfig | null>(
+        JSON.parse(localStorage.getItem("serverConfig") || "null") || null
     );
     const [session, setSession] = useState<Session | null>(
         JSON.parse(localStorage.getItem("session") || "null") || null
@@ -115,8 +131,13 @@ export default function AppContextProvider(props: {
     const listeningResize = useRef(false);
     const [reCaptchaSiteKey] = useState(
         props.reCaptchaSiteKey ||
-            process.env.REACT_APP_recaptchasitekey ||
+            process.env.REACT_APP_RECAPTCHA_SITE_KEY ||
             "{RECAPTCHA_SITE_KEY}"
+    );
+    const [turnstileSiteKey] = useState(
+        props.turnstileSiteKey ||
+            process.env.REACT_APP_TURNSTILE_SITE_KEY ||
+            "{TURNSTILE_SITE_KEY}"
     );
     const [alertDialog, setAlertDialog] = useState<AlertDialogProps>({
         open: false,
@@ -142,10 +163,14 @@ export default function AppContextProvider(props: {
 
     useEffect(() => {
         api.categories().then(setCategories);
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         api.serverPublicKey().then(setServerPublicKey);
+    }, []);
+
+    useEffect(() => {
+        api.serverConfig().then(setServerConfig);
     }, []);
 
     useEffect(() => {
@@ -190,6 +215,10 @@ export default function AppContextProvider(props: {
     useEffect(() => {
         localStorage.setItem("serverPublicKey", serverPublicKey);
     }, [serverPublicKey]);
+
+    useEffect(() => {
+        localStorage.setItem("serverConfig", JSON.stringify(serverConfig));
+    }, [serverConfig]);
 
     useEffect(() => {
         if (!session) {
@@ -247,10 +276,12 @@ export default function AppContextProvider(props: {
                 history: [history, setHistory],
                 categories: [categories, setCategories],
                 serverPublicKey: [serverPublicKey, setServerPublicKey],
+                serverConfig: [serverConfig, setServerConfig],
                 user: [user, setUser],
                 userAvatar,
                 session: [session, setSession],
                 reCaptchaSiteKey,
+                turnstileSiteKey,
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
                 starList: [starList, setStarList],
@@ -383,6 +414,11 @@ export function useReCaptchaSiteKey() {
     return reCaptchaSiteKey;
 }
 
+export function useTurnstileSiteKey() {
+    const { turnstileSiteKey } = useContext(AppContext);
+    return turnstileSiteKey;
+}
+
 export function useAlertDialog() {
     const { alertDialog } = useContext(AppContext);
     return alertDialog;
@@ -406,6 +442,11 @@ export function useSession() {
 export function useServerPublicKey() {
     const { serverPublicKey } = useContext(AppContext);
     return serverPublicKey;
+}
+
+export function useServerConfig() {
+    const { serverConfig } = useContext(AppContext);
+    return serverConfig;
 }
 
 export function useSidePanelExpanded() {

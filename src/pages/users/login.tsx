@@ -35,9 +35,9 @@ import {
     useNotification,
     useIsSmallScreen,
     useUser,
-    useReCaptchaSiteKey,
     useSession,
     useDarkMode,
+    useServerConfig,
 } from "../../components/AppContextProvider";
 import { severity } from "../../types/severity";
 import MetahkgLogo from "../../components/logo";
@@ -46,7 +46,7 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
@@ -65,9 +65,10 @@ export default function Login() {
         text: "",
     });
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
     const query = queryString.parse(window.location.search);
@@ -93,15 +94,21 @@ export default function Login() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
-        setAlert({ severity: "info", text: "Logging in..." });
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
+        setAlert({ severity: "info", text: "Logging in..." });
         api.authLogin({
             name,
             password: hash.sha256().update(password).digest("hex"),
             sameIp,
-            rtoken,
+            captchaToken,
         })
             .then((data) => {
                 setSession(data);
@@ -110,7 +117,7 @@ export default function Login() {
                 });
                 setNotification({
                     open: true,
-                    severity: "info",
+                    severity: "success",
                     text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
             })
@@ -125,7 +132,7 @@ export default function Login() {
                     text: parseError(err),
                 });
                 setLoading(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -139,6 +146,7 @@ export default function Login() {
             <Box
                 className={`min-h-50v ${isSmallScreen ? "w-100v" : "w-50v"}`}
                 component="form"
+                ref={formRef}
                 onSubmit={onSubmit}
             >
                 <Box className="m-[50px]">
@@ -215,12 +223,7 @@ export default function Login() {
                             Forgot password?
                         </Typography>
                     </Box>
-                    <ReCAPTCHA
-                        theme="dark"
-                        sitekey={reCaptchaSiteKey}
-                        size="invisible"
-                        ref={reCaptchaRef}
-                    />
+                    <CAPTCHA ref={captchaRef} />
                     <Box className="flex justify-between">
                         <Button
                             className="flex !text-[18px] !no-underline !normal-case"
@@ -235,7 +238,7 @@ export default function Login() {
                             Register
                         </Button>
                         <LoadingButton
-                            disabled={loading || !(name && password)}
+                            disabled={loading || !formRef.current?.checkValidity()}
                             loading={loading}
                             loadingPosition="start"
                             startIcon={<LoginIcon className="!text-[16px]" />}

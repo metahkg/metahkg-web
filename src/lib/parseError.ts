@@ -18,19 +18,26 @@
 import { ErrorDto } from "@metahkg/api";
 import { AxiosError } from "axios";
 
+/**
+ * Parses an error to a string
+ * @param err The error to parse
+ */
 export function parseError(err: AxiosError<any> | ErrorDto | any): string {
     try {
         let message = "";
         if (typeof err?.statusCode === "number") message += `${err.statusCode} `;
         else if (typeof err?.response?.statusCode === "number") message += err.statusCode;
 
-        if (typeof err?.response?.data?.error === "string") {
-            message += err.response.data.error;
+        if (typeof err?.error === "string") {
+            message += err.error;
+            if (typeof err?.message === "string") message += `: ${err.message}`;
             return message;
         }
 
-        if (typeof err?.error === "string") {
-            message += err.error;
+        if (typeof err?.response?.data?.error === "string") {
+            message += err.response.data.error;
+            if (typeof err?.response?.data?.message === "string")
+                message += `: ${err.response.data.message}`;
             return message;
         }
 

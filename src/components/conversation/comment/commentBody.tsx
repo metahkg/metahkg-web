@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { replace } from "../../../lib/domReplace";
+import { useReplace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
@@ -25,6 +25,7 @@ import { Comment } from "@metahkg/api";
 import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
+import { isIOS, isSafari } from "react-device-detect";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -40,6 +41,11 @@ export default function CommentBody(props: {
     const [blocked, setBlocked] = useState<boolean | undefined>(
         Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
     );
+    const replace = useReplace({
+        quote: depth > 0,
+        images: comment.images,
+        links: comment.links,
+    });
 
     useEffect(() => {
         if (blocked || blocked === undefined)
@@ -51,10 +57,10 @@ export default function CommentBody(props: {
 
     const [commentJSX, setCommentJSX] = useState(
         parse(
-            settings.filterSwearWords
+            settings.filterSwearWords && !(isSafari || isIOS)
                 ? filterSwearWords(comment.comment)
                 : comment.comment,
-            { replace: replace({ quote: depth > 0 }) }
+            { replace }
         )
     );
 
@@ -64,11 +70,16 @@ export default function CommentBody(props: {
                 settings.filterSwearWords
                     ? filterSwearWords(comment.comment)
                     : comment.comment,
-                { replace: replace({ quote: depth > 0 }) }
+                { replace }
             )
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [settings.filterSwearWords]);
+    }, [
+        settings.filterSwearWords,
+        settings.linkPreview,
+        settings.pdfViewer,
+        settings.videoPlayer,
+    ]);
 
     const content = useMemo(
         () => [

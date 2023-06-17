@@ -19,7 +19,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Close, Comment as CommentIcon } from "@mui/icons-material";
 import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
 import {
@@ -34,7 +33,7 @@ import {
     useDarkMode,
     useIsSmallScreen,
     useNotification,
-    useReCaptchaSiteKey,
+    useServerConfig,
 } from "./AppContextProvider";
 import useChangePage from "../hooks/conversation/changePage";
 import { roundup } from "../lib/common";
@@ -42,6 +41,9 @@ import { parseError } from "../lib/parseError";
 import ReCaptchaNotice from "../lib/reCaptchaNotice";
 import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
+import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
+import { Visibility } from "@metahkg/api";
+import VisibilityChooser from "./VisibilityChooser";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -51,6 +53,11 @@ export default function FloatingEditor() {
     const [fold, setFold] = useState(false);
     const [, setNotification] = useNotification();
     const [thread] = useThread();
+    const [visibility, setVisibility] = useState<Visibility>(
+        editor.quote?.visibility === "internal" || thread?.visibility === "internal"
+            ? "internal"
+            : "public"
+    );
     const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
     const changePage = useChangePage();
@@ -58,8 +65,8 @@ export default function FloatingEditor() {
     const darkMode = useDarkMode();
     const [shouldUpdate, setShouldUpdate] = useState(false);
     const [newCommentId, setNewCommentId] = useState(0);
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const [serverConfig] = useServerConfig();
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
@@ -68,6 +75,14 @@ export default function FloatingEditor() {
             update({ scrollToComment: newCommentId });
         }
     }, [newCommentId, shouldUpdate, update]);
+
+    useEffect(() => {
+        setVisibility(
+            editor.quote?.visibility === "internal" || thread?.visibility === "internal"
+                ? "internal"
+                : "public"
+        );
+    }, [editor.quote?.visibility, thread?.visibility]);
 
     function clearState() {
         setComment("");
@@ -82,13 +97,20 @@ export default function FloatingEditor() {
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setCreating(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setCreating(false);
+            return;
+        }
         setCreating(true);
         api.commentCreate(threadId, {
             comment,
             quote: editor.quote?.id,
-            rtoken,
+            captchaToken,
+            visibility,
         })
             .then((data) => {
                 setNewCommentId(data.id);
@@ -114,7 +136,7 @@ export default function FloatingEditor() {
                     text: parseError(err),
                 });
                 setCreating(false);
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -194,13 +216,18 @@ export default function FloatingEditor() {
                         lengthLimit={50000}
                         className="max-w-full"
                     />
+                    <VisibilityChooser
+                        visibility={visibility}
+                        setVisibility={setVisibility}
+                        disabled={
+                            editor.quote?.visibility === "internal" ||
+                            thread?.visibility === "internal"
+                        }
+                        className="mt-2 ml-1"
+                        title="Internal comment"
+                    />
                     <Box className="my-2 ml-1">
-                        <ReCAPTCHA
-                            theme="dark"
-                            sitekey={reCaptchaSiteKey}
-                            size="invisible"
-                            ref={reCaptchaRef}
-                        />
+                        <CAPTCHA ref={captchaRef} />
                         <LoadingButton
                             variant="contained"
                             color="secondary"

@@ -16,10 +16,9 @@
  */
 
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
 
 const Input = styled("input")({
     display: "none",
@@ -33,7 +32,6 @@ export default function UploadAvatar(props: {
     onChange?: (file: File) => void | Promise<void>;
 }) {
     const { onChange } = props;
-    const [uploading, setUploading] = React.useState(false);
 
     return (
         <Box component="form" encType="multipart/form-data">
@@ -46,22 +44,20 @@ export default function UploadAvatar(props: {
                     onChange={async (e) => {
                         const avatar = e?.target?.files?.[0];
                         if (avatar) {
-                            setUploading(true);
                             await onChange?.(avatar);
-                            setUploading(false);
                         }
                     }}
                 />
-                <LoadingButton
+                <IconButton
                     className="!mt-[5px] !normal-case"
-                    variant="contained"
+                    sx={{
+                        bgcolor: "primary.main",
+                        "&:hover": { bgcolor: "primary.main" },
+                    }}
                     component="span"
-                    loading={uploading}
-                    startIcon={<FileUpload />}
-                    loadingPosition="start"
                 >
-                    <Typography sx={{ color: "secondary.main" }}>Upload</Typography>
-                </LoadingButton>
+                    <FileUpload />
+                </IconButton>
             </label>
         </Box>
     );

@@ -16,55 +16,16 @@
  */
 
 import { useEffect } from "react";
-import { useUser } from "../../components/AppContextProvider";
-import { api } from "../../lib/api";
-import { checkNotificationPromise } from "../../lib/checkNotificationPromise";
+import { useSettings, useUser } from "../../components/AppContextProvider";
+import { subscribe } from "../../lib/notifications";
 
 export function useSubscribeNotifications() {
     const [user] = useUser();
+    const [settings] = useSettings();
+
     useEffect(() => {
-        // some browsers (like ios safari does not support Notification)
-        // some code from https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
-        if (!("Notification" in window)) {
-            return console.log("This browser does not support notifications.");
+        if (user && settings.notifications) {
+            subscribe();
         }
-        if (user) {
-            console.log("request notification permission");
-
-            function handlePermission(status: NotificationPermission) {
-                console.log("notification permission", status);
-                if ("serviceWorker" in navigator) {
-                    navigator.serviceWorker.ready.then(async (registration) => {
-                        if (await registration.pushManager.getSubscription()) return;
-                        console.log("subscribe");
-                        const subscription = await registration.pushManager.subscribe({
-                            userVisibleOnly: true,
-                            applicationServerKey: process.env.REACT_APP_VAPID_PUBLIC_KEY,
-                        });
-                        const auth = subscription.toJSON().keys?.auth;
-                        const p256dh = subscription.toJSON().keys?.p256dh;
-
-                        if (auth && p256dh) {
-                            await api.meNotificationsSubscribe({
-                                endpoint: subscription.endpoint,
-                                keys: {
-                                    auth,
-                                    p256dh,
-                                },
-                            });
-                        }
-                    });
-                }
-            }
-
-            // check notification promise for compatibility
-            if (checkNotificationPromise()) {
-                Notification.requestPermission()
-                    .then(handlePermission)
-                    .catch(console.log);
-            } else {
-                Notification.requestPermission(handlePermission);
-            }
-        }
-    }, [user]);
+    }, [user, settings.notifications]);
 }

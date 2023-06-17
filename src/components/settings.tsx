@@ -18,7 +18,7 @@
 import React from "react";
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { PopUp } from "../lib/popup";
-import { useSettings } from "./AppContextProvider";
+import { useSettings, useUser } from "./AppContextProvider";
 import { IOSSwitch } from "../lib/switch";
 import {
     secondaryColor,
@@ -26,6 +26,8 @@ import {
     secondaryColorMain,
     Theme,
 } from "../types/settings";
+import { isIOS, isSafari } from "react-device-detect";
+import { unsubscribe } from "../lib/notifications";
 
 export default function Settings(props: {
     open: boolean;
@@ -33,6 +35,7 @@ export default function Settings(props: {
 }) {
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
+    const [user] = useUser();
 
     const colorOptions: {
         value: string;
@@ -57,7 +60,7 @@ export default function Settings(props: {
               options: string[];
               action: (e: SelectChangeEvent<string>) => void;
           }
-    ) & { title: string })[] = [
+    ) & { title: string; disabled?: boolean })[] = [
         {
             title: "Theme",
             type: "select",
@@ -93,7 +96,8 @@ export default function Settings(props: {
             action: (e) => {
                 setSettings({ ...settings, filterSwearWords: e.target.checked });
             },
-            checked: settings.filterSwearWords,
+            checked: isSafari || isIOS ? false : settings.filterSwearWords,
+            disabled: isSafari || isIOS,
         },
         {
             title: "Auto load images",
@@ -106,16 +110,76 @@ export default function Settings(props: {
             },
             checked: settings.autoLoadImages,
         },
+        {
+            title: "Resize images",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    resizeImages: e.target.checked,
+                });
+            },
+            checked: settings.resizeImages,
+        },
+        {
+            title: "Preview links",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    linkPreview: e.target.checked,
+                });
+            },
+            checked: settings.linkPreview,
+        },
+        {
+            title: "Notifications",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    notifications: e.target.checked,
+                });
+                // no need to run subscribe since it is handled by useSubscribeNotifications hook
+                if (!e.target.checked) {
+                    unsubscribe();
+                }
+            },
+            checked: Boolean(user && settings.notifications),
+            disabled: !user,
+        },
+        {
+            title: "Pdf viewer from URL (experimental)",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    pdfViewer: e.target.checked,
+                });
+            },
+            checked: settings.pdfViewer,
+        },
+        {
+            title: "Video player from URL (experimental)",
+            type: "checkbox",
+            action: (e) => {
+                setSettings({
+                    ...settings,
+                    videoPlayer: e.target.checked,
+                });
+            },
+            checked: settings.videoPlayer,
+        },
     ];
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
             <Box
-                className="!mx-5 !my-2 grid grid-columns-1 grid-flow-row gap-y-2"
+                className="!mx-5 !my-2 grid grid-cols-1 grid-flow-row gap-y-2"
                 sx={{ bgcolor: "primary.main" }}
             >
-                {settingItems.map((item) => (
+                {settingItems.map((item, index) => (
                     <Box
-                        key={item.title}
+                        key={index}
                         className="flex justify-between items-center w-full h-12"
                     >
                         <Typography>{item.title}</Typography>
@@ -124,6 +188,7 @@ export default function Settings(props: {
                                 color="secondary"
                                 checked={item.checked}
                                 onChange={item.action}
+                                disabled={item.disabled}
                             />
                         )}
                         {item.type === "select" && (
@@ -133,9 +198,12 @@ export default function Settings(props: {
                                 value={item.selected}
                                 onChange={item.action}
                                 className="max-h-12 min-w-[100px]"
+                                disabled={item.disabled}
                             >
-                                {item.options.map((option) => (
-                                    <MenuItem value={option}>{option}</MenuItem>
+                                {item.options.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option}
+                                    </MenuItem>
                                 ))}
                             </Select>
                         )}

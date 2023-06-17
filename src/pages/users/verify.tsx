@@ -23,12 +23,13 @@ import {
     FormControlLabel,
     FormGroup,
     TextField,
+    TextFieldProps,
     Typography,
 } from "@mui/material";
 import {
     useDarkMode,
     useNotification,
-    useReCaptchaSiteKey,
+    useServerConfig,
     useSession,
     useUser,
     useWidth,
@@ -38,13 +39,12 @@ import { severity } from "../../types/severity";
 import { useMenu } from "../../components/MenuProvider";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import EmailValidator from "email-validator";
 import { HowToReg } from "@mui/icons-material";
 import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import { css } from "../../lib/css";
-import ReCAPTCHA from "react-google-recaptcha";
+import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import ReCaptchaNotice from "../../lib/reCaptchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
@@ -64,26 +64,33 @@ export default function Verify() {
     const [user] = useUser();
     const [, setSession] = useSession();
     const [sameIp, setSameIp] = useState(false);
+    const [serverConfig] = useServerConfig();
     const darkMode = useDarkMode();
-    const reCaptchaSiteKey = useReCaptchaSiteKey();
-    const reCaptchaRef = useRef<ReCAPTCHA>(null);
+    const captchaRef = useRef<CaptchaRefProps>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
     const small = width / 2 - 100 <= 450;
 
     async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
         e?.preventDefault();
-        const rtoken = await reCaptchaRef.current?.executeAsync();
-        if (!rtoken) return;
+        if (serverConfig?.captcha === "turnstile") {
+            setLoading(true);
+        }
+        const captchaToken = await captchaRef.current?.executeAsync();
+        if (!captchaToken) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
         setAlert({ severity: "info", text: "Verifying..." });
         setNotification({ open: true, severity: "info", text: "Verifying..." });
-        setLoading(true);
-        api.authVerify({ email, code, rtoken, sameIp })
+        api.authVerify({ email, code, captchaToken, sameIp })
             .then((data) => {
                 setSession(data);
                 setNotification({
                     open: true,
-                    severity: "info",
+                    severity: "success",
                     text: `Logged in as ${loadUser(data.token)?.name}.`,
                 });
                 navigate(String(query.returnto || "/"));
@@ -99,7 +106,7 @@ export default function Verify() {
                     severity: "error",
                     text: parseError(err),
                 });
-                reCaptchaRef.current?.reset();
+                captchaRef.current?.reset();
             });
     }
 
@@ -121,7 +128,12 @@ export default function Verify() {
             sx={{ bgcolor: "primary.dark" }}
         >
             <Box className={small ? "w-100v" : "w-50v"}>
-                <Box className="m-[40px]" component="form" onSubmit={onSubmit}>
+                <Box
+                    className="m-[40px]"
+                    component="form"
+                    ref={formRef}
+                    onSubmit={onSubmit}
+                >
                     <Box className="flex justify-center items-center">
                         <MetahkgLogo
                             svg
@@ -137,28 +149,25 @@ export default function Verify() {
                             {alert.text}
                         </Alert>
                     )}
-                    {[
-                        {
-                            label: "Email",
-                            value: email,
-                            set: setEmail,
-                            type: "email",
-                        },
-                        {
-                            label: "Code",
-                            value: code,
-                            set: setCode,
-                            type: "password",
-                        },
-                    ].map((item, index) => (
+                    {(
+                        [
+                            {
+                                label: "Email",
+                                value: email,
+                                onChange: (e) => setEmail(e.target.value),
+                                type: "email",
+                            },
+                            {
+                                label: "Code",
+                                value: code,
+                                onChange: (e) => setCode(e.target.value),
+                                type: "password",
+                            },
+                        ] as TextFieldProps[]
+                    ).map((props, index) => (
                         <TextField
-                            label={item.label}
-                            value={item.value}
-                            type={item.type}
+                            {...props}
                             className={!index ? "!mb-[15px]" : ""}
-                            onChange={(e) => {
-                                item.set(e.target.value);
-                            }}
                             variant="filled"
                             color="secondary"
                             required
@@ -191,20 +200,13 @@ export default function Verify() {
                             Resend verification email
                         </Typography>
                     </Box>
-                    <ReCAPTCHA
-                        theme="dark"
-                        sitekey={reCaptchaSiteKey}
-                        size="invisible"
-                        ref={reCaptchaRef}
-                    />
+                    <CAPTCHA ref={captchaRef} />
                     <LoadingButton
                         variant="contained"
                         className="!text-[16px] !normal-case"
                         color="secondary"
                         type="submit"
-                        disabled={
-                            loading || !(email && code && EmailValidator.validate(email))
-                        }
+                        disabled={loading || !formRef.current?.checkValidity()}
                         loading={loading}
                         loadingPosition="start"
                         startIcon={<HowToReg />}
