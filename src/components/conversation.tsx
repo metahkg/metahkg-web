@@ -69,7 +69,7 @@ function Conversation(props: { id: number }) {
     const [currentPage, setCurrentPage] = useCurrentPage();
     const [votes] = useVotes();
     const [updating] = useUpdating();
-    const [pages] = usePages();
+    const [pages, setPages] = usePages();
     const [, setEnd] = useEnd();
     const [loading, setLoading] = useLoading();
     const [reRender, setReRender] = useRerender();
@@ -146,6 +146,7 @@ function Conversation(props: { id: number }) {
         if (!firstRender) {
             setCurrentPage(1);
             setFinalPage(1);
+            setPages(1);
             setLoading(true);
             setThread(null);
             setReRender(!reRender);
