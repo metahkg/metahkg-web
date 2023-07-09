@@ -1,3 +1,50 @@
+#### 6.11.0 (2023-07-09)
+
+##### Chores
+
+*  set version v6.10.0 (f2ca9200)
+*  update CHANGELOG.md (27d036fc)
+*  change back to npm (5049a1c9)
+
+##### Continuous Integration
+
+* **docker build:**  add dev to the version passed to docker build if branch is dev (67f0298d)
+
+##### New Features
+
+* **comment:**  support html and games (can't create games yet) (45bd92b8)
+*  branding - migrate to 6.10 api (b9c80619)
+*  visibility chooser (93cda697)
+*  add hmac signature for requests to rlp proxy and metahkg redirect (96b0ded4)
+
+##### Bug Fixes
+
+*  upgrade @metahkg/api (8b609dcb)
+* **sort:**  set pages to 1 (8628dd92)
+* **side panel:**  apply branding to side panel (713ce98e)
+* **randomColor:**  removed undesirable colors, which is blocking execution (47c8fff2)
+* **about dialog:**  description (27ed4125)
+* **create:**  default internal if edit comment is internal (448009fd)
+* **floating editor:**  comment should be internal if thread is internal (c0282230)
+* **forgot:**  button keeps loading (e4906a1e)
+* **conversation:**  pagifying problem caused by visibility (3c47873e)
+* **visibility:**  wording (17959c8b)
+* **notifications:**  fix subscriptions getting sent two times after re-enabling the notifications setting (b344be4b)
+
+##### Other Changes
+
+* //gitlab.com/metahkg/metahkg-web into dev (32891995)
+*  - wrong total page number when some comments are deleted (since calculated by count) - may sometimes go to a non-existant page (b9ea11e9)
+* //gitlab.com/metahkg/metahkg-web into dev (23aef675)
+*  CHANGELOG.md (8ae67f61)
+* //gitlab.com/metahkg/metahkg-web into dev (26eb5065)
+* //gitlab.com/metahkg/metahkg-web into dev (76552f4e)
+* //gitlab.com/metahkg/metahkg-web into dev (deb22fe1)
+
+##### Code Style Changes
+
+*  format code with prettier (c30ec763)
+
 #### 6.10.0 (2023-06-06)
 
 ##### Chores
