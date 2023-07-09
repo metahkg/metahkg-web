@@ -109,7 +109,10 @@ export default function FloatingEditor() {
         }
         setCreating(true);
         api.commentCreate(threadId, {
-            comment,
+            comment: {
+                type: "html",
+                html: comment,
+            },
             quote: editor.quote?.id,
             captchaToken,
             visibility,

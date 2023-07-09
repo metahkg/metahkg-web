@@ -137,6 +137,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     },
                 },
                 user?.role === "admin" &&
+                    comment.comment.type === "html" &&
                     inThread && {
                         icon: (
                             <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
@@ -269,10 +270,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
         ]
     );
 
-    const moreList: (
-        | { icon: JSX.Element; title: string; action: () => void }
-        | undefined
-    )[] = [
+    const moreList = [
         (() => {
             const clientIsOp = thread && user?.id === thread.op.id;
             const pinned = thread?.pin?.id === comment.id;
@@ -322,11 +320,12 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 navigate(`/create?quote=${threadId}.${comment.id}`);
             },
         },
-        {
+        comment.comment.type === "html" && {
             icon: <EditIcon className="!text-[19px]" />,
             title: "Edit (in new comment)",
             action: () => {
-                if (user) setEditor({ open: true, edit: comment.comment });
+                if (user && comment.comment.type === "html")
+                    setEditor({ open: true, edit: comment.comment.html });
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
@@ -335,7 +334,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                     );
             },
         },
-    ];
+    ].filter(Boolean) as { icon: JSX.Element; title: string; action: () => void }[];
 
     return (
         <Box className={`flex items-end text-lg !pt-2 ${!fold ? "justify-between" : ""}`}>

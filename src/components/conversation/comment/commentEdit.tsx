@@ -25,25 +25,35 @@ import { useThreadId } from "../ConversationContext";
 import { useNotification } from "../../AppContextProvider";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
+import { HTMLComment } from "@metahkg/api";
 
 export default function CommentEdit() {
     const threadId = useThreadId();
     const [comment, setComment] = useComment();
     const [, setEditing] = useEditing();
-    const [edited, setEdited] = useState(comment.comment);
+    const [edited, setEdited] = useState(
+        comment.comment.type === "html" ? comment.comment.html : ""
+    );
     const [reason, setReason] = useState("");
     const [, setNotification] = useNotification();
     const [saving, setSaving] = useState(false);
+
+    if (comment.comment.type !== "html") {
+        return <></>;
+    }
 
     const onSave = async () => {
         setSaving(true);
         await api
             .commentEdit(threadId, comment.id, {
-                comment: edited,
+                html: edited,
                 reason,
             })
             .then(() => {
-                setComment({ ...comment, comment: edited });
+                setComment({
+                    ...comment,
+                    comment: { ...(comment.comment as HTMLComment), html: edited },
+                });
                 setEditing(false);
                 setReason("");
                 setNotification({
@@ -65,7 +75,7 @@ export default function CommentEdit() {
     return (
         <Box className="my-2">
             <TextEditor
-                initText={comment.comment}
+                initText={comment.comment.html}
                 onChange={setEdited}
                 toolbarBottom
                 noMenuBar
@@ -89,7 +99,7 @@ export default function CommentEdit() {
                 <LoadingButton
                     variant="contained"
                     onClick={onSave}
-                    disabled={comment.comment === edited || !reason}
+                    disabled={comment.comment.html === edited || !reason}
                     color="secondary"
                     loading={saving}
                     startIcon={<EditIcon />}

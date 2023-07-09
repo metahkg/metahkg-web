@@ -150,7 +150,10 @@ export default function Create() {
         api.threadCreate({
             title: threadTitle,
             category: catchoosed,
-            comment,
+            comment: {
+                type: "html",
+                html: comment,
+            },
             captchaToken,
             visibility,
         })

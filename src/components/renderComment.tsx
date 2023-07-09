@@ -25,7 +25,8 @@ export default function RenderComment(props: {
     darkMode: boolean;
 }) {
     const { comment, depth, darkMode } = props;
-    const commentJSX = parse(comment.comment);
+    const commentJSX =
+        comment.comment.type === "html" ? parse(comment.comment.html) : comment.text;
     const content = [
         comment.quote && depth < 3 && (
             <blockquote

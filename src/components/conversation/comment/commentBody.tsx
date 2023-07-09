@@ -25,7 +25,7 @@ import { Comment } from "@metahkg/api";
 import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
-import { isIOS, isSafari } from "react-device-detect";
+import Game from "./Game";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -55,24 +55,21 @@ export default function CommentBody(props: {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [blockList]);
 
-    const [commentJSX, setCommentJSX] = useState(
-        parse(
-            settings.filterSwearWords && !(isSafari || isIOS)
-                ? filterSwearWords(comment.comment)
-                : comment.comment,
-            { replace }
-        )
-    );
+    const [commentJSX, setCommentJSX] = useState<React.ReactNode>(<></>);
 
     useEffect(() => {
-        setCommentJSX(
-            parse(
-                settings.filterSwearWords
-                    ? filterSwearWords(comment.comment)
-                    : comment.comment,
-                { replace }
-            )
-        );
+        if (comment.comment.type === "html") {
+            setCommentJSX(
+                parse(
+                    settings.filterSwearWords
+                        ? filterSwearWords(comment.comment.html)
+                        : comment.comment.html,
+                    { replace }
+                )
+            );
+        } else if (comment.comment.type === "game" && comment.comment.gameId) {
+            setCommentJSX(<Game id={comment.comment.gameId} />);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         settings.filterSwearWords,
