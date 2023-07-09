@@ -128,7 +128,7 @@ export default function Create() {
         return (
             <Navigate
                 to={`/users/login?continue=true&returnto=${encodeURIComponent(
-                    wholePath()
+                    wholePath(),
                 )}`}
                 replace
             />

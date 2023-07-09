@@ -57,7 +57,7 @@ export default function FloatingEditor() {
     const [visibility, setVisibility] = useState<Visibility>(
         editor.quote?.visibility === "internal" || thread?.visibility === "internal"
             ? "internal"
-            : "public"
+            : "public",
     );
     const isSmallScreen = useIsSmallScreen();
     const update = useUpdate();
@@ -82,7 +82,7 @@ export default function FloatingEditor() {
         setVisibility(
             editor.quote?.visibility === "internal" || thread?.visibility === "internal"
                 ? "internal"
-                : "public"
+                : "public",
         );
     }, [editor.quote?.visibility, thread?.visibility]);
 
