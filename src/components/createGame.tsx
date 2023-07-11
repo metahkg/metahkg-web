@@ -33,7 +33,7 @@ export default function CreateGame(props: {
             guessOptions[index] = tempOptions[index];
             setGuessOptions([...guessOptions]);
         },
-        [edit, guessOptions, tempOptions]
+        [edit, guessOptions, tempOptions],
     );
 
     const onDiscard = useCallback(
@@ -45,7 +45,7 @@ export default function CreateGame(props: {
             }
             setTempOptions([...tempOptions]);
         },
-        [edit, guessOptions, tempOptions]
+        [edit, guessOptions, tempOptions],
     );
 
     const handleKeyPress = useCallback(
@@ -61,7 +61,7 @@ export default function CreateGame(props: {
                 }
             }
         },
-        [edit, guessOptions, newOption, onChange, onSave, title, type]
+        [edit, guessOptions, newOption, onChange, onSave, title, type],
     );
 
     useEffect(() => {
