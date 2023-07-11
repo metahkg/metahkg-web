@@ -14,7 +14,7 @@ import { useDarkMode, useNotification, useUser } from "../../AppContextProvider"
 import { LoadingButton } from "@mui/lab";
 import { parseError } from "../../../lib/parseError";
 import MetahkgLogo from "../../logo";
-import { Pool } from "@mui/icons-material";
+import { Casino, Pool } from "@mui/icons-material";
 
 export default function Game(props: { id: string }) {
     const { id } = props;
@@ -43,7 +43,7 @@ export default function Game(props: { id: string }) {
     }, [id, reload, setNotification]);
 
     useEffect(() => {
-        if (game?.type === "guess") {
+        if (game?.type === "guess" && user) {
             api.meGamesGuess(id)
                 .then((data) => {
                     setMeGuessHistory(data);
@@ -60,9 +60,9 @@ export default function Game(props: { id: string }) {
                     });
                 });
         }
-    }, [game?.type, id, setNotification, reload]);
+    }, [game?.type, id, setNotification, reload, user]);
 
-    return !game || (game?.type === "guess" && !meGuessHistory) ? (
+    return !game || (game?.type === "guess" && user && !meGuessHistory) ? (
         <Loader position="flex-start" />
     ) : (
         <Box className="rounded-2xl dark:bg-gray-900">
@@ -73,6 +73,7 @@ export default function Game(props: { id: string }) {
                 <RadioGroup
                     color="secondary"
                     onChange={(e) => {
+                        if (!user) return;
                         if (user?.id === game.host.id) return;
                         setGuess(Number(e.target.value));
                     }}
@@ -87,22 +88,38 @@ export default function Game(props: { id: string }) {
                                 control={<Radio color="secondary" />}
                                 label={
                                     <Box
-                                        className={`rounded-md p-2 m-1 ${
+                                        className={`rounded-md p-2 m-1 whitespace-nowrap ${
                                             meGuessHistory?.[meGuessHistory?.length - 1]
                                                 ?.option === index
                                                 ? "bg-gray-300 dark:bg-blue-900"
                                                 : "bg-gray-100 dark:bg-gray-800"
                                         }`}
                                         style={{
-                                            width: `${(option?.odds || 1) * 100}%`,
+                                            width: `${
+                                                ((option?.tokens || 0) /
+                                                    (game.tokens || 0)) *
+                                                500
+                                            }%`,
+                                            minWidth: "100%",
                                         }}
                                     >
                                         <Typography variant="body1">
                                             {option.text}
                                         </Typography>
-                                        <Typography variant="body2">
-                                            odds:{" "}
-                                            {Math.round((option.odds || 1) * 100) / 100}
+                                        <Typography
+                                            variant="body2"
+                                            className="flex items-center"
+                                        >
+                                            <Casino className="!text-[15px] mx-1" />{" "}
+                                            {Math.round((option.odds || 1) * 100) / 100}{" "}
+                                            <MetahkgLogo
+                                                width={13}
+                                                height={13}
+                                                light={darkMode}
+                                                svg
+                                                className="mx-1"
+                                            />{" "}
+                                            {option.tokens || 0}
                                         </Typography>
                                     </Box>
                                 }
