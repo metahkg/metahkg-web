@@ -48,6 +48,29 @@ export default function CreateGame(props: {
         [edit, guessOptions, tempOptions]
     );
 
+    const handleKeyPress = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Enter") {
+                if (edit.length > 0) {
+                    onSave(edit[0]);
+                } else if (newOption) {
+                    onSave(guessOptions.length);
+                    setNewOption("");
+                } else {
+                    onChange?.({ type, options: guessOptions, title });
+                }
+            }
+        },
+        [edit, guessOptions, newOption, onChange, onSave, title, type]
+    );
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress);
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     useEffect(() => {
         onChange?.({ type, options: guessOptions, title });
     }, [guessOptions, type, onChange, title]);
