@@ -6,6 +6,7 @@ import {
     Radio,
     RadioGroup,
     TextField,
+    Tooltip,
 } from "@mui/material";
 import { Close, Delete, Done, Edit } from "@mui/icons-material";
 
@@ -73,6 +74,7 @@ export default function CreateGame(props: {
                             <FormControlLabel
                                 value={index}
                                 control={<Radio color="secondary" />}
+                                className="!w-full [&>.MuiFormControlLabel-label]:!w-full whitespace-nowrap"
                                 label={
                                     edit.includes(index) ? (
                                         <TextField
@@ -84,7 +86,7 @@ export default function CreateGame(props: {
                                             defaultValue={guessOptions[index]}
                                             onChange={(e) => {
                                                 tempOptions[index] = e.target.value;
-                                                setTempOptions(tempOptions);
+                                                setTempOptions([...tempOptions]);
                                             }}
                                         />
                                     ) : (
@@ -92,41 +94,51 @@ export default function CreateGame(props: {
                                     )
                                 }
                             />
-                            <Box>
+                            <Box className="flex">
                                 {edit.includes(index) ? (
                                     <>
-                                        <IconButton
-                                            onClick={() => {
-                                                onSave(index);
-                                            }}
-                                        >
-                                            <Done />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => {
-                                                onDiscard(index);
-                                            }}
-                                        >
-                                            <Close />
-                                        </IconButton>
+                                        <Tooltip arrow title="Done">
+                                            <IconButton
+                                                onClick={() => {
+                                                    onSave(index);
+                                                }}
+                                            >
+                                                <Done className="!m-2" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip arrow title="Cancel">
+                                            <IconButton
+                                                onClick={() => {
+                                                    onDiscard(index);
+                                                }}
+                                            >
+                                                <Close className="!m-2" />
+                                            </IconButton>
+                                        </Tooltip>
                                     </>
                                 ) : (
-                                    <IconButton
-                                        onClick={() => {
-                                            setEdit(edit.concat(index));
-                                        }}
-                                    >
-                                        <Edit />
-                                    </IconButton>
+                                    <>
+                                        <Tooltip arrow title="Edit">
+                                            <IconButton
+                                                onClick={() => {
+                                                    setEdit(edit.concat(index));
+                                                }}
+                                            >
+                                                <Edit className="!m-2" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip arrow title="Delete">
+                                            <IconButton
+                                                onClick={() => {
+                                                    guessOptions.splice(index, 1);
+                                                    setGuessOptions([...guessOptions]);
+                                                }}
+                                            >
+                                                <Delete className="!m-2" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </>
                                 )}
-                                <IconButton
-                                    onClick={() => {
-                                        guessOptions.splice(index, 1);
-                                        setGuessOptions(guessOptions);
-                                    }}
-                                >
-                                    <Delete />
-                                </IconButton>
                             </Box>
                         </Box>
                     ))}
@@ -145,7 +157,7 @@ export default function CreateGame(props: {
                                         onChange={(e) => {
                                             tempOptions[guessOptions.length] =
                                                 e.target.value;
-                                            setTempOptions(tempOptions);
+                                            setTempOptions([...tempOptions]);
                                             setNewOption(e.target.value);
                                         }}
                                         className="!w-full"
