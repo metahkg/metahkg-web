@@ -16,8 +16,16 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Close, Comment as CommentIcon } from "@mui/icons-material";
-import { Box, DialogTitle, IconButton, Snackbar, Typography } from "@mui/material";
+import { Close, Code, Comment as CommentIcon, QuestionMark } from "@mui/icons-material";
+import {
+    Box,
+    DialogTitle,
+    IconButton,
+    Snackbar,
+    Tab,
+    Tabs,
+    Typography,
+} from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { api } from "../lib/api";
 import Comment from "./conversation/comment";
@@ -45,6 +53,7 @@ import { LoadingButton } from "@mui/lab";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "./VisibilityChooser";
+import CreateGame, { GameCreateType } from "./createGame";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -69,6 +78,8 @@ export default function FloatingEditor() {
     const [newCommentId, setNewCommentId] = useState(0);
     const captchaRef = useRef<CaptchaRefProps>(null);
     const [serverConfig] = useServerConfig();
+    const [commentType, setCommentType] = useState<"html" | "guess">("html");
+    const [game, setGame] = useState<GameCreateType | null>(null);
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
@@ -108,11 +119,28 @@ export default function FloatingEditor() {
             return;
         }
         setCreating(true);
+        let gameId: string = "";
+        if (commentType === "guess" && game?.options && game?.title) {
+            try {
+                const data = await api.gamesGuessCreate({
+                    options: game?.options,
+                    title: game?.title,
+                });
+                gameId = data.id;
+            } catch (e) {
+                return setNotification({
+                    open: true,
+                    severity: "error",
+                    text: parseError(e),
+                });
+            }
+        }
+        const type = {
+            html: "html",
+            guess: "game",
+        }[commentType] as "html" | "game";
         api.commentCreate(threadId, {
-            comment: {
-                type: "html",
-                html: comment,
-            },
+            comment: type === "html" ? { type, html: comment } : { type, gameId },
             quote: editor.quote?.id,
             captchaToken,
             visibility,
@@ -202,6 +230,31 @@ export default function FloatingEditor() {
                             maxHeight={200}
                         />
                     )}
+                    <Tabs
+                        value={commentType}
+                        onChange={(_e, v) => {
+                            setCommentType(v);
+                        }}
+                        textColor="secondary"
+                        indicatorColor="secondary"
+                        variant="fullWidth"
+                        className="!m-4 !mt-0"
+                    >
+                        <Tab
+                            icon={<Code />}
+                            value={"html"}
+                            label="HTML"
+                            iconPosition="start"
+                            disableRipple
+                        />
+                        <Tab
+                            icon={<QuestionMark />}
+                            value={"guess"}
+                            label="Guess"
+                            iconPosition="start"
+                            disableRipple
+                        />
+                    </Tabs>
                     <TextEditor
                         onChange={(e) => {
                             setComment(e);
@@ -219,8 +272,11 @@ export default function FloatingEditor() {
                         noStatusBar
                         toolbarBottom
                         lengthLimit={50000}
-                        className="max-w-full"
+                        className={`max-w-full ${commentType !== "html" ? "hidden" : ""}`}
                     />
+                    <Box className={commentType !== "guess" ? "hidden" : ""}>
+                        <CreateGame onChange={setGame} type="guess" />
+                    </Box>
                     <VisibilityChooser
                         visibility={visibility}
                         setVisibility={setVisibility}
@@ -239,7 +295,12 @@ export default function FloatingEditor() {
                             type="submit"
                             loading={creating}
                             loadingPosition="start"
-                            disabled={!comment || creating}
+                            disabled={
+                                (commentType === "html"
+                                    ? !comment
+                                    : !game?.title || game?.options.length < 2) ||
+                                creating
+                            }
                             startIcon={<CommentIcon />}
                         >
                             Comment
