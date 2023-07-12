@@ -169,8 +169,8 @@ export default function Game(props: { id: string }) {
                                 if (!user) {
                                     return navigate(
                                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                                            `${wholePath()}&c=${comment.id}`
-                                        )}`
+                                            `${wholePath()}&c=${comment.id}`,
+                                        )}`,
                                     );
                                 }
                                 if (guess !== null) {
