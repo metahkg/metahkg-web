@@ -10,11 +10,19 @@ import { useEffect, useRef, useState } from "react";
 import { GuessGame, UserGuess } from "@metahkg/api";
 import Loader from "../../../lib/loader";
 import { api } from "../../../lib/api";
-import { useDarkMode, useNotification, useUser } from "../../AppContextProvider";
+import {
+    useDarkMode,
+    useIsSmallScreen,
+    useNotification,
+    useUser,
+} from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { parseError } from "../../../lib/parseError";
 import MetahkgLogo from "../../logo";
 import { Casino, Pool } from "@mui/icons-material";
+import { wholePath } from "../../../lib/common";
+import { useNavigate } from "react-router-dom";
+import { useComment } from "../comment";
 
 export default function Game(props: { id: string }) {
     const { id } = props;
@@ -29,6 +37,9 @@ export default function Game(props: { id: string }) {
     const [user] = useUser();
     const darkMode = useDarkMode();
     const formRef = useRef<HTMLFormElement>();
+    const navigate = useNavigate();
+    const [comment] = useComment();
+    const isSmallScreen = useIsSmallScreen();
 
     useEffect(() => {
         api.game(id)
@@ -73,7 +84,6 @@ export default function Game(props: { id: string }) {
                 <RadioGroup
                     color="secondary"
                     onChange={(e) => {
-                        if (!user) return;
                         if (user?.id === game.host.id) return;
                         setGuess(Number(e.target.value));
                     }}
@@ -156,6 +166,13 @@ export default function Game(props: { id: string }) {
                             component="form"
                             onSubmit={(e) => {
                                 e?.preventDefault();
+                                if (!user) {
+                                    return navigate(
+                                        `/users/login?continue=true&returnto=${encodeURIComponent(
+                                            `${wholePath()}&c=${comment.id}`
+                                        )}`
+                                    );
+                                }
                                 if (guess !== null) {
                                     setLoading(true);
                                     api.gamesGuessGuess(id, {
@@ -179,7 +196,9 @@ export default function Game(props: { id: string }) {
                                 }
                             }}
                             ref={formRef}
-                            className="flex mt-3 justify-between items-center transition-[height] ease-out duration-500"
+                            className={`${
+                                isSmallScreen ? "" : "flex justify-between items-center"
+                            } mt-3 transition-[height] ease-out duration-500`}
                         >
                             <TextField
                                 type="number"
@@ -203,6 +222,7 @@ export default function Game(props: { id: string }) {
                                 loadingPosition="start"
                                 color="secondary"
                                 variant="contained"
+                                className={isSmallScreen ? "!mt-3" : ""}
                             >
                                 Bet
                             </LoadingButton>
