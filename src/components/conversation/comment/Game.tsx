@@ -1,5 +1,6 @@
 import {
     Box,
+    Checkbox,
     FormControlLabel,
     Radio,
     RadioGroup,
@@ -39,7 +40,9 @@ export default function Game(props: { id: string }) {
     const formRef = useRef<HTMLFormElement>();
     const navigate = useNavigate();
     const [comment] = useComment();
+    const [answer, setAnswer] = useState<number[]>([]);
     const isSmallScreen = useIsSmallScreen();
+    const isHost = user?.id === game?.host.id;
 
     useEffect(() => {
         api.game(id)
@@ -73,6 +76,14 @@ export default function Game(props: { id: string }) {
         }
     }, [game?.type, id, setNotification, reload, user]);
 
+    useEffect(() => {
+        if (isHost && !(answer.length >= 1)) {
+            setValid(false);
+        } else if (answer.length >= 1) {
+            setValid(true);
+        }
+    }, [isHost, answer]);
+
     return !game || (game?.type === "guess" && user && !meGuessHistory) ? (
         <Loader position="flex-start" />
     ) : (
@@ -84,7 +95,7 @@ export default function Game(props: { id: string }) {
                 <RadioGroup
                     color="secondary"
                     onChange={(e) => {
-                        if (user?.id === game.host.id) return;
+                        if (isHost || game.endedAt) return;
                         setGuess(Number(e.target.value));
                     }}
                     value={user?.id === game.host.id ? null : guess}
@@ -95,42 +106,74 @@ export default function Game(props: { id: string }) {
                             <FormControlLabel
                                 key={index}
                                 value={index}
-                                control={<Radio color="secondary" />}
+                                control={
+                                    isHost && !game.endedAt ? (
+                                        <Checkbox
+                                            checked={answer.includes(index)}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    answer.push(index);
+                                                    setAnswer([...answer]);
+                                                } else {
+                                                    setAnswer(
+                                                        answer.filter((v) => v !== index)
+                                                    );
+                                                }
+                                            }}
+                                            color="secondary"
+                                        />
+                                    ) : (
+                                        <Radio
+                                            color="secondary"
+                                            disabled={Boolean(game.endedAt || isHost)}
+                                        />
+                                    )
+                                }
                                 label={
                                     <Box
                                         className={`rounded-md p-2 m-1 whitespace-nowrap ${
-                                            meGuessHistory?.[meGuessHistory?.length - 1]
-                                                ?.option === index
+                                            game.endedAt
+                                                ? game.answer?.includes(index)
+                                                    ? "bg-green-600 dark:bg-green-900"
+                                                    : "bg-red-600 dark:bg-red-900"
+                                                : meGuessHistory?.[
+                                                      meGuessHistory?.length - 1
+                                                  ]?.option === index
                                                 ? "bg-gray-300 dark:bg-blue-900"
                                                 : "bg-gray-100 dark:bg-gray-800"
                                         }`}
                                         style={{
-                                            width: `${
-                                                ((option?.tokens || 0) /
-                                                    (game.tokens || 0)) *
-                                                500
-                                            }%`,
+                                            ...(!(isHost && !game.endedAt) && {
+                                                width: `${
+                                                    ((option?.tokens || 0) /
+                                                        (game.tokens || 0)) *
+                                                    500
+                                                }%`,
+                                            }),
                                             minWidth: "100%",
                                         }}
                                     >
                                         <Typography variant="body1">
                                             {option.text}
                                         </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            className="flex items-center"
-                                        >
-                                            <Casino className="!text-[15px] mx-1" />{" "}
-                                            {Math.round((option.odds || 1) * 100) / 100}{" "}
-                                            <MetahkgLogo
-                                                width={13}
-                                                height={13}
-                                                light={darkMode}
-                                                svg
-                                                className="mx-1"
-                                            />{" "}
-                                            {option.tokens || 0}
-                                        </Typography>
+                                        {!(isHost && !game.endedAt) && (
+                                            <Typography
+                                                variant="body2"
+                                                className="flex items-center"
+                                            >
+                                                <Casino className="!text-[15px] mx-1" />{" "}
+                                                {Math.round((option.odds || 1) * 100) /
+                                                    100}{" "}
+                                                <MetahkgLogo
+                                                    width={13}
+                                                    height={13}
+                                                    light={darkMode}
+                                                    svg
+                                                    className="mx-1"
+                                                />{" "}
+                                                {option.tokens || 0}
+                                            </Typography>
+                                        )}
                                     </Box>
                                 }
                             />
@@ -161,7 +204,7 @@ export default function Game(props: { id: string }) {
                     />
                 </Typography>
                 <Box className="transition-[height] ease-out duration-500">
-                    {guess !== null && (
+                    {(isHost || guess !== null) && !game.endedAt && (
                         <Box
                             component="form"
                             onSubmit={(e) => {
@@ -173,6 +216,30 @@ export default function Game(props: { id: string }) {
                                         )}`
                                     );
                                 }
+                                if (isHost) {
+                                    setLoading(true);
+                                    return api
+                                        .gamesGuessAnswer(id, {
+                                            answer: answer as unknown as number,
+                                        })
+                                        .then(() => {
+                                            setLoading(false);
+                                            setReload(!reload);
+                                            setNotification({
+                                                open: true,
+                                                severity: "success",
+                                                text: "Game answer set.",
+                                            });
+                                        })
+                                        .catch((e) => {
+                                            setLoading(false);
+                                            setNotification({
+                                                open: true,
+                                                severity: "error",
+                                                text: parseError(e),
+                                            });
+                                        });
+                                }
                                 if (guess !== null) {
                                     setLoading(true);
                                     api.gamesGuessGuess(id, {
@@ -181,9 +248,13 @@ export default function Game(props: { id: string }) {
                                     })
                                         .then(() => {
                                             setGuess(null);
-                                            setTokens(10);
                                             setLoading(false);
                                             setReload(!reload);
+                                            setNotification({
+                                                open: true,
+                                                severity: "success",
+                                                text: "Game bet set!",
+                                            });
                                         })
                                         .catch((e) => {
                                             setLoading(false);
@@ -200,18 +271,22 @@ export default function Game(props: { id: string }) {
                                 isSmallScreen ? "" : "flex justify-between items-center"
                             } mt-3 transition-[height] ease-out duration-500`}
                         >
-                            <TextField
-                                type="number"
-                                color="secondary"
-                                inputProps={{ pattern: "^[1-9]\\d*" }}
-                                label="Tokens"
-                                onChange={(e) => {
-                                    setTokens(Number(e.target.value));
-                                    setValid(formRef.current?.checkValidity() ?? false);
-                                }}
-                                defaultValue={tokens}
-                                variant="outlined"
-                            />
+                            {!isHost && (
+                                <TextField
+                                    type="number"
+                                    color="secondary"
+                                    inputProps={{ pattern: "^[1-9]\\d*" }}
+                                    label="Tokens"
+                                    onChange={(e) => {
+                                        setTokens(Number(e.target.value));
+                                        setValid(
+                                            formRef.current?.checkValidity() ?? false
+                                        );
+                                    }}
+                                    defaultValue={tokens}
+                                    variant="outlined"
+                                />
+                            )}
                             <LoadingButton
                                 type="submit"
                                 startIcon={
@@ -224,7 +299,7 @@ export default function Game(props: { id: string }) {
                                 variant="contained"
                                 className={isSmallScreen ? "!mt-3" : ""}
                             >
-                                Bet
+                                {isHost ? "Set answer" : "Bet"}
                             </LoadingButton>
                         </Box>
                     )}
