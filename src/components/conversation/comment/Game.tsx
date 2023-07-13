@@ -42,7 +42,7 @@ export default function Game(props: { id: string }) {
     const [comment] = useComment();
     const [answer, setAnswer] = useState<number[]>([]);
     const isSmallScreen = useIsSmallScreen();
-    const isHost = user?.id === game?.host.id;
+    const isHost = (user?.id && game?.host.id && user.id === game.host.id) ?? false;
 
     useEffect(() => {
         api.game(id)
@@ -77,10 +77,12 @@ export default function Game(props: { id: string }) {
     }, [game?.type, id, setNotification, reload, user]);
 
     useEffect(() => {
-        if (isHost && !(answer.length >= 1)) {
-            setValid(false);
-        } else if (answer.length >= 1) {
-            setValid(true);
+        if (isHost) {
+            if (answer.length >= 1) {
+                setValid(true);
+            } else {
+                setValid(false);
+            }
         }
     }, [isHost, answer]);
 
