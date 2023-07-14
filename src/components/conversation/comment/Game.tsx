@@ -152,7 +152,7 @@ export default function Game(props: { id: string }) {
                                                     500
                                                 }%`,
                                             }),
-                                            minWidth: "100%",
+                                            minWidth: "50px",
                                         }}
                                     >
                                         <Typography variant="body1">
