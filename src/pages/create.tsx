@@ -16,8 +16,8 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Alert, Box, TextField, Typography } from "@mui/material";
-import { Create as CreateIcon } from "@mui/icons-material";
+import { Alert, Box, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { Code, Create as CreateIcon, QuestionMark } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -41,6 +41,7 @@ import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "../components/VisibilityChooser";
+import CreateGame, { GameCreateType } from "../components/createGame";
 
 /**
  * Page for creating a new thread
@@ -61,6 +62,8 @@ export default function Create() {
         severity: "info",
         text: "",
     });
+    const [commentType, setCommentType] = useState<"html" | "guess">("html");
+    const [game, setGame] = useState<GameCreateType | null>(null);
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
 
@@ -147,13 +150,30 @@ export default function Create() {
         setLoading(true);
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
+        let gameId: string = "";
+        if (commentType === "guess" && game?.options && game?.title) {
+            try {
+                const data = await api.gamesGuessCreate({
+                    options: game?.options,
+                    title: game?.title,
+                });
+                gameId = data.id;
+            } catch (e) {
+                return setNotification({
+                    open: true,
+                    severity: "error",
+                    text: parseError(e),
+                });
+            }
+        }
+        const type = {
+            html: "html",
+            guess: "game",
+        }[commentType] as "html" | "game";
         api.threadCreate({
             title: threadTitle,
             category: catchoosed,
-            comment: {
-                type: "html",
-                html: comment,
-            },
+            comment: type === "html" ? { type, html: comment } : { type, gameId },
             captchaToken,
             visibility,
         })
@@ -210,6 +230,31 @@ export default function Create() {
                             }}
                         />
                     </Box>
+                    <Tabs
+                        value={commentType}
+                        onChange={(_e, v) => {
+                            setCommentType(v);
+                        }}
+                        textColor="secondary"
+                        indicatorColor="secondary"
+                        variant="fullWidth"
+                        className="!m-4 !mt-0"
+                    >
+                        <Tab
+                            icon={<Code />}
+                            value={"html"}
+                            label="HTML"
+                            iconPosition="start"
+                            disableRipple
+                        />
+                        <Tab
+                            icon={<QuestionMark />}
+                            value={"guess"}
+                            label="Guess"
+                            iconPosition="start"
+                            disableRipple
+                        />
+                    </Tabs>
                     <TextEditor
                         onChange={(_v, e: any) => {
                             setComment(e.getContent());
@@ -219,7 +264,11 @@ export default function Create() {
                         autoResize
                         lengthLimit={50000}
                         minHeight={isSmallScreen ? 310 : 350}
+                        className={commentType !== "html" ? "hidden" : ""}
                     />
+                    <Box className={commentType !== "guess" ? "hidden" : ""}>
+                        <CreateGame onChange={setGame} type="guess" />
+                    </Box>
                     <VisibilityChooser
                         visibility={visibility}
                         setVisibility={setVisibility}
@@ -229,7 +278,15 @@ export default function Create() {
                     <Box className="mt-2">
                         <CAPTCHA ref={captchaRef} />
                         <LoadingButton
-                            disabled={loading || !(comment && threadTitle && catchoosed)}
+                            disabled={
+                                loading ||
+                                !(commentType === "html"
+                                    ? comment
+                                    : (game?.options?.length || 0) >= 2 &&
+                                      game?.title &&
+                                      threadTitle &&
+                                      catchoosed)
+                            }
                             loading={loading}
                             className={"text-4 !h-10 !py-0 !normal-case"}
                             variant="contained"
