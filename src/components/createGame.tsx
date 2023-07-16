@@ -85,7 +85,6 @@ export default function CreateGame(props: {
                     onChange={(e) => {
                         setTitle(e.target.value);
                     }}
-                    required
                     fullWidth
                     className="!m-4 !mt-0"
                 />
