@@ -16,7 +16,12 @@
  */
 
 import React, { useState } from "react";
-import { useIsSmallScreen, useNotification, useSession } from "../AppContextProvider";
+import {
+    useDarkMode,
+    useIsSmallScreen,
+    useNotification,
+    useSession,
+} from "../AppContextProvider";
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
     Box,
@@ -38,8 +43,13 @@ import { User, UserSex } from "@metahkg/api";
 import { Session } from "../../types/session";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
+import MetahkgLogo from "../logo";
 
-export type UserData = User & { count: number; createdAt?: Date };
+export type UserData = User & {
+    count: number;
+    createdAt?: Date;
+    games?: { tokens: number };
+};
 
 interface DataTableProps {
     reqUser: UserData;
@@ -57,6 +67,7 @@ export default function DataTable(props: DataTableProps) {
     const [saving, setSaveDisabled] = useState(false);
     const [session, setSession] = useSession();
     const [, setMenuTitle] = useMenuTitle();
+    const darkMode = useDarkMode();
 
     const nameValid = /^\S{1,15}$/.test(name);
 
@@ -111,6 +122,14 @@ export default function DataTable(props: DataTableProps) {
             content: `${
                 reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
             } ago`,
+        },
+        {
+            title: (
+                <React.Fragment>
+                    <MetahkgLogo height={20} width={20} svg light={darkMode} /> Tokens
+                </React.Fragment>
+            ),
+            content: reqUser.games?.tokens || 0,
         },
     ];
 
