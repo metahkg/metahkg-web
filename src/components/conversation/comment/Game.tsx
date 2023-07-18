@@ -20,7 +20,7 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { parseError } from "../../../lib/parseError";
 import MetahkgLogo from "../../logo";
-import { Casino, Pool } from "@mui/icons-material";
+import { Casino, CheckCircle, ClearRounded, Pool } from "@mui/icons-material";
 import { wholePath } from "../../../lib/common";
 import { useNavigate } from "react-router-dom";
 import { useComment } from "../comment";
@@ -124,11 +124,20 @@ export default function Game(props: { id: string }) {
                                             }}
                                             color="secondary"
                                         />
+                                    ) : game.endedAt ? (
+                                        game.answer?.includes(index) ? (
+                                            <CheckCircle
+                                                color="success"
+                                                className="mx-2"
+                                            />
+                                        ) : (
+                                            <ClearRounded
+                                                color="error"
+                                                className="mx-2"
+                                            />
+                                        )
                                     ) : (
-                                        <Radio
-                                            color="secondary"
-                                            disabled={Boolean(game.endedAt || isHost)}
-                                        />
+                                        <Radio color="secondary" />
                                     )
                                 }
                                 label={
