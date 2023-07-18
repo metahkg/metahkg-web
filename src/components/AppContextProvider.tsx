@@ -101,24 +101,24 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
 
     const [darkMode, setDarkMode] = useState(isDarkMode());
     const [serverPublicKey, setServerPublicKey] = useState<string>(
-        localStorage.getItem("serverPublicKey") || ""
+        localStorage.getItem("serverPublicKey") || "",
     );
     const [serverConfig, setServerConfig] = useState<ServerConfig | null>(
-        JSON.parse(localStorage.getItem("serverConfig") || "null") || null
+        JSON.parse(localStorage.getItem("serverConfig") || "null") || null,
     );
     const [session, setSession] = useState<Session | null>(
-        JSON.parse(localStorage.getItem("session") || "null") || null
+        JSON.parse(localStorage.getItem("session") || "null") || null,
     );
     const [user, setUser] = useState(loadUser(session?.token));
     const userAvatar = useAvatar(user?.id || 0);
     const [userProfile, setUserProfile] = useState(
-        JSON.parse(localStorage.getItem("userProfile") || "null") || null
+        JSON.parse(localStorage.getItem("userProfile") || "null") || null,
     );
     const [categories, setCategories] = useState<Category[]>(
-        JSON.parse(localStorage.getItem("categories") || "[]")
+        JSON.parse(localStorage.getItem("categories") || "[]"),
     );
     const parsedHistory: { id: number; cid: number; c: number }[] = JSON.parse(
-        localStorage.getItem("history") || "[]"
+        localStorage.getItem("history") || "[]",
     );
     /** migrate from old */
     if (parsedHistory.length && !parsedHistory[0].id) {
@@ -139,16 +139,16 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
         btns: () => [],
     });
     const [blockList, setBlockList] = useState<BlockedUser[]>(
-        JSON.parse(localStorage.getItem("blocklist") || "[]")
+        JSON.parse(localStorage.getItem("blocklist") || "[]"),
     );
     const [starList, setStarList] = useState<Star[]>(
-        JSON.parse(localStorage.getItem("starlist") || "[]")
+        JSON.parse(localStorage.getItem("starlist") || "[]"),
     );
     const [sidePanelExpanded, setSidePanelExpanded] = useState(
         JSON.parse(
             localStorage.getItem("sidePanelExpanded") ||
-                (isSmallScreen ? "true" : "false")
-        )
+                (isSmallScreen ? "true" : "false"),
+        ),
     );
 
     useEffect(() => {
@@ -188,10 +188,13 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
             clearInterval(updateListsInterval.current);
         }
         if (user) {
-            updateListsInterval.current = setInterval(() => {
-                api.meBlocked().then(setBlockList);
-                api.meStarred().then(setStarList);
-            }, 1000 * 60 * 10);
+            updateListsInterval.current = setInterval(
+                () => {
+                    api.meBlocked().then(setBlockList);
+                    api.meStarred().then(setStarList);
+                },
+                1000 * 60 * 10,
+            );
         }
     }, [user]);
 
