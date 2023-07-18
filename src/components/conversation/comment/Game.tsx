@@ -16,6 +16,7 @@ import {
     useIsSmallScreen,
     useNotification,
     useUser,
+    useUserProfile,
 } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { parseError } from "../../../lib/parseError";
@@ -36,6 +37,7 @@ export default function Game(props: { id: string }) {
     const [valid, setValid] = useState(true);
     const [reload, setReload] = useState(false);
     const [user] = useUser();
+    const [userProfile, setUserProfile] = useUserProfile();
     const darkMode = useDarkMode();
     const formRef = useRef<HTMLFormElement>();
     const navigate = useNavigate();
@@ -61,10 +63,6 @@ export default function Game(props: { id: string }) {
             api.meGamesGuess(id)
                 .then((data) => {
                     setMeGuessHistory(data);
-                    const lastBet = data[data.length - 1]?.option;
-                    if (lastBet || lastBet === 0) {
-                        setGuess(lastBet);
-                    }
                 })
                 .catch((e) => {
                     setNotification({
@@ -100,7 +98,6 @@ export default function Game(props: { id: string }) {
                         if (isHost || game.endedAt) return;
                         setGuess(Number(e.target.value));
                     }}
-                    value={user?.id === game.host.id ? null : guess}
                     className="transition-[height] ease-out duration-500"
                 >
                     {game.options.map((option, index) => (
@@ -191,7 +188,7 @@ export default function Game(props: { id: string }) {
                             {meGuessHistory?.[meGuessHistory?.length - 1]?.option ===
                                 index && (
                                 <Typography variant="body1">
-                                    You bet:{" "}
+                                    Your bet:{" "}
                                     {meGuessHistory?.[meGuessHistory?.length - 1]?.tokens}{" "}
                                     <MetahkgLogo
                                         svg
@@ -261,6 +258,15 @@ export default function Game(props: { id: string }) {
                                             setGuess(null);
                                             setLoading(false);
                                             setReload(!reload);
+                                            setUserProfile({
+                                                ...userProfile,
+                                                games: {
+                                                    ...userProfile.games,
+                                                    tokens:
+                                                        (userProfile.games?.tokens || 0) -
+                                                        tokens,
+                                                },
+                                            });
                                             setNotification({
                                                 open: true,
                                                 severity: "success",
@@ -283,20 +289,33 @@ export default function Game(props: { id: string }) {
                             } mt-3 transition-[height] ease-out duration-500`}
                         >
                             {!isHost && (
-                                <TextField
-                                    type="number"
-                                    color="secondary"
-                                    inputProps={{ pattern: "^[1-9]\\d*" }}
-                                    label="Tokens"
-                                    onChange={(e) => {
-                                        setTokens(Number(e.target.value));
-                                        setValid(
-                                            formRef.current?.checkValidity() ?? false
-                                        );
-                                    }}
-                                    defaultValue={tokens}
-                                    variant="outlined"
-                                />
+                                <Box className="flex items-center">
+                                    <TextField
+                                        type="number"
+                                        color="secondary"
+                                        inputProps={{ pattern: "^[1-9]\\d*" }}
+                                        label="Tokens"
+                                        onChange={(e) => {
+                                            setTokens(Number(e.target.value));
+                                            setValid(
+                                                formRef.current?.checkValidity() ?? false
+                                            );
+                                        }}
+                                        defaultValue={tokens}
+                                        variant="outlined"
+                                    />
+                                    {typeof userProfile.games?.tokens === "number" && (
+                                        <Typography variant="body1" className="!ml-4">
+                                            You have: {userProfile.games.tokens}{" "}
+                                            <MetahkgLogo
+                                                light={darkMode}
+                                                svg
+                                                height={14}
+                                                width={14}
+                                            />
+                                        </Typography>
+                                    )}
+                                </Box>
                             )}
                             <LoadingButton
                                 type="submit"

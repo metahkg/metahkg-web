@@ -34,6 +34,7 @@ import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
 import { AvatarProps, useAvatar } from "../hooks/useAvatar";
+import { UserData } from "./profile/DataTable";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -51,6 +52,7 @@ export const AppContext = createContext<{
     serverConfig: [ServerConfig | null, Dispatch<SetStateAction<ServerConfig | null>>];
     user: [User | null, Dispatch<SetStateAction<User | null>>];
     userAvatar: AvatarProps;
+    userProfile: [UserData, Dispatch<SetStateAction<UserData | null>>];
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
@@ -109,6 +111,9 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     );
     const [user, setUser] = useState(loadUser(session?.token));
     const userAvatar = useAvatar(user?.id || 0);
+    const [userProfile, setUserProfile] = useState(
+        JSON.parse(localStorage.getItem("userProfile") || "null") || null
+    );
     const [categories, setCategories] = useState<Category[]>(
         JSON.parse(localStorage.getItem("categories") || "[]")
     );
@@ -162,6 +167,16 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
         if (user) {
             api.meBlocked().then(setBlockList);
             api.meStarred().then(setStarList);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user?.id]);
+
+    useEffect(() => {
+        if (user) {
+            api.userProfile(user.id).then(setUserProfile);
+        }
+        if (userProfile && !user?.id) {
+            setUserProfile(null);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
@@ -221,6 +236,10 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     }, [session?.token]);
 
     useEffect(() => {
+        localStorage.setItem("userProfile", JSON.stringify(userProfile));
+    }, [userProfile]);
+
+    useEffect(() => {
         localStorage.setItem("categories", JSON.stringify(categories));
     }, [categories]);
 
@@ -264,6 +283,7 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
                 serverConfig: [serverConfig, setServerConfig],
                 user: [user, setUser],
                 userAvatar,
+                userProfile: [userProfile, setUserProfile],
                 session: [session, setSession],
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
@@ -385,6 +405,11 @@ export function useUser() {
 export function useUserAvatar() {
     const { userAvatar } = useContext(AppContext);
     return userAvatar;
+}
+
+export function useUserProfile() {
+    const { userProfile } = useContext(AppContext);
+    return userProfile;
 }
 
 export function useIsSmallScreen() {
