@@ -48,7 +48,10 @@ export default function Game(props: { id: string }) {
 
     useEffect(() => {
         api.game(id)
-            .then(setGame)
+            .then((game) => {
+                setGame(game);
+                setGuess(null);
+            })
             .catch((e) => {
                 setNotification({
                     open: true,
@@ -98,6 +101,7 @@ export default function Game(props: { id: string }) {
                         if (isHost || game.endedAt) return;
                         setGuess(Number(e.target.value));
                     }}
+                    value={guess}
                     className="transition-[height] ease-out duration-500"
                 >
                     {game.options.map((option, index) => (
@@ -144,9 +148,9 @@ export default function Game(props: { id: string }) {
                                                 ? game.answer?.includes(index)
                                                     ? "bg-green-600 dark:bg-green-900"
                                                     : "bg-red-600 dark:bg-red-900"
-                                                : meGuessHistory?.[
-                                                      meGuessHistory?.length - 1
-                                                  ]?.option === index
+                                                : meGuessHistory?.find(
+                                                      (v) => v.option === index
+                                                  )
                                                 ? "bg-gray-300 dark:bg-blue-900"
                                                 : "bg-gray-100 dark:bg-gray-800"
                                         }`}
@@ -185,11 +189,16 @@ export default function Game(props: { id: string }) {
                                     </Box>
                                 }
                             />
-                            {meGuessHistory?.[meGuessHistory?.length - 1]?.option ===
-                                index && (
+                            {(meGuessHistory?.filter((v) => v.option === index)?.length ||
+                                false) && (
                                 <Typography variant="body1">
                                     Your bet:{" "}
-                                    {meGuessHistory?.[meGuessHistory?.length - 1]?.tokens}{" "}
+                                    {meGuessHistory
+                                        .filter((v) => v.option === index)
+                                        .reduce(
+                                            (prev, curr) => prev + curr.tokens,
+                                            0
+                                        )}{" "}
                                     <MetahkgLogo
                                         svg
                                         light={darkMode}
@@ -270,7 +279,7 @@ export default function Game(props: { id: string }) {
                                             setNotification({
                                                 open: true,
                                                 severity: "success",
-                                                text: "Game bet set!",
+                                                text: `You bet ${tokens} tokens!`,
                                             });
                                         })
                                         .catch((e) => {
