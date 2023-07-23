@@ -96,7 +96,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                             story ? VisibilityOffIcon : VisibilityIcon,
                             {
                                 className: "!text-metahkg-grey !text-[19px]",
-                            }
+                            },
                         ),
                         title: story ? "Quit story mode" : "Story mode",
                         action: () => {
@@ -107,7 +107,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                 setStory(story ? 0 : comment.user.id);
                                 setTimeout(() => {
                                     const commentEle = document.getElementById(
-                                        `c${comment.id}`
+                                        `c${comment.id}`,
                                     );
                                     if (cRoot.current && commentEle) {
                                         const afterHeight =
@@ -131,8 +131,8 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                         else
                             navigate(
                                 `/users/login?continue=true&returnto=${encodeURIComponent(
-                                    `${wholePath()}?c=${comment.id}`
-                                )}`
+                                    `${wholePath()}?c=${comment.id}`,
+                                )}`,
                             );
                     },
                 },
@@ -196,7 +196,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                                                 thread.conversation.filter(
                                                                     (v) =>
                                                                         v.id !==
-                                                                        comment.id
+                                                                        comment.id,
                                                                 ),
                                                         });
                                                     setNotification({
@@ -237,7 +237,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
             thread,
             setThread,
             setNotification,
-        ]
+        ],
     );
 
     const rightBtns: {
@@ -252,7 +252,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 action: () => {
                     setShareLink(
                         comment.slink ||
-                            `${window.location.origin}/thread/${threadId}?c=${comment.id}`
+                            `${window.location.origin}/thread/${threadId}?c=${comment.id}`,
                     );
                     setShareTitle(title + ` - comment #${comment.id}`);
                     setShareOpen(true);
@@ -267,7 +267,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
             setShareTitle,
             threadId,
             title,
-        ]
+        ],
     );
 
     const moreList = [
@@ -329,8 +329,8 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `${wholePath()}?c=${comment.id}`
-                        )}`
+                            `${wholePath()}?c=${comment.id}`,
+                        )}`,
                     );
             },
         },
@@ -372,7 +372,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                 <Tooltip
                     title={dateAndTime.format(
                         new Date(comment.createdAt),
-                        "ddd, MMM DD YYYY HH:mm:ss"
+                        "ddd, MMM DD YYYY HH:mm:ss",
                     )}
                     arrow
                 >
@@ -391,7 +391,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                 short: timeToWord(comment.createdAt),
                                 long: dateAndTime.format(
                                     new Date(comment.createdAt),
-                                    "DD/MM/YY HH:mm"
+                                    "DD/MM/YY HH:mm",
                                 ),
                             }[timeMode]
                         }
@@ -434,7 +434,7 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
                                         {button.icon}
                                     </IconButton>
                                 </Tooltip>
-                            )
+                            ),
                     )}
             </Box>
             {!fold && !blocked && (

@@ -103,7 +103,7 @@ export function allEqual(arr: any[]) {
 
 export function setTitle(
     title = JSON.parse(localStorage.getItem("serverConfig") || "{}")?.branding ||
-        "Metahkg"
+        "Metahkg",
 ) {
     document.title = title;
     document.querySelector(`meta[property="og:title"]`)?.setAttribute("content", title);
@@ -114,7 +114,7 @@ export function setTitle(
 export function setDescription(
     description = `${
         JSON.parse(localStorage.getItem("serverConfig") || "{}")?.branding || "Metahkg"
-    } is a free and open source lihkg-style forum.`
+    } is a free and open source lihkg-style forum.`,
 ) {
     document
         .querySelector(`meta[name="description"]`)

@@ -92,7 +92,7 @@ export default function Settings(props: {
                     ...settings,
                     secondaryColor: (() => {
                         const color = colorOptions.find(
-                            (option) => option.value === e.target.value
+                            (option) => option.value === e.target.value,
                         ) as secondaryColor & { value?: string };
                         delete color.value;
                         return color;
@@ -101,7 +101,7 @@ export default function Settings(props: {
             },
             options: colorOptions.map((option) => option.value),
             selected: colorOptions.find(
-                (option) => option.main === settings.secondaryColor?.main
+                (option) => option.main === settings.secondaryColor?.main,
             )?.value,
         },
         {

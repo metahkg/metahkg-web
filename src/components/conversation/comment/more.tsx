@@ -151,7 +151,7 @@ export default function MoreList(props: {
                                                             {button.title}
                                                         </ListItemText>
                                                     </MenuItem>
-                                                )
+                                                ),
                                         )}
                                     </MenuList>
                                 </ClickAwayListener>

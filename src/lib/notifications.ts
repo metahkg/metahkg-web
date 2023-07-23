@@ -17,7 +17,7 @@ export function subscribe() {
                 const subscription = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: JSON.parse(
-                        localStorage.getItem("serverConfig") || "null"
+                        localStorage.getItem("serverConfig") || "null",
                     )?.vapidPublicKey,
                 });
                 const auth = subscription.toJSON().keys?.auth;

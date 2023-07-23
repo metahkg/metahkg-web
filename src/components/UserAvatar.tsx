@@ -33,7 +33,7 @@ const UserAvatar = React.forwardRef(
             }[];
             customButtons?: React.ReactNode[];
         },
-        ref: React.ForwardedRef<AvatarProps>
+        ref: React.ForwardedRef<AvatarProps>,
     ) => {
         const { user, className, sx, buttons, customButtons } = props;
 
@@ -62,7 +62,7 @@ const UserAvatar = React.forwardRef(
                     {avatarName(user.name)}
                 </Avatar>
             ),
-            [blobUrl, className, sx, user.name]
+            [blobUrl, className, sx, user.name],
         );
 
         return loading ? (
@@ -100,7 +100,7 @@ const UserAvatar = React.forwardRef(
         ) : (
             avatarComponent
         );
-    }
+    },
 );
 
 export default UserAvatar;

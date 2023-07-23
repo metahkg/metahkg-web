@@ -241,10 +241,10 @@ function Conversation(props: { id: number }) {
                                                     pages={numOfPages}
                                                     page={page}
                                                     onChange={(
-                                                        e: SelectChangeEvent<number>
+                                                        e: SelectChangeEvent<number>,
                                                     ) => {
                                                         changePage(
-                                                            Number(e.target.value)
+                                                            Number(e.target.value),
                                                         );
                                                     }}
                                                     last={!(page === 1 && !index)}
@@ -263,11 +263,11 @@ function Conversation(props: { id: number }) {
                                                           (comment) =>
                                                               comment.id >
                                                                   (page - 1) * limit &&
-                                                              comment.id <= page * limit
+                                                              comment.id <= page * limit,
                                                       )
                                                     : thread.conversation.slice(
                                                           index * limit,
-                                                          (index + 1) * limit
+                                                          (index + 1) * limit,
                                                       )
                                                 ).map(
                                                     (comment) =>
@@ -284,7 +284,7 @@ function Conversation(props: { id: number }) {
                                                                     comment.id
                                                                 }
                                                             />
-                                                        )
+                                                        ),
                                                 )}
                                             </React.Fragment>
                                         </Box>
@@ -345,7 +345,7 @@ function Conversation(props: { id: number }) {
             thread?.title,
             update,
             updating,
-        ]
+        ],
     );
 }
 

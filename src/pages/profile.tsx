@@ -60,7 +60,7 @@ export default function Profile() {
     const [user] = useUser();
     const [uploadedAvatar, setUploadedAvatar] = useState<File | null>(null);
     const [uploadedAvatarOriginal, setUploadedAvatarOriginal] = useState<File | null>(
-        null
+        null,
     );
     const [editorOpen, setEditorOpen] = useState(false);
     const [serverConfig] = useServerConfig();

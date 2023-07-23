@@ -50,7 +50,7 @@ function Menu() {
             return <MenuBody key={index} selected={index} />;
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [data, smode]
+        [data, smode],
     );
 
     return (
@@ -135,7 +135,7 @@ function Menu() {
                         enableMouseEvents
                     />
                 ),
-                [menuMode, selected, setSelected, slideRenderer]
+                [menuMode, selected, setSelected, slideRenderer],
             )}
         </Box>
     );

@@ -60,7 +60,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                         youtube: YoutubePlayerRef,
                         facebook: FacebookPlayerRef,
                         streamable: StreamPlayerRef,
-                    }[mode].current
+                    }[mode].current,
                 );
                 Player instanceof Element && screenfull.request(Player);
             },
@@ -130,7 +130,7 @@ export default function Player(props: { url: string; style?: React.CSSProperties
                                             {btn.icon}
                                         </IconButton>
                                     </Tooltip>
-                                )
+                                ),
                         )}
                     </Box>
                 </Box>

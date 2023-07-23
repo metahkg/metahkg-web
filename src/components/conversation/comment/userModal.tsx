@@ -58,7 +58,9 @@ export default function UserModal(props: {
                                           text: `Unblocked ${commentUser.name}`,
                                       });
                                       setBlockList(
-                                          blockList.filter((i) => i.id !== commentUser.id)
+                                          blockList.filter(
+                                              (i) => i.id !== commentUser.id,
+                                          ),
                                       );
                                       api.meBlocked().then(setBlockList);
                                   })

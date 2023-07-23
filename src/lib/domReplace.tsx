@@ -36,7 +36,7 @@ const Img = loadable(() => import("../components/conversation/image/Image"));
 const Player = loadable(() => import("../components/conversation/comment/player"));
 const TweetEmbed = loadable(() => import("../components/conversation/comment/twitter"));
 const SocialMediaEmbed = loadable(
-    () => import("../components/conversation/comment/socialMediaEmbed")
+    () => import("../components/conversation/comment/socialMediaEmbed"),
 );
 
 export function useReplace(params: {
@@ -59,9 +59,10 @@ export function useReplace(params: {
                         if (!href) return;
                         const signature =
                             links?.find((v) => v.url === href)?.signature ?? "";
-                        const redirectHref = `https://${
-                            serverConfig?.domains.redirect
-                        }/?url=${encodeURIComponent(href)}&signature=${signature}${
+                        const redirectHref = `https://${serverConfig?.domains
+                            .redirect}/?url=${encodeURIComponent(
+                            href,
+                        )}&signature=${signature}${
                             (domNode.firstChild as unknown as Text)?.data === href
                                 ? ""
                                 : "&forceLanding=true"
@@ -138,7 +139,7 @@ export function useReplace(params: {
                             if (
                                 href &&
                                 [href, decodeURIComponent(href)].some(
-                                    (i) => i === (firstChild as unknown as Text)?.data
+                                    (i) => i === (firstChild as unknown as Text)?.data,
                                 )
                             ) {
                                 if (settings.pdfViewer && href.endsWith(".pdf")) {
@@ -204,6 +205,6 @@ export function useReplace(params: {
             images,
             quote,
             isSmallScreen,
-        ]
+        ],
     );
 }
