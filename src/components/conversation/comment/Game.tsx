@@ -313,7 +313,7 @@ export default function Game(props: { id: string }) {
                                         defaultValue={tokens}
                                         variant="outlined"
                                     />
-                                    {typeof userProfile.games?.tokens === "number" && (
+                                    {typeof userProfile?.games?.tokens === "number" && (
                                         <Typography variant="body1" className="!ml-4">
                                             You have: {userProfile.games.tokens}{" "}
                                             <MetahkgLogo
