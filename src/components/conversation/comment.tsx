@@ -42,14 +42,14 @@ const CommentContext = createContext<{
     reFetch: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     showReplies: [
         boolean | undefined,
-        React.Dispatch<React.SetStateAction<boolean | undefined>>
+        React.Dispatch<React.SetStateAction<boolean | undefined>>,
     ];
     replies: [CommentType[], React.Dispatch<React.SetStateAction<CommentType[]>>];
     popupOpen: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     fold: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     blocked: [
         boolean | undefined,
-        React.Dispatch<React.SetStateAction<boolean | undefined>>
+        React.Dispatch<React.SetStateAction<boolean | undefined>>,
     ];
     /** admin edit mode */
     editing: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -112,13 +112,13 @@ export default function Comment(props: {
     const prevVote = useRef(votes?.find((vote) => vote.cid === comment.id)?.vote);
 
     const [blocked, setBlocked] = useState<boolean | undefined>(
-        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined,
     );
 
     useEffect(() => {
         (blocked || blocked === undefined) &&
             setBlocked(
-                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined,
             );
     }, [blockList, blocked, comment.user.id]);
 
@@ -127,7 +127,7 @@ export default function Comment(props: {
         if (prevVote.current !== currentVote && currentVote) {
             prevVote.current = currentVote;
             api.commentVotes(threadId, comment.id).then((data) =>
-                setComment((comment) => ({ ...comment, ...data }))
+                setComment((comment) => ({ ...comment, ...data })),
             );
         }
     }, [prevVote, votes, comment.id, threadId]);
@@ -365,7 +365,7 @@ export default function Comment(props: {
             noQuote,
             ready,
             loading,
-        ]
+        ],
     );
 }
 

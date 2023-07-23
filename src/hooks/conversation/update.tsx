@@ -61,7 +61,7 @@ export function useUpdate() {
                         sort,
                         openNewPage || sort !== "time"
                             ? undefined
-                            : thread.conversation[thread.conversation.length - 1].id + 1
+                            : thread.conversation[thread.conversation.length - 1].id + 1,
                     ).then((data) => {
                         const scroll = () => {
                             document
@@ -73,12 +73,12 @@ export function useUpdate() {
                                                 ? data?.conversation?.length - 1
                                                 : 0
                                         ]?.id
-                                    }`
+                                    }`,
                                 )
                                 ?.scrollIntoView({ behavior: "smooth" });
                         };
                         data.conversation = data.conversation.filter(
-                            (v) => !thread.conversation.find((c) => c.id === v.id)
+                            (v) => !thread.conversation.find((c) => c.id === v.id),
                         );
                         if (!data.conversation.length) {
                             if (

@@ -91,7 +91,7 @@ registerRoute(
         // Return true to signal that we want to use the handler.
         return true;
     },
-    createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
+    createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html"),
 );
 
 // An example runtime caching route for requests that aren't handled by the
@@ -101,7 +101,7 @@ registerRoute(
     ({ url }) =>
         url.origin === self.location.origin &&
         ["/static", "/images", "/favicon.ico"].some((path) =>
-            url.pathname.startsWith(path)
+            url.pathname.startsWith(path),
         ),
     // Customize this strategy as needed, e.g., by changing to CacheFirst.
     new StaleWhileRevalidate({
@@ -111,7 +111,7 @@ registerRoute(
             // least-recently used files are removed.
             new ExpirationPlugin({ maxEntries: 500 }),
         ],
-    })
+    }),
 );
 
 registerRoute(
@@ -139,7 +139,7 @@ registerRoute(
             }),
             new ExpirationPlugin({ maxAgeSeconds: 60 * 24 * 60 }),
         ],
-    })
+    }),
 );
 
 registerRoute(
@@ -151,7 +151,7 @@ registerRoute(
                 statuses: [200],
             }),
         ],
-    })
+    }),
 );
 
 // This allows the web app to trigger skipWaiting via
@@ -167,8 +167,8 @@ self.addEventListener("message", (event) => {
                 client.postMessage({
                     type: "CURRENT_VERSION",
                     payload: `build ${build}`,
-                })
-            )
+                }),
+            ),
         );
     }
 });

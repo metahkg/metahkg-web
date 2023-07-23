@@ -23,6 +23,6 @@ module.exports = function (app) {
         createProxyMiddleware({
             target: process.env.BACKEND_URL || "https://dev.metahkg.org",
             changeOrigin: true,
-        })
+        }),
     );
 };

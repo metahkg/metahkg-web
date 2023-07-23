@@ -18,7 +18,7 @@ const CAPTCHA = React.forwardRef(
             siteKey?: string;
             timeout?: number;
         },
-        ref: React.ForwardedRef<CaptchaRefProps>
+        ref: React.ForwardedRef<CaptchaRefProps>,
     ) => {
         const { theme, siteKey } = props;
         const [token, setToken] = useState<string | null>(null);
@@ -89,7 +89,7 @@ const CAPTCHA = React.forwardRef(
                 />
             );
         }
-    }
+    },
 );
 
 export default CAPTCHA;

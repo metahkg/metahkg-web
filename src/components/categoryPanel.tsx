@@ -39,7 +39,7 @@ export function CategoryPanel(props: {
     const pinned = categories.filter((category) => category.pinned && !category.hidden);
     const others = categories
         .filter(
-            (category) => !category.tags?.length && !category.pinned && !category.hidden
+            (category) => !category.tags?.length && !category.pinned && !category.hidden,
         )
         .concat(hidden.filter((category) => !category.tags?.length));
 
@@ -54,7 +54,7 @@ export function CategoryPanel(props: {
             }
             setOpen(open);
         },
-        [setOpen]
+        [setOpen],
     );
 
     const CategoryEle = useCallback(
@@ -84,7 +84,7 @@ export function CategoryPanel(props: {
                 </Typography>
             </Box>
         ),
-        [currentCategory, menuMode, settings.secondaryColor?.main, toggleDrawer]
+        [currentCategory, menuMode, settings.secondaryColor?.main, toggleDrawer],
     );
 
     return (
@@ -123,12 +123,12 @@ export function CategoryPanel(props: {
                             {categories
                                 .filter(
                                     (category) =>
-                                        category.tags?.includes(tag) && !category.hidden
+                                        category.tags?.includes(tag) && !category.hidden,
                                 )
                                 .concat(
-                                    hidden.filter((category) =>
-                                        category.tags?.includes(tag)
-                                    )
+                                    hidden.filter(
+                                        (category) => category.tags?.includes(tag),
+                                    ),
                                 )
                                 .map(CategoryEle)}
                         </Box>

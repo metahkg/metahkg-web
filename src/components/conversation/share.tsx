@@ -53,7 +53,7 @@ export default function Share() {
             icon: <Telegram />,
             title: "Share to Telegram",
             link: `tg://msg_url?text=${encodeURIComponent(
-                title + "\n- Shared from Metahkg forum"
+                title + "\n- Shared from Metahkg forum",
             )}&url=${encodeURIComponent(link)}`,
         },
         {
@@ -70,14 +70,14 @@ export default function Share() {
             icon: <Reddit />,
             title: "Share to Reddit",
             link: `https://www.reddit.com/submit?link=${encodeURIComponent(
-                link
+                link,
             )}&title=${encodeURIComponent(title)}`,
         },
         {
             icon: <Facebook />,
             title: "Share to Facebook",
             link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                link
+                link,
             )}`,
         },
     ];

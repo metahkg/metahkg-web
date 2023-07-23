@@ -82,7 +82,7 @@ export default function useFirstFetch() {
                 setDescription(
                     (query.c &&
                         (data.conversation?.[Number(query.c) - 1] as Comment)?.text) ||
-                        (data.conversation?.[0] as Comment)?.text
+                        (data.conversation?.[0] as Comment)?.text,
                 );
                 if (!data.slink) {
                     data.slink = `${window.location.origin}/thread/${threadId}?page=1`;

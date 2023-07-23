@@ -31,7 +31,7 @@ export function filterSwearWords(text: string) {
                     .sort((a, b) => b.length - a.length)
                     .reduce((prev, curr) => {
                         return prev.replaceAll(curr, "*");
-                    }, text)
+                    }, text),
             );
     } catch (err) {
         console.error(err);

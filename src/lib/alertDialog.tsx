@@ -34,24 +34,24 @@ export interface AlertDialogProps {
     body?: (
         state: { [key: string]: any },
         setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
-        closeDialog: () => void
+        closeDialog: () => void,
     ) => React.ReactNode;
     btns: (
         state: { [key: string]: any },
         setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
-        closeDialog: () => void
+        closeDialog: () => void,
     ) => {
         text: string;
         action: (
             state: { [key: string]: any },
             setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
-            closeDialog: () => void
+            closeDialog: () => void,
         ) => void;
         disabled?: boolean;
     }[];
     onClose?: (
         state: { [key: string]: any },
-        setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>
+        setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>,
     ) => void;
 }
 

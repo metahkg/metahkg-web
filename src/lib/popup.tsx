@@ -124,7 +124,7 @@ export function PopUp(props: {
                                         >
                                             {button.text}
                                         </Button>
-                                    )
+                                    ),
                             )}
                         </Box>
                     </React.Fragment>
