@@ -115,6 +115,9 @@ export default function TextEditor(props: {
                         : { skin: "oxide" }),
                     branding: false,
                     promotion: false,
+                    relative_urls: false,
+                    convert_urls: false,
+                    remove_script_host: false,
                     ...(noStatusBar && { statusbar: false }),
                     setup: (editor) => {
                         editor.ui.registry.addButton("uploadimage", {
