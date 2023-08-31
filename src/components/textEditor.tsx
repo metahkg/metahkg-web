@@ -85,14 +85,14 @@ export default function TextEditor(props: {
                     a = a.substring(0, lengthLimit);
                     editor.setContent(a);
                     editor.windowManager.alert(
-                        "Content exceeded length limit. Automatically truncated.",
+                        "Content exceeded length limit. Automatically truncated."
                     );
                     return;
                 }
             }
             onChange?.(a, editor);
         },
-        [onChange, lengthLimit],
+        [onChange, lengthLimit]
     );
 
     return (
@@ -164,7 +164,7 @@ export default function TextEditor(props: {
                                             .then((res) => {
                                                 editor.windowManager.close();
                                                 editor.insertContent(
-                                                    `<img alt="" src="${res.data.url}" />`,
+                                                    `<img alt="" src="${res.data.url}" />`
                                                 );
                                             })
                                             .catch((err) => {
@@ -177,7 +177,7 @@ export default function TextEditor(props: {
                                                             {
                                                                 type: "alertbanner",
                                                                 text: `Error uploading image: ${parseError(
-                                                                    err,
+                                                                    err
                                                                 )}`,
                                                                 level: "error",
                                                                 icon: "warning",
@@ -281,7 +281,7 @@ export default function TextEditor(props: {
                                     "Content-Type": "multipart/form-data",
                                     Authorization: `Bearer ${session?.token}`,
                                 },
-                            },
+                            }
                         );
                         return data.url;
                     },
