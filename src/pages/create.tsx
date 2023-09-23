@@ -260,7 +260,6 @@ export default function Create() {
                             setComment(e.getContent());
                         }}
                         initText={inittext}
-                        toolbarSticky
                         autoResize
                         lengthLimit={50000}
                         minHeight={isSmallScreen ? 310 : 350}
