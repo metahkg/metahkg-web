@@ -119,7 +119,7 @@ export default function Game(props: { id: string }) {
                                                     setAnswer([...answer]);
                                                 } else {
                                                     setAnswer(
-                                                        answer.filter((v) => v !== index)
+                                                        answer.filter((v) => v !== index),
                                                     );
                                                 }
                                             }}
@@ -149,7 +149,7 @@ export default function Game(props: { id: string }) {
                                                     ? "bg-green-600 dark:bg-green-900"
                                                     : "bg-red-600 dark:bg-red-900"
                                                 : meGuessHistory?.find(
-                                                      (v) => v.option === index
+                                                      (v) => v.option === index,
                                                   )
                                                 ? "bg-gray-300 dark:bg-blue-900"
                                                 : "bg-gray-100 dark:bg-gray-800"
@@ -197,7 +197,7 @@ export default function Game(props: { id: string }) {
                                         .filter((v) => v.option === index)
                                         .reduce(
                                             (prev, curr) => prev + curr.tokens,
-                                            0
+                                            0,
                                         )}{" "}
                                     <MetahkgLogo
                                         svg
@@ -229,8 +229,8 @@ export default function Game(props: { id: string }) {
                                 if (!user) {
                                     return navigate(
                                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                                            `${wholePath()}&c=${comment.id}`
-                                        )}`
+                                            `${wholePath()}&c=${comment.id}`,
+                                        )}`,
                                     );
                                 }
                                 if (isHost) {
@@ -307,7 +307,7 @@ export default function Game(props: { id: string }) {
                                         onChange={(e) => {
                                             setTokens(Number(e.target.value));
                                             setValid(
-                                                formRef.current?.checkValidity() ?? false
+                                                formRef.current?.checkValidity() ?? false,
                                             );
                                         }}
                                         defaultValue={tokens}

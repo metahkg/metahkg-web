@@ -32,7 +32,7 @@ export default function CommentEdit() {
     const [comment, setComment] = useComment();
     const [, setEditing] = useEditing();
     const [edited, setEdited] = useState(
-        comment.comment.type === "html" ? comment.comment.html : ""
+        comment.comment.type === "html" ? comment.comment.html : "",
     );
     const [reason, setReason] = useState("");
     const [, setNotification] = useNotification();

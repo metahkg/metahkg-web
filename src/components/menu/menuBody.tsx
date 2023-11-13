@@ -96,7 +96,7 @@ export default function MenuBody(props: { selected: number }) {
                 case "category":
                     api.categoryThreads(
                         category,
-                        { 0: "latest", 1: "viral" }[selected] as "latest" | "viral"
+                        { 0: "latest", 1: "viral" }[selected] as "latest" | "viral",
                     )
                         .then(onSuccess)
                         .catch(onError);
@@ -106,7 +106,7 @@ export default function MenuBody(props: { selected: number }) {
                         profile,
                         { 0: "created", 1: "lastcomment" }[selected] as
                             | "created"
-                            | "lastcomment"
+                            | "lastcomment",
                     )
                         .then(onSuccess)
                         .catch(onError);
@@ -118,7 +118,7 @@ export default function MenuBody(props: { selected: number }) {
                         { 0: "relevance", 1: "created", 2: "lastcomment" }[selected] as
                             | "relevance"
                             | "created"
-                            | "lastcomment"
+                            | "lastcomment",
                     )
                         .then(onSuccess)
                         .catch(onError);
@@ -160,7 +160,7 @@ export default function MenuBody(props: { selected: number }) {
                 api.categoryThreads(
                     category,
                     { 0: "latest", 1: "viral" }[selected] as "latest" | "viral",
-                    page + 1
+                    page + 1,
                 )
                     .then(onSuccess)
                     .catch(onError);
@@ -171,7 +171,7 @@ export default function MenuBody(props: { selected: number }) {
                     { 0: "created", 1: "lastcomment" }[selected] as
                         | "created"
                         | "lastcomment",
-                    page + 1
+                    page + 1,
                 )
                     .then(onSuccess)
                     .catch(onError);
@@ -184,21 +184,21 @@ export default function MenuBody(props: { selected: number }) {
                         | "relevance"
                         | "created"
                         | "lastcomment",
-                    page + 1
+                    page + 1,
                 )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "recall":
                 api.threads(
-                    history.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
+                    history.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1),
                 )
                     .then(onSuccess)
                     .catch(onError);
                 break;
             case "starred":
                 api.threads(
-                    starList.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1)
+                    starList.map((item) => item.id).slice(page * 25, (page + 1) * 25 - 1),
                 )
                     .then(onSuccess)
                     .catch(onError);
@@ -254,7 +254,7 @@ export default function MenuBody(props: { selected: number }) {
                                     thread={thread}
                                     onClick={() => {
                                         const index = history.findIndex(
-                                            (i) => i.id === thread.id
+                                            (i) => i.id === thread.id,
                                         );
                                         if (index === -1) {
                                             history.unshift({
@@ -265,14 +265,14 @@ export default function MenuBody(props: { selected: number }) {
                                             setHistory(history);
                                             localStorage.setItem(
                                                 "history",
-                                                JSON.stringify(history)
+                                                JSON.stringify(history),
                                             );
                                         } else if (history[index].cid < thread.count) {
                                             history[index].c = thread.count;
                                             setHistory(history);
                                             localStorage.setItem(
                                                 "history",
-                                                JSON.stringify(history)
+                                                JSON.stringify(history),
                                             );
                                         }
                                     }}

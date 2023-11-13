@@ -78,11 +78,11 @@ export function ReactLinkPreview(props: {
                             `https://${
                                 serverConfig?.domains.rlpProxy || "rlp.metahkg.org"
                             }`,
-                            axios.create()
+                            axios.create(),
                         );
                         const data = await client.getMetadata(
                             encodeURIComponent(originalUrl || url),
-                            signature
+                            signature,
                         );
                         const { metadata } = data;
                         if (!metadata?.title || !metadata?.hostname) {

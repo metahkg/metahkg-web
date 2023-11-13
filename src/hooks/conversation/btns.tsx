@@ -123,7 +123,7 @@ export default function useBtns() {
                         setStarList(
                             starred
                                 ? starList.filter((i) => i.id !== threadId)
-                                : [...starList, { id: threadId, date: new Date() }]
+                                : [...starList, { id: threadId, date: new Date() }],
                         );
                         api.meStarred().then(setStarList);
                     })
@@ -157,8 +157,8 @@ export default function useBtns() {
                 else
                     navigate(
                         `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `/thread/${threadId}?page=${currentPage}`
-                        )}`
+                            `/thread/${threadId}?page=${currentPage}`,
+                        )}`,
                     );
             },
             title: "Reply",

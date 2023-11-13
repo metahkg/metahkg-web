@@ -130,7 +130,7 @@ module.exports = {
                 {
                     type: "color",
                     values: flattenColorPalette.default(theme("colors")),
-                }
+                },
             );
             matchUtilities(
                 {
@@ -148,7 +148,7 @@ module.exports = {
                 {
                     type: "color",
                     values: flattenColorPalette.default(theme("colors")),
-                }
+                },
             );
             matchUtilities(
                 {
@@ -158,7 +158,7 @@ module.exports = {
                         },
                     }),
                 },
-                { values: theme("borderRadius") }
+                { values: theme("borderRadius") },
             );
         },
     ],

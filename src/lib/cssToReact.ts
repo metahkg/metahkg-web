@@ -28,14 +28,14 @@ export default function cssToReact(css: string): React.CSSProperties {
                     format(css, {
                         parser: "css",
                         plugins: [prettierCss],
-                    }).replaceAll("\n", "")
-                ).attributes
+                    }).replaceAll("\n", ""),
+                ).attributes,
             ).map(([k, v]) => [
                 k.replace(/-[a-z]/g, (match) => {
                     return match[1].toUpperCase();
                 }),
                 v,
-            ])
+            ]),
         );
     } catch {
         return {};

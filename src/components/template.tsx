@@ -100,7 +100,7 @@ export default function Template() {
                             ? {
                                   component: Link,
                                   href: `/users/login?returnto=${encodeURIComponent(
-                                      wholePath()
+                                      wholePath(),
                                   )}`,
                               }
                             : {

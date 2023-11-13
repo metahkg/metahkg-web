@@ -39,7 +39,7 @@ export default function CommentBody(props: {
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const [blockList] = useBlockList();
     const [blocked, setBlocked] = useState<boolean | undefined>(
-        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+        Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined,
     );
     const replace = useReplace({
         quote: depth > 0,
@@ -50,7 +50,7 @@ export default function CommentBody(props: {
     useEffect(() => {
         if (blocked || blocked === undefined)
             setBlocked(
-                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
+                Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined,
             );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [blockList]);
@@ -64,8 +64,8 @@ export default function CommentBody(props: {
                     settings.filterSwearWords
                         ? filterSwearWords(comment.comment.html)
                         : comment.comment.html,
-                    { replace }
-                )
+                    { replace },
+                ),
             );
         } else if (comment.comment.type === "game" && comment.comment.gameId) {
             setCommentJSX(<Game id={comment.comment.gameId} />);
@@ -149,7 +149,7 @@ export default function CommentBody(props: {
             depth,
             noQuote,
             showQuote,
-        ]
+        ],
     );
 
     useEffect(() => {
