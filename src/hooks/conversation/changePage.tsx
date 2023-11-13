@@ -73,7 +73,7 @@ export default function useChangePage() {
             setFinalPage(
                 (shouldReRender && newPage) || newPage - finalPage === 1
                     ? newPage
-                    : finalPage
+                    : finalPage,
             );
 
             api.thread(threadId, newPage, limit, sort)
@@ -98,7 +98,7 @@ export default function useChangePage() {
                                                 ...data.conversation,
                                                 ...thread.conversation,
                                             ],
-                              }
+                              },
                     );
 
                     data.conversation.length % limit && setEnd(true);

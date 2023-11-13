@@ -50,8 +50,8 @@ export default function useOnScroll() {
                         Number(
                             document
                                 .getElementById(`c${comment.id}`)
-                                ?.getBoundingClientRect()?.top
-                        )
+                                ?.getBoundingClientRect()?.top,
+                        ),
                     ),
                     id: comment.id,
                 };

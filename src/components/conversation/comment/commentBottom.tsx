@@ -96,7 +96,7 @@ export default function CommentBottom() {
                     open: true,
                     severity: "error",
                     text: parseError(err),
-                })
+                }),
             );
     };
 

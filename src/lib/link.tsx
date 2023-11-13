@@ -32,7 +32,7 @@ export const Link = React.forwardRef(
             ref?: undefined;
             children: React.ReactNode;
         },
-        ref: React.ForwardedRef<HTMLAnchorElement>
+        ref: React.ForwardedRef<HTMLAnchorElement>,
     ) => {
         const { href, to, color, children } = props;
         return (
@@ -65,5 +65,5 @@ export const Link = React.forwardRef(
                 )}
             </React.Fragment>
         );
-    }
+    },
 );

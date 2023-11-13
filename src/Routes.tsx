@@ -68,7 +68,7 @@ export default function Routes() {
             setDescription(
                 `${
                     serverConfig?.branding || "Metahkg"
-                } is a free and open source lihkg-style forum.`
+                } is a free and open source lihkg-style forum.`,
             );
             prev.current = location.pathname;
         }

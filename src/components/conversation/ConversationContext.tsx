@@ -32,7 +32,7 @@ const ConversationContext = createContext<{
     currentPage: [number, React.Dispatch<React.SetStateAction<number>>];
     votes: [
         { cid: number; vote: "U" | "D" }[] | null,
-        React.Dispatch<React.SetStateAction<{ cid: number; vote: "U" | "D" }[] | null>>
+        React.Dispatch<React.SetStateAction<{ cid: number; vote: "U" | "D" }[] | null>>,
     ];
     updating: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
     pages: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -42,7 +42,7 @@ const ConversationContext = createContext<{
     story: [number, React.Dispatch<React.SetStateAction<number>>];
     sort: [
         "time" | "latest" | "score",
-        React.Dispatch<React.SetStateAction<"time" | "latest" | "score">>
+        React.Dispatch<React.SetStateAction<"time" | "latest" | "score">>,
     ];
     limit: [number, React.Dispatch<React.SetStateAction<number>>];
     lastHeight: React.MutableRefObject<number>;
@@ -65,11 +65,11 @@ export default function ConversationProvider(props: {
     const [thread, setThread] = useState<Thread | null>(null);
     const [limit, setLimit] = useState(settings.conversationLimit || 25);
     const [finalPage, setFinalPage] = useState(
-        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1,
     );
     /** Current page */
     const [currentPage, setCurrentPage] = useState(
-        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1
+        Number(query.page) || Math.floor((Number(query.c) - 1) / limit) + 1 || 1,
     );
     const [votes, setVotes] = useState<{ cid: number; vote: "U" | "D" }[] | null>(null);
     const [updating, setUpdating] = useState(false);

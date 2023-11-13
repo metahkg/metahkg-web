@@ -75,7 +75,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     <section key="message">
                         <h2>Message</h2>
                         <p>{this.state.error.message}</p>
-                    </section>
+                    </section>,
                 );
 
                 output.push(
@@ -85,7 +85,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                             {process.env.REACT_APP_build || process.env.REACT_APP_date} (v
                             {process.env.REACT_APP_version})
                         </pre>
-                    </section>
+                    </section>,
                 );
 
                 if (this.state.error.stack) {
@@ -93,7 +93,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                         <section key="stacktrace">
                             <h2>Stack trace</h2>
                             <pre>{this.state.error.stack}</pre>
-                        </section>
+                        </section>,
                     );
                 }
 

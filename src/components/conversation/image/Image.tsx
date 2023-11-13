@@ -140,7 +140,7 @@ const ImgComponent = React.forwardRef(
                 </Box>
             </PhotoView>
         );
-    }
+    },
 );
 
 export default function Image(props: Props) {

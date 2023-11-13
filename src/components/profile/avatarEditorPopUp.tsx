@@ -118,7 +118,7 @@ export default function AvatarEditorPopUp(props: {
                                 setAvatar(
                                     new File([blob], "avatar.png", {
                                         type: "image/png",
-                                    })
+                                    }),
                                 );
                             });
                     }
