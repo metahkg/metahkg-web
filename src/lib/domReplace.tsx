@@ -54,13 +54,15 @@ export function useReplace(params: {
                         if (!href) return;
                         const signature =
                             links?.find((v) => v.url === href)?.signature ?? "";
-                        const redirectHref = `https://${
-                            process.env.REACT_APP_REDIRECT_DOMAIN
-                        }/?url=${encodeURIComponent(href)}&signature=${signature}${
-                            (domNode.firstChild as unknown as Text)?.data === href
-                                ? ""
-                                : "&forceLanding=true"
-                        }`;
+                        const redirectHref = href.startsWith("mailto")
+                            ? href
+                            : `https://${
+                                  process.env.REACT_APP_REDIRECT_DOMAIN
+                              }/?url=${encodeURIComponent(href)}&signature=${signature}${
+                                  (domNode.firstChild as unknown as Text)?.data === href
+                                      ? ""
+                                      : "&forceLanding=true"
+                              }`;
                         if (
                             [regex.facebook.videos, regex.youtube, regex.streamable]
                                 .flat()
