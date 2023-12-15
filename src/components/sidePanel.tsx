@@ -199,7 +199,7 @@ export default function SidePanel(props: {
                                 <ListItemText>{button.title}</ListItemText>
                             </ListItemButton>
                         ) : (
-                            <Tooltip arrow title={button.title}>
+                            <Tooltip placement="right" arrow title={button.title}>
                                 <IconButton
                                     onClick={buttonOnclick(button)}
                                     className="!mt-2 h-[40px] w-[40px]"
