@@ -39,7 +39,8 @@ docker-build:
   image: docker:latest
   stage: build
   services:
-    - docker:dind
+    - name: docker:dind
+      alias: docker
   before_script:
     - apk add nodejs-current
     - docker pull tonistiigi/binfmt:latest
