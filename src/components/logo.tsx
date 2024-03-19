@@ -24,7 +24,6 @@ import { css } from "../lib/css";
 export default function MetahkgLogo(props: {
     light?: boolean;
     dark?: boolean;
-    ua?: boolean;
     text?: boolean;
     filled?: boolean;
     svg?: boolean;
@@ -33,7 +32,7 @@ export default function MetahkgLogo(props: {
     sx?: React.CSSProperties;
     className?: string;
 }) {
-    const { light, dark, ua, text, filled, svg, height, width, sx, className } = props;
+    const { light, dark, text, filled, svg, height, width, sx, className } = props;
     return (
         <img
             className={`${svg && light ? css.svgwhite : ""} ${className || ""}`}
@@ -46,7 +45,6 @@ export default function MetahkgLogo(props: {
                         : "/images/logo-white.png")) ||
                 (text && "/images/logo_with_text.png") ||
                 (dark && "/images/logo.png") ||
-                (ua && "/images/metahkg-ua.png") ||
                 "/images/logo.png"
             }
             alt="Metahkg Logo"
