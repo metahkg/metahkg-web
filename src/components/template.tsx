@@ -84,17 +84,6 @@ export default function Template() {
                 </Box>
                 <List>
                     <ListItemButton
-                        className="w-full !no-underline !text-inherit"
-                        component={Link}
-                        href="https://war.ukraine.ua/support-ukraine/"
-                    >
-                        <ListItemIcon>
-                            <MetahkgLogo ua height={24} width={30} />
-                        </ListItemIcon>
-                        <ListItemText>Support Ukraine</ListItemText>
-                    </ListItemButton>
-
-                    <ListItemButton
                         {...(!user
                             ? {
                                   component: Link,
