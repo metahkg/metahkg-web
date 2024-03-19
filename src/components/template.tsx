@@ -35,7 +35,6 @@ import {
 } from "@mui/material";
 import { Link } from "../lib/link";
 import MetahkgIcon from "./logo";
-import MetahkgLogo from "./logo";
 import { wholePath } from "../lib/common";
 import { useDarkMode, useUser } from "./AppContextProvider";
 import { useLogout } from "../hooks/useLogout";
