@@ -237,7 +237,7 @@ export default function Game(props: { id: string }) {
                                     setLoading(true);
                                     return api
                                         .gamesGuessAnswer(id, {
-                                            answer: answer as unknown as number,
+                                            answer,
                                         })
                                         .then(() => {
                                             setLoading(false);
