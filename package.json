@@ -41,7 +41,7 @@
     "humanize-duration": "^3.28.0",
     "jose": "^4.14.4",
     "naughty-words": "^1.2.0",
-    "postcss": "^8.4.25",
+    "postcss": "^8.4.31",
     "prettier": "^2.8.8",
     "prismjs": "^1.29.0",
     "query-string": "^8.1.0",
