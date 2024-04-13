@@ -21,7 +21,7 @@
     "@metahkg/api": "^6.11.9-dev",
     "@metahkg/csstojson": "^3.0.1",
     "@metahkg/react-link-preview": "^1.17.0",
-    "@metahkg/rlp-proxy-rewrite-api": "^6.9.3-dev",
+    "@metahkg/rlp-proxy-rewrite-api": "^6.9.3",
     "@mui/icons-material": "^5.13.7",
     "@mui/lab": "^5.0.0-alpha.135",
     "@mui/material": "^5.13.7",
