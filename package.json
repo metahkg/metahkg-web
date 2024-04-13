@@ -26,7 +26,7 @@
     "@mui/lab": "^5.0.0-alpha.135",
     "@mui/material": "^5.13.7",
     "@svgr/webpack": "^8.0.1",
-    "@tinymce/tinymce-react": "^4.3.0",
+    "@tinymce/tinymce-react": "^5.0.0",
     "@types/react-google-recaptcha": "^2.1.5",
     "autoprefixer": "^10.4.14",
     "axios": "^1.6.8",
