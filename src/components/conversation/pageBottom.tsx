@@ -62,7 +62,7 @@ export default function PageBottom() {
                 ))}
             </Box>
             <Typography className="!text-sm">
-                Copyright (c) 2022-present Metahkg Contributors.{" "}
+                Copyright (c) 2022-present Wong Chun Yat (wcyat).{" "}
                 <Link
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"

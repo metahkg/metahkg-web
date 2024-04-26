@@ -91,7 +91,7 @@ export function AboutDialog(props: {
                     Copyright
                 </Typography>
                 <Typography gutterBottom>
-                    Metahkg Copyright (c) 2022-present Metahkg Contributors
+                    Metahkg Copyright (c) 2022-present Wong Chun Yat (wcyat)
                 </Typography>
                 <Typography gutterBottom>
                     <Link

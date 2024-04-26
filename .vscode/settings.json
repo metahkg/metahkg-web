@@ -9,7 +9,7 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "copyrightInserter.holder": "Metahkg Contributors",
+  "copyrightInserter.holder": "Wong Chun Yat (wcyat)",
   "copyrightInserter.year": "2022-present",
   "copyrightInserter.license": "agpl3",
   "copyrightInserter.useLineComment": false

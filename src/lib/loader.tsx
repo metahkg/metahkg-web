@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2022-present Metahkg Contributors
+ Copyright (C) 2022-present Wong Chun Yat (wcyat)
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as
