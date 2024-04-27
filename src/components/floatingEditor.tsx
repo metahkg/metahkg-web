@@ -16,7 +16,12 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Close, Code, Comment as CommentIcon, QuestionMark } from "@mui/icons-material";
+import {
+    Close,
+    Code,
+    Comment as CommentIcon,
+    Poll as PollIcon,
+} from "@mui/icons-material";
 import {
     Box,
     DialogTitle,
@@ -53,7 +58,7 @@ import { LoadingButton } from "@mui/lab";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "./VisibilityChooser";
-import CreateGame, { GameCreateType } from "./createGame";
+import CreatePoll, { PollCreateType } from "./createPoll";
 
 export default function FloatingEditor() {
     const threadId = useThreadId();
@@ -78,8 +83,8 @@ export default function FloatingEditor() {
     const [newCommentId, setNewCommentId] = useState(0);
     const captchaRef = useRef<CaptchaRefProps>(null);
     const [serverConfig] = useServerConfig();
-    const [commentType, setCommentType] = useState<"html" | "guess">("html");
-    const [game, setGame] = useState<GameCreateType | null>(null);
+    const [commentType, setCommentType] = useState<"html" | "poll">("html");
+    const [poll, setPoll] = useState<PollCreateType | null>(null);
 
     useEffect(() => {
         if (shouldUpdate && newCommentId) {
@@ -119,14 +124,14 @@ export default function FloatingEditor() {
             return;
         }
         setCreating(true);
-        let gameId: string = "";
-        if (commentType === "guess" && game?.options && game?.title) {
+        let pollId: string = "";
+        if (commentType === "poll" && poll?.options && poll?.title) {
             try {
-                const data = await api.gamesGuessCreate({
-                    options: game?.options,
-                    title: game?.title,
+                const data = await api.pollsCreate({
+                    options: poll?.options,
+                    title: poll?.title,
                 });
-                gameId = data.id;
+                pollId = data.id;
             } catch (e) {
                 return setNotification({
                     open: true,
@@ -135,12 +140,11 @@ export default function FloatingEditor() {
                 });
             }
         }
-        const type = {
-            html: "html",
-            guess: "game",
-        }[commentType] as "html" | "game";
         api.commentCreate(threadId, {
-            comment: type === "html" ? { type, html: comment } : { type, gameId },
+            comment:
+                commentType === "html"
+                    ? { type: commentType, html: comment }
+                    : { type: commentType, pollId },
             quote: editor.quote?.id,
             captchaToken,
             visibility,
@@ -248,9 +252,9 @@ export default function FloatingEditor() {
                             disableRipple
                         />
                         <Tab
-                            icon={<QuestionMark />}
-                            value={"guess"}
-                            label="Guess"
+                            icon={<PollIcon />}
+                            value={"poll"}
+                            label="Poll"
                             iconPosition="start"
                             disableRipple
                         />
@@ -274,8 +278,8 @@ export default function FloatingEditor() {
                         lengthLimit={50000}
                         className={`max-w-full ${commentType !== "html" ? "hidden" : ""}`}
                     />
-                    <Box className={commentType !== "guess" ? "hidden" : ""}>
-                        <CreateGame onChange={setGame} type="guess" />
+                    <Box className={commentType !== "poll" ? "hidden" : ""}>
+                        <CreatePoll onChange={setPoll} />
                     </Box>
                     <VisibilityChooser
                         visibility={visibility}
@@ -298,7 +302,7 @@ export default function FloatingEditor() {
                             disabled={
                                 (commentType === "html"
                                     ? !comment
-                                    : !game?.title || game?.options.length < 2) ||
+                                    : !poll?.title || poll?.options.length < 2) ||
                                 creating
                             }
                             startIcon={<CommentIcon />}

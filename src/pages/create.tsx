@@ -17,7 +17,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, Tab, Tabs, TextField, Typography } from "@mui/material";
-import { Code, Create as CreateIcon, QuestionMark } from "@mui/icons-material";
+import { Code, Create as CreateIcon, Poll as PollIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -41,7 +41,7 @@ import { clearTinymceDraft } from "../lib/clearTinymceDraft";
 import { LoadingButton } from "@mui/lab";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "../components/VisibilityChooser";
-import CreateGame, { GameCreateType } from "../components/createGame";
+import CreatePoll, { PollCreateType } from "../components/createPoll";
 
 /**
  * Page for creating a new thread
@@ -62,8 +62,8 @@ export default function Create() {
         severity: "info",
         text: "",
     });
-    const [commentType, setCommentType] = useState<"html" | "guess">("html");
-    const [game, setGame] = useState<GameCreateType | null>(null);
+    const [commentType, setCommentType] = useState<"html" | "poll">("html");
+    const [poll, setPoll] = useState<PollCreateType | null>(null);
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
 
@@ -150,14 +150,14 @@ export default function Create() {
         setLoading(true);
         setAlert({ severity: "info", text: "Creating thread..." });
         setNotification({ open: true, severity: "info", text: "Creating thread..." });
-        let gameId: string = "";
-        if (commentType === "guess" && game?.options && game?.title) {
+        let pollId: string = "";
+        if (commentType === "poll" && poll?.options && poll?.title) {
             try {
-                const data = await api.gamesGuessCreate({
-                    options: game?.options,
-                    title: game?.title,
+                const data = await api.pollsCreate({
+                    options: poll?.options,
+                    title: poll?.title,
                 });
-                gameId = data.id;
+                pollId = data.id;
             } catch (e) {
                 return setNotification({
                     open: true,
@@ -166,14 +166,13 @@ export default function Create() {
                 });
             }
         }
-        const type = {
-            html: "html",
-            guess: "game",
-        }[commentType] as "html" | "game";
         api.threadCreate({
             title: threadTitle,
             category: catchoosed,
-            comment: type === "html" ? { type, html: comment } : { type, gameId },
+            comment:
+                commentType === "html"
+                    ? { type: commentType, html: comment }
+                    : { type: commentType, pollId },
             captchaToken,
             visibility,
         })
@@ -248,9 +247,9 @@ export default function Create() {
                             disableRipple
                         />
                         <Tab
-                            icon={<QuestionMark />}
-                            value={"guess"}
-                            label="Guess"
+                            icon={<PollIcon />}
+                            value={"poll"}
+                            label="Poll"
                             iconPosition="start"
                             disableRipple
                         />
@@ -265,8 +264,8 @@ export default function Create() {
                         minHeight={isSmallScreen ? 310 : 350}
                         className={commentType !== "html" ? "hidden" : ""}
                     />
-                    <Box className={commentType !== "guess" ? "hidden" : ""}>
-                        <CreateGame onChange={setGame} type="guess" />
+                    <Box className={commentType !== "poll" ? "hidden" : ""}>
+                        <CreatePoll onChange={setPoll} />
                     </Box>
                     <VisibilityChooser
                         visibility={visibility}
@@ -281,8 +280,8 @@ export default function Create() {
                                 loading ||
                                 !(commentType === "html"
                                     ? comment
-                                    : (game?.options?.length || 0) >= 2 &&
-                                      game?.title &&
+                                    : (poll?.options?.length || 0) >= 2 &&
+                                      poll?.title &&
                                       threadTitle &&
                                       catchoosed)
                             }

@@ -25,7 +25,7 @@ import { Comment } from "@metahkg/api";
 import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
-import Game from "./Game";
+import PollComponent from "./Poll";
 
 export default function CommentBody(props: {
     comment: Comment;
@@ -67,8 +67,8 @@ export default function CommentBody(props: {
                     { replace }
                 )
             );
-        } else if (comment.comment.type === "game" && comment.comment.gameId) {
-            setCommentJSX(<Game id={comment.comment.gameId} />);
+        } else if (comment.comment.type === "poll" && comment.comment.pollId) {
+            setCommentJSX(<PollComponent id={comment.comment.pollId} />);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [

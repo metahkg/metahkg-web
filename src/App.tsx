@@ -68,7 +68,12 @@ function App() {
                 main: darkMode ? "#222" : "#fff",
                 dark: darkMode ? "#171717" : "#f6f6f6",
             }}
-            secondary={settings.secondaryColor || { main: "#f5bd1f", dark: "#ffc100" }}
+            secondary={
+                settings.secondaryColor || {
+                    main: "#f5bd1f",
+                    dark: "rgba(245,189,31,0.5)",
+                }
+            }
         >
             <CssBaseline />
             <ErrorBoundary>

@@ -49,10 +49,10 @@ export default function Settings(props: {
         main: secondaryColorMain;
         dark: secondaryColorDark;
     }[] = [
-        { value: "Yellow", main: "#f5bd1f", dark: "#ffc100" },
-        { value: "Orange", main: "#ff9800", dark: "#b26a00" },
-        { value: "Teal", main: "#009688", dark: "#00695f" },
-        { value: "Purple", main: "#651fff", dark: "#4615b2" },
+        { value: "Yellow", main: "#f5bd1f", dark: "rgba(245,189,31,0.5)" },
+        { value: "Orange", main: "#ff9800", dark: "rgba(178,106,0,0.5)" },
+        { value: "Teal", main: "#009688", dark: "rgba(0,150,136,0.5)" },
+        { value: "Purple", main: "#651fff", dark: "rgba(101,31,255,0.5)" },
     ];
 
     const settingItems: ((

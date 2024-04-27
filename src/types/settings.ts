@@ -16,7 +16,11 @@
  */
 
 export type secondaryColorMain = "#651fff" | "#009688" | "#ff9800" | "#f5bd1f";
-export type secondaryColorDark = "#4615b2" | "#00695f" | "#b26a00" | "#ffc100";
+export type secondaryColorDark =
+    | "rgba(101,31,255,0.5)"
+    | "rgba(0,150,136,0.5)"
+    | "rgba(178,106,0,0.5)"
+    | "rgba(245,189,31,0.5)";
 export type secondaryColor = {
     main: secondaryColorMain;
     dark: secondaryColorDark;
