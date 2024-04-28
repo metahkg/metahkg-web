@@ -1,3 +1,50 @@
+#### 6.12.0 (2024-04-27)
+
+##### Chores
+
+*  set version 6.12.0 (799d3557)
+*  update license terms (4a7a43f0)
+*  upgrade @metahkg/api, @metahkg/rlp-proxy-rewrite-api, & axios (18b4bcea)
+*  upgrade tinymce to 6.7.0 (0eb8e71b)
+
+##### Continuous Integration
+
+*  update .deepsource.toml (0268d24e)
+
+##### New Features
+
+*  polls removed games (7ec94c4b)
+* **game:**
+  *  display total bet tokens (5ae7ebfa)
+  *  integrate user profile tokens (a0232a56)
+  *  use tick and cross (4db144cd)
+* **profile:**  add game tokens (0e9e7d85)
+* **create:**  support creating games (a75e0e18)
+
+##### Bug Fixes
+
+* **regex:**  youtube regex (6ef787dc)
+* **pdf:**  downgrade react-pdf to 5.2.0 (323be254)
+* **side panel:**  tooltip on the right (608efcf1)
+* **domReplace:**  not to proxy mailto links (7a9cbbea)
+* **create:**
+  *  disable tinymce sticky toolbar (852e0e39)
+  *  game title not required (dc359ec8)
+* **tinymce:**  disable relative urls (b3bb9767)
+* **game:**  userProfile is null (531eda8f)
+* **guess game:**  min width 50px (ddf1375f)
+
+##### Other Changes
+
+* //gitlab.com/metahkg/metahkg-web into dev (0cb57091)
+* //gitlab.com/metahkg/metahkg-web into dev (960b1e82)
+* **pdf:**  downgrade react-pdf to 5.2.0" (17a380e0)
+
+##### Code Style Changes
+
+*  format code with Prettier (e0236a29)
+*  format code with Prettier (1e085951)
+
 #### 6.11.0 (2023-07-09)
 
 ##### Chores
