@@ -46,22 +46,24 @@ export default function PollComponent(props: { id: string }) {
     }, [id, reload, setNotification]);
 
     useEffect(() => {
-        api.meVotesPolls(id)
-            .then((data) => {
-                setMeVote(data);
-            })
-            .catch((e) => {
-                if (e?.statusCode === 404) {
-                    setMeVote(null);
-                } else {
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(e),
-                    });
-                }
-            });
-    }, [id, setNotification, reload, user]);
+        if (user)
+            api.meVotesPolls(id)
+                .then((data) => {
+                    setMeVote(data);
+                })
+                .catch((e) => {
+                    if (e?.statusCode === 404) {
+                        setMeVote(null);
+                    } else {
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(e),
+                        });
+                    }
+                });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id, reload]);
 
     return !poll ? (
         <Loader position="flex-start" />

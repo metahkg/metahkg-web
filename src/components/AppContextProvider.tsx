@@ -27,7 +27,7 @@ import React, {
 } from "react";
 import type { history } from "../types/history";
 import type { notification } from "../types/notification";
-import type { Settings } from "../types/settings";
+import type { secondaryColor, Settings } from "../types/settings";
 import { api } from "../lib/api";
 import { AlertDialogProps } from "../lib/alertDialog";
 import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
@@ -35,6 +35,7 @@ import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
 import { AvatarProps, useAvatar } from "../hooks/useAvatar";
 import { UserData } from "./profile/DataTable";
+import { colorOptions } from "./settings";
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -77,7 +78,7 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     const [settings, setSettings] = useState<Settings>({
         ...{
             theme: "dark",
-            secondaryColor: { main: "#f5bd1f", dark: "#ffc100" },
+            secondaryColor: { main: "#f5bd1f", dark: "rgba(245,189,31,0.5)" },
             filterSwearWords: false,
             autoLoadImages: true,
             resizeImages: true,
@@ -150,6 +151,22 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
                 (isSmallScreen ? "true" : "false")
         )
     );
+
+    useEffect(() => {
+        setSettings({
+            ...settings,
+            secondaryColor: (() => {
+                const color = colorOptions.find(
+                    (option) =>
+                        option.main === (settings.secondaryColor?.main || "#f5bd1f")
+                ) as secondaryColor & { value?: string };
+                const colorClone = { ...color };
+                delete colorClone.value;
+                return colorClone;
+            })(),
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         api.categories().then(setCategories);

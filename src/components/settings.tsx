@@ -36,6 +36,17 @@ import {
 import { isIOS, isSafari } from "react-device-detect";
 import { unsubscribe } from "../lib/notifications";
 
+export const colorOptions: {
+    value: string;
+    main: secondaryColorMain;
+    dark: secondaryColorDark;
+}[] = [
+    { value: "Yellow", main: "#f5bd1f", dark: "rgba(245,189,31,0.5)" },
+    { value: "Orange", main: "#ff9800", dark: "rgba(178,106,0,0.5)" },
+    { value: "Teal", main: "#009688", dark: "rgba(0,150,136,0.5)" },
+    { value: "Purple", main: "#651fff", dark: "rgba(101,31,255,0.5)" },
+];
+
 export default function Settings(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,17 +54,6 @@ export default function Settings(props: {
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
     const [user] = useUser();
-
-    const colorOptions: {
-        value: string;
-        main: secondaryColorMain;
-        dark: secondaryColorDark;
-    }[] = [
-        { value: "Yellow", main: "#f5bd1f", dark: "rgba(245,189,31,0.5)" },
-        { value: "Orange", main: "#ff9800", dark: "rgba(178,106,0,0.5)" },
-        { value: "Teal", main: "#009688", dark: "rgba(0,150,136,0.5)" },
-        { value: "Purple", main: "#651fff", dark: "rgba(101,31,255,0.5)" },
-    ];
 
     const settingItems: ((
         | {
@@ -94,8 +94,9 @@ export default function Settings(props: {
                         const color = colorOptions.find(
                             (option) => option.value === e.target.value
                         ) as secondaryColor & { value?: string };
-                        delete color.value;
-                        return color;
+                        const colorClone = { ...color };
+                        delete colorClone.value;
+                        return colorClone;
                     })(),
                 });
             },
