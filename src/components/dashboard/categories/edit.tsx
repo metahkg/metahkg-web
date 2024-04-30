@@ -1,0 +1,219 @@
+import {
+    Autocomplete,
+    Box,
+    Checkbox,
+    Chip,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+} from "@mui/material";
+import React, { useMemo, useRef, useState } from "react";
+import { useCategories, useNotification } from "../../AppContextProvider";
+import { Category } from "@metahkg/api";
+import { LoadingButton } from "@mui/lab";
+import { Edit } from "@mui/icons-material";
+import { api } from "../../../lib/api";
+import { cleanObject } from "../../../lib/utils/cleanObject";
+import { parseError } from "../../../lib/parseError";
+
+export default function EditCategory() {
+    const formRef = useRef<HTMLFormElement>();
+    const [categories, setCategories] = useCategories();
+    const [, setNotification] = useNotification();
+    const [category, setCategory] = useState<number | "">("");
+    const [editCat, setEditCat] = useState<Category | null>(null);
+    const [loading, setLoading] = useState(false);
+    const tags = useMemo<string[]>(
+        () => [...new Set(categories.flatMap((cat) => cat.tags || []))],
+        [categories]
+    );
+
+    const submit = useMemo(
+        () => (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (editCat) {
+                setLoading(true);
+                api.categoryEdit(editCat.id, cleanObject({ ...editCat, id: undefined }))
+                    .then(() => {
+                        setLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "success",
+                            text: "Category edited successfully.",
+                        });
+                        api.categories()
+                            .then(setCategories)
+                            .catch(() => {});
+                    })
+                    .catch((err) => {
+                        setLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(err),
+                        });
+                    });
+            }
+        },
+        [editCat, setCategories, setNotification]
+    );
+
+    return (
+        <Box component="form" ref={formRef} onSubmit={submit}>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <FormControl sx={{ m: 1, minWidth: 150 }}>
+                        <InputLabel color="secondary">Category</InputLabel>
+                        <Select
+                            value={category}
+                            onChange={(e: SelectChangeEvent<number | "">) => {
+                                if (e.target.value === "") {
+                                    setCategory("");
+                                } else {
+                                    setCategory(e.target.value as number);
+                                    setEditCat(
+                                        categories.find(
+                                            (v) => v.id === (e.target.value as number)
+                                        ) as Category
+                                    );
+                                }
+                            }}
+                            label="Category"
+                            color="secondary"
+                        >
+                            <MenuItem value=""></MenuItem>
+                            {categories.map((cat) => (
+                                <MenuItem value={cat.id}>{cat.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                {category && editCat && (
+                    <React.Fragment>
+                        <Grid item xs={6}>
+                            <TextField
+                                color="secondary"
+                                required
+                                label="Name"
+                                onChange={(e) => {
+                                    setEditCat({
+                                        ...editCat,
+                                        name: e.target.value,
+                                    });
+                                }}
+                                inputProps={{ maxLength: 15 }}
+                                fullWidth
+                                value={editCat.name}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Autocomplete
+                                color="secondary"
+                                multiple
+                                id="tags-filled"
+                                options={tags}
+                                freeSolo
+                                renderTags={(value: readonly string[], getTagProps) =>
+                                    value.map((option: string, index: number) => (
+                                        <Chip
+                                            variant="outlined"
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        color="secondary"
+                                        variant="outlined"
+                                        label="Tags"
+                                    />
+                                )}
+                                onChange={(_e, v) => {
+                                    setEditCat({
+                                        ...editCat,
+                                        tags: v,
+                                    });
+                                }}
+                                value={editCat.tags || []}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        onChange={(e) => {
+                                            setEditCat({
+                                                ...editCat,
+                                                pinned: e.target.checked,
+                                            });
+                                        }}
+                                        color="secondary"
+                                        disabled={editCat?.hidden}
+                                        checked={!!editCat?.pinned}
+                                    />
+                                }
+                                label="Pinned"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        onChange={(e) => {
+                                            setEditCat({
+                                                ...editCat,
+                                                hidden: e.target.checked,
+                                            });
+                                        }}
+                                        color="secondary"
+                                        disabled={editCat?.pinned}
+                                        checked={!!editCat.hidden}
+                                    />
+                                }
+                                label="Hidden"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        onChange={(e) => {
+                                            setEditCat({
+                                                ...editCat,
+                                                nsfw: e.target.checked,
+                                            });
+                                        }}
+                                        color="secondary"
+                                        checked={!!editCat.nsfw}
+                                    />
+                                }
+                                label="NSFW"
+                            />
+                        </Grid>
+                    </React.Fragment>
+                )}
+            </Grid>
+            {category && editCat && (
+                <LoadingButton
+                    color="secondary"
+                    startIcon={<Edit />}
+                    type="submit"
+                    loading={loading}
+                    loadingPosition="start"
+                    disabled={!formRef.current?.checkValidity?.() || loading}
+                    variant="contained"
+                    className="!mt-2"
+                >
+                    Edit
+                </LoadingButton>
+            )}
+        </Box>
+    );
+}

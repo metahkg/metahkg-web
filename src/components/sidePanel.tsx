@@ -39,6 +39,7 @@ import {
     Search as SearchIcon,
     ChevronRight as ChevronRightIcon,
     ChevronLeft as ChevronLeftIcon,
+    AdminPanelSettings,
 } from "@mui/icons-material";
 import {
     useDarkMode,
@@ -94,6 +95,11 @@ export default function SidePanel(props: {
                     />
                 ),
                 link: `/profile/${user.id}`,
+            },
+            user?.role === "admin" && {
+                title: "Admin Dashboard",
+                icon: <AdminPanelSettings />,
+                link: "/dashboard",
             },
             {
                 title: "Categories",

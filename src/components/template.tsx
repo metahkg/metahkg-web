@@ -18,6 +18,7 @@
 import React from "react";
 import {
     AccountCircle as AccountCircleIcon,
+    AdminPanelSettings,
     Code as CodeIcon,
     Create as CreateIcon,
     Logout as LogoutIcon,
@@ -44,8 +45,14 @@ import { useLogout } from "../hooks/useLogout";
  * e.g. /category/:id, in which there's no main content but only the menu
  */
 export default function Template() {
+    const [user] = useUser();
     /* It's a list of objects. */
-    const links: { icon: JSX.Element; title: string; link: string }[] = [
+    const links = [
+        {
+            icon: <AdminPanelSettings />,
+            title: "Admin Dashboard",
+            link: "/dashboard",
+        },
         {
             icon: <CreateIcon />,
             title: "Create thread",
@@ -56,14 +63,13 @@ export default function Template() {
             title: "Telegram group",
             link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
-        {
+        user?.role === "admin" && {
             icon: <CodeIcon />,
             title: "Source code",
             link: "https://gitlab.com/metahkg/metahkg",
         },
-    ];
+    ].filter(Boolean) as { icon: JSX.Element; title: string; link: string }[];
 
-    const [user] = useUser();
     const darkMode = useDarkMode();
     const logout = useLogout();
     const [serverConfig] = useServerConfig();

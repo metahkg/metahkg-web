@@ -49,6 +49,9 @@ const Login = loadable(() => import("./pages/users/login"));
 const NotFound = loadable(() => import("./pages/notfound"));
 const Forbidden = loadable(() => import("./pages/forbidden"));
 
+// dashboard
+const DashBoard = loadable(() => import("./pages/dashboard"));
+
 export default function Routes() {
     const location = useLocation();
     const [id, setId] = useId();
@@ -197,6 +200,16 @@ export default function Routes() {
                 <Route path="reset" element={<Reset />} />
                 <Route path="login" element={<Login />} />
             </Route>
+            {user?.role === "admin" && (
+                <Route
+                    path="/dashboard"
+                    element={
+                        <DisableMenu>
+                            <DashBoard />
+                        </DisableMenu>
+                    }
+                />
+            )}
             <Route
                 path="/404"
                 element={
