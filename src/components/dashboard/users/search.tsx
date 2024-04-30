@@ -164,6 +164,7 @@ export default function SearchUsers() {
                             if (muteUser?.id && muteUser?.reason) {
                                 api.userMute(muteUser?.id, {
                                     reason: muteUser.reason,
+                                    exp: muteUser.exp,
                                 })
                                     .then(() => {
                                         closeDialog();
@@ -243,6 +244,7 @@ export default function SearchUsers() {
                             if (banUser?.id && banUser?.reason) {
                                 api.userBan(banUser?.id, {
                                     reason: banUser.reason,
+                                    exp: banUser.exp,
                                 })
                                     .then(() => {
                                         closeDialog();
