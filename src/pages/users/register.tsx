@@ -47,7 +47,7 @@ import { Link } from "react-router-dom";
 import queryString from "query-string";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
-import { UserSex } from "@metahkg/api";
+import { Sex } from "@metahkg/api";
 import { css } from "../../lib/css";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { LoadingButton } from "@mui/lab";
@@ -106,7 +106,7 @@ export default function Register() {
             email,
             name,
             password: hash.sha256().update(password).digest("hex"),
-            sex: sex as UserSex,
+            sex: sex as Sex,
             captchaToken,
             ...(inviteCode && { inviteCode }),
         })

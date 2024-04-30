@@ -34,7 +34,7 @@ import { timeToWord_long } from "../../lib/common";
 import { api } from "../../lib/api";
 import { Save } from "@mui/icons-material";
 import { parseError } from "../../lib/parseError";
-import { User, UserSex } from "@metahkg/api";
+import { User, Sex } from "@metahkg/api";
 import { Session } from "../../types/session";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
@@ -56,7 +56,7 @@ export default function DataTable(props: DataTableProps) {
     const [, setReFetch] = useReFetch();
     const [, setNotification] = useNotification();
     const [name, setName] = useState(reqUser.name);
-    const [sex, setSex] = useState<UserSex>(reqUser.sex);
+    const [sex, setSex] = useState<Sex>(reqUser.sex);
     const [saving, setSaveDisabled] = useState(false);
     const [session, setSession] = useSession();
     const [, setMenuTitle] = useMenuTitle();
