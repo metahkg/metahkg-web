@@ -6,17 +6,19 @@ import {
     useServerConfig,
     useUser,
 } from "../components/AppContextProvider";
-import { useLayoutEffect, useState } from "react";
-import { Category, Group, Numbers } from "@mui/icons-material";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Category, Comment, Group, Numbers } from "@mui/icons-material";
 import CategoriesBoard from "../components/dashboard/categories/categoriesBoard";
 import { useNavigate } from "react-router-dom";
 import UsersBoard from "../components/dashboard/users/usersBoard";
 import { setTitle } from "../lib/common";
 import { useMenu } from "../components/MenuProvider";
+import ThreadsBoard from "../components/dashboard/threads/threadsBoard";
+import InviteCodesBoard from "../components/dashboard/invite-codes/InviteCodesBoard";
 
 export default function Dashboard() {
     const darkMode = useDarkMode();
-    const [tab, setTab] = useState<"categories" | "users" | "invitecodes">(
+    const [tab, setTab] = useState<"categories" | "users" | "threads" | "invitecodes">(
         (localStorage.getItem("admindashboard_tab") as
             | "categories"
             | "users"
@@ -38,6 +40,12 @@ export default function Dashboard() {
             navigate("/404");
         }
     }, [navigate, user?.role]);
+
+    useEffect(() => {
+        if (localStorage.getItem("admindashboard_tab") || tab !== "categories") {
+            localStorage.setItem("admindashboard_tab", tab);
+        }
+    }, [tab]);
 
     return (
         <Box sx={{ backgroundColor: "primary.dark" }} className="flex justify-center">
@@ -83,6 +91,13 @@ export default function Dashboard() {
                                 iconPosition="start"
                                 disableRipple
                             />
+                            <Tab
+                                value={"threads"}
+                                label="Threads"
+                                icon={<Comment />}
+                                iconPosition="start"
+                                disableRipple
+                            />
                             {serverConfig?.register.mode === "invite" && (
                                 <Tab
                                     value={"invitecodes"}
@@ -96,6 +111,8 @@ export default function Dashboard() {
                     </Box>
                     {tab === "categories" && <CategoriesBoard />}
                     {tab === "users" && <UsersBoard />}
+                    {tab === "threads" && <ThreadsBoard />}
+                    {tab === "invitecodes" && <InviteCodesBoard />}
                 </Box>
             </Box>
         </Box>
