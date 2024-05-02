@@ -11,6 +11,8 @@ import { Category, Group, Numbers } from "@mui/icons-material";
 import CategoriesBoard from "../components/dashboard/categories/categoriesBoard";
 import { useNavigate } from "react-router-dom";
 import UsersBoard from "../components/dashboard/users/usersBoard";
+import { setTitle } from "../lib/common";
+import { useMenu } from "../components/MenuProvider";
 
 export default function Dashboard() {
     const darkMode = useDarkMode();
@@ -24,6 +26,12 @@ export default function Dashboard() {
     const [user] = useUser();
     const navigate = useNavigate();
     const isSmallScreen = useIsSmallScreen();
+    const [menu, setMenu] = useMenu();
+
+    useLayoutEffect(() => {
+        setTitle(`Admin Dashboard | ${serverConfig?.branding || "Metahkg"}`);
+        menu && setMenu(false);
+    }, [menu, setMenu, serverConfig?.branding]);
 
     useLayoutEffect(() => {
         if (user?.role !== "admin") {
