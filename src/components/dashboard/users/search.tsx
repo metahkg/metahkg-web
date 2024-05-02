@@ -18,7 +18,12 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useDarkMode, useNotification, useSettings } from "../../AppContextProvider";
+import {
+    useDarkMode,
+    useIsSmallScreen,
+    useNotification,
+    useSettings,
+} from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -63,6 +68,7 @@ export default function SearchUsers() {
         reason?: string;
         exp?: Date;
     } | null>(null);
+    const isSmallScreen = useIsSmallScreen();
     const search = useMemo(
         () => () => {
             if (searchSettings) {
@@ -411,7 +417,7 @@ export default function SearchUsers() {
                 <React.Fragment>
                     <Grid ref={resultsRef} container spacing={2} sx={{ mt: 1 }}>
                         {users.map((userInfo) => (
-                            <Grid item xs={4}>
+                            <Grid item xs={isSmallScreen ? 6 : 4}>
                                 <Card variant="outlined">
                                     <CardActionArea
                                         href={`/profile/${userInfo.id}`}
