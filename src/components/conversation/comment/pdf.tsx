@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack5";
+import { Document, Page, pdfjs } from "react-pdf";
 import { Box, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useWidth } from "../../AppContextProvider";
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function PdfViewer({ src }: { src: string }) {
     const [numPages, setNumPages] = useState(0);
@@ -28,7 +29,7 @@ export default function PdfViewer({ src }: { src: string }) {
             }`}
         >
             <Box
-                className="shadow-lg"
+                className="max-w-full shadow-lg overflow-auto"
                 sx={{
                     "& .react-pdf__Page__annotations.annotationLayer": {
                         display: "none",
@@ -38,13 +39,12 @@ export default function PdfViewer({ src }: { src: string }) {
                 <Document
                     file={src}
                     onLoadSuccess={onDocumentLoadSuccess}
-                    className="overflow-hidden"
+                    className="max-w-full overflow-auto"
                 >
                     <Page
-                        height={800}
                         renderTextLayer={false}
                         pageNumber={pageNumber}
-                        className="max-w-full h-[800px]"
+                        className="w-full object-contain"
                     />
                 </Document>
             </Box>
