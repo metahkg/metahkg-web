@@ -49,7 +49,7 @@ const Template = memo(function Template() {
     const [user] = useUser();
     /* It's a list of objects. */
     const links = [
-        {
+        user?.role === "admin" && {
             icon: <AdminPanelSettings />,
             title: "Admin Dashboard",
             link: "/dashboard",
@@ -64,7 +64,7 @@ const Template = memo(function Template() {
             title: "Telegram group",
             link: "https://t.me/+WbB7PyRovUY1ZDFl",
         },
-        user?.role === "admin" && {
+        {
             icon: <CodeIcon />,
             title: "Source code",
             link: "https://gitlab.com/metahkg/metahkg",
