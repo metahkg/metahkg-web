@@ -21,7 +21,12 @@ import React, { useState } from "react";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { PopUp } from "../../../lib/popup";
-import { useBlockList, useNotification, useUser } from "../../AppContextProvider";
+import {
+    useBlockList,
+    useFollowingList,
+    useNotification,
+    useUser,
+} from "../../AppContextProvider";
 
 export default function UserModal(props: {
     open: boolean;
@@ -30,6 +35,7 @@ export default function UserModal(props: {
 }) {
     const { open, setOpen, user: commentUser } = props;
     const [blockList, setBlockList] = useBlockList();
+    const [followingList, setFollowingList] = useFollowingList();
     const [, setNotification] = useNotification();
     const blocked = Boolean(blockList.find((i) => i.id === commentUser.id));
     const [user] = useUser();
@@ -42,7 +48,7 @@ export default function UserModal(props: {
             setOpen={setOpen}
             title="User information"
             buttons={[
-                { text: "View Profile", link: `/profile/${commentUser.id}` },
+                { text: "Profile", link: `/profile/${commentUser.id}` },
                 user
                     ? {
                           text: blocked ? "Unblock" : "Block",
@@ -69,6 +75,60 @@ export default function UserModal(props: {
                                           text: parseError(err),
                                       });
                                   });
+                          },
+                      }
+                    : undefined,
+                user
+                    ? {
+                          text: followingList.find((user) => user.id === commentUser.id)
+                              ? "Unfollow"
+                              : "Follow",
+                          action: () => {
+                              // Call the appropriate API function and update the state
+                              if (
+                                  followingList.find((user) => user.id === commentUser.id)
+                              ) {
+                                  api.userUnfollow(commentUser.id)
+                                      .then(() => {
+                                          setFollowingList([
+                                              ...followingList.filter(
+                                                  (user) => user.id !== commentUser.id
+                                              ),
+                                          ]);
+                                          setNotification({
+                                              open: true,
+                                              severity: "success",
+                                              text: "User unfollowed.",
+                                          });
+                                      })
+                                      .catch((err) => {
+                                          setNotification({
+                                              open: true,
+                                              severity: "success",
+                                              text: parseError(err),
+                                          });
+                                      });
+                              } else {
+                                  api.userFollow(commentUser.id)
+                                      .then(async () => {
+                                          await api
+                                              .meFollowing()
+                                              .then(setFollowingList)
+                                              .catch(() => {});
+                                          setNotification({
+                                              open: true,
+                                              severity: "success",
+                                              text: "Now following user.",
+                                          });
+                                      })
+                                      .catch((err) => {
+                                          setNotification({
+                                              open: true,
+                                              severity: "success",
+                                              text: parseError(err),
+                                          });
+                                      });
+                              }
                           },
                       }
                     : undefined,

@@ -73,9 +73,14 @@ export default function MenuBody(props: { selected: number }) {
     useEffect(() => {
         if (
             (reFetch || (!loading && !data.length)) &&
-            { category: category, profile, search: query, recall: true, starred: true }[
-                menuMode
-            ]
+            {
+                category: category,
+                profile,
+                search: query,
+                recall: true,
+                starred: true,
+                following: true,
+            }[menuMode]
         ) {
             data.length && setData([]);
             setReFetch(false);
@@ -130,6 +135,17 @@ export default function MenuBody(props: { selected: number }) {
                     break;
                 case "starred":
                     api.threads(starList.map((item) => item.id).slice(0, 24))
+                        .then(onSuccess)
+                        .catch(onError);
+                    break;
+                case "following":
+                    api.threadsFollowing(
+                        undefined,
+                        undefined,
+                        { 0: "created", 1: "lastcomment" }[selected] as
+                            | "created"
+                            | "lastcomment"
+                    )
                         .then(onSuccess)
                         .catch(onError);
             }
@@ -202,6 +218,17 @@ export default function MenuBody(props: { selected: number }) {
                 )
                     .then(onSuccess)
                     .catch(onError);
+                break;
+            case "following":
+                api.threadsFollowing(
+                    page,
+                    25,
+                    { 0: "created", 1: "lastcomment" }[selected] as
+                        | "created"
+                        | "lastcomment"
+                )
+                    .then(onSuccess)
+                    .catch(onError);
         }
     }
 
@@ -234,9 +261,14 @@ export default function MenuBody(props: { selected: number }) {
             className="!bg-none !shadow-none overflow-auto"
             style={{
                 maxHeight: `calc(100vh - ${
-                    { search: 151, recall: 51, category: 91, profile: 91, starred: 51 }[
-                        menuMode
-                    ]
+                    {
+                        search: 151,
+                        recall: 51,
+                        category: 91,
+                        profile: 91,
+                        starred: 51,
+                        following: 91,
+                    }[menuMode]
                 }px)`,
             }}
             onScroll={onScroll}

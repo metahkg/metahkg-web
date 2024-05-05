@@ -40,6 +40,7 @@ import {
     ChevronRight as ChevronRightIcon,
     ChevronLeft as ChevronLeftIcon,
     AdminPanelSettings,
+    People as PeopleIcon,
 } from "@mui/icons-material";
 import {
     useDarkMode,
@@ -122,6 +123,11 @@ export default function SidePanel(props: {
                 title: "Starred",
                 icon: <StarIcon />,
                 link: "/starred",
+            },
+            user && {
+                title: "Following",
+                icon: <PeopleIcon />,
+                link: "/following",
             },
             user && {
                 title: "Logout",

@@ -53,6 +53,7 @@ export default function MenuTop(props: {
         category: "Metahkg",
         recall: "Recall",
         starred: "Starred",
+        following: "Following",
     }[menuMode];
     const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = {
@@ -61,6 +62,7 @@ export default function MenuTop(props: {
         category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
         recall: [],
         starred: [],
+        following: ["Created", "Last Reply"],
     }[menuMode];
 
     const noTitleBar = isSmallScreen && menuMode === "category";

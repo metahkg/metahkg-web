@@ -33,6 +33,7 @@ const Profile = loadable(() => import("./pages/profile"));
 const History = loadable(() => import("./pages/history"));
 const Recall = loadable(() => import("./pages/recall"));
 const Starred = loadable(() => import("./pages/starred"));
+const Following = loadable(() => import("./pages/following"));
 
 // threads
 const Create = loadable(() => import("./pages/create"));
@@ -144,6 +145,18 @@ export default function Routes() {
                     ) : (
                         <EnableMenu>
                             <Starred />
+                        </EnableMenu>
+                    )
+                }
+            />
+            <Route
+                path="/following"
+                element={
+                    noAccess ? (
+                        <Navigate to="/users/login?continue=true" replace />
+                    ) : (
+                        <EnableMenu>
+                            <Following />
                         </EnableMenu>
                     )
                 }

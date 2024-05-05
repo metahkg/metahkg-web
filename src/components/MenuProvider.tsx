@@ -17,7 +17,7 @@
 
 import React, { createContext, useContext, useState } from "react";
 
-type menuMode = "category" | "search" | "profile" | "recall" | "starred";
+type menuMode = "category" | "search" | "profile" | "recall" | "starred" | "following";
 
 const MenuContext = createContext<{
     category: [number, React.Dispatch<React.SetStateAction<number>>];

@@ -30,7 +30,14 @@ import type { notification } from "../types/notification";
 import type { secondaryColor, Settings } from "../types/settings";
 import { api } from "../lib/api";
 import { AlertDialogProps } from "../lib/alertDialog";
-import { BlockedUser, Category, User, Star, ServerConfig } from "@metahkg/api";
+import {
+    BlockedUser,
+    Category,
+    User,
+    Star,
+    ServerConfig,
+    FollowedUser,
+} from "@metahkg/api";
 import { Session } from "../types/session";
 import { loadUser } from "../lib/jwt";
 import { AvatarProps, useAvatar } from "../hooks/useAvatar";
@@ -57,6 +64,7 @@ export const AppContext = createContext<{
     session: [Session | null, Dispatch<SetStateAction<Session | null>>];
     alertDialog: [AlertDialogProps, Dispatch<SetStateAction<AlertDialogProps>>];
     blockList: [BlockedUser[], Dispatch<SetStateAction<BlockedUser[]>>];
+    followingList: [FollowedUser[], Dispatch<SetStateAction<FollowedUser[]>>];
     starList: [Star[], Dispatch<SetStateAction<Star[]>>];
     sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
     // @ts-ignore
@@ -142,6 +150,10 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     const [blockList, setBlockList] = useState<BlockedUser[]>(
         JSON.parse(localStorage.getItem("blocklist") || "[]")
     );
+    const [followingList, setFollowingList] = useState<FollowedUser[]>(
+        JSON.parse(localStorage.getItem("followinglist") || "[]")
+    );
+
     const [starList, setStarList] = useState<Star[]>(
         JSON.parse(localStorage.getItem("starlist") || "[]")
     );
@@ -183,6 +195,7 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     useEffect(() => {
         if (user) {
             api.meBlocked().then(setBlockList);
+            api.meFollowing().then(setFollowingList);
             api.meStarred().then(setStarList);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -265,6 +278,10 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
     }, [blockList]);
 
     useEffect(() => {
+        localStorage.setItem("followinglist", JSON.stringify(followingList));
+    }, [followingList]);
+
+    useEffect(() => {
         localStorage.setItem("starlist", JSON.stringify(starList));
     }, [starList]);
 
@@ -304,6 +321,7 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
                 session: [session, setSession],
                 alertDialog: [alertDialog, setAlertDialog],
                 blockList: [blockList, setBlockList],
+                followingList: [followingList, setFollowingList],
                 starList: [starList, setStarList],
                 sidePanelExpanded: [sidePanelExpanded, setSidePanelExpanded],
             }}
@@ -442,6 +460,11 @@ export function useAlertDialog() {
 export function useBlockList() {
     const { blockList } = useContext(AppContext);
     return blockList;
+}
+
+export function useFollowingList() {
+    const { followingList } = useContext(AppContext);
+    return followingList;
 }
 
 export function useStarList() {
