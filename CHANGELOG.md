@@ -1,3 +1,42 @@
+#### 6.14.0 (2024-05-05)
+
+##### Chores
+
+*  set version 6.14.0 (d4ff9db2)
+*  set version 6.12.0 (799d3557)
+*  update license terms (4a7a43f0)
+*  upgrade @metahkg/api, @metahkg/rlp-proxy-rewrite-api, & axios (18b4bcea)
+
+##### Continuous Integration
+
+*  use node 20 (88e173e2)
+*  update .deepsource.toml (0268d24e)
+
+##### New Features
+
+*  get threads of following users; follow and unfollow users (67465bdc)
+*  threads board and invite codes board (03d2dda7)
+*  admin dashboard (incomplete) (d6f5dbfa)
+*  polls removed games (7ec94c4b)
+
+##### Bug Fixes
+
+* **sidepanel:**  place expand icon's tooltip at the right (fcbe1579)
+*  add @babel/plugin-proposal-private-property-in-object to dev dependencies (4a7b7916)
+* **pdf:**  fix pdf worker and fix overflow (f12085a3)
+* **search users:**  fix for small screens (0623e9fa)
+* **dashboard:**  add exp date to api request (cc2f076d)
+* **types:**  usersex (f829e063)
+* **dependencies:**  add @babel/plugin-transform-private-property-in-object  as a dev dependency (06e3699d)
+* **poll:**  background color (6d879b21)
+
+##### Other Changes
+
+*  add title (03361b8c)
+* //gitlab.com/metahkg/metahkg-web into dev (739e8925)
+*  CHANGELOG.md (f9118f8b)
+* //gitlab.com/metahkg/metahkg-web into dev (0cb57091)
+
 #### 6.12.0 (2024-04-27)
 
 ##### Chores
