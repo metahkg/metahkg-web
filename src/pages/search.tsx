@@ -34,8 +34,8 @@ import {
 import { setTitle } from "../lib/common";
 import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
-
-export default function Search() {
+import { memo } from "react";
+const Search = memo(function Search() {
     const [menu, setMenu] = useMenu();
     const [menuMode, setMenuMode] = useMenuMode();
     const [back, setBack] = useBack();
@@ -75,19 +75,7 @@ export default function Search() {
             clearData();
             setMenuMode("search");
         }
-    }, [
-        back,
-        menu,
-        menuMode,
-        selected,
-        serverConfig?.branding,
-        setBack,
-        setMenu,
-        setMenuMode,
-        setMenuTitle,
-        setReFetch,
-        setSelected,
-    ]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected]);
 
     return (
         <Box
@@ -99,4 +87,5 @@ export default function Search() {
             {!isSmallScreen && <Template />}
         </Box>
     );
-}
+});
+export default Search;

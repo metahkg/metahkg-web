@@ -2,8 +2,8 @@ import React from "react";
 import { Typography } from "@mui/material";
 import { Link } from "./link";
 import { useServerConfig } from "../components/AppContextProvider";
-
-export default function CaptchaNotice(props: { className?: string }) {
+import { memo } from "react";
+const CaptchaNotice = memo(function CaptchaNotice(props: { className?: string }) {
     const { className } = props;
     const [serverConfig] = useServerConfig();
     return (
@@ -44,4 +44,5 @@ export default function CaptchaNotice(props: { className?: string }) {
             apply.
         </Typography>
     );
-}
+});
+export default CaptchaNotice;

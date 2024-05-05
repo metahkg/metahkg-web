@@ -21,11 +21,12 @@ import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
 import { useDarkMode, useServerConfig } from "../components/AppContextProvider";
+import { memo } from "react";
 
 /**
  * 404 page
  */
-export default function NotFound() {
+const NotFound = memo(function NotFound() {
     const [menu, setMenu] = useMenu();
     const darkMode = useDarkMode();
     const [serverConfig] = useServerConfig();
@@ -50,4 +51,5 @@ export default function NotFound() {
             <Typography variant="h3">404 Not Found</Typography>
         </Box>
     );
-}
+});
+export default NotFound;

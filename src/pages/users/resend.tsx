@@ -37,8 +37,8 @@ import { parseError } from "../../lib/parseError";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
-
-export default function Resend() {
+import { memo } from "react";
+const Resend = memo(function Resend() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -168,4 +168,5 @@ export default function Resend() {
             </Box>
         </Box>
     );
-}
+});
+export default Resend;

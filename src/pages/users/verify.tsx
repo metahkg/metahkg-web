@@ -48,8 +48,8 @@ import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
-
-export default function Verify() {
+import { memo } from "react";
+const Verify = memo(function Verify() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -218,4 +218,5 @@ export default function Verify() {
             </Box>
         </Box>
     );
-}
+});
+export default Verify;

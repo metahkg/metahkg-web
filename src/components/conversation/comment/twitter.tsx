@@ -20,8 +20,8 @@ import { useState } from "react";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import Loader from "../../../lib/loader";
 import { useDarkMode } from "../../AppContextProvider";
-
-export default function TweetEmbed(props: { tweetId: string }) {
+import { memo } from "react";
+const TweetEmbed = memo(function TweetEmbed(props: { tweetId: string }) {
     const { tweetId } = props;
     const [loading, setLoading] = useState(true);
     const darkMode = useDarkMode();
@@ -47,4 +47,5 @@ export default function TweetEmbed(props: { tweetId: string }) {
             />
         </Box>
     );
-}
+});
+export default TweetEmbed;

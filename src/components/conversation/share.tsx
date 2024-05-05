@@ -30,13 +30,14 @@ import { PopUp } from "../../lib/popup";
 import { useNotification, useIsSmallScreen } from "../AppContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import { Link } from "../../lib/link";
+import { memo } from "react";
 
 /**
  * It shows a pop up with a text field and some buttons for
  * copying the text and sharing externally.
  * The text field shows the title and link of the post.
  */
-export default function Share() {
+const Share = memo(function Share() {
     const [title] = useShareTitle();
     const [link] = useShareLink();
     const [open, setOpen] = useShareOpen();
@@ -138,4 +139,5 @@ export default function Share() {
             </Box>
         </PopUp>
     );
-}
+});
+export default Share;

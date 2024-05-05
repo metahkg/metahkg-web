@@ -13,8 +13,8 @@ import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
-
-export default function DeleteCategory() {
+import { memo } from "react";
+const DeleteCategory = memo(function DeleteCategory() {
     const formRef = useRef<HTMLFormElement>();
     const [categories, setCategories] = useCategories();
     const [, setNotification] = useNotification();
@@ -96,4 +96,5 @@ export default function DeleteCategory() {
             </Grid>
         </Box>
     );
-}
+});
+export default DeleteCategory;

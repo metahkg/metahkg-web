@@ -5,8 +5,8 @@ import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
-
-export default function CreateInviteCode() {
+import { memo } from "react";
+const CreateInviteCode = memo(function CreateInviteCode() {
     const [, setNotification] = useNotification();
     const [code, setCode] = useState("");
     const [description, setDescription] = useState("");
@@ -81,4 +81,5 @@ export default function CreateInviteCode() {
             </LoadingButton>
         </Box>
     );
-}
+});
+export default CreateInviteCode;

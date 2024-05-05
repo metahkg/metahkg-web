@@ -58,8 +58,11 @@ import UserModal from "./userModal";
 import { colors, css } from "../../../lib/css";
 import BlockedBtn from "./blockedBtn";
 import { useBlocked, useEditing, useFold, useInThread } from "../comment";
-
-export default function CommentTop(props: { comment: Comment; noStory?: boolean }) {
+import { memo } from "react";
+const CommentTop = memo(function CommentTop(props: {
+    comment: Comment;
+    noStory?: boolean;
+}) {
     const [open, setOpen] = useState(false);
     const [timeMode, setTimeMode] = useState<"short" | "long">("short");
     const [, setShareLink] = useShareLink();
@@ -451,4 +454,5 @@ export default function CommentTop(props: { comment: Comment; noStory?: boolean 
             )}
         </Box>
     );
-}
+});
+export default CommentTop;

@@ -19,8 +19,8 @@ import { Box } from "@mui/material";
 import { FacebookEmbed, InstagramEmbed, TwitterEmbed } from "react-social-media-embed";
 import { regex } from "../../../lib/regex";
 import { useWidth } from "../../AppContextProvider";
-
-export default function SocialMediaEmbed(props: { url: string }) {
+import { memo } from "react";
+const SocialMediaEmbed = memo(function SocialMediaEmbed(props: { url: string }) {
     const { url } = props;
     const [width] = useWidth();
     const Element = [
@@ -53,4 +53,5 @@ export default function SocialMediaEmbed(props: { url: string }) {
     if (!Element) return null;
 
     return <Box>{Element}</Box>;
-}
+});
+export default SocialMediaEmbed;

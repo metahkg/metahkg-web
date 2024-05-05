@@ -21,11 +21,12 @@ import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
 import { useDarkMode, useServerConfig } from "../components/AppContextProvider";
+import { memo } from "react";
 
 /**
  * 403 page
  */
-export default function Forbidden() {
+const Forbidden = memo(function Forbidden() {
     const [menu, setMenu] = useMenu();
     const darkMode = useDarkMode();
     const [serverConfig] = useServerConfig();
@@ -50,4 +51,5 @@ export default function Forbidden() {
             <Typography variant="h3">403 Forbidden</Typography>
         </Box>
     );
-}
+});
+export default Forbidden;

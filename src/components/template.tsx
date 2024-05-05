@@ -39,12 +39,13 @@ import MetahkgIcon from "./logo";
 import { wholePath } from "../lib/common";
 import { useDarkMode, useServerConfig, useUser } from "./AppContextProvider";
 import { useLogout } from "../hooks/useLogout";
+import { memo } from "react";
 
 /**
  * just a template for large screens if there's no content
  * e.g. /category/:id, in which there's no main content but only the menu
  */
-export default function Template() {
+const Template = memo(function Template() {
     const [user] = useUser();
     /* It's a list of objects. */
     const links = [
@@ -139,4 +140,5 @@ export default function Template() {
             </Box>
         </Paper>
     );
-}
+});
+export default Template;

@@ -33,8 +33,8 @@ import screenfull from "screenfull";
 import { findDOMNode } from "react-dom";
 import { regex } from "../../../lib/regex";
 import { useDarkMode, useIsSmallScreen } from "../../AppContextProvider";
-
-export default function Player(props: { url: string; style?: React.CSSProperties }) {
+import { memo } from "react";
+const Player = memo(function Player(props: { url: string; style?: React.CSSProperties }) {
     const [pip, setPip] = useState(false);
     const [play, setPlay] = useState(false);
     const isSmallScreen = useIsSmallScreen();
@@ -169,4 +169,5 @@ export default function Player(props: { url: string; style?: React.CSSProperties
             }
         </Box>
     );
-}
+});
+export default Player;

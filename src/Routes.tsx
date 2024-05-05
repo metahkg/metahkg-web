@@ -23,6 +23,7 @@ import EnableMenu from "./lib/utils/enableMenu";
 import DisableMenu from "./lib/utils/disableMenu";
 import { useId } from "./components/MenuProvider";
 import { useServerConfig, useUser } from "./components/AppContextProvider";
+import { memo } from "react";
 
 const Thread = loadable(() => import("./pages/thread"));
 
@@ -52,8 +53,7 @@ const Forbidden = loadable(() => import("./pages/forbidden"));
 
 // dashboard
 const DashBoard = loadable(() => import("./pages/dashboard"));
-
-export default function Routes() {
+const Routes = memo(function Routes() {
     const location = useLocation();
     const [id, setId] = useId();
     const [serverConfig] = useServerConfig();
@@ -242,4 +242,5 @@ export default function Routes() {
             <Route path="*" element={<Navigate to="/404" replace />} />
         </Switch>
     );
-}
+});
+export default Routes;

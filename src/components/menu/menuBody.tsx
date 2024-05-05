@@ -31,11 +31,12 @@ import MenuThread from "./menuThread";
 import MenuPreload from "./menuPreload";
 import { parseError } from "../../lib/parseError";
 import { ThreadMeta } from "@metahkg/api";
+import { memo } from "react";
 
 /**
  * This function renders the main content of the menu
  */
-export default function MenuBody(props: { selected: number }) {
+const MenuBody = memo(function MenuBody(props: { selected: number }) {
     const { selected } = props;
     const navigate = useNavigate();
     const [menuMode] = useMenuMode();
@@ -328,4 +329,5 @@ export default function MenuBody(props: { selected: number }) {
             </Box>
         </Paper>
     );
-}
+});
+export default MenuBody;

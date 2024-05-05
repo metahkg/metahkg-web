@@ -42,11 +42,12 @@ import { LoadingButton } from "@mui/lab";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "../components/VisibilityChooser";
 import CreatePoll, { PollCreateType } from "../components/createPoll";
+import { memo } from "react";
 
 /**
  * Page for creating a new thread
  */
-export default function Create() {
+const Create = memo(function Create() {
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
@@ -301,4 +302,5 @@ export default function Create() {
             </Box>
         </Box>
     );
-}
+});
+export default Create;

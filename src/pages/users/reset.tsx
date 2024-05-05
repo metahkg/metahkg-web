@@ -47,8 +47,8 @@ import CaptchaNotice from "../../lib/captchaNotice";
 import hash from "hash.js";
 import { loadUser } from "../../lib/jwt";
 import { regexString } from "../../lib/regex";
-
-export default function Reset() {
+import { memo } from "react";
+const Reset = memo(function Reset() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -215,4 +215,5 @@ export default function Reset() {
             </Box>
         </Box>
     );
-}
+});
+export default Reset;

@@ -23,12 +23,13 @@ import { useId, useMenu } from "../components/MenuProvider";
 import { useIsSmallScreen } from "../components/AppContextProvider";
 import { ShareProvider } from "../components/conversation/ShareProvider";
 import ConversationProvider from "../components/conversation/ConversationContext";
+import { memo } from "react";
 
 /**
  * Thread Component for /thread/:id
  * controls the menu and returns a Conversation
  */
-export default function Thread() {
+const Thread = memo(function Thread() {
     const params = useParams();
     const [id, setId] = useId();
     const [menu, setMenu] = useMenu();
@@ -61,4 +62,5 @@ export default function Thread() {
             </Box>
         </Box>
     );
-}
+});
+export default Thread;

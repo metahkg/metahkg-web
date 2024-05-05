@@ -15,8 +15,8 @@ import { setTitle } from "../lib/common";
 import { useMenu } from "../components/MenuProvider";
 import ThreadsBoard from "../components/dashboard/threads/threadsBoard";
 import InviteCodesBoard from "../components/dashboard/invite-codes/InviteCodesBoard";
-
-export default function Dashboard() {
+import { memo } from "react";
+const Dashboard = memo(function Dashboard() {
     const darkMode = useDarkMode();
     const [tab, setTab] = useState<"categories" | "users" | "threads" | "invitecodes">(
         (localStorage.getItem("admindashboard_tab") as
@@ -117,4 +117,5 @@ export default function Dashboard() {
             </Box>
         </Box>
     );
-}
+});
+export default Dashboard;

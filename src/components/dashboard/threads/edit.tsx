@@ -16,8 +16,8 @@ import { Thread } from "@metahkg/api";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
 import Loader from "../../../lib/loader";
-
-export default function EditThread() {
+import { memo } from "react";
+const EditThread = memo(function EditThread() {
     const formRef = useRef<HTMLFormElement>();
     const [, setNotification] = useNotification();
     const [threadId, setThreadId] = useState<number | "">("");
@@ -172,4 +172,5 @@ export default function EditThread() {
             </Grid>
         </Box>
     );
-}
+});
+export default EditThread;

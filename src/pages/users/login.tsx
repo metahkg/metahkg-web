@@ -50,8 +50,8 @@ import CAPTCHA, { CaptchaRefProps } from "../../lib/Captcha";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
-
-export default function Login() {
+import { memo } from "react";
+const Login = memo(function Login() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const isSmallScreen = useIsSmallScreen();
@@ -255,4 +255,5 @@ export default function Login() {
             </Box>
         </Box>
     );
-}
+});
+export default Login;

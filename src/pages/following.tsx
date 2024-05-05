@@ -16,8 +16,8 @@ import {
 } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
 import { api } from "../lib/api";
-
-export default function Following() {
+import { memo } from "react";
+const Following = memo(function Following() {
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -45,20 +45,7 @@ export default function Following() {
             clearData();
             setMenuMode("following");
         }
-    }, [
-        back,
-        menu,
-        menuMode,
-        selected,
-        serverConfig?.branding,
-        setBack,
-        setMenu,
-        setMenuMode,
-        setMenuTitle,
-        setReFetch,
-        setSelected,
-        title,
-    ]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -81,4 +68,5 @@ export default function Following() {
             {!isSmallScreen && <Template />}
         </Box>
     );
-}
+});
+export default Following;

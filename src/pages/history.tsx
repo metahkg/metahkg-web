@@ -26,13 +26,14 @@ import {
     useMenuMode,
 } from "../components/MenuProvider";
 import { useBack, useIsSmallScreen } from "../components/AppContextProvider";
+import { memo } from "react";
 
 /**
  * Only for small screens
  * Controls the menu to show ProfileMenu
  * @returns a div element
  */
-export default function History() {
+const History = memo(function History() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
     const [menu, setMenu] = useMenu();
@@ -57,24 +58,10 @@ export default function History() {
 
         if (profile !== Number(params.id)) setProfile(Number(params.id));
         if (menuMode !== "profile") setMenuMode("profile");
-    }, [
-        back,
-        isSmallScreen,
-        menu,
-        menuMode,
-        params.id,
-        profile,
-        selected,
-        setMenuTitle,
-        setReFetch,
-        setSelected,
-        setMenuMode,
-        setMenu,
-        setBack,
-        setProfile,
-    ]);
+    }, [back, isSmallScreen, menu, menuMode, params.id, profile, selected, setMenuTitle, setReFetch, setSelected, setMenuMode, setMenu, setBack, setProfile]);
 
     if (!isSmallScreen) return <Navigate to={`/profile/${params.id}`} replace />;
 
     return <React.Fragment />;
-}
+});
+export default History;

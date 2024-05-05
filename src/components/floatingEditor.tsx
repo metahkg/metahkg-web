@@ -59,8 +59,8 @@ import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
 import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "./VisibilityChooser";
 import CreatePoll, { PollCreateType } from "./createPoll";
-
-export default function FloatingEditor() {
+import { memo } from "react";
+const FloatingEditor = memo(function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
@@ -315,4 +315,5 @@ export default function FloatingEditor() {
             </Box>
         </Snackbar>
     );
-}
+});
+export default FloatingEditor;

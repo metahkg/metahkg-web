@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useAlertDialog } from "../components/AppContextProvider";
+import { memo } from "react";
 
 export interface AlertDialogProps {
     open: boolean;
@@ -54,8 +55,7 @@ export interface AlertDialogProps {
         setState: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>
     ) => void;
 }
-
-export default function AlertDialog(props: AlertDialogProps) {
+const AlertDialog = memo(function AlertDialog(props: AlertDialogProps) {
     const { open, setOpen, title, message, onClose, body } = props;
     const [alertDialog, setAlertDialog] = useAlertDialog();
     const [state, setState] = useState<{ [key: string]: any }>({});
@@ -114,4 +114,5 @@ export default function AlertDialog(props: AlertDialogProps) {
             </DialogContent>
         </Dialog>
     );
-}
+});
+export default AlertDialog;

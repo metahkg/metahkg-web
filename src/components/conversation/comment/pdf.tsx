@@ -3,9 +3,9 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { Box, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useWidth } from "../../AppContextProvider";
+import { memo } from "react";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
-export default function PdfViewer({ src }: { src: string }) {
+const PdfViewer = memo(function PdfViewer({ src }: { src: string }) {
     const [numPages, setNumPages] = useState(0);
     const [pageNumber, setPageNumber] = useState(1);
     const [width] = useWidth();
@@ -61,4 +61,5 @@ export default function PdfViewer({ src }: { src: string }) {
             </Box>
         </Box>
     );
-}
+});
+export default PdfViewer;

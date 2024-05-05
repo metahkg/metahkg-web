@@ -38,10 +38,10 @@ import {
 } from "../comment";
 import EmotionList from "./emotionList";
 import loadable from "@loadable/component";
+import { memo } from "react";
 
 const EmojiMart = loadable(() => import("../../../lib/emoji-mart/react"));
-
-export default function CommentBottom() {
+const CommentBottom = memo(function CommentBottom() {
     const [emojiOpen, setEmojiOpen] = useState(false);
     const threadId = useThreadId();
     const [, setNotification] = useNotification();
@@ -230,4 +230,5 @@ export default function CommentBottom() {
             </Box>
         </Box>
     );
-}
+});
+export default CommentBottom;

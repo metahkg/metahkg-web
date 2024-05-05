@@ -39,6 +39,7 @@ import { useSubscribeNotifications } from "./hooks/app/useSubscribeNotifications
 import SidePanel from "./components/sidePanel";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { memo } from "react";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -122,8 +123,7 @@ function App() {
         </Theme>
     );
 }
-
-export default function MetahkgWebApp() {
+const MetahkgWebApp = memo(function MetahkgWebApp() {
     return (
         <ErrorBoundary>
             <AppContextProvider>
@@ -135,4 +135,5 @@ export default function MetahkgWebApp() {
             </AppContextProvider>
         </ErrorBoundary>
     );
-}
+});
+export default MetahkgWebApp;

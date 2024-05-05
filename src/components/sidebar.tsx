@@ -19,13 +19,14 @@ import React, { useState } from "react";
 import { Box, Drawer, IconButton } from "@mui/material";
 import SidePanel from "./sidePanel";
 import { Menu as MenuIcon } from "@mui/icons-material";
+import { memo } from "react";
 
 /**
  * The sidebar is a
  * drawer that is opened by clicking on the menu icon on the top left of the
  * screen. It contains a list of links to different pages
  */
-export default function SideBar() {
+const SideBar = memo(function SideBar() {
     const [open, setOpen] = useState(false);
 
     const toggleDrawer =
@@ -62,4 +63,5 @@ export default function SideBar() {
             </Drawer>
         </Box>
     );
-}
+});
+export default SideBar;

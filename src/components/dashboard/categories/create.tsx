@@ -13,8 +13,8 @@ import { useCategories, useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
-
-export default function CreateCategory() {
+import { memo } from "react";
+const CreateCategory = memo(function CreateCategory() {
     const [, setNotification] = useNotification();
     const [categories, setCategories] = useCategories();
     const tags = useMemo<string[]>(
@@ -179,4 +179,5 @@ export default function CreateCategory() {
             </LoadingButton>
         </Box>
     );
-}
+});
+export default CreateCategory;

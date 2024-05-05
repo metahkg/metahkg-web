@@ -52,8 +52,8 @@ import { css } from "../../lib/css";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
-
-export default function Register() {
+import { memo } from "react";
+const Register = memo(function Register() {
     const [width] = useWidth();
     const [, setNotification] = useNotification();
     const [name, setName] = useState("");
@@ -291,4 +291,5 @@ export default function Register() {
             </Box>
         </Box>
     );
-}
+});
+export default Register;

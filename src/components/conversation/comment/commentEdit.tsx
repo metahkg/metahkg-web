@@ -26,8 +26,8 @@ import { useNotification } from "../../AppContextProvider";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
 import { HTMLComment } from "@metahkg/api";
-
-export default function CommentEdit() {
+import { memo } from "react";
+const CommentEdit = memo(function CommentEdit() {
     const threadId = useThreadId();
     const [comment, setComment] = useComment();
     const [, setEditing] = useEditing();
@@ -110,4 +110,5 @@ export default function CommentEdit() {
             </Box>
         </Box>
     );
-}
+});
+export default CommentEdit;

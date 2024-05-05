@@ -31,13 +31,14 @@ import {
     useMenuTitle,
 } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
+import { memo } from "react";
 
 /**
  * It's a function that
  * returns a component that renders a box with a background color
  * @returns The empty component is being returned.
  */
-export default function Recall() {
+const Recall = memo(function Recall() {
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -63,20 +64,7 @@ export default function Recall() {
             clearData();
             setMenuMode("recall");
         }
-    }, [
-        back,
-        menu,
-        menuMode,
-        selected,
-        serverConfig?.branding,
-        setBack,
-        setMenu,
-        setMenuMode,
-        setMenuTitle,
-        setReFetch,
-        setSelected,
-        title,
-    ]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title]);
 
     return (
         <Box
@@ -88,4 +76,5 @@ export default function Recall() {
             {!isSmallScreen && <Template />}
         </Box>
     );
-}
+});
+export default Recall;

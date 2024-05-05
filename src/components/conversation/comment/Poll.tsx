@@ -10,8 +10,8 @@ import { HowToVote, Poll as PollIcon } from "@mui/icons-material";
 import { wholePath } from "../../../lib/common";
 import { useNavigate } from "react-router-dom";
 import { useComment } from "../comment";
-
-export default function PollComponent(props: { id: string }) {
+import { memo } from "react";
+const PollComponent = memo(function PollComponent(props: { id: string }) {
     const { id } = props;
     const [poll, setPoll] = useState<Poll | null>(null);
     const [, setNotification] = useNotification();
@@ -186,4 +186,5 @@ export default function PollComponent(props: { id: string }) {
             </Box>
         </Box>
     );
-}
+});
+export default PollComponent;

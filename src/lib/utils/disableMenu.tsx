@@ -22,8 +22,8 @@ import {
     useSidePanelExpanded,
 } from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
-
-export default function DisableMenu(props: { children: React.ReactNode }) {
+import { memo } from "react";
+const DisableMenu = memo(function DisableMenu(props: { children: React.ReactNode }) {
     const { children } = props;
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
@@ -46,4 +46,5 @@ export default function DisableMenu(props: { children: React.ReactNode }) {
             {children}
         </Box>
     );
-}
+});
+export default DisableMenu;

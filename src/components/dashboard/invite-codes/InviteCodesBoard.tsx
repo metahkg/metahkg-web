@@ -4,8 +4,8 @@ import CreateInviteCode from "./create";
 import ViewInviteCodes from "./view";
 import DeleteInviteCode from "./delete";
 import GenerateInviteCode from "./generate";
-
-export default function InviteCodesBoard() {
+import { memo } from "react";
+const InviteCodesBoard = memo(function InviteCodesBoard() {
     return (
         <Box>
             <Accordion>
@@ -42,4 +42,5 @@ export default function InviteCodesBoard() {
             </Accordion>
         </Box>
     );
-}
+});
+export default InviteCodesBoard;

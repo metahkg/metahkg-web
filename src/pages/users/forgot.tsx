@@ -36,8 +36,8 @@ import { api } from "../../lib/api";
 import { setTitle } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
 import CaptchaNotice from "../../lib/captchaNotice";
-
-export default function Forgot() {
+import { memo } from "react";
+const Forgot = memo(function Forgot() {
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -168,4 +168,5 @@ export default function Forgot() {
             </Box>
         </Box>
     );
-}
+});
+export default Forgot;

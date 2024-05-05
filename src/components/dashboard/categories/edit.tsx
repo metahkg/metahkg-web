@@ -20,8 +20,8 @@ import { Edit } from "@mui/icons-material";
 import { api } from "../../../lib/api";
 import { cleanObject } from "../../../lib/utils/cleanObject";
 import { parseError } from "../../../lib/parseError";
-
-export default function EditCategory() {
+import { memo } from "react";
+const EditCategory = memo(function EditCategory() {
     const formRef = useRef<HTMLFormElement>();
     const [categories, setCategories] = useCategories();
     const [, setNotification] = useNotification();
@@ -216,4 +216,5 @@ export default function EditCategory() {
             )}
         </Box>
     );
-}
+});
+export default EditCategory;

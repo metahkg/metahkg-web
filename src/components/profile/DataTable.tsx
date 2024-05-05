@@ -38,6 +38,7 @@ import { User, Sex } from "@metahkg/api";
 import { Session } from "../../types/session";
 import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
+import { memo } from "react";
 
 export type UserData = User & {
     count: number;
@@ -49,8 +50,7 @@ interface DataTableProps {
     setReqUser: React.Dispatch<React.SetStateAction<null | UserData>>;
     isSelf: boolean;
 }
-
-export default function DataTable(props: DataTableProps) {
+const DataTable = memo(function DataTable(props: DataTableProps) {
     const { reqUser, setReqUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
@@ -197,4 +197,5 @@ export default function DataTable(props: DataTableProps) {
             )}
         </Box>
     );
-}
+});
+export default DataTable;

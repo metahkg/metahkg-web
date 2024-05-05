@@ -2,8 +2,8 @@ import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/material";
 import EditThread from "./edit";
 import DeleteThread from "./delete";
-
-export default function ThreadsBoard() {
+import { memo } from "react";
+const ThreadsBoard = memo(function ThreadsBoard() {
     return (
         <Box>
             <Accordion>
@@ -24,4 +24,5 @@ export default function ThreadsBoard() {
             </Accordion>
         </Box>
     );
-}
+});
+export default ThreadsBoard;

@@ -3,8 +3,8 @@ import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/materia
 import CreateCategory from "./create";
 import EditCategory from "./edit";
 import DeleteCategory from "./delete";
-
-export default function CategoriesBoard() {
+import { memo } from "react";
+const CategoriesBoard = memo(function CategoriesBoard() {
     return (
         <Box>
             <Accordion>
@@ -33,4 +33,5 @@ export default function CategoriesBoard() {
             </Accordion>
         </Box>
     );
-}
+});
+export default CategoriesBoard;

@@ -16,6 +16,14 @@
  */
 
 import React, { createContext, useContext, useState } from "react";
+import { memo } from "react";
+
+/**
+ * It creates a context object that is passed to the children.
+ * @param props - { children: JSX.Element }
+ * @returns The `MenuProvider` component is returning a `MenuContext.Provider` component. This is the
+ * component that will be used to provide the context to the rest of the application.
+ */
 
 type menuMode = "category" | "search" | "profile" | "recall" | "starred" | "following";
 
@@ -31,14 +39,7 @@ const MenuContext = createContext<{
     smode: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
 }>({});
-
-/**
- * It creates a context object that is passed to the children.
- * @param props - { children: JSX.Element }
- * @returns The `MenuProvider` component is returning a `MenuContext.Provider` component. This is the
- * component that will be used to provide the context to the rest of the application.
- */
-export default function MenuProvider(props: { children: JSX.Element }) {
+const MenuProvider = memo(function MenuProvider(props: { children: JSX.Element }) {
     const [category, setCategory] = useState(0);
     const [id, setId] = useState(0);
     const [profile, setProfile] = useState<number>(0);
@@ -65,7 +66,8 @@ export default function MenuProvider(props: { children: JSX.Element }) {
             {props.children}
         </MenuContext.Provider>
     );
-}
+});
+export default MenuProvider;
 
 /**
  * Use the value of the category in the MenuContext.

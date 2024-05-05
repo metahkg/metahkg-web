@@ -22,8 +22,8 @@ import React, { useState } from "react";
 import CommentPopup from "../../lib/commentPopup";
 import { filterSwearWords } from "../../lib/filterSwear";
 import { useSettings } from "../AppContextProvider";
-
-export default function PinnedComment(props: { comment: Comment }) {
+import { memo } from "react";
+const PinnedComment = memo(function PinnedComment(props: { comment: Comment }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
     const [settings] = useSettings();
@@ -51,4 +51,5 @@ export default function PinnedComment(props: { comment: Comment }) {
             </Box>
         </React.Fragment>
     );
-}
+});
+export default PinnedComment;

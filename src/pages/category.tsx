@@ -34,13 +34,14 @@ import {
     useMenuMode,
 } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
+import { memo } from "react";
 
 /**
  * It's a function that
  * returns a component that renders a box with a background color
  * @returns The empty component is being returned.
  */
-export default function Category() {
+const Category = memo(function Category() {
     const params = useParams();
     const [menu, setMenu] = useMenu();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -76,23 +77,7 @@ export default function Category() {
 
         // update the category in context
         if (category !== Number(params.category)) setCategory(Number(params.category));
-    }, [
-        back,
-        categories,
-        category,
-        menu,
-        menuMode,
-        params.category,
-        selected,
-        serverConfig?.branding,
-        setBack,
-        setCategory,
-        setMenu,
-        setMenuMode,
-        setMenuTitle,
-        setReFetch,
-        setSelected,
-    ]);
+    }, [back, categories, category, menu, menuMode, params.category, selected, serverConfig?.branding, setBack, setCategory, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected]);
 
     return (
         <Box
@@ -105,4 +90,5 @@ export default function Category() {
             {!isSmallScreen && <Template />}
         </Box>
     );
-}
+});
+export default Category;

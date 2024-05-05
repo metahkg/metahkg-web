@@ -33,8 +33,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import Theme from "../../../theme";
-
-export default function SearchUsers() {
+import { memo } from "react";
+const SearchUsers = memo(function SearchUsers() {
     const [, setNotification] = useNotification();
     const [settings] = useSettings();
     const darkMode = useDarkMode();
@@ -567,4 +567,5 @@ export default function SearchUsers() {
             )}
         </Box>
     );
-}
+});
+export default SearchUsers;

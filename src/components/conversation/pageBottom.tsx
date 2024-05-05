@@ -4,8 +4,8 @@ import { Box, IconButton, Typography } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
 import DiscordIcon from "../../lib/icons/dicord";
 import { Link } from "../../lib/link";
-
-export default function PageBottom() {
+import { memo } from "react";
+const PageBottom = memo(function PageBottom() {
     const socialIcons = [
         {
             icon: (
@@ -75,4 +75,5 @@ export default function PageBottom() {
             </Typography>
         </Box>
     );
-}
+});
+export default PageBottom;

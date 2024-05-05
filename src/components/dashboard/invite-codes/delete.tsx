@@ -6,8 +6,8 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { Invite } from "@metahkg/api";
 import { LoadingButton } from "@mui/lab";
-
-export default function DeleteInviteCode() {
+import { memo } from "react";
+const DeleteInviteCode = memo(function DeleteInviteCode() {
     const [, setNotification] = useNotification();
     const [codes, setCodes] = useState<Invite[]>([]);
     const [selectedCode, setSelectedCode] = useState("");
@@ -87,4 +87,5 @@ export default function DeleteInviteCode() {
             </LoadingButton>
         </Box>
     );
-}
+});
+export default DeleteInviteCode;

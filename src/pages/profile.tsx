@@ -44,8 +44,8 @@ import Loader from "../lib/loader";
 import AvatarEditorPopUp from "../components/profile/avatarEditorPopUp";
 import UserAvatar from "../components/UserAvatar";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-
-export default function Profile() {
+import { memo } from "react";
+const Profile = memo(function Profile() {
     const params = useParams();
     const [profile, setProfile] = useProfile();
     const [reqUser, setReqUser] = useState<UserData | null>(null);
@@ -110,22 +110,7 @@ export default function Profile() {
 
         if (menuMode !== "profile") setMenuMode("profile");
         if (profile !== userId) setProfile(userId);
-    }, [
-        back,
-        isSmallScreen,
-        menu,
-        menuMode,
-        profile,
-        selected,
-        setBack,
-        setMenu,
-        setMenuMode,
-        setMenuTitle,
-        setProfile,
-        setReFetch,
-        setSelected,
-        userId,
-    ]);
+    }, [back, isSmallScreen, menu, menuMode, profile, selected, setBack, setMenu, setMenuMode, setMenuTitle, setProfile, setReFetch, setSelected, userId]);
 
     if (!userId) return <Navigate to="/" replace />;
 
@@ -266,4 +251,5 @@ export default function Profile() {
             )}
         </Box>
     );
-}
+});
+export default Profile;

@@ -1,8 +1,8 @@
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/material";
 import SearchUsers from "./search";
-
-export default function UsersBoard() {
+import { memo } from "react";
+const UsersBoard = memo(function UsersBoard() {
     return (
         <Box>
             <Accordion>
@@ -15,4 +15,5 @@ export default function UsersBoard() {
             </Accordion>
         </Box>
     );
-}
+});
+export default UsersBoard;

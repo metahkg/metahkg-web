@@ -9,13 +9,15 @@ import {
     Tooltip,
 } from "@mui/material";
 import { Close, Delete, Done, Edit } from "@mui/icons-material";
+import { memo } from "react";
 
 export interface PollCreateType {
     options: string[];
     title: string;
 }
-
-export default function CreatePoll(props: { onChange?: (poll: PollCreateType) => void }) {
+const CreatePoll = memo(function CreatePoll(props: {
+    onChange?: (poll: PollCreateType) => void;
+}) {
     const { onChange } = props;
     const [pollOptions, setPollOptions] = useState<string[]>([]);
     const [title, setTitle] = useState<string>("");
@@ -196,4 +198,5 @@ export default function CreatePoll(props: { onChange?: (poll: PollCreateType) =>
             </RadioGroup>
         </Box>
     );
-}
+});
+export default CreatePoll;

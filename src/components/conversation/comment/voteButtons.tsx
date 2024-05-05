@@ -24,8 +24,8 @@ import { useThreadId, useVotes } from "../ConversationContext";
 import { parseError } from "../../../lib/parseError";
 import { Comment, Vote } from "@metahkg/api";
 import { LoadingButton } from "@mui/lab";
-
-export default function VoteButtons(props: { comment: Comment }) {
+import { memo } from "react";
+const VoteButtons = memo(function VoteButtons(props: { comment: Comment }) {
     const threadId = useThreadId();
     const [votes, setVotes] = useVotes();
     const [, setNotification] = useNotification();
@@ -108,4 +108,5 @@ export default function VoteButtons(props: { comment: Comment }) {
             </LoadingButton>
         </ButtonGroup>
     );
-}
+});
+export default VoteButtons;

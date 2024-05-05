@@ -15,8 +15,8 @@ import { useIsSmallScreen, useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { Invite } from "@metahkg/api";
-
-export default function ViewInviteCodes() {
+import { memo } from "react";
+const ViewInviteCodes = memo(function ViewInviteCodes() {
     const [, setNotification] = useNotification();
     const [codes, setCodes] = useState<Invite[]>([]);
     const isSmallScreen = useIsSmallScreen();
@@ -104,4 +104,5 @@ export default function ViewInviteCodes() {
             </Grid>
         </Box>
     );
-}
+});
+export default ViewInviteCodes;

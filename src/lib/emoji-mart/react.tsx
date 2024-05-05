@@ -42,8 +42,8 @@ Footer
 import React, { useEffect, useRef } from "react";
 import { Picker, PickerOptions } from "emoji-mart";
 import data from "@emoji-mart/data";
-
-export default function EmojiMart(props: PickerOptions) {
+import { memo } from "react";
+const EmojiMart = memo(function EmojiMart(props: PickerOptions) {
     const ref = useRef<HTMLDivElement>(null);
     const instance = useRef<Picker | null>(null);
 
@@ -61,4 +61,5 @@ export default function EmojiMart(props: PickerOptions) {
     }, []);
 
     return React.createElement("div", { ref });
-}
+});
+export default EmojiMart;

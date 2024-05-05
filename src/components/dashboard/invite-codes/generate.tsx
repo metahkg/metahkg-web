@@ -5,8 +5,8 @@ import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
-
-export default function GenerateInviteCode() {
+import { memo } from "react";
+const GenerateInviteCode = memo(function GenerateInviteCode() {
     const [, setNotification] = useNotification();
     const [description, setDescription] = useState("");
     const generateFormRef = useRef<HTMLFormElement>(null);
@@ -65,4 +65,5 @@ export default function GenerateInviteCode() {
             )}
         </Box>
     );
-}
+});
+export default GenerateInviteCode;

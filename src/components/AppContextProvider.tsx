@@ -43,6 +43,13 @@ import { loadUser } from "../lib/jwt";
 import { AvatarProps, useAvatar } from "../hooks/useAvatar";
 import { UserData } from "./profile/DataTable";
 import { colorOptions } from "./settings";
+import { memo } from "react";
+
+/**
+ * Holds global application values.
+ * @param props - { children: JSX.Element }
+ * @returns The AppContextProvider is returning a JSX element.
+ */
 
 export const AppContext = createContext<{
     back: [string, Dispatch<SetStateAction<string>>];
@@ -69,13 +76,9 @@ export const AppContext = createContext<{
     sidePanelExpanded: [boolean, Dispatch<SetStateAction<boolean>>];
     // @ts-ignore
 }>(null);
-
-/**
- * Holds global application values.
- * @param props - { children: JSX.Element }
- * @returns The AppContextProvider is returning a JSX element.
- */
-export default function AppContextProvider(props: { children: JSX.Element }) {
+const AppContextProvider = memo(function AppContextProvider(props: {
+    children: JSX.Element;
+}) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState(localStorage.query || "");
     const [width, setWidth] = useState(window.innerWidth);
@@ -329,7 +332,8 @@ export default function AppContextProvider(props: { children: JSX.Element }) {
             {props.children}
         </AppContext.Provider>
     );
-}
+});
+export default AppContextProvider;
 
 /**
  * It returns the current history and a setter for the history

@@ -5,8 +5,8 @@ import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
-
-export default function DeleteThread() {
+import { memo } from "react";
+const DeleteThread = memo(function DeleteThread() {
     const formRef = useRef<HTMLFormElement>();
     const [, setNotification] = useNotification();
     const [threadId, setThreadId] = useState<number | "">("");
@@ -95,4 +95,5 @@ export default function DeleteThread() {
             </Grid>
         </Box>
     );
-}
+});
+export default DeleteThread;

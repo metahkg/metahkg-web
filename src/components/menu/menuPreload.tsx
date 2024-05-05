@@ -20,8 +20,9 @@ import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
 import { useHeight, useIsSmallScreen, useWidth } from "../AppContextProvider";
 import { useMenuMode } from "../MenuProvider";
+import { memo } from "react";
 /* A component that is used to preload the menu. */
-export default function MenuPreload() {
+const MenuPreload = memo(function MenuPreload() {
     const isSmallScreen = useIsSmallScreen();
     const [height] = useHeight();
     const [width] = useWidth();
@@ -54,4 +55,5 @@ export default function MenuPreload() {
             ))}
         </Box>
     );
-}
+});
+export default MenuPreload;

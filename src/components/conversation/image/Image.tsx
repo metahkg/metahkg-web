@@ -26,6 +26,7 @@ import { useCRoot } from "../ConversationContext";
 import cssToReact from "../../../lib/cssToReact";
 import { useServerConfig, useSettings } from "../../AppContextProvider";
 import { Image as ImageIcon } from "@mui/icons-material";
+import { memo } from "react";
 // import { engineName, isIOS, isSafari } from "react-device-detect";
 
 interface Props {
@@ -142,8 +143,7 @@ const ImgComponent = React.forwardRef(
         );
     }
 );
-
-export default function Image(props: Props) {
+const Image = memo(function Image(props: Props) {
     const { src } = props;
     const [settings] = useSettings();
     const [showImage, setShowImage] = useState(settings.autoLoadImages);
@@ -204,4 +204,5 @@ export default function Image(props: Props) {
             </ImageErrorBoundary>
         </Suspense>
     );
-}
+});
+export default Image;
