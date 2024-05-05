@@ -17,7 +17,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     useDarkMode,
     useIsSmallScreen,
@@ -69,33 +69,30 @@ export default function SearchUsers() {
         exp?: Date;
     } | null>(null);
     const isSmallScreen = useIsSmallScreen();
-    const search = useMemo(
-        () => () => {
-            if (searchSettings) {
-                setLoading(true);
-                const { id, name, email, sex, role, muted, banned } = searchSettings;
-                let searchPage = page;
-                api.users(id, name, email, sex, role, muted, banned, searchPage, 15)
-                    .then(({ count, users }) => {
-                        setUsers(users);
-                        setCount(count);
-                        setLoading(false);
-                        setTimeout(() => {
-                            resultsRef.current?.scrollIntoView();
-                        });
-                    })
-                    .catch((err) => {
-                        setLoading(false);
-                        setNotification({
-                            open: true,
-                            severity: "error",
-                            text: parseError(err),
-                        });
+    const search = useCallback(() => {
+        if (searchSettings) {
+            setLoading(true);
+            const { id, name, email, sex, role, muted, banned } = searchSettings;
+            let searchPage = page;
+            api.users(id, name, email, sex, role, muted, banned, searchPage, 15)
+                .then(({ count, users }) => {
+                    setUsers(users);
+                    setCount(count);
+                    setLoading(false);
+                    setTimeout(() => {
+                        resultsRef.current?.scrollIntoView();
                     });
-            }
-        },
-        [searchSettings, setNotification, page]
-    );
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                });
+        }
+    }, [searchSettings, setNotification, page]);
 
     useEffect(() => {
         if (searchSettings) {
