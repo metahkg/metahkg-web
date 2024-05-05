@@ -81,26 +81,25 @@ tagging:
   script:
     - tag=$(node -e "console.log(require('./package.json').version)")
     - if [ $CI_COMMIT_BRANCH = "dev" ]; then tag=${tag}-dev; fi;
+    - git pull origin ${CI_COMMIT_BRANCH} --tags
+    - git checkout $CI_COMMIT_AUTHOR
+    - if [ $(git tag -l "$tag") ]; then
+        echo "tag already exists";
+                exit 0;
+      fi;
     - "if [ $CI_COMMIT_BRANCH = 'dev' ];
        then yarn install;
        yarn generate-changelog;
        git add CHANGELOG.md;
        git commit -m 'update: CHANGELOG.md'; fi;"
     - git tag "$tag"
-    - git push origin $tag
-    - "if [ $CI_COMMIT_BRANCH = 'dev' ]; then
-       git fetch origin $CI_COMMIT_BRANCH;
-       git checkout dev;
-       git merge -X theirs origin/$CI_COMMIT_BRANCH -m 'merge';
-       yarn generate-changelog;
-       git add CHANGELOG.md;
-       git commit -m 'update: CHANGELOG.md';
-       git push origin $CI_COMMIT_BRANCH;
-       fi;"
+    - git push origin $CI_COMMIT_BRANCH --tags;
   rules:
-    - if: $CI_COMMIT_TAG
+    - if: "$CI_COMMIT_TAG"
       when: never
-    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>" && ($CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "master")
+    - if: $CI_COMMIT_BRANCH != "master" && $CI_COMMIT_BRANCH != "dev"
+      when: never
+    - if: $CI_COMMIT_AUTHOR != "metahkg-bot <bot@metahkg.org>"
       changes:
         - package.json
 
