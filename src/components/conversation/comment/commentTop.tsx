@@ -321,7 +321,7 @@ const CommentTop = memo(function CommentTop(props: {
                     }
                     return undefined;
                 })(),
-                {
+                comment.comment.type === "html" && {
                     icon: <FeedIcon className="!text-[19px]" />,
                     title: "Create thread",
                     action: () => {
