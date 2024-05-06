@@ -11,7 +11,7 @@ import {
     Grid,
 } from "@mui/material";
 import { Delete, Sync } from "@mui/icons-material";
-import { useIsSmallScreen, useNotification } from "../../AppContextProvider";
+import { useIsSmallScreen, useNotification, useUser } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { Invite } from "@metahkg/api";
@@ -20,24 +20,29 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
     const [, setNotification] = useNotification();
     const [codes, setCodes] = useState<Invite[]>([]);
     const isSmallScreen = useIsSmallScreen();
+    const [user] = useUser();
 
     const fetchCodes = useCallback(() => {
-        api.serverInviteCodes()
-            .then(setCodes)
-            .catch((err) => {
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
+        if (user?.role === "admin")
+            api.serverInviteCodes()
+                .then(setCodes)
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                 });
-            });
-    }, [setNotification]);
+    }, [setNotification, user?.role]);
 
     useEffect(() => {
         fetchCodes();
-        setInterval(() => {
+        const interval = setInterval(() => {
             fetchCodes();
         }, 5000);
+        return () => {
+            clearInterval(interval);
+        };
     }, [fetchCodes]);
 
     const handleDelete = useCallback(
