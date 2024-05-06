@@ -20,6 +20,8 @@ import queryString from "query-string";
 import { Comment, Thread } from "@metahkg/api";
 import { useSettings } from "../AppContextProvider";
 
+import { memo } from "react";
+
 interface editorStateType {
     open: boolean;
     quote?: Comment;
@@ -54,8 +56,7 @@ const ConversationContext = createContext<{
     cBottom: React.MutableRefObject<HTMLDivElement | null>;
     // @ts-ignore
 }>(null);
-
-export default function ConversationProvider(props: {
+const ConversationProvider = memo(function ConversationProvider(props: {
     children: JSX.Element | JSX.Element[];
     threadId: number;
 }) {
@@ -111,7 +112,8 @@ export default function ConversationProvider(props: {
             {children}
         </ConversationContext.Provider>
     );
-}
+});
+export default ConversationProvider;
 
 export function useThread() {
     const { thread } = React.useContext(ConversationContext);

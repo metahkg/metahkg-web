@@ -23,7 +23,8 @@ import {
 } from "../../components/AppContextProvider";
 import { useMenu } from "../../components/MenuProvider";
 
-export default function EnableMenu(props: {
+import { memo } from "react";
+const EnableMenu = memo(function EnableMenu(props: {
     children: React.ReactNode;
     notOnSmallScreen?: boolean;
 }) {
@@ -56,4 +57,5 @@ export default function EnableMenu(props: {
             {children}
         </Box>
     );
-}
+});
+export default EnableMenu;

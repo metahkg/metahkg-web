@@ -27,7 +27,8 @@ import { useBack, useIsSmallScreen } from "../AppContextProvider";
  * @param {string} props.title The title of of the thread
  * @param {string} props.slink The shortened link of the thread
  */
-export default function Title(props: {
+import { memo } from "react";
+const Title = memo(function Title(props: {
     /** thread category id */
     category: number | undefined;
     /** thread title */
@@ -76,4 +77,5 @@ export default function Title(props: {
             </Box>
         </Box>
     );
-}
+});
+export default Title;

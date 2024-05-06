@@ -19,7 +19,8 @@ import { Comment } from "@metahkg/api";
 import parse from "html-react-parser";
 import React, { useMemo } from "react";
 
-export default function RenderComment(props: {
+import { memo } from "react";
+const RenderComment = memo(function RenderComment(props: {
     comment: Comment;
     depth: number;
     darkMode: boolean;
@@ -54,4 +55,5 @@ export default function RenderComment(props: {
         [comment.quote, commentJSX, darkMode, depth]
     );
     return <React.Fragment>{content}</React.Fragment>;
-}
+});
+export default RenderComment;

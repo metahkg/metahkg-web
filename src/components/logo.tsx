@@ -21,7 +21,8 @@ import { css } from "../lib/css";
 /**
  * @description Metahkg logo, in different formats
  */
-export default function MetahkgLogo(props: {
+import { memo } from "react";
+const MetahkgLogo = memo(function MetahkgLogo(props: {
     light?: boolean;
     dark?: boolean;
     text?: boolean;
@@ -52,4 +53,5 @@ export default function MetahkgLogo(props: {
             width={width}
         />
     );
-}
+});
+export default MetahkgLogo;

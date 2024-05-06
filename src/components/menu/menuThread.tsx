@@ -29,7 +29,8 @@ import { useCat, useId, useMenuMode } from "../MenuProvider";
 import { useCategories, useHistory } from "../AppContextProvider";
 import { ThreadMeta } from "@metahkg/api";
 
-export default function MenuThread(props: {
+import { memo } from "react";
+const MenuThread = memo(function MenuThread(props: {
     thread: ThreadMeta;
     onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 }) {
@@ -134,4 +135,5 @@ export default function MenuThread(props: {
             </Box>
         </Link>
     );
-}
+});
+export default MenuThread;

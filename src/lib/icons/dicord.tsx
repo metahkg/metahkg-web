@@ -28,7 +28,8 @@ import React from "react";
  * @param {boolean} props.black use black for fill
  * @returns An SVG element.
  */
-export default function DiscordIcon(props: {
+import { memo } from "react";
+const DiscordIcon = memo(function DiscordIcon(props: {
     /** svg width */
     width?: number;
     /** svg height */
@@ -63,4 +64,5 @@ export default function DiscordIcon(props: {
             </g>
         </svg>
     );
-}
+});
+export default DiscordIcon;

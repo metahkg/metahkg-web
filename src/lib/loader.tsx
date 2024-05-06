@@ -17,7 +17,8 @@
 
 import { Box, CircularProgress, SxProps, Theme } from "@mui/material";
 
-export default function Loader(props: {
+import { memo } from "react";
+const Loader = memo(function Loader(props: {
     sxBox?: SxProps<Theme>;
     sxProgress?: SxProps<Theme>;
     position?: "center" | "flex-start" | "flex-end";
@@ -45,4 +46,5 @@ export default function Loader(props: {
             />
         </Box>
     );
-}
+});
+export default Loader;

@@ -19,7 +19,8 @@ import React from "react";
 import { Box, IconButton, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 
-export default function PageSelect(props: {
+import { memo } from "react";
+const PageSelect = memo(function PageSelect(props: {
     pages: number;
     page: number;
     last?: boolean;
@@ -68,4 +69,5 @@ export default function PageSelect(props: {
             )}
         </Box>
     );
-}
+});
+export default PageSelect;

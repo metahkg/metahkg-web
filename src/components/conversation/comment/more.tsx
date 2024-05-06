@@ -54,7 +54,8 @@ import {
 } from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
 
-export default function MoreList(props: {
+import { memo } from "react";
+const MoreList = memo(function MoreList(props: {
     buttons: ({ title: string; icon?: JSX.Element; action: () => void } | undefined)[];
 }) {
     const [open, setOpen] = React.useState(false);
@@ -162,4 +163,5 @@ export default function MoreList(props: {
             </Box>
         </Stack>
     );
-}
+});
+export default MoreList;

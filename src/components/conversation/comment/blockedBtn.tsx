@@ -17,7 +17,8 @@
 
 import { Button, Tooltip } from "@mui/material";
 
-export default function BlockedBtn(props: {
+import { memo } from "react";
+const BlockedBtn = memo(function BlockedBtn(props: {
     userName: string;
     reason?: string;
     setBlocked?: (x?: boolean) => void;
@@ -42,4 +43,5 @@ export default function BlockedBtn(props: {
             </Button>
         </Tooltip>
     );
-}
+});
+export default BlockedBtn;

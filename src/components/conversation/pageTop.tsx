@@ -18,7 +18,8 @@
 import React from "react";
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 
-export default function PageTop(props: {
+import { memo } from "react";
+const PageTop = memo(function PageTop(props: {
     pages: number;
     page: number;
     onChange: (e: SelectChangeEvent<number>) => void;
@@ -60,4 +61,5 @@ export default function PageTop(props: {
             </Typography>
         </Box>
     );
-}
+});
+export default PageTop;

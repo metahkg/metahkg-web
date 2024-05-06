@@ -22,7 +22,8 @@ import Loader from "../../lib/loader";
 import { PopUp } from "../../lib/popup";
 import { useServerConfig, useWidth } from "../AppContextProvider";
 
-export default function Gallery(props: {
+import { memo } from "react";
+const Gallery = memo(function Gallery(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     images: { src: string; signature: string }[];
@@ -71,4 +72,5 @@ export default function Gallery(props: {
             </Box>
         </PopUp>
     );
-}
+});
+export default Gallery;

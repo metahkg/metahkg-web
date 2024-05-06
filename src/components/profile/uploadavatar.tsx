@@ -20,15 +20,16 @@ import { Box, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FileUpload } from "@mui/icons-material";
 
-const Input = styled("input")({
-    display: "none",
-});
-
 /**
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadAvatar(props: {
+import { memo } from "react";
+
+const Input = styled("input")({
+    display: "none",
+});
+const UploadAvatar = memo(function UploadAvatar(props: {
     onChange?: (file: File) => void | Promise<void>;
 }) {
     const { onChange } = props;
@@ -61,4 +62,5 @@ export default function UploadAvatar(props: {
             </label>
         </Box>
     );
-}
+});
+export default UploadAvatar;

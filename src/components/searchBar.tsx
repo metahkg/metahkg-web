@@ -41,6 +41,12 @@ import React, { KeyboardEventHandler } from "react";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { useMenuMode, useReFetch, useSmode } from "./MenuProvider";
+/**
+ * It's a search bar
+ * @param props - {onKeyPress: KeyboardEventHandler; OnChange: ChangeEventHandler}
+ * @returns A search bar with a search icon and an input field.
+ */
+import { memo } from "react";
 
 const Search = styled("div")(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
@@ -75,12 +81,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-/**
- * It's a search bar
- * @param props - {onKeyPress: KeyboardEventHandler; OnChange: ChangeEventHandler}
- * @returns A search bar with a search icon and an input field.
- */
-export default function SearchBar(props: {
+const SearchBar = memo(function SearchBar(props: {
     query: string;
     onKeyPress: KeyboardEventHandler<HTMLDivElement>;
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
@@ -122,4 +123,5 @@ export default function SearchBar(props: {
             )}
         </Search>
     );
-}
+});
+export default SearchBar;

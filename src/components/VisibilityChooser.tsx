@@ -2,7 +2,8 @@ import { Visibility } from "@metahkg/api";
 import { HelpOutline as HelpOutlineIcon } from "@mui/icons-material";
 import { Box, Checkbox, FormControlLabel, Tooltip, Typography } from "@mui/material";
 
-export default function VisibilityChooser(props: {
+import { memo } from "react";
+const VisibilityChooser = memo(function VisibilityChooser(props: {
     visibility: Visibility;
     setVisibility: React.Dispatch<React.SetStateAction<Visibility>>;
     disabled?: boolean;
@@ -40,4 +41,5 @@ export default function VisibilityChooser(props: {
             />
         </Box>
     );
-}
+});
+export default VisibilityChooser;

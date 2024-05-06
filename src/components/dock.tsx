@@ -23,7 +23,8 @@ import { useIsSmallScreen } from "./AppContextProvider";
 /**
  * mobile dock
  */
-export default function Dock(props: {
+import { memo } from "react";
+const Dock = memo(function Dock(props: {
     btns: { icon: JSX.Element; action: () => void }[];
 }) {
     const { btns } = props;
@@ -47,4 +48,5 @@ export default function Dock(props: {
             )}
         </Box>
     );
-}
+});
+export default Dock;

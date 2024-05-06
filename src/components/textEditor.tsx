@@ -23,7 +23,8 @@ import axios from "axios";
 import { parseError } from "../lib/parseError";
 import { useSession } from "./AppContextProvider";
 
-export default function TextEditor(props: {
+import { memo } from "react";
+const TextEditor = memo(function TextEditor(props: {
     onChange?: (a: string, editor: import("tinymce/tinymce").Editor) => void;
     initText?: string;
     className?: string;
@@ -295,4 +296,5 @@ export default function TextEditor(props: {
             />
         </Box>
     );
-}
+});
+export default TextEditor;

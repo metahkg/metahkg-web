@@ -28,7 +28,8 @@ import {
     useUser,
 } from "../../AppContextProvider";
 
-export default function UserModal(props: {
+import { memo } from "react";
+const UserModal = memo(function UserModal(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     user: User;
@@ -192,4 +193,5 @@ export default function UserModal(props: {
             </Typography>
         </PopUp>
     );
-}
+});
+export default UserModal;

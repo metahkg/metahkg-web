@@ -37,6 +37,8 @@ import CommentBottom from "./comment/commentBottom";
 import CommentEdit from "./comment/commentEdit";
 import { Link } from "../../lib/link";
 
+import { memo } from "react";
+
 const CommentContext = createContext<{
     comment: [CommentType, React.Dispatch<React.SetStateAction<CommentType>>];
     reFetch: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -60,8 +62,7 @@ const CommentContext = createContext<{
     setIsExpanded?: React.Dispatch<React.SetStateAction<boolean>>;
     // @ts-ignore
 }>({});
-
-export default function Comment(props: {
+const Comment = memo(function Comment(props: {
     comment: CommentType;
     noId?: boolean;
     inPopUp?: boolean;
@@ -367,7 +368,8 @@ export default function Comment(props: {
             loading,
         ]
     );
-}
+});
+export default Comment;
 
 export function useComment() {
     const { comment } = useContext(CommentContext);

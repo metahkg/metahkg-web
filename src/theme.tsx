@@ -18,6 +18,7 @@
 import React, { useMemo } from "react";
 import { PaletteColorOptions } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { memo } from "react";
 
 declare module "@mui/material/styles" {
     interface Theme {
@@ -32,7 +33,7 @@ declare module "@mui/material/styles" {
         };
     }
 }
-export default function Theme(props: {
+const Theme = memo(function Theme(props: {
     primary?: PaletteColorOptions;
     secondary?: PaletteColorOptions;
     mode?: "dark" | "light";
@@ -53,4 +54,5 @@ export default function Theme(props: {
         [props.mode, props.primary, props.secondary]
     );
     return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
-}
+});
+export default Theme;

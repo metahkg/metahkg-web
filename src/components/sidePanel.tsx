@@ -57,7 +57,8 @@ import { CategoryPanel } from "./categoryPanel";
 import UserAvatar from "./UserAvatar";
 import { useLogout } from "../hooks/useLogout";
 
-export default function SidePanel(props: {
+import { memo } from "react";
+const SidePanel = memo(function SidePanel(props: {
     onClick?: (event: React.MouseEvent) => void;
     onClickLink?: (event: React.MouseEvent) => void;
 }) {
@@ -250,4 +251,5 @@ export default function SidePanel(props: {
             </Box>
         </Box>
     );
-}
+});
+export default SidePanel;

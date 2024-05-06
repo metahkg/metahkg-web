@@ -27,7 +27,8 @@ import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
 import PollComponent from "./Poll";
 
-export default function CommentBody(props: {
+import { memo } from "react";
+const CommentBody = memo(function CommentBody(props: {
     comment: Comment;
     depth: number;
     noQuote?: boolean;
@@ -197,4 +198,5 @@ export default function CommentBody(props: {
             )}
         </React.Fragment>
     );
-}
+});
+export default CommentBody;

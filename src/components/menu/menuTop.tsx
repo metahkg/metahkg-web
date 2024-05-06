@@ -32,7 +32,8 @@ import { setTitle } from "../../lib/common";
  * @param {number} props.selected selected tab number
  * @param {(e: number) => void} props.onClick event handler for when a tab is selected
  */
-export default function MenuTop(props: {
+import { memo } from "react";
+const MenuTop = memo(function MenuTop(props: {
     /** event handler when refresh is clicked */
     refresh: MouseEventHandler<HTMLButtonElement>;
     /** selected tab number*/
@@ -93,15 +94,7 @@ export default function MenuTop(props: {
                 });
             }
         }
-    }, [
-        category,
-        id,
-        profile,
-        setMenuTitle,
-        menuTitle,
-        menuMode,
-        serverConfig?.branding,
-    ]);
+    }, [category, id, profile, setMenuTitle, menuTitle, menuMode, serverConfig?.branding]);
 
     return (
         <Box>
@@ -165,4 +158,5 @@ export default function MenuTop(props: {
             <Divider />
         </Box>
     );
-}
+});
+export default MenuTop;

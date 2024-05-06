@@ -36,6 +36,8 @@ import {
 import { isIOS, isSafari } from "react-device-detect";
 import { unsubscribe } from "../lib/notifications";
 
+import { memo } from "react";
+
 export const colorOptions: {
     value: string;
     main: secondaryColorMain;
@@ -46,8 +48,7 @@ export const colorOptions: {
     { value: "Teal", main: "#009688", dark: "rgba(0,150,136,0.5)" },
     { value: "Purple", main: "#651fff", dark: "rgba(101,31,255,0.5)" },
 ];
-
-export default function Settings(props: {
+const Settings = memo(function Settings(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -258,4 +259,5 @@ export default function Settings(props: {
             </Box>
         </PopUp>
     );
-}
+});
+export default Settings;

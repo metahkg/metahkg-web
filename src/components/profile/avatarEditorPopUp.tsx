@@ -23,7 +23,8 @@ import { parseError } from "../../lib/parseError";
 import { PopUp } from "../../lib/popup";
 import { useNotification, useUser } from "../AppContextProvider";
 
-export default function AvatarEditorPopUp(props: {
+import { memo } from "react";
+const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     avatar: File | null;
@@ -179,4 +180,5 @@ export default function AvatarEditorPopUp(props: {
             </Stack>
         </PopUp>
     );
-}
+});
+export default AvatarEditorPopUp;

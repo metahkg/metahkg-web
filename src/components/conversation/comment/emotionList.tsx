@@ -37,7 +37,8 @@ import { useThreadId } from "../ConversationContext";
 import Loader from "../../../lib/loader";
 import UserAvatar from "../../UserAvatar";
 
-export default function EmotionList(props: {
+import { memo } from "react";
+const EmotionList = memo(function EmotionList(props: {
     emotions: { emotion: string; count: number }[];
 }) {
     const { emotions } = props;
@@ -152,4 +153,5 @@ export default function EmotionList(props: {
             </Popover>
         </Box>
     );
-}
+});
+export default EmotionList;
