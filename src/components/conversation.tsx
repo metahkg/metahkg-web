@@ -236,7 +236,7 @@ function Conversation(props: { id: number }) {
                                     return (
                                         <Box key={index}>
                                             <VisibilitySensor
-                                                intervalDelay={200}
+                                                intervalDelay={50}
                                                 partialVisibility
                                                 scrollCheck
                                                 onChange={(isVisible: boolean) => {
