@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCat, useReFetch, useProfile, useSmode, useMenuMode } from "../MenuProvider";
 import {
@@ -59,16 +59,19 @@ const MenuBody = memo(function MenuBody(props: { selected: number }) {
      * property set to the error message.
      * @param {AxiosError} err - The error object.
      */
-    function onError(err: AxiosError<any>) {
-        setNotification({
-            open: true,
-            severity: "error",
-            text: parseError(err),
-        });
-        setLoading(false);
-        err?.response?.status === 404 && navigate("/404", { replace: true });
-        err?.response?.status === 403 && navigate("/403", { replace: true });
-    }
+    const onError = useCallback(
+        (err: AxiosError<any>) => {
+            setNotification({
+                open: true,
+                severity: "error",
+                text: parseError(err),
+            });
+            setLoading(false);
+            err?.response?.status === 404 && navigate("/404", { replace: true });
+            err?.response?.status === 403 && navigate("/403", { replace: true });
+        },
+        [navigate, setNotification]
+    );
 
     /* A way to make sure that the effect is only run once. */
     useEffect(() => {

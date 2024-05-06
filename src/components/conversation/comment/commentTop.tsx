@@ -88,7 +88,10 @@ const CommentTop = memo(function CommentTop(props: {
 
     const { comment, noStory } = props;
 
-    const isOp = thread && thread.op.id === comment.user.id;
+    const isOp = useMemo(
+        () => thread && thread.op.id === comment.user.id,
+        [comment.user.id, thread]
+    );
 
     const leftBtns = useMemo(
         () =>
@@ -273,71 +276,79 @@ const CommentTop = memo(function CommentTop(props: {
         ]
     );
 
-    const moreList = [
-        (() => {
-            const clientIsOp = thread && user?.id === thread.op.id;
-            const pinned = thread?.pin?.id === comment.id;
-            if (clientIsOp || (user?.role === "admin" && pinned)) {
-                const onError = (err: AxiosError<any>) => {
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                };
-                return {
-                    icon: <PushPinIcon />,
-                    title: `${pinned ? "Unpin" : "Pin"} Comment`,
-                    action: () => {
-                        setNotification({
-                            open: true,
-                            severity: "info",
-                            text: `${pinned ? "Unpinn" : "Pinn"}ing Comment...`,
-                        });
-                        (pinned
-                            ? api.threadUnpin(threadId)
-                            : api.threadPin(threadId, { cid: comment.id })
-                        )
-                            .then(() => {
+    const moreList = useMemo(
+        () =>
+            [
+                (() => {
+                    const clientIsOp = thread && user?.id === thread.op.id;
+                    const pinned = thread?.pin?.id === comment.id;
+                    if (clientIsOp || (user?.role === "admin" && pinned)) {
+                        const onError = (err: AxiosError<any>) => {
+                            setNotification({
+                                open: true,
+                                severity: "error",
+                                text: parseError(err),
+                            });
+                        };
+                        return {
+                            icon: <PushPinIcon />,
+                            title: `${pinned ? "Unpin" : "Pin"} Comment`,
+                            action: () => {
                                 setNotification({
                                     open: true,
-                                    severity: "success",
-                                    text: `Comment ${pinned ? "un" : ""}pinned!`,
+                                    severity: "info",
+                                    text: `${pinned ? "Unpinn" : "Pinn"}ing Comment...`,
                                 });
-                                setThread((thread) => {
-                                    if (!pinned && thread) thread.pin = comment;
-                                    else if (thread) delete thread.pin;
-                                    return thread;
-                                });
-                            })
-                            .catch(onError);
+                                (pinned
+                                    ? api.threadUnpin(threadId)
+                                    : api.threadPin(threadId, { cid: comment.id })
+                                )
+                                    .then(() => {
+                                        setNotification({
+                                            open: true,
+                                            severity: "success",
+                                            text: `Comment ${pinned ? "un" : ""}pinned!`,
+                                        });
+                                        setThread((thread) => {
+                                            if (!pinned && thread) thread.pin = comment;
+                                            else if (thread) delete thread.pin;
+                                            return thread;
+                                        });
+                                    })
+                                    .catch(onError);
+                            },
+                        };
+                    }
+                    return undefined;
+                })(),
+                {
+                    icon: <FeedIcon className="!text-[19px]" />,
+                    title: "Create thread",
+                    action: () => {
+                        navigate(`/create?quote=${threadId}.${comment.id}`);
                     },
-                };
-            }
-            return undefined;
-        })(),
-        {
-            icon: <FeedIcon className="!text-[19px]" />,
-            title: "Create thread",
-            action: () => {
-                navigate(`/create?quote=${threadId}.${comment.id}`);
-            },
-        },
-        comment.comment.type === "html" && {
-            icon: <EditIcon className="!text-[19px]" />,
-            title: "Edit (in new comment)",
-            action: () => {
-                if (user && comment.comment.type === "html")
-                    setEditor({ open: true, edit: comment.comment.html });
-                else
-                    navigate(
-                        `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `${wholePath()}?c=${comment.id}`
-                        )}`
-                    );
-            },
-        },
-    ].filter(Boolean) as { icon: JSX.Element; title: string; action: () => void }[];
+                },
+                comment.comment.type === "html" && {
+                    icon: <EditIcon className="!text-[19px]" />,
+                    title: "Edit (in new comment)",
+                    action: () => {
+                        if (user && comment.comment.type === "html")
+                            setEditor({ open: true, edit: comment.comment.html });
+                        else
+                            navigate(
+                                `/users/login?continue=true&returnto=${encodeURIComponent(
+                                    `${wholePath()}?c=${comment.id}`
+                                )}`
+                            );
+                    },
+                },
+            ].filter(Boolean) as {
+                icon: JSX.Element;
+                title: string;
+                action: () => void;
+            }[],
+        [comment, navigate, setEditor, setNotification, setThread, thread, threadId, user]
+    );
 
     return (
         <Box className={`flex items-end text-lg !pt-2 ${!fold ? "justify-between" : ""}`}>

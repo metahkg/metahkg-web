@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Box, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
@@ -10,17 +10,17 @@ const PdfViewer = memo(function PdfViewer({ src }: { src: string }) {
     const [pageNumber, setPageNumber] = useState(1);
     const [width] = useWidth();
 
-    const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
         setNumPages(numPages);
-    };
+    }, []);
 
-    const handlePrevPage = () => {
+    const handlePrevPage = useCallback(() => {
         setPageNumber((prevPageNumber) => Math.max(prevPageNumber - 1, 1));
-    };
+    }, []);
 
-    const handleNextPage = () => {
+    const handleNextPage = useCallback(() => {
         setPageNumber((prevPageNumber) => Math.min(prevPageNumber + 1, numPages));
-    };
+    }, [numPages]);
 
     return (
         <Box

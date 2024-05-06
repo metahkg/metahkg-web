@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { Close } from "@mui/icons-material";
 import {
     Box,
@@ -57,10 +57,10 @@ export function PopUp(props: {
         closeBtn,
         onClose,
     } = props;
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpen(false);
         onClose?.();
-    };
+    }, [onClose, setOpen]);
     return (
         <Dialog
             open={open}

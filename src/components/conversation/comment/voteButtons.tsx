@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { ButtonGroup, Typography } from "@mui/material";
 import { useNotification, useUser } from "../../AppContextProvider";
@@ -33,7 +33,10 @@ const VoteButtons = memo(function VoteButtons(props: { comment: Comment }) {
     const [comment, setComment] = useState(props.comment);
     const [voting, setVoting] = useState("");
 
-    const vote = votes?.find((v) => v.cid === comment.id)?.vote;
+    const vote = useMemo(
+        () => votes?.find((v) => v.cid === comment.id)?.vote,
+        [comment.id, votes]
+    );
     const up = comment.U || 0;
     const down = comment.D || 0;
 
@@ -41,24 +44,27 @@ const VoteButtons = memo(function VoteButtons(props: { comment: Comment }) {
      * It sends a vote to the server.
      * @param {Vote} vote - "U" | "D"
      */
-    async function sendVote(vote: Vote) {
-        setVoting(vote);
-        await api
-            .commentVote({ vote }, threadId, comment.id)
-            .then(() => {
-                // for the refetch effect to work, we need to fetch the comment again
-                setComment({ ...comment, [vote]: (comment[vote] || 0) + 1 });
-                votes && setVotes([...votes, { cid: comment.id, vote }]);
-            })
-            .catch((err) => {
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
+    const sendVote = useCallback(
+        async (vote: Vote) => {
+            setVoting(vote);
+            await api
+                .commentVote({ vote }, threadId, comment.id)
+                .then(() => {
+                    // for the refetch effect to work, we need to fetch the comment again
+                    setComment({ ...comment, [vote]: (comment[vote] || 0) + 1 });
+                    votes && setVotes([...votes, { cid: comment.id, vote }]);
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                 });
-            });
-        setVoting("");
-    }
+            setVoting("");
+        },
+        [comment, setNotification, setVotes, threadId, votes]
+    );
 
     return (
         <ButtonGroup

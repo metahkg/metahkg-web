@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import axios, { AxiosResponse } from "axios";
@@ -29,54 +29,58 @@ const Input = styled("input")({
  * It's a form that uploads an image to the server
  * @returns A form with a file input.
  */
-export default function UploadImage(props: {
-    className?: string;
-    onUpload?: () => void;
-    onSuccess: (res: AxiosResponse<any, any>) => void;
-    onError: (err: any) => void;
-}) {
-    const { className, onUpload, onSuccess, onError } = props;
-    const [uploading, setUploading] = useState(false);
-    return (
-        <Box className={className}>
-            <form name="image" encType="multipart/form-data">
-                <label htmlFor="upload-image">
-                    <Input
-                        accept="image/*"
-                        id="upload-image"
-                        type="file"
-                        name="image"
-                        onChange={(e) => {
-                            onUpload && onUpload();
-                            const formData = new FormData();
-                            formData.append("image", e.target.files?.[0] || "");
-                            setUploading(true);
-                            axios
-                                .post("https://api.na.cx/upload", formData, {
-                                    headers: {
-                                        "Content-Type": "multipart/form-data",
-                                    },
-                                })
-                                .then(onSuccess)
-                                .catch(onError);
-                            setUploading(false);
-                        }}
-                    />
-                    <LoadingButton
-                        loading={uploading}
-                        disabled={uploading}
-                        className="!normal-case"
-                        variant="contained"
-                        component="span"
-                        startIcon={<FileUpload />}
-                        loadingPosition="start"
-                    >
-                        <Typography sx={{ color: "secondary.main" }}>
-                            Upload Image
-                        </Typography>
-                    </LoadingButton>
-                </label>
-            </form>
-        </Box>
-    );
-}
+const UploadImage = memo(
+    (props: {
+        className?: string;
+        onUpload?: () => void;
+        onSuccess: (res: AxiosResponse<any, any>) => void;
+        onError: (err: any) => void;
+    }) => {
+        const { className, onUpload, onSuccess, onError } = props;
+        const [uploading, setUploading] = useState(false);
+        return (
+            <Box className={className}>
+                <form name="image" encType="multipart/form-data">
+                    <label htmlFor="upload-image">
+                        <Input
+                            accept="image/*"
+                            id="upload-image"
+                            type="file"
+                            name="image"
+                            onChange={(e) => {
+                                onUpload && onUpload();
+                                const formData = new FormData();
+                                formData.append("image", e.target.files?.[0] || "");
+                                setUploading(true);
+                                axios
+                                    .post("https://api.na.cx/upload", formData, {
+                                        headers: {
+                                            "Content-Type": "multipart/form-data",
+                                        },
+                                    })
+                                    .then(onSuccess)
+                                    .catch(onError);
+                                setUploading(false);
+                            }}
+                        />
+                        <LoadingButton
+                            loading={uploading}
+                            disabled={uploading}
+                            className="!normal-case"
+                            variant="contained"
+                            component="span"
+                            startIcon={<FileUpload />}
+                            loadingPosition="start"
+                        >
+                            <Typography sx={{ color: "secondary.main" }}>
+                                Upload Image
+                            </Typography>
+                        </LoadingButton>
+                    </label>
+                </form>
+            </Box>
+        );
+    }
+);
+
+export default UploadImage;

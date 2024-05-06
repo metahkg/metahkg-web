@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useMemo } from "react";
 import Conversation from "../components/conversation";
 import { Box } from "@mui/material";
 import { useParams, Navigate } from "react-router-dom";
@@ -35,7 +35,7 @@ const Thread = memo(function Thread() {
     const [menu, setMenu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
 
-    const threadId = Number(params.id);
+    const threadId = useMemo(() => Number(params.id), [params.id]);
 
     useLayoutEffect(() => {
         !menu && !isSmallScreen && setMenu(true);

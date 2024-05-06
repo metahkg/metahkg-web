@@ -29,6 +29,7 @@ import {
     useThreadId,
     useUpdating,
 } from "../../components/conversation/ConversationContext";
+import { useCallback } from "react";
 
 export function useUpdate() {
     const [, setUpdating] = useUpdating();
@@ -43,94 +44,113 @@ export function useUpdate() {
     const [limit] = useLimit();
     const [sort] = useSort();
 
-    return (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
-        if (thread) {
-            let openNewPage = !(
-                (sort === "time"
-                    ? thread.conversation[thread.conversation.length - 1].id
-                    : thread.conversation.length) % limit
-            );
-            setUpdating(true);
+    return useCallback(
+        (options?: { scrollToBottom?: boolean; scrollToComment?: number }) => {
+            if (thread) {
+                let openNewPage = !(
+                    (sort === "time"
+                        ? thread.conversation[thread.conversation.length - 1].id
+                        : thread.conversation.length) % limit
+                );
+                setUpdating(true);
 
-            function update(norepeat?: boolean) {
-                if (thread) {
-                    api.thread(
-                        threadId,
-                        openNewPage ? finalPage + 1 : finalPage,
-                        limit,
-                        sort,
-                        openNewPage || sort !== "time"
-                            ? undefined
-                            : thread.conversation[thread.conversation.length - 1].id + 1
-                    ).then((data) => {
-                        const scroll = () => {
-                            document
-                                .getElementById(
-                                    `c${
-                                        options?.scrollToComment ||
-                                        data?.conversation[
-                                            options?.scrollToBottom
-                                                ? data?.conversation?.length - 1
-                                                : 0
-                                        ]?.id
-                                    }`
-                                )
-                                ?.scrollIntoView({ behavior: "smooth" });
-                        };
-                        data.conversation = data.conversation.filter(
-                            (v) => !thread.conversation.find((c) => c.id === v.id)
-                        );
-                        if (!data.conversation.length) {
-                            if (
-                                !openNewPage &&
-                                data.count / limit > finalPage &&
-                                !norepeat
-                            ) {
-                                openNewPage = true;
-                                console.log("update");
-                                return update(true);
+                function update(norepeat?: boolean) {
+                    if (thread) {
+                        api.thread(
+                            threadId,
+                            openNewPage ? finalPage + 1 : finalPage,
+                            limit,
+                            sort,
+                            openNewPage || sort !== "time"
+                                ? undefined
+                                : thread.conversation[thread.conversation.length - 1].id +
+                                      1
+                        ).then((data) => {
+                            const scroll = () => {
+                                document
+                                    .getElementById(
+                                        `c${
+                                            options?.scrollToComment ||
+                                            data?.conversation[
+                                                options?.scrollToBottom
+                                                    ? data?.conversation?.length - 1
+                                                    : 0
+                                            ]?.id
+                                        }`
+                                    )
+                                    ?.scrollIntoView({ behavior: "smooth" });
+                            };
+                            data.conversation = data.conversation.filter(
+                                (v) => !thread.conversation.find((c) => c.id === v.id)
+                            );
+                            if (!data.conversation.length) {
+                                if (
+                                    !openNewPage &&
+                                    data.count / limit > finalPage &&
+                                    !norepeat
+                                ) {
+                                    openNewPage = true;
+                                    console.log("update");
+                                    return update(true);
+                                }
+                                setEnd(true);
+                                setUpdating(false);
+                                if (options?.scrollToBottom || options?.scrollToComment)
+                                    setTimeout(scroll, 1);
+                                return;
                             }
-                            setEnd(true);
-                            setUpdating(false);
-                            if (options?.scrollToBottom || options?.scrollToComment)
-                                setTimeout(scroll, 1);
-                            return;
-                        }
-                        if (!openNewPage) {
-                            lastHeight.current = 0;
-                            const conversation = [
-                                ...thread.conversation,
-                                ...data.conversation,
-                            ];
-                            setThread({
-                                ...thread,
-                                ...data,
-                                conversation,
-                            });
-                            setTimeout(scroll, 1);
-                            conversation.length % limit && setEnd(true);
-                        } else {
-                            setThread({
-                                ...thread,
-                                ...data,
-                                conversation: [
+                            if (!openNewPage) {
+                                lastHeight.current = 0;
+                                const conversation = [
                                     ...thread.conversation,
                                     ...data.conversation,
-                                ],
-                            });
+                                ];
+                                setThread({
+                                    ...thread,
+                                    ...data,
+                                    conversation,
+                                });
+                                setTimeout(scroll, 1);
+                                conversation.length % limit && setEnd(true);
+                            } else {
+                                setThread({
+                                    ...thread,
+                                    ...data,
+                                    conversation: [
+                                        ...thread.conversation,
+                                        ...data.conversation,
+                                    ],
+                                });
+                                setUpdating(false);
+                                setFinalPage(finalPage + 1);
+                                setPages(pages + 1);
+                                navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
+                                    replace: true,
+                                });
+                                setCurrentPage(finalPage + 1);
+                            }
                             setUpdating(false);
-                            setFinalPage(finalPage + 1);
-                            setPages(pages + 1);
-                            navigate(`/thread/${threadId}?page=${finalPage + 1}`, {
-                                replace: true,
-                            });
-                            setCurrentPage(finalPage + 1);
-                        }
-                        setUpdating(false);
-                    });
+                        });
+                    }
                 }
+                update();
             }
-            update();
-        }
-    };
+        },
+        [
+            finalPage,
+            lastHeight,
+            limit,
+            navigate,
+            pages,
+            setCurrentPage,
+            setEnd,
+            setFinalPage,
+            setPages,
+            setThread,
+            setUpdating,
+            sort,
+            thread,
+            threadId,
+        ]
+    );
 }

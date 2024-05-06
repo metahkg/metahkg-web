@@ -12,7 +12,7 @@ import {
     SelectChangeEvent,
     TextField,
 } from "@mui/material";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { Category } from "@metahkg/api";
 import { LoadingButton } from "@mui/lab";
@@ -33,8 +33,8 @@ const EditCategory = memo(function EditCategory() {
         [categories]
     );
 
-    const submit = useMemo(
-        () => (e?: React.FormEvent<HTMLFormElement>) => {
+    const submit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
             if (editCat) {
                 setLoading(true);

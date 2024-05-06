@@ -15,7 +15,14 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { Alert, Box, Tab, Tabs, TextField, Typography } from "@mui/material";
 import { Code, Create as CreateIcon, Poll as PollIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
@@ -68,10 +75,13 @@ const Create = memo(function Create() {
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
 
-    const quote = {
-        threadId: Number(String(query.quote).split(".")[0]),
-        commentId: Number(String(query.quote).split(".")[1]),
-    };
+    const quote = useMemo(
+        () => ({
+            threadId: Number(String(query.quote).split(".")[0]),
+            commentId: Number(String(query.quote).split(".")[1]),
+        }),
+        [query.quote]
+    );
 
     const [inittext, setInittext] = useState("");
     const [user] = useUser();
@@ -128,6 +138,76 @@ const Create = memo(function Create() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setLoading(true);
+            }
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
+                setLoading(false);
+                return;
+            }
+            setLoading(true);
+            setAlert({ severity: "info", text: "Creating thread..." });
+            setNotification({ open: true, severity: "info", text: "Creating thread..." });
+            let pollId: string = "";
+            if (commentType === "poll" && poll?.options && poll?.title) {
+                try {
+                    const data = await api.pollsCreate({
+                        options: poll?.options,
+                        title: poll?.title,
+                    });
+                    pollId = data.id;
+                } catch (e) {
+                    return setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(e),
+                    });
+                }
+            }
+            api.threadCreate({
+                title: threadTitle,
+                category: catchoosed,
+                comment:
+                    commentType === "html"
+                        ? { type: commentType, html: comment }
+                        : { type: commentType, pollId },
+                captchaToken,
+                visibility,
+            })
+                .then((data) => {
+                    clearTinymceDraft(window.location.pathname);
+                    navigate(`/thread/${data.id}`, { replace: true });
+                    setTimeout(() => {
+                        notification.open && setNotification({ open: false, text: "" });
+                    }, 100);
+                })
+                .catch((err) => {
+                    const text = parseError(err);
+                    setAlert({ severity: "error", text });
+                    setNotification({ open: true, severity: "error", text });
+                    setLoading(false);
+                    captchaRef.current?.reset();
+                });
+        },
+        [
+            catchoosed,
+            comment,
+            commentType,
+            navigate,
+            notification.open,
+            poll?.options,
+            poll?.title,
+            serverConfig?.captcha.type,
+            setNotification,
+            threadTitle,
+            visibility,
+        ]
+    );
+
     if (!user)
         return (
             <Navigate
@@ -137,61 +217,6 @@ const Create = memo(function Create() {
                 replace
             />
         );
-
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
-            setLoading(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
-        setAlert({ severity: "info", text: "Creating thread..." });
-        setNotification({ open: true, severity: "info", text: "Creating thread..." });
-        let pollId: string = "";
-        if (commentType === "poll" && poll?.options && poll?.title) {
-            try {
-                const data = await api.pollsCreate({
-                    options: poll?.options,
-                    title: poll?.title,
-                });
-                pollId = data.id;
-            } catch (e) {
-                return setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(e),
-                });
-            }
-        }
-        api.threadCreate({
-            title: threadTitle,
-            category: catchoosed,
-            comment:
-                commentType === "html"
-                    ? { type: commentType, html: comment }
-                    : { type: commentType, pollId },
-            captchaToken,
-            visibility,
-        })
-            .then((data) => {
-                clearTinymceDraft(window.location.pathname);
-                navigate(`/thread/${data.id}`, { replace: true });
-                setTimeout(() => {
-                    notification.open && setNotification({ open: false, text: "" });
-                }, 100);
-            })
-            .catch((err) => {
-                const text = parseError(err);
-                setAlert({ severity: "error", text });
-                setNotification({ open: true, severity: "error", text });
-                setLoading(false);
-                captchaRef.current?.reset();
-            });
-    }
 
     return (
         <Box

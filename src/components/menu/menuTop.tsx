@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { MouseEventHandler, useEffect } from "react";
+import React, { MouseEventHandler, useEffect, useMemo } from "react";
 import { Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
@@ -47,25 +47,36 @@ export default function MenuTop(props: {
     const isSmallScreen = useIsSmallScreen();
     const [serverConfig] = useServerConfig();
 
-    const inittitle = {
-        search: "Search",
-        profile: "User Profile",
-        category: "Metahkg",
-        recall: "Recall",
-        starred: "Starred",
-        following: "Following",
-    }[menuMode];
+    const inittitle = useMemo(
+        () =>
+            ({
+                search: "Search",
+                profile: "User Profile",
+                category: "Metahkg",
+                recall: "Recall",
+                starred: "Starred",
+                following: "Following",
+            }[menuMode]),
+        [menuMode]
+    );
     const [menuTitle, setMenuTitle] = useMenuTitle();
-    const tabs = {
-        search: ["Relevance", "Created", "Last Reply"],
-        profile: ["Created", "Last Reply"],
-        category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
-        recall: [],
-        starred: [],
-        following: ["Created", "Last Reply"],
-    }[menuMode];
+    const tabs = useMemo(
+        () =>
+            ({
+                search: ["Relevance", "Created", "Last Reply"],
+                profile: ["Created", "Last Reply"],
+                category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
+                recall: [],
+                starred: [],
+                following: ["Created", "Last Reply"],
+            }[menuMode]),
+        [isSmallScreen, menuMode, menuTitle]
+    );
 
-    const noTitleBar = isSmallScreen && menuMode === "category";
+    const noTitleBar = useMemo(
+        () => isSmallScreen && menuMode === "category",
+        [isSmallScreen, menuMode]
+    );
 
     useEffect(() => {
         if (!menuTitle) {

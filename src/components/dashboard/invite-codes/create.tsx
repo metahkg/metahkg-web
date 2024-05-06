@@ -1,6 +1,6 @@
 import { Add } from "@mui/icons-material";
 import { Box, Grid, TextField, FormHelperText } from "@mui/material";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -13,31 +13,34 @@ const CreateInviteCode = memo(function CreateInviteCode() {
     const createFormRef = useRef<HTMLFormElement>(null);
     const [createLoading, setCreateLoading] = useState(false);
 
-    const createSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
-        if (code && code.length === 10) {
-            setCreateLoading(true);
-            api.serverInviteCodesCreate({ code, description })
-                .then(() => {
-                    setCreateLoading(false);
-                    setNotification({
-                        open: true,
-                        severity: "success",
-                        text: "Invite code created  successfully.",
+    const createSubmit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (code && code.length === 10) {
+                setCreateLoading(true);
+                api.serverInviteCodesCreate({ code, description })
+                    .then(() => {
+                        setCreateLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "success",
+                            text: "Invite code created  successfully.",
+                        });
+                        setCode("");
+                        setDescription("");
+                    })
+                    .catch((err) => {
+                        setCreateLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(err),
+                        });
                     });
-                    setCode("");
-                    setDescription("");
-                })
-                .catch((err) => {
-                    setCreateLoading(false);
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                });
-        }
-    };
+            }
+        },
+        [code, description, setNotification]
+    );
 
     return (
         <Box onSubmit={createSubmit} component="form" ref={createFormRef}>

@@ -8,7 +8,7 @@ import {
     SelectChangeEvent,
     MenuItem,
 } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNotification, useCategories } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { Edit } from "@mui/icons-material";
@@ -35,8 +35,8 @@ const EditThread = memo(function EditThread() {
         }
     });
 
-    const submit = useMemo(
-        () => (e?: React.FormEvent<HTMLFormElement>) => {
+    const submit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
             if (thread) {
                 setSubmitLoading(true);

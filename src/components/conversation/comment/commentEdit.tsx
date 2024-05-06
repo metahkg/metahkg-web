@@ -19,7 +19,7 @@ import { useComment, useEditing } from "../comment";
 import { Box, TextField } from "@mui/material";
 import { Edit as EditIcon } from "@mui/icons-material";
 import TextEditor from "../../textEditor";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { api } from "../../../lib/api";
 import { useThreadId } from "../ConversationContext";
 import { useNotification } from "../../AppContextProvider";
@@ -38,11 +38,7 @@ const CommentEdit = memo(function CommentEdit() {
     const [, setNotification] = useNotification();
     const [saving, setSaving] = useState(false);
 
-    if (comment.comment.type !== "html") {
-        return <></>;
-    }
-
-    const onSave = async () => {
+    const onSave = useCallback(async () => {
         setSaving(true);
         await api
             .commentEdit(threadId, comment.id, {
@@ -70,7 +66,11 @@ const CommentEdit = memo(function CommentEdit() {
                 });
             });
         setSaving(false);
-    };
+    }, [comment, edited, reason, setComment, setEditing, setNotification, threadId]);
+
+    if (comment.comment.type !== "html") {
+        return <></>;
+    }
 
     return (
         <Box className="my-2">

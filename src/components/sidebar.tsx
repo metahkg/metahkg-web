@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Box, Drawer, IconButton } from "@mui/material";
 import SidePanel from "./sidePanel";
 import { Menu as MenuIcon } from "@mui/icons-material";
@@ -29,7 +29,7 @@ import { memo } from "react";
 const SideBar = memo(function SideBar() {
     const [open, setOpen] = useState(false);
 
-    const toggleDrawer =
+    const toggleDrawer = useCallback(
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
             if (
                 event.type === "keydown" &&
@@ -39,7 +39,9 @@ const SideBar = memo(function SideBar() {
                 return;
             }
             setOpen(open);
-        };
+        },
+        []
+    );
 
     return (
         <Box>

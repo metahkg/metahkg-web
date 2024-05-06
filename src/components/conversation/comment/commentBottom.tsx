@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { AddReaction, Forum } from "@mui/icons-material";
 import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
 import VoteButtons from "./voteButtons";
@@ -55,52 +55,60 @@ const CommentBottom = memo(function CommentBottom() {
     const isSmallScreen = useIsSmallScreen();
     const darkMode = useDarkMode();
 
-    const choosed = user && comment.emotions?.find((i) => i.user === user.id)?.emotion;
+    const choosed = useMemo(
+        () => user && comment.emotions?.find((i) => i.user === user.id)?.emotion,
+        [comment.emotions, user]
+    );
 
-    const setEmotion = (emotion: string) => {
-        if (!user) return;
-        setEmojiOpen(false);
-        setNotification({
-            open: true,
-            severity: "info",
-            text: "Setting emotion...",
-        });
-        api.commentEmotionSet(threadId, comment.id, {
-            emotion,
-        })
-            .then(() => {
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: "Emotion set!",
-                });
-                user &&
-                    setComment({
-                        ...comment,
-                        emotions: comment.emotions
-                            ? [
-                                  ...comment.emotions.filter((i) => i.user !== user.id),
-                                  { user: user?.id, emotion },
-                              ]
-                            : [{ user: user?.id, emotion }],
-                    });
-                api.commentEmotions(threadId, comment.id).then((data) => {
-                    setComment({
-                        ...comment,
-                        emotions: data,
-                    });
-                });
+    const setEmotion = useCallback(
+        (emotion: string) => {
+            if (!user) return;
+            setEmojiOpen(false);
+            setNotification({
+                open: true,
+                severity: "info",
+                text: "Setting emotion...",
+            });
+            api.commentEmotionSet(threadId, comment.id, {
+                emotion,
             })
-            .catch((err) =>
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
+                .then(() => {
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: "Emotion set!",
+                    });
+                    user &&
+                        setComment({
+                            ...comment,
+                            emotions: comment.emotions
+                                ? [
+                                      ...comment.emotions.filter(
+                                          (i) => i.user !== user.id
+                                      ),
+                                      { user: user?.id, emotion },
+                                  ]
+                                : [{ user: user?.id, emotion }],
+                        });
+                    api.commentEmotions(threadId, comment.id).then((data) => {
+                        setComment({
+                            ...comment,
+                            emotions: data,
+                        });
+                    });
                 })
-            );
-    };
+                .catch((err) =>
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    })
+                );
+        },
+        [comment, setComment, setNotification, threadId, user]
+    );
 
-    const deleteEmotion = () => {
+    const deleteEmotion = useCallback(() => {
         if (!user) return;
         api.commentEmotionDelete(threadId, comment.id).then(() => {
             setNotification({
@@ -122,27 +130,28 @@ const CommentBottom = memo(function CommentBottom() {
                 });
             });
         });
-    };
+    }, [comment, setComment, setNotification, threadId, user]);
 
-    let emotions = comment.emotions
-        ?.reduce((prev, curr) => {
-            if (!prev.includes(curr.emotion)) prev.push(curr.emotion);
-            return prev;
-        }, [] as string[])
-        .map((emotion) => ({
-            emotion,
-            count: comment.emotions?.filter((x) => x.emotion === emotion).length || 0,
-        }))
-        .sort((a, b) => b.count - a.count);
-
-    const userEmotionIndex = emotions?.findIndex((i) => i.emotion === choosed);
-
-    if (userEmotionIndex && emotions && userEmotionIndex > 2)
-        emotions = [
-            ...emotions.slice(0, 2),
-            emotions[userEmotionIndex],
-            ...emotions.slice(2).filter((i) => i.emotion !== choosed),
-        ];
+    const emotions = useMemo(() => {
+        let emotions = comment.emotions
+            ?.reduce((prev, curr) => {
+                if (!prev.includes(curr.emotion)) prev.push(curr.emotion);
+                return prev;
+            }, [] as string[])
+            .map((emotion) => ({
+                emotion,
+                count: comment.emotions?.filter((x) => x.emotion === emotion).length || 0,
+            }))
+            .sort((a, b) => b.count - a.count);
+        const userEmotionIndex = emotions?.findIndex((i) => i.emotion === choosed);
+        if (userEmotionIndex && emotions && userEmotionIndex > 2)
+            emotions = [
+                ...emotions.slice(0, 2),
+                emotions[userEmotionIndex],
+                ...emotions.slice(2).filter((i) => i.emotion !== choosed),
+            ];
+        return emotions;
+    }, [choosed, comment.emotions]);
 
     return (
         <Box className="flex justify-between items-center w-full">

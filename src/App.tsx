@@ -44,7 +44,7 @@ import { memo } from "react";
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
 
-function App() {
+const App = memo(() => {
     const [menu] = useMenu();
     const isSmallScreen = useIsSmallScreen();
     const [settingsOpen, setSettingsOpen] = useSettingsOpen();
@@ -122,7 +122,8 @@ function App() {
             </ErrorBoundary>
         </Theme>
     );
-}
+});
+
 const MetahkgWebApp = memo(function MetahkgWebApp() {
     return (
         <ErrorBoundary>

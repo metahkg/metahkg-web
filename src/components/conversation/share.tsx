@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
     ContentCopy,
     Facebook,
@@ -49,39 +49,43 @@ const Share = memo(function Share() {
         title: string;
         link: string;
     };
-    const externals: external[] = [
-        {
-            icon: <Telegram />,
-            title: "Share to Telegram",
-            link: `tg://msg_url?text=${encodeURIComponent(
-                title + "\n- Shared from Metahkg forum"
-            )}&url=${encodeURIComponent(link)}`,
-        },
-        {
-            icon: <WhatsApp />,
-            title: "Share to WhatsApp",
-            link: `whatsapp://send?text=${encodeURIComponent(text)}`,
-        },
-        {
-            icon: <Twitter />,
-            title: "Share to Twitter",
-            link: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
-        },
-        {
-            icon: <Reddit />,
-            title: "Share to Reddit",
-            link: `https://www.reddit.com/submit?link=${encodeURIComponent(
-                link
-            )}&title=${encodeURIComponent(title)}`,
-        },
-        {
-            icon: <Facebook />,
-            title: "Share to Facebook",
-            link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                link
-            )}`,
-        },
-    ];
+    const externals: external[] = useMemo(
+        () => [
+            {
+                icon: <Telegram />,
+                title: "Share to Telegram",
+                link: `tg://msg_url?text=${encodeURIComponent(
+                    title + "\n- Shared from Metahkg forum"
+                )}&url=${encodeURIComponent(link)}`,
+            },
+            {
+                icon: <WhatsApp />,
+                title: "Share to WhatsApp",
+                link: `whatsapp://send?text=${encodeURIComponent(text)}`,
+            },
+            {
+                icon: <Twitter />,
+                title: "Share to Twitter",
+                link: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
+            },
+            {
+                icon: <Reddit />,
+                title: "Share to Reddit",
+                link: `https://www.reddit.com/submit?link=${encodeURIComponent(
+                    link
+                )}&title=${encodeURIComponent(title)}`,
+            },
+            {
+                icon: <Facebook />,
+                title: "Share to Facebook",
+                link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    link
+                )}`,
+            },
+        ],
+        [link, text, title]
+    );
+
     return (
         <PopUp open={open} setOpen={setOpen} title="Share">
             <Box className="!mx-2 text-start text-5">

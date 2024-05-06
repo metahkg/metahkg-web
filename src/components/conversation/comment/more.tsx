@@ -37,7 +37,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
     Box,
     ClickAwayListener,
@@ -60,11 +60,11 @@ export default function MoreList(props: {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
-    const handleToggle = () => {
+    const handleToggle = useCallback(() => {
         setOpen((prevOpen) => !prevOpen);
-    };
+    }, []);
 
-    const handleClose = (event: Event | React.SyntheticEvent) => {
+    const handleClose = useCallback((event: Event | React.SyntheticEvent) => {
         if (
             anchorRef.current &&
             anchorRef.current.contains(event.target as HTMLElement)
@@ -72,16 +72,16 @@ export default function MoreList(props: {
             return;
         }
         setOpen(false);
-    };
+    }, []);
 
-    function handleListKeyDown(event: React.KeyboardEvent) {
+    const handleListKeyDown = useCallback((event: React.KeyboardEvent) => {
         if (event.key === "Tab") {
             event.preventDefault();
             setOpen(false);
         } else if (event.key === "Escape") {
             setOpen(false);
         }
-    }
+    }, []);
 
     // return focus to the button when we transitioned from !open -> open
     const prevOpen = useRef(open);

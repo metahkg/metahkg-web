@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import {
     Article as ArticleIcon,
@@ -39,7 +39,10 @@ export default function MenuThread(props: {
     const [menuMode] = useMenuMode();
     const [categories] = useCategories();
     const { thread, onClick } = props;
-    const commentId = history.find((i) => i.id === thread.id)?.cid;
+    const commentId = useMemo(
+        () => history.find((i) => i.id === thread.id)?.cid,
+        [history, thread.id]
+    );
 
     return (
         <Link

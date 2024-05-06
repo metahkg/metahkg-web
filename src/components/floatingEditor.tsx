@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Close,
     Code,
@@ -60,6 +60,7 @@ import { Visibility } from "@metahkg/api";
 import VisibilityChooser from "./VisibilityChooser";
 import CreatePoll, { PollCreateType } from "./createPoll";
 import { memo } from "react";
+
 const FloatingEditor = memo(function FloatingEditor() {
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
@@ -102,80 +103,99 @@ const FloatingEditor = memo(function FloatingEditor() {
         );
     }, [editor.quote?.visibility, thread?.visibility]);
 
-    function clearState() {
+    const clearState = useCallback(() => {
         setComment("");
         setCreating(false);
         setFold(false);
-    }
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setEditor({ ...editor, open: false });
         clearState();
-    };
+    }, [clearState, editor, setEditor]);
 
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
-            setCreating(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setCreating(false);
-            return;
-        }
-        setCreating(true);
-        let pollId: string = "";
-        if (commentType === "poll" && poll?.options && poll?.title) {
-            try {
-                const data = await api.pollsCreate({
-                    options: poll?.options,
-                    title: poll?.title,
-                });
-                pollId = data.id;
-            } catch (e) {
-                return setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(e),
-                });
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setCreating(true);
             }
-        }
-        api.commentCreate(threadId, {
-            comment:
-                commentType === "html"
-                    ? { type: commentType, html: comment }
-                    : { type: commentType, pollId },
-            quote: editor.quote?.id,
-            captchaToken,
-            visibility,
-        })
-            .then((data) => {
-                setNewCommentId(data.id);
-
-                const numOfPages = roundup((data.id || 0) / limit);
-
-                setEditor({ ...editor, open: false });
-                clearTinymceDraft(window.location.pathname);
-
-                if (numOfPages !== finalPage)
-                    changePage(numOfPages, () => {
-                        setShouldUpdate(true);
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
+                setCreating(false);
+                return;
+            }
+            setCreating(true);
+            let pollId: string = "";
+            if (commentType === "poll" && poll?.options && poll?.title) {
+                try {
+                    const data = await api.pollsCreate({
+                        options: poll?.options,
+                        title: poll?.title,
                     });
-                else update({ scrollToComment: data.id });
-
-                setCreating(false);
-                clearState();
+                    pollId = data.id;
+                } catch (e) {
+                    return setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(e),
+                    });
+                }
+            }
+            api.commentCreate(threadId, {
+                comment:
+                    commentType === "html"
+                        ? { type: commentType, html: comment }
+                        : { type: commentType, pollId },
+                quote: editor.quote?.id,
+                captchaToken,
+                visibility,
             })
-            .catch((err) => {
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
+                .then((data) => {
+                    setNewCommentId(data.id);
+
+                    const numOfPages = roundup((data.id || 0) / limit);
+
+                    setEditor({ ...editor, open: false });
+                    clearTinymceDraft(window.location.pathname);
+
+                    if (numOfPages !== finalPage)
+                        changePage(numOfPages, () => {
+                            setShouldUpdate(true);
+                        });
+                    else update({ scrollToComment: data.id });
+
+                    setCreating(false);
+                    clearState();
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setCreating(false);
+                    captchaRef.current?.reset();
                 });
-                setCreating(false);
-                captchaRef.current?.reset();
-            });
-    }
+        },
+        [
+            changePage,
+            clearState,
+            comment,
+            commentType,
+            editor,
+            finalPage,
+            limit,
+            poll?.options,
+            poll?.title,
+            serverConfig?.captcha.type,
+            setEditor,
+            setNotification,
+            threadId,
+            update,
+            visibility,
+        ]
+    );
 
     return (
         <Snackbar

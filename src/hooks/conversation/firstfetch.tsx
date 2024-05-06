@@ -37,6 +37,7 @@ import { setDescription, setTitle } from "../../lib/common";
 import queryString from "query-string";
 import { parseError } from "../../lib/parseError";
 import { Comment } from "@metahkg/api";
+import { useCallback } from "react";
 
 export default function useFirstFetch() {
     const [finalPage] = useFinalPage();
@@ -56,17 +57,20 @@ export default function useFirstFetch() {
     const [user] = useUser();
     const [serverConfig] = useServerConfig();
     const query = queryString.parse(window.location.search);
-    const onError = (err: AxiosError<any>) => {
-        !notification.open &&
-            setNotification({
-                open: true,
-                severity: "error",
-                text: parseError(err),
-            });
-        err?.response?.status === 404 && navigate("/404", { replace: true });
-        err?.response?.status === 403 && navigate("/403", { replace: true });
-    };
-    return () => {
+    const onError = useCallback(
+        (err: AxiosError<any>) => {
+            !notification.open &&
+                setNotification({
+                    open: true,
+                    severity: "error",
+                    text: parseError(err),
+                });
+            err?.response?.status === 404 && navigate("/404", { replace: true });
+            err?.response?.status === 403 && navigate("/403", { replace: true });
+        },
+        [navigate, notification.open, setNotification]
+    );
+    return useCallback(() => {
         api.thread(threadId, finalPage, limit, sort)
             .then((data) => {
                 data.slink && setThread(data);
@@ -98,5 +102,24 @@ export default function useFirstFetch() {
                     setVotes(data);
                 })
                 .catch(onError);
-    };
+    }, [
+        cat,
+        finalPage,
+        history,
+        id,
+        limit,
+        menuMode,
+        onError,
+        query.c,
+        serverConfig?.branding,
+        setCat,
+        setEnd,
+        setHistory,
+        setId,
+        setThread,
+        setVotes,
+        sort,
+        threadId,
+        user,
+    ]);
 }

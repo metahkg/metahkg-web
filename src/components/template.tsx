@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
     AccountCircle as AccountCircleIcon,
     AdminPanelSettings,
@@ -48,28 +48,32 @@ import { memo } from "react";
 const Template = memo(function Template() {
     const [user] = useUser();
     /* It's a list of objects. */
-    const links = [
-        user?.role === "admin" && {
-            icon: <AdminPanelSettings />,
-            title: "Admin Dashboard",
-            link: "/dashboard",
-        },
-        {
-            icon: <CreateIcon />,
-            title: "Create thread",
-            link: "/create",
-        },
-        {
-            icon: <TelegramIcon />,
-            title: "Telegram group",
-            link: "https://t.me/+WbB7PyRovUY1ZDFl",
-        },
-        {
-            icon: <CodeIcon />,
-            title: "Source code",
-            link: "https://gitlab.com/metahkg/metahkg",
-        },
-    ].filter(Boolean) as { icon: JSX.Element; title: string; link: string }[];
+    const links = useMemo(
+        () =>
+            [
+                user?.role === "admin" && {
+                    icon: <AdminPanelSettings />,
+                    title: "Admin Dashboard",
+                    link: "/dashboard",
+                },
+                {
+                    icon: <CreateIcon />,
+                    title: "Create thread",
+                    link: "/create",
+                },
+                {
+                    icon: <TelegramIcon />,
+                    title: "Telegram group",
+                    link: "https://t.me/+WbB7PyRovUY1ZDFl",
+                },
+                {
+                    icon: <CodeIcon />,
+                    title: "Source code",
+                    link: "https://gitlab.com/metahkg/metahkg",
+                },
+            ].filter(Boolean) as { icon: JSX.Element; title: string; link: string }[],
+        [user?.role]
+    );
 
     const darkMode = useDarkMode();
     const logout = useLogout();

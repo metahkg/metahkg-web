@@ -8,7 +8,7 @@ import {
     Grid,
     TextField,
 } from "@mui/material";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { api } from "../../../lib/api";
@@ -30,8 +30,8 @@ const CreateCategory = memo(function CreateCategory() {
     } | null>(null);
     const createFormRef = useRef<HTMLFormElement>(null);
     const [createLoading, setCreateLoading] = useState(false);
-    const createSubmit = useMemo(
-        () => (e?: React.FormEvent<HTMLFormElement>) => {
+    const createSubmit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
             if (createSettings && createSettings.name) {
                 setCreateLoading(true);

@@ -15,6 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback } from "react";
 import { useNotification } from "../components/AppContextProvider";
 import { api } from "../lib/api";
 import { parseError } from "../lib/parseError";
@@ -24,7 +25,7 @@ export function useLogout() {
     const [, setNotification] = useNotification();
     const clearSession = useClearSession();
 
-    return async () => {
+    return useCallback(async () => {
         setNotification({
             open: true,
             severity: "info",
@@ -47,5 +48,5 @@ export function useLogout() {
                     text: parseError(err),
                 });
             });
-    };
+    }, [clearSession, setNotification]);
 }

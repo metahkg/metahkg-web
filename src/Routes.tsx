@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import { setDescription, setTitle } from "./lib/common";
 import { Navigate, Outlet, Route, Routes as Switch, useLocation } from "react-router-dom";
 import loadable from "@loadable/component";
@@ -60,7 +60,10 @@ const Routes = memo(function Routes() {
     const [user] = useUser();
     const prev = React.useRef(location.pathname);
 
-    const noAccess = serverConfig?.visibility === "internal" && !user;
+    const noAccess = useMemo(
+        () => serverConfig?.visibility === "internal" && !user,
+        [serverConfig?.visibility, user]
+    );
 
     useLayoutEffect(() => {
         if (!/^\/thread\/[1-9]\d*$/.test(location.pathname)) id && setId(0);

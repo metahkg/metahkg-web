@@ -111,7 +111,10 @@ function Conversation(props: { id: number }) {
 
     const onScroll = useOnScroll();
 
-    const ready = !!(thread && thread.conversation.length && (user ? votes : 1));
+    const ready = useMemo(
+        () => !!(thread && thread.conversation.length && (user ? votes : 1)),
+        [thread, user, votes]
+    );
 
     useEffect(() => {
         !query.page &&
@@ -154,7 +157,10 @@ function Conversation(props: { id: number }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sort, limit]);
 
-    const numOfPages = roundup((thread?.count || 0) / limit);
+    const numOfPages = useMemo(
+        () => roundup((thread?.count || 0) / limit),
+        [limit, thread?.count]
+    );
     const btns = useBtns();
     const onVisibilityChange = useOnVisibilityChange();
 
@@ -219,6 +225,7 @@ function Conversation(props: { id: number }) {
                     >
                         <Box className="w-full max-height-full max-w-full">
                             {ready &&
+                                thread &&
                                 [...Array(pages)].map((p, index) => {
                                     const page =
                                         sort === "time"
@@ -338,11 +345,7 @@ function Conversation(props: { id: number }) {
             setGalleryOpen,
             sort,
             story,
-            thread?.category,
-            thread?.conversation,
-            thread?.images,
-            thread?.pin,
-            thread?.title,
+            thread,
             update,
             updating,
         ]

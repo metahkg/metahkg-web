@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useImage } from "react-image";
 import ImageErrorBoundary from "./ImageErrorBoundary";
 import { PhotoView } from "react-photo-view";
@@ -64,7 +64,7 @@ const ImgComponent = React.forwardRef(
         const smallMaxW = 250;
         const maxW = 800;
 
-        const checkCanResize = () => {
+        const checkCanResize = useCallback(() => {
             //if (isIOS || isSafari || engineName === "Webkit") return;
 
             const img = imgRef.current;
@@ -76,7 +76,7 @@ const ImgComponent = React.forwardRef(
                 )
                     setDisableResize(true);
             }
-        };
+        }, [small]);
 
         useEffect(() => {
             checkCanResize();

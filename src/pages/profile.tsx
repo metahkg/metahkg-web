@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect, useMemo } from "react";
 import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
@@ -67,8 +67,8 @@ const Profile = memo(function Profile() {
 
     const navigate = useNavigate();
 
-    const userId = Number(params.id);
-    const isSelf = userId === user?.id;
+    const userId = useMemo(() => Number(params.id), [params.id]);
+    const isSelf = useMemo(() => userId === user?.id, [user?.id, userId]);
 
     const userAvatar = useUserAvatar();
 
@@ -112,6 +112,66 @@ const Profile = memo(function Profile() {
         if (profile !== userId) setProfile(userId);
     }, [back, isSmallScreen, menu, menuMode, profile, selected, setBack, setMenu, setMenuMode, setMenuTitle, setProfile, setReFetch, setSelected, userId]);
 
+    const buttons = useMemo(
+        () =>
+            isSelf
+                ? ([
+                      !userAvatar.error && {
+                          icon: <DeleteIcon />,
+                          label: "Delete",
+                          onClick: () => {
+                              if (user) {
+                                  setNotification({
+                                      open: true,
+                                      severity: "info",
+                                      text: "Deleting avatar...",
+                                  });
+                                  api.userAvatarDelete(user.id)
+                                      .then(() => {
+                                          setNotification({
+                                              open: true,
+                                              severity: "success",
+                                              text: "Avatar deleted",
+                                          });
+                                          userAvatar.reload();
+                                      })
+                                      .catch((err) => {
+                                          setNotification({
+                                              open: true,
+                                              severity: "error",
+                                              text: parseError(err),
+                                          });
+                                      });
+                              }
+                          },
+                      },
+                  ].filter(Boolean) as {
+                      icon: React.ReactNode;
+                      label?: string;
+                      onClick?: () => void;
+                  }[])
+                : undefined,
+        [isSelf, setNotification, user, userAvatar]
+    );
+
+    const customButtons = useMemo(
+        () =>
+            isSelf
+                ? [
+                      <Tooltip title="Upload" arrow>
+                          <UploadAvatar
+                              onChange={(image) => {
+                                  setUploadedAvatarOriginal(image);
+                                  setUploadedAvatar(image);
+                                  setEditorOpen(true);
+                              }}
+                          />
+                      </Tooltip>,
+                  ]
+                : undefined,
+        [isSelf]
+    );
+
     if (!userId) return <Navigate to="/" replace />;
 
     return (
@@ -149,58 +209,8 @@ const Profile = memo(function Profile() {
                                 height: 120,
                                 width: 120,
                             }}
-                            buttons={
-                                isSelf
-                                    ? ([
-                                          !userAvatar.error && {
-                                              icon: <DeleteIcon />,
-                                              label: "Delete",
-                                              onClick: () => {
-                                                  setNotification({
-                                                      open: true,
-                                                      severity: "info",
-                                                      text: "Deleting avatar...",
-                                                  });
-                                                  api.userAvatarDelete(user.id)
-                                                      .then(() => {
-                                                          setNotification({
-                                                              open: true,
-                                                              severity: "success",
-                                                              text: "Avatar deleted",
-                                                          });
-                                                          userAvatar.reload();
-                                                      })
-                                                      .catch((err) => {
-                                                          setNotification({
-                                                              open: true,
-                                                              severity: "error",
-                                                              text: parseError(err),
-                                                          });
-                                                      });
-                                              },
-                                          },
-                                      ].filter(Boolean) as {
-                                          icon: React.ReactNode;
-                                          label?: string;
-                                          onClick?: () => void;
-                                      }[])
-                                    : undefined
-                            }
-                            customButtons={
-                                isSelf
-                                    ? [
-                                          <Tooltip title="Upload" arrow>
-                                              <UploadAvatar
-                                                  onChange={(image) => {
-                                                      setUploadedAvatarOriginal(image);
-                                                      setUploadedAvatar(image);
-                                                      setEditorOpen(true);
-                                                  }}
-                                              />
-                                          </Tooltip>,
-                                      ]
-                                    : undefined
-                            }
+                            buttons={buttons}
+                            customButtons={customButtons}
                         />
                         <Box
                             className={`${

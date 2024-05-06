@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { GitHub, Reddit, Telegram } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 import GitlabIcon from "../../lib/icons/gitlab";
@@ -6,41 +6,45 @@ import DiscordIcon from "../../lib/icons/dicord";
 import { Link } from "../../lib/link";
 import { memo } from "react";
 const PageBottom = memo(function PageBottom() {
-    const socialIcons = [
-        {
-            icon: (
-                <GitlabIcon
-                    className="text-inherit-size text-inherit"
-                    height={16}
-                    width={16}
-                />
-            ),
-            link: "https://gitlab.com/metahkg",
-        },
-        {
-            icon: <GitHub fontSize="inherit" className="!text-inherit" />,
-            link: "https://github.com/metahkg",
-        },
-        {
-            icon: <Telegram fontSize="inherit" className="!text-inherit" />,
-            link: "https://t.me/+WbB7PyRovUY1ZDFl",
-        },
-        {
-            icon: (
-                <DiscordIcon
-                    height={17}
-                    width={17}
-                    className="text-inherit-size"
-                    color="#aca9a9"
-                />
-            ),
-            link: "https://discord.gg/yrf2v8KGdc",
-        },
-        {
-            icon: <Reddit fontSize="inherit" className="!text-inherit" />,
-            link: "https://reddit.com/r/metahkg",
-        },
-    ];
+    const socialIcons = useMemo(
+        () => [
+            {
+                icon: (
+                    <GitlabIcon
+                        className="text-inherit-size text-inherit"
+                        height={16}
+                        width={16}
+                    />
+                ),
+                link: "https://gitlab.com/metahkg",
+            },
+            {
+                icon: <GitHub fontSize="inherit" className="!text-inherit" />,
+                link: "https://github.com/metahkg",
+            },
+            {
+                icon: <Telegram fontSize="inherit" className="!text-inherit" />,
+                link: "https://t.me/+WbB7PyRovUY1ZDFl",
+            },
+            {
+                icon: (
+                    <DiscordIcon
+                        height={17}
+                        width={17}
+                        className="text-inherit-size"
+                        color="#aca9a9"
+                    />
+                ),
+                link: "https://discord.gg/yrf2v8KGdc",
+            },
+            {
+                icon: <Reddit fontSize="inherit" className="!text-inherit" />,
+                link: "https://reddit.com/r/metahkg",
+            },
+        ],
+        []
+    );
+
     return (
         <Box className="mt-2 mb-[80px] !text-metahkg-grey text-center grid grid-cols-1 gap-2 justify-center items-center max-w-full max-height-full">
             <Box className="flex justify-center items-center text-[17px]">

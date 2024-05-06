@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { memo, useCallback } from "react";
 import {
     Box,
     FormControl,
@@ -33,32 +33,36 @@ import { useCategories } from "../AppContextProvider";
  * @param {React.Dispatch<React.SetStateAction<number>>} props.setCat The function to update props.cat
  * @returns A form control with a select menu.
  */
-export default function ChooseCat(props: {
-    cat: number;
-    setCat: React.Dispatch<React.SetStateAction<number>>;
-}) {
-    const { cat, setCat } = props;
-    const changeHandler = (e: SelectChangeEvent<number>) => {
-        setCat(Number(e.target.value));
-    };
-    const [categories] = useCategories();
-    return (
-        <Box>
-            {categories.length && (
-                <FormControl className="!min-w-[200px]">
-                    <InputLabel color="secondary">Category</InputLabel>
-                    <Select
-                        color="secondary"
-                        value={cat}
-                        label="Category"
-                        onChange={changeHandler}
-                    >
-                        {categories.map((category) => (
-                            <MenuItem value={category.id}>{category.name}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            )}
-        </Box>
-    );
-}
+const ChooseCat = memo(
+    (props: { cat: number; setCat: React.Dispatch<React.SetStateAction<number>> }) => {
+        const { cat, setCat } = props;
+        const changeHandler = useCallback(
+            (e: SelectChangeEvent<number>) => {
+                setCat(Number(e.target.value));
+            },
+            [setCat]
+        );
+        const [categories] = useCategories();
+        return (
+            <Box>
+                {categories.length && (
+                    <FormControl className="!min-w-[200px]">
+                        <InputLabel color="secondary">Category</InputLabel>
+                        <Select
+                            color="secondary"
+                            value={cat}
+                            label="Category"
+                            onChange={changeHandler}
+                        >
+                            {categories.map((category) => (
+                                <MenuItem value={category.id}>{category.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
+            </Box>
+        );
+    }
+);
+
+export default ChooseCat;

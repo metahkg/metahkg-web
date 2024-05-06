@@ -23,7 +23,7 @@ import {
     DialogContentText,
     DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useAlertDialog } from "../components/AppContextProvider";
 import { memo } from "react";
 
@@ -59,7 +59,7 @@ const AlertDialog = memo(function AlertDialog(props: AlertDialogProps) {
     const { open, setOpen, title, message, onClose, body } = props;
     const [alertDialog, setAlertDialog] = useAlertDialog();
     const [state, setState] = useState<{ [key: string]: any }>({});
-    const closeDialog = () => {
+    const closeDialog = useCallback(() => {
         setOpen(false);
         setTimeout(() => {
             setAlertDialog({
@@ -74,9 +74,12 @@ const AlertDialog = memo(function AlertDialog(props: AlertDialogProps) {
         });
         setState({});
         onClose?.(state, setState);
-    };
+    }, [alertDialog, onClose, setAlertDialog, setOpen, state]);
 
-    const btns = props.btns(state, setState, closeDialog);
+    const btns = useMemo(
+        () => props.btns(state, setState, closeDialog),
+        [closeDialog, props, state]
+    );
 
     return (
         <Dialog

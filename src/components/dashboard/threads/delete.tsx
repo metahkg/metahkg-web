@@ -1,5 +1,5 @@
 import { Box, Grid, TextField } from "@mui/material";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
@@ -21,29 +21,32 @@ const DeleteThread = memo(function DeleteThread() {
         }
     });
 
-    const submit = (e?: React.FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
-        if (threadId && reason) {
-            setLoading(true);
-            api.threadDelete(threadId, { reason })
-                .then(() => {
-                    setLoading(false);
-                    setNotification({
-                        open: true,
-                        severity: "success",
-                        text: "Thread deleted successfully.",
+    const submit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (threadId && reason) {
+                setLoading(true);
+                api.threadDelete(threadId, { reason })
+                    .then(() => {
+                        setLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "success",
+                            text: "Thread deleted successfully.",
+                        });
+                    })
+                    .catch((err) => {
+                        setLoading(false);
+                        setNotification({
+                            open: true,
+                            severity: "error",
+                            text: parseError(err),
+                        });
                     });
-                })
-                .catch((err) => {
-                    setLoading(false);
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                });
-        }
-    };
+            }
+        },
+        [reason, setNotification, threadId]
+    );
 
     return (
         <Box component="form" ref={formRef} onSubmit={submit} className="m-2">

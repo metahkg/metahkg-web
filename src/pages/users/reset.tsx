@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
     Alert,
     Box,
@@ -69,51 +69,64 @@ const Reset = memo(function Reset() {
     const formRef = useRef<HTMLFormElement>(null);
     const navigate = useNavigate();
 
-    const small = width / 2 - 100 <= 450;
+    const small = useMemo(() => width / 2 - 100 <= 450, [width]);
 
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
-            setLoading(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
-        setAlert({ severity: "info", text: "Reseting..." });
-        setNotification({ open: true, severity: "info", text: "Reseting..." });
-        api.authReset({
-            email,
-            code,
-            password: hash.sha256().update(password).digest("hex"),
-            captchaToken,
-            sameIp,
-        })
-            .then((data) => {
-                setSession(data);
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: `Logged in as ${loadUser(data.token)?.name}.`,
-                });
-                navigate(String(query.returnto || "/"));
-            })
-            .catch((err) => {
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setLoading(true);
+            }
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
                 setLoading(false);
-                setAlert({
-                    severity: "error",
-                    text: parseError(err),
+                return;
+            }
+            setLoading(true);
+            setAlert({ severity: "info", text: "Reseting..." });
+            setNotification({ open: true, severity: "info", text: "Reseting..." });
+            api.authReset({
+                email,
+                code,
+                password: hash.sha256().update(password).digest("hex"),
+                captchaToken,
+                sameIp,
+            })
+                .then((data) => {
+                    setSession(data);
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: `Logged in as ${loadUser(data.token)?.name}.`,
+                    });
+                    navigate(String(query.returnto || "/"));
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    setAlert({
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    captchaRef.current?.reset();
                 });
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
-                captchaRef.current?.reset();
-            });
-    }
+        },
+        [
+            code,
+            email,
+            navigate,
+            password,
+            query.returnto,
+            sameIp,
+            serverConfig?.captcha.type,
+            setNotification,
+            setSession,
+        ]
+    );
 
     useLayoutEffect(() => {
         setTitle(`Reset password | ${serverConfig?.branding || "Metahkg"}`);

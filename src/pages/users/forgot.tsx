@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -63,50 +63,53 @@ const Forgot = memo(function Forgot() {
 
     if (user) <Navigate to="/" replace />;
 
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setLoading(true);
+            }
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
+                setLoading(false);
+                return;
+            }
             setLoading(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
-        setAlert({ severity: "info", text: "Requesting reset password..." });
-        setNotification({
-            open: true,
-            severity: "info",
-            text: "Requesting reset password...",
-        });
-        api.authForgot({ email, captchaToken })
-            .then(() => {
-                setNotification({
-                    open: true,
-                    text: `Reset password email sent.`,
-                });
-                setAlert({
-                    severity: "success",
-                    text: "Reset password email sent. Please click the link to reset your password.",
-                });
-                captchaRef.current?.reset();
-                setLoading(false);
-            })
-            .catch((err) => {
-                setAlert({
-                    severity: "error",
-                    text: parseError(err),
-                });
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
-                captchaRef.current?.reset();
-                setLoading(false);
+            setAlert({ severity: "info", text: "Requesting reset password..." });
+            setNotification({
+                open: true,
+                severity: "info",
+                text: "Requesting reset password...",
             });
-    }
+            api.authForgot({ email, captchaToken })
+                .then(() => {
+                    setNotification({
+                        open: true,
+                        text: `Reset password email sent.`,
+                    });
+                    setAlert({
+                        severity: "success",
+                        text: "Reset password email sent. Please click the link to reset your password.",
+                    });
+                    captchaRef.current?.reset();
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    setAlert({
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    captchaRef.current?.reset();
+                    setLoading(false);
+                });
+        },
+        [email, serverConfig?.captcha.type, setNotification]
+    );
 
     useEffect(() => {
         if (query.email && !user) onSubmit();

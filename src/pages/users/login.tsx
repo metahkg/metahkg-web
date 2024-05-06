@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
     Alert,
     Box,
@@ -90,51 +90,63 @@ const Login = memo(function Login() {
         menu && setMenu(false);
     }, [menu, setMenu, user, serverConfig?.branding]);
 
-    if (user) return <Navigate to="/" replace />;
-
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
-            setLoading(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setLoading(false);
-            return;
-        }
-        setLoading(true);
-        setAlert({ severity: "info", text: "Logging in..." });
-        api.authLogin({
-            name,
-            password: hash.sha256().update(password).digest("hex"),
-            sameIp,
-            captchaToken,
-        })
-            .then((data) => {
-                setSession(data);
-                navigate(decodeURIComponent(String(query.returnto || "/")), {
-                    replace: true,
-                });
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: `Logged in as ${loadUser(data.token)?.name}.`,
-                });
-            })
-            .catch((err) => {
-                setAlert({
-                    severity: "error",
-                    text: parseError(err),
-                });
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setLoading(true);
+            }
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
                 setLoading(false);
-                captchaRef.current?.reset();
-            });
-    }
+                return;
+            }
+            setLoading(true);
+            setAlert({ severity: "info", text: "Logging in..." });
+            api.authLogin({
+                name,
+                password: hash.sha256().update(password).digest("hex"),
+                sameIp,
+                captchaToken,
+            })
+                .then((data) => {
+                    setSession(data);
+                    navigate(decodeURIComponent(String(query.returnto || "/")), {
+                        replace: true,
+                    });
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: `Logged in as ${loadUser(data.token)?.name}.`,
+                    });
+                })
+                .catch((err) => {
+                    setAlert({
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setLoading(false);
+                    captchaRef.current?.reset();
+                });
+        },
+        [
+            name,
+            navigate,
+            password,
+            query.returnto,
+            sameIp,
+            serverConfig?.captcha.type,
+            setNotification,
+            setSession,
+        ]
+    );
+
+    if (user) return <Navigate to="/" replace />;
 
     return (
         <Box

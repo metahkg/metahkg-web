@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Category } from "@metahkg/api";
 import { Box, Drawer, Typography } from "@mui/material";
 import { useCategories, useDarkMode, useSettings, useUser } from "./AppContextProvider";
@@ -12,36 +12,45 @@ export function CategoryPanel(props: {
 }) {
     const { open, setOpen } = props;
     const [user] = useUser();
-    let [categories] = useCategories();
+    const [categories] = useCategories();
     const [currentCategory] = useCat();
     const darkMode = useDarkMode();
     const [settings] = useSettings();
     const [menuMode] = useMenuMode();
 
-    categories.sort((a, b) => a.id - b.id);
+    const sortedCategories = useMemo(() => {
+        const sorted = categories.sort((a, b) => a.id - b.id);
+        if (!user) {
+            return sorted.filter((category) => !category.hidden);
+        }
+        return sorted;
+    }, [categories, user]);
 
-    const hidden = categories.filter((category) => category.hidden);
+    const hidden = useMemo(
+        () => categories.filter((category) => category.hidden),
+        [categories]
+    );
 
-    if (!user) {
-        categories = categories.filter((category) => !category.hidden);
-    }
-
-    const tags: string[] = categories.reduce((prev, curr) => {
-        curr.tags?.forEach((tag) => {
-            if (!prev.includes(tag)) {
-                prev.push(tag);
-            }
-        });
-        return prev;
-    }, [] as string[]);
+    const tags: string[] = useMemo(
+        () => [...new Set(sortedCategories.flatMap((category) => category.tags || []))],
+        [sortedCategories]
+    );
 
     // hidden categories shall not be pinned
-    const pinned = categories.filter((category) => category.pinned && !category.hidden);
-    const others = categories
-        .filter(
-            (category) => !category.tags?.length && !category.pinned && !category.hidden
-        )
-        .concat(hidden.filter((category) => !category.tags?.length));
+    const pinned = useMemo(
+        () => sortedCategories.filter((category) => category.pinned && !category.hidden),
+        [sortedCategories]
+    );
+    const others = useMemo(
+        () =>
+            sortedCategories
+                .filter(
+                    (category) =>
+                        !category.tags?.length && !category.pinned && !category.hidden
+                )
+                .concat(hidden.filter((category) => !category.tags?.length)),
+        [hidden, sortedCategories]
+    );
 
     const toggleDrawer = useCallback(
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -120,7 +129,7 @@ export function CategoryPanel(props: {
                             <Typography gutterBottom className="text-metahkg-grey">
                                 {tag}
                             </Typography>
-                            {categories
+                            {sortedCategories
                                 .filter(
                                     (category) =>
                                         category.tags?.includes(tag) && !category.hidden

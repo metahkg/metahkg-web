@@ -32,6 +32,7 @@ import {
 } from "../../components/conversation/ConversationContext";
 import { roundup } from "../../lib/common";
 import { parseError } from "../../lib/parseError";
+import { useCallback, useMemo } from "react";
 
 export default function useChangePage() {
     const [, setLoading] = useLoading();
@@ -46,84 +47,112 @@ export default function useChangePage() {
     const [limit] = useLimit();
     const navigate = useNavigate();
     const threadId = useThreadId();
-    const firstPage = roundup((thread?.conversation?.[0]?.id || 1) / limit);
+    const firstPage = useMemo(
+        () => roundup((thread?.conversation?.[0]?.id || 1) / limit),
+        [limit, thread?.conversation]
+    );
 
-    return (newPage: number, callback?: () => void) => {
-        if (thread) {
-            setCurrentPage(newPage);
+    return useCallback(
+        (newPage: number, callback?: () => void) => {
+            if (thread) {
+                setCurrentPage(newPage);
 
-            navigate(`${window.location.pathname}?page=${newPage}`, { replace: true });
+                navigate(`${window.location.pathname}?page=${newPage}`, {
+                    replace: true,
+                });
 
-            const targetElement = document.getElementById(`${newPage}`);
+                const targetElement = document.getElementById(`${newPage}`);
 
-            if (targetElement)
-                return targetElement.scrollIntoView({ behavior: "smooth" });
+                if (targetElement)
+                    return targetElement.scrollIntoView({ behavior: "smooth" });
 
-            const shouldReRender =
-                newPage - finalPage !== 1 && newPage - firstPage !== -1;
+                const shouldReRender =
+                    newPage - finalPage !== 1 && newPage - firstPage !== -1;
 
-            if (shouldReRender) {
-                lastHeight.current = 0;
-                setThread({ ...thread, conversation: [] });
-            }
+                if (shouldReRender) {
+                    lastHeight.current = 0;
+                    setThread({ ...thread, conversation: [] });
+                }
 
-            setLoading(true);
-            setEnd(false);
-            setPages(shouldReRender ? 1 : pages + 1);
-            setFinalPage(
-                (shouldReRender && newPage) || newPage - finalPage === 1
-                    ? newPage
-                    : finalPage
-            );
+                setLoading(true);
+                setEnd(false);
+                setPages(shouldReRender ? 1 : pages + 1);
+                setFinalPage(
+                    (shouldReRender && newPage) || newPage - finalPage === 1
+                        ? newPage
+                        : finalPage
+                );
 
-            api.thread(threadId, newPage, limit, sort)
-                .then((data) => {
-                    if (!data.conversation.length)
-                        return setNotification({
+                api.thread(threadId, newPage, limit, sort)
+                    .then((data) => {
+                        if (!data.conversation.length)
+                            return setNotification({
+                                open: true,
+                                severity: "error",
+                                text: "Page not found!",
+                            });
+
+                        setThread(
+                            shouldReRender
+                                ? data
+                                : {
+                                      ...thread,
+                                      ...data,
+                                      conversation:
+                                          newPage - finalPage === 1
+                                              ? [
+                                                    ...thread.conversation,
+                                                    ...data.conversation,
+                                                ]
+                                              : [
+                                                    ...data.conversation,
+                                                    ...thread.conversation,
+                                                ],
+                                  }
+                        );
+
+                        data.conversation.length % limit && setEnd(true);
+
+                        setTimeout(() => {
+                            setCurrentPage(newPage);
+
+                            document
+                                .getElementById(String(newPage))
+                                ?.scrollIntoView({ behavior: "smooth" });
+
+                            navigate(`${window.location.pathname}?page=${newPage}`, {
+                                replace: true,
+                            });
+
+                            callback && setTimeout(callback);
+                        });
+                    })
+                    .catch((err) => {
+                        setNotification({
                             open: true,
                             severity: "error",
-                            text: "Page not found!",
+                            text: parseError(err),
                         });
-
-                    setThread(
-                        shouldReRender
-                            ? data
-                            : {
-                                  ...thread,
-                                  ...data,
-                                  conversation:
-                                      newPage - finalPage === 1
-                                          ? [...thread.conversation, ...data.conversation]
-                                          : [
-                                                ...data.conversation,
-                                                ...thread.conversation,
-                                            ],
-                              }
-                    );
-
-                    data.conversation.length % limit && setEnd(true);
-
-                    setTimeout(() => {
-                        setCurrentPage(newPage);
-
-                        document
-                            .getElementById(String(newPage))
-                            ?.scrollIntoView({ behavior: "smooth" });
-
-                        navigate(`${window.location.pathname}?page=${newPage}`, {
-                            replace: true,
-                        });
-
-                        callback && setTimeout(callback);
                     });
-                })
-                .catch((err) => {
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: parseError(err),
-                    });
-                });
-        }
-    };
+            }
+        },
+        [
+            finalPage,
+            firstPage,
+            lastHeight,
+            limit,
+            navigate,
+            pages,
+            setCurrentPage,
+            setEnd,
+            setFinalPage,
+            setLoading,
+            setNotification,
+            setPages,
+            setThread,
+            sort,
+            thread,
+            threadId,
+        ]
+    );
 }

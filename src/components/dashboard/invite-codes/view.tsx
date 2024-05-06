@@ -40,28 +40,31 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
         }, 5000);
     }, [fetchCodes]);
 
-    const handleDelete = (code: string) => {
-        api.serverInviteCodesDelete(code)
-            .then(() => {
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: "Invite code deleted successfully.",
+    const handleDelete = useCallback(
+        (code: string) => {
+            api.serverInviteCodesDelete(code)
+                .then(() => {
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: "Invite code deleted successfully.",
+                    });
+                    fetchCodes(); // Update the list  after deletion
+                })
+                .catch((err) => {
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                 });
-                fetchCodes(); // Update the list  after deletion
-            })
-            .catch((err) => {
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
-            });
-    };
+        },
+        [fetchCodes, setNotification]
+    );
 
-    const handleSync = () => {
+    const handleSync = useCallback(() => {
         fetchCodes();
-    };
+    }, [fetchCodes]);
 
     return (
         <Box display="flex" flexWrap="wrap" gap={2}>

@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Button, Divider, Skeleton } from "@mui/material";
 import { roundup } from "../../lib/common";
 import { useHeight, useIsSmallScreen, useWidth } from "../AppContextProvider";
@@ -27,9 +27,15 @@ const MenuPreload = memo(function MenuPreload() {
     const [height] = useHeight();
     const [width] = useWidth();
     const [menuMode] = useMenuMode();
-    const totalHeight = height - (menuMode === "search" ? 151 : 91);
-    const amount = roundup(totalHeight / 72);
-    const buttonWidth = isSmallScreen ? width : 0.3 * width;
+    const totalHeight = useMemo(
+        () => height - (menuMode === "search" ? 151 : 91),
+        [height, menuMode]
+    );
+    const amount = useMemo(() => roundup(totalHeight / 72), [totalHeight]);
+    const buttonWidth = useMemo(
+        () => (isSmallScreen ? width : 0.3 * width),
+        [isSmallScreen, width]
+    );
     return (
         <Box
             className="dark:!bg-[#1e1e1e]"

@@ -15,11 +15,12 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback } from "react";
 import { useSession } from "../components/AppContextProvider";
 
 export function useClearSession() {
     const [, setSession] = useSession();
-    return function () {
+    return useCallback(() => {
         setSession(null);
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.ready.then(async (registration) => {
@@ -27,5 +28,5 @@ export function useClearSession() {
                 subscription?.unsubscribe();
             });
         }
-    };
+    }, [setSession]);
 }

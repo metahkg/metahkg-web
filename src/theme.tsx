@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { PaletteColorOptions } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -38,15 +38,19 @@ export default function Theme(props: {
     mode?: "dark" | "light";
     children: JSX.Element | JSX.Element[];
 }) {
-    const theme = createTheme({
-        palette: {
-            mode: props.mode || "dark",
-            primary: props.primary,
-            secondary: props.secondary,
-        },
-        typography: {
-            fontFamily: ["Roboto", "Arial", "sans-serif"].join(","),
-        },
-    });
+    const theme = useMemo(
+        () =>
+            createTheme({
+                palette: {
+                    mode: props.mode || "dark",
+                    primary: props.primary,
+                    secondary: props.secondary,
+                },
+                typography: {
+                    fontFamily: ["Roboto", "Arial", "sans-serif"].join(","),
+                },
+            }),
+        [props.mode, props.primary, props.secondary]
+    );
     return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 }

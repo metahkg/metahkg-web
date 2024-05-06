@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useIsSmallScreen, useNotification, useSession } from "../AppContextProvider";
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
@@ -61,63 +61,76 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
     const [session, setSession] = useSession();
     const [, setMenuTitle] = useMenuTitle();
 
-    const nameValid = /^\S{1,15}$/.test(name);
+    const nameValid = useMemo(() => /^\S{1,15}$/.test(name), [name]);
 
-    const items = [
-        {
-            title: "Name",
-            content: isSelf ? (
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    value={name}
-                    onChange={(e) => {
-                        setName(e.target.value);
-                    }}
-                    helperText={
-                        name !== reqUser.name &&
-                        !nameValid &&
-                        "Username must be 1 to 15 characters without spaces."
-                    }
-                    error={name !== reqUser.name && !nameValid}
-                    inputProps={{ pattern: regexString.username }}
-                />
-            ) : (
-                reqUser.name
-            ),
-        },
-        {
-            title: "Threads",
-            content: reqUser.count,
-        },
-        {
-            title: "Gender",
-            content: isSelf ? (
-                <Select
-                    variant="standard"
-                    value={sex}
-                    onChange={(e) => {
-                        const newValue = e.target.value;
-                        if (newValue === "M" || newValue === "F") setSex(newValue);
-                    }}
-                >
-                    <MenuItem value="M">Male</MenuItem>
-                    <MenuItem value="F">Female</MenuItem>
-                </Select>
-            ) : (
-                { M: "male", F: "female" }[reqUser.sex] || ""
-            ),
-        },
-        { title: "Role", content: reqUser.role },
-        {
-            title: "Joined",
-            content: `${
-                reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
-            } ago`,
-        },
-    ];
+    const items = useMemo(
+        () => [
+            {
+                title: "Name",
+                content: isSelf ? (
+                    <TextField
+                        variant="standard"
+                        color="secondary"
+                        value={name}
+                        onChange={(e) => {
+                            setName(e.target.value);
+                        }}
+                        helperText={
+                            name !== reqUser.name &&
+                            !nameValid &&
+                            "Username must be 1 to 15 characters without spaces."
+                        }
+                        error={name !== reqUser.name && !nameValid}
+                        inputProps={{ pattern: regexString.username }}
+                    />
+                ) : (
+                    reqUser.name
+                ),
+            },
+            {
+                title: "Threads",
+                content: reqUser.count,
+            },
+            {
+                title: "Gender",
+                content: isSelf ? (
+                    <Select
+                        variant="standard"
+                        value={sex}
+                        onChange={(e) => {
+                            const newValue = e.target.value;
+                            if (newValue === "M" || newValue === "F") setSex(newValue);
+                        }}
+                    >
+                        <MenuItem value="M">Male</MenuItem>
+                        <MenuItem value="F">Female</MenuItem>
+                    </Select>
+                ) : (
+                    { M: "male", F: "female" }[reqUser.sex] || ""
+                ),
+            },
+            { title: "Role", content: reqUser.role },
+            {
+                title: "Joined",
+                content: `${
+                    reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
+                } ago`,
+            },
+        ],
+        [
+            isSelf,
+            name,
+            nameValid,
+            reqUser.count,
+            reqUser.createdAt,
+            reqUser.name,
+            reqUser.role,
+            reqUser.sex,
+            sex,
+        ]
+    );
 
-    function updateUserInfo() {
+    const updateUserInfo = useCallback(() => {
         setSaveDisabled(true);
         setNotification({ open: true, severity: "info", text: "Updating user info..." });
         api.userEdit(reqUser.id, { name, sex })
@@ -147,7 +160,17 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                     text: parseError(err),
                 });
             });
-    }
+    }, [
+        name,
+        reqUser.id,
+        session,
+        setMenuTitle,
+        setNotification,
+        setReFetch,
+        setReqUser,
+        setSession,
+        sex,
+    ]);
 
     return (
         <Box className="w-full" style={{ maxWidth: isSmallScreen ? "100%" : "80%" }}>

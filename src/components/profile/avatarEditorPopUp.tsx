@@ -16,7 +16,7 @@
  */
 
 import { Slider, Stack } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
@@ -40,62 +40,83 @@ export default function AvatarEditorPopUp(props: {
     const [user] = useUser();
     const editorRef = useRef<AvatarEditor>(null);
 
-    const resetAvatarProps = () => {
+    const resetAvatarProps = useCallback(() => {
         setAvatarProps({
             scale: 1,
             rotate: 0,
         });
-    };
+    }, []);
+
+    const buttons = useMemo(
+        () => [
+            {
+                text: "Cancel",
+                action: () => {
+                    setOpen(false);
+                    resetAvatarProps();
+                },
+            },
+            {
+                text: "Confirm",
+                action: () => {
+                    if (avatar && user) {
+                        setNotification({
+                            open: true,
+                            severity: "info",
+                            text: "Uploading avatar...",
+                        });
+                        api.userAvatarUpload(user?.id, {
+                            data: avatar,
+                            fileName: "avatar",
+                        })
+                            .then(() => {
+                                setNotification({
+                                    open: true,
+                                    severity: "success",
+                                    text: "Avatar updated.",
+                                });
+                                onSuccess();
+                                setOpen(false);
+                                resetAvatarProps();
+                            })
+                            .catch((err) => {
+                                setNotification({
+                                    open: true,
+                                    severity: "error",
+                                    text: parseError(err),
+                                });
+                                setOpen(false);
+                                resetAvatarProps();
+                            });
+                    }
+                },
+            },
+        ],
+        [avatar, onSuccess, resetAvatarProps, setNotification, setOpen, user]
+    );
+
+    const onImageChange = useCallback(() => {
+        const canvas = editorRef.current?.getImage();
+        if (canvas) {
+            const dataUrl = canvas.toDataURL();
+            fetch(dataUrl)
+                .then((res) => res.blob())
+                .then(async (blob) => {
+                    setAvatar(
+                        new File([blob], "avatar.png", {
+                            type: "image/png",
+                        })
+                    );
+                });
+        }
+    }, [setAvatar]);
 
     return (
         <PopUp
             open={open}
             setOpen={setOpen}
             title={"Edit avatar"}
-            buttons={[
-                {
-                    text: "Cancel",
-                    action: () => {
-                        setOpen(false);
-                        resetAvatarProps();
-                    },
-                },
-                {
-                    text: "Confirm",
-                    action: () => {
-                        if (avatar && user) {
-                            setNotification({
-                                open: true,
-                                severity: "info",
-                                text: "Uploading avatar...",
-                            });
-                            api.userAvatarUpload(user?.id, {
-                                data: avatar,
-                                fileName: "avatar",
-                            })
-                                .then(() => {
-                                    setNotification({
-                                        open: true,
-                                        severity: "success",
-                                        text: "Avatar updated.",
-                                    });
-                                    onSuccess();
-                                    setOpen(false);
-                                    resetAvatarProps();
-                                })
-                                .catch((err) => {
-                                    setNotification({
-                                        open: true,
-                                        severity: "error",
-                                        text: parseError(err),
-                                    });
-                                    setOpen(false);
-                                    resetAvatarProps();
-                                });
-                        }
-                    },
-                },
-            ]}
+            buttons={buttons}
             onClose={resetAvatarProps}
         >
             <AvatarEditor
@@ -108,21 +129,7 @@ export default function AvatarEditorPopUp(props: {
                 color={[33, 33, 33, 0.6]} // RGBA
                 scale={avatarProps.scale}
                 rotate={avatarProps.rotate}
-                onImageChange={() => {
-                    const canvas = editorRef.current?.getImage();
-                    if (canvas) {
-                        const dataUrl = canvas.toDataURL();
-                        fetch(dataUrl)
-                            .then((res) => res.blob())
-                            .then(async (blob) => {
-                                setAvatar(
-                                    new File([blob], "avatar.png", {
-                                        type: "image/png",
-                                    })
-                                );
-                            });
-                    }
-                }}
+                onImageChange={onImageChange}
             />
             <Stack spacing={2} direction="row" sx={{ mx: 2 }} alignItems="center">
                 <p>Zoom</p>

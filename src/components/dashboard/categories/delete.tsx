@@ -7,7 +7,7 @@ import {
     Select,
     SelectChangeEvent,
 } from "@mui/material";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
@@ -21,8 +21,8 @@ const DeleteCategory = memo(function DeleteCategory() {
     const [category, setCategory] = useState<number | "">("");
     const [loading, setLoading] = useState(false);
 
-    const submit = useMemo(
-        () => (e?: React.FormEvent<HTMLFormElement>) => {
+    const submit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
             if (category) {
                 setLoading(true);

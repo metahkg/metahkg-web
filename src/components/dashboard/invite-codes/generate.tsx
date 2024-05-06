@@ -1,6 +1,6 @@
 import { Refresh } from "@mui/icons-material";
 import { Box, TextField, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -13,28 +13,31 @@ const GenerateInviteCode = memo(function GenerateInviteCode() {
     const [generateLoading, setGenerateLoading] = useState(false);
     const [generatedCode, setGeneratedCode] = useState<string | null>(null);
 
-    const generateSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-        e?.preventDefault();
-        setGenerateLoading(true);
-        api.serverInviteCodesGenerate({ description })
-            .then((res) => {
-                setGenerateLoading(false);
-                setGeneratedCode(res.code);
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: "Invite code generated  successfully.",
+    const generateSubmit = useCallback(
+        (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            setGenerateLoading(true);
+            api.serverInviteCodesGenerate({ description })
+                .then((res) => {
+                    setGenerateLoading(false);
+                    setGeneratedCode(res.code);
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: "Invite code generated  successfully.",
+                    });
+                })
+                .catch((err) => {
+                    setGenerateLoading(false);
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
                 });
-            })
-            .catch((err) => {
-                setGenerateLoading(false);
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
-            });
-    };
+        },
+        [description, setNotification]
+    );
 
     return (
         <Box onSubmit={generateSubmit} component="form" ref={generateFormRef}>

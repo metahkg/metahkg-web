@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     Box,
     IconButton,
@@ -178,13 +178,16 @@ export default function SidePanel(props: {
         ].filter((item) => item) as Button[];
     }, [serverConfig?.branding, darkMode, user, avatar, logout, setSettingsOpen]);
 
-    const buttonOnclick = (button: Button) => (e: React.MouseEvent) => {
-        if (button.link) {
-            onClickLink?.(e);
-        }
-        onClick?.(e);
-        button.onClick?.(e);
-    };
+    const buttonOnclick = useCallback(
+        (button: Button) => (e: React.MouseEvent) => {
+            if (button.link) {
+                onClickLink?.(e);
+            }
+            onClick?.(e);
+            button.onClick?.(e);
+        },
+        [onClick, onClickLink]
+    );
 
     return (
         <Box

@@ -15,6 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useCallback } from "react";
 import { useHistory } from "../../components/AppContextProvider";
 import {
     useEnd,
@@ -31,39 +32,42 @@ export default function useOnScroll() {
     const [thread] = useThread();
     const threadId = useThreadId();
     const update = useUpdate();
-    return (e: any) => {
-        if (!end && !updating) {
-            const diff = e.target.scrollHeight - e.target.scrollTop;
-            if (
-                (e.target.clientHeight >= diff - 5 &&
-                    e.target.clientHeight <= diff + 5) ||
-                diff < e.target.clientHeight
-            ) {
-                update();
+    return useCallback(
+        (e: any) => {
+            if (!end && !updating) {
+                const diff = e.target.scrollHeight - e.target.scrollTop;
+                if (
+                    (e.target.clientHeight >= diff - 5 &&
+                        e.target.clientHeight <= diff + 5) ||
+                    diff < e.target.clientHeight
+                ) {
+                    update();
+                }
             }
-        }
-        const index = history.findIndex((i) => i.id === threadId);
-        if (index !== -1 && thread) {
-            const arr = thread.conversation.map((comment) => {
-                return {
-                    top: Math.abs(
-                        Number(
-                            document
-                                .getElementById(`c${comment.id}`)
-                                ?.getBoundingClientRect()?.top
-                        )
-                    ),
-                    id: comment.id,
-                };
-            });
+            const index = history.findIndex((i) => i.id === threadId);
+            if (index !== -1 && thread) {
+                const arr = thread.conversation.map((comment) => {
+                    return {
+                        top: Math.abs(
+                            Number(
+                                document
+                                    .getElementById(`c${comment.id}`)
+                                    ?.getBoundingClientRect()?.top
+                            )
+                        ),
+                        id: comment.id,
+                    };
+                });
 
-            const currentComment = arr.reduce((a, b) => (a.top < b.top ? a : b)).id;
+                const currentComment = arr.reduce((a, b) => (a.top < b.top ? a : b)).id;
 
-            if (history[index]?.cid !== currentComment && currentComment) {
-                history[index].cid = currentComment;
-                setHistory(history);
-                localStorage.setItem("history", JSON.stringify(history));
+                if (history[index]?.cid !== currentComment && currentComment) {
+                    history[index].cid = currentComment;
+                    setHistory(history);
+                    localStorage.setItem("history", JSON.stringify(history));
+                }
             }
-        }
-    };
+        },
+        [end, history, setHistory, thread, threadId, update, updating]
+    );
 }

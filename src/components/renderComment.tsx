@@ -17,7 +17,7 @@
 
 import { Comment } from "@metahkg/api";
 import parse from "html-react-parser";
-import React from "react";
+import React, { useMemo } from "react";
 
 export default function RenderComment(props: {
     comment: Comment;
@@ -25,27 +25,33 @@ export default function RenderComment(props: {
     darkMode: boolean;
 }) {
     const { comment, depth, darkMode } = props;
-    const commentJSX =
-        comment.comment.type === "html" ? parse(comment.comment.html) : comment.text;
-    const content = [
-        comment.quote && depth < 3 && (
-            <blockquote
-                style={{
-                    color: "#aca9a9",
-                    borderLeft: `2px solid ${darkMode ? "#646262" : "e7e7e7"}`,
-                    marginLeft: 0,
-                }}
-            >
-                <div style={{ marginLeft: 15 }}>
-                    <RenderComment
-                        comment={comment.quote}
-                        depth={depth + 1}
-                        darkMode={darkMode}
-                    />
-                </div>
-            </blockquote>
-        ),
-        commentJSX,
-    ];
+    const commentJSX = useMemo(
+        () =>
+            comment.comment.type === "html" ? parse(comment.comment.html) : comment.text,
+        [comment.comment, comment.text]
+    );
+    const content = useMemo(
+        () => [
+            comment.quote && depth < 3 && (
+                <blockquote
+                    style={{
+                        color: "#aca9a9",
+                        borderLeft: `2px solid ${darkMode ? "#646262" : "e7e7e7"}`,
+                        marginLeft: 0,
+                    }}
+                >
+                    <div style={{ marginLeft: 15 }}>
+                        <RenderComment
+                            comment={comment.quote}
+                            depth={depth + 1}
+                            darkMode={darkMode}
+                        />
+                    </div>
+                </blockquote>
+            ),
+            commentJSX,
+        ],
+        [comment.quote, commentJSX, darkMode, depth]
+    );
     return <React.Fragment>{content}</React.Fragment>;
 }

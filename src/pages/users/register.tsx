@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import hash from "hash.js";
 import {
     Alert,
@@ -75,10 +75,10 @@ const Register = memo(function Register() {
     const darkMode = useDarkMode();
     const captchaRef = useRef<CaptchaRefProps>(null);
 
-    const query = queryString.parse(window.location.search);
+    const query = useMemo(() => queryString.parse(window.location.search), []);
     const navigate = useNavigate();
 
-    const small = width / 2 - 100 <= 450;
+    const small = useMemo(() => width / 2 - 100 <= 450, [width]);
 
     useLayoutEffect(() => {
         setTitle(`Register | ${serverConfig?.branding || "Metahkg"}`);
@@ -87,81 +87,96 @@ const Register = memo(function Register() {
 
     if (user) <Navigate to="/" replace />;
 
-    async function onSubmit(e?: React.FormEvent<HTMLFormElement>) {
-        e?.preventDefault();
-        if (serverConfig?.captcha.type === "turnstile") {
-            setLoading(true);
-            setDisable(true);
-        }
-        const captchaToken = await captchaRef.current?.executeAsync();
-        if (!captchaToken) {
-            setLoading(false);
-            setDisable(false);
-            return;
-        }
-        setDisable(true);
-        setLoading(true);
-        setAlert({ severity: "info", text: "Registering..." });
-        api.authRegister({
-            email,
-            name,
-            password: hash.sha256().update(password).digest("hex"),
-            sex: sex as Sex,
-            captchaToken,
-            ...(inviteCode && { inviteCode }),
-        })
-            .then(() => {
-                setAlert({
-                    severity: "success",
-                    text: "A link has been sent to your email address. Please click the link to verify.",
-                });
-                setNotification({
-                    open: true,
-                    severity: "success",
-                    text: "Please click the link sent to your email address.",
-                });
-            })
-            .catch((err) => {
-                setAlert({ severity: "error", text: parseError(err) });
-                setNotification({
-                    open: true,
-                    severity: "error",
-                    text: parseError(err),
-                });
+    const onSubmit = useCallback(
+        async (e?: React.FormEvent<HTMLFormElement>) => {
+            e?.preventDefault();
+            if (serverConfig?.captcha.type === "turnstile") {
+                setLoading(true);
+                setDisable(true);
+            }
+            const captchaToken = await captchaRef.current?.executeAsync();
+            if (!captchaToken) {
+                setLoading(false);
                 setDisable(false);
-                captchaRef.current?.reset();
-            });
-        setLoading(false);
-    }
+                return;
+            }
+            setDisable(true);
+            setLoading(true);
+            setAlert({ severity: "info", text: "Registering..." });
+            api.authRegister({
+                email,
+                name,
+                password: hash.sha256().update(password).digest("hex"),
+                sex: sex as Sex,
+                captchaToken,
+                ...(inviteCode && { inviteCode }),
+            })
+                .then(() => {
+                    setAlert({
+                        severity: "success",
+                        text: "A link has been sent to your email address. Please click the link to verify.",
+                    });
+                    setNotification({
+                        open: true,
+                        severity: "success",
+                        text: "Please click the link sent to your email address.",
+                    });
+                })
+                .catch((err) => {
+                    setAlert({ severity: "error", text: parseError(err) });
+                    setNotification({
+                        open: true,
+                        severity: "error",
+                        text: parseError(err),
+                    });
+                    setDisable(false);
+                    captchaRef.current?.reset();
+                });
+            setLoading(false);
+        },
+        [
+            email,
+            inviteCode,
+            name,
+            password,
+            serverConfig?.captcha.type,
+            setNotification,
+            sex,
+        ]
+    );
 
-    const inputs: TextFieldProps[] = [
-        {
-            label: "Username",
-            onChange: (e) => {
-                setName(e.target.value);
+    const inputs: TextFieldProps[] = useMemo(
+        () => [
+            {
+                label: "Username",
+                onChange: (e) => {
+                    setName(e.target.value);
+                },
+                type: "text",
+                inputProps: {
+                    pattern: regexString.username,
+                },
+                helperText:
+                    "1-15 en/jp/greek/zh-tw/number/emoji characters without spaces",
             },
-            type: "text",
-            inputProps: {
-                pattern: regexString.username,
+            {
+                label: "Email",
+                onChange: (e) => setEmail(e.target.value),
+                type: "email",
+                inputProps: {
+                    pattern: regexString.email,
+                },
             },
-            helperText: "1-15 en/jp/greek/zh-tw/number/emoji characters without spaces",
-        },
-        {
-            label: "Email",
-            onChange: (e) => setEmail(e.target.value),
-            type: "email",
-            inputProps: {
-                pattern: regexString.email,
+            {
+                label: "Password",
+                onChange: (e) => setPassword(e.target.value),
+                type: "password",
+                inputProps: { pattern: regexString.password },
+                helperText: "At least 8 characters long without spaces",
             },
-        },
-        {
-            label: "Password",
-            onChange: (e) => setPassword(e.target.value),
-            type: "password",
-            inputProps: { pattern: regexString.password },
-            helperText: "At least 8 characters long without spaces",
-        },
-    ];
+        ],
+        []
+    );
 
     return (
         <Box

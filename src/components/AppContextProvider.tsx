@@ -292,10 +292,10 @@ const AppContextProvider = memo(function AppContextProvider(props: {
         localStorage.setItem("sidePanelExpanded", JSON.stringify(sidePanelExpanded));
     }, [sidePanelExpanded]);
 
-    function updateSize() {
+    const updateSize = useCallback(() => {
         setWidth(window.innerWidth);
         setHeight(window.innerHeight);
-    }
+    }, []);
 
     if (!listeningResize.current) {
         listeningResize.current = true;

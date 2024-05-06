@@ -48,6 +48,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
+import { useMemo } from "react";
 
 export default function useBtns() {
     const update = useUpdate();
@@ -65,124 +66,157 @@ export default function useBtns() {
     const [currentPage] = useCurrentPage();
     const [starList, setStarList] = useStarList();
     const croot = useCRoot();
-    const starred = Boolean(starList.find((i) => i.id === threadId));
+    const starred = useMemo(
+        () => Boolean(starList.find((i) => i.id === threadId)),
+        [starList, threadId]
+    );
 
-    const btns = [
-        {
-            icon: <Refresh />,
-            action: () => {
-                update();
-                const newscrollTop =
-                    croot.current?.scrollHeight || 0 - (croot.current?.clientHeight || 0);
-                if (croot.current) croot.current.scrollTop = newscrollTop;
-            },
-            title: "Refresh",
-        },
-        sort !== "score" && {
-            icon: <Bolt />,
-            action: () => {
-                setSort("score");
-            },
-            title: "Sort by score",
-        },
-        sort !== "time" && {
-            icon: <FastForward />,
-            action: () => {
-                setSort("time");
-            },
-            title: "Sort by time (oldest first)",
-        },
-        sort !== "latest" && {
-            icon: <FastRewind />,
-            action: () => {
-                setSort("latest");
-            },
-            title: "Sort by time (newest first)",
-        },
-        user && {
-            icon: (
-                <Star
-                    {...(starred && {
-                        color: "secondary",
-                    })}
-                />
-            ),
-            action: () => {
-                setNotification({
-                    open: true,
-                    severity: "info",
-                    text: `${starred ? "Unstarring" : "Starring"} thread...`,
-                });
-                (starred ? api.threadUnstar(threadId) : api.threadStar(threadId))
-                    .then(() => {
+    const btns = useMemo(
+        () =>
+            [
+                {
+                    icon: <Refresh />,
+                    action: () => {
+                        update();
+                        const newscrollTop =
+                            croot.current?.scrollHeight ||
+                            0 - (croot.current?.clientHeight || 0);
+                        if (croot.current) croot.current.scrollTop = newscrollTop;
+                    },
+                    title: "Refresh",
+                },
+                sort !== "score" && {
+                    icon: <Bolt />,
+                    action: () => {
+                        setSort("score");
+                    },
+                    title: "Sort by score",
+                },
+                sort !== "time" && {
+                    icon: <FastForward />,
+                    action: () => {
+                        setSort("time");
+                    },
+                    title: "Sort by time (oldest first)",
+                },
+                sort !== "latest" && {
+                    icon: <FastRewind />,
+                    action: () => {
+                        setSort("latest");
+                    },
+                    title: "Sort by time (newest first)",
+                },
+                user && {
+                    icon: (
+                        <Star
+                            {...(starred && {
+                                color: "secondary",
+                            })}
+                        />
+                    ),
+                    action: () => {
                         setNotification({
                             open: true,
-                            severity: "success",
-                            text: `Thread ${starred ? "un" : ""}starred.`,
+                            severity: "info",
+                            text: `${starred ? "Unstarring" : "Starring"} thread...`,
                         });
-                        setStarList(
-                            starred
-                                ? starList.filter((i) => i.id !== threadId)
-                                : [...starList, { id: threadId, date: new Date() }]
-                        );
-                        api.meStarred().then(setStarList);
-                    })
-                    .catch((err) => {
-                        setNotification({
-                            open: true,
-                            severity: "error",
-                            text: parseError(err),
-                        });
-                    });
-            },
-            title: starred ? "Unstar" : "Star",
-        },
-        {
-            icon: <Collections />,
-            action: () => {
-                if (thread?.images?.length) setGalleryOpen(true);
-                else
-                    setNotification({
-                        open: true,
-                        severity: "error",
-                        text: "No images!",
-                    });
-            },
-            title: "Images",
-        },
-        {
-            icon: <Reply />,
-            action: () => {
-                if (user) setEditor({ open: true });
-                else
-                    navigate(
-                        `/users/login?continue=true&returnto=${encodeURIComponent(
-                            `/thread/${threadId}?page=${currentPage}`
-                        )}`
-                    );
-            },
-            title: "Reply",
-        },
-        {
-            icon: <ShareIcon className="!text-[19px]" />,
-            action: () => {
-                if (thread && thread.title && thread.slink) {
-                    !shareOpen && setShareOpen(true);
-                    shareTitle !== thread.title &&
-                        thread.title &&
-                        setShareTitle(thread.title);
-                    shareLink !== thread.slink &&
-                        thread.slink &&
-                        setShareLink(thread.slink);
-                }
-            },
-            title: "Share",
-        },
-    ].filter((x) => x) as {
-        icon: React.ReactElement;
-        action: () => void;
-        title: string;
-    }[];
+                        (starred ? api.threadUnstar(threadId) : api.threadStar(threadId))
+                            .then(() => {
+                                setNotification({
+                                    open: true,
+                                    severity: "success",
+                                    text: `Thread ${starred ? "un" : ""}starred.`,
+                                });
+                                setStarList(
+                                    starred
+                                        ? starList.filter((i) => i.id !== threadId)
+                                        : [
+                                              ...starList,
+                                              { id: threadId, date: new Date() },
+                                          ]
+                                );
+                                api.meStarred().then(setStarList);
+                            })
+                            .catch((err) => {
+                                setNotification({
+                                    open: true,
+                                    severity: "error",
+                                    text: parseError(err),
+                                });
+                            });
+                    },
+                    title: starred ? "Unstar" : "Star",
+                },
+                {
+                    icon: <Collections />,
+                    action: () => {
+                        if (thread?.images?.length) setGalleryOpen(true);
+                        else
+                            setNotification({
+                                open: true,
+                                severity: "error",
+                                text: "No images!",
+                            });
+                    },
+                    title: "Images",
+                },
+                {
+                    icon: <Reply />,
+                    action: () => {
+                        if (user) setEditor({ open: true });
+                        else
+                            navigate(
+                                `/users/login?continue=true&returnto=${encodeURIComponent(
+                                    `/thread/${threadId}?page=${currentPage}`
+                                )}`
+                            );
+                    },
+                    title: "Reply",
+                },
+                {
+                    icon: <ShareIcon className="!text-[19px]" />,
+                    action: () => {
+                        if (thread && thread.title && thread.slink) {
+                            !shareOpen && setShareOpen(true);
+                            shareTitle !== thread.title &&
+                                thread.title &&
+                                setShareTitle(thread.title);
+                            shareLink !== thread.slink &&
+                                thread.slink &&
+                                setShareLink(thread.slink);
+                        }
+                    },
+                    title: "Share",
+                },
+            ].filter((x) => x) as {
+                icon: React.ReactElement;
+                action: () => void;
+                title: string;
+            }[],
+        [
+            croot,
+            currentPage,
+            navigate,
+            setEditor,
+            setGalleryOpen,
+            setNotification,
+            setShareLink,
+            setShareOpen,
+            setShareTitle,
+            setSort,
+            setStarList,
+            shareLink,
+            shareOpen,
+            shareTitle,
+            sort,
+            starList,
+            starred,
+            thread,
+            threadId,
+            update,
+            user,
+        ]
+    );
 
     return btns;
 }

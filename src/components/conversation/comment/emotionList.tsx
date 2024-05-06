@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowBack, MoreHoriz } from "@mui/icons-material";
 import {
     Box,
@@ -56,10 +56,10 @@ export default function EmotionList(props: {
         }
     }, [comment.id, emotion, threadId, users]);
 
-    const handleUsersClose = () => {
+    const handleUsersClose = useCallback(() => {
         setEmotion("");
         setOpenAdditional(true);
-    };
+    }, []);
 
     function UserItem(props: { user: User }) {
         const { user } = props;

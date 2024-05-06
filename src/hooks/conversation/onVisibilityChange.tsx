@@ -23,6 +23,7 @@ import {
     useThread,
 } from "../../components/conversation/ConversationContext";
 import queryString from "query-string";
+import { useCallback } from "react";
 
 export default function useOnVisibilityChange() {
     const croot = useCRoot();
@@ -32,27 +33,30 @@ export default function useOnVisibilityChange() {
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
 
-    return (isVisible: boolean, page: number) => {
-        let Page = page;
-        if (isVisible) {
-            lastHeight.current = croot.current?.scrollTop || lastHeight.current;
-            if (Page !== Number(query.page) && Page) {
-                navigate(`${window.location.pathname}?page=${Page}`, {
-                    replace: true,
-                });
-                setCurrentPage(Page);
-            }
-        }
-        if (!isVisible && thread && thread.conversation.length) {
-            if (lastHeight.current !== croot.current?.scrollTop && croot.current) {
-                Page = croot.current.scrollTop > lastHeight.current ? Page : Page - 1;
-                if (lastHeight.current && Page !== Number(query.page) && Page) {
+    return useCallback(
+        (isVisible: boolean, page: number) => {
+            let Page = page;
+            if (isVisible) {
+                lastHeight.current = croot.current?.scrollTop || lastHeight.current;
+                if (Page !== Number(query.page) && Page) {
                     navigate(`${window.location.pathname}?page=${Page}`, {
                         replace: true,
                     });
                     setCurrentPage(Page);
                 }
             }
-        }
-    };
+            if (!isVisible && thread && thread.conversation.length) {
+                if (lastHeight.current !== croot.current?.scrollTop && croot.current) {
+                    Page = croot.current.scrollTop > lastHeight.current ? Page : Page - 1;
+                    if (lastHeight.current && Page !== Number(query.page) && Page) {
+                        navigate(`${window.location.pathname}?page=${Page}`, {
+                            replace: true,
+                        });
+                        setCurrentPage(Page);
+                    }
+                }
+            }
+        },
+        [croot, lastHeight, navigate, query.page, setCurrentPage, thread]
+    );
 }

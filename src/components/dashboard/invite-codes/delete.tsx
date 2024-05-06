@@ -1,6 +1,6 @@
 import { Delete } from "@mui/icons-material";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -25,7 +25,7 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
             });
     }, [setNotification]);
 
-    const deleteSubmit = () => {
+    const deleteSubmit = useCallback(() => {
         if (selectedCode) {
             setDeleteLoading(true);
             api.serverInviteCodesDelete(selectedCode)
@@ -51,7 +51,7 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
                     });
                 });
         }
-    };
+    }, [selectedCode, setNotification]);
 
     return (
         <Box>

@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useMemo } from "react";
 import {
     Box,
     MenuItem,
@@ -74,133 +74,136 @@ export default function Settings(props: {
               helperText?: string;
               action: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
           }
-    ) & { title: string; disabled?: boolean })[] = [
-        {
-            title: "Theme",
-            type: "select",
-            action: (e) => {
-                setSettings({ ...settings, theme: e.target.value as Theme });
+    ) & { title: string; disabled?: boolean })[] = useMemo(
+        () => [
+            {
+                title: "Theme",
+                type: "select",
+                action: (e) => {
+                    setSettings({ ...settings, theme: e.target.value as Theme });
+                },
+                options: ["dark", "light", "system"],
+                selected: settings.theme || "dark",
             },
-            options: ["dark", "light", "system"],
-            selected: settings.theme || "dark",
-        },
-        {
-            title: "Accent color",
-            type: "select",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    secondaryColor: (() => {
-                        const color = colorOptions.find(
-                            (option) => option.value === e.target.value
-                        ) as secondaryColor & { value?: string };
-                        const colorClone = { ...color };
-                        delete colorClone.value;
-                        return colorClone;
-                    })(),
-                });
-            },
-            options: colorOptions.map((option) => option.value),
-            selected: colorOptions.find(
-                (option) => option.main === settings.secondaryColor?.main
-            )?.value,
-        },
-        {
-            title: "Filter swear words",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({ ...settings, filterSwearWords: e.target.checked });
-            },
-            checked: isSafari || isIOS ? false : settings.filterSwearWords,
-            disabled: isSafari || isIOS,
-        },
-        {
-            title: "Auto load images",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    autoLoadImages: e.target.checked,
-                });
-            },
-            checked: settings.autoLoadImages,
-        },
-        {
-            title: "Resize images",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    resizeImages: e.target.checked,
-                });
-            },
-            checked: settings.resizeImages,
-        },
-        {
-            title: "Preview links",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    linkPreview: e.target.checked,
-                });
-            },
-            checked: settings.linkPreview,
-        },
-        {
-            title: "Notifications",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    notifications: e.target.checked,
-                });
-                // no need to run subscribe since it is handled by useSubscribeNotifications hook
-                if (!e.target.checked) {
-                    unsubscribe();
-                }
-            },
-            checked: Boolean(user && settings.notifications),
-            disabled: !user,
-        },
-        {
-            title: "Pdf viewer from URL (experimental)",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    pdfViewer: e.target.checked,
-                });
-            },
-            checked: settings.pdfViewer,
-        },
-        {
-            title: "Video player from URL (experimental)",
-            type: "checkbox",
-            action: (e) => {
-                setSettings({
-                    ...settings,
-                    videoPlayer: e.target.checked,
-                });
-            },
-            checked: settings.videoPlayer,
-        },
-        {
-            title: "Conversation comments limit per page (1-50)",
-            type: "number",
-            pattern: "([1-4][0-9]{0,1}|50)",
-            value: settings.conversationLimit,
-            action: (e) => {
-                if (/^([1-4][0-9]{0,1}|50)$/.test(e.target.value)) {
+            {
+                title: "Accent color",
+                type: "select",
+                action: (e) => {
                     setSettings({
                         ...settings,
-                        conversationLimit: Number(e.target.value),
+                        secondaryColor: (() => {
+                            const color = colorOptions.find(
+                                (option) => option.value === e.target.value
+                            ) as secondaryColor & { value?: string };
+                            const colorClone = { ...color };
+                            delete colorClone.value;
+                            return colorClone;
+                        })(),
                     });
-                }
+                },
+                options: colorOptions.map((option) => option.value),
+                selected: colorOptions.find(
+                    (option) => option.main === settings.secondaryColor?.main
+                )?.value,
             },
-            helperText: "Integers between 1-50 only",
-        },
-    ];
+            {
+                title: "Filter swear words",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({ ...settings, filterSwearWords: e.target.checked });
+                },
+                checked: isSafari || isIOS ? false : settings.filterSwearWords,
+                disabled: isSafari || isIOS,
+            },
+            {
+                title: "Auto load images",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        autoLoadImages: e.target.checked,
+                    });
+                },
+                checked: settings.autoLoadImages,
+            },
+            {
+                title: "Resize images",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        resizeImages: e.target.checked,
+                    });
+                },
+                checked: settings.resizeImages,
+            },
+            {
+                title: "Preview links",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        linkPreview: e.target.checked,
+                    });
+                },
+                checked: settings.linkPreview,
+            },
+            {
+                title: "Notifications",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        notifications: e.target.checked,
+                    });
+                    // no need to run subscribe since it is handled by useSubscribeNotifications hook
+                    if (!e.target.checked) {
+                        unsubscribe();
+                    }
+                },
+                checked: Boolean(user && settings.notifications),
+                disabled: !user,
+            },
+            {
+                title: "Pdf viewer from URL (experimental)",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        pdfViewer: e.target.checked,
+                    });
+                },
+                checked: settings.pdfViewer,
+            },
+            {
+                title: "Video player from URL (experimental)",
+                type: "checkbox",
+                action: (e) => {
+                    setSettings({
+                        ...settings,
+                        videoPlayer: e.target.checked,
+                    });
+                },
+                checked: settings.videoPlayer,
+            },
+            {
+                title: "Conversation comments limit per page (1-50)",
+                type: "number",
+                pattern: "([1-4][0-9]{0,1}|50)",
+                value: settings.conversationLimit,
+                action: (e) => {
+                    if (/^([1-4][0-9]{0,1}|50)$/.test(e.target.value)) {
+                        setSettings({
+                            ...settings,
+                            conversationLimit: Number(e.target.value),
+                        });
+                    }
+                },
+                helperText: "Integers between 1-50 only",
+            },
+        ],
+        [setSettings, settings, user]
+    );
     return (
         <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
             <Box

@@ -16,7 +16,7 @@
  */
 
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import YoutubePlayer from "react-player/youtube";
 import FacebookPlayer from "react-player/facebook";
 import StreamPlayer from "react-player/streamable";
@@ -45,61 +45,75 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
 
     const { url, style } = props;
 
-    const mode =
-        (regex.facebook.videos.some((regexp) => regexp.test(url)) && "facebook") ||
-        (regex.youtube.some((regexp) => regexp.test(url)) && "youtube") ||
-        "streamable";
+    const mode = useMemo(
+        () =>
+            (regex.facebook.videos.some((regexp) => regexp.test(url)) && "facebook") ||
+            (regex.youtube.some((regexp) => regexp.test(url)) && "youtube") ||
+            "streamable",
+        [url]
+    );
 
-    const buttons = [
-        {
-            title: "Full Screen (press ESC/F11 to exit)",
-            icon: <Fullscreen className="!text-[18px]" />,
-            onClick: () => {
-                const Player = findDOMNode(
-                    {
-                        youtube: YoutubePlayerRef,
-                        facebook: FacebookPlayerRef,
-                        streamable: StreamPlayerRef,
-                    }[mode].current
-                );
-                Player instanceof Element && screenfull.request(Player);
+    const buttons: {
+        title: string;
+        icon: React.ReactNode;
+        onClick: () => void;
+        hidden?: boolean;
+    }[] = useMemo(
+        () => [
+            {
+                title: "Full Screen (press ESC/F11 to exit)",
+                icon: <Fullscreen className="!text-[18px]" />,
+                onClick: () => {
+                    const Player = findDOMNode(
+                        {
+                            youtube: YoutubePlayerRef,
+                            facebook: FacebookPlayerRef,
+                            streamable: StreamPlayerRef,
+                        }[mode].current
+                    );
+                    Player instanceof Element && screenfull.request(Player);
+                },
             },
-        },
-        {
-            title: "Picture in Picture",
-            icon: <PictureInPictureAlt className="!text-[16px]" />,
-            onClick: () => {
-                setPip(!pip);
+            {
+                title: "Picture in Picture",
+                icon: <PictureInPictureAlt className="!text-[16px]" />,
+                onClick: () => {
+                    setPip(!pip);
+                },
+                hidden: !{
+                    youtube: YoutubePlayer,
+                    facebook: FacebookPlayer,
+                    streamable: StreamPlayer,
+                }[mode].canEnablePIP(url),
             },
-            hidden: !{
-                youtube: YoutubePlayer,
-                facebook: FacebookPlayer,
-                streamable: StreamPlayer,
-            }[mode].canEnablePIP(url),
-        },
-        {
-            title: "Close",
-            icon: <Close className="!text-[16px]" />,
-            onClick: () => {
-                setPlay(false);
+            {
+                title: "Close",
+                icon: <Close className="!text-[16px]" />,
+                onClick: () => {
+                    setPlay(false);
+                },
             },
-        },
-    ];
+        ],
+        [mode, pip, url]
+    );
 
-    const commonProps = {
-        width: isSmallScreen ? "100%" : "65%",
-        height: "auto",
-        className: "aspect-video",
-        stopOnUnmount: false,
-        pip,
-        url,
-        controls: true,
-        light: !play,
-        onClickPreview: () => {
-            setPlay(true);
-        },
-        playing: play,
-    };
+    const commonProps = useMemo(
+        () => ({
+            width: isSmallScreen ? "100%" : "65%",
+            height: "auto",
+            className: "aspect-video",
+            stopOnUnmount: false,
+            pip,
+            url,
+            controls: true,
+            light: !play,
+            onClickPreview: () => {
+                setPlay(true);
+            },
+            playing: play,
+        }),
+        [isSmallScreen, pip, play, url]
+    );
 
     return (
         <Box className="!mb-[5px]" style={style}>

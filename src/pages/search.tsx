@@ -15,7 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
 import {
@@ -46,7 +46,7 @@ const Search = memo(function Search() {
     const [, setMenuTitle] = useMenuTitle();
     const [serverConfig] = useServerConfig();
     const navigate = useNavigate();
-    const querystring = queryString.parse(window.location.search);
+    const querystring = useMemo(() => queryString.parse(window.location.search), []);
 
     useEffect(() => {
         if (querystring.q) setQuery(decodeURIComponent(String(querystring.q)));
