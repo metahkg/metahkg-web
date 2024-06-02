@@ -17,7 +17,7 @@
 
 import { useReplace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
@@ -58,7 +58,7 @@ const CommentBody = memo(function CommentBody(props: {
 
     const [commentJSX, setCommentJSX] = useState<React.ReactNode>(<></>);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (comment.comment.type === "html") {
             setCommentJSX(
                 parse(
