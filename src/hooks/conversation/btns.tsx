@@ -22,8 +22,8 @@ import {
     Share as ShareIcon,
     Star,
     Bolt,
-    FastForward,
-    FastRewind,
+    //FastForward,
+    //FastRewind,
 } from "@mui/icons-material";
 import { useUpdate } from "./update";
 import {
@@ -85,14 +85,18 @@ export default function useBtns() {
                     },
                     title: "Refresh",
                 },
-                sort !== "score" && {
-                    icon: <Bolt />,
+                {
+                    icon: <Bolt color={sort === "score" ? "secondary" : "inherit"} />,
                     action: () => {
-                        setSort("score");
+                        if (sort === "score") {
+                            setSort("time");
+                        } else {
+                            setSort("score");
+                        }
                     },
                     title: "Sort by score",
                 },
-                sort !== "time" && {
+                /*sort !== "time" && {
                     icon: <FastForward />,
                     action: () => {
                         setSort("time");
@@ -105,7 +109,7 @@ export default function useBtns() {
                         setSort("latest");
                     },
                     title: "Sort by time (newest first)",
-                },
+                },*/
                 user && {
                     icon: (
                         <Star
