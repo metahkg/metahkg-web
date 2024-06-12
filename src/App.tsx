@@ -40,6 +40,7 @@ import SidePanel from "./components/sidePanel";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { memo } from "react";
+import { api } from "./lib/api";
 
 const Menu = loadable(() => import("./components/menu"));
 const Settings = loadable(() => import("./components/settings"));
@@ -61,6 +62,29 @@ const App = memo(() => {
         document.querySelector("html")?.classList.add(darkMode ? "dark" : "light");
         document.querySelector("html")?.classList.remove(darkMode ? "light" : "dark");
     }, [darkMode]);
+
+    useEffect(() => {
+        const healthCheckInterval = setInterval(() => {
+            api.health()
+                .then()
+                .catch((err) => {
+                    // cloudflare under attack mode returns a 403
+                    if (err.status === 403) {
+                        // unregister the service worker
+                        navigator.serviceWorker
+                            .getRegistrations()
+                            .then((registrations) => {
+                                for (let registration of registrations) {
+                                    registration.unregister();
+                                    // reload the page
+                                    window.location.reload();
+                                }
+                            });
+                    }
+                });
+        }, 30000);
+        return () => clearInterval(healthCheckInterval);
+    }, []);
 
     return (
         <Theme
