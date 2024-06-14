@@ -188,7 +188,7 @@ const Settings = memo(function Settings(props: {
                 checked: settings.videoPlayer,
             },
             {
-                title: "Conversation comments limit per page (1-50)",
+                title: "Comments per page",
                 type: "number",
                 pattern: "([1-4][0-9]{0,1}|50)",
                 value: settings.conversationLimit,
@@ -200,7 +200,7 @@ const Settings = memo(function Settings(props: {
                         });
                     }
                 },
-                helperText: "Integers between 1-50 only",
+                helperText: "Integers between 1 and 50 only",
             },
         ],
         [setSettings, settings, user]
