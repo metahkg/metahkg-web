@@ -80,14 +80,14 @@ const VoteButtons = memo(function VoteButtons(props: { comment: Comment }) {
                 }}
                 startIcon={
                     <ArrowDropUp
-                        className={vote === "U" ? "text-[green]" : "text-[#aaa]"}
+                        className={vote === "U" ? "text-green-500" : "text-[#aaa]"}
                     />
                 }
                 loading={voting === "U"}
                 loadingPosition="start"
             >
                 <Typography
-                    className={`flex ${vote === "U" ? "text-[green]" : "text-[#aaa]"}`}
+                    className={`flex ${vote === "U" ? "text-green-500" : "text-[#aaa]"}`}
                 >
                     {up}
                 </Typography>
