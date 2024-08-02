@@ -102,12 +102,12 @@ const Create = memo(function Create() {
             });
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
-                    if (data) {
+                    if (data && data.comment.type === "html") {
                         setInittext(/*html*/ `<blockquote style="color: #aca9a9; border-left: 2px solid ${
                             darkMode ? "#646262" : "e7e7e7"
                         }; margin-left: 0">
                                         <div style="margin-left: 15px">
-                                            ${data.comment}
+                                            ${data.comment.html}
                                         </div>
                                     </blockquote>
                                     <p></p>`);
