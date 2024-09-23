@@ -27,7 +27,7 @@ export function useRegisterServiceWorker() {
 
             register({
                 onUpdate: async (registration) => {
-                    registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+                    console.log("service worker updated");
                     window.location.reload();
                 },
                 onSuccess: async (_registration) => {
@@ -40,21 +40,16 @@ export function useRegisterServiceWorker() {
                     .then(async (registration) => {
                         console.log("updating service worker");
 
-                        await registration.update();
-
                         registration.addEventListener("updatefound", () => {
                             console.log("update found");
                             console.log("service worker skip waiting");
                             registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                            window.location.reload();
+                            //window.location.reload();
                         });
 
-                        setInterval(registration.update, 1000 * 60 * 10);
+                        await registration.update();
 
-                        if (registration.waiting) {
-                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                            window.location.reload();
-                        }
+                        setInterval(registration.update, 1000 * 60 * 10);
                     })
                     .catch((error) => {
                         console.error(error.message);
