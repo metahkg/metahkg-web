@@ -34,7 +34,9 @@ const Forbidden = memo(function Forbidden() {
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle(t("forbidden.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(
+            t("forbidden.title") + ` | ${serverConfig?.branding || t("common.branding")}`
+        );
         menu && setMenu(false);
     }, [menu, setMenu, serverConfig?.branding, t]);
 

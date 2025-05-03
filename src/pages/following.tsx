@@ -32,7 +32,9 @@ const Following = memo(function Following() {
     const [, setUsers] = useState<any[]>([]);
 
     useLayoutEffect(() => {
-        setTitle(t("following.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(
+            t("following.title") + ` | ${serverConfig?.branding || t("common.branding")}`
+        );
 
         function clearData() {
             setReFetch(true);

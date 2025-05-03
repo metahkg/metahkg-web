@@ -33,7 +33,9 @@ const Dashboard = memo(function Dashboard() {
     const [menu, setMenu] = useMenu();
 
     useLayoutEffect(() => {
-        setTitle(t("dashboard.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(
+            t("dashboard.title") + ` | ${serverConfig?.branding || t("common.branding")}`
+        );
         menu && setMenu(false);
     }, [menu, setMenu, serverConfig?.branding, t]);
 

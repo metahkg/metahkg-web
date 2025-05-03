@@ -91,7 +91,8 @@ const Create = memo(function Create() {
 
     useLayoutEffect(() => {
         setTitle(
-            t("create.thread_title") + (serverConfig?.branding || t("common.branding"))
+            t("create.thread_title") +
+                ` | ${serverConfig?.branding || t("common.branding")}`
         );
         menu && setMenu(false);
     }, [menu, setMenu, user, serverConfig?.branding, t]);
