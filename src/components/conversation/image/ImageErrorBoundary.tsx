@@ -22,7 +22,7 @@ import { css } from "../../../lib/css";
 
 export default class ImageErrorBoundary extends React.Component<{
     src: string;
-    children: JSX.Element;
+    children: React.JSX.Element;
 }> {
     state = { hasError: false };
 

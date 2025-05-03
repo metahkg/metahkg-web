@@ -33,4 +33,4 @@ axios.interceptors.request.use((config) => {
     return config;
 });
 
-export const api = new Client(process.env.REACT_APP_BACKEND || "/api", axios);
+export const api = new Client(import.meta.env.VITE_BACKEND_URL || "/api", axios);

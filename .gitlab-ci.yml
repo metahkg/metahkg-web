@@ -54,8 +54,8 @@ docker-build:
     - if [ "$CI_COMMIT_BRANCH" = "dev" ]; then build_version="${version}-dev"; else build_version=$version; fi;
     - docker buildx create --use
     - docker buildx build --push --pull --platform linux/amd64,linux/arm64
-      --build-arg REACT_APP_build=$CI_COMMIT_SHORT_SHA
-      --build-arg REACT_APP_version=$build_version
+      --build-arg VITE_APP_build=$CI_COMMIT_SHORT_SHA
+      --build-arg VITE_APP_version=$build_version
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest"
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$CI_COMMIT_SHORT_SHA"
       -t "$CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:$version"

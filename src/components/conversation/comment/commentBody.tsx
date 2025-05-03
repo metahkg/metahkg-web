@@ -19,6 +19,37 @@ import { useReplace } from "../../../lib/domReplace";
 import parse from "html-react-parser";
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import Prism from "prismjs";
+// Import PrismJS theme and languages
+import "prismjs/themes/prism-okaidia.css"; // Or your preferred theme
+import "prismjs/components/prism-markup-templating.js"; // Required for JSX/TSX
+import "prismjs/components/prism-javascript.js";
+import "prismjs/components/prism-typescript.js";
+import "prismjs/components/prism-jsx.js";
+import "prismjs/components/prism-tsx.js";
+import "prismjs/components/prism-python.js";
+import "prismjs/components/prism-bash.js";
+import "prismjs/components/prism-json.js";
+import "prismjs/components/prism-css.js";
+import "prismjs/components/prism-scss.js"; // Note: sass -> scss in prismjs
+import "prismjs/components/prism-markdown.js";
+import "prismjs/components/prism-mongodb.js";
+import "prismjs/components/prism-sql.js";
+import "prismjs/components/prism-c.js";
+import "prismjs/components/prism-cpp.js";
+import "prismjs/components/prism-csharp.js";
+import "prismjs/components/prism-java.js";
+import "prismjs/components/prism-scala.js";
+import "prismjs/components/prism-kotlin.js";
+import "prismjs/components/prism-swift.js";
+import "prismjs/components/prism-go.js";
+import "prismjs/components/prism-rust.js";
+import "prismjs/components/prism-ruby.js";
+import "prismjs/components/prism-php.js";
+import "prismjs/components/prism-yaml.js";
+// Import plugins if needed (ensure CSS for plugins like line-numbers is also handled)
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+
 import { Box, Button } from "@mui/material";
 import CommentPopup from "../../../lib/commentPopup";
 import { Comment } from "@metahkg/api";

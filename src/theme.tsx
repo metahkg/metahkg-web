@@ -37,7 +37,7 @@ const Theme = memo(function Theme(props: {
     primary?: PaletteColorOptions;
     secondary?: PaletteColorOptions;
     mode?: "dark" | "light";
-    children: JSX.Element | JSX.Element[];
+    children: React.JSX.Element | React.JSX.Element[];
 }) {
     const theme = useMemo(
         () =>

@@ -34,7 +34,7 @@ const Title = memo(function Title(props: {
     /** thread title */
     title: string | undefined;
     /** buttons */
-    btns: { icon: JSX.Element; action: () => void; title: string }[];
+    btns: { icon: React.JSX.Element; action: () => void; title: string }[];
 }) {
     const { category, title, btns } = props;
     const [history] = useBack();

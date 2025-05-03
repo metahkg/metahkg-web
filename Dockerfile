@@ -15,19 +15,19 @@
 
 FROM node:18-alpine AS build
 
-ARG REACT_APP_build
-ENV REACT_APP_build $REACT_APP_build
+ARG VITE_APP_build
+ENV VITE_APP_build $VITE_APP_build
 
-ARG REACT_APP_date
-ENV REACT_APP_date $REACT_APP_date
+ARG VITE_APP_date
+ENV VITE_APP_date $VITE_APP_date
 
-ARG REACT_APP_version
-ENV REACT_APP_version $REACT_APP_version
+ARG VITE_APP_version
+ENV VITE_APP_version $VITE_APP_version
 
 ARG env
 ENV env $env
 
-ENV REACT_APP_ENV $env
+ENV VITE_APP_ENV $env
 
 WORKDIR /app
 
@@ -51,19 +51,19 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-ARG REACT_APP_build
-ENV REACT_APP_build $REACT_APP_build
+ARG VITE_APP_build
+ENV VITE_APP_build $VITE_APP_build
 
-ARG REACT_APP_date
-ENV REACT_APP_date $REACT_APP_date
+ARG VITE_APP_date
+ENV VITE_APP_date $VITE_APP_date
 
-ARG REACT_APP_version
-ENV REACT_APP_version $REACT_APP_version
+ARG VITE_APP_version
+ENV VITE_APP_version $VITE_APP_version
 
 ARG env
 ENV env $env
 
-ENV REACT_APP_ENV $env
+ENV VITE_APP_ENV $env
 
 COPY --from=build /app/build* ./build
 COPY --from=build /app/node_modules ./node_modules

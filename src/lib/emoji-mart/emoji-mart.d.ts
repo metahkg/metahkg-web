@@ -48,7 +48,7 @@ declare module "emoji-mart" {
     }
 
     export interface PickerOptions {
-        ref?: React.RefObject<HTMLDivElement>;
+        ref?: React.RefObject<HTMLDivElement | null>;
         /** Data to use for the picker
          * @default null
          */

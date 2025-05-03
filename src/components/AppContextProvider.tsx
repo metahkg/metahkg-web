@@ -47,7 +47,7 @@ import { memo } from "react";
 
 /**
  * Holds global application values.
- * @param props - { children: JSX.Element }
+ * @param props - { children: React.JSX.Element }
  * @returns The AppContextProvider is returning a JSX element.
  */
 
@@ -77,7 +77,7 @@ export const AppContext = createContext<{
     // @ts-ignore
 }>(null);
 const AppContextProvider = memo(function AppContextProvider(props: {
-    children: JSX.Element;
+    children: React.JSX.Element;
 }) {
     const [back, setBack] = useState("");
     const [query, setQuery] = useState(localStorage.query || "");
@@ -214,17 +214,18 @@ const AppContextProvider = memo(function AppContextProvider(props: {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
-    const updateListsInterval = useRef<NodeJS.Timer>();
+    const updateListsInterval = useRef<number | undefined>(undefined);
 
     useEffect(() => {
         if (updateListsInterval.current) {
             clearInterval(updateListsInterval.current);
         }
         if (user) {
+            // Explicitly cast to handle Node vs Browser type difference for setInterval
             updateListsInterval.current = setInterval(() => {
                 api.meBlocked().then(setBlockList);
                 api.meStarred().then(setStarList);
-            }, 1000 * 60 * 10);
+            }, 1000 * 60 * 10) as any as number;
         }
     }, [user]);
 

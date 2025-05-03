@@ -502,7 +502,7 @@
 
 -   use image proxy with `react-link preview`
 -   move csp to `index.html`
--   custom `rlp-proxy` domain (`REACT_APP_RLP_PROXY_DOMAIN`)
+-   custom `rlp-proxy` domain (`VITE_APP_RLP_PROXY_DOMAIN`)
 
 ## v5.7.1
 

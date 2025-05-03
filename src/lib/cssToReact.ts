@@ -17,18 +17,20 @@
 
 import React from "react";
 import { toJSON } from "@metahkg/csstojson/dist/toJSON";
-import { format } from "prettier/standalone";
+import prettier from "prettier/standalone";
 import prettierCss from "prettier/parser-postcss";
 
-export default function cssToReact(css: string): React.CSSProperties {
+export default async function cssToReact(css: string): Promise<React.CSSProperties> {
     try {
         return Object.fromEntries(
             Object.entries(
                 toJSON(
-                    format(css, {
-                        parser: "css",
-                        plugins: [prettierCss],
-                    }).replaceAll("\n", "")
+                    (
+                        await prettier.format(css, {
+                            parser: "css",
+                            plugins: [prettierCss],
+                        })
+                    ).replaceAll("\n", "")
                 ).attributes
             ).map(([k, v]) => [
                 k.replace(/-[a-z]/g, (match) => {

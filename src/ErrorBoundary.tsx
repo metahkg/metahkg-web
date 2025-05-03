@@ -45,7 +45,7 @@ interface State {
 
 interface Props {
     message?: string;
-    children?: JSX.Element | JSX.Element[];
+    children?: React.JSX.Element | React.JSX.Element[];
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -82,8 +82,10 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     <section key="versionInfo">
                         <h2>Version info</h2>
                         <pre>
-                            {process.env.REACT_APP_build || process.env.REACT_APP_date} (v
-                            {process.env.REACT_APP_version})
+                            {import.meta.env.VITE_APP_build ||
+                                import.meta.env.VITE_APP_date}{" "}
+                            (v
+                            {import.meta.env.VITE_APP_version})
                         </pre>
                     </section>
                 );

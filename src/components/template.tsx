@@ -73,7 +73,11 @@ const Template = memo(function Template() {
                     title: t("template.source_code"),
                     link: "https://gitlab.com/metahkg/metahkg",
                 },
-            ].filter(Boolean) as { icon: JSX.Element; title: string; link: string }[],
+            ].filter(Boolean) as {
+                icon: React.JSX.Element;
+                title: string;
+                link: string;
+            }[],
         [user?.role, t]
     );
 

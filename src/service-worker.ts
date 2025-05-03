@@ -162,7 +162,8 @@ self.addEventListener("message", (event) => {
         self.skipWaiting();
     }
     if (event.data && event.data.type === "CHECK_VERSION") {
-        const build = process.env.REACT_APP_build || process.env.REACT_APP_date || "1";
+        const build =
+            import.meta.env.VITE_APP_build || import.meta.env.VITE_APP_date || "1";
         self.clients.matchAll({ includeUncontrolled: true, type: "window" }).then((all) =>
             all.map((client) =>
                 client.postMessage({

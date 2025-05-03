@@ -47,7 +47,7 @@ const Share = memo(function Share() {
     const [, setNotification] = useNotification();
     const isSmallScreen = useIsSmallScreen();
     type external = {
-        icon: JSX.Element;
+        icon: React.JSX.Element;
         title: string;
         link: string;
     };

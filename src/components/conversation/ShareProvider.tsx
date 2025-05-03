@@ -23,7 +23,9 @@ const ShareContext = createContext<any>({});
  * It creates a context object for the share popup.
  * @param props - {children: JSX Element}
  */
-export function ShareProvider(props: { children: JSX.Element | JSX.Element[] }) {
+export function ShareProvider(props: {
+    children: React.JSX.Element | React.JSX.Element[];
+}) {
     const [shareOpen, setShareOpen] = useState(false);
     const [shareTitle, setShareTitle] = useState("");
     const [shareLink, setShareLink] = useState("");

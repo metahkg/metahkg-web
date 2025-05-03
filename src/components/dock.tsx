@@ -25,7 +25,7 @@ import { useIsSmallScreen } from "./AppContextProvider";
  */
 import { memo } from "react";
 const Dock = memo(function Dock(props: {
-    btns: { icon: JSX.Element; action: () => void }[];
+    btns: { icon: React.JSX.Element; action: () => void }[];
 }) {
     const { btns } = props;
     const isSmallScreen = useIsSmallScreen();

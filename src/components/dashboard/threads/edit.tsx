@@ -19,7 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import Loader from "../../../lib/loader";
 import { memo } from "react";
 const EditThread = memo(function EditThread() {
-    const formRef = useRef<HTMLFormElement>();
+    const formRef = useRef<HTMLFormElement>(null);
     const [, setNotification] = useNotification();
     const [threadId, setThreadId] = useState<number | "">("");
     const [thread, setThread] = useState<Thread | null>(null);

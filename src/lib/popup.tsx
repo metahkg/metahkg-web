@@ -37,7 +37,7 @@ export function PopUp(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     buttons?: ({ text: string; link?: string; action?: () => void } | undefined)[];
-    children: JSX.Element | JSX.Element[];
+    children: React.JSX.Element | React.JSX.Element[];
     fullScreen?: boolean;
     fullWidth?: boolean;
     sx?: SxProps<Theme>;

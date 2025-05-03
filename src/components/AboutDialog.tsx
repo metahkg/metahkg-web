@@ -45,24 +45,28 @@ export function AboutDialog(props: {
                         {t("about.web_app_link")}
                     </Link>
                 </Typography>
-                {process.env.REACT_APP_version ? (
+                {import.meta.env.VITE_APP_version ? (
                     <React.Fragment>
                         <Typography gutterBottom variant="h5">
                             {t("about.version_heading")}
                         </Typography>
                         <Typography gutterBottom>
                             <Link
-                                href={`https://gitlab.com/metahkg/metahkg-web/-/tree/${process.env.REACT_APP_version}`}
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/tree/${
+                                    import.meta.env.VITE_APP_version
+                                }`}
                                 className="inline"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                v{process.env.REACT_APP_version}
+                                v{import.meta.env.VITE_APP_version}
                             </Link>
                         </Typography>
                         <Typography gutterBottom>
                             <Link
-                                href={`https://gitlab.com/metahkg/metahkg-web/-/blob/${process.env.REACT_APP_version}/CHANGELOG.md`}
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/blob/${
+                                    import.meta.env.VITE_APP_version
+                                }/CHANGELOG.md`}
                                 className="inline"
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -72,29 +76,33 @@ export function AboutDialog(props: {
                         </Typography>
                     </React.Fragment>
                 ) : null}
-                {process.env.REACT_APP_build ? (
+                {import.meta.env.VITE_APP_build ? (
                     <React.Fragment>
                         <Typography variant="h5" gutterBottom>
                             {t("about.build_heading")}
                         </Typography>
                         <Typography gutterBottom>
                             <Link
-                                href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${process.env.REACT_APP_build}`}
+                                href={`https://gitlab.com/metahkg/metahkg-web/-/commit/${
+                                    import.meta.env.VITE_APP_build
+                                }`}
                                 className="inline"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                {process.env.REACT_APP_build}
+                                {import.meta.env.VITE_APP_build}
                             </Link>
                         </Typography>
                     </React.Fragment>
                 ) : null}
-                {!process.env.REACT_APP_build && process.env.REACT_APP_date ? (
+                {!import.meta.env.VITE_APP_build && import.meta.env.VITE_APP_date ? (
                     <React.Fragment>
                         <Typography variant="h5" gutterBottom>
                             {t("about.build_heading")}
                         </Typography>
-                        <Typography gutterBottom>{process.env.REACT_APP_date}</Typography>
+                        <Typography gutterBottom>
+                            {import.meta.env.VITE_APP_date}
+                        </Typography>
                     </React.Fragment>
                 ) : null}
                 <Typography variant="h5" gutterBottom>

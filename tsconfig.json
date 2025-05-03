@@ -13,8 +13,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["vite/client", "@testing-library/jest-dom"] // Add vite client types and jest-dom types
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"] // Also include vite config for TS checks
 }

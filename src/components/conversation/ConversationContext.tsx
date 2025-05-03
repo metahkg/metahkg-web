@@ -57,7 +57,7 @@ const ConversationContext = createContext<{
     // @ts-ignore
 }>(null);
 const ConversationProvider = memo(function ConversationProvider(props: {
-    children: JSX.Element | JSX.Element[];
+    children: React.JSX.Element | React.JSX.Element[];
     threadId: number;
 }) {
     const query = queryString.parse(window.location.search);

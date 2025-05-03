@@ -20,7 +20,7 @@ import { memo } from "react";
 
 /**
  * It creates a context object that is passed to the children.
- * @param props - { children: JSX.Element }
+ * @param props - { children: React.JSX.Element }
  * @returns The `MenuProvider` component is returning a `MenuContext.Provider` component. This is the
  * component that will be used to provide the context to the rest of the application.
  */
@@ -39,7 +39,7 @@ const MenuContext = createContext<{
     smode: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
 }>({});
-const MenuProvider = memo(function MenuProvider(props: { children: JSX.Element }) {
+const MenuProvider = memo(function MenuProvider(props: { children: React.JSX.Element }) {
     const [category, setCategory] = useState(0);
     const [id, setId] = useState(0);
     const [profile, setProfile] = useState<number>(0);

@@ -17,7 +17,7 @@ import { parseError } from "../../../lib/parseError";
 import { memo } from "react";
 const DeleteCategory = memo(function DeleteCategory() {
     const { t } = useTranslation();
-    const formRef = useRef<HTMLFormElement>();
+    const formRef = useRef<HTMLFormElement>(null);
     const [categories, setCategories] = useCategories();
     const [, setNotification] = useNotification();
     const [category, setCategory] = useState<number | "">("");

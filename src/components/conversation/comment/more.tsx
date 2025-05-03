@@ -57,7 +57,10 @@ import { useTranslation } from "react-i18next";
 
 import { memo } from "react";
 const MoreList = memo(function MoreList(props: {
-    buttons: ({ title: string; icon?: JSX.Element; action: () => void } | undefined)[];
+    buttons: (
+        | { title: string; icon?: React.JSX.Element; action: () => void }
+        | undefined
+    )[];
 }) {
     const { t } = useTranslation();
     const [open, setOpen] = React.useState(false);

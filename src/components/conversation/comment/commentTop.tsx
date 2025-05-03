@@ -253,7 +253,7 @@ const CommentTop = memo(function CommentTop(props: {
     );
 
     const rightBtns: {
-        icon: JSX.Element;
+        icon: React.JSX.Element;
         title: string;
         action: () => void;
     }[] = useMemo(
@@ -356,7 +356,7 @@ const CommentTop = memo(function CommentTop(props: {
                     },
                 },
             ].filter(Boolean) as {
-                icon: JSX.Element;
+                icon: React.JSX.Element;
                 title: string;
                 action: () => void;
             }[],

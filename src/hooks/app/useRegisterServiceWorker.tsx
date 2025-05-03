@@ -17,48 +17,53 @@
 
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { register, unregister } from "../../serviceWorkerRegistration";
+// Registration is now handled by vite-plugin-pwa
+// import { register, unregister } from "../../serviceWorkerRegistration";
 
 export function useRegisterServiceWorker() {
     const { t } = useTranslation();
     useEffect(() => {
-        try {
-            if (process.env.REACT_APP_ENV === "dev") return unregister();
-
-            console.log("registering service worker");
-
-            register({
-                onUpdate: async (registration) => {
-                    console.log("service worker updated");
-                    window.location.reload();
-                },
-                onSuccess: async (_registration) => {
-                    console.log("service worker registered");
-                },
-            });
-
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.ready
-                    .then(async (registration) => {
-                        console.log("updating service worker");
-
-                        registration.addEventListener("updatefound", () => {
-                            console.log("update found");
-                            console.log("service worker skip waiting");
-                            registration.waiting?.postMessage({ type: "SKIP_WAITING" });
-                            //window.location.reload();
-                        });
-
-                        await registration.update();
-
-                        setInterval(registration.update, 1000 * 60 * 10);
-                    })
-                    .catch((error) => {
-                        console.error(error.message);
-                    });
-            }
-        } catch {
-            console.error(t("app.service_worker_registration_failed"));
-        }
+        // try {
+        //     // Unregistering in dev might still be useful if PWA plugin doesn't handle it
+        //     // if (import.meta.env.VITE_APP_ENV === "dev") return unregister();
+        //
+        //     // console.log("registering service worker");
+        //
+        //     // register({ // Callbacks might need to be adapted for vite-plugin-pwa if custom logic is needed
+        //     //     onUpdate: async (registration) => {
+        //     //         console.log("service worker updated");
+        //     //         window.location.reload();
+        //     //     },
+        //     //     onSuccess: async (_registration) => {
+        //     //         console.log("service worker registered");
+        //     //     },
+        //     // });
+        //
+        //     // if ("serviceWorker" in navigator) {
+        //     //     navigator.serviceWorker.ready
+        //     //         .then(async (registration) => {
+        //     //             console.log("updating service worker");
+        //     //
+        //     //             registration.addEventListener("updatefound", () => {
+        //     //                 console.log("update found");
+        //     //                 console.log("service worker skip waiting");
+        //     //                 registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+        //     //                 //window.location.reload();
+        //     //             });
+        //     //
+        //     //             await registration.update();
+        //     //
+        //     //             setInterval(registration.update, 1000 * 60 * 10);
+        //     //         })
+        //     //         .catch((error) => {
+        //     //             console.error(error.message);
+        //     //         });
+        //     // }
+        // } catch {
+        //     console.error(t("app.service_worker_registration_failed"));
+        // }
+        // NOTE: The update/success logic previously in register() callbacks
+        // might need to be reimplemented using vite-plugin-pwa's events if desired.
+        // See vite-plugin-pwa documentation for handling updates.
     }, [t]);
 }

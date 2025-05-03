@@ -8,7 +8,7 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { memo } from "react";
 const DeleteThread = memo(function DeleteThread() {
-    const formRef = useRef<HTMLFormElement>();
+    const formRef = useRef<HTMLFormElement>(null);
     const [, setNotification] = useNotification();
     const [threadId, setThreadId] = useState<number | "">("");
     const [reason, setReason] = useState("");

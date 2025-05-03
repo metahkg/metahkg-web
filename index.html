@@ -29,7 +29,7 @@
             content="script-src 'self' https://connect.facebook.net https://www.instagram.com https://platform.twitter.com/widgets.js https://platform.twitter.com/js/ https://www.youtube.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://challenges.cloudflare.com/ https://static.cloudflareinsights.com https://cdnjs.cloudflare.com https://unpkg.com"
         />
 
-        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
 
         <!-- preconnects -->
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
@@ -63,8 +63,8 @@
             property="og:description"
             content="Metahkg is a free and open source lihkg-style forum."
         />
-        <meta property="og:url" content="%PUBLIC_URL%/" />
-        <meta property="og:image" content="%PUBLIC_URL%/images/logo.png" />
+        <meta property="og:url" content="/" />
+        <meta property="og:image" content="/images/logo.png" />
         <!-- end - og -->
 
         <!-- twitter -->
@@ -74,11 +74,11 @@
             name="twitter:description"
             content="Metahkg is a free and open source lihkg-style forum."
         />
-        <meta name="twitter:image" content="%PUBLIC_URL%/images/logo.png" />
+        <meta name="twitter:image" content="/images/logo.png" />
         <!-- end - twitter -->
 
-        <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo192.png" />
-        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <link rel="apple-touch-icon" href="/images/logo192.png" />
+        <link rel="manifest" href="/manifest.json" />
     </head>
 
     <body
@@ -88,5 +88,6 @@
 
         <!-- the element where the react app is rendered -->
         <div id="root"></div>
+        <script type="module" src="/src/index.tsx"></script>
     </body>
 </html>
