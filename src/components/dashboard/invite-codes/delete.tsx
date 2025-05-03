@@ -1,6 +1,7 @@
 import { Delete } from "@mui/icons-material";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -12,6 +13,8 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
     const [codes, setCodes] = useState<Invite[]>([]);
     const [selectedCode, setSelectedCode] = useState("");
     const [deleteLoading, setDeleteLoading] = useState(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         api.serverInviteCodes()
@@ -34,7 +37,7 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: "Invite code deleted successfully.",
+                        text: t("dashboard.invite_codes.delete.success_notification"),
                     });
                     setSelectedCode("");
                     // Update the list of codes
@@ -51,17 +54,19 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
                     });
                 });
         }
-    }, [selectedCode, setNotification]);
+    }, [selectedCode, setNotification, t]);
 
     return (
         <Box>
             <Box>
                 <FormControl sx={{ minWidth: 250 }}>
-                    <InputLabel color="secondary">Select Invite Code</InputLabel>
+                    <InputLabel color="secondary">
+                        {t("dashboard.invite_codes.delete.select_label")}
+                    </InputLabel>
                     <Select
                         value={selectedCode}
                         onChange={(e) => setSelectedCode(e.target.value)}
-                        label="Select Invite Code"
+                        label={t("dashboard.invite_codes.delete.select_label")}
                         color="secondary"
                     >
                         {codes.map((code) => (
@@ -83,7 +88,7 @@ const DeleteInviteCode = memo(function DeleteInviteCode() {
                 variant="contained"
                 className="!mt-2"
             >
-                Delete
+                {t("dashboard.invite_codes.delete.delete_button")}
             </LoadingButton>
         </Box>
     );

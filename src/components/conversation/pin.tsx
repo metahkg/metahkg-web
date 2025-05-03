@@ -23,9 +23,11 @@ import CommentPopup from "../../lib/commentPopup";
 import { filterSwearWords } from "../../lib/filterSwear";
 import { useSettings } from "../AppContextProvider";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 const PinnedComment = memo(function PinnedComment(props: { comment: Comment }) {
     const { comment } = props;
     const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
     const [settings] = useSettings();
     return (
         <React.Fragment>
@@ -40,7 +42,7 @@ const PinnedComment = memo(function PinnedComment(props: { comment: Comment }) {
                 <InfoOutlined className="!text-metahkg-grey !mx-2" />
                 <Box className="overflow-hidden">
                     <Typography className="!my-0" color="secondary">
-                        Pinned Comment #{comment.id}
+                        {t("pin.pinned_comment_id", { commentId: comment.id })}
                     </Typography>
                     <Typography className="!text-metahkg-grey text-ellipsis overflow-hidden whitespace-nowrap !mr-4">
                         {settings.filterSwearWords

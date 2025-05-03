@@ -26,6 +26,7 @@ import { useBlockList, useSettings } from "../../AppContextProvider";
 import { filterSwearWords } from "../../../lib/filterSwear";
 import BlockedBtn from "./blockedBtn";
 import PollComponent from "./Poll";
+import { useTranslation } from "react-i18next";
 
 import { memo } from "react";
 const CommentBody = memo(function CommentBody(props: {
@@ -36,6 +37,7 @@ const CommentBody = memo(function CommentBody(props: {
 }) {
     const { comment, depth, noQuote, maxHeight } = props;
     const [settings] = useSettings();
+    const { t } = useTranslation();
     const [quoteOpen, setQuoteOpen] = useState(false);
     const [showQuote, setShowQuote] = useState(!(depth && depth % 4 === 0));
     const [blockList] = useBlockList();
@@ -122,7 +124,7 @@ const CommentBody = memo(function CommentBody(props: {
                                 setShowQuote(true);
                             }}
                         >
-                            Show more
+                            {t("commentBody.show_more")}
                         </Button>
                     )}
                 </blockquote>
@@ -146,6 +148,7 @@ const CommentBody = memo(function CommentBody(props: {
             comment.quote,
             comment.user.id,
             comment.user.name,
+            t,
             commentJSX,
             depth,
             noQuote,

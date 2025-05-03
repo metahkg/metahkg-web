@@ -18,6 +18,7 @@
 import React, { useEffect, useState, useLayoutEffect, useMemo } from "react";
 import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
     useReFetch,
     useMenu,
@@ -46,6 +47,7 @@ import UserAvatar from "../components/UserAvatar";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { memo } from "react";
 const Profile = memo(function Profile() {
+    const { t } = useTranslation();
     const params = useParams();
     const [profile, setProfile] = useProfile();
     const [reqUser, setReqUser] = useState<UserData | null>(null);
@@ -77,7 +79,7 @@ const Profile = memo(function Profile() {
             api.userProfile(userId)
                 .then((data) => {
                     setReqUser(data);
-                    setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
+                    setTitle(`${data.name} | ${t("common.branding")}`);
                 })
                 .catch((err) => {
                     setNotification({
@@ -89,7 +91,7 @@ const Profile = memo(function Profile() {
                     err?.response?.status === 403 && navigate("/403", { replace: true });
                 });
         }
-    }, [navigate, params.id, reqUser, serverConfig?.branding, setNotification, userId]);
+    }, [navigate, params.id, reqUser, serverConfig?.branding, setNotification, userId, t]);
 
     useLayoutEffect(() => {
         /**
@@ -118,20 +120,22 @@ const Profile = memo(function Profile() {
                 ? ([
                       !userAvatar.error && {
                           icon: <DeleteIcon />,
-                          label: "Delete",
+                          label: t("profile.delete_avatar_button"),
                           onClick: () => {
                               if (user) {
                                   setNotification({
                                       open: true,
                                       severity: "info",
-                                      text: "Deleting avatar...",
+                                      text: t("profile.deleting_avatar_notification"),
                                   });
                                   api.userAvatarDelete(user.id)
                                       .then(() => {
                                           setNotification({
                                               open: true,
                                               severity: "success",
-                                              text: "Avatar deleted",
+                                              text: t(
+                                                  "profile.avatar_deleted_notification"
+                                              ),
                                           });
                                           userAvatar.reload();
                                       })
@@ -151,14 +155,14 @@ const Profile = memo(function Profile() {
                       onClick?: () => void;
                   }[])
                 : undefined,
-        [isSelf, setNotification, user, userAvatar]
+        [isSelf, setNotification, user, userAvatar, t] // Added t to dependencies
     );
 
     const customButtons = useMemo(
         () =>
             isSelf
                 ? [
-                      <Tooltip title="Upload" arrow>
+                      <Tooltip title={t("profile.upload_avatar_tooltip")} arrow>
                           <UploadAvatar
                               onChange={(image) => {
                                   setUploadedAvatarOriginal(image);
@@ -169,7 +173,7 @@ const Profile = memo(function Profile() {
                       </Tooltip>,
                   ]
                 : undefined,
-        [isSelf]
+        [isSelf, t]
     );
 
     if (!userId) return <Navigate to="/" replace />;
@@ -252,7 +256,7 @@ const Profile = memo(function Profile() {
                                     variant="text"
                                     color="secondary"
                                 >
-                                    View History
+                                    {t("profile.view_history_button")}
                                 </Button>
                             </Link>
                         </Box>

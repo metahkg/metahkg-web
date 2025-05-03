@@ -54,6 +54,7 @@ import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
 import { Notification } from "@metahkg/api";
+import i18n from "./i18n";
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -189,7 +190,7 @@ self.addEventListener("push", (event) => {
     if (!event.data) return;
     const data: Notification = event.data.json();
     const promiseChain = self.registration
-        .showNotification(data.title || "New notification", {
+        .showNotification(data.title || i18n.t("notifications.new_notification"), {
             ...data.options,
             icon: `${DOMAIN}/favicon.ico`,
         })

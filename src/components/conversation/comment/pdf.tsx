@@ -4,6 +4,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useWidth } from "../../AppContextProvider";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 const PdfViewer = memo(function PdfViewer({ src }: { src: string }) {
     const [numPages, setNumPages] = useState(0);
@@ -21,6 +22,8 @@ const PdfViewer = memo(function PdfViewer({ src }: { src: string }) {
     const handleNextPage = useCallback(() => {
         setPageNumber((prevPageNumber) => Math.min(prevPageNumber + 1, numPages));
     }, [numPages]);
+
+    const { t } = useTranslation();
 
     return (
         <Box
@@ -53,7 +56,7 @@ const PdfViewer = memo(function PdfViewer({ src }: { src: string }) {
                     <ArrowBack />
                 </IconButton>
                 <Typography variant="subtitle1" className="mx-2">
-                    Page {pageNumber} of {numPages}
+                    {t("pdf.page_count", { pageNumber, numPages })}
                 </Typography>
                 <IconButton onClick={handleNextPage} disabled={pageNumber === numPages}>
                     <ArrowForward />

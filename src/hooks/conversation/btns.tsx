@@ -49,8 +49,10 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function useBtns() {
+    const { t } = useTranslation();
     const update = useUpdate();
     const threadId = useThreadId();
     const navigate = useNavigate();
@@ -83,7 +85,7 @@ export default function useBtns() {
                             0 - (croot.current?.clientHeight || 0);
                         if (croot.current) croot.current.scrollTop = newscrollTop;
                     },
-                    title: "Refresh",
+                    title: t("conversation.refresh_button"),
                 },
                 {
                     icon: <Bolt color={sort === "score" ? "secondary" : "inherit"} />,
@@ -94,7 +96,7 @@ export default function useBtns() {
                             setSort("score");
                         }
                     },
-                    title: "Sort by score",
+                    title: t("conversation.sort_by_score_tooltip"),
                 },
                 /*sort !== "time" && {
                     icon: <FastForward />,
@@ -122,14 +124,18 @@ export default function useBtns() {
                         setNotification({
                             open: true,
                             severity: "info",
-                            text: `${starred ? "Unstarring" : "Starring"} thread...`,
+                            text: starred
+                                ? t("conversation.unstarring_thread_notification")
+                                : t("conversation.starring_thread_notification"),
                         });
                         (starred ? api.threadUnstar(threadId) : api.threadStar(threadId))
                             .then(() => {
                                 setNotification({
                                     open: true,
                                     severity: "success",
-                                    text: `Thread ${starred ? "un" : ""}starred.`,
+                                    text: starred
+                                        ? t("conversation.thread_unstarred_notification")
+                                        : t("conversation.thread_starred_notification"),
                                 });
                                 setStarList(
                                     starred
@@ -149,7 +155,9 @@ export default function useBtns() {
                                 });
                             });
                     },
-                    title: starred ? "Unstar" : "Star",
+                    title: starred
+                        ? t("conversation.unstar_button")
+                        : t("conversation.star_button"),
                 },
                 {
                     icon: <Collections />,
@@ -159,10 +167,10 @@ export default function useBtns() {
                             setNotification({
                                 open: true,
                                 severity: "error",
-                                text: "No images!",
+                                text: t("conversation.no_images_notification"),
                             });
                     },
-                    title: "Images",
+                    title: t("conversation.images_button"),
                 },
                 {
                     icon: <Reply />,
@@ -175,7 +183,7 @@ export default function useBtns() {
                                 )}`
                             );
                     },
-                    title: "Reply",
+                    title: t("conversation.reply_button"),
                 },
                 {
                     icon: <ShareIcon className="!text-[19px]" />,
@@ -190,7 +198,7 @@ export default function useBtns() {
                                 setShareLink(thread.slink);
                         }
                     },
-                    title: "Share",
+                    title: t("conversation.share_button"),
                 },
             ].filter((x) => x) as {
                 icon: React.ReactElement;
@@ -219,6 +227,7 @@ export default function useBtns() {
             threadId,
             update,
             user,
+            t,
         ]
     );
 

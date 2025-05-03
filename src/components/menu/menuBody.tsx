@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCat, useReFetch, useProfile, useSmode, useMenuMode } from "../MenuProvider";
 import {
@@ -37,6 +38,7 @@ import { memo } from "react";
  * This function renders the main content of the menu
  */
 const MenuBody = memo(function MenuBody(props: { selected: number }) {
+    const { t } = useTranslation();
     const { selected } = props;
     const navigate = useNavigate();
     const [menuMode] = useMenuMode();
@@ -256,7 +258,7 @@ const MenuBody = memo(function MenuBody(props: { selected: number }) {
     if (menuMode === "search" && !query)
         return (
             <Typography className={"text-center !mt-[10px]"} color={"secondary"}>
-                Please enter a query.
+                {t("menuBody.please_enter_query")}
             </Typography>
         );
 
@@ -326,7 +328,7 @@ const MenuBody = memo(function MenuBody(props: { selected: number }) {
                             color: "secondary.main",
                         }}
                     >
-                        End
+                        {t("menuBody.end")}
                     </Typography>
                 )}
             </Box>

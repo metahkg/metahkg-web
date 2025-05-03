@@ -5,7 +5,10 @@ import GitlabIcon from "../../lib/icons/gitlab";
 import DiscordIcon from "../../lib/icons/dicord";
 import { Link } from "../../lib/link";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 const PageBottom = memo(function PageBottom() {
+    const { t } = useTranslation();
+
     const socialIcons = useMemo(
         () => [
             {
@@ -66,14 +69,14 @@ const PageBottom = memo(function PageBottom() {
                 ))}
             </Box>
             <Typography className="!text-sm">
-                Copyright (c) 2022-present Wong Chun Yat (wcyat).{" "}
+                {t("pageBottom.copyright")}{" "}
                 <Link
                     href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="!text-metahkg-grey"
                 >
-                    AGPL-3.0-or-later
+                    {t("pageBottom.license")}
                 </Link>
                 .
             </Typography>

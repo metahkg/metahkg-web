@@ -26,6 +26,7 @@ import {
 import React, { useCallback, useMemo, useState } from "react";
 import { useAlertDialog } from "../components/AppContextProvider";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface AlertDialogProps {
     open: boolean;
@@ -56,6 +57,7 @@ export interface AlertDialogProps {
     ) => void;
 }
 const AlertDialog = memo(function AlertDialog(props: AlertDialogProps) {
+    const { t } = useTranslation();
     const { open, setOpen, title, message, onClose, body } = props;
     const [alertDialog, setAlertDialog] = useAlertDialog();
     const [state, setState] = useState<{ [key: string]: any }>({});
@@ -111,7 +113,7 @@ const AlertDialog = memo(function AlertDialog(props: AlertDialogProps) {
                             </Button>
                         ))
                     ) : (
-                        <Button onClick={closeDialog}>OK</Button>
+                        <Button onClick={closeDialog}>{t("alertDialog.ok")}</Button>
                     )}
                 </DialogActions>
             </DialogContent>

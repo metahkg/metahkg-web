@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Category } from "@metahkg/api";
 import { Box, Drawer, Typography } from "@mui/material";
 import { useCategories, useDarkMode, useSettings, useUser } from "./AppContextProvider";
@@ -10,6 +11,7 @@ export function CategoryPanel(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+    const { t } = useTranslation();
     const { open, setOpen } = props;
     const [user] = useUser();
     const [categories] = useCategories();
@@ -112,14 +114,14 @@ export function CategoryPanel(props: {
                 <Box className="flex items-end my-5">
                     <MetahkgLogo svg light={darkMode} height={30} width={30} />
                     <Typography variant="h6" component="h1" className="ml-1">
-                        Categories
+                        {t("categoryPanel.categories_heading")}
                     </Typography>
                 </Box>
                 <React.Fragment>
                     {Boolean(pinned.length) && (
                         <Box>
                             <Typography className="text-metahkg-grey" gutterBottom>
-                                Pinned
+                                {t("categoryPanel.pinned_heading")}
                             </Typography>
                             {pinned.map(CategoryEle)}
                         </Box>
@@ -145,7 +147,7 @@ export function CategoryPanel(props: {
                     {Boolean(others.length) && (
                         <Box>
                             <Typography gutterBottom className="text-metahkg-grey">
-                                Others
+                                {t("categoryPanel.others_heading")}
                             </Typography>
                             {others.map(CategoryEle)}
                         </Box>

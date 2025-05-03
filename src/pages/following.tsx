@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
+import { useTranslation } from "react-i18next";
 import {
     useBack,
     useIsSmallScreen,
@@ -18,6 +19,7 @@ import { setTitle } from "../lib/common";
 import { api } from "../lib/api";
 import { memo } from "react";
 const Following = memo(function Following() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -30,7 +32,7 @@ const Following = memo(function Following() {
     const [, setUsers] = useState<any[]>([]);
 
     useLayoutEffect(() => {
-        setTitle(`Following | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(t("following.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
 
         function clearData() {
             setReFetch(true);
@@ -45,7 +47,7 @@ const Following = memo(function Following() {
             clearData();
             setMenuMode("following");
         }
-    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title, t]); // Added t to dependencies
 
     useEffect(() => {
         const fetchUsers = async () => {

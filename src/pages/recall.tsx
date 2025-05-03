@@ -18,6 +18,7 @@
 import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
+import { useTranslation } from "react-i18next";
 import {
     useBack,
     useIsSmallScreen,
@@ -39,6 +40,7 @@ import { memo } from "react";
  * @returns The empty component is being returned.
  */
 const Recall = memo(function Recall() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [back, setBack] = useBack();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -49,7 +51,7 @@ const Recall = memo(function Recall() {
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle(`Recall | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(t("recall.title") + ` | ${t("common.branding")}`);
 
         function clearData() {
             setReFetch(true);
@@ -64,7 +66,7 @@ const Recall = memo(function Recall() {
             clearData();
             setMenuMode("recall");
         }
-    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, title, t]); // Added t to dependencies
 
     return (
         <Box

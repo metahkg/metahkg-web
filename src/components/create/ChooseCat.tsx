@@ -16,6 +16,7 @@
  */
 
 import React, { memo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Box,
     FormControl,
@@ -43,15 +44,18 @@ const ChooseCat = memo(
             [setCat]
         );
         const [categories] = useCategories();
+        const { t } = useTranslation();
         return (
             <Box>
                 {categories.length && (
                     <FormControl className="!min-w-[200px]">
-                        <InputLabel color="secondary">Category</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("chooseCat.category_label")}
+                        </InputLabel>
                         <Select
                             color="secondary"
                             value={cat}
-                            label="Category"
+                            label={t("chooseCat.category_label")}
                             onChange={changeHandler}
                         >
                             {categories.map((category) => (

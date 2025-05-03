@@ -29,6 +29,7 @@ import {
 } from "../../AppContextProvider";
 
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 const UserModal = memo(function UserModal(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,26 +44,33 @@ const UserModal = memo(function UserModal(props: {
     const [blockModalOpen, setBlockModalOpen] = useState(false);
     const [reason, setReason] = useState("");
 
+    const { t } = useTranslation();
+
     return (
         <PopUp
             open={open}
             setOpen={setOpen}
-            title="User information"
+            title={t("user_modal.title")}
             buttons={[
-                { text: "Profile", link: `/profile/${commentUser.id}` },
+                { text: t("user_modal.profile"), link: `/profile/${commentUser.id}` },
                 user
                     ? {
-                          text: blocked ? "Unblock" : "Block",
+                          text: blocked ? t("user_modal.unblock") : t("user_modal.block"),
                           action: () => {
                               if (!blocked) return setBlockModalOpen(true);
 
-                              setNotification({ open: true, text: "Unblocking user..." });
+                              setNotification({
+                                  open: true,
+                                  text: t("user_modal.unblocking_user"),
+                              });
                               api.userUnblock(commentUser.id)
                                   .then(() => {
                                       setNotification({
                                           open: true,
                                           severity: "success",
-                                          text: `Unblocked ${commentUser.name}`,
+                                          text: t("user_modal.unblocked_user", {
+                                              userName: commentUser.name,
+                                          }),
                                       });
                                       setBlockList(
                                           blockList.filter((i) => i.id !== commentUser.id)
@@ -82,8 +90,8 @@ const UserModal = memo(function UserModal(props: {
                 user
                     ? {
                           text: followingList.find((user) => user.id === commentUser.id)
-                              ? "Unfollow"
-                              : "Follow",
+                              ? t("user_modal.unfollow")
+                              : t("user_modal.follow"),
                           action: () => {
                               // Call the appropriate API function and update the state
                               if (
@@ -99,7 +107,7 @@ const UserModal = memo(function UserModal(props: {
                                           setNotification({
                                               open: true,
                                               severity: "success",
-                                              text: "User unfollowed.",
+                                              text: t("user_modal.user_unfollowed"),
                                           });
                                       })
                                       .catch((err) => {
@@ -119,7 +127,7 @@ const UserModal = memo(function UserModal(props: {
                                           setNotification({
                                               open: true,
                                               severity: "success",
-                                              text: "Now following user.",
+                                              text: t("user_modal.now_following_user"),
                                           });
                                       })
                                       .catch((err) => {
@@ -138,19 +146,24 @@ const UserModal = memo(function UserModal(props: {
             <PopUp
                 open={blockModalOpen}
                 setOpen={setBlockModalOpen}
-                title="Block user"
+                title={t("user_modal.block_user")}
                 buttons={[
                     { text: "Cancel", action: () => setBlockModalOpen(false) },
                     {
-                        text: "Block",
+                        text: t("user_modal.block_button"),
                         action: () => {
-                            setNotification({ open: true, text: "Blocking user..." });
+                            setNotification({
+                                open: true,
+                                text: t("user_modal.blocking_user"),
+                            });
                             api.userBlock(commentUser.id, { reason })
                                 .then(() => {
                                     setNotification({
                                         open: true,
                                         severity: "success",
-                                        text: `Blocked ${commentUser.name}`,
+                                        text: t("user_modal.blocked_user", {
+                                            userName: commentUser.name,
+                                        }),
                                     });
                                     setBlockList([
                                         ...blockList,
@@ -179,11 +192,11 @@ const UserModal = memo(function UserModal(props: {
                     </Typography>
                     <TextField
                         onChange={(e) => setReason(e.target.value)}
-                        label="Reason to block (optional)"
+                        label={t("user_modal.reason_label")}
                         variant="outlined"
                         fullWidth
                         color="secondary"
-                        helperText="This can help you to find out why you blocked this user"
+                        helperText={t("user_modal.reason_helper")}
                     />
                 </Box>
             </PopUp>

@@ -17,6 +17,7 @@
 
 import React, { useLayoutEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
@@ -27,14 +28,17 @@ import { memo } from "react";
  * 404 page
  */
 const NotFound = memo(function NotFound() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const darkMode = useDarkMode();
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle(`404 Not Found | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(
+            t("notfound.title") + ` | ${serverConfig?.branding || t("common.branding")}`
+        );
         menu && setMenu(false);
-    }, [menu, serverConfig?.branding, setMenu]);
+    }, [menu, serverConfig?.branding, setMenu, t]);
 
     return (
         <Box
@@ -48,7 +52,7 @@ const NotFound = memo(function NotFound() {
                 height={100}
                 width={80}
             />
-            <Typography variant="h3">404 Not Found</Typography>
+            <Typography variant="h3">{t("notfound.title")}</Typography>
         </Box>
     );
 });

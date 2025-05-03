@@ -17,6 +17,7 @@
 
 import React, { useLayoutEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import MetahkgLogo from "../components/logo";
 import { useMenu } from "../components/MenuProvider";
 import { setTitle } from "../lib/common";
@@ -27,14 +28,15 @@ import { memo } from "react";
  * 403 page
  */
 const Forbidden = memo(function Forbidden() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const darkMode = useDarkMode();
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle(`403 Forbidden | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(t("forbidden.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, serverConfig?.branding]);
+    }, [menu, setMenu, serverConfig?.branding, t]);
 
     return (
         <Box
@@ -48,7 +50,7 @@ const Forbidden = memo(function Forbidden() {
                 height={100}
                 width={80}
             />
-            <Typography variant="h3">403 Forbidden</Typography>
+            <Typography variant="h3">{t("forbidden.title")}</Typography>
         </Box>
     );
 });

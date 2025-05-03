@@ -38,6 +38,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 import React, { KeyboardEventHandler } from "react";
+import { useTranslation } from "react-i18next";
 import { Chip, InputBase, styled } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { useMenuMode, useReFetch, useSmode } from "./MenuProvider";
@@ -86,6 +87,7 @@ const SearchBar = memo(function SearchBar(props: {
     onKeyPress: KeyboardEventHandler<HTMLDivElement>;
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
+    const { t } = useTranslation();
     const { query, onKeyPress, onChange } = props;
     const [, setReFetch] = useReFetch();
     const [smode, setSmode] = useSmode();
@@ -97,7 +99,7 @@ const SearchBar = memo(function SearchBar(props: {
                 <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-                placeholder="Search"
+                placeholder={t("searchBar.placeholder")}
                 inputProps={{ "aria-label": "search" }}
                 onKeyPress={onKeyPress}
                 onChange={onChange}
@@ -105,7 +107,7 @@ const SearchBar = memo(function SearchBar(props: {
             />
             {menuMode === "search" && (
                 <Chip
-                    label={smode ? "OP" : "Title"}
+                    label={smode ? t("searchBar.op_chip") : t("searchBar.title_chip")}
                     onClick={() => {
                         setSmode(Number(!smode));
                         setReFetch(true);

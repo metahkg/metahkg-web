@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Delete, Sync } from "@mui/icons-material";
 import { useIsSmallScreen, useNotification, useUser } from "../../AppContextProvider";
+import { useTranslation } from "react-i18next";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { Invite } from "@metahkg/api";
@@ -21,6 +22,8 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
     const [codes, setCodes] = useState<Invite[]>([]);
     const isSmallScreen = useIsSmallScreen();
     const [user] = useUser();
+
+    const { t } = useTranslation();
 
     const fetchCodes = useCallback(() => {
         if (user?.role === "admin")
@@ -52,7 +55,7 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: "Invite code deleted successfully.",
+                        text: t("dashboard.invite_codes.view.deleted_notification"),
                     });
                     fetchCodes(); // Update the list  after deletion
                 })
@@ -64,7 +67,7 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
                     });
                 });
         },
-        [fetchCodes, setNotification]
+        [fetchCodes, setNotification, t]
     );
 
     const handleSync = useCallback(() => {
@@ -80,7 +83,7 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
                     startIcon={<Sync />}
                     onClick={handleSync}
                 >
-                    Sync Now
+                    {t("dashboard.invite_codes.view.sync_button")}
                 </Button>
             </Box>
             <Grid container spacing={2}>
@@ -90,10 +93,11 @@ const ViewInviteCodes = memo(function ViewInviteCodes() {
                             <CardHeader title={code.code} />
                             <CardContent>
                                 <Typography variant="body2" color="text.secondary">
-                                    {code.description || "No description"}
+                                    {code.description ||
+                                        t("dashboard.invite_codes.view.no_description")}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    Created at:{" "}
+                                    {t("dashboard.invite_codes.view.created_at")}{" "}
                                     {code?.createdAt &&
                                         new Date(code.createdAt).toDateString()}
                                 </Typography>

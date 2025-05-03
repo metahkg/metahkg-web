@@ -19,6 +19,7 @@ import React from "react";
 import { Box, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 const PageTop = memo(function PageTop(props: {
     pages: number;
     page: number;
@@ -30,6 +31,7 @@ const PageTop = memo(function PageTop(props: {
     id?: number | string;
 }) {
     const { pages, page, onChange, last, next, onLastClicked, onNextClicked, id } = props;
+    const { t } = useTranslation();
     return (
         <Box className="flex justify-between items-center !mx-7 h-[68px]" id={String(id)}>
             <Typography
@@ -37,18 +39,18 @@ const PageTop = memo(function PageTop(props: {
                 sx={last ? { color: "secondary.main" } : {}}
                 onClick={last ? onLastClicked : () => {}}
             >
-                Last Page
+                {t("pageTop.last_page")}
             </Typography>
             <Select
                 value={page}
-                label="Age"
+                label={t("pageTop.page_select")}
                 onChange={onChange}
                 color="secondary"
                 variant="standard"
             >
                 {[...Array(pages)].map((p, index) => (
                     <MenuItem key={index} value={index + 1}>
-                        Page {index + 1}
+                        {t("pageTop.page_select")} {index + 1}
                     </MenuItem>
                 ))}
             </Select>
@@ -57,7 +59,7 @@ const PageTop = memo(function PageTop(props: {
                 sx={next ? { color: "secondary.main" } : {}}
                 onClick={next ? onNextClicked : () => {}}
             >
-                Next Page
+                {t("pageTop.next_page")}
             </Typography>
         </Box>
     );

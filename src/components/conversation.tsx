@@ -17,6 +17,7 @@
 
 import "react-photo-view/dist/react-photo-view.css";
 import React, { memo, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, LinearProgress, Paper, SelectChangeEvent } from "@mui/material";
 import queryString from "query-string";
 import Title from "./conversation/title";
@@ -62,6 +63,7 @@ import { Refresh } from "@mui/icons-material";
 import { useFirstRender } from "../hooks/useFirstRender";
 
 function Conversation(props: { id: number }) {
+    const { t } = useTranslation();
     const query = queryString.parse(window.location.search);
     const [thread, setThread] = useThread();
     const [finalPage, setFinalPage] = useFinalPage();
@@ -316,7 +318,7 @@ function Conversation(props: { id: number }) {
                                 startIcon={<Refresh />}
                                 loadingPosition="start"
                             >
-                                Update
+                                {t("conversation.update_button")}
                             </LoadingButton>
                         </Box>
                         <PageBottom />
@@ -348,6 +350,7 @@ function Conversation(props: { id: number }) {
             thread,
             update,
             updating,
+            t,
         ]
     );
 }

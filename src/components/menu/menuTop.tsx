@@ -16,6 +16,7 @@
  */
 
 import React, { MouseEventHandler, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Autorenew as AutorenewIcon } from "@mui/icons-material";
 import { Box, Divider, IconButton, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import { useCat, useId, useProfile, useMenuTitle, useMenuMode } from "../MenuProvider";
@@ -41,6 +42,7 @@ const MenuTop = memo(function MenuTop(props: {
     /** event handler for when a tab is selected */
     onClick: (e: number) => void;
 }) {
+    const { t } = useTranslation();
     const [profile] = useProfile();
     const [category] = useCat();
     const [id] = useId();
@@ -51,27 +53,34 @@ const MenuTop = memo(function MenuTop(props: {
     const inittitle = useMemo(
         () =>
             ({
-                search: "Search",
-                profile: "User Profile",
-                category: "Metahkg",
-                recall: "Recall",
-                starred: "Starred",
-                following: "Following",
+                search: t("menuTop.search"),
+                profile: t("menuTop.user_profile"),
+                category: t("menuTop.metahkg"),
+                recall: t("menuTop.recall"),
+                starred: t("menuTop.starred"),
+                following: t("menuTop.following"),
             }[menuMode]),
-        [menuMode]
+        [menuMode, t]
     );
     const [menuTitle, setMenuTitle] = useMenuTitle();
     const tabs = useMemo(
         () =>
             ({
-                search: ["Relevance", "Created", "Last Reply"],
-                profile: ["Created", "Last Reply"],
-                category: [isSmallScreen && menuTitle ? menuTitle : "Latest", "Viral"],
+                search: [
+                    t("menuTop.relevance"),
+                    t("menuTop.created"),
+                    t("menuTop.last_reply"),
+                ],
+                profile: [t("menuTop.created"), t("menuTop.last_reply")],
+                category: [
+                    isSmallScreen && menuTitle ? menuTitle : t("menuTop.latest"),
+                    t("menuTop.viral"),
+                ],
                 recall: [],
                 starred: [],
-                following: ["Created", "Last Reply"],
+                following: [t("menuTop.created"), t("menuTop.last_reply")],
             }[menuMode]),
-        [isSmallScreen, menuMode, menuTitle]
+        [isSmallScreen, menuMode, menuTitle, t]
     );
 
     const noTitleBar = useMemo(
@@ -84,17 +93,25 @@ const MenuTop = memo(function MenuTop(props: {
             if (menuMode === "profile") {
                 api.userName(profile).then((data) => {
                     setMenuTitle(data.name);
-                    setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
+                    setTitle(
+                        `${data.name} | ${
+                            serverConfig?.branding || t("routes.default_branding")
+                        }`
+                    );
                 });
             } else if (menuMode === "category" && category) {
                 api.category(category).then((data) => {
                     setMenuTitle(data.name);
                     if (!id)
-                        setTitle(`${data.name} | ${serverConfig?.branding || "Metahkg"}`);
+                        setTitle(
+                            `${data.name} | ${
+                                serverConfig?.branding || t("routes.default_branding")
+                            }`
+                        );
                 });
             }
         }
-    }, [category, id, profile, setMenuTitle, menuTitle, menuMode, serverConfig?.branding]);
+    }, [category, id, profile, setMenuTitle, menuTitle, menuMode, serverConfig?.branding, t]);
 
     return (
         <Box>
@@ -117,7 +134,7 @@ const MenuTop = memo(function MenuTop(props: {
                         </Typography>
                         {!isSmallScreen && (
                             <Box className="flex absolute right-[10px]">
-                                <Tooltip title="Refresh" arrow>
+                                <Tooltip title={t("menuTop.refresh")} arrow>
                                     <IconButton onClick={props.refresh}>
                                         <AutorenewIcon />
                                     </IconButton>

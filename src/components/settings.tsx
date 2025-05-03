@@ -16,6 +16,8 @@
  */
 
 import React, { ChangeEvent, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 import {
     Box,
     MenuItem,
@@ -52,6 +54,7 @@ const Settings = memo(function Settings(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+    const { t } = useTranslation();
     const { open, setOpen } = props;
     const [settings, setSettings] = useSettings();
     const [user] = useUser();
@@ -77,6 +80,15 @@ const Settings = memo(function Settings(props: {
           }
     ) & { title: string; disabled?: boolean })[] = useMemo(
         () => [
+            {
+                title: "Language",
+                type: "select",
+                action: (e) => {
+                    i18n.changeLanguage(e.target.value);
+                },
+                options: (i18n.options.supportedLngs as string[]) || [], // Get languages from supportedLngs
+                selected: i18n.language,
+            },
             {
                 title: "Theme",
                 type: "select",
@@ -200,13 +212,14 @@ const Settings = memo(function Settings(props: {
                         });
                     }
                 },
-                helperText: "Integers between 1 and 50 only",
+                helperText: t("settings.integers_between_1_and_50_only"),
             },
         ],
-        [setSettings, settings, user]
+        [setSettings, settings, user, t] // Add i18n.language and t to dependencies
     );
+
     return (
-        <PopUp title="Settings" open={open} setOpen={setOpen} fullWidth>
+        <PopUp title={t("settings.title")} open={open} setOpen={setOpen} fullWidth>
             <Box
                 className="!mx-5 !my-2 grid grid-cols-1 grid-flow-row gap-y-2"
                 sx={{ bgcolor: "primary.main" }}
@@ -216,7 +229,11 @@ const Settings = memo(function Settings(props: {
                         key={index}
                         className="flex justify-between items-center w-full h-12"
                     >
-                        <Typography>{item.title}</Typography>
+                        <Typography>
+                            {t(
+                                `settings.${item.title.toLowerCase().replace(/\s/g, "_")}`
+                            )}
+                        </Typography>
                         {item.type === "checkbox" && (
                             <IOSSwitch
                                 color="secondary"

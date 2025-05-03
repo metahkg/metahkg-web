@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Box,
     IconButton,
@@ -72,6 +73,7 @@ const SidePanel = memo(function SidePanel(props: {
     const avatar = useUserAvatar();
     const logout = useLogout();
     const [serverConfig] = useServerConfig();
+    const { t } = useTranslation();
 
     interface Button {
         title: string;
@@ -99,85 +101,85 @@ const SidePanel = memo(function SidePanel(props: {
                 link: `/profile/${user.id}`,
             },
             user?.role === "admin" && {
-                title: "Admin Dashboard",
+                title: t("sidePanel.admin_dashboard"),
                 icon: <AdminPanelSettings />,
                 link: "/dashboard",
             },
             {
-                title: "Categories",
+                title: t("sidePanel.categories"),
                 icon: <CategoryIcon />,
                 onClick: () => {
                     setCategoryOpen(true);
                 },
             },
             {
-                title: "Search",
+                title: t("sidePanel.search"),
                 icon: <SearchIcon />,
                 link: "/search",
             },
             {
-                title: "Recall",
+                title: t("sidePanel.recall"),
                 icon: <AccessTimeFilledIcon />,
                 link: "/recall",
             },
             user && {
-                title: "Starred",
+                title: t("sidePanel.starred"),
                 icon: <StarIcon />,
                 link: "/starred",
             },
             user && {
-                title: "Following",
+                title: t("sidePanel.following"),
                 icon: <PeopleIcon />,
                 link: "/following",
             },
             user && {
-                title: "Logout",
+                title: t("sidePanel.logout"),
                 icon: <LogoutIcon />,
                 onClick: () => {
                     logout();
                 },
             },
             !user && {
-                title: "Login",
+                title: t("sidePanel.login"),
                 icon: <LoginIcon />,
                 link: "/users/login",
             },
             !user && {
-                title: "Register",
+                title: t("sidePanel.register"),
                 icon: <HowToRegIcon />,
                 link: "/users/register",
             },
             {
-                title: "Create thread",
+                title: t("sidePanel.create_thread"),
                 icon: <CreateIcon />,
                 link: "/create",
             },
             {
-                title: "Settings",
+                title: t("sidePanel.settings"),
                 icon: <SettingsIcon />,
                 onClick: () => {
                     setSettingsOpen(true);
                 },
             },
             {
-                title: "Telegram group",
+                title: t("sidePanel.telegram_group"),
                 icon: <TelegramIcon />,
                 link: "https://t.me/+WbB7PyRovUY1ZDFl",
             },
             {
-                title: "About",
+                title: t("sidePanel.about"),
                 icon: <InfoIcon />,
                 onClick: () => {
                     setAboutOpen(true);
                 },
             },
             {
-                title: "Source code",
+                title: t("sidePanel.source_code"),
                 icon: <CodeIcon />,
                 link: "https://gitlab.com/metahkg/metahkg",
             },
         ].filter((item) => item) as Button[];
-    }, [serverConfig?.branding, darkMode, user, avatar, logout, setSettingsOpen]);
+    }, [serverConfig?.branding, darkMode, user, avatar, logout, setSettingsOpen, t]);
 
     const buttonOnclick = useCallback(
         (button: Button) => (e: React.MouseEvent) => {
@@ -239,10 +241,10 @@ const SidePanel = memo(function SidePanel(props: {
                         <ListItemIcon>
                             <ChevronLeftIcon />
                         </ListItemIcon>
-                        <ListItemText>Collapse</ListItemText>
+                        <ListItemText>{t("sidePanel.collapse")}</ListItemText>
                     </ListItemButton>
                 ) : (
-                    <Tooltip arrow title="Expand" placement="right">
+                    <Tooltip arrow title={t("sidePanel.expand")} placement="right">
                         <IconButton onClick={() => setExpanded(!expanded)}>
                             <ChevronRightIcon />
                         </IconButton>

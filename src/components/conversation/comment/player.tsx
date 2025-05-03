@@ -20,6 +20,7 @@ import React, { useMemo, useRef, useState } from "react";
 import YoutubePlayer from "react-player/youtube";
 import FacebookPlayer from "react-player/facebook";
 import StreamPlayer from "react-player/streamable";
+import { useTranslation } from "react-i18next";
 import {
     Close,
     Facebook,
@@ -39,6 +40,7 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
     const [play, setPlay] = useState(false);
     const isSmallScreen = useIsSmallScreen();
     const darkMode = useDarkMode();
+    const { t } = useTranslation();
     const YoutubePlayerRef = useRef<YoutubePlayer>(null);
     const FacebookPlayerRef = useRef<FacebookPlayer>(null);
     const StreamPlayerRef = useRef<StreamPlayer>(null);
@@ -61,7 +63,7 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
     }[] = useMemo(
         () => [
             {
-                title: "Full Screen (press ESC/F11 to exit)",
+                title: t("player.fullscreen_tooltip"),
                 icon: <Fullscreen className="!text-[18px]" />,
                 onClick: () => {
                     const Player = findDOMNode(
@@ -75,7 +77,7 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
                 },
             },
             {
-                title: "Picture in Picture",
+                title: t("player.pip_tooltip"),
                 icon: <PictureInPictureAlt className="!text-[16px]" />,
                 onClick: () => {
                     setPip(!pip);
@@ -87,14 +89,14 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
                 }[mode].canEnablePIP(url),
             },
             {
-                title: "Close",
+                title: t("player.close_tooltip"),
                 icon: <Close className="!text-[16px]" />,
                 onClick: () => {
                     setPlay(false);
                 },
             },
         ],
-        [mode, pip, url]
+        [mode, pip, url, t]
     );
 
     const commonProps = useMemo(
@@ -132,7 +134,7 @@ const Player = memo(function Player(props: { url: string; style?: React.CSSPrope
                             }[mode]
                         }
                         <Typography className="!my-0 !ml-[5px]">
-                            {mode[0].toUpperCase() + mode.slice(1)}
+                            {t(`player.${mode}`)}
                         </Typography>
                     </Box>
                     <Box className="flex items-center !mr-[5px]">

@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 import axios, { AxiosResponse } from "axios";
 import { FileUpload } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 const Input = styled("input")({
     display: "none",
@@ -38,6 +39,7 @@ const UploadImage = memo(
     }) => {
         const { className, onUpload, onSuccess, onError } = props;
         const [uploading, setUploading] = useState(false);
+        const { t } = useTranslation();
         return (
             <Box className={className}>
                 <form name="image" encType="multipart/form-data">
@@ -73,7 +75,7 @@ const UploadImage = memo(
                             loadingPosition="start"
                         >
                             <Typography sx={{ color: "secondary.main" }}>
-                                Upload Image
+                                {t("uploadImage.upload_image_button")}
                             </Typography>
                         </LoadingButton>
                     </label>

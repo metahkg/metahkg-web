@@ -40,12 +40,14 @@ import { wholePath } from "../lib/common";
 import { useDarkMode, useServerConfig, useUser } from "./AppContextProvider";
 import { useLogout } from "../hooks/useLogout";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * just a template for large screens if there's no content
  * e.g. /category/:id, in which there's no main content but only the menu
  */
 const Template = memo(function Template() {
+    const { t } = useTranslation();
     const [user] = useUser();
     /* It's a list of objects. */
     const links = useMemo(
@@ -53,26 +55,26 @@ const Template = memo(function Template() {
             [
                 user?.role === "admin" && {
                     icon: <AdminPanelSettings />,
-                    title: "Admin Dashboard",
+                    title: t("template.admin_dashboard"),
                     link: "/dashboard",
                 },
                 {
                     icon: <CreateIcon />,
-                    title: "Create thread",
+                    title: t("template.create_thread"),
                     link: "/create",
                 },
                 {
                     icon: <TelegramIcon />,
-                    title: "Telegram group",
+                    title: t("template.telegram_group"),
                     link: "https://t.me/+WbB7PyRovUY1ZDFl",
                 },
                 {
                     icon: <CodeIcon />,
-                    title: "Source code",
+                    title: t("template.source_code"),
                     link: "https://gitlab.com/metahkg/metahkg",
                 },
             ].filter(Boolean) as { icon: JSX.Element; title: string; link: string }[],
-        [user?.role]
+        [user?.role, t]
     );
 
     const darkMode = useDarkMode();
@@ -113,7 +115,7 @@ const Template = memo(function Template() {
                             {user ? <LogoutIcon /> : <AccountCircleIcon />}
                         </ListItemIcon>
                         <ListItemText>
-                            {user ? "Logout" : "Login / Register"}
+                            {user ? t("template.logout") : t("template.login_register")}
                         </ListItemText>
                     </ListItemButton>
                     {user && (

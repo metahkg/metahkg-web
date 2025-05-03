@@ -31,6 +31,7 @@ import { useNotification, useIsSmallScreen } from "../AppContextProvider";
 import { useShareLink, useShareOpen, useShareTitle } from "./ShareProvider";
 import { Link } from "../../lib/link";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * It shows a pop up with a text field and some buttons for
@@ -41,7 +42,8 @@ const Share = memo(function Share() {
     const [title] = useShareTitle();
     const [link] = useShareLink();
     const [open, setOpen] = useShareOpen();
-    const text = title + "\n" + link + "\n- Shared from Metahkg forum";
+    const { t } = useTranslation();
+    const text = title + "\n" + link + "\n" + t("share.shared_from");
     const [, setNotification] = useNotification();
     const isSmallScreen = useIsSmallScreen();
     type external = {
@@ -53,41 +55,41 @@ const Share = memo(function Share() {
         () => [
             {
                 icon: <Telegram />,
-                title: "Share to Telegram",
+                title: t("share.share_to_telegram"),
                 link: `tg://msg_url?text=${encodeURIComponent(
-                    title + "\n- Shared from Metahkg forum"
+                    title + "\n" + t("share.shared_from")
                 )}&url=${encodeURIComponent(link)}`,
             },
             {
                 icon: <WhatsApp />,
-                title: "Share to WhatsApp",
+                title: t("share.share_to_whatsapp"),
                 link: `whatsapp://send?text=${encodeURIComponent(text)}`,
             },
             {
                 icon: <Twitter />,
-                title: "Share to Twitter",
+                title: t("share.share_to_twitter"),
                 link: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
             },
             {
                 icon: <Reddit />,
-                title: "Share to Reddit",
+                title: t("share.share_to_reddit"),
                 link: `https://www.reddit.com/submit?link=${encodeURIComponent(
                     link
                 )}&title=${encodeURIComponent(title)}`,
             },
             {
                 icon: <Facebook />,
-                title: "Share to Facebook",
+                title: t("share.share_to_facebook"),
                 link: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
                     link
                 )}`,
             },
         ],
-        [link, text, title]
+        [link, text, title, t]
     );
 
     return (
-        <PopUp open={open} setOpen={setOpen} title="Share">
+        <PopUp open={open} setOpen={setOpen} title={t("share.title")}>
             <Box className="!mx-2 text-start text-5">
                 <TextField
                     className={`!mt-0 ${
@@ -100,28 +102,28 @@ const Share = memo(function Share() {
                     value={text}
                 />
                 <Box className="!mt-1 overflow-auto whitespace-nowrap">
-                    <Tooltip arrow title="Copy">
+                    <Tooltip arrow title={t("share.copy_tooltip")}>
                         <IconButton
                             onClick={async () => {
                                 await navigator.clipboard.writeText(text);
                                 setNotification({
                                     open: true,
                                     severity: "success",
-                                    text: "Copied to Clipboard!",
+                                    text: t("share.copied_to_clipboard"),
                                 });
                             }}
                         >
                             <ContentCopy />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip arrow title="Copy link">
+                    <Tooltip arrow title={t("share.copy_link_tooltip")}>
                         <IconButton
                             onClick={async () => {
                                 await navigator.clipboard.writeText(link);
                                 setNotification({
                                     open: true,
                                     severity: "success",
-                                    text: "Link copied to Clipboard!",
+                                    text: t("share.link_copied_to_clipboard"),
                                 });
                             }}
                         >

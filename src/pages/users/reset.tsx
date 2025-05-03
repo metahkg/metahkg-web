@@ -26,6 +26,7 @@ import {
     TextFieldProps,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 import {
     useDarkMode,
     useNotification,
@@ -49,6 +50,7 @@ import { loadUser } from "../../lib/jwt";
 import { regexString } from "../../lib/regex";
 import { memo } from "react";
 const Reset = memo(function Reset() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -83,8 +85,8 @@ const Reset = memo(function Reset() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Reseting..." });
-            setNotification({ open: true, severity: "info", text: "Reseting..." });
+            setAlert({ severity: "info", text: t("reset.reseting") });
+            setNotification({ open: true, severity: "info", text: t("reset.reseting") });
             api.authReset({
                 email,
                 code,
@@ -97,7 +99,9 @@ const Reset = memo(function Reset() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: `Logged in as ${loadUser(data.token)?.name}.`,
+                        text: t("login.logged_in_as", {
+                            name: loadUser(data.token)?.name,
+                        }),
                     });
                     navigate(String(query.returnto || "/"));
                 })
@@ -125,13 +129,14 @@ const Reset = memo(function Reset() {
             serverConfig?.captcha.type,
             setNotification,
             setSession,
+            t,
         ]
     );
 
     useLayoutEffect(() => {
-        setTitle(`Reset password | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("reset.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, serverConfig?.branding]);
+    }, [menu, setMenu, serverConfig?.branding, t]);
 
     return (
         <Box
@@ -153,7 +158,10 @@ const Reset = memo(function Reset() {
                             width={40}
                             className="!mb-[10px]"
                         />
-                        <h1 className="text-[25px] !mb-[20px] mx-0">Reset password</h1>
+                        <MetahkgLogo svg light={darkMode} height={50} width={40} />
+                        <h1 className="text-[25px] !mb-[20px] mx-0">
+                            {t("reset.title")}
+                        </h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>
@@ -163,27 +171,26 @@ const Reset = memo(function Reset() {
                     {(
                         [
                             {
-                                label: "Email",
+                                label: t("forgot.email_label"),
                                 value: email,
                                 onChange: (e) => setEmail(e.target.value),
                                 type: "email",
                             },
                             {
-                                label: "Code",
+                                label: t("reset.code_label"),
                                 value: code,
                                 onChange: (e) => setCode(e.target.value),
                                 type: "password",
                             },
                             {
-                                label: "New password",
+                                label: t("reset.new_password_label"),
                                 value: password,
                                 onChange: (e) => setPassword(e.target.value),
                                 type: "password",
                                 inputProps: {
                                     pattern: regexString.password,
                                 },
-                                helperText:
-                                    "Password must be at least 8 characters long, without spaces.",
+                                helperText: t("reset.password_helper_text"),
                             },
                         ] as TextFieldProps[]
                     ).map((props, index) => (
@@ -207,7 +214,7 @@ const Reset = memo(function Reset() {
                                     checked={sameIp}
                                 />
                             }
-                            label="Restrict session to same ip address"
+                            label={t("login.restrict_ip")}
                         />
                     </FormGroup>
                     <CAPTCHA ref={captchaRef} />
@@ -221,7 +228,7 @@ const Reset = memo(function Reset() {
                         startIcon={<LockOpen />}
                         loadingPosition="start"
                     >
-                        Reset
+                        {t("reset.reset_button")}
                     </LoadingButton>
                     <CaptchaNotice />
                 </Box>

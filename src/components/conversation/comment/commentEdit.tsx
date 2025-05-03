@@ -26,6 +26,7 @@ import { useNotification } from "../../AppContextProvider";
 import { parseError } from "../../../lib/parseError";
 import { LoadingButton } from "@mui/lab";
 import { HTMLComment } from "@metahkg/api";
+import { useTranslation } from "react-i18next";
 import { memo } from "react";
 const CommentEdit = memo(function CommentEdit() {
     const threadId = useThreadId();
@@ -37,6 +38,7 @@ const CommentEdit = memo(function CommentEdit() {
     const [reason, setReason] = useState("");
     const [, setNotification] = useNotification();
     const [saving, setSaving] = useState(false);
+    const { t } = useTranslation();
 
     const onSave = useCallback(async () => {
         setSaving(true);
@@ -55,18 +57,20 @@ const CommentEdit = memo(function CommentEdit() {
                 setNotification({
                     open: true,
                     severity: "success",
-                    text: "Comment edited.",
+                    text: t("commentEdit.comment_edited"),
                 });
             })
             .catch((err) => {
                 setNotification({
                     open: true,
                     severity: "error",
-                    text: `Unable to save comment: ${parseError(err)}}`,
+                    text: t("commentEdit.unable_to_save_comment", {
+                        error: parseError(err),
+                    }),
                 });
             });
         setSaving(false);
-    }, [comment, edited, reason, setComment, setEditing, setNotification, threadId]);
+    }, [comment, edited, reason, setComment, setEditing, setNotification, threadId, t]);
 
     if (comment.comment.type !== "html") {
         return <></>;
@@ -91,7 +95,7 @@ const CommentEdit = memo(function CommentEdit() {
                     variant="outlined"
                     fullWidth
                     required
-                    label="Reason"
+                    label={t("commentEdit.reason_label")}
                     onChange={(e) => {
                         setReason(e.target.value);
                     }}
@@ -105,7 +109,7 @@ const CommentEdit = memo(function CommentEdit() {
                     startIcon={<EditIcon />}
                     loadingPosition="start"
                 >
-                    Save
+                    {t("commentEdit.save_button")}
                 </LoadingButton>
             </Box>
         </Box>

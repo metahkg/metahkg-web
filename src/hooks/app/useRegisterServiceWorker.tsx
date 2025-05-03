@@ -16,9 +16,11 @@
  */
 
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { register, unregister } from "../../serviceWorkerRegistration";
 
 export function useRegisterServiceWorker() {
+    const { t } = useTranslation();
     useEffect(() => {
         try {
             if (process.env.REACT_APP_ENV === "dev") return unregister();
@@ -56,7 +58,7 @@ export function useRegisterServiceWorker() {
                     });
             }
         } catch {
-            console.error("Service worker registration failed");
+            console.error(t("app.service_worker_registration_failed"));
         }
-    }, []);
+    }, [t]);
 }

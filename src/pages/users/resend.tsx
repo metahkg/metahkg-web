@@ -24,6 +24,7 @@ import React, {
     useState,
 } from "react";
 import { Alert, Box, TextField } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import {
     useDarkMode,
     useNotification,
@@ -46,6 +47,7 @@ import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
 import { memo } from "react";
 const Resend = memo(function Resend() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -65,9 +67,9 @@ const Resend = memo(function Resend() {
     const small = useMemo(() => width / 2 - 100 <= 450, [width]);
 
     useLayoutEffect(() => {
-        setTitle(`Resend Verification Email | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("resend.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, serverConfig?.branding, setMenu, user]);
+    }, [menu, serverConfig?.branding, setMenu, user, t]);
 
     if (user) <Navigate to="/" replace />;
 
@@ -83,21 +85,21 @@ const Resend = memo(function Resend() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Requesting resend..." });
+            setAlert({ severity: "info", text: t("resend.requesting_resend") });
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Requesting resend...",
+                text: t("resend.requesting_resend"),
             });
             api.authResend({ email, captchaToken })
                 .then(() => {
                     setNotification({
                         open: true,
-                        text: `Verification email sent.`,
+                        text: t("resend.verification_email_sent"),
                     });
                     setAlert({
                         severity: "success",
-                        text: "Verification email sent.",
+                        text: t("resend.verification_email_sent"),
                     });
                     captchaRef.current?.reset();
                     setLoading(false);
@@ -116,7 +118,7 @@ const Resend = memo(function Resend() {
                     setLoading(false);
                 });
         },
-        [email, serverConfig?.captcha.type, setNotification]
+        [email, serverConfig?.captcha.type, setNotification, t]
     );
 
     useEffect(() => {
@@ -139,7 +141,7 @@ const Resend = memo(function Resend() {
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
                         <h1 className="text-[25px] my-0 !ml-[5px]">
-                            Resend Verification Email
+                            {t("resend.title")}
                         </h1>
                     </Box>
                     {alert.text && (
@@ -148,7 +150,7 @@ const Resend = memo(function Resend() {
                         </Alert>
                     )}
                     <TextField
-                        label="Email"
+                        label={t("forgot.email_label")}
                         value={email}
                         type="email"
                         onChange={(e) => {
@@ -174,7 +176,7 @@ const Resend = memo(function Resend() {
                             loadingPosition="start"
                             startIcon={<SendIcon className="!text-[16px]" />}
                         >
-                            Resend
+                            {t("resend.resend_button")}
                         </LoadingButton>
                         <CaptchaNotice />
                     </Box>

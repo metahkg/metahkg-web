@@ -1,5 +1,6 @@
 import { Refresh } from "@mui/icons-material";
 import { Box, TextField, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useCallback, useRef, useState } from "react";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
@@ -13,6 +14,8 @@ const GenerateInviteCode = memo(function GenerateInviteCode() {
     const [generateLoading, setGenerateLoading] = useState(false);
     const [generatedCode, setGeneratedCode] = useState<string | null>(null);
 
+    const { t } = useTranslation();
+
     const generateSubmit = useCallback(
         (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
@@ -24,7 +27,7 @@ const GenerateInviteCode = memo(function GenerateInviteCode() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: "Invite code generated  successfully.",
+                        text: t("dashboard.invite_codes.generate.success_notification"),
                     });
                 })
                 .catch((err) => {
@@ -36,14 +39,14 @@ const GenerateInviteCode = memo(function GenerateInviteCode() {
                     });
                 });
         },
-        [description, setNotification]
+        [description, setNotification, t]
     );
 
     return (
         <Box onSubmit={generateSubmit} component="form" ref={generateFormRef}>
             <TextField
                 color="secondary"
-                label="Description (optional)"
+                label={t("dashboard.invite_codes.generate.description_label")}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 fullWidth
@@ -59,11 +62,12 @@ const GenerateInviteCode = memo(function GenerateInviteCode() {
                 variant="contained"
                 className="!mt-2"
             >
-                Generate
+                {t("dashboard.invite_codes.generate.generate_button")}
             </LoadingButton>
             {generatedCode && (
                 <Typography variant="body2" color="text.secondary" className="!mt-2">
-                    Generated Code: {generatedCode}
+                    {t("dashboard.invite_codes.generate.generated_code_label")}
+                    {generatedCode}
                 </Typography>
             )}
         </Box>

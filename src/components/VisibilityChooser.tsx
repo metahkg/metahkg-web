@@ -1,4 +1,5 @@
 import { Visibility } from "@metahkg/api";
+import { useTranslation } from "react-i18next";
 import { HelpOutline as HelpOutlineIcon } from "@mui/icons-material";
 import { Box, Checkbox, FormControlLabel, Tooltip, Typography } from "@mui/material";
 
@@ -10,6 +11,7 @@ const VisibilityChooser = memo(function VisibilityChooser(props: {
     className?: string;
     title?: string;
 }) {
+    const { t } = useTranslation();
     const { visibility, setVisibility, disabled, className, title } = props;
 
     return (
@@ -28,11 +30,13 @@ const VisibilityChooser = memo(function VisibilityChooser(props: {
                 label={
                     <Box className="flex">
                         <Typography variant="body1">
-                            {title || "Internal comment"}
+                            {title || t("visibilityChooser.internal_comment")}
                         </Typography>
                         <Tooltip
                             arrow
-                            title="Internal comments can only be seen by logged in users. All replies will also be made internal."
+                            title={t(
+                                "visibilityChooser.internal_comment_tooltip_message"
+                            )}
                         >
                             <HelpOutlineIcon className="hover:bg-[rgba(255,255,255,0.2)] ml-1 rounded-md" />
                         </Tooltip>

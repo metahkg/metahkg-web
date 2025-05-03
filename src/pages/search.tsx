@@ -18,6 +18,7 @@
 import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import { Box } from "@mui/material";
 import Template from "../components/template";
+import { useTranslation } from "react-i18next";
 import {
     useReFetch,
     useMenu,
@@ -36,6 +37,7 @@ import queryString from "query-string";
 import { useNavigate } from "react-router-dom";
 import { memo } from "react";
 const Search = memo(function Search() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [menuMode, setMenuMode] = useMenuMode();
     const [back, setBack] = useBack();
@@ -58,7 +60,7 @@ const Search = memo(function Search() {
     }, [navigate, query]);
 
     useLayoutEffect(() => {
-        setTitle(`Search | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(t("search.title") + ` | ${t("common.branding")}`);
 
         function clearData() {
             setReFetch(true);
@@ -75,7 +77,7 @@ const Search = memo(function Search() {
             clearData();
             setMenuMode("search");
         }
-    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected]);
+    }, [back, menu, menuMode, selected, serverConfig?.branding, setBack, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, t]); // Added t to dependencies
 
     return (
         <Box

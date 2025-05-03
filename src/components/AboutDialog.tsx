@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "../lib/link";
 import { PopUp } from "../lib/popup";
 import { useServerConfig } from "./AppContextProvider";
@@ -8,22 +9,23 @@ export function AboutDialog(props: {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+    const { t } = useTranslation();
     const { open, setOpen } = props;
     const [serverConfig] = useServerConfig();
 
     return (
-        <PopUp title="About Metahkg" closeBtn open={open} setOpen={setOpen} fullWidth>
+        <PopUp title={t("about.title")} closeBtn open={open} setOpen={setOpen} fullWidth>
             <Box className="mb-4 flex flex-col">
                 <Typography variant="body1" gutterBottom className="!mt-4">
                     {serverConfig?.branding && serverConfig?.branding !== "Metahkg"
-                        ? `${serverConfig.branding} is powered by Metahkg.`
+                        ? t("about.powered_by", { branding: serverConfig.branding })
                         : ""}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Metahkg is a free and open source lihkg-style forum.
+                    {t("about.description")}
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    Source code
+                    {t("about.source_code_heading")}
                 </Typography>
                 <Typography gutterBottom>
                     <Link
@@ -31,7 +33,7 @@ export function AboutDialog(props: {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Metahkg Main Repository
+                        {t("about.main_repo_link")}
                     </Link>
                 </Typography>
                 <Typography gutterBottom>
@@ -40,13 +42,13 @@ export function AboutDialog(props: {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Metahkg Web App
+                        {t("about.web_app_link")}
                     </Link>
                 </Typography>
                 {process.env.REACT_APP_version ? (
                     <React.Fragment>
                         <Typography gutterBottom variant="h5">
-                            Version
+                            {t("about.version_heading")}
                         </Typography>
                         <Typography gutterBottom>
                             <Link
@@ -65,7 +67,7 @@ export function AboutDialog(props: {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                CHANGELOG
+                                {t("about.changelog_link")}
                             </Link>
                         </Typography>
                     </React.Fragment>
@@ -73,7 +75,7 @@ export function AboutDialog(props: {
                 {process.env.REACT_APP_build ? (
                     <React.Fragment>
                         <Typography variant="h5" gutterBottom>
-                            Build
+                            {t("about.build_heading")}
                         </Typography>
                         <Typography gutterBottom>
                             <Link
@@ -90,17 +92,15 @@ export function AboutDialog(props: {
                 {!process.env.REACT_APP_build && process.env.REACT_APP_date ? (
                     <React.Fragment>
                         <Typography variant="h5" gutterBottom>
-                            Build
+                            {t("about.build_heading")}
                         </Typography>
                         <Typography gutterBottom>{process.env.REACT_APP_date}</Typography>
                     </React.Fragment>
                 ) : null}
                 <Typography variant="h5" gutterBottom>
-                    Copyright
+                    {t("about.copyright_heading")}
                 </Typography>
-                <Typography gutterBottom>
-                    Metahkg Copyright (c) 2022-present Wong Chun Yat (wcyat)
-                </Typography>
+                <Typography gutterBottom>{t("about.copyright_text")}</Typography>
                 <Typography gutterBottom>
                     <Link
                         href="https://gitlab.com/metahkg/metahkg/-/tree/master/LICENSE.md"
@@ -108,7 +108,7 @@ export function AboutDialog(props: {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        AGPL-3.0-or-later
+                        {t("about.license_link")}
                     </Link>
                 </Typography>
                 <Typography gutterBottom>
@@ -117,17 +117,15 @@ export function AboutDialog(props: {
                         className="inline"
                         target="_blank"
                     >
-                        Third-party Licenses
+                        {t("about.third_party_licenses_link")}
                     </Link>
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    Logo
+                    {t("about.logo_heading")}
                 </Typography>
+                <Typography gutterBottom>{t("about.logo_copyright")}</Typography>
                 <Typography gutterBottom>
-                    Metahkg logo Copyright (c) 2022 "white card", CC-BY-4.0
-                </Typography>
-                <Typography gutterBottom>
-                    See{" "}
+                    {t("about.see_text")}{" "}
                     <Link
                         href="https://gitlab.com/metahkg/metahkg-web/-/tree/master/public/images/LICENSE"
                         className="inline"
@@ -136,7 +134,7 @@ export function AboutDialog(props: {
                     >
                         metahkg-web@public/images/LICENSE
                     </Link>{" "}
-                    for more information.
+                    {t("about.for_more_info_text")}
                 </Typography>
             </Box>
         </PopUp>

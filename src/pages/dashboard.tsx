@@ -1,4 +1,5 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import MetahkgLogo from "../components/logo";
 import {
     useDarkMode,
@@ -17,6 +18,7 @@ import ThreadsBoard from "../components/dashboard/threads/threadsBoard";
 import InviteCodesBoard from "../components/dashboard/invite-codes/InviteCodesBoard";
 import { memo } from "react";
 const Dashboard = memo(function Dashboard() {
+    const { t } = useTranslation();
     const darkMode = useDarkMode();
     const [tab, setTab] = useState<"categories" | "users" | "threads" | "invitecodes">(
         (localStorage.getItem("admindashboard_tab") as
@@ -31,9 +33,9 @@ const Dashboard = memo(function Dashboard() {
     const [menu, setMenu] = useMenu();
 
     useLayoutEffect(() => {
-        setTitle(`Admin Dashboard | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(t("dashboard.title") + ` | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, serverConfig?.branding]);
+    }, [menu, setMenu, serverConfig?.branding, t]);
 
     useLayoutEffect(() => {
         if (user?.role !== "admin") {
@@ -62,7 +64,7 @@ const Dashboard = memo(function Dashboard() {
                         light={darkMode}
                         className="!mr-2 !mb-2"
                     />
-                    <Typography variant="h4">Admin Dashboard</Typography>
+                    <Typography variant="h4">{t("dashboard.title")}</Typography>
                 </Box>
                 <Box className="mt-3">
                     <Box display="flex" justifyContent="center" width="100%">
@@ -79,21 +81,21 @@ const Dashboard = memo(function Dashboard() {
                         >
                             <Tab
                                 value={"categories"}
-                                label="Categories"
+                                label={t("dashboard.categories_tab")}
                                 icon={<Category />}
                                 iconPosition="start"
                                 disableRipple
                             />
                             <Tab
                                 value={"users"}
-                                label="Users"
+                                label={t("dashboard.users_tab")}
                                 icon={<Group />}
                                 iconPosition="start"
                                 disableRipple
                             />
                             <Tab
                                 value={"threads"}
-                                label="Threads"
+                                label={t("dashboard.threads_tab")}
                                 icon={<Comment />}
                                 iconPosition="start"
                                 disableRipple
@@ -101,7 +103,7 @@ const Dashboard = memo(function Dashboard() {
                             {serverConfig?.register.mode === "invite" && (
                                 <Tab
                                     value={"invitecodes"}
-                                    label="Invite codes"
+                                    label={t("dashboard.invite_codes_tab")}
                                     icon={<Numbers />}
                                     iconPosition="start"
                                     disableRipple

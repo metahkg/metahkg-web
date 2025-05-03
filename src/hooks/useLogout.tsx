@@ -16,12 +16,14 @@
  */
 
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useNotification } from "../components/AppContextProvider";
 import { api } from "../lib/api";
 import { parseError } from "../lib/parseError";
 import { useClearSession } from "./useClearSession";
 
 export function useLogout() {
+    const { t } = useTranslation();
     const [, setNotification] = useNotification();
     const clearSession = useClearSession();
 
@@ -29,7 +31,7 @@ export function useLogout() {
         setNotification({
             open: true,
             severity: "info",
-            text: "Logging you out...",
+            text: t("logout.logging_out"),
         });
         await api
             .authLogout()
@@ -38,7 +40,7 @@ export function useLogout() {
                 setNotification({
                     open: true,
                     severity: "success",
-                    text: "Logged out.",
+                    text: t("logout.logged_out"),
                 });
             })
             .catch((err) => {
@@ -48,5 +50,5 @@ export function useLogout() {
                     text: parseError(err),
                 });
             });
-    }, [clearSession, setNotification]);
+    }, [clearSession, setNotification, t]);
 }

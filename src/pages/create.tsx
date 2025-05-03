@@ -24,6 +24,7 @@ import React, {
     useState,
 } from "react";
 import { Alert, Box, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Code, Create as CreateIcon, Poll as PollIcon } from "@mui/icons-material";
 import TextEditor from "../components/textEditor";
 import CAPTCHA, { CaptchaRefProps } from "../lib/Captcha";
@@ -55,6 +56,7 @@ import { memo } from "react";
  * Page for creating a new thread
  */
 const Create = memo(function Create() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const query = queryString.parse(window.location.search);
     const [menu, setMenu] = useMenu();
@@ -88,17 +90,19 @@ const Create = memo(function Create() {
     const [serverConfig] = useServerConfig();
 
     useLayoutEffect(() => {
-        setTitle(`Create thread | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(
+            t("create.thread_title") + (serverConfig?.branding || t("common.branding"))
+        );
         menu && setMenu(false);
-    }, [menu, setMenu, user, serverConfig?.branding]);
+    }, [menu, setMenu, user, serverConfig?.branding, t]);
 
     useEffect(() => {
         if (user && quote.threadId && quote.commentId) {
-            setAlert({ severity: "info", text: "Fetching comment..." });
+            setAlert({ severity: "info", text: t("create.fetching_comment") });
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Fetching comment...",
+                text: t("create.fetching_comment"),
             });
             api.comment(quote.threadId, quote.commentId)
                 .then((data) => {
@@ -120,17 +124,19 @@ const Create = memo(function Create() {
                                 setNotification({ open: false, text: "" });
                         }, 500);
                     } else {
-                        setAlert({ severity: "error", text: "Comment not found!" });
+                        setAlert({
+                            severity: "error",
+                            text: t("create.comment_not_found"),
+                        });
                         setNotification({
                             open: true,
                             severity: "error",
-                            text: "Comment not found!",
+                            text: t("create.comment_not_found"),
                         });
                     }
                 })
                 .catch(() => {
-                    const text =
-                        "Unable to fetch comment. This comment would not be a quote.";
+                    const text = t("create.unable_to_fetch_comment");
                     setAlert({ severity: "warning", text });
                     setNotification({ open: true, severity: "warning", text });
                 });
@@ -150,8 +156,12 @@ const Create = memo(function Create() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Creating thread..." });
-            setNotification({ open: true, severity: "info", text: "Creating thread..." });
+            setAlert({ severity: "info", text: t("create.creating_thread") });
+            setNotification({
+                open: true,
+                severity: "info",
+                text: t("create.creating_thread"),
+            });
             let pollId: string = "";
             if (commentType === "poll" && poll?.options && poll?.title) {
                 try {
@@ -199,6 +209,7 @@ const Create = memo(function Create() {
             commentType,
             navigate,
             notification.open,
+            t,
             poll?.options,
             poll?.title,
             serverConfig?.captcha.type,
@@ -235,7 +246,7 @@ const Create = memo(function Create() {
                             light={darkMode}
                             className="!mr-2 !mb-2"
                         />
-                        <Typography variant="h4">Create thread</Typography>
+                        <Typography variant="h4">{t("create.thread_title")}</Typography>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-4" severity={alert.severity}>
@@ -249,7 +260,7 @@ const Create = memo(function Create() {
                             variant="filled"
                             color="secondary"
                             fullWidth
-                            label="Title"
+                            label={t("create.title_label")}
                             onChange={(e) => {
                                 setThreadTitle(e.target.value);
                             }}
@@ -268,14 +279,14 @@ const Create = memo(function Create() {
                         <Tab
                             icon={<Code />}
                             value={"html"}
-                            label="HTML"
+                            label={t("create.html_tab")}
                             iconPosition="start"
                             disableRipple
                         />
                         <Tab
                             icon={<PollIcon />}
                             value={"poll"}
-                            label="Poll"
+                            label={t("create.poll_tab")}
                             iconPosition="start"
                             disableRipple
                         />
@@ -297,7 +308,7 @@ const Create = memo(function Create() {
                         visibility={visibility}
                         setVisibility={setVisibility}
                         className="mt-2 ml-1"
-                        title="Internal thread"
+                        title={t("create.internal_thread_title")}
                     />
                     <Box className="mt-2">
                         <CAPTCHA ref={captchaRef} />
@@ -319,7 +330,7 @@ const Create = memo(function Create() {
                             startIcon={<CreateIcon className="!text-4" />}
                             loadingPosition="start"
                         >
-                            Create
+                            {t("create.create_button")}
                         </LoadingButton>
                         <CaptchaNotice className="!mt-[10px]" />
                     </Box>

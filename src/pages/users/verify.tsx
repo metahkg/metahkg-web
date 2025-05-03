@@ -33,6 +33,7 @@ import {
     TextFieldProps,
     Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import {
     useDarkMode,
     useNotification,
@@ -57,6 +58,7 @@ import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
 import { memo } from "react";
 const Verify = memo(function Verify() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -91,15 +93,21 @@ const Verify = memo(function Verify() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Verifying..." });
-            setNotification({ open: true, severity: "info", text: "Verifying..." });
+            setAlert({ severity: "info", text: t("verify.verifying") });
+            setNotification({
+                open: true,
+                severity: "info",
+                text: t("verify.verifying"),
+            });
             api.authVerify({ email, code, captchaToken, sameIp })
                 .then((data) => {
                     setSession(data);
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: `Logged in as ${loadUser(data.token)?.name}.`,
+                        text: t("login.logged_in_as", {
+                            name: loadUser(data.token)?.name,
+                        }),
                     });
                     navigate(String(query.returnto || "/"));
                 })
@@ -126,13 +134,14 @@ const Verify = memo(function Verify() {
             serverConfig?.captcha.type,
             setNotification,
             setSession,
+            t,
         ]
     );
 
     useLayoutEffect(() => {
-        setTitle(`Verify | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("verify.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user, serverConfig?.branding]);
+    }, [menu, setMenu, user, serverConfig?.branding, t]);
 
     useEffect(() => {
         if (query.code && query.email && !user) onSubmit();
@@ -161,7 +170,9 @@ const Verify = memo(function Verify() {
                             width={40}
                             className="!mb-[10px]"
                         />
-                        <h1 className="text-[25px] !mb-[20px] mx-0">Verify</h1>
+                        <h1 className="text-[25px] !mb-[20px] mx-0">
+                            {t("verify.title")}
+                        </h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>
@@ -171,13 +182,13 @@ const Verify = memo(function Verify() {
                     {(
                         [
                             {
-                                label: "Email",
+                                label: t("forgot.email_label"),
                                 value: email,
                                 onChange: (e) => setEmail(e.target.value),
                                 type: "email",
                             },
                             {
-                                label: "Code",
+                                label: t("reset.code_label"),
                                 value: code,
                                 onChange: (e) => setCode(e.target.value),
                                 type: "password",
@@ -204,7 +215,7 @@ const Verify = memo(function Verify() {
                                     checked={sameIp}
                                 />
                             }
-                            label="Restrict session to same ip address"
+                            label={t("login.restrict_ip")}
                         />
                     </FormGroup>
                     <Box className="my-[15px]">
@@ -216,7 +227,7 @@ const Verify = memo(function Verify() {
                             className={`${css.link} !font-bold`}
                             to="/users/resend"
                         >
-                            Resend verification email
+                            {t("login.verify_resend_email")}
                         </Typography>
                     </Box>
                     <CAPTCHA ref={captchaRef} />
@@ -230,7 +241,7 @@ const Verify = memo(function Verify() {
                         loadingPosition="start"
                         startIcon={<HowToReg />}
                     >
-                        Verify
+                        {t("verify.verify_button")}
                     </LoadingButton>
                     <CaptchaNotice />
                 </Box>

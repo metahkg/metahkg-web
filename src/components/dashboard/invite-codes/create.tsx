@@ -1,6 +1,7 @@
 import { Add } from "@mui/icons-material";
 import { Box, Grid, TextField, FormHelperText } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNotification } from "../../AppContextProvider";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
@@ -13,6 +14,8 @@ const CreateInviteCode = memo(function CreateInviteCode() {
     const createFormRef = useRef<HTMLFormElement>(null);
     const [createLoading, setCreateLoading] = useState(false);
 
+    const { t } = useTranslation();
+
     const createSubmit = useCallback(
         (e?: React.FormEvent<HTMLFormElement>) => {
             e?.preventDefault();
@@ -24,7 +27,7 @@ const CreateInviteCode = memo(function CreateInviteCode() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Invite code created  successfully.",
+                            text: t("dashboard.invite_codes.create.success_notification"),
                         });
                         setCode("");
                         setDescription("");
@@ -39,7 +42,7 @@ const CreateInviteCode = memo(function CreateInviteCode() {
                     });
             }
         },
-        [code, description, setNotification]
+        [code, description, setNotification, t]
     );
 
     return (
@@ -49,7 +52,7 @@ const CreateInviteCode = memo(function CreateInviteCode() {
                     <TextField
                         color="secondary"
                         required
-                        label="Code"
+                        label={t("dashboard.invite_codes.create.code_label")}
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                         inputProps={{ minLength: 10, maxLength: 10 }}
@@ -57,13 +60,13 @@ const CreateInviteCode = memo(function CreateInviteCode() {
                         error={code.length !== 0 && code.length !== 10}
                     />
                     <FormHelperText error={code.length !== 0 && code.length !== 10}>
-                        Code must be 10 digits long.
+                        {t("dashboard.invite_codes.create.code_helper_text")}
                     </FormHelperText>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField
                         color="secondary"
-                        label="Description (optional)"
+                        label={t("dashboard.invite_codes.create.description_label")}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         fullWidth
@@ -80,7 +83,7 @@ const CreateInviteCode = memo(function CreateInviteCode() {
                 variant="contained"
                 className="!mt-2"
             >
-                Create
+                {t("dashboard.invite_codes.create.create_button")}
             </LoadingButton>
         </Box>
     );

@@ -9,12 +9,14 @@ import {
     TextField,
 } from "@mui/material";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { memo } from "react";
 const CreateCategory = memo(function CreateCategory() {
+    const { t } = useTranslation();
     const [, setNotification] = useNotification();
     const [categories, setCategories] = useCategories();
     const tags = useMemo<string[]>(
@@ -41,7 +43,7 @@ const CreateCategory = memo(function CreateCategory() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Category created successfully.",
+                            text: t("createCategory.category_created_success"),
                         });
                         api.categories()
                             .then(setCategories)
@@ -57,7 +59,7 @@ const CreateCategory = memo(function CreateCategory() {
                     });
             }
         },
-        [createSettings, setCategories, setNotification]
+        [createSettings, setCategories, setNotification, t]
     );
 
     return (
@@ -67,7 +69,7 @@ const CreateCategory = memo(function CreateCategory() {
                     <TextField
                         color="secondary"
                         required
-                        label="Name"
+                        label={t("createCategory.name_label")}
                         onChange={(e) => {
                             setCreateSettings({
                                 ...createSettings,
@@ -99,7 +101,7 @@ const CreateCategory = memo(function CreateCategory() {
                                 {...params}
                                 color="secondary"
                                 variant="outlined"
-                                label="Tags"
+                                label={t("createCategory.tags_label")}
                             />
                         )}
                         onChange={(_e, v) => {
@@ -126,7 +128,7 @@ const CreateCategory = memo(function CreateCategory() {
                                 disabled={createSettings?.hidden}
                             />
                         }
-                        label="Pinned"
+                        label={t("createCategory.pinned_label")}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -144,7 +146,7 @@ const CreateCategory = memo(function CreateCategory() {
                                 disabled={createSettings?.pinned}
                             />
                         }
-                        label="Hidden"
+                        label={t("createCategory.hidden_label")}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -161,7 +163,7 @@ const CreateCategory = memo(function CreateCategory() {
                                 color="secondary"
                             />
                         }
-                        label="NSFW"
+                        label={t("createCategory.nsfw_label")}
                     />
                 </Grid>
             </Grid>
@@ -175,7 +177,7 @@ const CreateCategory = memo(function CreateCategory() {
                 variant="contained"
                 className="!mt-2"
             >
-                Create
+                {t("createCategory.create_button")}
             </LoadingButton>
         </Box>
     );

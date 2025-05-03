@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Box,
     FormControlLabel,
@@ -18,6 +19,7 @@ export interface PollCreateType {
 const CreatePoll = memo(function CreatePoll(props: {
     onChange?: (poll: PollCreateType) => void;
 }) {
+    const { t } = useTranslation();
     const { onChange } = props;
     const [pollOptions, setPollOptions] = useState<string[]>([]);
     const [title, setTitle] = useState<string>("");
@@ -77,7 +79,7 @@ const CreatePoll = memo(function CreatePoll(props: {
         <Box>
             <Box className="flex max-w-full">
                 <TextField
-                    label="Title"
+                    label={t("createPoll.title_label")}
                     color="secondary"
                     variant="standard"
                     onChange={(e) => {
@@ -99,7 +101,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                                 edit.includes(index) ? (
                                     <TextField
                                         type="string"
-                                        label="Edit option"
+                                        label={t("createPoll.edit_option_label")}
                                         variant="filled"
                                         fullWidth
                                         color="secondary"
@@ -117,7 +119,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                         <Box className="flex">
                             {edit.includes(index) ? (
                                 <>
-                                    <Tooltip arrow title="Done">
+                                    <Tooltip arrow title={t("createPoll.done_tooltip")}>
                                         <IconButton
                                             onClick={() => {
                                                 onSave(index);
@@ -126,7 +128,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                                             <Done className="!m-2" />
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip arrow title="Cancel">
+                                    <Tooltip arrow title={t("createPoll.cancel_tooltip")}>
                                         <IconButton
                                             onClick={() => {
                                                 onDiscard(index);
@@ -138,7 +140,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                                 </>
                             ) : (
                                 <>
-                                    <Tooltip arrow title="Edit">
+                                    <Tooltip arrow title={t("createPoll.edit_tooltip")}>
                                         <IconButton
                                             onClick={() => {
                                                 setEdit(edit.concat(index));
@@ -147,7 +149,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                                             <Edit className="!m-2" />
                                         </IconButton>
                                     </Tooltip>
-                                    <Tooltip arrow title="Delete">
+                                    <Tooltip arrow title={t("createPoll.delete_tooltip")}>
                                         <IconButton
                                             onClick={() => {
                                                 pollOptions.splice(index, 1);
@@ -170,7 +172,7 @@ const CreatePoll = memo(function CreatePoll(props: {
                                 <TextField
                                     key={pollOptions.length}
                                     type="string"
-                                    label="New option"
+                                    label={t("createPoll.new_option_label")}
                                     variant="filled"
                                     fullWidth
                                     color="secondary"

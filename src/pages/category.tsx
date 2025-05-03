@@ -18,6 +18,7 @@
 import React, { useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Template from "../components/template";
 import {
     useBack,
@@ -42,6 +43,7 @@ import { memo } from "react";
  * @returns The empty component is being returned.
  */
 const Category = memo(function Category() {
+    const { t } = useTranslation();
     const params = useParams();
     const [menu, setMenu] = useMenu();
     const [menuMode, setMenuMode] = useMenuMode();
@@ -57,7 +59,11 @@ const Category = memo(function Category() {
     useLayoutEffect(() => {
         const categoryName = categories.find((i) => i.id === category)?.name;
         categoryName &&
-            setTitle(categoryName + ` | ${serverConfig?.branding || "Metahkg"}`);
+            setTitle(
+                categoryName +
+                    t("category.title_separator") +
+                    (serverConfig?.branding || "Metahkg")
+            );
 
         function clearData() {
             setReFetch(true);
@@ -77,7 +83,7 @@ const Category = memo(function Category() {
 
         // update the category in context
         if (category !== Number(params.category)) setCategory(Number(params.category));
-    }, [back, categories, category, menu, menuMode, params.category, selected, serverConfig?.branding, setBack, setCategory, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected]);
+    }, [back, categories, category, menu, menuMode, params.category, selected, serverConfig?.branding, setBack, setCategory, setMenu, setMenuMode, setMenuTitle, setReFetch, setSelected, t]); // Added t to dependencies
 
     return (
         <Box

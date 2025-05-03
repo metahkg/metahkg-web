@@ -51,6 +51,7 @@ import {
 import { api } from "../../../lib/api";
 import { AxiosError } from "axios";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { parseError } from "../../../lib/parseError";
 import { Comment } from "@metahkg/api";
 import { filterSwearWords } from "../../../lib/filterSwear";
@@ -86,6 +87,8 @@ const CommentTop = memo(function CommentTop(props: {
 
     const cRoot = useCRoot();
 
+    const { t } = useTranslation();
+
     const { comment, noStory } = props;
 
     const isOp = useMemo(
@@ -104,7 +107,9 @@ const CommentTop = memo(function CommentTop(props: {
                                 className: "!text-metahkg-grey !text-[19px]",
                             }
                         ),
-                        title: story ? "Quit story mode" : "Story mode",
+                        title: story
+                            ? t("comment.quitStoryMode")
+                            : t("comment.storyMode"),
                         action: () => {
                             const commentEle = document.getElementById(`c${comment.id}`);
                             if (cRoot.current && commentEle) {
@@ -131,7 +136,7 @@ const CommentTop = memo(function CommentTop(props: {
                     icon: (
                         <ReplyIcon className="!text-metahkg-grey !text-[19px] !mb-[1px]" />
                     ),
-                    title: "Reply",
+                    title: t("comment.reply"),
                     action: () => {
                         if (user) setEditor({ open: true, quote: comment });
                         else
@@ -148,7 +153,7 @@ const CommentTop = memo(function CommentTop(props: {
                         icon: (
                             <EditIcon className="!text-metahkg-grey !text-[18px] !mb-[1px]" />
                         ),
-                        title: "Edit (admin)",
+                        title: t("comment.editAdmin"),
                         action: () => {
                             setEditing((editing) => !editing);
                         },
@@ -158,16 +163,16 @@ const CommentTop = memo(function CommentTop(props: {
                         icon: (
                             <DeleteIcon className="!text-metahkg-grey !text-[17px] !mb-[1px]" />
                         ),
-                        title: "Delete (admin)",
+                        title: t("comment.deleteAdmin"),
                         action: () => {
                             setAlertDialog({
                                 ...alertDialog,
                                 open: true,
-                                title: "Are you sure you want to delete this comment?",
+                                title: t("comment.deleteConfirm"),
                                 body: (state, setState) => (
                                     <TextField
                                         color="secondary"
-                                        label="Reason"
+                                        label={t("comment.reason")}
                                         required
                                         variant="outlined"
                                         className="!my-[5px]"
@@ -181,13 +186,13 @@ const CommentTop = memo(function CommentTop(props: {
                                 ),
                                 btns: (state, _setState) => [
                                     {
-                                        text: "Cancel",
+                                        text: t("common.cancel"),
                                         action: (_state, _setState, closeDialog) => {
                                             closeDialog();
                                         },
                                     },
                                     {
-                                        text: "Confirm",
+                                        text: t("common.confirm"),
                                         disabled: !state.reason,
                                         action: (state, _setState, closeDialog) => {
                                             api.commentDelete(threadId, comment.id, {
@@ -208,7 +213,7 @@ const CommentTop = memo(function CommentTop(props: {
                                                     setNotification({
                                                         open: true,
                                                         severity: "success",
-                                                        text: "Comment deleted.",
+                                                        text: t("comment.deleted"),
                                                     });
                                                 })
                                                 .catch((err) => {
@@ -243,6 +248,7 @@ const CommentTop = memo(function CommentTop(props: {
             thread,
             setThread,
             setNotification,
+            t,
         ]
     );
 
@@ -254,7 +260,7 @@ const CommentTop = memo(function CommentTop(props: {
         () => [
             {
                 icon: <ShareIcon className="!text-metahkg-grey !text-[19px]" />,
-                title: "Share",
+                title: t("commentTop.share_tooltip"),
                 action: () => {
                     setShareLink(
                         comment.slink ||
@@ -273,6 +279,7 @@ const CommentTop = memo(function CommentTop(props: {
             setShareTitle,
             threadId,
             title,
+            t,
         ]
     );
 
@@ -292,12 +299,16 @@ const CommentTop = memo(function CommentTop(props: {
                         };
                         return {
                             icon: <PushPinIcon />,
-                            title: `${pinned ? "Unpin" : "Pin"} Comment`,
+                            title: pinned
+                                ? t("comment.unpinComment")
+                                : t("comment.pinComment"),
                             action: () => {
                                 setNotification({
                                     open: true,
                                     severity: "info",
-                                    text: `${pinned ? "Unpinn" : "Pinn"}ing Comment...`,
+                                    text: pinned
+                                        ? t("comment.unpinningComment")
+                                        : t("comment.pinningComment"),
                                 });
                                 (pinned
                                     ? api.threadUnpin(threadId)
@@ -307,7 +318,9 @@ const CommentTop = memo(function CommentTop(props: {
                                         setNotification({
                                             open: true,
                                             severity: "success",
-                                            text: `Comment ${pinned ? "un" : ""}pinned!`,
+                                            text: t("comment.commentUnpinned", {
+                                                action: pinned ? t("common.un") : "",
+                                            }),
                                         });
                                         setThread((thread) => {
                                             if (!pinned && thread) thread.pin = comment;
@@ -323,14 +336,14 @@ const CommentTop = memo(function CommentTop(props: {
                 })(),
                 comment.comment.type === "html" && {
                     icon: <FeedIcon className="!text-[19px]" />,
-                    title: "Create thread",
+                    title: t("comment.createThread"),
                     action: () => {
                         navigate(`/create?quote=${threadId}.${comment.id}`);
                     },
                 },
                 comment.comment.type === "html" && {
                     icon: <EditIcon className="!text-[19px]" />,
-                    title: "Edit (in new comment)",
+                    title: t("comment.editInNewComment"),
                     action: () => {
                         if (user && comment.comment.type === "html")
                             setEditor({ open: true, edit: comment.comment.html });
@@ -347,7 +360,17 @@ const CommentTop = memo(function CommentTop(props: {
                 title: string;
                 action: () => void;
             }[],
-        [comment, navigate, setEditor, setNotification, setThread, thread, threadId, user]
+        [
+            comment,
+            navigate,
+            setEditor,
+            setNotification,
+            setThread,
+            thread,
+            threadId,
+            user,
+            t,
+        ]
     );
 
     return (

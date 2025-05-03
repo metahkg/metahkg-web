@@ -15,6 +15,7 @@
  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { useTranslation } from "react-i18next";
 import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import { setDescription, setTitle } from "./lib/common";
 import { Navigate, Outlet, Route, Routes as Switch, useLocation } from "react-router-dom";
@@ -59,6 +60,7 @@ const Routes = memo(function Routes() {
     const [serverConfig] = useServerConfig();
     const [user] = useUser();
     const prev = React.useRef(location.pathname);
+    const { t } = useTranslation();
 
     const noAccess = useMemo(
         () => serverConfig?.visibility === "internal" && !user,
@@ -71,15 +73,15 @@ const Routes = memo(function Routes() {
 
     useEffect(() => {
         if (location.pathname !== prev.current) {
-            setTitle(serverConfig?.branding || "Metahkg");
+            setTitle(serverConfig?.branding || t("common.branding"));
             setDescription(
-                `${
-                    serverConfig?.branding || "Metahkg"
-                } is a free and open source lihkg-style forum.`
+                `${serverConfig?.branding || t("common.branding")}${t(
+                    "common.description_suffix"
+                )}`
             );
             prev.current = location.pathname;
         }
-    }, [serverConfig, location]);
+    }, [serverConfig, location, t]);
 
     return (
         <Switch>

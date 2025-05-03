@@ -17,6 +17,7 @@
 
 import { Slider, Stack } from "@mui/material";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import AvatarEditor from "react-avatar-editor";
 import { api } from "../../lib/api";
 import { parseError } from "../../lib/parseError";
@@ -38,6 +39,8 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
         rotate: 0,
     });
     const [, setNotification] = useNotification();
+
+    const { t } = useTranslation();
     const [user] = useUser();
     const editorRef = useRef<AvatarEditor>(null);
 
@@ -51,20 +54,20 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
     const buttons = useMemo(
         () => [
             {
-                text: "Cancel",
+                text: t("common.cancel"),
                 action: () => {
                     setOpen(false);
                     resetAvatarProps();
                 },
             },
             {
-                text: "Confirm",
+                text: t("common.confirm"),
                 action: () => {
                     if (avatar && user) {
                         setNotification({
                             open: true,
                             severity: "info",
-                            text: "Uploading avatar...",
+                            text: t("profile.avatar_editor.uploading_notification"),
                         });
                         api.userAvatarUpload(user?.id, {
                             data: avatar,
@@ -74,7 +77,7 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
                                 setNotification({
                                     open: true,
                                     severity: "success",
-                                    text: "Avatar updated.",
+                                    text: t("profile.avatar_editor.updated_notification"),
                                 });
                                 onSuccess();
                                 setOpen(false);
@@ -93,7 +96,7 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
                 },
             },
         ],
-        [avatar, onSuccess, resetAvatarProps, setNotification, setOpen, user]
+        [avatar, onSuccess, resetAvatarProps, setNotification, setOpen, user, t]
     );
 
     const onImageChange = useCallback(() => {
@@ -116,7 +119,7 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
         <PopUp
             open={open}
             setOpen={setOpen}
-            title={"Edit avatar"}
+            title={t("profile.avatar_editor.title")}
             buttons={buttons}
             onClose={resetAvatarProps}
         >
@@ -133,7 +136,7 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
                 onImageChange={onImageChange}
             />
             <Stack spacing={2} direction="row" sx={{ mx: 2 }} alignItems="center">
-                <p>Zoom</p>
+                <p>{t("profile.avatar_editor.zoom_label")}</p>
                 <Slider
                     min={1}
                     max={5}
@@ -156,7 +159,7 @@ const AvatarEditorPopUp = memo(function AvatarEditorPopUp(props: {
                 <p>{avatarProps.scale}x</p>
             </Stack>
             <Stack spacing={2} direction="row" sx={{ mx: 2 }} alignItems="center">
-                <p>Rotate</p>
+                <p>{t("profile.avatar_editor.rotate_label")}</p>
                 <Slider
                     min={0}
                     max={360}

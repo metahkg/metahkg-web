@@ -23,6 +23,7 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, Typography, SxProps, Theme, CircularProgress } from "@mui/material";
 import { useBlockList, useNotification } from "../AppContextProvider";
 import { useThreadId, useVotes } from "./ConversationContext";
@@ -115,6 +116,8 @@ const Comment = memo(function Comment(props: {
     const [blocked, setBlocked] = useState<boolean | undefined>(
         Boolean(blockList.find((i) => i.id === comment.user.id)) || undefined
     );
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         (blocked || blocked === undefined) &&
@@ -243,19 +246,21 @@ const Comment = memo(function Comment(props: {
                                                 className="inline"
                                                 sx={{ color: "secondary.main" }}
                                             >
-                                                Admin{" "}
+                                                {t("comment.admin_replied", {
+                                                    adminName: reply.admin.name,
+                                                    adminId: reply.admin.id,
+                                                    date: reply.date
+                                                        ? new Date(reply.date)
+                                                              .toISOString()
+                                                              .split("T")[0]
+                                                        : "unknown",
+                                                })}{" "}
                                                 <Link
                                                     color="inherit"
                                                     href={`/profile/${reply.admin.id}`}
                                                 >
                                                     {reply.admin.name}
-                                                </Link>{" "}
-                                                #{reply.admin.id} replied on{" "}
-                                                {reply.date
-                                                    ? new Date(reply.date)
-                                                          .toISOString()
-                                                          .split("T")[0]
-                                                    : "unknown"}
+                                                </Link>
                                                 :{" "}
                                             </Typography>
                                             {reply.reply}
@@ -269,19 +274,21 @@ const Comment = memo(function Comment(props: {
                                                 className="inline"
                                                 sx={{ color: "secondary.main" }}
                                             >
-                                                Admin{" "}
+                                                {t("comment.admin_edited", {
+                                                    adminName: edit.admin.name,
+                                                    adminId: edit.admin.id,
+                                                    date: edit.date
+                                                        ? new Date(edit.date)
+                                                              .toISOString()
+                                                              .split("T")[0]
+                                                        : "unknown",
+                                                })}{" "}
                                                 <Link
                                                     color="inherit"
                                                     href={`/profile/${edit.admin.id}`}
                                                 >
                                                     {edit.admin.name}
-                                                </Link>{" "}
-                                                #{edit.admin.id} edited on{" "}
-                                                {edit.date
-                                                    ? new Date(edit.date)
-                                                          .toISOString()
-                                                          .split("T")[0]
-                                                    : "unknown"}
+                                                </Link>
                                                 :{" "}
                                             </Typography>
                                             {edit.reason}
@@ -309,7 +316,10 @@ const Comment = memo(function Comment(props: {
                                     }}
                                 >
                                     <Typography className="!mt-1 !mb-1" color="secondary">
-                                        {showReplies ? "Hide" : "Show"} Replies
+                                        {showReplies
+                                            ? t("comment.hide_replies")
+                                            : t("comment.show_replies")}{" "}
+                                        {t("comment.replies_label")}
                                     </Typography>
                                     {showReplies ? (
                                         <KeyboardArrowUp color="secondary" />
@@ -333,7 +343,7 @@ const Comment = memo(function Comment(props: {
                                                 className="!mt-1 !mb-1 !text-lg"
                                                 color="secondary"
                                             >
-                                                End
+                                                {t("comment.end")}
                                             </Typography>
                                         </Box>
                                     </React.Fragment>
@@ -350,6 +360,7 @@ const Comment = memo(function Comment(props: {
             showReplies,
             replies,
             popupOpen,
+            t,
             fold,
             blocked,
             editing,

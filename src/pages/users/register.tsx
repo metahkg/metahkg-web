@@ -17,6 +17,7 @@
 
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
 import hash from "hash.js";
+import { useTranslation } from "react-i18next";
 import {
     Alert,
     Box,
@@ -54,6 +55,7 @@ import { LoadingButton } from "@mui/lab";
 import { regexString } from "../../lib/regex";
 import { memo } from "react";
 const Register = memo(function Register() {
+    const { t } = useTranslation();
     const [width] = useWidth();
     const [, setNotification] = useNotification();
     const [name, setName] = useState("");
@@ -81,9 +83,9 @@ const Register = memo(function Register() {
     const small = useMemo(() => width / 2 - 100 <= 450, [width]);
 
     useLayoutEffect(() => {
-        setTitle(`Register | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("register.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user, serverConfig?.branding]);
+    }, [menu, setMenu, user, serverConfig?.branding, t]);
 
     if (user) <Navigate to="/" replace />;
 
@@ -102,7 +104,7 @@ const Register = memo(function Register() {
             }
             setDisable(true);
             setLoading(true);
-            setAlert({ severity: "info", text: "Registering..." });
+            setAlert({ severity: "info", text: t("register.registering") });
             api.authRegister({
                 email,
                 name,
@@ -114,12 +116,12 @@ const Register = memo(function Register() {
                 .then(() => {
                     setAlert({
                         severity: "success",
-                        text: "A link has been sent to your email address. Please click the link to verify.",
+                        text: t("register.verification_email_sent_alert"),
                     });
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: "Please click the link sent to your email address.",
+                        text: t("register.verification_email_sent_notification"),
                     });
                 })
                 .catch((err) => {
@@ -142,13 +144,14 @@ const Register = memo(function Register() {
             serverConfig?.captcha.type,
             setNotification,
             sex,
+            t,
         ]
     );
 
     const inputs: TextFieldProps[] = useMemo(
         () => [
             {
-                label: "Username",
+                label: t("register.username_label"),
                 onChange: (e) => {
                     setName(e.target.value);
                 },
@@ -156,11 +159,10 @@ const Register = memo(function Register() {
                 inputProps: {
                     pattern: regexString.username,
                 },
-                helperText:
-                    "1-15 en/jp/greek/zh-tw/number/emoji characters without spaces",
+                helperText: t("register.username_helper_text"),
             },
             {
-                label: "Email",
+                label: t("register.email_label"),
                 onChange: (e) => setEmail(e.target.value),
                 type: "email",
                 inputProps: {
@@ -168,14 +170,14 @@ const Register = memo(function Register() {
                 },
             },
             {
-                label: "Password",
+                label: t("register.password_label"),
                 onChange: (e) => setPassword(e.target.value),
                 type: "password",
                 inputProps: { pattern: regexString.password },
-                helperText: "At least 8 characters long without spaces",
+                helperText: t("register.password_helper_text"),
             },
         ],
-        []
+        [t]
     );
 
     return (
@@ -214,7 +216,9 @@ const Register = memo(function Register() {
                             width={40}
                             className="!mb-[10px]"
                         />
-                        <h1 className="text-[25px] !mb-[20px] mx-0">Register</h1>
+                        <h1 className="text-[25px] !mb-[20px] mx-0">
+                            {t("register.title")}
+                        </h1>
                     </Box>
                     {alert.text && (
                         <Alert
@@ -237,12 +241,14 @@ const Register = memo(function Register() {
                         />
                     ))}
                     <FormControl required className="!min-w-[200px]">
-                        <InputLabel color="secondary">Gender</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("register.gender_label")}
+                        </InputLabel>
                         <Select
                             color="secondary"
                             defaultValue=""
                             disabled={disable}
-                            label="Gender"
+                            label={t("register.gender_label")}
                             onChange={(e) => {
                                 setSex(e.target.value as "M" | "F" | undefined);
                                 // wait until formRef is updated
@@ -253,8 +259,8 @@ const Register = memo(function Register() {
                                 });
                             }}
                         >
-                            <MenuItem value="M">Male</MenuItem>
-                            <MenuItem value="F">Female</MenuItem>
+                            <MenuItem value="M">{t("register.gender_male")}</MenuItem>
+                            <MenuItem value="F">{t("register.gender_female")}</MenuItem>
                         </Select>
                     </FormControl>
                     {serverConfig?.register.mode === "invite" && (
@@ -263,7 +269,7 @@ const Register = memo(function Register() {
                             color="secondary"
                             disabled={disable}
                             required
-                            label="Invite Code"
+                            label={t("register.invite_code_label")}
                             onChange={(e) => {
                                 setInviteCode(e.target.value);
                             }}
@@ -283,7 +289,7 @@ const Register = memo(function Register() {
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
                         >
-                            Verify / Resend verification email
+                            {t("register.verify_resend_email")}
                         </Typography>
                     </Box>
                     <Box className="!mt-[15px]">
@@ -298,7 +304,7 @@ const Register = memo(function Register() {
                             color="secondary"
                             variant="contained"
                         >
-                            Register
+                            {t("register.register_button")}
                         </LoadingButton>
                         <CaptchaNotice />
                     </Box>

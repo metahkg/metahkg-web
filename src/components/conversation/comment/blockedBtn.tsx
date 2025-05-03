@@ -16,6 +16,7 @@
  */
 
 import { Button, Tooltip } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 import { memo } from "react";
 const BlockedBtn = memo(function BlockedBtn(props: {
@@ -25,11 +26,19 @@ const BlockedBtn = memo(function BlockedBtn(props: {
     className?: string;
 }) {
     const { userName, reason, setBlocked, className } = props;
+    const { t } = useTranslation();
 
     return (
         <Tooltip
             arrow
-            title={`User ${userName} blocked${reason ? ` because of "${reason}"` : ""}.`}
+            title={
+                reason
+                    ? t("blockedBtn.tooltip_blocked_user_with_reason", {
+                          userName,
+                          reason,
+                      })
+                    : t("blockedBtn.tooltip_blocked_user", { userName })
+            }
         >
             <Button
                 className={`${className} !text-sm !normal-case`}
@@ -39,7 +48,7 @@ const BlockedBtn = memo(function BlockedBtn(props: {
                 }}
                 variant="outlined"
             >
-                Click to view comment
+                {t("blockedBtn.view_comment")}
             </Button>
         </Tooltip>
     );

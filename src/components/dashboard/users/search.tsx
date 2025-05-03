@@ -18,6 +18,7 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     useDarkMode,
     useIsSmallScreen,
@@ -47,6 +48,8 @@ const SearchUsers = memo(function SearchUsers() {
         muted?: boolean;
         banned?: boolean;
     } | null>(null);
+
+    const { t } = useTranslation();
     const formRef = useRef<HTMLFormElement>(null);
     const resultsRef = useRef<HTMLDivElement>(null);
     const [loading, setLoading] = useState(false);
@@ -114,14 +117,15 @@ const SearchUsers = memo(function SearchUsers() {
             <AlertDialog
                 open={muteDialogOpen}
                 setOpen={setMuteDialogOpen}
-                title={`Mute user ${
-                    users?.find((user) => user.id === muteUser?.id)?.name
-                } (#${muteUser?.id})?`}
+                title={t("dashboard.users.search.mute_dialog_title", {
+                    userName: users?.find((user) => user.id === muteUser?.id)?.name,
+                    userId: muteUser?.id,
+                })}
                 body={(state, setState, closeDialog) => (
                     <Grid container spacing={2} sx={{ my: 1 }}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Reason"
+                                label={t("dashboard.users.search.reason_label")}
                                 color="secondary"
                                 required
                                 onChange={(e) => {
@@ -141,7 +145,9 @@ const SearchUsers = memo(function SearchUsers() {
                                     }
                                 >
                                     <DateTimePicker
-                                        label="Expiration"
+                                        label={t(
+                                            "dashboard.users.search.expiration_label"
+                                        )}
                                         onChange={(value) => {
                                             setMuteUser({
                                                 ...muteUser,
@@ -156,13 +162,13 @@ const SearchUsers = memo(function SearchUsers() {
                 )}
                 btns={() => [
                     {
-                        text: "Cancel",
+                        text: t("dashboard.users.search.cancel_button"),
                         action: (_state, _setState, closeDialog) => {
                             closeDialog();
                         },
                     },
                     {
-                        text: "Confirm",
+                        text: t("dashboard.users.search.confirm_button"),
                         action: (_state, _setState, closeDialog) => {
                             if (muteUser?.id && muteUser?.reason) {
                                 api.userMute(muteUser?.id, {
@@ -174,7 +180,9 @@ const SearchUsers = memo(function SearchUsers() {
                                         setNotification({
                                             open: true,
                                             severity: "success",
-                                            text: "User muted.",
+                                            text: t(
+                                                "dashboard.users.search.user_muted_notification"
+                                            ),
                                         });
                                         search();
                                     })
@@ -194,14 +202,15 @@ const SearchUsers = memo(function SearchUsers() {
             <AlertDialog
                 open={banDialogOpen}
                 setOpen={setBanDialogOpen}
-                title={`Ban user ${
-                    users?.find((user) => user.id === banUser?.id)?.name
-                } (#${banUser?.id})?`}
+                title={t("dashboard.users.search.ban_dialog_title", {
+                    userName: users?.find((user) => user.id === banUser?.id)?.name,
+                    userId: banUser?.id,
+                })}
                 body={(state, setState, closeDialog) => (
                     <Grid container spacing={2} sx={{ my: 1 }}>
                         <Grid item xs={12}>
                             <TextField
-                                label="Reason"
+                                label={t("dashboard.users.search.reason_label")}
                                 color="secondary"
                                 required
                                 onChange={(e) => {
@@ -221,7 +230,9 @@ const SearchUsers = memo(function SearchUsers() {
                                     }
                                 >
                                     <DateTimePicker
-                                        label="Expiration"
+                                        label={t(
+                                            "dashboard.users.search.expiration_label"
+                                        )}
                                         onChange={(value) => {
                                             setBanUser({
                                                 ...banUser,
@@ -236,13 +247,13 @@ const SearchUsers = memo(function SearchUsers() {
                 )}
                 btns={() => [
                     {
-                        text: "Cancel",
+                        text: t("dashboard.users.search.cancel_button"),
                         action: (_state, _setState, closeDialog) => {
                             closeDialog();
                         },
                     },
                     {
-                        text: "Confirm",
+                        text: t("dashboard.users.search.confirm_button"),
                         action: (_state, _setState, closeDialog) => {
                             if (banUser?.id && banUser?.reason) {
                                 api.userBan(banUser?.id, {
@@ -254,7 +265,9 @@ const SearchUsers = memo(function SearchUsers() {
                                         setNotification({
                                             open: true,
                                             severity: "success",
-                                            text: "User banned.",
+                                            text: t(
+                                                "dashboard.users.search.user_banned_notification"
+                                            ),
                                         });
                                         search();
                                     })
@@ -275,7 +288,7 @@ const SearchUsers = memo(function SearchUsers() {
                 <Grid item xs={6}>
                     <TextField
                         color="secondary"
-                        label="User ID"
+                        label={t("dashboard.users.search.user_id_label")}
                         onChange={(e) => {
                             setSearchSettings({
                                 ...searchSettings,
@@ -291,7 +304,7 @@ const SearchUsers = memo(function SearchUsers() {
                 <Grid item xs={6}>
                     <TextField
                         color="secondary"
-                        label="User Name"
+                        label={t("dashboard.users.search.user_name_label")}
                         onChange={(e) => {
                             setSearchSettings({
                                 ...searchSettings,
@@ -306,7 +319,7 @@ const SearchUsers = memo(function SearchUsers() {
                 <Grid item xs={6}>
                     <TextField
                         color="secondary"
-                        label="User Email"
+                        label={t("dashboard.users.search.user_email_label")}
                         onChange={(e) => {
                             setSearchSettings({
                                 ...searchSettings,
@@ -320,10 +333,12 @@ const SearchUsers = memo(function SearchUsers() {
                 </Grid>
                 <Grid item xs={6}>
                     <FormControl sx={{ minWidth: 120 }} fullWidth>
-                        <InputLabel color="secondary">User Gender</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("dashboard.users.search.user_gender_label")}
+                        </InputLabel>
                         <Select
                             color="secondary"
-                            label="User Gender"
+                            label={t("dashboard.users.search.user_gender_label")}
                             variant="outlined"
                             defaultValue=""
                             onChange={(e) => {
@@ -335,18 +350,24 @@ const SearchUsers = memo(function SearchUsers() {
                             value={searchSettings?.sex || ""}
                         >
                             <MenuItem value=""></MenuItem>
-                            <MenuItem value="M">Male</MenuItem>
-                            <MenuItem value="F">Female</MenuItem>
+                            <MenuItem value="M">
+                                {t("profile.data_table.gender_male")}
+                            </MenuItem>
+                            <MenuItem value="F">
+                                {t("profile.data_table.gender_female")}
+                            </MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
 
                 <Grid item xs={6}>
                     <FormControl sx={{ minWidth: 120 }} fullWidth>
-                        <InputLabel color="secondary">User Role</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("dashboard.users.search.user_role_label")}
+                        </InputLabel>
                         <Select
                             color="secondary"
-                            label="User Role"
+                            label={t("dashboard.users.search.user_role_label")}
                             variant="outlined"
                             defaultValue=""
                             onChange={(e) => {
@@ -358,8 +379,12 @@ const SearchUsers = memo(function SearchUsers() {
                             value={searchSettings?.role || ""}
                         >
                             <MenuItem value=""></MenuItem>
-                            <MenuItem value="admin">Admin</MenuItem>
-                            <MenuItem value="user">User</MenuItem>
+                            <MenuItem value="admin">
+                                {t("dashboard.users.search.admin_role")}
+                            </MenuItem>
+                            <MenuItem value="user">
+                                {t("dashboard.users.search.user_role")}
+                            </MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -377,7 +402,7 @@ const SearchUsers = memo(function SearchUsers() {
                                 checked={!!searchSettings?.muted}
                             />
                         }
-                        label="Muted"
+                        label={t("dashboard.users.search.muted_checkbox")}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -394,7 +419,7 @@ const SearchUsers = memo(function SearchUsers() {
                                 checked={!!searchSettings?.banned}
                             />
                         }
-                        label="Banned"
+                        label={t("dashboard.users.search.banned_checkbox")}
                     />
                 </Grid>
             </Grid>
@@ -408,7 +433,7 @@ const SearchUsers = memo(function SearchUsers() {
                 variant="contained"
                 className="!mt-2"
             >
-                Search
+                {t("dashboard.users.search.search_button")}
             </LoadingButton>
             {!!users && (
                 <React.Fragment>
@@ -437,13 +462,20 @@ const SearchUsers = memo(function SearchUsers() {
                                                 variant="body2"
                                                 color="text.secondary"
                                             >
-                                                <strong>ID:</strong> {userInfo.id}
+                                                <strong>
+                                                    {t("dashboard.users.search.id_label")}
+                                                </strong>{" "}
+                                                {userInfo.id}
                                             </Typography>
                                             <Typography
                                                 variant="body2"
                                                 color="text.secondary"
                                             >
-                                                <strong>Created At:</strong>{" "}
+                                                <strong>
+                                                    {t(
+                                                        "dashboard.users.search.created_at_label"
+                                                    )}
+                                                </strong>{" "}
                                                 {new Date(
                                                     userInfo.createdAt
                                                 ).toDateString()}
@@ -452,25 +484,44 @@ const SearchUsers = memo(function SearchUsers() {
                                                 variant="body2"
                                                 color="text.secondary"
                                             >
-                                                <strong>Gender:</strong> {userInfo.sex}
+                                                <strong>
+                                                    {t(
+                                                        "dashboard.users.search.gender_label"
+                                                    )}
+                                                </strong>{" "}
+                                                {userInfo.sex}
                                             </Typography>
                                             <Typography
                                                 variant="body2"
                                                 color="text.secondary"
                                             >
-                                                <strong>Role:</strong> {userInfo.role}
+                                                <strong>
+                                                    {t(
+                                                        "dashboard.users.search.role_label"
+                                                    )}
+                                                </strong>{" "}
+                                                {userInfo.role}
                                             </Typography>
                                             {userInfo.mute && (
                                                 <Typography
                                                     variant="body2"
                                                     color="text.secondary"
                                                 >
-                                                    <strong>Muted for:</strong>{" "}
+                                                    <strong>
+                                                        {t(
+                                                            "dashboard.users.search.muted_for_label"
+                                                        )}
+                                                    </strong>{" "}
                                                     {userInfo.mute.reason}{" "}
                                                     {userInfo.mute.exp &&
-                                                        `(expires: ${new Date(
-                                                            userInfo.mute.exp
-                                                        ).toDateString()})`}
+                                                        t(
+                                                            "dashboard.users.search.expires_label",
+                                                            {
+                                                                date: new Date(
+                                                                    userInfo.mute.exp
+                                                                ).toDateString(),
+                                                            }
+                                                        )}
                                                 </Typography>
                                             )}
                                             {userInfo.ban && (
@@ -478,12 +529,21 @@ const SearchUsers = memo(function SearchUsers() {
                                                     variant="body2"
                                                     color="text.secondary"
                                                 >
-                                                    <strong>Banned for:</strong>{" "}
+                                                    <strong>
+                                                        {t(
+                                                            "dashboard.users.search.banned_for_label"
+                                                        )}
+                                                    </strong>{" "}
                                                     {userInfo.ban.reason}{" "}
                                                     {userInfo.ban.exp &&
-                                                        `(expires: ${new Date(
-                                                            userInfo.ban.exp
-                                                        ).toDateString()})`}
+                                                        t(
+                                                            "dashboard.users.search.expires_label",
+                                                            {
+                                                                date: new Date(
+                                                                    userInfo.ban.exp
+                                                                ).toDateString(),
+                                                            }
+                                                        )}
                                                 </Typography>
                                             )}
                                         </CardContent>
@@ -502,7 +562,9 @@ const SearchUsers = memo(function SearchUsers() {
                                                             setNotification({
                                                                 open: true,
                                                                 severity: "success",
-                                                                text: "User unmuted.",
+                                                                text: t(
+                                                                    "dashboard.users.search.user_unmuted_notification"
+                                                                ),
                                                             });
                                                             search();
                                                         })
@@ -516,7 +578,11 @@ const SearchUsers = memo(function SearchUsers() {
                                                 }
                                             }}
                                         >
-                                            {userInfo.mute ? "Unmute" : "Mute"}
+                                            {userInfo.mute
+                                                ? t(
+                                                      "dashboard.users.search.unmute_button"
+                                                  )
+                                                : t("dashboard.users.search.mute_button")}
                                         </Button>
                                         <Button
                                             size="small"
@@ -531,7 +597,9 @@ const SearchUsers = memo(function SearchUsers() {
                                                             setNotification({
                                                                 open: true,
                                                                 severity: "success",
-                                                                text: "User unbanned.",
+                                                                text: t(
+                                                                    "dashboard.users.search.user_unbanned_notification"
+                                                                ),
                                                             });
                                                             search();
                                                         })
@@ -545,7 +613,9 @@ const SearchUsers = memo(function SearchUsers() {
                                                 }
                                             }}
                                         >
-                                            {userInfo.ban ? "Unban" : "Ban"}
+                                            {userInfo.ban
+                                                ? t("dashboard.users.search.unban_button")
+                                                : t("dashboard.users.search.ban_button")}
                                         </Button>
                                     </CardActions>
                                 </Card>

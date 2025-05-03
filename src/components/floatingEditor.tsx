@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Close,
     Code,
@@ -62,6 +63,7 @@ import CreatePoll, { PollCreateType } from "./createPoll";
 import { memo } from "react";
 
 const FloatingEditor = memo(function FloatingEditor() {
+    const { t } = useTranslation();
     const threadId = useThreadId();
     const [editor, setEditor] = useEditor();
     const [comment, setComment] = useState("");
@@ -218,7 +220,9 @@ const FloatingEditor = memo(function FloatingEditor() {
             >
                 <DialogTitle className="flex justify-between items-center !p-0">
                     <Typography variant="h5" className="!ml-5 !my-2">
-                        {editor.quote ? "Reply" : "Comment"}
+                        {editor.quote
+                            ? t("floatingEditor.reply_title")
+                            : t("floatingEditor.comment_title")}
                     </Typography>
                     <Box className="flex mr-1">
                         <IconButton
@@ -267,14 +271,14 @@ const FloatingEditor = memo(function FloatingEditor() {
                         <Tab
                             icon={<Code />}
                             value={"html"}
-                            label="HTML"
+                            label={t("create.html_tab")}
                             iconPosition="start"
                             disableRipple
                         />
                         <Tab
                             icon={<PollIcon />}
                             value={"poll"}
-                            label="Poll"
+                            label={t("create.poll_tab")}
                             iconPosition="start"
                             disableRipple
                         />
@@ -309,7 +313,7 @@ const FloatingEditor = memo(function FloatingEditor() {
                             thread?.visibility === "internal"
                         }
                         className="mt-2 ml-1"
-                        title="Internal comment"
+                        title={t("floatingEditor.internal_comment_title")}
                     />
                     <Box className="my-2 ml-1">
                         <CAPTCHA ref={captchaRef} />
@@ -327,7 +331,7 @@ const FloatingEditor = memo(function FloatingEditor() {
                             }
                             startIcon={<CommentIcon />}
                         >
-                            Comment
+                            {t("floatingEditor.comment_button")}
                         </LoadingButton>
                         <CaptchaNotice />
                     </Box>

@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Alert,
     Box,
@@ -52,6 +53,7 @@ import { loadUser } from "../../lib/jwt";
 import { LoadingButton } from "@mui/lab";
 import { memo } from "react";
 const Login = memo(function Login() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const isSmallScreen = useIsSmallScreen();
@@ -75,20 +77,20 @@ const Login = memo(function Login() {
 
     useEffect(() => {
         if (query?.continue) {
-            setAlert({ severity: "info", text: "Login to continue." });
+            setAlert({ severity: "info", text: t("login.continue") });
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Login to continue.",
+                text: t("login.continue"),
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useLayoutEffect(() => {
-        setTitle(`Login | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("login.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user, serverConfig?.branding]);
+    }, [menu, setMenu, user, serverConfig?.branding, t]);
 
     const onSubmit = useCallback(
         async (e?: React.FormEvent<HTMLFormElement>) => {
@@ -102,7 +104,7 @@ const Login = memo(function Login() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Logging in..." });
+            setAlert({ severity: "info", text: t("login.logging_in") });
             api.authLogin({
                 name,
                 password: hash.sha256().update(password).digest("hex"),
@@ -117,7 +119,9 @@ const Login = memo(function Login() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: `Logged in as ${loadUser(data.token)?.name}.`,
+                        text: t("login.logged_in_as", {
+                            name: loadUser(data.token)?.name,
+                        }),
                     });
                 })
                 .catch((err) => {
@@ -143,6 +147,7 @@ const Login = memo(function Login() {
             serverConfig?.captcha.type,
             setNotification,
             setSession,
+            t,
         ]
     );
 
@@ -170,7 +175,7 @@ const Login = memo(function Login() {
                             light={darkMode}
                             className="!mb-[10px]"
                         />
-                        <h1 className="text-[25px] !mb-[20px]">Login</h1>
+                        <h1 className="text-[25px] !mb-[20px]">{t("login.title")}</h1>
                     </Box>
                     {alert.text && (
                         <Alert
@@ -181,8 +186,16 @@ const Login = memo(function Login() {
                         </Alert>
                     )}
                     {[
-                        { label: "Username / Email", type: "text", set: setName },
-                        { label: "Password", type: "password", set: setPassword },
+                        {
+                            label: t("login.username_email_label"),
+                            type: "text",
+                            set: setName,
+                        },
+                        {
+                            label: t("login.password_label"),
+                            type: "password",
+                            set: setPassword,
+                        },
                     ].map((item, index) => (
                         <TextField
                             key={index}
@@ -209,7 +222,7 @@ const Login = memo(function Login() {
                                     checked={sameIp}
                                 />
                             }
-                            label="Restrict session to same ip address"
+                            label={t("login.restrict_ip")}
                         />
                     </FormGroup>
                     <Box className="my-[15px]">
@@ -221,7 +234,7 @@ const Login = memo(function Login() {
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
                         >
-                            Verify / Resend verification email
+                            {t("login.verify_resend_email")}
                         </Typography>
                         <div className="h-[15px]" />
                         <Typography
@@ -232,7 +245,7 @@ const Login = memo(function Login() {
                                 color: `${theme.palette.secondary.main} !important`,
                             })}
                         >
-                            Forgot password?
+                            {t("login.forgot_password")}
                         </Typography>
                     </Box>
                     <CAPTCHA ref={captchaRef} />
@@ -247,7 +260,7 @@ const Login = memo(function Login() {
                             })}
                             to={`/users/register${window.location.search}`}
                         >
-                            Register
+                            {t("login.register_button")}
                         </Button>
                         <LoadingButton
                             disabled={loading || !formRef.current?.checkValidity()}
@@ -259,7 +272,7 @@ const Login = memo(function Login() {
                             variant="contained"
                             type="submit"
                         >
-                            Login
+                            {t("login.login_button")}
                         </LoadingButton>
                     </Box>
                     <CaptchaNotice />

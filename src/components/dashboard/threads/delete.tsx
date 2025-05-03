@@ -1,5 +1,6 @@
 import { Box, Grid, TextField } from "@mui/material";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
@@ -13,6 +14,8 @@ const DeleteThread = memo(function DeleteThread() {
     const [reason, setReason] = useState("");
     const [loading, setLoading] = useState(false);
     const [valid, setValid] = useState(formRef.current?.checkValidity?.());
+
+    const { t } = useTranslation();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
@@ -32,7 +35,7 @@ const DeleteThread = memo(function DeleteThread() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Thread deleted successfully.",
+                            text: t("dashboard.threads.delete.success_notification"),
                         });
                     })
                     .catch((err) => {
@@ -45,7 +48,7 @@ const DeleteThread = memo(function DeleteThread() {
                     });
             }
         },
-        [reason, setNotification, threadId]
+        [reason, setNotification, threadId, t]
     );
 
     return (
@@ -57,7 +60,7 @@ const DeleteThread = memo(function DeleteThread() {
                         onChange={(e) => {
                             setThreadId(Number(e.target.value));
                         }}
-                        label="Thread ID"
+                        label={t("dashboard.threads.delete.thread_id_label")}
                         color="secondary"
                         type="number"
                         inputProps={{
@@ -71,8 +74,8 @@ const DeleteThread = memo(function DeleteThread() {
                         <TextField
                             color="secondary"
                             variant="outlined"
-                            label="Reason for deleting"
-                            placeholder="Provide a reason for deleting"
+                            label={t("dashboard.threads.delete.reason_label")}
+                            placeholder={t("dashboard.threads.delete.reason_placeholder")}
                             required
                             onChange={(e) => {
                                 setReason(e.target.value);
@@ -92,7 +95,7 @@ const DeleteThread = memo(function DeleteThread() {
                         variant="contained"
                         className="!mt-4 !ml-4"
                     >
-                        Delete
+                        {t("dashboard.threads.delete.delete_button")}
                     </LoadingButton>
                 )}
             </Grid>

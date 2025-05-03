@@ -21,6 +21,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import Loader from "../../lib/loader";
 import { PopUp } from "../../lib/popup";
 import { useServerConfig, useWidth } from "../AppContextProvider";
+import { useTranslation } from "react-i18next";
 
 import { memo } from "react";
 const Gallery = memo(function Gallery(props: {
@@ -33,8 +34,10 @@ const Gallery = memo(function Gallery(props: {
     const [loading, setLoading] = useState(true);
     const [serverConfig] = useServerConfig();
 
+    const { t } = useTranslation();
+
     return (
-        <PopUp title="Images" open={open} setOpen={setOpen} fullScreen>
+        <PopUp title={t("gallery.title")} open={open} setOpen={setOpen} fullScreen>
             <Box sx={{ bgcolor: "primary.main" }} className="!mx-2">
                 <PhotoProvider>
                     {loading && <Loader position="center" />}

@@ -8,6 +8,7 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import React, { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { LoadingButton } from "@mui/lab";
 import { Delete } from "@mui/icons-material";
@@ -15,6 +16,7 @@ import { api } from "../../../lib/api";
 import { parseError } from "../../../lib/parseError";
 import { memo } from "react";
 const DeleteCategory = memo(function DeleteCategory() {
+    const { t } = useTranslation();
     const formRef = useRef<HTMLFormElement>();
     const [categories, setCategories] = useCategories();
     const [, setNotification] = useNotification();
@@ -32,7 +34,7 @@ const DeleteCategory = memo(function DeleteCategory() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Category deleted successfully.",
+                            text: t("deleteCategory.category_deleted_success"),
                         });
                         api.categories()
                             .then(setCategories)
@@ -48,7 +50,7 @@ const DeleteCategory = memo(function DeleteCategory() {
                     });
             }
         },
-        [setCategories, setNotification, category]
+        [setCategories, setNotification, category, t]
     );
 
     return (
@@ -56,7 +58,9 @@ const DeleteCategory = memo(function DeleteCategory() {
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <FormControl sx={{ m: 1, minWidth: 150 }}>
-                        <InputLabel color="secondary">Category</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("deleteCategory.category_label")}
+                        </InputLabel>
                         <Select
                             value={category}
                             onChange={(e: SelectChangeEvent<number | "">) => {
@@ -66,7 +70,7 @@ const DeleteCategory = memo(function DeleteCategory() {
                                     setCategory(e.target.value as number);
                                 }
                             }}
-                            label="Category"
+                            label={t("deleteCategory.category_label")}
                             color="secondary"
                         >
                             <MenuItem value=""></MenuItem>
@@ -89,7 +93,7 @@ const DeleteCategory = memo(function DeleteCategory() {
                             variant="contained"
                             className="!mt-2"
                         >
-                            Delete
+                            {t("deleteCategory.delete_button")}
                         </LoadingButton>
                     </Grid>
                 )}

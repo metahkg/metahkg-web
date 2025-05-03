@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Editor } from "@tinymce/tinymce-react";
 import { useDarkMode, useIsSmallScreen, useServerConfig } from "./AppContextProvider";
 import { Box, SxProps, Theme } from "@mui/material";
@@ -53,6 +54,7 @@ const TextEditor = memo(function TextEditor(props: {
         noAutoSave,
     } = props;
 
+    const { t } = useTranslation();
     const isSmallScreen = useIsSmallScreen();
     const [session] = useSession();
     const darkMode = useDarkMode();
@@ -132,20 +134,22 @@ const TextEditor = memo(function TextEditor(props: {
                                         ?.files?.[0];
                                     if (file) {
                                         editor.windowManager.open({
-                                            title: "Upload image",
+                                            title: t("textEditor.upload_image_title"),
                                             body: {
                                                 type: "panel",
                                                 items: [
                                                     {
                                                         type: "htmlpanel",
-                                                        html: "<p>Uploading your image...</p>",
+                                                        html: `<p>${t(
+                                                            "textEditor.uploading_image"
+                                                        )}</p>`,
                                                     },
                                                 ],
                                             },
                                             buttons: [
                                                 {
                                                     type: "submit",
-                                                    text: "OK",
+                                                    text: t("alertDialog.ok"),
                                                     buttonType: "primary",
                                                 },
                                             ],
@@ -176,15 +180,15 @@ const TextEditor = memo(function TextEditor(props: {
                                             .catch((err) => {
                                                 editor.windowManager.close();
                                                 editor.windowManager.open({
-                                                    title: "Error",
+                                                    title: t("commentEdit.error_title"),
                                                     body: {
                                                         type: "panel",
                                                         items: [
                                                             {
                                                                 type: "alertbanner",
-                                                                text: `Error uploading image: ${parseError(
-                                                                    err
-                                                                )}`,
+                                                                text: `${t(
+                                                                    "textEditor.error_uploading_image_message"
+                                                                )}${parseError(err)}`,
                                                                 level: "error",
                                                                 icon: "warning",
                                                             },
@@ -193,7 +197,7 @@ const TextEditor = memo(function TextEditor(props: {
                                                     buttons: [
                                                         {
                                                             type: "submit",
-                                                            text: "OK",
+                                                            text: t("alertDialog.ok"),
                                                             buttonType: "primary",
                                                         },
                                                     ],

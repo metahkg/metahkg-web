@@ -18,6 +18,7 @@
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
 import { useNotification } from "../../components/AppContextProvider";
+import { useTranslation } from "react-i18next";
 import {
     useCurrentPage,
     useEnd,
@@ -35,6 +36,7 @@ import { parseError } from "../../lib/parseError";
 import { useCallback, useMemo } from "react";
 
 export default function useChangePage() {
+    const { t } = useTranslation();
     const [, setLoading] = useLoading();
     const [pages, setPages] = usePages();
     const [finalPage, setFinalPage] = useFinalPage();
@@ -89,7 +91,7 @@ export default function useChangePage() {
                             return setNotification({
                                 open: true,
                                 severity: "error",
-                                text: "Page not found!",
+                                text: t("changePage.page_not_found"),
                             });
 
                         setThread(
@@ -142,6 +144,7 @@ export default function useChangePage() {
             lastHeight,
             limit,
             navigate,
+            t,
             pages,
             setCurrentPage,
             setEnd,

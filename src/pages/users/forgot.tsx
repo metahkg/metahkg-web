@@ -18,6 +18,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Alert, Box, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 import {
     useDarkMode,
     useNotification,
@@ -38,6 +39,7 @@ import { parseError } from "../../lib/parseError";
 import CaptchaNotice from "../../lib/captchaNotice";
 import { memo } from "react";
 const Forgot = memo(function Forgot() {
+    const { t } = useTranslation();
     const [menu, setMenu] = useMenu();
     const [, setNotification] = useNotification();
     const [width] = useWidth();
@@ -57,9 +59,9 @@ const Forgot = memo(function Forgot() {
     const small = width / 2 - 100 <= 450;
 
     useLayoutEffect(() => {
-        setTitle(`Forgot password | ${serverConfig?.branding || "Metahkg"}`);
+        setTitle(`${t("forgot.title")} | ${serverConfig?.branding || "Metahkg"}`);
         menu && setMenu(false);
-    }, [menu, setMenu, user, serverConfig?.branding]);
+    }, [menu, setMenu, user, serverConfig?.branding, t]);
 
     if (user) <Navigate to="/" replace />;
 
@@ -75,21 +77,21 @@ const Forgot = memo(function Forgot() {
                 return;
             }
             setLoading(true);
-            setAlert({ severity: "info", text: "Requesting reset password..." });
+            setAlert({ severity: "info", text: t("forgot.requesting_reset") });
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Requesting reset password...",
+                text: t("forgot.requesting_reset"),
             });
             api.authForgot({ email, captchaToken })
                 .then(() => {
                     setNotification({
                         open: true,
-                        text: `Reset password email sent.`,
+                        text: t("forgot.reset_email_sent"),
                     });
                     setAlert({
                         severity: "success",
-                        text: "Reset password email sent. Please click the link to reset your password.",
+                        text: t("forgot.reset_email_sent_instructions"),
                     });
                     captchaRef.current?.reset();
                     setLoading(false);
@@ -108,13 +110,13 @@ const Forgot = memo(function Forgot() {
                     setLoading(false);
                 });
         },
-        [email, serverConfig?.captcha.type, setNotification]
+        [email, serverConfig?.captcha.type, setNotification, t]
     );
 
     useEffect(() => {
         if (query.email && !user) onSubmit();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [onSubmit, query.email, user]);
 
     if (user) return <Navigate to="/" replace />;
 
@@ -132,7 +134,9 @@ const Forgot = memo(function Forgot() {
                 >
                     <Box className="flex justify-center items-center !mb-[20px]">
                         <MetahkgLogo svg light={darkMode} height={50} width={40} />
-                        <h1 className="text-[25px] my-0 !ml-[5px]">Forgot password</h1>
+                        <h1 className="text-[25px] my-0 !ml-[5px]">
+                            {t("forgot.title")}
+                        </h1>
                     </Box>
                     {alert.text && (
                         <Alert className="!mb-[20px]" severity={alert.severity}>
@@ -140,7 +144,7 @@ const Forgot = memo(function Forgot() {
                         </Alert>
                     )}
                     <TextField
-                        label="Email"
+                        label={t("forgot.email_label")}
                         value={email}
                         type="email"
                         onChange={(e) => {
@@ -163,7 +167,7 @@ const Forgot = memo(function Forgot() {
                             startIcon={<SendIcon className="!text-[16px]" />}
                             loadingPosition="start"
                         >
-                            Reset
+                            {t("forgot.reset_button")}
                         </LoadingButton>
                         <CaptchaNotice />
                     </Box>

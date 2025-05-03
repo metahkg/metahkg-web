@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useIsSmallScreen, useNotification, useSession } from "../AppContextProvider";
 import { useMenuTitle, useReFetch } from "../MenuProvider";
 import {
@@ -51,6 +52,7 @@ interface DataTableProps {
     isSelf: boolean;
 }
 const DataTable = memo(function DataTable(props: DataTableProps) {
+    const { t } = useTranslation();
     const { reqUser, setReqUser, isSelf } = props;
     const isSmallScreen = useIsSmallScreen();
     const [, setReFetch] = useReFetch();
@@ -66,7 +68,7 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
     const items = useMemo(
         () => [
             {
-                title: "Name",
+                title: t("profile.data_table.name_title"),
                 content: isSelf ? (
                     <TextField
                         variant="standard"
@@ -78,7 +80,7 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                         helperText={
                             name !== reqUser.name &&
                             !nameValid &&
-                            "Username must be 1 to 15 characters without spaces."
+                            t("profile.data_table.name_helper_text")
                         }
                         error={name !== reqUser.name && !nameValid}
                         inputProps={{ pattern: regexString.username }}
@@ -88,11 +90,11 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                 ),
             },
             {
-                title: "Threads",
+                title: t("profile.data_table.threads_title"),
                 content: reqUser.count,
             },
             {
-                title: "Gender",
+                title: t("profile.data_table.gender_title"),
                 content: isSelf ? (
                     <Select
                         variant="standard"
@@ -102,19 +104,28 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                             if (newValue === "M" || newValue === "F") setSex(newValue);
                         }}
                     >
-                        <MenuItem value="M">Male</MenuItem>
-                        <MenuItem value="F">Female</MenuItem>
+                        <MenuItem value="M">
+                            {t("profile.data_table.gender_male")}
+                        </MenuItem>
+                        <MenuItem value="F">
+                            {t("profile.data_table.gender_female")}
+                        </MenuItem>
                     </Select>
                 ) : (
-                    { M: "male", F: "female" }[reqUser.sex] || ""
+                    {
+                        M: t("profile.data_table.gender_male").toLowerCase(),
+                        F: t("profile.data_table.gender_female").toLowerCase(),
+                    }[reqUser.sex] || ""
                 ),
             },
-            { title: "Role", content: reqUser.role },
+            { title: t("profile.data_table.role_title"), content: reqUser.role },
             {
-                title: "Joined",
+                title: t("profile.data_table.joined_title"),
                 content: `${
-                    reqUser.createdAt ? timeToWord_long(reqUser.createdAt) : "unknown"
-                } ago`,
+                    reqUser.createdAt
+                        ? timeToWord_long(reqUser.createdAt)
+                        : t("profile.data_table.joined_unknown")
+                }${t("profile.data_table.joined_ago")}`,
             },
         ],
         [
@@ -127,12 +138,17 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
             reqUser.role,
             reqUser.sex,
             sex,
+            t,
         ]
     );
 
     const updateUserInfo = useCallback(() => {
         setSaveDisabled(true);
-        setNotification({ open: true, severity: "info", text: "Updating user info..." });
+        setNotification({
+            open: true,
+            severity: "info",
+            text: t("profile.data_table.updating_notification"),
+        });
         api.userEdit(reqUser.id, { name, sex })
             .then((data) => {
                 setSaveDisabled(false);
@@ -149,7 +165,7 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                 setNotification({
                     open: true,
                     severity: "success",
-                    text: `Successfully updated.`,
+                    text: t("profile.data_table.updated_notification"),
                 });
             })
             .catch((err) => {
@@ -166,6 +182,7 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
         session,
         setMenuTitle,
         setNotification,
+        t,
         setReFetch,
         setReqUser,
         setSession,
@@ -215,7 +232,7 @@ const DataTable = memo(function DataTable(props: DataTableProps) {
                     startIcon={<Save />}
                     loadingPosition="start"
                 >
-                    Save
+                    {t("profile.data_table.save_button")}
                 </LoadingButton>
             )}
         </Box>

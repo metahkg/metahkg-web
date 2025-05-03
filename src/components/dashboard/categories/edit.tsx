@@ -13,6 +13,7 @@ import {
     TextField,
 } from "@mui/material";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useCategories, useNotification } from "../../AppContextProvider";
 import { Category } from "@metahkg/api";
 import { LoadingButton } from "@mui/lab";
@@ -22,6 +23,7 @@ import { cleanObject } from "../../../lib/utils/cleanObject";
 import { parseError } from "../../../lib/parseError";
 import { memo } from "react";
 const EditCategory = memo(function EditCategory() {
+    const { t } = useTranslation();
     const formRef = useRef<HTMLFormElement>();
     const [categories, setCategories] = useCategories();
     const [, setNotification] = useNotification();
@@ -44,7 +46,7 @@ const EditCategory = memo(function EditCategory() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Category edited successfully.",
+                            text: t("editCategory.category_edited_success"),
                         });
                         api.categories()
                             .then(setCategories)
@@ -60,7 +62,7 @@ const EditCategory = memo(function EditCategory() {
                     });
             }
         },
-        [editCat, setCategories, setNotification]
+        [editCat, setCategories, setNotification, t]
     );
 
     return (
@@ -68,7 +70,9 @@ const EditCategory = memo(function EditCategory() {
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <FormControl sx={{ m: 1, minWidth: 150 }}>
-                        <InputLabel color="secondary">Category</InputLabel>
+                        <InputLabel color="secondary">
+                            {t("editCategory.category_label")}
+                        </InputLabel>
                         <Select
                             value={category}
                             onChange={(e: SelectChangeEvent<number | "">) => {
@@ -83,7 +87,7 @@ const EditCategory = memo(function EditCategory() {
                                     );
                                 }
                             }}
-                            label="Category"
+                            label={t("editCategory.category_label")}
                             color="secondary"
                         >
                             <MenuItem value=""></MenuItem>
@@ -99,7 +103,7 @@ const EditCategory = memo(function EditCategory() {
                             <TextField
                                 color="secondary"
                                 required
-                                label="Name"
+                                label={t("editCategory.name_label")}
                                 onChange={(e) => {
                                     setEditCat({
                                         ...editCat,
@@ -132,7 +136,7 @@ const EditCategory = memo(function EditCategory() {
                                         {...params}
                                         color="secondary"
                                         variant="outlined"
-                                        label="Tags"
+                                        label={t("editCategory.tags_label")}
                                     />
                                 )}
                                 onChange={(_e, v) => {
@@ -159,7 +163,7 @@ const EditCategory = memo(function EditCategory() {
                                         checked={!!editCat?.pinned}
                                     />
                                 }
-                                label="Pinned"
+                                label={t("editCategory.pinned_label")}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -177,7 +181,7 @@ const EditCategory = memo(function EditCategory() {
                                         checked={!!editCat.hidden}
                                     />
                                 }
-                                label="Hidden"
+                                label={t("editCategory.hidden_label")}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -194,7 +198,7 @@ const EditCategory = memo(function EditCategory() {
                                         checked={!!editCat.nsfw}
                                     />
                                 }
-                                label="NSFW"
+                                label={t("editCategory.nsfw_label")}
                             />
                         </Grid>
                     </React.Fragment>
@@ -211,7 +215,7 @@ const EditCategory = memo(function EditCategory() {
                     variant="contained"
                     className="!mt-2"
                 >
-                    Edit
+                    {t("editCategory.edit_button")}
                 </LoadingButton>
             )}
         </Box>

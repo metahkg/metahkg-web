@@ -11,6 +11,7 @@ import { wholePath } from "../../../lib/common";
 import { useNavigate } from "react-router-dom";
 import { useComment } from "../comment";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 const PollComponent = memo(function PollComponent(props: { id: string }) {
     const { id } = props;
     const [poll, setPoll] = useState<Poll | null>(null);
@@ -29,6 +30,8 @@ const PollComponent = memo(function PollComponent(props: { id: string }) {
             poll && poll.endsAt && new Date(poll.endsAt).getTime() < new Date().getTime(),
         [poll]
     );
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         api.pollsInfo(id)
@@ -119,8 +122,10 @@ const PollComponent = memo(function PollComponent(props: { id: string }) {
                                             variant="body2"
                                             className="flex items-center"
                                         >
-                                            {option.votes || 0} vote
-                                            {option.votes === 1 ? "" : "s"}
+                                            {option.votes || 0}{" "}
+                                            {option.votes === 1
+                                                ? t("poll.vote_singular")
+                                                : t("poll.vote_plural")}
                                         </Typography>
                                     </Box>
                                 }
@@ -178,7 +183,7 @@ const PollComponent = memo(function PollComponent(props: { id: string }) {
                                 variant="contained"
                                 className={isSmallScreen ? "!mt-3" : ""}
                             >
-                                Vote
+                                {t("poll.vote_button")}
                             </LoadingButton>
                         </Box>
                     </Box>

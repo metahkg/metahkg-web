@@ -53,11 +53,13 @@ import {
     Tooltip,
 } from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 import { memo } from "react";
 const MoreList = memo(function MoreList(props: {
     buttons: ({ title: string; icon?: JSX.Element; action: () => void } | undefined)[];
 }) {
+    const { t } = useTranslation();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
@@ -97,7 +99,7 @@ const MoreList = memo(function MoreList(props: {
     return (
         <Stack direction="row" spacing={1}>
             <Box>
-                <Tooltip arrow title="More">
+                <Tooltip arrow title={t("comment.more")}>
                     <IconButton
                         ref={anchorRef}
                         className="!p-0 !ml-[10px]"

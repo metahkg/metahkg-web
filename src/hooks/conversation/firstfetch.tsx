@@ -18,10 +18,10 @@
 import { AxiosError } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
+import { useTranslation } from "react-i18next";
 import {
     useHistory,
     useNotification,
-    useServerConfig,
     useUser,
 } from "../../components/AppContextProvider";
 import { useCat, useId, useMenuMode } from "../../components/MenuProvider";
@@ -40,6 +40,7 @@ import { Comment } from "@metahkg/api";
 import { useCallback } from "react";
 
 export default function useFirstFetch() {
+    const { t } = useTranslation();
     const [finalPage] = useFinalPage();
     const [, setThread] = useThread();
     const [history, setHistory] = useHistory();
@@ -55,7 +56,6 @@ export default function useFirstFetch() {
     const navigate = useNavigate();
     const [notification, setNotification] = useNotification();
     const [user] = useUser();
-    const [serverConfig] = useServerConfig();
     const query = queryString.parse(window.location.search);
     const onError = useCallback(
         (err: AxiosError<any>) => {
@@ -82,7 +82,7 @@ export default function useFirstFetch() {
                 }
                 !cat && menuMode === "category" && setCat(data.category);
                 id !== data.id && setId(data.id);
-                setTitle(`${data.title} | ${serverConfig?.branding || "Metahkg"}`);
+                setTitle(`${data.title} | ${t("common.branding")}`);
                 setDescription(
                     (query.c &&
                         (data.conversation?.[Number(query.c) - 1] as Comment)?.text) ||
@@ -108,10 +108,10 @@ export default function useFirstFetch() {
         history,
         id,
         limit,
+        t,
         menuMode,
         onError,
         query.c,
-        serverConfig?.branding,
         setCat,
         setEnd,
         setHistory,

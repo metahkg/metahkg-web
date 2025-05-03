@@ -16,6 +16,7 @@
  */
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { css } from "../lib/css";
 
 /**
@@ -33,6 +34,7 @@ const MetahkgLogo = memo(function MetahkgLogo(props: {
     sx?: React.CSSProperties;
     className?: string;
 }) {
+    const { t } = useTranslation();
     const { light, dark, text, filled, svg, height, width, sx, className } = props;
     return (
         <img
@@ -48,7 +50,7 @@ const MetahkgLogo = memo(function MetahkgLogo(props: {
                 (dark && "/images/logo.png") ||
                 "/images/logo.png"
             }
-            alt="Metahkg Logo"
+            alt={t("logo.alt_text")}
             height={height}
             width={width}
         />

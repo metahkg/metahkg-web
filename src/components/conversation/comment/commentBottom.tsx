@@ -16,6 +16,7 @@
  */
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AddReaction, Forum } from "@mui/icons-material";
 import { Box, Button, IconButton, Popover, Typography } from "@mui/material";
 import VoteButtons from "./voteButtons";
@@ -54,6 +55,7 @@ const CommentBottom = memo(function CommentBottom() {
     const emotionBtnRef = useRef<HTMLButtonElement>(null);
     const isSmallScreen = useIsSmallScreen();
     const darkMode = useDarkMode();
+    const { t } = useTranslation();
 
     const choosed = useMemo(
         () => user && comment.emotions?.find((i) => i.user === user.id)?.emotion,
@@ -67,7 +69,7 @@ const CommentBottom = memo(function CommentBottom() {
             setNotification({
                 open: true,
                 severity: "info",
-                text: "Setting emotion...",
+                text: t("commentBottom.setting_emotion"),
             });
             api.commentEmotionSet(threadId, comment.id, {
                 emotion,
@@ -76,7 +78,7 @@ const CommentBottom = memo(function CommentBottom() {
                     setNotification({
                         open: true,
                         severity: "success",
-                        text: "Emotion set!",
+                        text: t("commentBottom.emotion_set"),
                     });
                     user &&
                         setComment({
@@ -105,7 +107,7 @@ const CommentBottom = memo(function CommentBottom() {
                     })
                 );
         },
-        [comment, setComment, setNotification, threadId, user]
+        [comment, setComment, setNotification, threadId, user, t]
     );
 
     const deleteEmotion = useCallback(() => {
@@ -114,7 +116,7 @@ const CommentBottom = memo(function CommentBottom() {
             setNotification({
                 open: true,
                 severity: "success",
-                text: "Emotion deleted.",
+                text: t("commentBottom.emotion_deleted"),
             });
             user &&
                 setComment({
@@ -130,7 +132,7 @@ const CommentBottom = memo(function CommentBottom() {
                 });
             });
         });
-    }, [comment, setComment, setNotification, threadId, user]);
+    }, [comment, setComment, setNotification, threadId, user, t]);
 
     const emotions = useMemo(() => {
         let emotions = comment.emotions

@@ -17,6 +17,7 @@
 
 import { ErrorDto } from "@metahkg/api";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
     useNotification,
     useSession,
@@ -27,6 +28,7 @@ import { parseError } from "../../lib/parseError";
 import { useClearSession } from "../useClearSession";
 
 export function useCheckSession() {
+    const { t } = useTranslation();
     const [user] = useUser();
     const [session, setSession] = useSession();
     const [, setNotification] = useNotification();
@@ -55,7 +57,7 @@ export function useCheckSession() {
                                         open: true,
                                         severity: "error",
                                         text:
-                                            "Failed to refresh session: " +
+                                            t("app.failed_to_refresh_session") +
                                             parseError(data),
                                     });
                                 }
@@ -70,5 +72,5 @@ export function useCheckSession() {
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [clearSession, session, setNotification, setSession, user, t]);
 }

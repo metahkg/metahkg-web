@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNotification, useCategories } from "../../AppContextProvider";
+import { useTranslation } from "react-i18next";
 import { api } from "../../../lib/api";
 import { Edit } from "@mui/icons-material";
 import { Thread } from "@metahkg/api";
@@ -27,6 +28,8 @@ const EditThread = memo(function EditThread() {
     const [reason, setReason] = useState("");
     const [categories] = useCategories();
     const [valid, setValid] = useState(formRef.current?.checkValidity?.());
+
+    const { t } = useTranslation();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
@@ -50,7 +53,7 @@ const EditThread = memo(function EditThread() {
                         setNotification({
                             open: true,
                             severity: "success",
-                            text: "Thread edited successfully.",
+                            text: t("dashboard.threads.edit.success_notification"),
                         });
                     })
                     .catch((err) => {
@@ -63,7 +66,7 @@ const EditThread = memo(function EditThread() {
                     });
             }
         },
-        [thread, reason, setNotification]
+        [thread, reason, setNotification, t]
     );
 
     const fetchThread = (id: number) => {
@@ -94,7 +97,7 @@ const EditThread = memo(function EditThread() {
                             setThreadId(Number(e.target.value));
                             if (e.target.value) fetchThread(Number(e.target.value));
                         }}
-                        label="Thread ID"
+                        label={t("dashboard.threads.edit.thread_id_label")}
                         color="secondary"
                         type="number"
                         inputProps={{
@@ -109,7 +112,7 @@ const EditThread = memo(function EditThread() {
                             <TextField
                                 color="secondary"
                                 required
-                                label="New Title"
+                                label={t("dashboard.threads.edit.new_title_label")}
                                 onChange={(e) => {
                                     setThread({ ...thread, title: e.target.value });
                                 }}
@@ -120,7 +123,9 @@ const EditThread = memo(function EditThread() {
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl required sx={{ minWidth: 250 }} fullWidth>
-                                <InputLabel color="secondary">New Category</InputLabel>
+                                <InputLabel color="secondary">
+                                    {t("dashboard.threads.edit.new_category_label")}
+                                </InputLabel>
                                 <Select
                                     value={thread.category}
                                     onChange={(e: SelectChangeEvent<number | "">) => {
@@ -129,7 +134,7 @@ const EditThread = memo(function EditThread() {
                                             category: e.target.value as number,
                                         });
                                     }}
-                                    label="New Category"
+                                    label={t("dashboard.threads.edit.new_category_label")}
                                     color="secondary"
                                     required
                                     fullWidth
@@ -144,8 +149,10 @@ const EditThread = memo(function EditThread() {
                             <TextField
                                 color="secondary"
                                 variant="outlined"
-                                label="Reason for editing"
-                                placeholder="Provide a reason for editing"
+                                label={t("dashboard.threads.edit.reason_label")}
+                                placeholder={t(
+                                    "dashboard.threads.edit.reason_placeholder"
+                                )}
                                 required
                                 onChange={(e) => {
                                     setReason(e.target.value);
@@ -166,7 +173,7 @@ const EditThread = memo(function EditThread() {
                         variant="contained"
                         className="!mt-4 !ml-4"
                     >
-                        Edit
+                        {t("dashboard.threads.edit.edit_button")}
                     </LoadingButton>
                 )}
             </Grid>

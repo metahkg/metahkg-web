@@ -1,16 +1,18 @@
 import { ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import CreateInviteCode from "./create";
 import ViewInviteCodes from "./view";
 import DeleteInviteCode from "./delete";
 import GenerateInviteCode from "./generate";
 import { memo } from "react";
 const InviteCodesBoard = memo(function InviteCodesBoard() {
+    const { t } = useTranslation();
     return (
         <Box>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    Create Invite Code
+                    {t("dashboard.invite_codes.board.create_accordion_title")}
                 </AccordionSummary>
                 <AccordionDetails>
                     <CreateInviteCode />
@@ -18,7 +20,7 @@ const InviteCodesBoard = memo(function InviteCodesBoard() {
             </Accordion>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    Generate Invite Code
+                    {t("dashboard.invite_codes.board.generate_accordion_title")}
                 </AccordionSummary>
                 <AccordionDetails>
                     <GenerateInviteCode />
@@ -26,7 +28,7 @@ const InviteCodesBoard = memo(function InviteCodesBoard() {
             </Accordion>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    View Invite Codes
+                    {t("dashboard.invite_codes.board.view_accordion_title")}
                 </AccordionSummary>
                 <AccordionDetails>
                     <ViewInviteCodes />
@@ -34,7 +36,7 @@ const InviteCodesBoard = memo(function InviteCodesBoard() {
             </Accordion>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                    Delete Invite Code
+                    {t("dashboard.invite_codes.board.delete_accordion_title")}
                 </AccordionSummary>
                 <AccordionDetails>
                     <DeleteInviteCode />
