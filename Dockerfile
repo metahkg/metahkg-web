@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 ARG VITE_APP_build
 ENV VITE_APP_build $VITE_APP_build
@@ -47,7 +47,7 @@ COPY ./.babelrc ./config-overrides.js ./
 RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules && mkdir node_modules; fi;
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js postcss.config.js tailwind.config.js; fi;
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
