@@ -72,5 +72,5 @@ export function useCheckSession() {
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clearSession, session, setNotification, setSession, user, t]);
+    }, []);
 }
