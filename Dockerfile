@@ -42,8 +42,7 @@ RUN yarn install --frozen-lockfile --network-timeout 1000000
 COPY ./src ./src
 COPY ./public ./public
 COPY ./scripts ./scripts
-COPY ./.babelrc ./
-COPY ./index.html ./
+COPY ./.babelrc ./index.html ./vite.config.ts ./
 
 RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules && mkdir node_modules; fi;
 RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc postcss.config.js tailwind.config.js; fi;
