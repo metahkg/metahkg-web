@@ -42,10 +42,11 @@ RUN yarn install --frozen-lockfile --network-timeout 1000000
 COPY ./src ./src
 COPY ./public ./public
 COPY ./scripts ./scripts
-COPY ./.babelrc ./config-overrides.js ./
+COPY ./.babelrc ./
+COPY ./index.html ./
 
 RUN if [ "${env}" != "dev" ]; then yarn build && rm -rf node_modules && mkdir node_modules; fi;
-RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc config-overrides.js postcss.config.js tailwind.config.js; fi;
+RUN if [ "${env}" != "dev" ]; then rm -rf tsconfig.json yarn.lock .babelrc postcss.config.js tailwind.config.js; fi;
 
 FROM node:20-alpine
 
@@ -70,7 +71,7 @@ COPY --from=build /app/node_modules ./node_modules
 
 COPY ./scripts ./scripts
 
-COPY --from=build /app/package.json /app/yarn.lock* /app/tsconfig.json* /app/.babelrc* /app/config-overrides.js* /app/postcss.config.js* /app/tailwind.config.js*  ./
+COPY --from=build /app/package.json /app/yarn.lock* /app/tsconfig.json* /app/.babelrc* /app/postcss.config.js* /app/tailwind.config.js*  ./
 COPY ./serve.json ./
 
 RUN if [ "${env}" != "dev" ]; then yarn global add serve --network-timeout 1000000; fi;
