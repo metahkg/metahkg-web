@@ -107,12 +107,12 @@
     "@svgr/webpack": "^6.5.1"
   },
   "scripts": {
-    "start": ". ./scripts/prebuild.sh && vite",
+    "start": "./scripts/start.sh",
+    "dev": ". ./scripts/prebuild.sh && vite",
     "build": ". ./scripts/prebuild.sh && vite build",
     "preview": "vite preview",
     "test": "tsc --noEmit",
     "docker": "docker build -t metahkg/metahkg-web .",
-    "dev": "yarn start",
     "prepare": "husky install",
     "lint": "eslint --cache --fix src && (prettier --check src || prettier --write src)",
     "setup": "./setup.sh",
