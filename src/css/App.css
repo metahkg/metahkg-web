@@ -98,3 +98,32 @@ code {
 #webpack-dev-server-client-overlay {
     display: none;
 }
+
+/* Custom Scrollbar Styles */
+/* For Webkit browsers (Chrome, Safari, Edge, etc.) */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Color of the track */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the thumb on hover */
+}
+
+/* For Firefox */
+/* Note: Firefox support for detailed scrollbar styling is limited */
+/* These properties provide basic color and width adjustments */
+* {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #888 transparent; /* thumb color track color */
+}
