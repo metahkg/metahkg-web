@@ -8,7 +8,7 @@ i18n.use(Backend)
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
         fallbackLng: "en", // fallback language is english
-        supportedLngs: ["en", "zh-HK", "ja"], // Explicitly list supported languages
+        supportedLngs: ["en", "zh-HK", "ja", "ko", "fr", "de", "es", "pt"], // Explicitly list supported languages
         backend: {
             loadPath: "/locales/{{lng}}/{{ns}}.json",
         },
