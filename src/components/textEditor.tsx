@@ -86,14 +86,14 @@ const TextEditor = memo(function TextEditor(props: {
                     a = a.substring(0, lengthLimit);
                     editor.setContent(a);
                     editor.windowManager.alert(
-                        "Content exceeded length limit. Automatically truncated."
+                        "Content exceeded length limit. Automatically truncated.",
                     );
                     return;
                 }
             }
             onChange?.(a, editor);
         },
-        [onChange, lengthLimit]
+        [onChange, lengthLimit],
     );
 
     return (
@@ -165,12 +165,12 @@ const TextEditor = memo(function TextEditor(props: {
                                                             "multipart/form-data",
                                                         Authorization: `Bearer ${session?.token}`,
                                                     },
-                                                }
+                                                },
                                             )
                                             .then((res) => {
                                                 editor.windowManager.close();
                                                 editor.insertContent(
-                                                    `<img alt="" src="${res.data.url}" />`
+                                                    `<img alt="" src="${res.data.url}" />`,
                                                 );
                                             })
                                             .catch((err) => {
@@ -183,7 +183,7 @@ const TextEditor = memo(function TextEditor(props: {
                                                             {
                                                                 type: "alertbanner",
                                                                 text: `Error uploading image: ${parseError(
-                                                                    err
+                                                                    err,
                                                                 )}`,
                                                                 level: "error",
                                                                 icon: "warning",
@@ -287,7 +287,7 @@ const TextEditor = memo(function TextEditor(props: {
                                     "Content-Type": "multipart/form-data",
                                     Authorization: `Bearer ${session?.token}`,
                                 },
-                            }
+                            },
                         );
                         return data.url;
                     },
